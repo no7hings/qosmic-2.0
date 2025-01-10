@@ -164,7 +164,7 @@ class QtItemForHistoryEntity(
 
     def _do_open_associate_(self):
         if self._associate_hover_flag is True:
-            _qt_core.QtUtil.copy_text_to_clipboard(
+            _qt_core.QtUtil.write_clipboard(
                 self._associated_entity_id
             )
             if self._open_associate_fnc_ is not None:

@@ -396,10 +396,10 @@ class _GuiSourceTaskUnitSceneOpt(_GuiBaseOpt):
             bsc_storage.StgFileOpt(scene_path).show_in_system()
 
         def copy_path_fnc_():
-            gui_qt_core.QtUtil.copy_text_to_clipboard(scene_path.replace('/', '\\'))
+            gui_qt_core.QtUtil.write_clipboard(scene_path.replace('/', '\\'))
 
         def copy_unit_path_fnc_():
-            gui_qt_core.QtUtil.copy_text_to_clipboard(scene_path)
+            gui_qt_core.QtUtil.write_clipboard(scene_path)
 
         menu_data = [
             ('show_in_explorer', 'file/folder', show_in_explorer_fnc_),

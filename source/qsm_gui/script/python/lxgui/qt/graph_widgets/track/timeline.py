@@ -214,13 +214,13 @@ class QtTrackTimeline(
 
         self._draw_timehandle_(painter)
 
-    def _get_current_frame_(self):
+    def _get_current_timeframe_(self):
         return self._timeframe_current
 
-    def _set_current_frame_(self, frame):
+    def _set_current_timeframe_(self, frame):
         self._timeframe_current = frame
         self._refresh_widget_all_()
-        sys.stdout.write('frame is change: {}.\n'.format(frame))
+        # sys.stdout.write('frame is change: {}.\n'.format(frame))
 
     def _set_coord_model_(self, model):
         self._coord_model = model

@@ -234,9 +234,9 @@ class MtgLayerBase(object):
             # add layer attribute
             cmds.addAttr(
                 location, longName='qsm_layers',
-                numberOfChildren=100, attributeType='compound'
+                numberOfChildren=250, attributeType='compound'
             )
-            for i in range(100):
+            for i in range(250):
                 cmds.addAttr(
                     location, longName='layer_{}'.format(i),
                     attributeType='message',
@@ -816,7 +816,7 @@ class MtgMasterLayer(AbsMtgLayer):
         mocap_resource.connect_from_master_layer(self)
 
     def get_next_layer_index(self):
-        for i in range(100):
+        for i in range(250):
             if not cmds.listConnections(
                 '{}.qsm_layers.layer_{}'.format(
                     self._location, i
@@ -987,7 +987,7 @@ class MtgMasterLayer(AbsMtgLayer):
 
     def get_all_layer_locations(self):
         list_ = []
-        for i in range(100):
+        for i in range(250):
             _ = cmds.listConnections(
                 '{}.qsm_layers.layer_{}'.format(
                     self._location, i

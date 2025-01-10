@@ -1044,7 +1044,7 @@ class _GuiDirectoryOpt(
     def gui_add(self, dtb_resource, dtb_directory, file_type, is_current=False):
         def cache_fnc_():
             def copy_path_fnc_():
-                gui_qt_core.QtUtil.copy_text_to_clipboard(location)
+                gui_qt_core.QtUtil.write_clipboard(location)
 
             def open_folder_fnc():
                 bsc_storage.StgDirectoryOpt(location).show_in_system()
@@ -1161,7 +1161,7 @@ class _GuiFileOpt(
     def gui_add(self, dtb_resource, dtb_directory, file_type, file_name, file_path):
         def cache_fnc_():
             def copy_path_fnc_():
-                gui_qt_core.QtUtil.copy_text_to_clipboard(file_path)
+                gui_qt_core.QtUtil.write_clipboard(file_path)
 
             def open_folder_fnc():
                 bsc_storage.StgFileOpt(file_path).show_in_system()

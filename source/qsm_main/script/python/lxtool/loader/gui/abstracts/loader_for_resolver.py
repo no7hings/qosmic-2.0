@@ -571,7 +571,7 @@ class _GuiFileOpt(
     def gui_add(self, file_opt):
         def cache_fnc_():
             def copy_path_fnc_():
-                gui_qt_core.QtUtil.copy_text_to_clipboard(file_path)
+                gui_qt_core.QtUtil.write_clipboard(file_path)
 
             def open_folder_fnc():
                 bsc_storage.StgFileOpt(file_path).show_in_system()

@@ -553,3 +553,14 @@ class QtApplication(object):
     def is_shift_modifier(cls):
         # noinspection PyArgumentList
         return QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ShiftModifier
+
+    @classmethod
+    def is_alt_modifier(cls):
+        # noinspection PyArgumentList
+        return QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.AltModifier
+
+    @classmethod
+    def is_ctrl_shift_modifier(cls):
+        # noinspection PyArgumentList
+        return QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ControlModifier|QtCore.Qt.ShiftModifier
+

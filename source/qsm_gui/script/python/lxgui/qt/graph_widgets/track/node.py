@@ -337,6 +337,7 @@ class QtTrackNode(
 
     def _update_basic_coord_as_move_(self, x, y):
         clip_start = self._track_model.compute_clip_start_loc(x)
+        # model move method
         self._track_model.move_by_clip_start(clip_start)
 
         bsc_x = self._track_model.compute_basic_x_at(clip_start)
@@ -464,7 +465,7 @@ class QtTrackNode(
         self._post_blend_rect = QtCore.QRect()
 
         self._track_model = None
-        self._track_last_model = None
+        self._last_track_model = None
 
         self._time_basic_frame_rect = QtCore.QRect()
         self._time_left_draw_flag = False
@@ -760,14 +761,14 @@ class QtTrackNode(
         )
 
     def _setup_track_(self, **kwargs):
-        self._track_model = self._graph._track_stage_model.create_one(self, **kwargs)
+        self._track_model = self._graph._track_model_stage.create_one(self, **kwargs)
 
         if self._track_model.is_trash is True:
             self.hide()
         else:
             self.show()
 
-        self._node_update_transformation_fnc_(self._track_model)
+        self._node_update_track_model_fnc_(self._track_model)
 
         self._build_timetrack_trim_()
 
@@ -775,9 +776,10 @@ class QtTrackNode(
         self._push_track_model_()
 
     def _push_track_model_(self):
-        self._track_last_model = self._track_model.copy()
+        self._last_track_model = self._track_model.copy()
 
-    def _node_update_transformation_fnc_(self, track_model):
+    def _node_update_track_model_fnc_(self, track_model):
+        # print track_model.to_dict()
         self._track_model = track_model
 
         x, y, w, h = self._track_model.compute_timetrack_args()

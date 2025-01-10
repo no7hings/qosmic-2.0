@@ -16,6 +16,7 @@ class _BaseViewWidget(QtWidgets.QWidget):
         super(_BaseViewWidget, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self._mrg = 4
+
         self._grid_lot = _qt_wgt_base.QtGridLayout(self)
         self._grid_lot.setContentsMargins(*[self._mrg]*4)
         self._grid_lot.setSpacing(2)
@@ -24,14 +25,19 @@ class _BaseViewWidget(QtWidgets.QWidget):
 
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
 
+        self.installEventFilter(self)
+
     def paintEvent(self, event):
         painter = QtGui.QPainter(self)
         mrg = self._mrg
         x, y, w, h = 0, 0, self.width(), self.height()
 
         f_x, f_y, f_w, f_h = x+1, y+1, w-2, h-2
-        pen = QtGui.QPen(QtGui.QColor(*[(71, 71, 71, 255), (95, 95, 95, 255)][self.hasFocus()]))
-        pen.setWidth(2)
+        is_focus = self.hasFocus()
+        pen = QtGui.QPen(QtGui.QColor(*[(71, 71, 71, 255), (95, 95, 95, 255)][is_focus]))
+        pen_width = [1, 2][is_focus]
+
+        pen.setWidth(pen_width)
         painter.setPen(pen)
         painter.setBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
         painter.drawRect(f_x, f_y, f_w, f_h)

@@ -1,6 +1,6 @@
 # Animation Frame
 ## 2024 update
-### Frame
+### Main
 [https://rk8o3v6r7h.feishu.cn/docx/HlNOddq7EonL1yxnIjlcKE14nWd]
 ### Lazy Workspace 1.0
 [https://rk8o3v6r7h.feishu.cn/docx/NnwwdEr4coz4uPxN7W2cQzNnn1f]

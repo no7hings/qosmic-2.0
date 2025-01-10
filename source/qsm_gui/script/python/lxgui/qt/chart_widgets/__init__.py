@@ -6,3 +6,6 @@ from .bar import *
 from .histogram import *
 
 from .line import *
+
+from .curve import *
+

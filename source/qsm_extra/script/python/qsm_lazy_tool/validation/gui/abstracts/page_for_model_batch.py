@@ -261,7 +261,7 @@ class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
                 bsc_storage.StgFileOpt(file_path).show_in_system()
 
             def copy_path_fnc():
-                gui_qt_core.QtUtil.copy_text_to_clipboard(file_path)
+                gui_qt_core.QtUtil.write_clipboard(file_path)
 
             return [
                 ('Open Folder', 'file/folder', open_folder_fnc_),

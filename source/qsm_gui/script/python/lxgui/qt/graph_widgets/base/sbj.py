@@ -164,26 +164,26 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         )
 
     def _update_basic_coord_as_move_(self, x, y):
-        def _int(_c):
-            if _c >= 0:
-                return int(_c)
-            return int(_c)-1
+        def int_(v_):
+            if v_ >= 0:
+                return int(v_)
+            return int(v_)-1
 
         t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
         x_1, y_1 = (x-t_x)/s_x, (y-t_y)/s_y
 
-        self._node_basic_x, self._node_basic_y = _int(x_1), _int(y_1)
+        self._node_basic_x, self._node_basic_y = int_(x_1), int_(y_1)
 
     def _update_basic_args_as_left_trim_(self, x, y, w, h):
-        def _int(_c):
-            if _c >= 0:
-                return int(_c)
-            return int(_c)-1
+        def int_(v_):
+            if v_ >= 0:
+                return int(v_)
+            return int(v_)-1
 
         t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
 
         x_1, y_1 = (x-t_x)/s_x, (y-t_y)/s_y
-        self._node_basic_x, self._node_basic_y = _int(x_1), _int(y_1)
+        self._node_basic_x, self._node_basic_y = int_(x_1), int_(y_1)
 
         w_1, h_1 = w/s_x, h/s_y
         self._node_basic_w, self._node_basic_h = int(w_1), int(h_1)

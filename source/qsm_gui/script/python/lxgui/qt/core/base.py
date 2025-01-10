@@ -154,15 +154,21 @@ class QtUtil(object):
         qt_widget.setGraphicsEffect(shadow)
 
     @staticmethod
-    def copy_text_to_clipboard(text):
+    def write_clipboard(text):
         # noinspection PyArgumentList
         clipboard = QtWidgets.QApplication.clipboard()
         clipboard.setText(text)
 
     @staticmethod
-    def get_text_from_clipboard():
+    def read_clipboard():
         # noinspection PyArgumentList
         return QtWidgets.QApplication.clipboard().text()
+    
+    @staticmethod
+    def clear_clipboard():
+        # noinspection PyArgumentList
+        clipboard = QtWidgets.QApplication.clipboard()
+        clipboard.clear()
 
     @staticmethod
     def show_qt_window(widget, pos=None, size=None, use_exec=False):

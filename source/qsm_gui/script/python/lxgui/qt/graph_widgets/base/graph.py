@@ -3,6 +3,8 @@ import enum
 # qt
 from ...core.wrap import *
 
+from ... import core as _qt_core
+
 from ... import graph_models as _graph_models
 
 from . import undo_command as _undo_command
@@ -73,14 +75,14 @@ class AbsQtGraphSbjDef(object):
     NG_CONNECTION_CLS = None
 
     @classmethod
-    def _filter_nodes_on_left_(cls, sbj, sbj_list):
+    def _filter_nodes_on_left_(cls, node_widget, sbj_list):
         list_ = []
-        x = sbj.x()
-        for i_sbj in sbj_list:
-            if i_sbj != sbj:
-                i_x = i_sbj.x()
+        x = node_widget.x()
+        for i_node_widget in sbj_list:
+            if i_node_widget != node_widget:
+                i_x = i_node_widget.x()
                 if i_x < x:
-                    list_.append(i_sbj)
+                    list_.append(i_node_widget)
         return list_
 
     def _init_sbj_base_def_(self, widget):
@@ -175,24 +177,24 @@ class AbsQtGraphSbjDef(object):
         if self._graph_select_nodes:
             nodes = self._graph_select_nodes
         else:
-            sbj = self._get_hovered_node_()
-            if sbj:
-                nodes = [sbj]
+            node_widget = self._get_hovered_node_()
+            if node_widget:
+                nodes = [node_widget]
             else:
                 nodes = self._graph_nodes
 
         self._do_frame_nodes_for_(nodes)
 
-    def _update_current_node_(self, sbj):
-        self._graph_current_node = sbj
-        if sbj is not None:
+    def _update_current_node_(self, node_widget):
+        self._graph_current_node = node_widget
+        if node_widget is not None:
             self._graph_current_node.raise_()
 
         self._refresh_widget_draw_()
 
-    def _update_hover_node_(self, sbj):
-        self._graph_hover_node = sbj
-        if sbj is not None:
+    def _update_hover_node_(self, node_widget):
+        self._graph_hover_node = node_widget
+        if node_widget is not None:
             self._graph_hover_node.raise_()
 
         self._refresh_widget_draw_()
@@ -202,121 +204,120 @@ class AbsQtGraphSbjDef(object):
             return self._graph_current_node._get_name_text_()
 
     def _clear_node_selection_(self):
-        for i_sbj in self._graph_select_nodes:
-            i_sbj._set_selected_(False)
+        for i_node_widget in self._graph_select_nodes:
+            i_node_widget._set_selected_(False)
 
         self._graph_select_nodes = []
         self._graph_current_node = None
 
     def _get_node_selection_flag_(self):
-        flags = self._widget._get_action_mdf_flags_()
-        if not flags:
-            return self._widget.NGSelectionFlag.Separate
-        elif flags == [self._widget.ActionFlag.KeyShiftPress]:
+        if _qt_core.QtApplication.is_shift_modifier():
             return self._widget.NGSelectionFlag.Add
-        elif flags == [self._widget.ActionFlag.KeyControlPress]:
+        elif _qt_core.QtApplication.is_ctrl_modifier():
             return self._widget.NGSelectionFlag.Sub
-        elif flags == [self._widget.ActionFlag.KeyControlShiftPress]:
+        elif _qt_core.QtApplication.is_ctrl_shift_modifier():
             return self._widget.NGSelectionFlag.Invert
+        else:
+            return self._widget.NGSelectionFlag.Separate
 
     # click
-    def _do_node_press_start_for_(self, sbj):
+    def _do_node_press_start_for_(self, node_widget):
         self._node_selection_flag = self._get_node_selection_flag_()
-        self._update_current_node_(sbj)
+        self._update_current_node_(node_widget)
 
-    def _do_node_press_for_(self, sbj):
+    def _do_node_press_for_(self, node_widget):
         if self._get_graph_selected_node_count_() == 0:
-            self._separate_select_node_for_(sbj)
+            self._separate_select_node_for_(node_widget)
 
-    def _do_node_press_end_for_(self, sbj):
+    def _do_node_press_end_for_(self, node_widget):
         if self._widget._is_action_flag_match_(
             self._widget.ActionFlag.NGNodePressMove
         ) is False:
             if self._node_selection_flag == self._widget.NGSelectionFlag.Separate:
-                self._separate_select_node_for_(sbj)
+                self._separate_select_node_for_(node_widget)
             elif self._node_selection_flag == self._widget.NGSelectionFlag.Add:
-                self._add_select_node_for_(sbj)
+                self._add_select_node_for_(node_widget)
             elif self._node_selection_flag == self._widget.NGSelectionFlag.Sub:
-                self._sub_select_node_for_(sbj)
+                self._sub_select_node_for_(node_widget)
             elif self._node_selection_flag == self._widget.NGSelectionFlag.Invert:
-                self._invert_select_node_for_(sbj)
+                self._invert_select_node_for_(node_widget)
 
     # move
     def _do_node_press_start_for_any_action_(self):
         [i._push_last_properties_() for i in self._graph_select_nodes]
 
-    def _do_node_press_move_for_(self, sbj, d_point):
-        if sbj._is_selected_() is True:
-            self._graph_node_move_together_fnc_(sbj, d_point)
+    def _do_node_press_move_for_(self, node_widget, d_point):
+        if node_widget._is_selected_() is True:
+            self._graph_node_move_together_fnc_(node_widget, d_point)
         else:
-            self._separate_move_node_(sbj)
+            self._separate_move_node_(node_widget)
 
-    def _graph_node_move_together_fnc_(self, sbj, d_point):
-        self._update_current_node_(sbj)
+    def _graph_node_move_together_fnc_(self, node_widget, d_point):
+        self._update_current_node_(node_widget)
 
         if self._graph_current_node is not None:
-            p_0 = sbj.pos()
-            for i_sbj in self._graph_select_nodes:
-                if i_sbj != self._graph_current_node:
-                    i_p = i_sbj.pos()
+            p_0 = node_widget.pos()
+            for i_node_widget in self._graph_select_nodes:
+                if i_node_widget != self._graph_current_node:
+                    i_p = i_node_widget.pos()
                     i_offset_point = p_0-i_p
-                    i_sbj._move_by_point_(d_point, i_offset_point)
+                    i_node_widget._move_by_point_(d_point, i_offset_point)
                 else:
-                    i_sbj._move_by_point_(d_point)
+                    i_node_widget._move_by_point_(d_point)
 
-    def _separate_move_node_(self, sbj):
-        self._separate_select_node_for_(sbj)
+    def _separate_move_node_(self, node_widget):
+        self._separate_select_node_for_(node_widget)
 
     # resize
-    def _do_node_press_move_trim_for_(self, sbj, d_point, start_size, flag):
-        if sbj._is_selected_() is True:
-            self._together_trim_nodes_(sbj, d_point, start_size, flag)
+    def _do_node_press_move_trim_for_(self, node_widget, d_point, start_size, flag):
+        if node_widget._is_selected_() is True:
+            self._together_trim_nodes_(node_widget, d_point, start_size, flag)
         else:
-            self._separate_trim_node_(sbj, d_point, start_size, flag)
+            self._separate_trim_node_(node_widget, d_point, start_size, flag)
 
-    def _together_trim_nodes_(self, sbj, d_point, start_size, flag):
+    def _together_trim_nodes_(self, node_widget, d_point, start_size, flag):
         # if self._graph_current_node is not None:
         if flag == self._widget.ActionFlag.NGSbjTrimLeft:
-            p_0 = sbj.pos()
-            sbj._trim_left_fnc_(d_point)
-            # nodes = self._filter_nodes_on_left_(sbj, self._graph_select_nodes)
+            p_0 = node_widget.pos()
+            node_widget._trim_left_fnc_(d_point)
+            # nodes = self._filter_nodes_on_left_(node_widget, self._graph_select_nodes)
             # print nodes
         elif flag == self._widget.ActionFlag.NGSbjTrimRight:
-            sbj._trim_right_fnc_(d_point, start_size)
+            node_widget._trim_right_fnc_(d_point, start_size)
 
-    def _separate_trim_node_(self, sbj, d_point, start_size, flag):
-        sbj.raise_()
+    def _separate_trim_node_(self, node_widget, d_point, start_size, flag):
+        node_widget.raise_()
         if flag == self._widget.ActionFlag.NGSbjTrimLeft:
-            sbj._trim_left_fnc_(d_point)
+            node_widget._trim_left_fnc_(d_point)
         elif flag == self._widget.ActionFlag.NGSbjTrimRight:
-            sbj._trim_right_fnc_(d_point, start_size)
+            node_widget._trim_right_fnc_(d_point, start_size)
 
     # scale
-    def _do_node_press_scale_for_(self, sbj, d_point, start_size, flag):
-        if sbj._is_selected_() is True:
-            self._together_scale_nodes_(sbj, d_point, start_size, flag)
+    def _do_node_press_scale_for_(self, node_widget, d_point, start_size, flag):
+        if node_widget._is_selected_() is True:
+            self._together_scale_nodes_(node_widget, d_point, start_size, flag)
         else:
-            self._separate_scale_node_(sbj, d_point, start_size, flag)
+            self._separate_scale_node_(node_widget, d_point, start_size, flag)
 
-    def _together_scale_nodes_(self, sbj, d_point, start_size, flag):
+    def _together_scale_nodes_(self, node_widget, d_point, start_size, flag):
         # if self._graph_current_node is not None:
         if flag == self._widget.ActionFlag.NGSbjScaleLeft:
-            p_0 = sbj.pos()
-            sbj._scale_left_fnc_(d_point)
-            # nodes = self._filter_nodes_on_left_(sbj, self._graph_select_nodes)
+            p_0 = node_widget.pos()
+            node_widget._scale_left_fnc_(d_point)
+            # nodes = self._filter_nodes_on_left_(node_widget, self._graph_select_nodes)
             # print nodes
         elif flag == self._widget.ActionFlag.NGSbjScaleRight:
-            sbj._scale_right_fnc_(d_point, start_size)
+            node_widget._scale_right_fnc_(d_point, start_size)
 
-    def _separate_scale_node_(self, sbj, d_point, start_size, flag):
-        sbj.raise_()
+    def _separate_scale_node_(self, node_widget, d_point, start_size, flag):
+        node_widget.raise_()
         if flag == self._widget.ActionFlag.NGSbjScaleLeft:
-            sbj._scale_left_fnc_(d_point)
+            node_widget._scale_left_fnc_(d_point)
         elif flag == self._widget.ActionFlag.NGSbjScaleRight:
-            sbj._scale_right_fnc_(d_point, start_size)
+            node_widget._scale_right_fnc_(d_point, start_size)
 
     # undo
-    def _push_selects_nodes_transformation_changed_action_(self, sbj=None, flag=None):
+    def _push_selects_nodes_transformation_changed_action_(self, node_widget=None, flag=None):
         data = []
         for i in self._graph_select_nodes:
             i_coord, i_last_coord = i._get_basic_coord_(), i._get_basic_last_coord_()
@@ -326,12 +327,12 @@ class AbsQtGraphSbjDef(object):
                     (i, i_coord, i_last_coord, i_size, i_last_size)
                 )
 
-        if sbj is not None:
-            coord, last_coord = sbj._get_basic_coord_(), sbj._get_basic_last_coord_()
-            size, last_size = sbj._get_basic_size_(), sbj._get_basic_last_size_()
+        if node_widget is not None:
+            coord, last_coord = node_widget._get_basic_coord_(), node_widget._get_basic_last_coord_()
+            size, last_size = node_widget._get_basic_size_(), node_widget._get_basic_last_size_()
             if coord != last_coord or size != last_size:
                 data.append(
-                    (sbj, coord, last_coord, size, last_size)
+                    (node_widget, coord, last_coord, size, last_size)
                 )
         if data:
             c = _undo_command.QtNodeActionCommand(
@@ -340,32 +341,32 @@ class AbsQtGraphSbjDef(object):
             self._widget._undo_stack.push(c)
 
     # select
-    def _separate_select_node_for_(self, sbj):
+    def _separate_select_node_for_(self, node_widget):
         self._clear_node_selection_()
-        sbj._set_selected_(True)
-        self._graph_select_nodes = [sbj]
+        node_widget._set_selected_(True)
+        self._graph_select_nodes = [node_widget]
 
-    def _add_select_node_for_(self, sbj):
-        if sbj not in self._graph_select_nodes:
-            sbj._set_selected_(True)
-            self._graph_select_nodes.append(sbj)
+    def _add_select_node_for_(self, node_widget):
+        if node_widget not in self._graph_select_nodes:
+            node_widget._set_selected_(True)
+            self._graph_select_nodes.append(node_widget)
 
-    def _sub_select_node_for_(self, sbj):
-        if sbj in self._graph_select_nodes:
-            sbj._set_selected_(False)
-            self._graph_select_nodes.remove(sbj)
+    def _sub_select_node_for_(self, node_widget):
+        if node_widget in self._graph_select_nodes:
+            node_widget._set_selected_(False)
+            self._graph_select_nodes.remove(node_widget)
 
-    def _invert_select_node_for_(self, sbj):
-        if sbj in self._graph_select_nodes:
-            sbj._set_selected_(False)
-            self._graph_select_nodes.remove(sbj)
-        elif sbj not in self._graph_select_nodes:
-            sbj._set_selected_(True)
-            self._graph_select_nodes.append(sbj)
+    def _invert_select_node_for_(self, node_widget):
+        if node_widget in self._graph_select_nodes:
+            node_widget._set_selected_(False)
+            self._graph_select_nodes.remove(node_widget)
+        elif node_widget not in self._graph_select_nodes:
+            node_widget._set_selected_(True)
+            self._graph_select_nodes.append(node_widget)
 
     def _on_graph_node_select_all_(self):
-        for i_sbj in self._graph_nodes:
-            self._add_select_node_for_(i_sbj)
+        for i_node_widget in self._graph_nodes:
+            self._add_select_node_for_(i_node_widget)
 
 
 class AbsQtGraphDrawBaseDef(object):
@@ -433,35 +434,35 @@ class AbsQtActionForRectSelectDef(object):
         self._widget._clear_node_selection_()
 
         contains = []
-        for i_sbj in self._widget._graph_nodes:
+        for i_node_widget in self._widget._graph_nodes:
             if self._rect_selection_rect.intersects(
-                i_sbj._node_global_selection_rect
+                i_node_widget._node_global_selection_rect
             ) is True:
-                i_sbj._set_selected_(True)
-                contains.append(i_sbj)
+                i_node_widget._set_selected_(True)
+                contains.append(i_node_widget)
 
         self._graph_select_nodes = contains
 
     def _add_rect_select_nodes_(self):
-        for i_sbj in self._widget._graph_nodes:
+        for i_node_widget in self._widget._graph_nodes:
             if self._rect_selection_rect.intersects(
-                i_sbj._node_global_selection_rect
+                i_node_widget._node_global_selection_rect
             ) is True:
-                self._widget._add_select_node_for_(i_sbj)
+                self._widget._add_select_node_for_(i_node_widget)
 
     def _sub_rect_select_nodes_(self):
-        for i_sbj in self._widget._graph_nodes:
+        for i_node_widget in self._widget._graph_nodes:
             if self._rect_selection_rect.intersects(
-                i_sbj._node_global_selection_rect
+                i_node_widget._node_global_selection_rect
             ) is True:
-                self._widget._sub_select_node_for_(i_sbj)
+                self._widget._sub_select_node_for_(i_node_widget)
 
     def _invert_rect_select_nodes_(self):
-        for i_sbj in self._widget._graph_nodes:
+        for i_node_widget in self._widget._graph_nodes:
             if self._rect_selection_rect.intersects(
-                i_sbj._node_global_selection_rect
+                i_node_widget._node_global_selection_rect
             ) is True:
-                self._widget._invert_select_node_for_(i_sbj)
+                self._widget._invert_select_node_for_(i_node_widget)
 
 
 class QtSbjLayer(QtWidgets.QWidget):

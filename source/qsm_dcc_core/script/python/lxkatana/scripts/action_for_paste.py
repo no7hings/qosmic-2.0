@@ -28,7 +28,7 @@ class ScpActionForNodeGraphMaterialPaste(object):
 
         file_path = None
 
-        text = gui_qt_core.QtUtil.get_text_from_clipboard()
+        text = gui_qt_core.QtUtil.read_clipboard()
 
         if text:
             if bsc_storage.StgFile.get_is_exists(text) is True:
@@ -88,7 +88,7 @@ class ScpActionForNodeGraphGroupPaste(object):
 
         file_path = None
 
-        text = gui_qt_core.QtUtil.get_text_from_clipboard()
+        text = gui_qt_core.QtUtil.read_clipboard()
 
         if text:
             if bsc_storage.StgFile.get_is_exists(text) is True:

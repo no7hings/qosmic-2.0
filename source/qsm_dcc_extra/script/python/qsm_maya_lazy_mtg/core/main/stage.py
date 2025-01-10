@@ -135,11 +135,11 @@ class MtgStage(object):
         qsm_mya_core.Undo.flush()
 
     @classmethod
-    def generate_stage_model_fnc(cls, track_data):
-        stage_model = bsc_model.TrackStageModel()
-        for i_kwargs in track_data:
-            stage_model.create_one(widget=None, **i_kwargs)
-        return stage_model
+    def generate_stage_model_fnc(cls, track_data_list):
+        model_stage = bsc_model.TrackModelStage()
+        for i_track_data in track_data_list:
+            model_stage.create_one(widget=None, **i_track_data)
+        return model_stage
 
     def __init__(self, rig_namespace):
         self._master_layer_location = _layer.MtgMasterLayer.find_one_master_layer_location(rig_namespace)
@@ -151,15 +151,15 @@ class MtgStage(object):
 
         mtg_master_layer = _layer.MtgMasterLayer(self._master_layer_location)
         for i_path in mtg_master_layer.get_all_layer_locations():
-            i_kwargs = _layer.MtgLayer(i_path).generate_track_kwargs()
-            list_.append(i_kwargs)
+            i_track_data = _layer.MtgLayer(i_path).generate_track_kwargs()
+            list_.append(i_track_data)
         return list_
 
     def generate_stage_model(self):
-        stage_model = bsc_model.TrackStageModel()
-        for i_kwargs in self.generate_track_data():
-            stage_model.create_one(widget=None, **i_kwargs)
-        return stage_model
+        model_stage = bsc_model.TrackModelStage()
+        for i_track_data in self.generate_track_data():
+            model_stage.create_one(widget=None, **i_track_data)
+        return model_stage
 
     def look_from_persp_cam(self):
         _layer.MtgMasterLayer(self._master_layer_location).look_from_persp_cam()
@@ -196,28 +196,28 @@ class MtgStage(object):
         )
 
     def import_track_json(self, track_json_path):
-        track_data = bsc_storage.StgFileOpt(track_json_path).set_read()
+        track_data_list = bsc_storage.StgFileOpt(track_json_path).set_read()
 
         mtg_master_layer = _layer.MtgMasterLayer(self._master_layer_location)
         rig_namespace = mtg_master_layer.get_rig_namespace()
 
-        with bsc_log.LogProcessContext.create(maximum=len(track_data)) as l_p:
-            for i_kwargs in track_data:
-                mtg_master_layer.create_layer(**i_kwargs)
+        with bsc_log.LogProcessContext.create(maximum=len(track_data_list)) as l_p:
+            for i_track_data in track_data_list:
+                mtg_master_layer.create_layer(**i_track_data)
 
                 l_p.do_update()
 
-        stage = self.generate_stage_model_fnc(track_data)
+        stage = self.generate_stage_model_fnc(track_data_list)
 
         self.update_by_stage(rig_namespace, stage)
         
     def update_track_json(self, track_json_path):
-        track_data = bsc_storage.StgFileOpt(track_json_path).set_read()
+        track_data_list = bsc_storage.StgFileOpt(track_json_path).set_read()
 
         mtg_master_layer = _layer.MtgMasterLayer(self._master_layer_location)
         rig_namespace = mtg_master_layer.get_rig_namespace()
 
-        stage = self.generate_stage_model_fnc(track_data)
+        stage = self.generate_stage_model_fnc(track_data_list)
 
         self.update_by_stage(rig_namespace, stage)
         

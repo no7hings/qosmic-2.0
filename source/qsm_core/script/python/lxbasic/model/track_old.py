@@ -181,8 +181,8 @@ class TrackModel(object):
 
         return result
 
-    def __init__(self, stage_model):
-        self._stage_model = stage_model
+    def __init__(self, model_stage):
+        self._track_model_stage = model_stage
 
         self.setup(
             key='untitled',
@@ -233,7 +233,7 @@ class TrackModel(object):
         )
 
     def copy(self):
-        _ = self.__class__(self._stage_model)
+        _ = self.__class__(self._track_model_stage)
         for i in self.COPY_KEYS:
             i_value = self.__dict__[i]
             if isinstance(i_value, (list, dict)):
@@ -264,7 +264,7 @@ class TrackModel(object):
 
     @property
     def rgb(self):
-        return bsc_core.BscTextOpt(self._motion_name).to_hash_rgb(s_p=(15, 35), v_p=(75, 95))
+        return bsc_core.BscTextOpt(self._key).to_hash_rgb(s_p=(15, 35), v_p=(75, 95))
 
     @property
     def layer_index(self):
@@ -577,35 +577,38 @@ class TrackModel(object):
         bsc_x = self.compute_basic_x_at(self._clip_start)
         bsc_y = self.compute_basic_y_at(self._layer_index)
         bsc_w = self.compute_basic_w_by(self.clip_count)
-        bsc_h = TrackStageModel.LAYER_BASIC_UNIT
+        bsc_h = TrackModelStage.LAYER_BASIC_UNIT
         return bsc_x, bsc_y, bsc_w, bsc_h
 
     def compute_clip_start_loc(self, x):
-        return self._stage_model._time_coord_model.compute_unit_index_loc(x)
+        return self._track_model_stage._time_coord_model.compute_unit_index_loc(x)
 
     def compute_clip_count_by(self, w):
-        return self._stage_model._time_coord_model.compute_unit_count_by(w)
+        return self._track_model_stage._time_coord_model.compute_unit_count_by(w)
 
     def compute_basic_x_at(self, clip_start):
-        return self._stage_model._time_coord_model.compute_basic_coord_at(clip_start)
+        return self._track_model_stage._time_coord_model.compute_basic_coord_at(clip_start)
 
     def compute_basic_y_at(self, layer_index):
-        return self._stage_model._layer_coord_model.compute_basic_coord_at(layer_index)
+        return self._track_model_stage._layer_coord_model.compute_basic_coord_at(layer_index)
 
     def compute_basic_w_by(self, clip_count):
-        return self._stage_model._time_coord_model.compute_basic_size_by(clip_count)
+        return self._track_model_stage._time_coord_model.compute_basic_size_by(clip_count)
 
     def compute_layer_index_loc(self, y):
-        return self._stage_model._layer_coord_model.compute_unit_index_loc(y)
+        return self._track_model_stage._layer_coord_model.compute_unit_index_loc(y)
 
     def compute_w_by_count(self, count):
-        return self._stage_model._time_coord_model.compute_size_by_count(count)
+        return self._track_model_stage._time_coord_model.compute_size_by_count(count)
 
     def to_hash(self):
         return bsc_core.BscHash.to_hash_key({x: self.__dict__['_'+x] for x in self.MAIN_KEYS})
 
     def get(self, key):
         return self.__dict__['_'+key]
+
+    def offset_to(self, frame):
+        pass
 
 
 class TrackWidget(object):
@@ -614,7 +617,60 @@ class TrackWidget(object):
         self.__track_last_model = None
 
 
-class TrackStageModel(object):
+class TrackModelGroup(object):
+    def __init__(self, track_model_list):
+        self._track_model_list = track_model_list
+
+    def __str__(self):
+        return str(self._track_model_list)
+
+    def __repr__(self):
+        return '\n'+self.__str__()
+
+    @property
+    def track_models(self):
+        return self._track_model_list
+
+    def sort(self):
+        dict_ = dict()
+        for i_track_model in self._track_model_list:
+            i_clip_start = i_track_model.clip_start
+            i_layer_index = i_track_model.layer_index
+            dict_.setdefault((i_clip_start, i_layer_index), []).append(i_track_model)
+
+        keys = dict_.keys()
+
+        keys.sort()
+        self._track_model_list = []
+        for i_key in keys:
+            i_track_models = dict_[i_key]
+            for j_track_model in i_track_models:
+                self._track_model_list.append(j_track_model)
+
+    def apply_timeframe(self, timeframe):
+        clip_start_first = 0
+        for i_idx, i_track_model in enumerate(self._track_model_list):
+            i_clip_start = i_track_model.clip_start
+            if i_idx == 0:
+                i_track_model.move_by_clip_start(timeframe)
+                clip_start_first = i_clip_start
+            else:
+                i_offset = i_clip_start-clip_start_first
+                i_track_model.move_by_clip_start(timeframe+i_offset)
+
+    def apply_layer_index(self, layer_index):
+        layer_index_first = 0
+        for i_idx, i_track_model in enumerate(self._track_model_list):
+            i_layer_index = i_track_model.layer_index
+            if i_idx == 0:
+                layer_index_first = i_layer_index
+                i_track_model.layer_index = layer_index
+            else:
+                i_offset = i_layer_index-layer_index_first
+                i_track_model.layer_index = layer_index+i_offset
+
+
+class TrackModelStage(object):
     TIME_BASIC_UNIT = 100
     LAYER_BASIC_UNIT = 40
 
@@ -712,9 +768,23 @@ class TrackStageModel(object):
             widget = TrackWidget()
 
         widget._track_model = track_model
-        widget._track_last_model = track_model.copy()
+        widget._last_track_model = track_model.copy()
         self.register(widget)
         return track_model
+
+    def create_node_fnc(self, **kwargs):
+        track_model = TrackModel(self)
+        track_model.setup(**kwargs)
+        return track_model
+
+    def create_group_fnc(self, track_args_list):
+        track_models = []
+        for i_track_args in track_args_list:
+            if isinstance(i_track_args, dict):
+                track_models.append(self.create_node_fnc(**i_track_args))
+            elif isinstance(i_track_args, TrackModel):
+                track_models.append(i_track_args)
+        return TrackModelGroup(track_models)
 
     def delete_one(self, track_model):
         self._track_widget_dict.pop(track_model.key)
@@ -731,6 +801,9 @@ class TrackStageModel(object):
 
     def step_y_loc(self, y):
         return self._layer_coord_model.step_coord_loc(y)
+
+    def compute_timeframe(self, x):
+        return self._time_coord_model.compute_unit_index_loc_(x)
 
     def compute_layer_index(self, y):
         return self._layer_coord_model.compute_unit_index_loc_(y)
@@ -759,6 +832,7 @@ class TrackStageModel(object):
         sys.stdout.write('stage is change.\n')
         clip_start_list = []
         clip_end_list = []
+
         # get data by layer index
         dict_0 = {}
         for k, v in self._track_widget_dict.items():
@@ -780,6 +854,7 @@ class TrackStageModel(object):
         layer_index_list = dict_0.keys()
         layer_index_list.sort()
         layer_index_list.reverse()
+
         # update valid frames
         for i_layer_index in layer_index_list:
             i_models = dict_0[i_layer_index]
@@ -840,16 +915,29 @@ class TrackStageModel(object):
     def compute_max_layer_index(self):
         return max(x.layer_index for x in self.get_all_models())
 
+    def find_next_key(self, name):
+        if name not in self._track_widget_dict:
+            return name
+        else:
+            count = 1
+            new_name = '{}_copy'.format(name)
+            while new_name in self._track_widget_dict:
+                new_name = '{}_copy{}'.format(name, count)
+                count += 1
+
+            if new_name not in self._track_widget_dict:
+                return new_name
+
 
 class TrackStageTravel(object):
-    def __init__(self, data):
-        self._data = data
+    def __init__(self, ordered_track_model_dict):
+        self._ordered_track_model_dict = ordered_track_model_dict
         self._index = 0
         self._index_minimum = 0
-        self._index_maximum = len(self._data)-1
+        self._index_maximum = len(self._ordered_track_model_dict)-1
         self._frame_range_dict = {}
         self._track_model_index_dict = {}
-        for idx, (k, v) in enumerate(data.items()):
+        for idx, (k, v) in enumerate(self._ordered_track_model_dict.items()):
             self._frame_range_dict[idx] = k
             self._track_model_index_dict[idx] = v
 

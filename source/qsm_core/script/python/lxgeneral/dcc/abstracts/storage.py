@@ -35,12 +35,12 @@ class AbsObjStgGuiExtraDef(object):
     def copy_path_to_clipboard(self):
         import lxgui.qt.core as gui_qt_core
 
-        gui_qt_core.QtUtil.copy_text_to_clipboard(self.path)
+        gui_qt_core.QtUtil.write_clipboard(self.path)
 
     def copy_name_to_clipboard(self):
         import lxgui.qt.core as gui_qt_core
 
-        gui_qt_core.QtUtil.copy_text_to_clipboard(self.name)
+        gui_qt_core.QtUtil.write_clipboard(self.name)
 
 
 class AbsStgDirectory(

@@ -51,6 +51,7 @@ class QtTrackLayer(
 
     def _set_current_index_(self, index):
         self._current_index = index
+        self._refresh_widget_draw_()
         
     def _get_current_index_(self):
         return self._current_index

@@ -268,7 +268,7 @@ class QtEntryForConstant(
     def _on_copy_path_(self):
         _ = self.text()
         if _:
-            _qt_core.QtUtil.copy_text_to_clipboard(_)
+            _qt_core.QtUtil.write_clipboard(_)
 
     def _set_entry_use_as_storage_(self, boolean=True):
         super(QtEntryForConstant, self)._set_entry_use_as_storage_(boolean)

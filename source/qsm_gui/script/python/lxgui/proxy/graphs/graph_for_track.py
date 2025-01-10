@@ -82,13 +82,13 @@ class PrxTrackWidget(
         self._qt_widget._graph._setup_graph_by_universe_()
 
     def get_stage_model(self):
-        return self._qt_widget._track_guide._stage_model
+        return self._qt_widget._track_guide._track_model_stage
 
     def get_current(self):
-        return self._qt_widget._track_timeline._get_current_frame_()
+        return self._qt_widget._track_timeline._get_current_timeframe_()
 
     def set_current_frame(self, frame):
-        self._qt_widget._track_timeline._set_current_frame_(frame)
+        self._qt_widget._track_timeline._set_current_timeframe_(frame)
 
     def restore(self):
         self._qt_widget._graph._restore_graph_()
@@ -146,7 +146,7 @@ class PrxTrackWidget(
             clip_start = i_clip_end+1
 
     def get_all_layer_names(self):
-        return self._qt_widget._track_guide._stage_model.get_all_layer_names()
+        return self._qt_widget._track_guide._track_model_stage.get_all_layer_names()
 
     def get_all_track_keys(self):
-        return self._qt_widget._track_guide._stage_model.get_all_layer_names()
+        return self._qt_widget._track_guide._track_model_stage.get_all_layer_names()

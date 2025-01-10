@@ -570,7 +570,6 @@ class QtGeneralNodeGraph(
                     sort_key=sort_key
                 )
 
-    # sbj
     def _create_node_(self, *args, **kwargs):
         ng_node = self.NG_NODE_CLS(self)
         self._graph_nodes.append(ng_node)

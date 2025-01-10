@@ -30,8 +30,8 @@ class QtTrackGuide(
             x, y, w, h
         )
 
-        start_x = self._stage_model.compute_start_x()
-        track_w = self._stage_model.compute_width()
+        start_x = self._track_model_stage.compute_start_x()
+        track_w = self._track_model_stage.compute_width()
         txt_w = self._text_w
         txt_h = h/2
 
@@ -51,7 +51,7 @@ class QtTrackGuide(
         )
 
     def _update_stage_(self):
-        self._stage_model.update()
+        self._track_model_stage.update()
         self.stage_changed.emit()
 
         self._refresh_widget_all_()
@@ -80,7 +80,7 @@ class QtTrackGuide(
 
         self._graph = None
 
-        self._stage_model = bsc_model.TrackStageModel()
+        self._track_model_stage = bsc_model.TrackModelStage()
 
         self.installEventFilter(self)
 
@@ -146,17 +146,17 @@ class QtTrackGuide(
 
         painter.drawText(
             self._track_start_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
-            str(self._stage_model.track_start)
+            str(self._track_model_stage.track_start)
         )
         painter.drawText(
             self._track_end_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
-            str(self._stage_model.track_end)
+            str(self._track_model_stage.track_end)
         )
 
     def _draw_track_frame_ranges_(self, painter):
         h = self.height()
 
-        tvl = self._stage_model.generate_travel()
+        tvl = self._track_model_stage.generate_travel()
         while tvl.is_valid():
 
             frame_range, model = tvl.current_data()
@@ -165,13 +165,13 @@ class QtTrackGuide(
 
             last_key = tvl.last_key()
             if last_key:
-                last_node = self._stage_model.get_one_node(last_key)
+                last_node = self._track_model_stage.get_one_node(last_key)
             else:
                 last_node = None
 
             next_key = tvl.next_key()
             if next_key:
-                next_node = self._stage_model.get_one_node(next_key)
+                next_node = self._track_model_stage.get_one_node(next_key)
             else:
                 next_node = None
 
@@ -183,17 +183,17 @@ class QtTrackGuide(
                 else:
                     name = key
 
-                node = self._stage_model.get_one_node(key)
+                node = self._track_model_stage.get_one_node(key)
                 if last_node is None:
                     last_last_key = tvl.last_last_key()
-                    last_last_node = self._stage_model.get_one_node(last_last_key)
+                    last_last_node = self._track_model_stage.get_one_node(last_last_key)
                     self._draw_frame_range_(
                         painter, last_last_node, node, next_node,
                         frame_range, name, model.rgb, h, is_start, is_end
                     )
                 elif next_node is None:
                     next_next_key = tvl.next_next_key()
-                    next_next_node = self._stage_model.get_one_node(next_next_key)
+                    next_next_node = self._track_model_stage.get_one_node(next_next_key)
                     self._draw_frame_range_(
                         painter, last_node, node, next_next_node,
                         frame_range, name, model.rgb, h, is_start, is_end
@@ -225,29 +225,29 @@ class QtTrackGuide(
 
         count = end-start+1
 
-        start_x = self._stage_model.compute_start_x_at(start)
-        count_w = self._stage_model.compute_width_for(count)
+        start_x = self._track_model_stage.compute_start_x_at(start)
+        count_w = self._track_model_stage.compute_width_for(count)
         end_x = start_x+count_w
         #
         if node is not None:
             node_pre_blend = node._track_model.pre_blend
-            node_pre_blend_w = self._stage_model.compute_width_for(node_pre_blend)
-            node_post_blend_w = self._stage_model.compute_width_for(node._track_model.post_blend)
+            node_pre_blend_w = self._track_model_stage.compute_width_for(node_pre_blend)
+            node_post_blend_w = self._track_model_stage.compute_width_for(node._track_model.post_blend)
         else:
             node_pre_blend = last_node._track_model.pre_blend
-            node_pre_blend_w = self._stage_model.compute_width_for(last_node._track_model.pre_blend)
-            node_post_blend_w = self._stage_model.compute_width_for(last_node._track_model.post_blend)
+            node_pre_blend_w = self._track_model_stage.compute_width_for(last_node._track_model.pre_blend)
+            node_post_blend_w = self._track_model_stage.compute_width_for(last_node._track_model.post_blend)
 
         # last node
         if last_node is not None:
             last_node_post_blend = last_node._track_model.post_blend
-            last_node_post_blend_w = self._stage_model.compute_width_for(last_node_post_blend)
+            last_node_post_blend_w = self._track_model_stage.compute_width_for(last_node_post_blend)
         else:
             last_node_post_blend = 0
             last_node_post_blend_w = 0
         # next node
         if next_node is not None:
-            next_node_pre_blend_w = self._stage_model.compute_width_for(next_node._track_model.pre_blend)
+            next_node_pre_blend_w = self._track_model_stage.compute_width_for(next_node._track_model.pre_blend)
         else:
             next_node_pre_blend_w = 0
 
@@ -385,8 +385,8 @@ class QtTrackGuide(
         self._graph = widget
 
     def _restore_stage_(self):
-        self._stage_model.restore()
+        self._track_model_stage.restore()
         self._refresh_widget_all_()
 
     def _delete_node_(self, track_model):
-        self._stage_model.delete_one(track_model)
+        self._track_model_stage.delete_one(track_model)
