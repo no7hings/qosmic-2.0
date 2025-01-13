@@ -192,7 +192,7 @@ class QtAdvCharacterPicker(
         self._draw_path_dict = {}
 
         main_path = gui_qt_core.QtPainterPath()
-        main_path._add_points_(
+        main_path._add_coords_(
             [
                 (self._main_frame_rect.topLeft().x(), self._main_frame_rect.topLeft().y()),
                 (self._main_frame_rect.topRight().x(), self._main_frame_rect.topRight().y()),
@@ -212,7 +212,7 @@ class QtAdvCharacterPicker(
                 i_points.append(j_point)
 
             i_points.append(i_points[0])
-            i_path._add_points_(i_points)
+            i_path._add_coords_(i_points)
 
         self.setMinimumWidth(w_min)
 

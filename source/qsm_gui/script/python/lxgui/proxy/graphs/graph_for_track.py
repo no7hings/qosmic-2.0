@@ -99,6 +99,9 @@ class PrxTrackWidget(
     def create_test(self):
         post_cycles = range(1, 5)
 
+        pre_blends = range(4, 8)
+        post_blends = range(4, 8)
+
         motion_json_ptn = 'Z:/libraries/lazy-resource/all/motion_splice/{name}/json/{name}.motion.json'
 
         keys = [
@@ -117,6 +120,8 @@ class PrxTrackWidget(
         for i_index in range(10):
             i_name = random.choice(keys)
             i_post_cycle = random.choice(post_cycles)
+            i_pre_blend = random.choice(pre_blends)
+            i_post_blend = random.choice(post_blends)
 
             i_motion_json = motion_json_ptn.format(name=i_name)
 
@@ -138,7 +143,7 @@ class PrxTrackWidget(
                 source_start=1, source_end=i_source_count-1,
                 pre_cycle=1, post_cycle=i_post_cycle,
                 scale_start=None, scale_end=None, scale_offset=None,
-                pre_blend=4, post_blend=4,
+                pre_blend=i_pre_blend, post_blend=i_post_blend,
                 layer_index=i_index,
                 is_bypass=0, is_trash=0,
                 motion_json=i_motion_json,

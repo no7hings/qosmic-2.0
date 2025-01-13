@@ -569,9 +569,15 @@ class TrackModel(object):
     def pre_blend(self):
         return self._pre_blend
 
+    def set_pre_blend(self, value):
+        self._pre_blend = max(min(value, 24), 1)
+
     @property
     def post_blend(self):
         return self._post_blend
+
+    def set_post_blend(self, value):
+        self._post_blend = max(min(value, 24), 1)
 
     def compute_timetrack_args(self):
         bsc_x = self.compute_basic_x_at(self._clip_start)
@@ -614,7 +620,7 @@ class TrackModel(object):
 class TrackWidget(object):
     def __init__(self, *args, **kwargs):
         self._track_model = None
-        self.__track_last_model = None
+        self._last_track_model = None
 
 
 class TrackModelGroup(object):
@@ -889,6 +895,11 @@ class TrackModelStage(object):
     def get_one_node(self, key):
         return self._track_widget_dict.get(key)
 
+    def get_one(self, key):
+        _ = self._track_widget_dict.get(key)
+        if _:
+            return _._track_model
+
     def get_all_nodes(self):
         return self._track_widget_dict.values()
 
@@ -946,29 +957,29 @@ class TrackStageTravel(object):
     def current_data(self):
         return self._frame_range_dict[self._index], self._track_model_index_dict[self._index]
 
-    def last_data(self):
+    def pre_data(self):
         if self._index > self._index_minimum:
             return self._frame_range_dict[self._index-1], self._track_model_index_dict[self._index-1]
 
-    def last_model(self):
+    def pre_model(self):
         if self._index > self._index_minimum:
             return self._track_model_index_dict[self._index-1]
 
-    def last_key(self):
-        track_model = self.last_model()
+    def pre_key(self):
+        track_model = self.pre_model()
         if track_model:
             return track_model.key
 
-    def last_last_model(self):
+    def pre_pre_model(self):
         if self._index > self._index_minimum+1:
             return self._track_model_index_dict[self._index-2]
 
-    def last_last_data(self):
+    def pre_pre_data(self):
         if self._index > self._index_minimum+1:
             return self._frame_range_dict[self._index-2], self._track_model_index_dict[self._index-2]
 
-    def last_last_key(self):
-        track_model = self.last_last_model()
+    def pre_pre_key(self):
+        track_model = self.pre_pre_model()
         if track_model:
             return track_model.key
 

@@ -158,6 +158,15 @@ class QtTrackGraph(
             c._graph = self
             self._widget._undo_stack.push(c)
 
+    def _graph_bypass_node_fnc_(self, track_model, flag):
+        key = track_model.key
+        if key in self._graph_node_dict:
+            node_widget = self._graph_node_dict[key]
+
+            track_model.set_bypass(int(flag))
+
+            node_widget._refresh_by_bypass_()
+
     def _on_graph_node_trash_auto_(self):
         cmd_data = []
 
@@ -175,6 +184,13 @@ class QtTrackGraph(
             )
             c._graph = self
             self._widget._undo_stack.push(c)
+
+    def _graph_node_trash_fnc_(self, track_model, flag):
+        key = track_model.key
+        if key in self._graph_node_dict:
+            node_widget = self._graph_node_dict[key]
+            track_model.set_trash(int(flag))
+            node_widget._refresh_by_trash_()
 
     def _on_graph_node_copy_auto_(self):
         track_data = []
@@ -194,7 +210,7 @@ class QtTrackGraph(
             )
         )
         _qt_core.QtUtil.write_clipboard(data_string)
-        
+
     def _on_graph_node_cut_auto_(self):
         track_data = []
         nodes = self._get_selected_nodes_()
@@ -297,9 +313,6 @@ class QtTrackGraph(
             c._graph = self
             self._widget._undo_stack.push(c)
 
-    def _graph_node_paste_cut_fnc_(self, track_model):
-        self._graph_node_update_track_model_fnc_(track_model)
-
     def _graph_node_paste_copy_fnc_(self, track_model, flag):
         # create
         key = track_model.key
@@ -320,6 +333,39 @@ class QtTrackGraph(
                 track_model = node_widget._track_model
                 track_model.set_trash(1)
                 node_widget._refresh_by_trash_()
+
+    def _graph_node_paste_cut_fnc_(self, track_model):
+        self._graph_node_update_track_model_fnc_(track_model)
+
+    def _graph_node_update_blend_(self, key, blend_flag):
+        cmd_data = []
+        if key in self._graph_node_dict:
+            node_widget = self._graph_node_dict[key]
+            track_model = node_widget._track_model
+
+            track_model_new = track_model.copy()
+            if blend_flag == 0:
+                track_model_new.set_pre_blend(node_widget._pre_blend_tmp)
+            elif blend_flag == 1:
+                track_model_new.set_post_blend(node_widget._post_blend_tmp)
+
+            last_track_model = track_model.copy()
+            cmd_data.append(('blend', (track_model_new, last_track_model)))
+
+        if cmd_data:
+            c = _undo_command.QtTrackActionCommand(
+                cmd_data
+            )
+            c._graph = self
+            self._widget._undo_stack.push(c)
+
+    def _graph_node_update_blend_fnc_(self, track_model):
+        key = track_model.key
+        if key in self._graph_node_dict:
+            node_widget = self._graph_node_dict[key]
+            self._graph_node_update_track_model_fnc_(track_model)
+            node_widget._update_blend_tmp_()
+            self._update_stage_()
 
     def _graph_node_update_track_model_fnc_(self, track_model):
         key = track_model.key
@@ -344,22 +390,6 @@ class QtTrackGraph(
         self._create_node_(
             **track_model.to_dict()
         )
-
-    def _graph_bypass_node_fnc_(self, track_model, flag):
-        key = track_model.key
-        if key in self._graph_node_dict:
-            node_widget = self._graph_node_dict[key]
-
-            track_model.set_bypass(int(flag))
-
-            node_widget._refresh_by_bypass_()
-
-    def _graph_node_trash_fnc_(self, track_model, flag):
-        key = track_model.key
-        if key in self._graph_node_dict:
-            node_widget = self._graph_node_dict[key]
-            track_model.set_trash(int(flag))
-            node_widget._refresh_by_trash_()
 
     def _update_stage_(self):
         self._track_guide._update_stage_()
@@ -671,6 +701,7 @@ class QtTrackView(QtWidgets.QWidget):
 
         self._track_timehandle = _timehandle.QtTimeHandle(self)
         self._track_timeline._set_timehandle_(self._track_timehandle)
+        self._track_timehandle._set_graph_(self._graph)
 
 
 class QtTrackWidget(_vew_wgt_base._BaseViewWidget):

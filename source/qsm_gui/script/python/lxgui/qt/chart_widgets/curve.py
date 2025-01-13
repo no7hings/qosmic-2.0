@@ -38,3 +38,15 @@ class QtChartForCurve(QtWidgets.QWidget):
         self._chart_model = _curve_model.ChartModelForCurve()
 
         self.installEventFilter(self)
+
+    def eventFilter(self, *args):
+        widget, event = args
+        if widget == self:
+            if event.type() == QtCore.QEvent.Resize:
+                self._refresh_widget_all_()
+        return False
+
+    def paintEvent(self, event):
+        painter = _qt_core.QtPainter(self)
+        painter.drawPixmap(0, 0, self._pixmap_cache)
+        painter.device()

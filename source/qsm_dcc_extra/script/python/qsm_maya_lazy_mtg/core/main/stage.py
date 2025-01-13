@@ -87,23 +87,24 @@ class MtgStage(object):
                     frame_range, is_start, is_end, pre_blend, post_blend
                 )
 
-                model_last = tvl.last_model()
-                if model_last:
-                    key_last = model_last.key
-                    layer_name_last = _bsc_util.MtgRigNamespace.to_layer_name(rig_namespace, key_last)
-                    mtg_layer_last = _layer.MtgLayer(layer_name_last)
-                    mtg_layer.update_root_start_fnc(mtg_layer, mtg_layer_last, frame_range[0])
+                pre_model = tvl.pre_model()
+                if pre_model:
+                    pre_key = pre_model.key
+                    pre_layer_name = _bsc_util.MtgRigNamespace.to_layer_name(rig_namespace, pre_key)
+                    pre_mtg_layer = _layer.MtgLayer(pre_layer_name)
+                    mtg_layer.update_root_start_fnc(mtg_layer, pre_mtg_layer, frame_range[0])
                 else:
                     if is_start:
                         # update root start
                         mtg_layer.update_root_start_by_self_fnc(mtg_layer, frame_range[0], frame_range[1])
                     else:
-                        model_last_last = tvl.last_last_model()
-                        if model_last_last:
-                            key_last = model_last_last.key
-                            layer_name_last = _bsc_util.MtgRigNamespace.to_layer_name(rig_namespace, key_last)
-                            mtg_layer_last = _layer.MtgLayer(layer_name_last)
-                            mtg_layer.update_root_start_fnc(mtg_layer, mtg_layer_last, frame_range[0])
+                        pre_pre_model = tvl.pre_pre_model()
+                        if pre_pre_model:
+                            pre_key = pre_pre_model.key
+                            pre_layer_name = _bsc_util.MtgRigNamespace.to_layer_name(rig_namespace, pre_key)
+                            pre_mtg_layer = _layer.MtgLayer(pre_layer_name)
+                            mtg_layer.update_root_start_fnc(mtg_layer, pre_mtg_layer, frame_range[0])
+
                 # todo: may chr is not move
                 mtg_master_layer.update_root_loc_for(
                     mtg_layer, is_start, valid_start, valid_end
@@ -111,14 +112,14 @@ class MtgStage(object):
             else:
                 # when current is empty, use last model, ignore start
                 if is_start is False:
-                    model_last = tvl.last_model()
-                    if model_last:
-                        key_last = model_last.key
-                        layer_name_last = _bsc_util.MtgRigNamespace.to_layer_name(rig_namespace, key_last)
-                        mtg_layer_last = _layer.MtgLayer(layer_name_last)
+                    pre_model = tvl.pre_model()
+                    if pre_model:
+                        pre_key = pre_model.key
+                        pre_layer_name = _bsc_util.MtgRigNamespace.to_layer_name(rig_namespace, pre_key)
+                        pre_mtg_layer = _layer.MtgLayer(pre_layer_name)
                         start_frame, end_frame = frame_range
                         mtg_master_layer.update_root_loc_end_for(
-                            mtg_layer_last, start_frame, end_frame
+                            pre_mtg_layer, start_frame, end_frame
                         )
 
             tvl.next()

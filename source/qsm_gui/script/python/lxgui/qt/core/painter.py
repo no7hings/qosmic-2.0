@@ -21,7 +21,7 @@ class QtPainterPath(QtGui.QPainterPath):
         super(QtPainterPath, self).__init__(*args)
         self.setFillRule(QtCore.Qt.WindingFill)
 
-    def _add_points_(self, points):
+    def _add_coords_(self, points):
         points_ = [QtCore.QPointF(x, y) for x, y in points]
         self.addPolygon(QtGui.QPolygonF(points_))
 
@@ -1353,7 +1353,7 @@ class QtPainter(QtGui.QPainter):
 
     def _draw_path_by_coords_(self, coords, antialiasing=True):
         path = QtPainterPath()
-        path._add_points_(coords)
+        path._add_coords_(coords)
         self._set_antialiasing_(antialiasing)
         self.drawPath(path)
         return path

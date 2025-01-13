@@ -22,7 +22,7 @@ if __name__ == '__main__':
     app = wrap.QtWidgets.QApplication(sys.argv)
 
     w = W()
-    w.set_definition_window_size((960, 480))
+    w.set_definition_window_size((480, 480))
     w.show_window_auto()
 
     sys.exit(app.exec_())

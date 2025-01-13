@@ -462,7 +462,13 @@ class QtTrackNode(
         self._scale_left_rect, self._scale_right_rect = QtCore.QRect(), QtCore.QRect()
 
         self._pre_blend_rect = QtCore.QRect()
+        self._pre_blend_flag = False
+        self._pre_blend_tmp = 0
         self._post_blend_rect = QtCore.QRect()
+        self._post_blend_flag = False
+        self._post_blend_tmp = 0
+
+        self._guide_path = QtGui.QPainterPath()
 
         self._track_model = None
         self._last_track_model = None
@@ -684,9 +690,7 @@ class QtTrackNode(
             _gui_core.GuiRgba.Transparent
         )
         painter._set_border_width_(border_width)
-        painter.drawRect(
-            rect
-        )
+        painter.drawRect(rect)
 
     def _draw_basic_(self, painter):
         if self._track_model.is_bypass > 0:
@@ -768,6 +772,8 @@ class QtTrackNode(
         else:
             self.show()
 
+        self._update_blend_tmp_()
+
         self._node_update_track_model_fnc_(self._track_model)
 
         self._build_timetrack_trim_()
@@ -834,3 +840,31 @@ class QtTrackNode(
                     trm_x, trm_y, trm_w, trm_h
                 )
                 self._end_trim.show()
+
+    def _get_pre_blend_(self, flag):
+        if flag is True:
+            return self._pre_blend_tmp
+        return self._track_model.pre_blend
+
+    def _update_pre_blend_tmp_(self, offset):
+        value = self._track_model.pre_blend-offset
+        maximum = 24
+        minimum = 1
+        # value >= 1
+        self._pre_blend_tmp = max(min(value, maximum), minimum)
+
+    def _get_post_blend_(self, flag):
+        if flag is True:
+            return self._post_blend_tmp
+        return self._track_model.post_blend
+
+    def _update_post_blend_tmp_(self, offset):
+        value = self._track_model.post_blend+offset
+        maximum = 24
+        minimum = 1
+        # value >= 1
+        self._post_blend_tmp = max(min(value, maximum), minimum)
+
+    def _update_blend_tmp_(self):
+        self._pre_blend_tmp = self._track_model.pre_blend
+        self._post_blend_tmp = self._track_model.post_blend

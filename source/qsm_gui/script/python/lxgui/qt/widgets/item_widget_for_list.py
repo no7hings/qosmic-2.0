@@ -97,7 +97,7 @@ class QtItemWidgetForList(
                 (frm_x_0+frm_w_0, frm_y_0+frm_h_0-20)
             ]
             points += points[:1]
-            self._statu_draw_path._add_points_(
+            self._statu_draw_path._add_coords_(
                 points
             )
 
