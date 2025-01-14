@@ -7,7 +7,7 @@ from ...qt.widgets import entry_frame as _qt_widget_entry_frame
 
 from ...qt.widgets import view_for_tag as _view_for_tag_filter
 
-from ...qt.widgets import view_for_histogram_chart as _view_for_histogram_chart
+from ...qt.chart_widgets import histogram as _cht_wgt_for_histogram
 # proxy abstracts
 from .. import abstracts as _prx_abstracts
 
@@ -25,7 +25,7 @@ class PrxTagView(
     def _show_chart_fnc(self):
         data = self._qt_view._generate_chart_data_()
         if data:
-            chart_view = _view_for_histogram_chart.QtViewForHistogramChart()
+            chart_view = _cht_wgt_for_histogram.QtHistogramChartWidget()
             chart_view._set_data_(data)
             _qt_core.QtApplication.show_tool_dialog(
                 widget=chart_view, title='Histogram Chart', size=(640, 480), parent=self._qt_widget

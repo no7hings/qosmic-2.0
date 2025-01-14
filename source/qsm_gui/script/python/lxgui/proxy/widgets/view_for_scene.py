@@ -22,7 +22,7 @@ class PrxSceneView(
     gui_prx_abstracts.AbsPrxWidget,
 ):
     QT_WIDGET_CLS = _qt_vew_wgt_base._BaseViewWidget
-    QT_VIEW_CLS = _qt_vew_wgt_list._QtListViewWidget
+    QT_VIEW_CLS = _qt_vew_wgt_list._QtListView
 
     def __init__(self, *args, **kwargs):
         super(PrxSceneView, self).__init__(*args, **kwargs)

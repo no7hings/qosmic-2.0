@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxgui.qt.widgets as qt_widgets
+import lxgui.qt.chart_widgets as qt_cht_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
@@ -11,7 +11,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         super(W, self).__init__(*args, **kwargs)
 
         keys = ['triangle', 'memory']
-        self._d = qt_widgets.QtViewForLineChart(self._qt_widget)
+        self._d = qt_cht_widgets.QtLineChartWidget(self._qt_widget)
         self._d._set_data_(
             self.generate_data(keys), keys, data_type_dict=dict(memory='file_size')
         )

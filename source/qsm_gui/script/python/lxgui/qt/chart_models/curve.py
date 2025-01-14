@@ -14,19 +14,30 @@ from . import base as _base
 
 class ChartModelForCurve(object):
     class TangentTypes:
-        Linear = 0
-        Flag = 1
+        Linear = 'linear'
+        Flat = 'flat'
+        Clamp = 'clamp'
+        Step = 'step'
+
+        All = [
+            Linear,
+            Flat,
+            # Clamp,
+            Step
+        ]
+        Default = Flat
 
     def __init__(self):
         self._branches = [
+            # is dict
             _base._Data(
                 coord=(2, 2)
             ),
             _base._Data(
-                coord=(4, 4)
+                coord=(4, 6)
             ),
             _base._Data(
-                coord=(6, 6)
+                coord=(6, 8)
             )
         ]
 
@@ -38,7 +49,7 @@ class ChartModelForCurve(object):
 
         self._tangent_handle_width = 1
 
-        self._tangent_type = ''
+        self._tangent_type = self.TangentTypes.Default
 
     def generate_pixmap(self, x, y, w, h):
         self.update(x, y, w, h)
@@ -74,59 +85,85 @@ class ChartModelForCurve(object):
                     )
                 )
 
-        self._draw_line(painter, points)
+        self._draw_curve_fnc(painter, points, self._tangent_type, self._tangent_handle_width)
 
         painter.setPen(QtCore.Qt.black)
         painter.drawPath(path)
 
-    def _draw_line(self, painter, points):
+    def _draw_curve_fnc(self, painter, points, tangent_type, tangent_handle_width):
         if len(points) < 2:
             return
 
         path = QtGui.QPainterPath()
 
-        point_first = points[0]
-        path.moveTo(point_first)
-
         c = len(points)
 
-        for i in range(len(points)-1):
-            i_point_pre = points[i]
-            i_point = points[i+1]
+        for i in range(c):
+            i_point = points[i]
+            if i == 0:
+                path.moveTo(i_point)
+            else:
+                i_point_pre = points[i-1]
+                i_point_next = points[i+1] if i < c-1 else None
 
-            i_out_tangent_point = QtCore.QPointF(i_point_pre.x() + self._tangent_handle_width, i_point_pre.y())
-            i_in_tangent_point = QtCore.QPointF(i_point.x()-self._tangent_handle_width, i_point.y())
+                i_out_tangent_point_pre = None
+                i_in_tangent_point = None
+                if tangent_type == self.TangentTypes.Flat:
+                    i_out_tangent_point_pre = QtCore.QPointF(i_point_pre.x()+tangent_handle_width, i_point_pre.y())
+                    i_in_tangent_point = QtCore.QPointF(i_point.x()-tangent_handle_width, i_point.y())
+                    path.cubicTo(i_out_tangent_point_pre, i_in_tangent_point, i_point)
+                elif tangent_type == self.TangentTypes.Linear:
+                    i_out_tangent_point_pre = QtCore.QPointF(
+                        (i_point_pre.x()+i_point.x())/2, (i_point_pre.y() + i_point.y())/2
+                    )
+                    i_in_tangent_point = i_out_tangent_point_pre
+                    path.cubicTo(i_out_tangent_point_pre, i_in_tangent_point, i_point)
+                elif tangent_type == self.TangentTypes.Clamp:
+                    pass
+                    
+                elif tangent_type == self.TangentTypes.Step:
+                    mid_point = QtCore.QPointF(i_point.x(), i_point_pre.y())
+                    path.lineTo(mid_point)
+                    path.lineTo(i_point)
+                else:
+                    raise RuntimeError()
 
-            painter.setPen(QtGui.QPen(QtGui.QColor(95, 95, 95, 255), 2))
-            painter.drawLine(i_point_pre, i_out_tangent_point)
-            painter.drawLine(i_point, i_in_tangent_point)
+                if i_out_tangent_point_pre is not None:
+                    pen = QtGui.QPen(QtGui.QColor(0, 255, 0, 255))
+                    pen.setStyle(QtCore.Qt.DashLine)
+                    painter.setPen(pen)
+                    painter.setBrush(QtGui.QColor(0, 255, 0, 255))
+                    painter.drawLine(i_point_pre, i_out_tangent_point_pre)
+                    i_out_tangent_rect_pre = QtCore.QRect(
+                        i_out_tangent_point_pre.x()-2, i_out_tangent_point_pre.y()-3, 6, 6
+                    )
+                    painter.drawEllipse(i_out_tangent_rect_pre)
 
-            #
-            painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0, 255), 2))
-            i_rect = QtCore.QRect(
+                if i_in_tangent_point is not None:
+                    pen = QtGui.QPen(QtGui.QColor(255, 0, 0, 255))
+                    pen.setStyle(QtCore.Qt.DashLine)
+                    painter.setPen(pen)
+                    painter.setBrush(QtGui.QColor(255, 0, 0, 255))
+                    painter.drawLine(i_point, i_in_tangent_point)
+                    i_in_tangent_rect = QtCore.QRect(
+                        i_in_tangent_point.x()-2, i_in_tangent_point.y()-3, 6, 6
+                    )
+                    painter.drawEllipse(i_in_tangent_rect)
+
+            # point
+            painter.setPen(
+                QtGui.QColor(255, 255, 0)
+            )
+            painter.setBrush(
+                QtGui.QColor(255, 255, 0)
+            )
+            i_point_rect = QtCore.QRect(
                 i_point.x()-3, i_point.y()-3, 6, 6
             )
-            painter.drawEllipse(
-                i_rect
-            )
-
-            # out tangent
-            painter.setPen(QtGui.QPen(QtGui.QColor(0, 255, 0, 255), 2))
-            i_in_rect = QtCore.QRect(
-                i_out_tangent_point.x()-2, i_out_tangent_point.y()-2, 4, 4
-            )
-            painter.drawEllipse(i_in_rect)
-
-            # in tangent
-            painter.setPen(QtGui.QPen(QtGui.QColor(255, 0, 0, 255), 2))
-            i_out_rect = QtCore.QRect(
-                i_in_tangent_point.x()-2, i_in_tangent_point.y()-2, 4, 4
-            )
-            painter.drawEllipse(i_out_rect)
-
-            path.cubicTo(i_out_tangent_point, i_in_tangent_point, i_point)
+            painter.drawEllipse(i_point_rect)
 
         painter.setPen(QtGui.QPen(QtGui.QColor(223, 223, 223, 255), 2))
+        painter.setBrush(QtGui.QColor(0, 0, 0, 0))
         painter.drawPath(path)
 
     def compute_x_maximum(self):
@@ -149,4 +186,7 @@ class ChartModelForCurve(object):
             y_range = max(y_max-y_min, 1e-5)
             return -x_min, -y_min, (self._w-self._margin*2)/x_range, (self._h-self._margin*2)/y_range
         return 0, 0, 1, 1
+
+    def set_tangent_type(self, tangent_type):
+        self._tangent_type = tangent_type
 

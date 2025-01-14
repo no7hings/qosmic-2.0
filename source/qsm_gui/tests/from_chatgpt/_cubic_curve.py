@@ -76,6 +76,7 @@ class CurveWindow(QMainWindow):
         path.moveTo(points[0])
 
         for i in range(1, len(points) - 1):
+            print i
             # 当前点
             prev_point = points[i - 1]
             current_point = points[i]
@@ -84,6 +85,9 @@ class CurveWindow(QMainWindow):
             # 计算控制点
             control_point1 = self.calculate_control_point(current_point, prev_point, -self.handle_length)
             control_point2 = self.calculate_control_point(current_point, next_point, self.handle_length)
+
+            painter.drawPoint(control_point1)
+            painter.drawPoint(control_point2)
 
             # 添加贝塞尔曲线
             path.cubicTo(control_point1, control_point2, next_point)
@@ -104,12 +108,15 @@ class CurveWindow(QMainWindow):
         scale = length / distance
         return QPointF(origin.x() + dx * scale, origin.y() + dy * scale)
 
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     # 坐标列表
-    coord_list = [{"coord": (0, 0)}, {"coord": (1, 1)}, {"coord": (2, 0)}, {"coord": (3, 1)}, {"coord": (4, 0)}]
+    coord_list = [
+        {"coord": (2, 2)},
+        {"coord": (4, 6)},
+        {"coord": (6, 8)},
+    ]
 
     # 显示窗口（切换模式为 "linear" 或 "spline"）
     mode = "spline"  # 选择 "spline" 或 "linear"

@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxgui.core as gui_core
 
-import lxgui.qt.widgets as qt_widgets
+import lxgui.qt.chart_widgets as qt_cht_widgets
 
 import qsm_screw.core as lzy_src_core
 
@@ -55,7 +55,7 @@ class Main(object):
             self.show_dialog(dict_, keys)
 
     def show_dialog(self, data, keys):
-        chart_view = qt_widgets.QtViewForLineChart()
+        chart_view = qt_cht_widgets.QtLineChartWidget()
         chart_view._set_name_text_('Process Memory Usage')
         chart_view._set_data_(
             data,

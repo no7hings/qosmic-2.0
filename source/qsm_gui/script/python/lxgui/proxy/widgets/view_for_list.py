@@ -104,7 +104,7 @@ class PrxListView(
         self._set_prx_view_def_init_(self._qt_view)
         self._qt_view._set_sort_enable_(True)
         #
-        self._qt_info_bar_chart = _qt_widget_chart.QtChartForInfoBar()
+        self._qt_info_bar_chart = _qt_widget_chart.QtInfoChartBar()
         self._qt_info_bar_chart.hide()
         self._qt_layout_0.addWidget(self._qt_info_bar_chart)
         self._qt_view.info_text_accepted.connect(

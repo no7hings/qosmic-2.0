@@ -331,3 +331,6 @@ class ChartModelForHistogram(object):
             file_path,
             format_
         )
+
+    def set_name(self, text):
+        pass

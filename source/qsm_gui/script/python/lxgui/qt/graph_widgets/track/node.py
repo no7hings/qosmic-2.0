@@ -848,10 +848,8 @@ class QtTrackNode(
 
     def _update_pre_blend_tmp_(self, offset):
         value = self._track_model.pre_blend-offset
-        maximum = 24
-        minimum = 1
         # value >= 1
-        self._pre_blend_tmp = max(min(value, maximum), minimum)
+        self._pre_blend_tmp = max(min(value, 256), 1)
 
     def _get_post_blend_(self, flag):
         if flag is True:
@@ -860,10 +858,8 @@ class QtTrackNode(
 
     def _update_post_blend_tmp_(self, offset):
         value = self._track_model.post_blend+offset
-        maximum = 24
-        minimum = 1
         # value >= 1
-        self._post_blend_tmp = max(min(value, maximum), minimum)
+        self._post_blend_tmp = max(min(value, 256), 1)
 
     def _update_blend_tmp_(self):
         self._pre_blend_tmp = self._track_model.pre_blend

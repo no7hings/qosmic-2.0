@@ -9,7 +9,7 @@ import lxgui.qt.chart_widgets as qt_cht_widgets
 class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
-        self._d = qt_cht_widgets.QtChartForCurve(self._qt_widget)
+        self._d = qt_cht_widgets.QtCurveChartWidget(self._qt_widget)
 
         self.add_widget(self._d)
 

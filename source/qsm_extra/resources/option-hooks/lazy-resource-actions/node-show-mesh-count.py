@@ -3,9 +3,7 @@ import lxbasic.core as bsc_core
 
 import lxgui.core as gui_core
 
-import lxgui.qt.widgets as qt_widgets
-
-import lxbasic.storage as bsc_storage
+import lxgui.qt.chart_widgets as qt_cht_widget
 
 import qsm_screw.core as lzy_src_core
 
@@ -89,7 +87,7 @@ class Main(object):
             self.show_dialog(dict_)
 
     def show_dialog(self, data):
-        chart_view = qt_widgets.QtViewForBarChart()
+        chart_view = qt_cht_widget.QtBarChartWidget()
         chart_view._set_name_text_('Mesh Count')
 
         if gui_core.GuiUtil.get_language() == 'chs':

@@ -517,14 +517,14 @@ class QtChartAsProgressing(
                     )
 
 
-class QtChartForInfoBar(
+class QtInfoChartBar(
     QtWidgets.QWidget,
 ):
     def _refresh_widget_draw_(self):
         self.update()
 
     def __init__(self, *args, **kwargs):
-        super(QtChartForInfoBar, self).__init__(*args, **kwargs)
+        super(QtInfoChartBar, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
         #

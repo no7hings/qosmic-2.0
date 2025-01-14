@@ -570,14 +570,14 @@ class TrackModel(object):
         return self._pre_blend
 
     def set_pre_blend(self, value):
-        self._pre_blend = max(min(value, 24), 1)
+        self._pre_blend = max(min(value, 256), 1)
 
     @property
     def post_blend(self):
         return self._post_blend
 
     def set_post_blend(self, value):
-        self._post_blend = max(min(value, 24), 1)
+        self._post_blend = max(min(value, 256), 1)
 
     def compute_timetrack_args(self):
         bsc_x = self.compute_basic_x_at(self._clip_start)

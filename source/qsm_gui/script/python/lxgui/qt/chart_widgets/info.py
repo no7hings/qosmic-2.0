@@ -7,7 +7,7 @@ from ...qt import core as _qt_core
 from .. import chart_models as _chart_models
 
 
-class QtChartForInfo(QtWidgets.QWidget):
+class QtInfoChart(QtWidgets.QWidget):
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
         self._refresh_widget_draw_()
@@ -21,7 +21,7 @@ class QtChartForInfo(QtWidgets.QWidget):
         )
 
     def __init__(self, *args, **kwargs):
-        super(QtChartForInfo, self).__init__(*args, **kwargs)
+        super(QtInfoChart, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)

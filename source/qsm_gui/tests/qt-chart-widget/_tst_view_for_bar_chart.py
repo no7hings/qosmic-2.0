@@ -1,6 +1,8 @@
 # coding:utf-8
 import lxgui.qt.widgets as qt_widgets
 
+import lxgui.qt.chart_widgets as qt_cht_widgets
+
 import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxbasic.storage as bsc_storage
@@ -16,7 +18,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
             'Z:/caches/temporary/.asset-cache/mesh-count/32M/BBCFACD7-1A0B-3EF1-B7FC-44EE86FACF8E.json'
         ).set_read()
 
-        self._d = qt_widgets.QtViewForBarChart(self._qt_widget)
+        self._d = qt_cht_widgets.QtBarChartWidget(self._qt_widget)
         data = data_0['mesh_count']['components']
         data['VALUE_LIMIT'] = dict(
             face=250000,

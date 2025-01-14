@@ -21,7 +21,7 @@ from ...widgets import scroll as _wgt_scroll
 
 from ...widgets.input import input_for_filter as _wgt_input_for_filter
 
-from ...widgets import view_for_histogram_chart as _wgt_view_for_histogram_chart
+from ...chart_widgets import histogram as _cht_wgt_for_histogram
 
 from ...view_models.tag import view as _vew_mod_tag
 
@@ -296,7 +296,7 @@ class QtTagWidget(
     def _on_show_chart_(self):
         data = self._view._generate_chart_data_()
         if data:
-            chart_view = _wgt_view_for_histogram_chart.QtViewForHistogramChart()
+            chart_view = _cht_wgt_for_histogram.QtHistogramChartWidget()
             chart_view._set_data_(data)
             _qt_core.QtApplication.show_tool_dialog(
                 widget=chart_view, title='Histogram Chart', size=(640, 480), parent=self

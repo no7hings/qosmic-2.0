@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.storage as bsc_storage
 
-import lxgui.qt.widgets as qt_widgets
+import lxgui.qt.chart_widgets as qt_cht_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
@@ -12,7 +12,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         data, data_keys = bsc_storage.Profile.get_data_args()
 
-        self._d = qt_widgets.QtViewForBarChart(self._qt_widget)
+        self._d = qt_cht_widgets.QtBarChartWidget(self._qt_widget)
         self._d._set_data_(
             data,
             data_keys,

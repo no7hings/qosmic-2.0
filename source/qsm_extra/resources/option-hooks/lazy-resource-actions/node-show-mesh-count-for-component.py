@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxgui.core as gui_core
 
-import lxgui.qt.widgets as qt_widgets
+import lxgui.qt.chart_widgets as qt_cht_widgets
 
 import lxbasic.storage as bsc_storage
 
@@ -52,7 +52,7 @@ class Main(object):
                     self.show_dialog(dict_)
 
     def show_dialog(self, data):
-        chart_view = qt_widgets.QtViewForBarChart()
+        chart_view = qt_cht_widgets.QtBarChartWidget()
         chart_view._set_name_text_('Mesh Count')
         if gui_core.GuiUtil.get_language() == 'chs':
             data_key_names = ['三角面数', '三角面数（单位面积）']

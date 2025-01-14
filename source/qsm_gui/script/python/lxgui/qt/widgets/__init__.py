@@ -104,9 +104,3 @@ from .view_for_tree import *
 from .view_for_tab import *
 
 from .view_for_history import *
-
-from .view_for_bar_chart import *
-
-from .view_for_histogram_chart import *
-
-from .view_for_line_chart import *

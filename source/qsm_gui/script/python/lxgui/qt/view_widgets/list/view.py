@@ -49,7 +49,7 @@ class _QtListItemDelegate(QtWidgets.QStyledItemDelegate):
         return item.sizeHint()
 
 
-class _QtListViewWidget(
+class _QtListView(
     QtWidgets.QListWidget,
     _vew_mod_base.AbsView,
     _qt_abstracts.AbsQtThreadWorkerExtraDef,
@@ -57,7 +57,7 @@ class _QtListViewWidget(
     QT_MENU_CLS = _wgt_utility.QtMenu
 
     def __init__(self, *args, **kwargs):
-        super(_QtListViewWidget, self).__init__(*args, **kwargs)
+        super(_QtListView, self).__init__(*args, **kwargs)
 
         self.setStyleSheet(_qt_core.QtStyle.get('QListView'))
         self.verticalScrollBar().setStyleSheet(_qt_core.QtStyle.get('QScrollBar'))
@@ -132,7 +132,7 @@ class _QtListViewWidget(
                 'placeholder/empty'
             )
         else:
-            super(_QtListViewWidget, self).paintEvent(event)
+            super(_QtListView, self).paintEvent(event)
 
     def contextMenuEvent(self, event):
         menu = None
@@ -192,7 +192,7 @@ class _QtListViewWidget(
             self._view_model.on_wheel(event)
             event.ignore()
         else:
-            super(_QtListViewWidget, self).wheelEvent(event)
+            super(_QtListView, self).wheelEvent(event)
 
     def startDrag(self, actions):
         items = self.selectedItems()
@@ -286,12 +286,12 @@ class QtListWidget(
         self._sort_and_group_tool_box = self._add_left_tool_box_('sort and group')
         self._keyword_filter_tool_box = self._add_top_tool_box_('keyword filter', size_mode=1)
 
-        self._view = _QtListViewWidget()
+        self._view = _QtListView()
         self._grid_lot.addWidget(self._view, 1, 1, 1, 1)
         self._view.setFocusProxy(self)
         self._view_model = self._view._view_model
 
-        self._info_bar_chart = _wgt_chart.QtChartForInfoBar()
+        self._info_bar_chart = _wgt_chart.QtInfoChartBar()
         self._grid_lot.addWidget(self._info_bar_chart, 2, 1, 1, 1)
         self._info_bar_chart.hide()
         self._view.info_text_accepted.connect(

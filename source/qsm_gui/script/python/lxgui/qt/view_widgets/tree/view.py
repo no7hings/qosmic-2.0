@@ -23,7 +23,7 @@ from ...widgets import scroll as _wgt_scroll
 
 from ...widgets import chart as _wgt_chart
 
-from ...widgets import view_for_histogram_chart as _wgt_view_for_histogram_chart
+from ...chart_widgets import histogram as _cht_wgt_for_histogram
 
 from ...view_models import base as _vew_mod_base
 
@@ -44,7 +44,7 @@ class _QtListItemDelegate(QtWidgets.QStyledItemDelegate):
         self.parent()._view_model.draw_item(painter, option, index)
 
 
-class _QtTreeViewWidget(
+class _QtTreeView(
     QtWidgets.QTreeWidget,
     _vew_mod_base.AbsView,
     _qt_abstracts.AbsQtThreadWorkerExtraDef,
@@ -56,7 +56,7 @@ class _QtTreeViewWidget(
     PEN_BRANCH_HIGHLIGHT = QtGui.QPen(QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue), _gui_core.GuiDpiScale.get(1))
 
     def __init__(self, *args, **kwargs):
-        super(_QtTreeViewWidget, self).__init__(*args, **kwargs)
+        super(_QtTreeView, self).__init__(*args, **kwargs)
         self.setAutoFillBackground(True)
         qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
@@ -320,7 +320,7 @@ class _QtTreeViewWidget(
                 self.rect(), 'placeholder/empty'
             )
         #
-        super(_QtTreeViewWidget, self).paintEvent(event)
+        super(_QtTreeView, self).paintEvent(event)
 
     def contextMenuEvent(self, event):
         menu = None
@@ -428,12 +428,12 @@ class QtTreeWidget(
         # sort and chart
         self._sort_and_chart_tool_box = self._add_left_tool_box_('sort and chart')
 
-        self._view = _QtTreeViewWidget()
+        self._view = _QtTreeView()
         self._grid_lot.addWidget(self._view, 1, 1, 1, 1)
         self._view.setFocusProxy(self)
         self._view_model = self._view._view_model
 
-        self._info_bar_chart = _wgt_chart.QtChartForInfoBar()
+        self._info_bar_chart = _wgt_chart.QtInfoChartBar()
         self._grid_lot.addWidget(self._info_bar_chart, 2, 1, 1, 1)
         self._info_bar_chart.hide()
         self._view.info_text_accepted.connect(
@@ -579,7 +579,7 @@ class QtTreeWidget(
     def _on_show_chart_(self):
         data = self._view_model.generate_chart_data()
         if data:
-            chart_view = _wgt_view_for_histogram_chart.QtViewForHistogramChart()
+            chart_view = _cht_wgt_for_histogram.QtHistogramChartWidget()
             chart_view._set_data_(data)
             _qt_core.QtApplication.show_tool_dialog(
                 widget=chart_view, title='Histogram Chart', size=(640, 480), parent=self
