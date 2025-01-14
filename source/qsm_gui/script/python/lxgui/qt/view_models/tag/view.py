@@ -1,11 +1,9 @@
 # coding:utf-8
-import collections
-
 import lxbasic.core as bsc_core
 
-from . import base as _base
+from .. import base as _base
 
-from . import view_base as _view_base
+from .. import view_base as _view_base
 
 
 class TagViewModel(_view_base.AbsViewModel):

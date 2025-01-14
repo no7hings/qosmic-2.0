@@ -1,11 +1,11 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 # qt
-from ...qt.core.wrap import *
+from ....qt.core.wrap import *
 
-from . import base as _base
+from .. import base as _base
 
-from . import item_base as _item_base
+from .. import item_base as _item_base
 
 
 class TreeItemModel(_item_base.AbsItemModel):

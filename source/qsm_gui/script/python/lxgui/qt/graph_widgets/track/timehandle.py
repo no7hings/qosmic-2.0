@@ -72,8 +72,8 @@ class QtTimeHandle(
                     pass
                 elif event.buttons() == QtCore.Qt.LeftButton:
                     self._do_press_move_(event)
-
-            event.ignore()
+            elif event.type() == QtCore.QEvent.MouseButtonRelease:
+                self._clear_all_action_flags_()
         return False
 
     def paintEvent(self, event):

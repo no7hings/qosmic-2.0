@@ -2,7 +2,7 @@
 # qt
 from ....qt.core.wrap import *
 
-from ...view_models import item_for_tree as _vew_mod_item_for_tree
+from ...view_models.tree import item as _vew_mod_item
 
 
 class QtTreeItem(QtWidgets.QTreeWidgetItem):
@@ -11,7 +11,7 @@ class QtTreeItem(QtWidgets.QTreeWidgetItem):
         self.setFlags(
             QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled
         )
-        self._item_model = _vew_mod_item_for_tree.TreeItemModel(self)
+        self._item_model = _vew_mod_item.TreeItemModel(self)
 
     def __str__(self):
         return '{}(path={})'.format(

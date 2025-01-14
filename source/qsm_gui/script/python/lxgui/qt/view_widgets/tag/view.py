@@ -23,7 +23,7 @@ from ...widgets.input import input_for_filter as _wgt_input_for_filter
 
 from ...widgets import view_for_histogram_chart as _wgt_view_for_histogram_chart
 
-from ...view_models import view_for_tag as _vew_mod_tag
+from ...view_models.tag import view as _vew_mod_tag
 
 from .. import base as _base
 

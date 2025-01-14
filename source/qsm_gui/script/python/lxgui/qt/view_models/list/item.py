@@ -5,15 +5,15 @@ import lxbasic.pinyin as bsc_pinyin
 
 import lxbasic.storage as bsc_storage
 
-from ... import core as _gui_core
+from .... import core as _gui_core
 # qt
-from ...qt.core.wrap import *
+from ....qt.core.wrap import *
 
-from ...qt import core as _qt_core
+from ....qt import core as _qt_core
 
-from . import base as _base
+from .. import base as _base
 
-from . import item_base as _item_base
+from .. import item_base as _item_base
 
 
 class _FramePlayThread(QtCore.QThread):
@@ -51,7 +51,6 @@ class _FramePlayThread(QtCore.QThread):
 
 
 class _AudioPlayThread(QtCore.QThread):
-
     finished = qt_signal()
     progress_percent_changed = qt_signal(float)
 
@@ -106,7 +105,7 @@ class _AudioPlayThread(QtCore.QThread):
                     if percent != self._progress_percent:
                         self._progress_percent = percent
                         self.progress_percent_changed.emit(self._progress_percent)
-            
+
             # when loop is enable, restart from zero
             if self._loop_flag and self._running_flag:
                 self._start_time = 0
@@ -124,7 +123,7 @@ class _AudioPlayThread(QtCore.QThread):
     def do_start_from(self, percent):
         if self._close_flag is False:
             self._start_percent = percent
-            self._start_time = int(self._time_maximum * percent * 1000)
+            self._start_time = int(self._time_maximum*percent*1000)
             self.do_start()
 
     def do_start(self):
@@ -147,7 +146,7 @@ class _AudioPlayThread(QtCore.QThread):
 
 class ListItemModel(_item_base.AbsItemModel):
     WAIT_PLAY_DELAY = 100
-    
+
     def __init__(self, item):
         super(ListItemModel, self).__init__(
             item,

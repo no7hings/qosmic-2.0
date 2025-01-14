@@ -3,15 +3,15 @@ import functools
 
 import lxbasic.core as bsc_core
 
-from ... import core as _gui_core
+from .... import core as _gui_core
 # qt
-from ...qt.core.wrap import *
+from ....qt.core.wrap import *
 
-from ...qt import core as _qt_core
+from ....qt import core as _qt_core
 
-from . import base as _base
+from .. import base as _base
 
-from . import view_base as _view_base
+from .. import view_base as _view_base
 
 
 class ListViewModel(_view_base.AbsViewModel):
@@ -217,7 +217,7 @@ class ListViewModel(_view_base.AbsViewModel):
         )
 
         assert isinstance(widget, QtWidgets.QListWidget)
-        
+
         self._widget = widget
 
         self._widget.item_check_changed.connect(self._on_item_check_changed)
@@ -230,7 +230,7 @@ class ListViewModel(_view_base.AbsViewModel):
     def set_item_mode(self, mode):
         self._data.item.mode = mode
         self._update_item_mode()
-    
+
     def _update_item_mode(self):
         if self._data.item.mode == self.ItemMode.Icon:
             self._widget.setViewMode(self._widget.IconMode)

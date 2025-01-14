@@ -29,7 +29,7 @@ from ...widgets.input import input_for_filter as _wgt_input_for_filter
 
 from ...view_models import base as _vew_mod_base
 
-from ...view_models import view_for_list as _vew_mod_list
+from ...view_models.list import view as _vew_mod_list
 
 from .. import base as _base
 

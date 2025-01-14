@@ -19,7 +19,7 @@ from ...widgets import base as _wgt_base
 
 from ...widgets import utility as _wgt_utility
 
-from ...view_models import item_for_tag as _vew_mod_item_for_tag
+from ...view_models.tag import item as _vew_mod_item
 
 
 class _AbsTagItem(object):
@@ -59,7 +59,7 @@ class _AbsTagItem(object):
     def _init_tag_base_(self, widget):
         self._widget = widget
 
-        self._item_model = _vew_mod_item_for_tag.TagItemMode(self)
+        self._item_model = _vew_mod_item.TagItemMode(self)
 
         self._view_widget = None
         self._parent_widget = None

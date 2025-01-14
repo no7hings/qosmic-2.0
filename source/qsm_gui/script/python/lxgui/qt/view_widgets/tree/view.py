@@ -27,7 +27,7 @@ from ...widgets import view_for_histogram_chart as _wgt_view_for_histogram_chart
 
 from ...view_models import base as _vew_mod_base
 
-from ...view_models import view_for_tree as _vew_mod_tree
+from ...view_models.tree import view as _vew_mod_tree
 
 from .. import base as _base
 

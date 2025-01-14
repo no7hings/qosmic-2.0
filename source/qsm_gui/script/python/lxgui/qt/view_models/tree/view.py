@@ -1,19 +1,15 @@
 # coding:utf-8
-import collections
-
-import functools
-
 import lxbasic.core as bsc_core
 
-from ... import core as _gui_core
+from .... import core as _gui_core
 # qt
-from ...qt.core.wrap import *
+from ....qt.core.wrap import *
 
-from ...qt import core as _qt_core
+from ....qt import core as _qt_core
 
-from . import base as _base
+from .. import base as _base
 
-from . import view_base as _view_base
+from .. import view_base as _view_base
 
 
 class TreeViewModel(_view_base.AbsViewModel):
@@ -288,7 +284,7 @@ class TreeViewModel(_view_base.AbsViewModel):
 
     def draw_item(self, painter, option, index):
         self._widget.itemFromIndex(index)._item_model.draw(painter, option, index)
-    
+
     def _sort_items_fnc(self, qt_order):
         self._widget.sortItems(0, qt_order)
 

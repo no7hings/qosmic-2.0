@@ -1,9 +1,4 @@
 # coding:utf-8
-import functools
-
-import collections
-
-from ... import core as _gui_core
 # qt
 from ...qt.core.wrap import *
 

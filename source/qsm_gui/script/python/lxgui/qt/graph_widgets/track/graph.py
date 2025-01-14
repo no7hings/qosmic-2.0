@@ -725,6 +725,9 @@ class QtTrackWidget(_vew_wgt_base._BaseViewWidget):
         self._grid_lot.addWidget(self._left_scroll_box, 1, 0, 1, 1)
         self._left_scroll_box._set_layout_align_left_or_top_()
         self._left_scroll_box.setFixedWidth(self.TOOL_BAR_W)
+
+        self._undo_and_redo_tool_box = self._add_top_tool_box_('undo and redo')
+
         # keyword filter
         self._keyword_filter_tool_box = self._add_top_tool_box_('keyword filter', size_mode=1)
 
@@ -740,6 +743,8 @@ class QtTrackWidget(_vew_wgt_base._BaseViewWidget):
         self._track_timehandle = self._view._track_timehandle
 
         self._build_keyword_filter_tool_box_()
+
+        self._build_undo_and_redo_tool_box_()
 
     def _add_top_tool_box_(self, name, size_mode=0):
         tool_box = _wgt_container.QtHToolBox()
@@ -769,6 +774,17 @@ class QtTrackWidget(_vew_wgt_base._BaseViewWidget):
         tool_box._set_expanded_(True)
         tool_box._set_name_text_(name)
         return tool_box
+
+    def _build_undo_and_redo_tool_box_(self):
+        self._undo_button = _wgt_button.QtIconPressButton()
+        self._undo_button._set_name_text_('undo')
+        self._undo_button._set_icon_name_('montage/undo')
+        self._undo_and_redo_tool_box._add_widget_(self._undo_button)
+
+        self._redo_button = _wgt_button.QtIconPressButton()
+        self._redo_button._set_name_text_('redo')
+        self._redo_button._set_icon_name_('montage/redo')
+        self._undo_and_redo_tool_box._add_widget_(self._redo_button)
 
     def _build_keyword_filter_tool_box_(self):
         self._keyword_filter_input = _wgt_input_for_filter.QtInputForFilter()

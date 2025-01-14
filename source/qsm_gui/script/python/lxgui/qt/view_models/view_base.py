@@ -3,8 +3,6 @@ import collections
 
 import functools
 
-import lxbasic.core as bsc_core
-
 from ... import core as _gui_core
 # qt
 from ...qt.core.wrap import *

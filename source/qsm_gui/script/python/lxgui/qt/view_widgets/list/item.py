@@ -2,7 +2,7 @@
 # qt
 from ....qt.core.wrap import *
 
-from ...view_models import item_for_list as _vew_mod_item_for_list
+from ...view_models.list import item as _vew_mod_item
 
 
 class QtListItem(QtWidgets.QListWidgetItem):
@@ -11,7 +11,7 @@ class QtListItem(QtWidgets.QListWidgetItem):
     def __init__(self, *args, **kwargs):
         super(QtListItem, self).__init__(*args)
 
-        self._item_model = _vew_mod_item_for_list.ListItemModel(self)
+        self._item_model = _vew_mod_item.ListItemModel(self)
 
 
 class QtListGroupItem(QtWidgets.QListWidgetItem):
@@ -25,7 +25,7 @@ class QtListGroupItem(QtWidgets.QListWidgetItem):
             QtCore.Qt.NoItemFlags
         )
 
-        self._item_model = _vew_mod_item_for_list.ListGroupItemModel(self)
+        self._item_model = _vew_mod_item.ListGroupItemModel(self)
 
     def sizeHint(self):
         return QtCore.QSize(self.listWidget().viewport().width(), self.HEIGHT)

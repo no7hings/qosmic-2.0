@@ -1,17 +1,7 @@
 # coding:utf-8
-import lxbasic.core as bsc_core
+from .. import base as _base
 
-import lxbasic.storage as bsc_storage
-
-from ... import core as _gui_core
-# qt
-from ...qt.core.wrap import *
-
-from ...qt import core as _qt_core
-
-from . import base as _base
-
-from . import item_base as _item_base
+from .. import item_base as _item_base
 
 
 class TagItemMode(_item_base.AbsItemModel):
