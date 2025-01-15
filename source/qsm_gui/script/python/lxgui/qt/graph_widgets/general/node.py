@@ -60,7 +60,7 @@ class QtGeneralNode(
         self.installEventFilter(self)
 
     def _refresh_widget_all_(self):
-        self._update_node_geometry_properties_()
+        self._update_node_base_geometry_()
         self._update_node_geometry_()
         self._update_node_draw_properties_()
 
@@ -87,11 +87,6 @@ class QtGeneralNode(
 
         x_0, y_0 = x+b_w_0/2, y+b_w_0/2
         w_0, h_0 = w-b_w_0, h-b_w_0
-
-        # select
-        self._node_selection_rect.setRect(
-            x_0, y_0, w_0, h_0
-        )
 
         # name
         n_x, n_y = x_0+c_i_r/2, y_0

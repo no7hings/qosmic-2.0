@@ -346,7 +346,10 @@ class TrackModel(object):
     @clip_start.setter
     def clip_start(self, value):
         if value != self._clip_start:
-            self._clip_start = int(value)
+            value = int(value)
+            # at least 1 frame
+            value = min(value, self._clip_end-1)
+            self._clip_start = value
 
     def update_scale_offset(self):
         self._scale_offset = self.compute_scale_offset()
@@ -435,7 +438,10 @@ class TrackModel(object):
     @clip_end.setter
     def clip_end(self, value):
         if value != self._clip_end:
-            self._clip_end = int(value)
+            value = int(value)
+            # at least 1 frame
+            value = max(value, self._clip_start+1)
+            self._clip_end = value
 
     @property
     def clip_count(self):
@@ -625,6 +631,10 @@ class TrackWidget(object):
 
 
 class TrackModelGroup(object):
+    class SortMode:
+        Time = 0
+        Layer = 1
+
     def __init__(self, track_model_list):
         self._track_model_list = track_model_list
 
@@ -638,12 +648,25 @@ class TrackModelGroup(object):
     def track_models(self):
         return self._track_model_list
 
-    def sort(self):
+    def sort_by_time(self):
+        self.sort_by(self.SortMode.Time)
+
+    def sort_by_layer(self):
+        self.sort_by(self.SortMode.Layer)
+
+    def sort_by(self, mode):
         dict_ = dict()
         for i_track_model in self._track_model_list:
             i_clip_start = i_track_model.clip_start
             i_layer_index = i_track_model.layer_index
-            dict_.setdefault((i_clip_start, i_layer_index), []).append(i_track_model)
+            if mode == self.SortMode.Time:
+                i_key = (i_clip_start, i_layer_index)
+            elif mode == self.SortMode.Layer:
+                i_key = (i_layer_index, i_clip_start)
+            else:
+                raise RuntimeError()
+
+            dict_.setdefault(i_key, []).append(i_track_model)
 
         keys = dict_.keys()
 
@@ -675,6 +698,23 @@ class TrackModelGroup(object):
             else:
                 i_offset = i_layer_index-layer_index_first
                 i_track_model.layer_index = layer_index+i_offset
+
+    def do_layout(self):
+        if len(self._track_model_list) > 1:
+            first_track_model = self._track_model_list[0]
+            layer_index = first_track_model.layer_index
+
+            timeframe = first_track_model.clip_end
+
+            clip_counts = []
+            for i_idx, i_track_model in enumerate(self._track_model_list):
+                if i_idx != 0:
+                    i_track_model.layer_index = layer_index+i_idx
+                    i_clip_count = i_track_model.clip_count
+                    i_clip_start_new = timeframe+sum(clip_counts)+1
+                    i_track_model.move_by_clip_start(i_clip_start_new)
+
+                    clip_counts.append(i_clip_count)
 
 
 class TrackModelStage(object):

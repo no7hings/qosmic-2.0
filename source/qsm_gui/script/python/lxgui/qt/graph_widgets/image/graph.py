@@ -67,10 +67,6 @@ class QtImageNode(_gnl_node.QtGeneralNode):
         self._set_frame_draw_rect_(
             x_0, y_0, w_0, h_0
         )
-        # select
-        self._node_selection_rect.setRect(
-            x_0, y_0, w_0, h_0
-        )
         # name
         n_x, n_y = x_0, y_0
         n_w, n_h = w_0, self._ng_draw_name_h

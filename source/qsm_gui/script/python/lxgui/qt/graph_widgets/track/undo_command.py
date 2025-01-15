@@ -15,9 +15,6 @@ class QtTrackActionCommand(QtWidgets.QUndoCommand):
             if i_flag in {'move', 'trim', 'scale', 'layout'}:
                 i_track_model, i_last_track_model = i_data
                 self._graph._graph_node_update_track_model_fnc_(i_last_track_model)
-                sys.stdout.write(
-                    'track {}: name="{}", model={}\n'.format(i_flag, i_track_model.key, i_last_track_model)
-                )
             elif i_flag == 'bypass':
                 i_track_model, i_flag = i_data
                 self._graph._graph_node_bypass_fnc_(i_track_model, not i_flag)
@@ -34,16 +31,13 @@ class QtTrackActionCommand(QtWidgets.QUndoCommand):
                 i_track_model, i_last_track_model = i_data
                 self._graph._graph_node_update_blend_fnc_(i_last_track_model)
 
-            self._graph._update_stage_()
+        self._graph._update_stage_()
 
     def redo(self):
         for i_flag, i_data in self._data:
             if i_flag in {'move', 'trim', 'scale', 'layout'}:
                 i_track_model, i_last_track_model = i_data
                 self._graph._graph_node_update_track_model_fnc_(i_track_model)
-                sys.stdout.write(
-                    'track {}: name="{}", model={}\n'.format(i_flag, i_track_model.key, i_track_model)
-                )
             elif i_flag == 'bypass':
                 i_track_model, i_flag = i_data
                 self._graph._graph_node_bypass_fnc_(i_track_model, i_flag)
@@ -60,4 +54,4 @@ class QtTrackActionCommand(QtWidgets.QUndoCommand):
                 i_track_model, i_last_track_model = i_data
                 self._graph._graph_node_update_blend_fnc_(i_track_model)
 
-            self._graph._update_stage_()
+        self._graph._update_stage_()

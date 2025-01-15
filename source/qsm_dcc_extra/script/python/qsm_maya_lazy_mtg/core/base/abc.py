@@ -468,5 +468,7 @@ class AbsMontage(object):
             cmds.createNode(
                 'dagContainer', name=name, shared=1, skipSelect=1
             )
-            cmds.setAttr(cls.ROOT_PATH+'.iconName', 'folder-closed.png', type='string')
+            cmds.setAttr(
+                cls.ROOT_PATH+'.iconName', 'folder-closed.png', type='string'
+            )
         return cls.ROOT_PATH

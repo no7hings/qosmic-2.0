@@ -91,7 +91,7 @@ class QtTrackGuide(
 
     def _do_press_release_(self, evnt):
         if self._current_blend_move_flag is True:
-            self._graph._on_update_blend_auto_(self._current_track_key, self._current_blend_flag)
+            self._graph._push_node_blend_action_fnc_(self._current_track_key, self._current_blend_flag)
 
     def _update_stage_(self):
         self._track_model_stage.update()
@@ -333,10 +333,14 @@ class QtTrackGuide(
                 next_rgb = (255, 0, 0)
             else:
                 next_rgb = next_node._track_model.rgb
+
         # end node
         else:
             next_node_pre_blend_w = 0
-            next_rgb = rgb
+            if is_end:
+                next_rgb = rgb
+            else:
+                next_rgb = (255, 0, 0)
 
         # node blend
         node_pre_blend_start_x = start_x-node_pre_blend_w

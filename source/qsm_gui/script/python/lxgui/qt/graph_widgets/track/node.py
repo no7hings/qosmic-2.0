@@ -183,7 +183,7 @@ class QtTrackNode(
         else:
             self.show()
 
-        self._update_node_geometry_properties_()
+        self._update_node_base_geometry_()
         self._update_node_geometry_()
 
         self._update_node_draw_properties_()
@@ -214,10 +214,6 @@ class QtTrackNode(
         w_0, h_0 = w-bdr_w, h-bdr_w
 
         self._frame_draw_rect.setRect(x_0, y_0, w_0, h_0)
-        # for selection
-        self._node_selection_rect.setRect(
-            x, y, w, h
-        )
         # frame
         frm_x, frm_y = x_0, y_0
         frm_w, frm_h = w_0, h_0
@@ -322,6 +318,13 @@ class QtTrackNode(
             hrd_frm_x+frm_w-ofs_w, hrd_frm_y, ofs_w, hrd_frm_h
         )
         return True
+
+    def _update_node_base_geometry_(self):
+        x_0, y_0, w_0, h_0 = self._compute_geometry_by_graph_args_()
+        self._node_rect.setRect(x_0, y_0, w_0, h_0)
+        self._node_selection_rect.setRect(0, 0, w_0, h_0)
+        # todo: add trim to global selection?
+        self._node_global_selection_rect.setRect(x_0, y_0, w_0, h_0)
 
     def _refresh_by_trash_(self):
         # is trash
@@ -765,16 +768,16 @@ class QtTrackNode(
         )
 
     def _setup_track_(self, **kwargs):
-        self._track_model = self._graph._track_model_stage.create_one(self, **kwargs)
+        track_model = self._graph._track_model_stage.create_one(self, **kwargs)
 
-        if self._track_model.is_trash is True:
+        if track_model.is_trash is True:
             self.hide()
         else:
             self.show()
 
         self._update_blend_tmp_()
 
-        self._node_update_track_model_fnc_(self._track_model)
+        self._node_update_track_model_fnc_(track_model, force=True)
 
         self._build_timetrack_trim_()
 
@@ -784,14 +787,16 @@ class QtTrackNode(
     def _push_track_model_(self):
         self._last_track_model = self._track_model.copy()
 
-    def _node_update_track_model_fnc_(self, track_model):
-        # print track_model.to_dict()
-        self._track_model = track_model
+    def _node_update_track_model_fnc_(self, track_model, force=True):
+        if track_model != self._track_model or force is True:
+            self._track_model = track_model
 
-        x, y, w, h = self._track_model.compute_timetrack_args()
-        self._node_basic_x, self._node_basic_y = x, y
-        self._node_basic_w, self._node_basic_h = w, h
-        self._refresh_widget_all_()
+            x, y, w, h = self._track_model.compute_timetrack_args()
+            self._node_basic_x, self._node_basic_y = x, y
+            self._node_basic_w, self._node_basic_h = w, h
+            self._refresh_widget_all_()
+            return True
+        return False
 
     def _build_timetrack_trim_(self):
         self._start_trim = QtTrackTrim(

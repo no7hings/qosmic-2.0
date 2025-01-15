@@ -364,7 +364,7 @@ class AbsQtGraphSbjDef(_AbsQtSbjRectSelectDef):
             node_widget._scale_right_fnc_(d_point, start_size)
 
     # transformation
-    def _graph_push_transformation_action_fnc_(self, node_widget=None, flag=None):
+    def _push_node_transformation_action_fnc_(self, node_widget=None, flag=None):
         cmd_data = []
         for i_node_widget in self._graph_selection_nodes:
             i_coord, i_last_coord = i_node_widget._get_basic_coord_(), i_node_widget._get_basic_last_coord_()

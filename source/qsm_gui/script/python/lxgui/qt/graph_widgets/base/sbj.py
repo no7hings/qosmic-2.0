@@ -147,21 +147,15 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
             )
             i._refresh_widget_all_()
 
-    def _update_node_geometry_properties_(self):
-        x, y, w, h = self._compute_geometry_by_graph_args_()
+    def _update_node_base_geometry_(self):
 
-        self._node_rect.setRect(
-            x, y, w, h
-        )
+        x_0, y_0, w_0, h_0 = self._compute_geometry_by_graph_args_()
 
-        x_1, y_1, w_1, h_1 = (
-            self._node_selection_rect.x(), self._node_selection_rect.y(),
-            self._node_selection_rect.width(), self._node_selection_rect.height()
-        )
+        self._node_rect.setRect(x_0, y_0, w_0, h_0)
 
-        self._node_global_selection_rect.setRect(
-            x+x_1, y+y_1, w_1, h_1
-        )
+        self._node_selection_rect.setRect(0, 0, w_0, h_0)
+
+        self._node_global_selection_rect.setRect(x_0, y_0, w_0, h_0)
 
     def _compute_geometry_by_graph_args_(self):
         t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
@@ -198,8 +192,6 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         # may be more than one node resizing
         self._get_graph_()._do_node_press_start_for_any_action_()
 
-        # move
-
     def _update_press_move_flag_(self, event):
         point = event.pos()
         if self._node_selection_rect.contains(point):
@@ -222,14 +214,14 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         self._graph._do_node_press_move_for_(self, d_point)
 
     def _do_press_move_end_(self, event):
-        self._get_graph_()._graph_push_transformation_action_fnc_(flag='move')
+        self._get_graph_()._push_node_transformation_action_fnc_(flag='move')
 
     def _move_to_coord_(self, x, y):
         # move real time
         self._widget.move(x, y)
 
         self._update_basic_coord_as_move_(x, y)
-        self._update_node_geometry_properties_()
+        self._update_node_base_geometry_()
 
         self._update_node_attachments_()
 
@@ -242,7 +234,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         self._widget.move(x, y)
 
         self._update_basic_coord_as_move_(x, y)
-        self._update_node_geometry_properties_()
+        self._update_node_base_geometry_()
 
         self._update_node_attachments_()
 
@@ -265,7 +257,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         )
 
     def _do_press_trim_end_(self, event):
-        self._get_graph_()._graph_push_transformation_action_fnc_(self, flag='trim')
+        self._get_graph_()._push_node_transformation_action_fnc_(self, flag='trim')
 
     def _trim_left_fnc_(self, d_point, offset_point=None):
         if offset_point is not None:
@@ -314,7 +306,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         )
 
     def _do_press_scale_end_(self, event):
-        self._get_graph_()._graph_push_transformation_action_fnc_(self, flag='scale')
+        self._get_graph_()._push_node_transformation_action_fnc_(self, flag='scale')
 
     def _scale_left_fnc_(self, d_point, offset_point=None):
         if offset_point is not None:

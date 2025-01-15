@@ -595,7 +595,7 @@ class QtGeneralNodeGraph(
         if self._graph_selection_nodes:
             self._do_node_press_start_for_any_action_()
             self._layout_nodes_for_(self._graph_selection_nodes, sort_key)
-            self._graph_push_transformation_action_fnc_(flag='layout')
+            self._push_node_transformation_action_fnc_(flag='layout')
 
 
 class _QtNGTreeNode(
