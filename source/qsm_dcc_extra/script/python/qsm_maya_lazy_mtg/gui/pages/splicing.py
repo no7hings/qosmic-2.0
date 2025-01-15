@@ -95,17 +95,30 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
         else:
             self.gui_restore()
 
-    def _on_dcc_export(self):
+    def _on_dcc_export_track(self):
         if self._rig_namespace is not None:
-            motion_json_path = gui_core.GuiStorageDialog.save_file(
+            track_json_path = gui_core.GuiStorageDialog.save_file(
                 ext_filter='All File (*.jsz)', parent=self._qt_widget
             )
-            if motion_json_path:
+            if track_json_path:
                 mtg_stage = qsm_mya_lzy_mtg_core.MtgStage(self._rig_namespace)
-                mtg_stage.export_track_data(motion_json_path)
+                mtg_stage.export_track_data(track_json_path)
         else:
             self._window.exec_message_dialog(
                 'No motion to export.',
+                status='warning'
+            )
+
+    def _on_dcc_import_track(self):
+        if self._rig_namespace is not None:
+            track_json_path = gui_core.GuiStorageDialog.open_file(
+                ext_filter='All File (*.jsz)', parent=self._qt_widget
+            )
+            if track_json_path:
+                qsm_mya_lzy_mtg_core.MtgStage(self._rig_namespace).import_track_json(track_json_path)
+        else:
+            self._window.exec_message_dialog(
+                'No motion to import.',
                 status='warning'
             )
 

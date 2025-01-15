@@ -718,6 +718,11 @@ class MtgMasterLayer(AbsMtgLayer):
         for i in layers:
             qsm_mya_core.Node.delete(i)
 
+    def restore(self):
+        layers = self.get_all_layer_locations()
+        for i in layers:
+            qsm_mya_core.Node.delete(i)
+
     def do_bake(self):
         rig_namespace = self.get_rig_namespace()
 

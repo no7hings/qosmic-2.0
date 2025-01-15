@@ -57,14 +57,16 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
 
     def _gui_add_export_import_tools(self, prx_tool_box):
         for i in [
-            ('export', 'montage/splicing-export', 'Press to export track', self._on_dcc_export),
-            ('import', 'montage/splicing-import', 'Press to import track', self._on_dcc_import),
+            ('export', 'file/jsz', 'action/upload', 'Press to export track', self._on_dcc_export_track),
+            ('import', 'file/jsz', 'action/download', 'Press to import track', self._on_dcc_import_track),
         ]:
-            i_key, i_icon_name, i_tool_tip, i_fnc = i
+            i_key, i_icon_name, i_sub_icon_name, i_tool_tip, i_fnc = i
             i_tool = gui_prx_widgets.PrxIconPressButton()
             prx_tool_box.add_widget(i_tool)
             i_tool.set_name(i_key)
             i_tool.set_icon_name(i_icon_name)
+            if i_sub_icon_name:
+                i_tool.set_sub_icon_name(i_sub_icon_name)
             i_tool.set_tool_tip(i_tool_tip)
             i_tool.connect_press_clicked_to(i_fnc)
 
@@ -229,10 +231,13 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
     def _do_check_update(self):
         pass
 
-    def _on_dcc_export(self):
+    def _on_dcc_export_track(self):
         pass
 
-    def _on_dcc_import(self):
+    def _on_dcc_import_track(self):
+        pass
+
+    def _on_dcc_import_motion(self):
         pass
 
     def _on_dcc_delete(self):

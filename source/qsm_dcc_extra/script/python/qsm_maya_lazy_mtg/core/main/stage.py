@@ -200,6 +200,8 @@ class MtgStage(object):
         track_data_list = bsc_storage.StgFileOpt(track_json_path).set_read()
 
         mtg_master_layer = _layer.MtgMasterLayer(self._master_layer_location)
+        mtg_master_layer.restore()
+
         rig_namespace = mtg_master_layer.get_rig_namespace()
 
         with bsc_log.LogProcessContext.create(maximum=len(track_data_list)) as l_p:

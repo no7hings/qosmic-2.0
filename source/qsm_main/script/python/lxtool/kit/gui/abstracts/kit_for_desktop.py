@@ -874,7 +874,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                     prx_tool.set_icon_by_text(name)
 
                 if icon_sub_name:
-                    prx_tool.set_icon_sub_name(icon_sub_name)
+                    prx_tool.set_sub_icon_name(icon_sub_name)
 
                 if menu_data is not None:
                     prx_tool.set_menu_data(menu_data)
@@ -919,7 +919,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                     prx_tool.set_icon_by_text(name)
 
                 if icon_sub_name:
-                    prx_tool.set_icon_sub_name(icon_sub_name)
+                    prx_tool.set_sub_icon_name(icon_sub_name)
 
                 prx_tool.set_tool_tip(
                     tool_tip,

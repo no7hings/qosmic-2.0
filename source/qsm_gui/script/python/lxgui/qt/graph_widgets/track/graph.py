@@ -130,6 +130,7 @@ class QtTrackGraph(
 
         self._timetrack_trim_sbj_layer = _bsc_graph.QtSbjLayer(self)
         self._connection_sbj_layer = _bsc_graph.QtSbjLayer(self)
+
         # undo
         self._undo_stack = QtWidgets.QUndoStack()
         self._undo_stack.setUndoLimit(100)
@@ -141,6 +142,7 @@ class QtTrackGraph(
             )
         )
         self.addAction(self._undo_action)
+
         # redo
         self._redo_action = self._undo_stack.createRedoAction(self, 'redo')
         self._redo_button = None
@@ -565,8 +567,7 @@ class QtTrackGraph(
     # trim
     def _on_trim_left_auto_(self):
         cmd_data = []
-
-        node_widgets = self._get_selected_nodes_()
+        node_widgets = self._get_selected_nodes_() or filter(None, [self._get_hovered_node_()])
         if node_widgets:
             current_timeframe = self._track_timeline._get_current_timeframe_()
 
@@ -584,7 +585,7 @@ class QtTrackGraph(
     def _on_trim_right_auto_(self):
         cmd_data = []
 
-        node_widgets = self._get_selected_nodes_()
+        node_widgets = self._get_selected_nodes_() or filter(None, [self._get_hovered_node_()])
         if node_widgets:
             current_timeframe = self._track_timeline._get_current_timeframe_()
 

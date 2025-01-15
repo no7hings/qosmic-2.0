@@ -267,7 +267,7 @@ class PrxInputForMediasOpen(PrxInputForFilesOpen):
         self._create_button.connect_press_clicked_to(self._do_screenshot)
         self._create_button.set_name('create file')
         self._create_button.set_icon_name('camera')
-        self._create_button.set_icon_sub_name('action/add')
+        self._create_button.set_sub_icon_name('action/add')
         self._create_button.set_icon_frame_size(18, 18)
         self._create_button.set_tool_tip(
             [

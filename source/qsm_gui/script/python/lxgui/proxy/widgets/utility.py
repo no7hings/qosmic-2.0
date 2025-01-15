@@ -347,7 +347,7 @@ class PrxIconPressButton(gui_prx_abstracts.AbsPrxWidget):
             gui_core.GuiIcon.get(icon_name)
         )
 
-    def set_icon_sub_name(self, icon_name):
+    def set_sub_icon_name(self, icon_name):
         self._qt_widget._set_sub_icon_file_path_(
             gui_core.GuiIcon.get(icon_name)
         )
