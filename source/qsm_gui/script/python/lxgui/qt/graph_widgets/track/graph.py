@@ -42,7 +42,6 @@ class QtTrackGraph(
     QtWidgets.QWidget,
 
     _qt_abstracts.AbsQtActionBaseDef,
-    _bsc_graph.AbsQtActionForRectSelectDef,
 
     _bsc_graph.AbsQtGraphBaseDef,
     _bsc_graph.AbsQtGraphSbjDef,
@@ -96,12 +95,14 @@ class QtTrackGraph(
 
         self._track_guide._refresh_widget_all_()
 
+        self._track_timeline._set_play_timeframe_range_(*self._track_model_stage.track_range)
+
     def _graph_node_move_together_fnc_(self, node_widget, d_point):
         p_0 = node_widget.pos()
         p_1_x, p_1_y = d_point.x(), d_point.y()
         x_1 = self._track_model_stage.step_x_loc(p_1_x)
         d_point_step = QtCore.QPoint(x_1, p_1_y)
-        for i_node_widget in self._graph_select_nodes:
+        for i_node_widget in self._graph_selection_nodes:
             if i_node_widget != node_widget:
                 i_p = i_node_widget.pos()
                 i_offset_point = p_0-i_p
@@ -109,14 +110,15 @@ class QtTrackGraph(
             else:
                 i_node_widget._move_by_point_(d_point_step)
 
-    def _push_selects_nodes_transformation_changed_action_(self, node_widget=None, flag=None):
+    def _graph_push_transformation_action_fnc_(self, node_widget=None, flag=None):
         cmd_data = []
-        nodes = list(self._graph_select_nodes)
-        if node_widget is not None:
-            if node_widget not in nodes:
-                nodes += [node_widget]
 
-        for i_node_widget in nodes:
+        node_widgets = list(self._graph_selection_nodes)
+        if node_widget is not None:
+            if node_widget not in node_widgets:
+                node_widgets += [node_widget]
+
+        for i_node_widget in node_widgets:
             i_model, i_last_model = i_node_widget._track_model, i_node_widget._last_track_model
             if i_model != i_last_model:
                 cmd_data.append(
@@ -130,7 +132,7 @@ class QtTrackGraph(
             c._graph = self
             self._widget._undo_stack.push(c)
 
-    def _on_graph_node_bypass_auto_(self):
+    def _on_bypass_auto_(self):
         cmd_data = []
 
         hover_node = self._get_hovered_node_()
@@ -139,12 +141,12 @@ class QtTrackGraph(
 
         bypass_flag = hover_node._track_model.is_bypass
 
-        nodes = list(self._graph_select_nodes)
-        if hover_node not in nodes:
-            nodes.append(hover_node)
+        node_widgets = list(self._graph_selection_nodes)
+        if hover_node not in node_widgets:
+            node_widgets.append(hover_node)
 
-        if nodes:
-            for i_node_widget in nodes:
+        if node_widgets:
+            for i_node_widget in node_widgets:
                 i_model = i_node_widget._track_model
                 cmd_data.append(
                     # to target flag
@@ -158,7 +160,7 @@ class QtTrackGraph(
             c._graph = self
             self._widget._undo_stack.push(c)
 
-    def _graph_bypass_node_fnc_(self, track_model, flag):
+    def _graph_node_bypass_fnc_(self, track_model, flag):
         key = track_model.key
         if key in self._graph_node_dict:
             node_widget = self._graph_node_dict[key]
@@ -167,12 +169,12 @@ class QtTrackGraph(
 
             node_widget._refresh_by_bypass_()
 
-    def _on_graph_node_trash_auto_(self):
+    def _on_trash_auto_(self):
         cmd_data = []
 
-        nodes = self._get_selected_nodes_()
-        if nodes:
-            for i_node_widget in nodes:
+        node_widgets = self._get_selected_nodes_()
+        if node_widgets:
+            for i_node_widget in node_widgets:
                 i_model = i_node_widget._track_model
                 cmd_data.append(
                     ('trash', (i_model, True))
@@ -192,11 +194,11 @@ class QtTrackGraph(
             track_model.set_trash(int(flag))
             node_widget._refresh_by_trash_()
 
-    def _on_graph_node_copy_auto_(self):
+    def _on_copy_auto_(self):
         track_data = []
-        nodes = self._get_selected_nodes_()
-        if nodes:
-            for i_node_widget in nodes:
+        node_widgets = self._get_selected_nodes_()
+        if node_widgets:
+            for i_node_widget in node_widgets:
                 i_model = i_node_widget._track_model
                 track_data.append(i_model.to_dict())
 
@@ -213,9 +215,9 @@ class QtTrackGraph(
 
     def _on_graph_node_cut_auto_(self):
         track_data = []
-        nodes = self._get_selected_nodes_()
-        if nodes:
-            for i_node_widget in nodes:
+        node_widgets = self._get_selected_nodes_()
+        if node_widgets:
+            for i_node_widget in node_widgets:
                 i_model = i_node_widget._track_model
                 track_data.append(i_model.to_dict())
 
@@ -230,9 +232,9 @@ class QtTrackGraph(
         )
         _qt_core.QtUtil.write_clipboard(data_string)
         # use trash
-        self._on_graph_node_trash_auto_()
+        self._on_trash_auto_()
 
-    def _on_graph_node_paste_auto_(self):
+    def _on_paste_auto_(self):
 
         cmd_data = []
 
@@ -337,7 +339,7 @@ class QtTrackGraph(
     def _graph_node_paste_cut_fnc_(self, track_model):
         self._graph_node_update_track_model_fnc_(track_model)
 
-    def _graph_node_update_blend_(self, key, blend_flag):
+    def _on_update_blend_auto_(self, key, blend_flag):
         cmd_data = []
         if key in self._graph_node_dict:
             node_widget = self._graph_node_dict[key]
@@ -378,8 +380,8 @@ class QtTrackGraph(
         if key in self._graph_node_dict:
             node_widget = self._graph_node_dict[key]
             # todo: remove fnc has bug
-            if node_widget in self._graph_select_nodes:
-                self._graph_select_nodes.remove(node_widget)
+            if node_widget in self._graph_selection_nodes:
+                self._graph_selection_nodes.remove(node_widget)
             if node_widget in self._graph_nodes:
                 self._graph_nodes.remove(node_widget)
 
@@ -394,8 +396,8 @@ class QtTrackGraph(
     def _update_stage_(self):
         self._track_guide._update_stage_()
 
-    def _do_graph_frame_scale_for_(self, nodes):
-        x_0, y_0, x_1, y_1, w_0, h_0 = self._graph_model._compute_nodes_basic_geometry_args_for(nodes)
+    def _do_graph_frame_scale_for_(self, node_widgets):
+        x_0, y_0, x_1, y_1, w_0, h_0 = self._graph_model._compute_nodes_basic_geometry_args_for(node_widgets)
         w_1, h_1 = self.width(), self.height()
 
         s_x_0 = float(w_1)/float(w_0)
@@ -404,8 +406,8 @@ class QtTrackGraph(
             s_x_0*.875, 1.0
         )
 
-    def _do_graph_frame_translate_for_(self, nodes):
-        x_0, y_0, x_1, y_1, w_0, h_0 = self._graph_model._compute_nodes_basic_geometry_args_for(nodes)
+    def _do_graph_frame_translate_for_(self, node_widgets):
+        x_0, y_0, x_1, y_1, w_0, h_0 = self._graph_model._compute_nodes_basic_geometry_args_for(node_widgets)
         sx, sy = self._graph_model.sx, self._graph_model.sy
 
         # scale to
@@ -422,16 +424,21 @@ class QtTrackGraph(
         p = event.pos()
 
         x, y = p.x(), p.y()
-        
-        self._current_timeframe_tmp = self._track_model_stage.compute_timeframe(x)
+        # time
+        if _qt_core.QtUtil.is_ctrl_modifier():
+            self._current_timeframe_tmp = self._track_model_stage.compute_timeframe(x)
+        # later
         self._current_layer_index_tmp = self._track_model_stage.compute_layer_index(y)
 
     def _do_graph_press_end_auto_(self, event):
         if self._is_action_flag_match_(
             self.ActionFlag.PressClick
         ):
+            # time
+            if _qt_core.QtUtil.is_ctrl_modifier():
+                self._track_timeline._accept_current_timeframe_(self._current_timeframe_tmp)
+            # layer
             self._track_layer._set_current_index_(self._current_layer_index_tmp)
-            self._track_timeline._set_current_timeframe_(self._current_timeframe_tmp)
             self._track_layer._refresh_widget_draw_()
 
     def __init__(self, *args, **kwargs):
@@ -444,7 +451,6 @@ class QtTrackGraph(
         )
 
         self._init_action_base_def_(self)
-        self._init_action_for_rect_select_def_(self)
 
         self._init_graph_base_def_(self)
         self._init_sbj_base_def_(self)
@@ -470,6 +476,7 @@ class QtTrackGraph(
         self._connection_sbj_layer = _bsc_graph.QtSbjLayer(self)
         # undo
         self._undo_stack = QtWidgets.QUndoStack()
+        self._undo_button = None
         self._undo_action = self._undo_stack.createUndoAction(self, 'undo')
         self._undo_action.setShortcut(
             QtGui.QKeySequence(
@@ -479,6 +486,7 @@ class QtTrackGraph(
         self.addAction(self._undo_action)
         # redo
         self._redo_action = self._undo_stack.createRedoAction(self, 'redo')
+        self._redo_button = None
         self._redo_action.setShortcut(
             QtGui.QKeySequence(
                 QtCore.Qt.CTRL+QtCore.Qt.SHIFT+QtCore.Qt.Key_Z
@@ -491,17 +499,17 @@ class QtTrackGraph(
             # frame
             (self._on_graph_node_frame_auto_, 'F'),
             # select
-            (self._on_graph_node_select_all_, 'Ctrl+A'),
+            (self._selection_all_fnc_, 'Ctrl+A'),
             # bypass
-            (self._on_graph_node_bypass_auto_, 'D'),
+            (self._on_bypass_auto_, 'D'),
             # trash
-            (self._on_graph_node_trash_auto_, 'Delete'),
+            (self._on_trash_auto_, 'Delete'),
             # copy
-            (self._on_graph_node_copy_auto_, 'Ctrl+C'),
+            (self._on_copy_auto_, 'Ctrl+C'),
             # cut
             (self._on_graph_node_cut_auto_, 'Ctrl+X'),
             # paste
-            (self._on_graph_node_paste_auto_, 'Ctrl+V')
+            (self._on_paste_auto_, 'Ctrl+V'),
         ]
         for i_fnc, i_shortcut in actions:
             i_action = QtWidgets.QAction(self)
@@ -642,6 +650,24 @@ class QtTrackGraph(
         self._track_guide = widget
         self._track_model_stage = self._track_guide._track_model_stage
 
+    def _set_undo_button_(self, widget):
+        self._undo_button = widget
+        self._undo_button.press_clicked.connect(self._undo_action.trigger)
+        # noinspection PyUnresolvedReferences
+        self._undo_stack.canUndoChanged.connect(self._update_undo_)
+
+    def _update_undo_(self):
+        self._undo_button._set_action_enable_(self._undo_stack.canUndo())
+
+    def _set_redo_button_(self, widget):
+        self._redo_button = widget
+        self._redo_button.press_clicked.connect(self._redo_action.trigger)
+        # noinspection PyUnresolvedReferences
+        self._undo_stack.canRedoChanged.connect(self._update_redo_)
+
+    def _update_redo_(self):
+        self._redo_button._set_action_enable_(self._undo_stack.canRedo())
+
     def _create_node_(self, *args, **kwargs):
         key = kwargs['key']
         if self._track_model_stage.is_exists(key) is True:
@@ -658,10 +684,10 @@ class QtTrackGraph(
         return node_widget
 
     def _create_connection_(self, *args, **kwargs):
-        ng_connection = self.NG_CONNECTION_CLS(self._connection_sbj_layer)
-        self._ng_graph_connections.append(ng_connection)
-        ng_connection._set_graph_(self)
-        return ng_connection
+        connection_widget = self.NG_CONNECTION_CLS(self._connection_sbj_layer)
+        self._ng_graph_connections.append(connection_widget)
+        connection_widget._set_graph_(self)
+        return connection_widget
 
     def _restore_graph_(self):
         self._track_guide._restore_stage_()
@@ -779,12 +805,16 @@ class QtTrackWidget(_vew_wgt_base._BaseViewWidget):
         self._undo_button = _wgt_button.QtIconPressButton()
         self._undo_button._set_name_text_('undo')
         self._undo_button._set_icon_name_('montage/undo')
+        self._undo_button._set_action_enable_(False)
         self._undo_and_redo_tool_box._add_widget_(self._undo_button)
+        self._view._graph._set_undo_button_(self._undo_button)
 
         self._redo_button = _wgt_button.QtIconPressButton()
         self._redo_button._set_name_text_('redo')
         self._redo_button._set_icon_name_('montage/redo')
+        self._redo_button._set_action_enable_(False)
         self._undo_and_redo_tool_box._add_widget_(self._redo_button)
+        self._view._graph._set_redo_button_(self._redo_button)
 
     def _build_keyword_filter_tool_box_(self):
         self._keyword_filter_input = _wgt_input_for_filter.QtInputForFilter()

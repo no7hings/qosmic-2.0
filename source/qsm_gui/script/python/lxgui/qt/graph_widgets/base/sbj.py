@@ -163,37 +163,6 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
             x+x_1, y+y_1, w_1, h_1
         )
 
-    def _update_basic_coord_as_move_(self, x, y):
-        def int_(v_):
-            if v_ >= 0:
-                return int(v_)
-            return int(v_)-1
-
-        t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
-        x_1, y_1 = (x-t_x)/s_x, (y-t_y)/s_y
-
-        self._node_basic_x, self._node_basic_y = int_(x_1), int_(y_1)
-
-    def _update_basic_args_as_left_trim_(self, x, y, w, h):
-        def int_(v_):
-            if v_ >= 0:
-                return int(v_)
-            return int(v_)-1
-
-        t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
-
-        x_1, y_1 = (x-t_x)/s_x, (y-t_y)/s_y
-        self._node_basic_x, self._node_basic_y = int_(x_1), int_(y_1)
-
-        w_1, h_1 = w/s_x, h/s_y
-        self._node_basic_w, self._node_basic_h = int(w_1), int(h_1)
-
-    def _update_basic_args_as_right_trim_(self, w, h):
-        t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
-
-        w_1, h_1 = w/s_x, h/s_y
-        self._node_basic_w, self._node_basic_h = int(w_1), int(h_1)
-
     def _compute_geometry_by_graph_args_(self):
         t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
         return self._node_basic_x*s_x+t_x, self._node_basic_y*s_y+t_y, self._node_basic_w*s_x, self._node_basic_h*s_y
@@ -253,7 +222,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         self._graph._do_node_press_move_for_(self, d_point)
 
     def _do_press_move_end_(self, event):
-        self._get_graph_()._push_selects_nodes_transformation_changed_action_(flag='move')
+        self._get_graph_()._graph_push_transformation_action_fnc_(flag='move')
 
     def _move_to_coord_(self, x, y):
         # move real time
@@ -296,7 +265,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         )
 
     def _do_press_trim_end_(self, event):
-        self._get_graph_()._push_selects_nodes_transformation_changed_action_(self, flag='trim')
+        self._get_graph_()._graph_push_transformation_action_fnc_(self, flag='trim')
 
     def _trim_left_fnc_(self, d_point, offset_point=None):
         if offset_point is not None:
@@ -345,7 +314,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         )
 
     def _do_press_scale_end_(self, event):
-        self._get_graph_()._push_selects_nodes_transformation_changed_action_(self, flag='scale')
+        self._get_graph_()._graph_push_transformation_action_fnc_(self, flag='scale')
 
     def _scale_left_fnc_(self, d_point, offset_point=None):
         if offset_point is not None:
@@ -391,8 +360,9 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         pass
 
     # basic coord
-    def _pull_basic_coord_(self, x, y):
-        self._node_basic_x, self._node_basic_y = x, y
+    def _pull_basic_coord_(self, basic_x, basic_y):
+        self._node_basic_x, self._node_basic_y = basic_x, basic_y
+
         self._refresh_widget_all_()
 
     def _get_basic_coord_(self):
@@ -400,6 +370,39 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
 
     def _get_basic_last_coord_(self):
         return self._node_basic_last_x, self._node_basic_last_y
+
+    def _update_basic_coord_as_move_(self, x, y):
+        self._node_basic_x, self._node_basic_y = self._compute_basic_coord_(x, y)
+
+    def _compute_basic_coord_(self, x, y):
+        def int_(v_):
+            if v_ >= 0:
+                return int(v_)
+            return int(v_)-1
+
+        t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
+        x_1, y_1 = (x-t_x)/s_x, (y-t_y)/s_y
+        return int_(x_1), int_(y_1)
+
+    def _update_basic_args_as_left_trim_(self, x, y, w, h):
+        def int_(v_):
+            if v_ >= 0:
+                return int(v_)
+            return int(v_)-1
+
+        t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
+
+        x_1, y_1 = (x-t_x)/s_x, (y-t_y)/s_y
+        self._node_basic_x, self._node_basic_y = int_(x_1), int_(y_1)
+
+        w_1, h_1 = w/s_x, h/s_y
+        self._node_basic_w, self._node_basic_h = int(w_1), int(h_1)
+
+    def _update_basic_args_as_right_trim_(self, w, h):
+        t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
+
+        w_1, h_1 = w/s_x, h/s_y
+        self._node_basic_w, self._node_basic_h = int(w_1), int(h_1)
 
     # basic size
     def _pull_basic_size_(self, w, h):

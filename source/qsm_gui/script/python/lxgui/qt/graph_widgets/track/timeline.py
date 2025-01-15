@@ -1,7 +1,5 @@
 # coding=utf-8
 # gui
-import sys
-
 from .... import core as _gui_core
 # qt
 from ...core.wrap import *
@@ -9,6 +7,40 @@ from ...core.wrap import *
 from ... import core as _qt_core
 
 from ... import abstracts as _qt_abstracts
+
+
+class _FramePlayThread(QtCore.QThread):
+    timeout = qt_signal()
+
+    def __init__(self, parent):
+        super(_FramePlayThread, self).__init__(parent)
+        self._interval = 1000.0/24
+
+        self._running_flag = False
+        self._close_flag = False
+
+    def set_interval(self, interval):
+        self._interval = interval
+
+    def do_start(self):
+        if self._close_flag is False:
+            self._running_flag = True
+            self.start()
+
+    def run(self):
+        while self._running_flag:
+            # noinspection PyArgumentList
+            QtCore.QThread.msleep(self._interval)
+            self.timeout.emit()
+
+    def do_stop(self):
+        self._running_flag = False
+
+    def do_close(self):
+        self._close_flag = True
+        self.do_stop()
+        self.wait()
+        self.deleteLater()
 
 
 class QtTrackTimeline(
@@ -29,18 +61,21 @@ class QtTrackTimeline(
         x, y = 0, 0
         frm_w, frm_h = self.width(), self.height()
 
-        self._unit_current_coord = self._coord_model.compute_offset_at(self._timeframe_current)
+        self._unit_current_coord = self._coord_model.compute_offset_at(self._current_timeframe)
 
         #
-        self._timeframe_start, self._timeframe_end = self._coord_model.unit_index_range
+        self._start_timeframe, self._end_timeframe = self._coord_model.unit_index_range
 
         # timehandle
-        txt_w = QtGui.QFontMetrics(self._text_font).width(str(self._timeframe_current))+16
+        txt_w = QtGui.QFontMetrics(self._text_font).width(str(self._current_timeframe))+16
 
         d = self._timeframe_current_handle_w/2
-        txt_h = frm_h-d
+
+        bub_h = frm_h/2
+        bub_gap = (frm_h-bub_h)/2+d
+
         self._timehandle_text_rect.setRect(
-            self._unit_current_coord-(txt_w/2), y+d, txt_w, txt_h
+            self._unit_current_coord-(txt_w/2), y+bub_gap, txt_w, bub_h
         )
         self._timehandle_path = _qt_core.QtPainterPath()
         self._timehandle_path._add_coords_(
@@ -56,13 +91,10 @@ class QtTrackTimeline(
             ]
         )
 
-        bub_h = frm_h/2
-        bub_gap = (frm_h-bub_h)/2
-
         self._timeframe_bubble_flag = False
 
         # left hide
-        if self._timeframe_start > self._timeframe_current:
+        if self._start_timeframe > self._current_timeframe:
             self._timeframe_bubble_flag = True
 
             self._timeframe_bubble_rect.setRect(
@@ -70,7 +102,7 @@ class QtTrackTimeline(
             )
 
         # right hide
-        elif self._timeframe_end < self._timeframe_current:
+        elif self._end_timeframe < self._current_timeframe:
             self._timeframe_bubble_flag = True
 
             self._timeframe_bubble_rect.setRect(
@@ -106,10 +138,7 @@ class QtTrackTimeline(
 
         x = p.x()
         frame = self._coord_model.compute_unit_index_loc(x)
-        if frame != self._timeframe_current:
-            self._timeframe_current = int(frame)
-            self.frame_accepted.emit(self._timeframe_current)
-            self._refresh_widget_all_()
+        self._accept_current_timeframe_(frame)
 
     def _do_press_move_(self, event):
         p = event.pos()
@@ -117,10 +146,7 @@ class QtTrackTimeline(
         x = p.x()
 
         frame = self._coord_model.compute_unit_index_loc(x)
-        if frame != self._timeframe_current:
-            self._timeframe_current = int(frame)
-            self.frame_accepted.emit(self._timeframe_current)
-            self._refresh_widget_all_()
+        self._accept_current_timeframe_(frame)
 
     def _update_to_timehandle_(self):
         view = self.parent()
@@ -149,15 +175,24 @@ class QtTrackTimeline(
         self._text_font = _qt_core.QtFont.generate(size=10, weight=50)
 
         self._time_index_text_w = 64
-        self._timeframe_current = 1
-        
+        self._current_timeframe = 1
+
         self._timeframe_bubble_flag = False
 
-        self._timeframe_start, self._timeframe_end = 1, 48
+        self._start_timeframe, self._end_timeframe = 1, 48
+
+        self._play_start_timeframe, self._play_end_timeframe = self._start_timeframe, self._end_timeframe
 
         self._timeline_frame_rect = QtCore.QRect()
 
         self._coord_model = None
+
+        self._autoplaying_flag = False
+        self._fps = 24
+
+        self._play_thread = _FramePlayThread(self)
+        self._play_thread.timeout.connect(self._on_autoplaying_)
+        self._play_thread.set_interval(int(1000.0/self._fps))
 
         self._timeframe_current_handle_w = 20
         self._timeframe_current_handle_rect = QtCore.QRect()
@@ -216,13 +251,21 @@ class QtTrackTimeline(
         self._draw_timehandle_(painter)
 
     def _get_current_timeframe_(self):
-        return self._timeframe_current
+        return self._current_timeframe
 
-    def _set_current_timeframe_(self, frame):
-        if frame != self._timeframe_current:
-            self._timeframe_current = frame
+    def _set_current_timeframe_(self, value):
+        if value != self._current_timeframe:
+            self._current_timeframe = value
             self._refresh_widget_all_()
-            # sys.stdout.write('frame is change: {}.\n'.format(frame))
+            return True
+        return False
+
+    def _accept_current_timeframe_(self, value):
+        if self._set_current_timeframe_(value) is True:
+            self.frame_accepted.emit(self._current_timeframe)
+
+    def _set_play_timeframe_range_(self, start, end):
+        self._play_start_timeframe, self._play_end_timeframe = start, end
 
     def _set_coord_model_(self, model):
         self._coord_model = model
@@ -238,13 +281,21 @@ class QtTrackTimeline(
         # handle
         painter.drawPath(self._timehandle_path)
 
+        # rect
+        painter._set_antialiasing_(True)
+        painter.setPen(_qt_core.QtRgba.BdrBubble)
+        painter.setBrush(_qt_core.QtRgba.BkgBubble)
+        painter.drawRoundedRect(
+            self._timehandle_text_rect, 2, 2, QtCore.Qt.AbsoluteSize
+        )
+
         # text
         painter.setPen(_qt_core.QtRgba.TxtBubble)
         painter._set_font_(self._text_font)
         painter.drawText(
             self._timehandle_text_rect,
             QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
-            str(self._timeframe_current)
+            str(self._current_timeframe)
         )
 
         if self._timeframe_bubble_flag is True:
@@ -255,11 +306,33 @@ class QtTrackTimeline(
             painter.drawRoundedRect(
                 self._timeframe_bubble_rect, 2, 2, QtCore.Qt.AbsoluteSize
             )
+
             # text
             painter.setPen(_qt_core.QtRgba.TxtBubble)
             painter._set_font_(self._text_font)
             painter.drawText(
                 self._timeframe_bubble_rect,
                 QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
-                str(self._timeframe_current)
+                str(self._current_timeframe)
             )
+
+    def _on_autoplaying_(self):
+        index = self._current_timeframe
+
+        if index > self._play_end_timeframe:
+            index = self._play_start_timeframe
+
+        if index < self._play_start_timeframe:
+            index = self._play_start_timeframe
+
+        index += 1
+
+        self._accept_current_timeframe_(index)
+
+    def _swap_autoplaying_(self):
+        self._autoplaying_flag = not self._autoplaying_flag
+
+        if self._autoplaying_flag is True:
+            self._play_thread.do_start()
+        else:
+            self._play_thread.do_stop()

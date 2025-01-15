@@ -49,7 +49,6 @@ class QtGeneralNodeGraph(
     _bsc_graph.AbsQtGraphSbjDef,
 
     _qt_abstracts.AbsQtActionBaseDef,
-    _bsc_graph.AbsQtActionForRectSelectDef,
     AbsQtActionFrameDef,
 
     _bsc_graph.AbsQtGraphBaseDef,
@@ -92,7 +91,6 @@ class QtGeneralNodeGraph(
         )
         #
         self._init_action_base_def_(self)
-        self._init_action_for_rect_select_def_(self)
         self._set_action_frame_def_init_(self)
         #
         self._init_sbj_base_def_(self)
@@ -133,7 +131,7 @@ class QtGeneralNodeGraph(
             (functools.partial(self._set_ng_action_graph_layout_selection_, '-height'), 'Ctrl+L'),
             (functools.partial(self._set_ng_action_graph_layout_selection_, 'height'), 'Shift+L'),
             (self._set_ng_action_graph_frame_, 'F'),
-            (self._on_graph_node_select_all_, 'Ctrl+A')
+            (self._selection_all_fnc_, 'Ctrl+A')
         ]
         for i_fnc, i_shortcut in actions:
             i_action = QtWidgets.QAction(self)
@@ -336,23 +334,23 @@ class QtGeneralNodeGraph(
         self._graph_universe = universe
         objs = self._graph_universe.get_objs()
         for i_obj in objs:
-            i_ng_node = self._create_node_()
-            i_ng_node._set_unr_obj_(i_obj)
-            i_ng_node._set_type_text_(
+            i_node_widget = self._create_node_()
+            i_node_widget._set_unr_obj_(i_obj)
+            i_node_widget._set_type_text_(
                 i_obj.type_name
             )
-            i_ng_node._set_name_text_(
+            i_node_widget._set_name_text_(
                 i_obj.name
             )
-            i_ng_node._set_name_icon_text_(
+            i_node_widget._set_name_icon_text_(
                 i_obj.type_name
             )
-            i_ng_node._set_tool_tip_(['path: "{}"'.format(i_obj.path)])
+            i_node_widget._set_tool_tip_(['path: "{}"'.format(i_obj.path)])
             # i_image_path = i_obj.get('image')
             # if i_image_path:
-            #     i_ng_node._set_image_path_(i_image_path)
+            #     i_node_widget._set_image_path_(i_image_path)
 
-            i_obj.set_gui_ng_graph_node(i_ng_node)
+            i_obj.set_gui_ng_graph_node(i_node_widget)
 
         connections = self._graph_universe.get_connections()
         for i_connection in connections:
@@ -380,8 +378,8 @@ class QtGeneralNodeGraph(
         if objs:
             ng_nodes = [i.get_gui_ng_graph_node() for i in objs]
             idx = 0
-            for i_ng_node in ng_nodes:
-                i_ng_node._move_to_coord_(
+            for i_node_widget in ng_nodes:
+                i_node_widget._move_to_coord_(
                     0, idx*192
                 )
                 idx += 1
@@ -391,9 +389,9 @@ class QtGeneralNodeGraph(
                 size=(192, 192)
             )
             ng_nodes.extend(ng_nodes_0)
-            for i_ng_node in self._get_ng_graph_nodes_():
-                if i_ng_node not in ng_nodes:
-                    i_ng_node._move_to_coord_(
+            for i_node_widget in self._get_ng_graph_nodes_():
+                if i_node_widget not in ng_nodes:
+                    i_node_widget._move_to_coord_(
                         0, idx*192
                     )
                     idx += 1
@@ -438,18 +436,16 @@ class QtGeneralNodeGraph(
         obj_stack = []
         o2c_dict = {}
         c2o_dict = {}
-        #
+
         x, y, w, h = nodes[0]._get_geometry_args_()
         [rcs_fnc_(i._ng_node_obj, 0) for i in nodes]
 
-        # objs = [i._ng_node_obj for i in nodes]
-        # basic_source_objs = self._graph_universe.get_basic_source_objs(objs)
-        ys = []
+        y_list = []
         for i in nodes:
             i_x, i_y, i_w, i_h = i._get_geometry_args_()
-            ys.append(i_y)
+            y_list.append(i_y)
 
-        y_min, y_max = min(ys), max(ys)
+        y_min, y_max = min(y_list), max(y_list)
         y = y_min+(y_max-y_min)/2
         #
         dir_x, dir_y = direction
@@ -457,6 +453,8 @@ class QtGeneralNodeGraph(
         #
         for k, v in o2c_dict.items():
             c2o_dict.setdefault(v, []).append(k)
+        #
+        cmd_data = []
         #
         if c2o_dict:
             for column, v in c2o_dict.items():
@@ -486,10 +484,14 @@ class QtGeneralNodeGraph(
                         else:
                             raise ValueError()
                         #
-                        i_ng_node = i_obj.get_gui_ng_graph_node()
-                        i_ng_node._move_to_coord_(
-                            i_x, i_y
+                        i_node_widget = i_obj.get_gui_ng_graph_node()
+                        i_basic_coord = i_node_widget._compute_basic_coord_(i_x, i_y)
+                        i_last_basic_coord = i_node_widget._get_basic_coord_()
+                        cmd_data.append(
+                            ('layout', (i_node_widget, i_basic_coord, i_last_basic_coord))
                         )
+
+        self._push_general_action_fnc_(cmd_data)
         return [i.get_gui_ng_graph_node() for i in obj_stack]
 
     @classmethod
@@ -502,10 +504,10 @@ class QtGeneralNodeGraph(
         keys = []
         list_ = []
         query_dict = {}
-        for i_ng_node in nodes:
-            i_x = i_ng_node.pos().x()
-            _i_width = i_ng_node.width()
-            i_height = i_ng_node._get_image_line_height_()
+        for i_node_widget in nodes:
+            i_x = i_node_widget.pos().x()
+            _i_width = i_node_widget.width()
+            i_height = i_node_widget._get_image_line_height_()
 
             if sort_key in ['x', '-x']:
                 i_key = i_x
@@ -520,7 +522,7 @@ class QtGeneralNodeGraph(
             query_dict.setdefault(
                 i_key, []
             ).append(
-                i_ng_node
+                i_node_widget
             )
         keys.sort()
         if sort_key in ['-x', '-height']:
@@ -542,13 +544,13 @@ class QtGeneralNodeGraph(
 
         x_0, y_0, x_1, y_1 = self._get_ng_graph_layout_args_(nodes)
 
-        for seq, i_ng_node in enumerate(nodes):
-            i_w, i_h = i_ng_node.width(), i_ng_node.height()
+        for seq, i_node_widget in enumerate(nodes):
+            i_w, i_h = i_node_widget.width(), i_node_widget.height()
 
             y_0 = y_1-i_h
 
             i_x, i_y = x_0, y_0
-            i_ng_node._move_to_coord_(
+            i_node_widget._move_to_coord_(
                 i_x, i_y
             )
 
@@ -577,10 +579,10 @@ class QtGeneralNodeGraph(
         return ng_node
 
     def _create_connection_(self, *args, **kwargs):
-        ng_connection = self.NG_CONNECTION_CLS(self._connection_sbj_layer)
-        self._ng_graph_connections.append(ng_connection)
-        ng_connection._set_graph_(self)
-        return ng_connection
+        connection_widget = self.NG_CONNECTION_CLS(self._connection_sbj_layer)
+        self._ng_graph_connections.append(connection_widget)
+        connection_widget._set_graph_(self)
+        return connection_widget
 
     # action frame select
     def _set_action_frame_execute_(self, event):
@@ -590,10 +592,10 @@ class QtGeneralNodeGraph(
         self._on_graph_node_frame_auto_()
 
     def _set_ng_action_graph_layout_selection_(self, sort_key='x'):
-        if self._graph_select_nodes:
+        if self._graph_selection_nodes:
             self._do_node_press_start_for_any_action_()
-            self._layout_nodes_for_(self._graph_select_nodes, sort_key)
-            self._push_selects_nodes_transformation_changed_action_(flag='layout')
+            self._layout_nodes_for_(self._graph_selection_nodes, sort_key)
+            self._graph_push_transformation_action_fnc_(flag='layout')
 
 
 class _QtNGTreeNode(

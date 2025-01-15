@@ -202,7 +202,7 @@ class ListItemModel(_item_base.AbsItemModel):
         self._data.autoplay_enable = True
 
         play_thread = _FramePlayThread(self._view)
-        play_thread.timeout.connect(self._autoplaying)
+        play_thread.timeout.connect(self._on_autoplaying)
         frame_interval = int(1000/fps)
         play_thread.set_interval(frame_interval)
 
@@ -289,7 +289,7 @@ class ListItemModel(_item_base.AbsItemModel):
             self._update_audio_play_progress_percent(0.0)
             self._data.audio.play_thread.do_start()
 
-    def _autoplaying(self):
+    def _on_autoplaying(self):
         if self._data.play_enable is True:
             if self._data.autoplay_enable is True:
                 if self._data.autoplay.flag is True:

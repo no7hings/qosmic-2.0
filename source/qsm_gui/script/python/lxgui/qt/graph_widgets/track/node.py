@@ -864,3 +864,9 @@ class QtTrackNode(
     def _update_blend_tmp_(self):
         self._pre_blend_tmp = self._track_model.pre_blend
         self._post_blend_tmp = self._track_model.post_blend
+
+    def _do_delete_(self):
+        super(QtTrackNode, self)._do_delete_()
+        # clear trim
+        self._start_trim._do_delete_()
+        self._end_trim._do_delete_()

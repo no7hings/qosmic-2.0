@@ -751,6 +751,10 @@ class TrackModelStage(object):
         return self._track_end-self._track_start+1
 
     @property
+    def track_range(self):
+        return self._track_start, self._track_end
+
+    @property
     def missing_frame_ranges(self):
         return TrackModel._find_missing_frame_ranges(self._all_frames)
 

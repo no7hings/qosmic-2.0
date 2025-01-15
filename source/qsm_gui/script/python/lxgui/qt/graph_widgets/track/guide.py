@@ -91,7 +91,7 @@ class QtTrackGuide(
 
     def _do_press_release_(self, evnt):
         if self._current_blend_move_flag is True:
-            self._graph._graph_node_update_blend_(self._current_track_key, self._current_blend_flag)
+            self._graph._on_update_blend_auto_(self._current_track_key, self._current_blend_flag)
 
     def _update_stage_(self):
         self._track_model_stage.update()
@@ -246,7 +246,7 @@ class QtTrackGuide(
                     next_next_node = self._track_model_stage.get_one_node(next_next_key)
                     self._draw_node_(
                         painter, pre_node, node, next_next_node,
-                        frame_range, h, is_start, is_end
+                        frame_range, h, is_start, is_end, next_next_flag=True
                     )
                 # middle
                 else:
@@ -264,7 +264,7 @@ class QtTrackGuide(
 
     def _draw_node_(
         self, painter, pre_node, node, next_node,
-        frame_range, h, is_start, is_end
+        frame_range, h, is_start, is_end, next_next_flag=False
     ):
         y = 0
         start, end = frame_range
@@ -328,7 +328,12 @@ class QtTrackGuide(
         if next_node is not None:
             next_node_pre_blend = next_node._get_pre_blend_(self._current_blend_move_flag)
             next_node_pre_blend_w = self._track_model_stage.compute_width_for(next_node_pre_blend)
-            next_rgb = next_node._track_model.rgb
+
+            if next_next_flag is True:
+                next_rgb = (255, 0, 0)
+            else:
+                next_rgb = next_node._track_model.rgb
+        # end node
         else:
             next_node_pre_blend_w = 0
             next_rgb = rgb
@@ -459,7 +464,7 @@ class QtTrackGuide(
         painter._set_antialiasing_(True)
         if node is not None:
             if curve_coords:
-                self._draw_blend_curve_(painter, curve_coords)
+                self._draw_blend_curve_fnc_(painter, curve_coords)
         painter._set_antialiasing_(False)
 
         painter._set_text_color_(
@@ -523,7 +528,7 @@ class QtTrackGuide(
                 pre_node._post_blend_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter, str(pre_node_post_blend)
             )
 
-    def _draw_blend_curve_(self, painter, coords):
+    def _draw_blend_curve_fnc_(self, painter, coords):
         points = [QtCore.QPointF(*x) for x in coords]
         basic_path = QtGui.QPainterPath()
 

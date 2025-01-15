@@ -189,4 +189,3 @@ class ChartModelForCurve(object):
 
     def set_tangent_type(self, tangent_type):
         self._tangent_type = tangent_type
-

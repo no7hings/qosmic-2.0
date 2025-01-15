@@ -120,8 +120,8 @@ class PrxTrackWidget(
         for i_index in range(10):
             i_name = random.choice(keys)
             i_post_cycle = random.choice(post_cycles)
-            i_pre_blend = random.choice(pre_blends)
-            i_post_blend = random.choice(post_blends)
+            i_pre_blend = 4  # random.choice(pre_blends)
+            i_post_blend = 4  # random.choice(post_blends)
 
             i_motion_json = motion_json_ptn.format(name=i_name)
 

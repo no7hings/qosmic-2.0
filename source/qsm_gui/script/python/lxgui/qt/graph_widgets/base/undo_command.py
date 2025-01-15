@@ -4,23 +4,36 @@ import sys
 from ...core.wrap import *
 
 
-class QtNodeActionCommand(QtWidgets.QUndoCommand):
+class QtNodeGeneralActionCommand(QtWidgets.QUndoCommand):
     def __init__(self, data):
-        super(QtNodeActionCommand, self).__init__()
+        super(QtNodeGeneralActionCommand, self).__init__()
         self._data = data
+        self._graph = None
 
     def undo(self):
-        for i, i_coord, i_last_coord, i_size, i_last_size in self._data:
-            i._pull_basic_coord_(*i_last_coord)
-            # i._pull_basic_size_(*i_last_size)
-            sys.stdout.write(
-                'node move: name="{}", coord=({}, {})\n'.format(i._get_name_text_(), *i_last_coord)
-            )
+        for i_flag, i_data in self._data:
+            if i_flag == 'selection':
+                i_node_widget, i_boolean = i_data
+
+                i_node_widget._set_selected_(not i_boolean)
+                if i_boolean is True:
+                    self._graph._graph_selection_nodes.remove(i_node_widget)
+                else:
+                    self._graph._graph_selection_nodes.append(i_node_widget)
+            elif i_flag in {'move', 'layout'}:
+                i_node_widget, i_basic_coord, i_basic_last_coord = i_data
+                i_node_widget._pull_basic_coord_(*i_basic_last_coord)
 
     def redo(self):
-        for i, i_coord, i_last_coord, i_size, i_last_size in self._data:
-            i._pull_basic_coord_(*i_coord)
-            # i._pull_basic_size_(*i_size)
-            sys.stdout.write(
-                'node move: name="{}", coord=({}, {})\n'.format(i._get_name_text_(), *i_coord)
-            )
+        for i_flag, i_data in self._data:
+            if i_flag == 'selection':
+                i_node_widget, i_boolean = i_data
+
+                i_node_widget._set_selected_(i_boolean)
+                if i_boolean is False:
+                    self._graph._graph_selection_nodes.remove(i_node_widget)
+                else:
+                    self._graph._graph_selection_nodes.append(i_node_widget)
+            elif i_flag in {'move', 'layout'}:
+                i_node_widget, i_basic_coord, i_basic_last_coord = i_data
+                i_node_widget._pull_basic_coord_(*i_basic_coord)

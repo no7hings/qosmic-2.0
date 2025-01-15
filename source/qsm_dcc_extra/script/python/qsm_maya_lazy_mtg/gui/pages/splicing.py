@@ -28,6 +28,8 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
         self._script_job_opt.destroy()
 
     def _do_dcc_playback_swap(self):
+        # super(PrxPageForSplicing, self)._do_dcc_playback_swap()
+
         if qsm_mya_core.Play.is_active() is False:
             qsm_mya_core.Play.start()
         else:

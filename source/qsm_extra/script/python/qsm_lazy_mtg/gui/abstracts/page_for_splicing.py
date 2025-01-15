@@ -224,7 +224,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
             self._motion_prx_track_widget.set_current_frame(int(time))
 
     def _do_dcc_playback_swap(self):
-        pass
+        self._motion_prx_track_widget._qt_widget._track_timeline._swap_autoplaying_()
 
     def _do_check_update(self):
         pass

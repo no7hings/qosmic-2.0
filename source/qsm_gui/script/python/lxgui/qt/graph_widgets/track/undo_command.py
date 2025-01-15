@@ -20,7 +20,7 @@ class QtTrackActionCommand(QtWidgets.QUndoCommand):
                 )
             elif i_flag == 'bypass':
                 i_track_model, i_flag = i_data
-                self._graph._graph_bypass_node_fnc_(i_track_model, not i_flag)
+                self._graph._graph_node_bypass_fnc_(i_track_model, not i_flag)
             elif i_flag == 'trash':
                 i_track_model, i_flag = i_data
                 self._graph._graph_node_trash_fnc_(i_track_model, not i_flag)
@@ -46,7 +46,7 @@ class QtTrackActionCommand(QtWidgets.QUndoCommand):
                 )
             elif i_flag == 'bypass':
                 i_track_model, i_flag = i_data
-                self._graph._graph_bypass_node_fnc_(i_track_model, i_flag)
+                self._graph._graph_node_bypass_fnc_(i_track_model, i_flag)
             elif i_flag == 'trash':
                 i_track_model, i_flag = i_data
                 self._graph._graph_node_trash_fnc_(i_track_model, i_flag)

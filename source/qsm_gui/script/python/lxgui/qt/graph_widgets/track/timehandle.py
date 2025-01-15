@@ -37,7 +37,7 @@ class QtTimeHandle(
         x = p_0.x()
 
         frame = self._graph._track_model_stage._time_coord_model.compute_unit_index_loc(x)
-        self._graph._track_timeline._set_current_timeframe_(frame)
+        self._graph._track_timeline._accept_current_timeframe_(frame)
 
     def __init__(self, *args, **kwargs):
         super(QtTimeHandle, self).__init__(*args, **kwargs)
@@ -74,6 +74,9 @@ class QtTimeHandle(
                     self._do_press_move_(event)
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 self._clear_all_action_flags_()
+            # zoom
+            # elif event.type() == QtCore.QEvent.Wheel:
+            #     self._graph.eventFilter(self._graph, event)
         return False
 
     def paintEvent(self, event):
