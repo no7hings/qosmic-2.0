@@ -70,7 +70,7 @@ class AbsQtGraphBaseDef(object):
         self._graph_model.on_zoom(event.pos(), event.angleDelta().y())
 
 
-class AbsQtActionForRectSelectDef(object):
+class _AbsQtSbjRectSelectDef(object):
     def _refresh_widget_draw_(self):
         raise NotImplementedError()
 
@@ -123,7 +123,7 @@ class AbsQtActionForRectSelectDef(object):
         return node_widgets
 
 
-class AbsQtGraphSbjDef(AbsQtActionForRectSelectDef):
+class AbsQtGraphSbjDef(_AbsQtSbjRectSelectDef):
     NG_NODE_CLS = None
     NG_CONNECTION_CLS = None
 
@@ -449,7 +449,7 @@ class AbsQtGraphSbjDef(AbsQtActionForRectSelectDef):
 
     def _push_general_action_fnc_(self, cmd_data):
         if cmd_data:
-            c = _undo_command.QtNodeGeneralActionCommand(
+            c = _undo_command.QtGraphActionCommand(
                 cmd_data
             )
             c._graph = self

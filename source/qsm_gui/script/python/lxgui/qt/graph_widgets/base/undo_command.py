@@ -4,9 +4,9 @@ import sys
 from ...core.wrap import *
 
 
-class QtNodeGeneralActionCommand(QtWidgets.QUndoCommand):
+class QtGraphActionCommand(QtWidgets.QUndoCommand):
     def __init__(self, data):
-        super(QtNodeGeneralActionCommand, self).__init__()
+        super(QtGraphActionCommand, self).__init__()
         self._data = data
         self._graph = None
 

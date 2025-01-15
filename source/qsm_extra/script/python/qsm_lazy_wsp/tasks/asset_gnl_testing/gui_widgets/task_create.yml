@@ -34,3 +34,9 @@ build:
                 name_chs: '任务单元'
                 options: ['main']
                 default: 'main'
+
+            use_current_scene:
+                widget: boolean
+                name: 'Use Current Scene'
+                name_chs: '使用当前文件'
+                value: False

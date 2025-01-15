@@ -868,5 +868,7 @@ class QtTrackNode(
     def _do_delete_(self):
         super(QtTrackNode, self)._do_delete_()
         # clear trim
-        self._start_trim._do_delete_()
-        self._end_trim._do_delete_()
+        if self._start_trim is not None:
+            self._start_trim._do_delete_()
+        if self._end_trim is not None:
+            self._end_trim._do_delete_()

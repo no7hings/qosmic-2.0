@@ -123,8 +123,9 @@ class Sketch(object):
             # update reset
             qsm_mya_core.OrientConstraint.update_reset(node, rotate)
             
-            # remove offset?
+            # todo: shortest has euler error
             cmds.setAttr(node+'.interpType', 2)
+            # remove offset?
             for i in ['offsetX', 'offsetY', 'offsetZ']:
                 cmds.setAttr(
                     node+'.'+i, 0
@@ -154,6 +155,7 @@ class Sketch(object):
             self._path, target_node, maintainOffset=1, weight=1
         )
         node = _[0]
+        # todo: shortest has euler error
         cmds.setAttr(node+'.interpType', 2)
         if clear_offset is True:
             for i in [

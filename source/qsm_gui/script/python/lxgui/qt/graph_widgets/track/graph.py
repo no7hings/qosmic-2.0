@@ -97,6 +97,183 @@ class QtTrackGraph(
 
         self._track_timeline._set_play_timeframe_range_(*self._track_model_stage.track_range)
 
+    def __init__(self, *args, **kwargs):
+        super(QtTrackGraph, self).__init__(*args, **kwargs)
+        self.setMouseTracking(True)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setFocusPolicy(QtCore.Qt.ClickFocus)
+        self.setSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
+
+        self._init_action_base_def_(self)
+
+        self._init_graph_base_def_(self)
+        self._init_sbj_base_def_(self)
+
+        self._init_universe_def_(self)
+
+        self._graph_model._graph_scale_x_enable = True
+        self._graph_model._graph_scale_y_enable = False
+
+        self._track_guide = None
+        self._track_model_stage = None
+
+        self._graph_node_dict = {}
+
+        self._track_timeline = None
+
+        self._track_layer = None
+
+        self._current_layer_index_tmp = None
+        self._current_timeframe_tmp = None
+
+        self._timetrack_trim_sbj_layer = _bsc_graph.QtSbjLayer(self)
+        self._connection_sbj_layer = _bsc_graph.QtSbjLayer(self)
+        # undo
+        self._undo_stack = QtWidgets.QUndoStack()
+        self._undo_button = None
+        self._undo_action = self._undo_stack.createUndoAction(self, 'undo')
+        self._undo_action.setShortcut(
+            QtGui.QKeySequence(
+                QtCore.Qt.CTRL+QtCore.Qt.Key_Z
+            )
+        )
+        self.addAction(self._undo_action)
+        # redo
+        self._redo_action = self._undo_stack.createRedoAction(self, 'redo')
+        self._redo_button = None
+        self._redo_action.setShortcut(
+            QtGui.QKeySequence(
+                QtCore.Qt.CTRL+QtCore.Qt.SHIFT+QtCore.Qt.Key_Z
+            )
+        )
+        self.addAction(self._redo_action)
+
+        self.installEventFilter(self)
+        actions = [
+            # frame
+            (self._on_graph_node_frame_auto_, 'F'),
+            # select
+            (self._selection_all_fnc_, 'Ctrl+A'),
+            # bypass
+            (self._on_bypass_auto_, 'D'),
+            # trash
+            (self._on_trash_auto_, 'Delete'),
+            # copy
+            (self._on_copy_auto_, 'Ctrl+C'),
+            # cut
+            (self._on_graph_node_cut_auto_, 'Ctrl+X'),
+            # paste
+            (self._on_paste_auto_, 'Ctrl+V'),
+        ]
+        for i_fnc, i_shortcut in actions:
+            i_action = QtWidgets.QAction(self)
+            # noinspection PyUnresolvedReferences
+            i_action.triggered.connect(
+                i_fnc
+            )
+            i_action.setShortcut(
+                QtGui.QKeySequence(
+                    i_shortcut
+                )
+            )
+            self.addAction(i_action)
+
+    def eventFilter(self, *args):
+        widget, event = args
+        if widget == self:
+            if event.type() == QtCore.QEvent.Resize:
+                self._refresh_widget_all_()
+            elif event.type() == QtCore.QEvent.Enter:
+                pass
+            elif event.type() == QtCore.QEvent.Leave:
+                pass
+
+            # key press
+            elif event.type() == QtCore.QEvent.KeyPress:
+                pass
+            elif event.type() == QtCore.QEvent.KeyRelease:
+                self._clear_action_modifier_flags_()
+            #
+            elif event.type() == QtCore.QEvent.MouseButtonPress:
+                if event.button() == QtCore.Qt.LeftButton:
+                    if self._is_action_flag_match_(
+                        self.ActionFlag.NGNodePressClick,
+                        self.ActionFlag.NGNodeAnyAction
+                    ) is False:
+                        self._set_action_flag_(
+                            self.ActionFlag.PressClick
+                        )
+                        # rect select
+                        self._do_rect_select_start_(event)
+
+                        # layer or timeline press
+                        self._do_graph_press_start_(event)
+                #
+                elif event.button() == QtCore.Qt.RightButton:
+                    pass
+                elif event.button() == QtCore.Qt.MidButton:
+                    self._set_action_flag_(
+                        self.ActionFlag.NGGraphTrackClick
+                    )
+                    self._do_graph_track_start_(event)
+                else:
+                    event.ignore()
+            elif event.type() == QtCore.QEvent.MouseMove:
+                if event.buttons() == QtCore.Qt.NoButton:
+                    self._do_graph_hover_move_(event)
+                elif event.buttons() == QtCore.Qt.LeftButton:
+                    if self._is_action_flag_match_(
+                        self.ActionFlag.NGNodePressClick, self.ActionFlag.NGNodePressMove,
+                        self.ActionFlag.NGNodeAnyAction
+                    ) is False:
+                        self._set_action_flag_(
+                            self.ActionFlag.RectSelectMove
+                        )
+                        self._do_rect_select_move_(event)
+                elif event.buttons() == QtCore.Qt.RightButton:
+                    pass
+                elif event.buttons() == QtCore.Qt.MidButton:
+                    self._set_action_flag_(
+                        self.ActionFlag.NGGraphTrackMove
+                    )
+                    self._do_graph_track_move_(event)
+                else:
+                    event.ignore()
+            elif event.type() == QtCore.QEvent.MouseButtonRelease:
+                if event.button() == QtCore.Qt.LeftButton:
+                    # rect select
+                    self._do_rect_select_end_auto_(event)
+                    # layer press
+                    self._do_graph_press_end_auto_(event)
+                elif event.button() == QtCore.Qt.RightButton:
+                    pass
+                elif event.button() == QtCore.Qt.MidButton:
+                    self._do_graph_track_end_(event)
+                else:
+                    event.ignore()
+                #
+                self._clear_all_action_flags_()
+
+            # zoom
+            elif event.type() == QtCore.QEvent.Wheel:
+                self._do_graph_zoom_(event)
+                return True
+        return False
+
+    def paintEvent(self, event):
+        painter = _qt_core.QtNGPainter(self)
+
+        if self._is_action_flag_match_(
+            self.ActionFlag.RectSelectMove
+        ):
+            painter._draw_dotted_frame_(
+                self._rect_selection_rect,
+                border_color=_qt_core.QtRgba.BorderSelect,
+                background_color=_qt_core.QtRgba.Transparent
+            )
+
     def _graph_node_move_together_fnc_(self, node_widget, d_point):
         p_0 = node_widget.pos()
         p_1_x, p_1_y = d_point.x(), d_point.y()
@@ -132,6 +309,7 @@ class QtTrackGraph(
             c._graph = self
             self._widget._undo_stack.push(c)
 
+    # bypass
     def _on_bypass_auto_(self):
         cmd_data = []
 
@@ -169,6 +347,7 @@ class QtTrackGraph(
 
             node_widget._refresh_by_bypass_()
 
+    # trash
     def _on_trash_auto_(self):
         cmd_data = []
 
@@ -194,6 +373,7 @@ class QtTrackGraph(
             track_model.set_trash(int(flag))
             node_widget._refresh_by_trash_()
 
+    # copy cut paste
     def _on_copy_auto_(self):
         track_data = []
         node_widgets = self._get_selected_nodes_()
@@ -339,6 +519,7 @@ class QtTrackGraph(
     def _graph_node_paste_cut_fnc_(self, track_model):
         self._graph_node_update_track_model_fnc_(track_model)
 
+    # blend
     def _on_update_blend_auto_(self, key, blend_flag):
         cmd_data = []
         if key in self._graph_node_dict:
@@ -440,196 +621,6 @@ class QtTrackGraph(
             # layer
             self._track_layer._set_current_index_(self._current_layer_index_tmp)
             self._track_layer._refresh_widget_draw_()
-
-    def __init__(self, *args, **kwargs):
-        super(QtTrackGraph, self).__init__(*args, **kwargs)
-        self.setMouseTracking(True)
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setFocusPolicy(QtCore.Qt.ClickFocus)
-        self.setSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
-        )
-
-        self._init_action_base_def_(self)
-
-        self._init_graph_base_def_(self)
-        self._init_sbj_base_def_(self)
-
-        self._init_universe_def_(self)
-
-        self._graph_model._graph_scale_x_enable = True
-        self._graph_model._graph_scale_y_enable = False
-
-        self._track_guide = None
-        self._track_model_stage = None
-
-        self._graph_node_dict = {}
-
-        self._track_timeline = None
-
-        self._track_layer = None
-
-        self._current_layer_index_tmp = None
-        self._current_timeframe_tmp = None
-
-        self._timetrack_trim_sbj_layer = _bsc_graph.QtSbjLayer(self)
-        self._connection_sbj_layer = _bsc_graph.QtSbjLayer(self)
-        # undo
-        self._undo_stack = QtWidgets.QUndoStack()
-        self._undo_button = None
-        self._undo_action = self._undo_stack.createUndoAction(self, 'undo')
-        self._undo_action.setShortcut(
-            QtGui.QKeySequence(
-                QtCore.Qt.CTRL+QtCore.Qt.Key_Z
-            )
-        )
-        self.addAction(self._undo_action)
-        # redo
-        self._redo_action = self._undo_stack.createRedoAction(self, 'redo')
-        self._redo_button = None
-        self._redo_action.setShortcut(
-            QtGui.QKeySequence(
-                QtCore.Qt.CTRL+QtCore.Qt.SHIFT+QtCore.Qt.Key_Z
-            )
-        )
-        self.addAction(self._redo_action)
-
-        self.installEventFilter(self)
-        actions = [
-            # frame
-            (self._on_graph_node_frame_auto_, 'F'),
-            # select
-            (self._selection_all_fnc_, 'Ctrl+A'),
-            # bypass
-            (self._on_bypass_auto_, 'D'),
-            # trash
-            (self._on_trash_auto_, 'Delete'),
-            # copy
-            (self._on_copy_auto_, 'Ctrl+C'),
-            # cut
-            (self._on_graph_node_cut_auto_, 'Ctrl+X'),
-            # paste
-            (self._on_paste_auto_, 'Ctrl+V'),
-        ]
-        for i_fnc, i_shortcut in actions:
-            i_action = QtWidgets.QAction(self)
-            # noinspection PyUnresolvedReferences
-            i_action.triggered.connect(
-                i_fnc
-            )
-            i_action.setShortcut(
-                QtGui.QKeySequence(
-                    i_shortcut
-                )
-            )
-            self.addAction(i_action)
-
-    def eventFilter(self, *args):
-        widget, event = args
-        if widget == self:
-            if event.type() == QtCore.QEvent.Resize:
-                self._refresh_widget_all_()
-            elif event.type() == QtCore.QEvent.Enter:
-                pass
-            elif event.type() == QtCore.QEvent.Leave:
-                pass
-            
-            # key press
-            elif event.type() == QtCore.QEvent.KeyPress:
-                pass
-            elif event.type() == QtCore.QEvent.KeyRelease:
-                self._clear_action_modifier_flags_()
-            #
-            elif event.type() == QtCore.QEvent.MouseButtonPress:
-                if event.button() == QtCore.Qt.LeftButton:
-                    if self._is_action_flag_match_(
-                        self.ActionFlag.NGNodePressClick,
-                        self.ActionFlag.NGNodeAnyAction
-                    ) is False:
-                        self._set_action_flag_(
-                            self.ActionFlag.PressClick
-                        )
-                        # rect select
-                        self._do_rect_select_start_(event)
-
-                        # layer or timeline press
-                        self._do_graph_press_start_(event)
-                #
-                elif event.button() == QtCore.Qt.RightButton:
-                    pass
-                elif event.button() == QtCore.Qt.MidButton:
-                    self._set_action_flag_(
-                        self.ActionFlag.NGGraphTrackClick
-                    )
-                    self._do_graph_track_start_(event)
-                else:
-                    event.ignore()
-            elif event.type() == QtCore.QEvent.MouseMove:
-                if event.buttons() == QtCore.Qt.NoButton:
-                    self._do_graph_hover_move_(event)
-                elif event.buttons() == QtCore.Qt.LeftButton:
-                    if self._is_action_flag_match_(
-                        self.ActionFlag.NGNodePressClick, self.ActionFlag.NGNodePressMove,
-                        self.ActionFlag.NGNodeAnyAction
-                    ) is False:
-                        self._set_action_flag_(
-                            self.ActionFlag.RectSelectMove
-                        )
-                        self._do_rect_select_move_(event)
-                elif event.buttons() == QtCore.Qt.RightButton:
-                    pass
-                elif event.buttons() == QtCore.Qt.MidButton:
-                    self._set_action_flag_(
-                        self.ActionFlag.NGGraphTrackMove
-                    )
-                    self._do_graph_track_move_(event)
-                else:
-                    event.ignore()
-            elif event.type() == QtCore.QEvent.MouseButtonRelease:
-                if event.button() == QtCore.Qt.LeftButton:
-                    # rect select
-                    self._do_rect_select_end_auto_(event)
-                    # layer press
-                    self._do_graph_press_end_auto_(event)
-                elif event.button() == QtCore.Qt.RightButton:
-                    pass
-                elif event.button() == QtCore.Qt.MidButton:
-                    self._do_graph_track_end_(event)
-                else:
-                    event.ignore()
-                #
-                self._clear_all_action_flags_()
-
-            # zoom
-            elif event.type() == QtCore.QEvent.Wheel:
-                self._do_graph_zoom_(event)
-                return True
-            #
-            # elif event.type() == QtCore.QEvent.FocusIn:
-            #     self._is_focused = True
-            #     self.focus_accepted.emit(True)
-            #     parent = self.parent()
-            #     if isinstance(parent, _qt_wgt_entry_frame.QtEntryFrame):
-            #         parent._set_focused_(True)
-            # elif event.type() == QtCore.QEvent.FocusOut:
-            #     self._is_focused = False
-            #     self.focus_accepted.emit(False)
-            #     parent = self.parent()
-            #     if isinstance(parent, _qt_wgt_entry_frame.QtEntryFrame):
-            #         parent._set_focused_(False)
-        return False
-
-    def paintEvent(self, event):
-        painter = _qt_core.QtNGPainter(self)
-
-        if self._is_action_flag_match_(
-            self.ActionFlag.RectSelectMove
-        ):
-            painter._draw_dotted_frame_(
-                self._rect_selection_rect,
-                border_color=_qt_core.QtRgba.BorderSelect,
-                background_color=_qt_core.QtRgba.Transparent
-            )
 
     def _set_graph_universe_(self, universe):
         self._graph_universe = universe

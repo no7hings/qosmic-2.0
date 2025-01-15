@@ -1,4 +1,6 @@
 # coding=utf-8
+import functools
+
 import lxbasic.core as bsc_core
 
 import lxbasic.model as bsc_model
@@ -15,8 +17,13 @@ from .. import core as _qt_core
 
 from .. import abstracts as _qt_abstracts
 
+from . import utility as _utility
 
-class QtChartForSprcTask(QtWidgets.QWidget):
+
+class QtChartForSprcTask(
+    QtWidgets.QWidget,
+    _qt_abstracts.AbsQtMenuBaseDef,
+):
     H = 20
     started = qt_signal()
     finished = qt_signal()
@@ -34,6 +41,8 @@ class QtChartForSprcTask(QtWidgets.QWidget):
 
     Status = _gui_core.GuiProcessStatus
     Rgba = _gui_core.GuiRgba
+
+    QT_MENU_CLS = _utility.QtMenu
 
     @qt_slot(int)
     def _on_progress_started_(self, maximum):
@@ -99,6 +108,9 @@ class QtChartForSprcTask(QtWidgets.QWidget):
 
     @qt_slot(list)
     def _on_failed_(self, results):
+        def fnc_(file_path_):
+            bsc_storage.StgPath.start_in_system(file_path_)
+
         if results:
             file_path = bsc_log.LogBase.get_user_debug_file(
                 'process', create=True
@@ -106,6 +118,12 @@ class QtChartForSprcTask(QtWidgets.QWidget):
             bsc_storage.StgFileOpt(
                 file_path
             ).set_write(''.join(results))
+
+            self._set_menu_data_(
+                [
+                    ('Show Error', 'file/file', functools.partial(fnc_, file_path))
+                ]
+            )
 
         self.failed.emit()
 
@@ -206,6 +224,8 @@ class QtChartForSprcTask(QtWidgets.QWidget):
         )
         self.setFixedHeight(self.H)
 
+        self._init_menu_base_def_(self)
+
         self._data_model = bsc_model.Progress(self)
 
         self._start_timestamp = None
@@ -260,6 +280,9 @@ class QtChartForSprcTask(QtWidgets.QWidget):
         if widget == self:
             if event.type() == QtCore.QEvent.Resize:
                 self._refresh_widget_all_()
+            elif event.type() == QtCore.QEvent.MouseButtonPress:
+                if event.button() == QtCore.Qt.RightButton:
+                    self._popup_menu_()
         return False
 
     def paintEvent(self, event):

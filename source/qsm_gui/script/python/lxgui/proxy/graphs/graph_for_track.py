@@ -143,7 +143,7 @@ class PrxTrackWidget(
                 source_start=1, source_end=i_source_count-1,
                 pre_cycle=1, post_cycle=i_post_cycle,
                 scale_start=None, scale_end=None, scale_offset=None,
-                pre_blend=i_pre_blend, post_blend=i_post_blend,
+                pre_blend=i_pre_blend, post_blend=i_post_blend, blend_type='flat',
                 layer_index=i_index,
                 is_bypass=0, is_trash=0,
                 motion_json=i_motion_json,

@@ -174,10 +174,3 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
 
     def find_one(self, sketch_key):
         return self._sketch_map.get(sketch_key)
-
-    def bake_all_keyframes(self, start_frame, end_frame, attributes=None):
-        # do not mark undo here
-        qsm_mya_mtn_core.ControlSetBake(self._paths).execute(
-            start_frame, end_frame,
-            attributes=attributes, reduce_filter=False
-        )

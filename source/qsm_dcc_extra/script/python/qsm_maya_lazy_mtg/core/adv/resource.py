@@ -64,7 +64,8 @@ class AdvResource(object):
             ),
             start_frame=start_frame,
             end_frame=end_frame,
-            fps=qsm_mya_core.Frame.get_fps()
+            fps=qsm_mya_core.Frame.get_fps(),
+            api_version='1.0.1'
         )
         return data
 
@@ -101,13 +102,13 @@ class AdvResource(object):
 
     # to master layer
 
-    def fit_master_layer_scale(self, master_layer):
+    def fit_scale_to_master_layer(self, master_layer):
         root_height = self.get_root_height()
         master_lower_height = self._sketch_set.DEFAULT_MASTER_LOWER_HEIGHT
         scale = root_height/master_lower_height
         master_layer.apply_root_scale(scale)
 
-    def fit_master_layer_sketches(self, master_layer):
+    def fit_sketches_to_master_layer(self, master_layer):
         for i_sketch_key in self._sketch_set.ChrMasterSketches.Basic:
             # adv sketch
             i_sketch_src = self._sketch_set.get(i_sketch_key)
@@ -140,8 +141,8 @@ class AdvResource(object):
                     _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_resource(i_control_dst)
 
     def connect_from_master_layer(self, master_layer):
-        self.fit_master_layer_scale(master_layer)
-        self.fit_master_layer_sketches(master_layer)
+        self.fit_scale_to_master_layer(master_layer)
+        self.fit_sketches_to_master_layer(master_layer)
         self.constraint_from_master_layer(master_layer)
 
     # to transfer

@@ -22,11 +22,37 @@ class PrxSubpageForProjectGnlTestingCreate(_sub_page_for_task_create.AbsPrxSubpa
 
     def _on_apply(self):
         prx_widget = self._subwindow._prx_widget
+
+        use_current_scene = self._prx_options_node.get('use_current_scene')
+
         resource_properties = self._subwindow._resource_properties
         if not resource_properties:
             return
 
-        if qsm_mya_core.SceneFile.new_with_dialog() is True:
+        if use_current_scene is False:
+            if qsm_mya_core.SceneFile.new_with_dialog() is True:
+                task_parse = mya_lzy_wps_core.TaskParse()
+
+                task_unit = self._prx_options_node.get('task_unit')
+                if not task_unit:
+                    return
+
+                (
+                    task_create_opt, kwargs_new, scene_src_path, thumbnail_path
+                ) = self.TASK_CREATE_OPT_CLS.generate_scene_src_args(
+                    resource_properties, task_parse, task_unit, 'maya'
+                )
+
+                if bsc_storage.StgPath.get_is_file(scene_src_path) is False:
+                    task_create_opt.build_scene_src_fnc(scene_src_path)
+
+                    qsm_mya_core.SceneFile.refresh()
+
+                    with self._subwindow._window.gui_minimized():
+                        gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
+
+                    prx_widget.gui_load_task_unit_scene(kwargs_new)
+        else:
             task_parse = mya_lzy_wps_core.TaskParse()
 
             task_unit = self._prx_options_node.get('task_unit')

@@ -18,6 +18,10 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
             return _[0]
 
     @classmethod
+    def find_roots(cls, namespace):
+        return cmds.ls('|{}:*'.format(namespace, long=1))
+
+    @classmethod
     def find_valid_namespaces(cls):
         list_ = []
         _ = cmds.ls('*:Hips', long=1)
@@ -29,9 +33,13 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
 
     @classmethod
     def generate(cls, namespace):
-        return cls(
-            cmds.ls(cls.find_root(namespace), type='joint', long=1, dag=1) or []
-        )
+        # todo, may has more than one root
+        paths = []
+        for i_location in cls.find_roots(namespace):
+            i_paths = cmds.ls(i_location, type='joint', long=1, dag=1) or []
+            if i_paths:
+                paths.extend(i_paths)
+        return cls(paths)
 
     def __init__(self, *args, **kwargs):
         super(MocapSketchSet, self).__init__(*args, **kwargs)

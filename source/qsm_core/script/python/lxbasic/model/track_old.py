@@ -36,7 +36,7 @@ class TrackModel(object):
         # variant for scale
         '_scale_start', '_scale_end', '_scale_offset',
         # variant for blend
-        '_pre_blend', '_post_blend',
+        '_pre_blend', '_post_blend', '_blend_type',
         '_layer_index',
         '_is_bypass', '_is_trash',
         '_motion_json', '_motion_name',
@@ -51,7 +51,7 @@ class TrackModel(object):
         'source_start', 'source_end',
         'pre_cycle', 'post_cycle',
         'scale_start', 'scale_end', 'scale_offset',
-        'pre_blend', 'post_blend',
+        'pre_blend', 'post_blend', 'blend_type',
         'layer_index',
         'is_bypass', 'is_trash',
         'motion_json',
@@ -65,7 +65,7 @@ class TrackModel(object):
         source_start=1, source_end=24,
         pre_cycle=0, post_cycle=1,
         scale_start=None, scale_end=None, scale_offset=None,
-        pre_blend=4, post_blend=4,
+        pre_blend=4, post_blend=4, blend_type='flat',
         layer_index=0,
         is_bypass=0, is_trash=0,
         motion_json='',
@@ -93,6 +93,7 @@ class TrackModel(object):
 
         self._pre_blend = pre_blend
         self._post_blend = post_blend
+        self._blend_type = blend_type
 
         self._valid_frames = []
         self._valid_frame_ranges = []
@@ -191,7 +192,7 @@ class TrackModel(object):
             source_start=1, source_end=24,
             pre_cycle=0, post_cycle=1,
             scale_start=None, scale_end=None, scale_offset=None,
-            pre_blend=4, post_blend=4,
+            pre_blend=4, post_blend=4, blend_type='flat',
             layer_index=0,
             is_bypass=0
         )

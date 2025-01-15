@@ -8,18 +8,6 @@ import qsm_maya.core as qsm_mya_core
 class AbsMontage(object):
     ROOT_PATH = '|__MONTAGE__'
 
-    LAYER_KEYS = [
-        'key',
-        'clip_start', 'clip_end',
-        'start', 'speed', 'count',
-        'source_start', 'source_end',
-        'pre_cycle', 'post_cycle',
-        'scale_start', 'scale_end', 'scale_offset',
-        'pre_blend', 'post_blend',
-        'layer_index',
-        'is_bypass',
-    ]
-
     class ChrMasterSketches:
         Root_M = 'Root_M'
         Hip_R = 'Hip_R'

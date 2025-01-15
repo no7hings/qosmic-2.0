@@ -1818,13 +1818,9 @@ containers:
                 type: integer
                 value: 4
 
-            blend_start_time:
-                type: time
-                value: 1
-            
-            blend_end_time:
-                type: time
-                value: 48
+            blend_type:
+                type: string
+                value: 'flat'
 
             translate_offset:
                 type: float3

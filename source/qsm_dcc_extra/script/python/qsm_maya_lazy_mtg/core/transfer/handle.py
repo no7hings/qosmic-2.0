@@ -39,7 +39,8 @@ class MocapTransferHandle(object):
             host=bsc_core.BscSystem.get_host(),
             start_frame=start_frame,
             end_frame=end_frame,
-            fps=qsm_mya_core.Frame.get_fps()
+            fps=qsm_mya_core.Frame.get_fps(),
+            api_version='1.0.1'
         )
         return data
 
@@ -52,6 +53,9 @@ class MocapTransferHandle(object):
         pass
 
     def export_mocap_to(self, file_path):
+        # bake first
+        self.bake_sketches_keyframes()
+        #
         bsc_storage.StgFileOpt(file_path).set_write(
             self.get_data_from_mocap()
         )
@@ -65,9 +69,9 @@ class MocapTransferHandle(object):
             handle.connect_to_mocap()
             # bake key frame first
             handle.bake_sketches_keyframes()
-            handle.export_mocap_to(
-                'Z:/resources/motion_json_new/idle.json'
-            )
+            # handle.export_mocap_to(
+            #     'Z:/resources/motion_json_new/idle.json'
+            # )
 
 
 class MocapToAdvHandle(object):

@@ -29,6 +29,8 @@ from ..adv import resource as _adv_resource
 
 from ..adv import control_set as _adv_control_set
 
+from ..mocap import resource as _mcp_resource
+
 from ..base import abc as _bsc_abc
 
 
@@ -329,7 +331,7 @@ class MtgLayer(AbsMtgLayer):
         layer_opt, data,
         start_frame=1,
         pre_cycle=0, post_cycle=1,
-        pre_blend=4, post_blend=4,
+        pre_blend=4, post_blend=4, blend_type='flat',
         **kwargs
     ):
         location = layer_opt.location
@@ -403,13 +405,6 @@ class MtgLayer(AbsMtgLayer):
         )
         qsm_mya_core.NodeAttribute.set_value(
             location, 'valid_end', clip_end
-        )
-        # old variant
-        qsm_mya_core.NodeAttribute.set_value(
-            location, 'blend_start_time', clip_start
-        )
-        qsm_mya_core.NodeAttribute.set_value(
-            location, 'blend_end_time', clip_end
         )
         #
         for i_sketch_key, i_v in sketch_data.items():
@@ -554,33 +549,53 @@ class MtgLayer(AbsMtgLayer):
             self._location, 'layer_index', layer_index
         )
 
-    def update_main_weight(self, frame_range, is_start=False, is_end=False, pre_blend=2, post_blend=2):
+    def update_main_weight(
+        self,
+        frame_range,
+        is_start=False, is_end=False,
+        pre_blend=2, post_blend=2, blend_type='flat',
+        **kwargs
+    ):
         curve_opt = self.get_main_weight_curve_opt()
+
+        end_offset = 0
+
+        min_weight, max_weight = 0.0, 0.5
 
         start_frame, end_frame = frame_range
 
         condition = [is_start, is_end]
         if condition == [True, True]:
-            curve_opt.create_value_at_time(start_frame, 1)
-            curve_opt.create_value_at_time(end_frame, 1)
+            # start
+            curve_opt.create_value_at_time(start_frame, max_weight)
+            # end
+            curve_opt.create_value_at_time(end_frame+end_offset, max_weight)
         elif condition == [True, False]:
-            curve_opt.create_value_at_time(start_frame, 1)
-            curve_opt.create_value_at_time(end_frame, 1)
-            curve_opt.create_value_at_time(end_frame+post_blend, 0)
+            # start
+            curve_opt.create_value_at_time(start_frame, max_weight)
+            # end
+            curve_opt.create_value_at_time(end_frame+end_offset, max_weight)
+            curve_opt.create_value_at_time(end_frame+post_blend+end_offset, min_weight)
         elif condition == [False, True]:
-            curve_opt.create_value_at_time(start_frame-pre_blend, 0)
-            curve_opt.create_value_at_time(start_frame, 1)
-            curve_opt.create_value_at_time(end_frame, 1)
+            # start
+            curve_opt.create_value_at_time(start_frame-pre_blend, min_weight)
+            curve_opt.create_value_at_time(start_frame, max_weight)
+            # end
+            curve_opt.create_value_at_time(end_frame+end_offset, max_weight)
         else:
             if start_frame == end_frame:
-                curve_opt.create_value_at_time(start_frame-pre_blend, 0)
-                curve_opt.create_value_at_time(start_frame, 1)
-                curve_opt.create_value_at_time(end_frame+post_blend, 0)
+                # start
+                curve_opt.create_value_at_time(start_frame-pre_blend, min_weight)
+                curve_opt.create_value_at_time(start_frame, max_weight)
+                # end
+                curve_opt.create_value_at_time(end_frame+post_blend, min_weight)
             else:
-                curve_opt.create_value_at_time(start_frame-pre_blend, 0)
-                curve_opt.create_value_at_time(start_frame, 1)
-                curve_opt.create_value_at_time(end_frame, 1)
-                curve_opt.create_value_at_time(end_frame+post_blend, 0)
+                # start
+                curve_opt.create_value_at_time(start_frame-pre_blend, min_weight)
+                curve_opt.create_value_at_time(start_frame, max_weight)
+                # end
+                curve_opt.create_value_at_time(end_frame+end_offset, max_weight)
+                curve_opt.create_value_at_time(end_frame+post_blend+end_offset, min_weight)
 
     def update_main_weight_auto(self, is_start, is_end):
         clip_start, clip_end = self._node_opt.get('clip_start'), self._node_opt.get('clip_end')
@@ -725,6 +740,19 @@ class MtgMasterLayer(AbsMtgLayer):
             )
 
             self.do_delete()
+        elif _mcp_resource.MocapResource.check_is_valid(rig_namespace) is True:
+            start_frame, end_frame = self.get_frame_range()
+
+            mocap_resource = _mcp_resource.MocapResource(rig_namespace)
+
+            mocap_resource.sketch_set.bake_all_keyframes(
+                start_frame, end_frame,
+                attributes=[
+                    'translateX', 'translateY', 'translateZ',
+                    'rotateX', 'rotateY', 'rotateZ',
+                ]
+            )
+            self.do_delete()
         else:
             pass
 
@@ -834,7 +862,13 @@ class MtgMasterLayer(AbsMtgLayer):
         return 'test'
 
     @qsm_mya_core.Undo.execute
-    def append_layer(self, motion_json, pre_cycle=1, post_cycle=1, pre_blend=2, post_blend=2, **kwargs):
+    def append_layer(
+        self,
+        motion_json,
+        pre_cycle=1, post_cycle=1,
+        pre_blend=2, post_blend=2, blend_type='flat',
+        **kwargs
+    ):
         if not bsc_storage.StgPath.get_is_file(motion_json):
             raise OSError()
 
@@ -868,7 +902,7 @@ class MtgMasterLayer(AbsMtgLayer):
             data,
             start_frame=stage_end_frame+1,
             pre_cycle=pre_cycle, post_cycle=post_cycle,
-            pre_blend=pre_blend, post_blend=post_blend,
+            pre_blend=pre_blend, post_blend=post_blend, blend_type='flat',
             **kwargs
         )
         # create main weight curve for self
@@ -880,7 +914,7 @@ class MtgMasterLayer(AbsMtgLayer):
             mtg_layer.update_main_weight(
                 (clip_start, clip_end),
                 is_start=True, is_end=True,
-                pre_blend=pre_blend, post_blend=post_blend
+                pre_blend=pre_blend, post_blend=post_blend, blend_type='flat'
             )
             self.update_root_start_by_self_fnc(mtg_layer, clip_start, clip_end)
 
@@ -890,7 +924,7 @@ class MtgMasterLayer(AbsMtgLayer):
             mtg_layer.update_main_weight(
                 (clip_start, clip_end),
                 is_start=False, is_end=True,
-                pre_blend=pre_blend, post_blend=post_blend
+                pre_blend=pre_blend, post_blend=post_blend, blend_type='flat'
             )
             self.update_root_start_fnc(mtg_layer, mtg_layer_last, clip_start)
             mtg_layer_last.update_main_weight_auto(is_start=False, is_end=False)

@@ -8,6 +8,13 @@ from . import sketch_set as _sketch_set
 
 
 class MocapResource(object):
+    @classmethod
+    def check_is_valid(cls, namespace):
+        _ = cmds.ls('{}:Hips'.format(namespace), long=1)
+        if _:
+            return True
+        return False
+
     def __init__(self, namespace):
         self._namespace = namespace
 
@@ -35,7 +42,7 @@ class MocapResource(object):
         self._sketch_set.zero_out()
         return self._sketch_set.compute_height()
 
-    def fit_master_layer_scale(self, master_layer):
+    def fit_scale_to_master_layer(self, master_layer):
         # source height
         root_height = self.get_root_height()
         master_lower_height = self._sketch_set.DEFAULT_MASTER_LOWER_HEIGHT
@@ -47,7 +54,7 @@ class MocapResource(object):
         self._sketch_set.constraint_from_master_layer(master_layer)
 
     def connect_from_master_layer(self, master_layer):
-        self.fit_master_layer_scale(master_layer)
+        self.fit_scale_to_master_layer(master_layer)
         self.constraint_from_master_layer(master_layer)
 
     def find_sketch(self, sketch_key):

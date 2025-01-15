@@ -12,3 +12,5 @@ from .adv import *
 from .dcc_mesh_count import *
 
 from .sync import *
+
+from .montage import *

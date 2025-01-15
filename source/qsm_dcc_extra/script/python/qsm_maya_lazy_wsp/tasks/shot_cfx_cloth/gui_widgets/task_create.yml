@@ -102,6 +102,12 @@ build:
                 options: ['main', 'test']
                 default: 'main'
 
+            use_current_scene:
+                widget: boolean
+                name: 'Use Current Scene'
+                name_chs: '使用当前文件'
+                value: False
+
             auto_load_cfx_rig:
                 widget: boolean
                 name: 'Auto Load CFX Rig'

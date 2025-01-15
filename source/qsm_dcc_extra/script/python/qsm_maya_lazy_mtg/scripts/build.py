@@ -61,34 +61,34 @@ class MtgBuildScp(object):
         if template == 'running_jumping':
             data = [
                 # 30
-                ('a_pose', 1, 8, 8),
-                ('jog_backward', 1, 8, 8),
-                ('idle_1', 1, 8, 8),
-                ('slow_run', 2, 8, 8),
-                ('medium_run', 2, 8, 8),
-                ('fast_run', 2, 8, 8),
-                ('jump', 1, 8, 8),
+                ('a_pose', 1, 4, 4),
+                ('jog_backward', 1, 4, 4),
+                ('idle_1', 1, 4, 4),
+                ('slow_run', 2, 4, 4),
+                ('medium_run', 2, 4, 4),
+                ('fast_run', 2, 4, 4),
+                ('jump', 1, 4, 4),
             ]
         elif template == 'walking':
             data = [
-                ('a_pose', 1, 8, 8),
-                ('female_basic_locomotion_walking', 4, 8, 8)
+                ('a_pose', 1, 4, 4),
+                ('female_basic_locomotion_walking', 4, 4, 4)
             ]
         elif template == 'jogging':
             data = [
-                ('a_pose', 1, 8, 8),
-                ('soccer_game_jog_forward', 4, 8, 8)
+                ('a_pose', 1, 4, 4),
+                ('soccer_game_jog_forward', 4, 4, 4)
             ]
         elif template == 'running':
             data = [
-                ('a_pose', 1, 8, 8),
-                ('female_basic_locomotion_running', 4, 8, 8)
+                ('a_pose', 1, 4, 4),
+                ('female_basic_locomotion_running', 4, 4, 4)
             ]
         elif template == 'dancing':
             data = [
-                ('a_pose', 1, 8, 8),
-                # ('gangnam_style', 1, 8, 8),
-                ('northern_soul_spin', 1, 8, 8),
+                ('a_pose', 1, 4, 4),
+                # ('gangnam_style', 1, 4, 4),
+                ('northern_soul_spin', 1, 4, 4),
             ]
 
         if data:
@@ -101,8 +101,7 @@ class MtgBuildScp(object):
                     self._mtg_master_layer.append_layer(
                         i_motion_json,
                         post_cycle=i_cycle,
-                        pre_blend=i_pre_blend,
-                        post_blend=i_post_blend,
+                        pre_blend=i_pre_blend, post_blend=i_post_blend, blend_type='flat',
                     )
                     l_p.do_update()
 
@@ -117,7 +116,9 @@ class MtgBuildScp(object):
         if master_layer_location:
             mtg_master_layer = _man_layer.MtgMasterLayer(master_layer_location)
             mtg_master_layer.append_layer(
-                motion_json_path, post_cycle=1, pre_blend=8, post_blend=8,
+                motion_json_path,
+                post_cycle=1,
+                pre_blend=8, post_blend=8, blend_type='flat',
             )
 
             start_frame, end_frame = mtg_master_layer.get_frame_range()
@@ -168,8 +169,7 @@ class MtgBuildScp(object):
         scp._mtg_master_layer.append_layer(
             'Z:/resources/motion_json_new/idle.json',
             post_cycle=4,
-            pre_blend=8,
-            post_blend=8,
+            pre_blend=8, post_blend=8, blend_type='flat',
         )
 
         qsm_mya_core.Frame.set_frame_range(

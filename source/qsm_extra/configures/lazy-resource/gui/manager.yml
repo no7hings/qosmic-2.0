@@ -80,7 +80,7 @@ entity-type-actions:
                 }
                 # motion extend
                 -   'lazy-resource-actions/node-generate-motion-by-fbx-auto': {
-                    gui_parent: '/Generate', gui_name: 'Motion(mixamo)', gui_parent_chs: '/生成', gui_name_chs: '动作（fbx）'
+                    gui_parent: '/Generate', gui_name: 'Motion(MoCap fbx)', gui_parent_chs: '/生成', gui_name_chs: '动作（MoCap fbx）'
                 }
                 -   'lazy-resource-actions/node-load-motion-to-character-auto': {
                     gui_parent: '/Load', gui_name: 'Motion to Character', gui_parent_chs: '/加载', gui_name_chs: '动作到角色'

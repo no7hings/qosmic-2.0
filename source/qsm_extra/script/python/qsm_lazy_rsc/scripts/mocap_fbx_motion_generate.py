@@ -3,6 +3,8 @@ import os
 
 import lxbasic.storage as bsc_storage
 
+import qsm_general.core as qsm_gnl_core
+
 import qsm_general.process as qsm_gnl_process
 
 import qsm_screw.core as qsm_scr_core
@@ -20,27 +22,36 @@ class MoCapFbxMotionGenerate(object):
 
         fbx_path = scr_stage.get_node_parameter(self._scr_node_path, 'fbx_source')
         if not fbx_path:
+            scr_stage.close()
             return
 
         fbx_name = bsc_storage.StgFileOpt(fbx_path).name
         task_name = '[{}][{}]'.format(self.TASK_KEY, fbx_name)
         motion_json_path = scr_stage.generate_node_motion_json_path(self._scr_node_path, 'motion')
-        if os.path.isfile(motion_json_path) is False:
-            preview_mov_path = scr_stage.generate_node_preview_mov_path(self._scr_node_path)
-            image_sequence_dir_path = scr_stage.generate_node_image_sequence_dir_path(self._scr_node_path)
-            cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script_by_option_dict(
-                self.TASK_KEY,
-                dict(
-                    fbx_path=fbx_path,
-                    motion_json_path=motion_json_path,
-                    preview_mov_path=preview_mov_path,
-                    image_sequence_dir_path=image_sequence_dir_path,
-                )
+
+        # check motion json file is existing, when True check API version
+        if bsc_storage.StgPath.get_is_file(motion_json_path):
+            data = bsc_storage.StgFileOpt(motion_json_path).set_read()
+            api_version = data['metadata'].get('api_version')
+            if api_version == qsm_gnl_core.Montage.API_VERSION:
+                scr_stage.close()
+                return task_name, None
+
+        preview_mov_path = scr_stage.generate_node_preview_mov_path(self._scr_node_path)
+        image_sequence_dir_path = scr_stage.generate_node_image_sequence_dir_path(self._scr_node_path)
+        cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script_by_option_dict(
+            self.TASK_KEY,
+            dict(
+                fbx_path=fbx_path,
+                motion_json_path=motion_json_path,
+                preview_mov_path=preview_mov_path,
+                image_sequence_dir_path=image_sequence_dir_path,
             )
-            scr_stage.close()
-            return task_name, cmd_script
+        )
         scr_stage.close()
-        return task_name, None
+        return task_name, cmd_script
+        # scr_stage.close()
+        # return task_name, None
 
     def register(self):
         scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
