@@ -52,7 +52,7 @@ build:
                         tool_tip_chs:
                             |-
                             点击拷贝角色（所有控制器）的动作（数值和曲线）：
-                                选择一个角色（可以是任意部件）；
+                                选择一个角色（任意部件）；
                                 动作数据包含数值和曲线。
                             右键/点击小三角：
                                 当前帧（Pose）：只复制当前帧（时间轴）。
@@ -251,7 +251,7 @@ build:
                             点击镜像粘贴控制器：
                                 需要先使用“拷贝控制器”拷贝数据；
                                 可以跨MAYA使用；
-                                可以选择多个绑定（可以是任意部件）同时粘贴；
+                                可以选择多个绑定（任意部件）同时粘贴；
                                 如果拷贝的是左边（*_L）的控制器，会自动镜像粘贴到右边（*_R），右边同理；
                                 如果拷贝的是中间（*_M）的控制器，会自动镜像数值和曲线，如90变成-90；
                                 可以在“设置”的“帧偏移”修改曲线偏移，实现错帧镜像；
@@ -731,11 +731,11 @@ build:
 
     messages:
         no_character:
-            message_chs: '选择一个角色（可以是任意部件）。'
+            message_chs: '选择一个角色（任意部件）。'
             message: 'Select one character (any part).'
 
         no_characters:
-            message_chs: '选择一个或者多个角色（可以是任意部件）。'
+            message_chs: '选择一个或者多个角色（任意部件）。'
             message: 'Select one or more character (any part).'
 
         no_controls:

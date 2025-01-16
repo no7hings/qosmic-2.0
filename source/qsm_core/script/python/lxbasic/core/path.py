@@ -442,7 +442,13 @@ class BscNodePathOpt(object):
         return 0.25, 0.75, 0.5
     
     def is_match_pattern(self, p):
-        return not not fnmatch.filter([self._path_text], p)
+        return bool(fnmatch.filter([self._path_text], p))
+
+    def is_name_match_pattern(self, p):
+        return bool(fnmatch.filter([self.get_name()], p))
+
+    def has_namespace(self):
+        return ':' in self.get_name()
 
     def generate_child(self, name):
         return self.__class__(

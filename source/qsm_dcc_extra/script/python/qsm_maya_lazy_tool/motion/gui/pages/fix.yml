@@ -43,5 +43,5 @@ build:
 
     messages:
         no_references:
-            message_chs: '选择一个或者多个引用（可以是任意部件）。'
+            message_chs: '选择一个或者多个引用（任意部件）。'
             message: 'Select one or more references (any part).'

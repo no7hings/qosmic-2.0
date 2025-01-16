@@ -1,11 +1,9 @@
 # coding:utf-8
-import lxgui.core as gui_core
+import lxbasic.core as bsc_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
-
-import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
 import qsm_maya.adv as qsm_mya_adv
 
@@ -13,42 +11,80 @@ import qsm_maya.adv as qsm_mya_adv
 class PrxToolsetForMoCapImport(gui_prx_widgets.PrxBaseUnit):
     GUI_KEY = 'import_mocap'
 
-    def get_dcc_character_args(self):
-        results = []
-        namespaces = qsm_mya_core.Namespaces.extract_from_selection()
-        if namespaces:
-            results = qsm_mya_hdl_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+    def get_dcc_args(self):
+        locations = qsm_mya_core.Selection.get()
+        if len(locations) >=2:
+            location_0, location_1 = locations[:2]
+            rig_namespace = qsm_mya_core.Namespace.extract_from_path(location_0)
+            if qsm_mya_adv.AdvOpt.check_is_valid(rig_namespace) is False:
+                self._window.exec_message_dialog(
+                    self.choice_gui_message(
+                        self._page._configure.get('build.messages.no_selection')
+                    ),
+                    status='warning'
+                )
+                return
 
-        if not results:
+            path_opt = bsc_core.BscNodePathOpt(location_1)
+
+            mocap_location = None
+            comps = path_opt.get_components()
+            for i_path_opt in comps:
+                if i_path_opt.has_namespace():
+                    i_result = i_path_opt.is_name_match_pattern('*:Hips')
+                else:
+                    i_result = i_path_opt.is_name_match_pattern('Hips')
+
+                if i_result is True:
+                    mocap_location = i_path_opt.get_path()
+                    break
+
+            if not mocap_location:
+                self._window.exec_message_dialog(
+                    self.choice_gui_message(
+                        self._page._configure.get('build.messages.no_selection')
+                    ),
+                    status='warning'
+                )
+                return
+
+            import qsm_maya_lazy_montage.core.transfer.handle as h
+
+            h.MocapToAdvHandle(
+                rig_namespace, mocap_location=mocap_location
+            ).execute()
+        else:
             self._window.exec_message_dialog(
                 self.choice_gui_message(
-                    self._page._configure.get('build.messages.no_characters')
+                    self._page._configure.get('build.messages.no_selection')
                 ),
                 status='warning'
             )
             return
-        return results
+        # results = []
+        # namespaces = qsm_mya_core.Namespaces.extract_from_selection()
+        # if namespaces:
+        #     results = qsm_mya_hdl_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+        #
+        # if not results:
+        #     self._window.exec_message_dialog(
+        #         self.choice_gui_message(
+        #             self._page._configure.get('build.messages.no_character')
+        #         ),
+        #         status='warning'
+        #     )
+        #     return
+        # return results
 
     def do_dcc_import_character_mocap_to_control(self):
-        namespaces = self.get_dcc_character_args()
+        namespaces = self.get_dcc_args()
         if namespaces:
-            with self._window.gui_progressing(
-                maximum=len(namespaces), label='import motion to characters'
-            ) as g_p:
-                for i_namespace in namespaces:
-                    print i_namespace
-                    # i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
-                    # i_opt.load_controls_motion_from(
-                    #     file_path,
-                    #     force=True,
-                    #     frame_offset=0,
-                    # )
-                    # g_p.do_update()
+            pass
 
             self._window.popup_message(
                 self.choice_gui_message(
                     self._page._configure.get(
-                        'build.messages.import_characters'
+                        'build.messages.import_mocap'
                     )
                 )
             )
@@ -77,5 +113,5 @@ class PrxToolsetForMoCapImport(gui_prx_widgets.PrxBaseUnit):
         self._qt_layout.addWidget(prx_sca.widget)
 
         self._prx_options_node.set(
-            'import_character_mocap.to_control', self.do_dcc_import_character_mocap_to_control
+            'character_mocap.to_control', self.do_dcc_import_character_mocap_to_control
         )

@@ -1,7 +1,7 @@
 build:
     messages:
         no_characters:
-            message_chs: '选择一个或者多个角色（可以是任意部件）。'
+            message_chs: '选择一个或者多个角色（任意部件）。'
             message: 'Select one or more character (any part).'
 
     import:

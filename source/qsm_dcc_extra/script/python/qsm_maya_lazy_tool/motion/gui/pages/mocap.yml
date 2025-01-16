@@ -22,32 +22,28 @@ build:
                 name_chs: '选项'
 
                 parameters:
-                    import_character_mocap:
+                    character_mocap:
                         widget: group
-                        name: 'Import Character MoCap'
-                        name_chs: '导入角色动捕'
+                        name: 'Character MoCap'
+                        name_chs: '角色动捕'
 
-                    import_character_mocap/to_control:
+                    character_mocap/to_control:
                         widget: button
                         name: 'Import to Control'
                         name_chs: '导入到控制器'
                         icon: 'tool/maya/import'
                         tool_tip:
                             |-
-                            To be supplemented.
+                            Select one character (any part) first, add select one MoCap(any part), press button
                         tool_tip_chs:
                             |-
-                            选中一个绑定（任意部件），再选中一个动捕（任意部件），点按钮。
+                            先选中一个角色（任意部件），再选中一个动捕（任意部件），点按钮。
 
     messages:
-        no_character:
-            message_chs: '选择一个角色（可以是任意部件）。'
-            message: 'Select one character (any part).'
+        no_selection:
+            message_chs: '先选中一个角色（任意部件），再选中一个动捕（任意部件）。'
+            message: 'Select one character (any part) first, add select one MoCap(any part).'
 
-        no_mocap:
-            message_chs: '选择一个动捕（可以是任意部件）。'
-            message: 'Select one MoCap (any part).'
-
-        import_characters:
+        import_mocap:
             message_chs: '导入动捕到选中的角色成功，按“Z”撤销。'
-            message: 'Import motion to selected characters successful, press "Z" undo.'
+            message: 'Import MoCap to selected characters successful, press "Z" undo.'

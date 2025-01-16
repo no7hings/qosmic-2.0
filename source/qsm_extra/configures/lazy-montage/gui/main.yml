@@ -32,7 +32,7 @@ build:
 
         no_character:
             message: 'Select one character (any part).'
-            message_chs: '选择一个角色（可以是任意部件）。'
+            message_chs: '选择一个角色（任意部件）。'
 
         delete_confirm:
             message: 'Are you sure to delete? Click "Ok" to continue.'

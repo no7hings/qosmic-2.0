@@ -1,7 +1,7 @@
 build:
     messages:
         no_characters:
-            message_chs: '选择一个或者多个角色（可以是任意部件）。'
+            message_chs: '选择一个或者多个角色（任意部件）。'
             message: 'Select one or more character (any part).'
 
     basic:
@@ -73,7 +73,7 @@ build:
                         To be supplemented.
                     tool_tip_chs:
                         |-
-                        点击加载解算预设，需要选中绑定，可以是任意部件:
+                        点击加载解算预设，需要选中绑定，任意部件:
                             目前更新功能可能会出现BUG。
 
                 cfx_rig/enable:
@@ -138,7 +138,7 @@ build:
                         To be supplemented.
                     tool_tip_chs:
                         |-
-                        点击加载/ 更新动画缓存，需要选中绑定，可以是任意部件：
+                        点击加载/ 更新动画缓存，需要选中绑定，任意部件：
                             目前更新功能可能会出现BUG。
 
                 simulation:
@@ -470,7 +470,7 @@ build:
                         To be supplemented.
                     tool_tip_chs:
                         |-
-                        默认为导出所有，如果需要导出选择，请选中需要导出的绑定，可以是任意部件。
+                        默认为导出所有，如果需要导出选择，请选中需要导出的绑定，任意部件。
 
                 cache_export/export_cloth_cache:
                     widget: button

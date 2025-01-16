@@ -104,11 +104,18 @@ class MocapToAdvHandle(object):
     def delete_transfer_resource(self):
         self._transfer_resource.do_delete()
 
+    def execute(self):
+        self.setup()
+        self.create_mocap_resource_connection()
+        self.create_adv_connection()
+        self.bake_adv_controls_keyframes()
+        self.delete_transfer_resource()
+
     @classmethod
     def test(cls):
-        h = cls('sam_Skin', mocap_location='|Hips')
-        h.setup()
-        h.create_mocap_resource_connection()
-        h.create_adv_connection()
-        h.bake_adv_controls_keyframes()
-        h.delete_transfer_resource()
+        self = cls('sam_Skin', mocap_location='|Hips')
+        self.setup()
+        self.create_mocap_resource_connection()
+        self.create_adv_connection()
+        self.bake_adv_controls_keyframes()
+        self.delete_transfer_resource()
