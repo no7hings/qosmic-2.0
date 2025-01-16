@@ -39,5 +39,12 @@ class TaskParse(lzy_wsp_core.TaskParse):
             variants['resource_type'] = 'shot'
             return _task_session.TaskSession(task_parse, variants)
 
+    @classmethod
+    def autosave_source_scene_scr(cls):
+        task_session = cls.generate_task_session_by_resource_source_scene_src_auto()
+        if task_session is not None:
+            return task_session.increment_and_save_source_task_scene_src()
+        return False
+
     def __init__(self):
         super(TaskParse, self).__init__()

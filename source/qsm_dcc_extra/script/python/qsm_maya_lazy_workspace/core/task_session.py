@@ -39,6 +39,7 @@ class TaskSession(lzy_wsp_core.TaskSession):
 
             gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
             return kwargs_new
+        return False
 
     def save_source_task_scene_scr_to(self, task_unit):
         variants_new = dict(self._properties)

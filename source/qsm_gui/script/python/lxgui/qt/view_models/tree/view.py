@@ -235,8 +235,11 @@ class TreeViewModel(_view_base.AbsViewModel):
     def data(self):
         return self._data
 
-    def create_root_item(self):
-        _ = self.create_item('/')
+    def create_root_item(self, **kwargs):
+        if 'path' not in kwargs:
+            kwargs['path'] = '/'
+
+        _ = self.create_item(**kwargs)
         if _[0] is True:
             _[1].setExpanded(True)
         return _
@@ -252,14 +255,21 @@ class TreeViewModel(_view_base.AbsViewModel):
             self._widget.addTopLevelItem(item)
         else:
             parent_path = path_opt.get_parent_path()
+            # maybe add a path to root
             if parent_path not in self._data.item_dict:
-                raise RuntimeError()
-            parent_item = self._data.item_dict[parent_path]
-            if isinstance(parent_item, QtWidgets.QTreeWidgetItem) is False:
-                raise RuntimeError()
-            parent_item.addChild(item)
+                self._widget.addTopLevelItem(item)
+            else:
+                parent_item = self._data.item_dict[parent_path]
+                if isinstance(parent_item, QtWidgets.QTreeWidgetItem) is False:
+                    raise RuntimeError()
 
-        name = path_opt.get_name()
+                parent_item.addChild(item)
+
+        if 'name' in kwargs:
+            name = kwargs['name']
+        else:
+            name = path_opt.get_name()
+
         item.setText(0, str(index_cur).zfill(4))
 
         item_model = item._item_model

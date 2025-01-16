@@ -29,6 +29,31 @@ class TaskParse(object):
 
     TASK_SESSION_CLS = _task_session.TaskSession
 
+    @classmethod
+    def generate_task_session_by_resource_source_scene_src_auto(cls):
+        return None
+
+    @classmethod
+    def generate_task_session_by_resource_source_scene_src(cls, scene_path, **kwargs_over):
+        task_parse = cls()
+
+        for i_resource_type in cls.ResourceTypes.All:
+            i_ptn_opt = task_parse.generate_pattern_opt_for(
+                '{}-source-maya-scene_src-file'.format(i_resource_type)
+            )
+            i_variants = i_ptn_opt.get_variants(scene_path, extract=True)
+            if i_variants:
+                if kwargs_over:
+                    i_variants.update(kwargs_over)
+                # do not pop result
+                # i_variants.pop('result')
+                i_variants['resource_type'] = i_resource_type
+                return cls.TASK_SESSION_CLS(task_parse, i_variants)
+    
+    @classmethod
+    def autosave_source_scene_scr(cls):
+        return None
+
     def __init__(self, *args, **kwargs):
         pass
 
@@ -120,27 +145,6 @@ class TaskParse(object):
             return ptn.format(**variants)
         else:
             raise RuntimeError()
-
-    @classmethod
-    def generate_task_session_by_resource_source_scene_src_auto(cls):
-        return None
-
-    @classmethod
-    def generate_task_session_by_resource_source_scene_src(cls, scene_path, **kwargs_over):
-        task_parse = cls()
-
-        for i_resource_type in cls.ResourceTypes.All:
-            i_ptn_opt = task_parse.generate_pattern_opt_for(
-                '{}-source-maya-scene_src-file'.format(i_resource_type)
-            )
-            i_variants = i_ptn_opt.get_variants(scene_path, extract=True)
-            if i_variants:
-                if kwargs_over:
-                    i_variants.update(kwargs_over)
-                # do not pop result
-                # i_variants.pop('result')
-                i_variants['resource_type'] = i_resource_type
-                return cls.TASK_SESSION_CLS(task_parse, i_variants)
 
     @property
     def properties(self):

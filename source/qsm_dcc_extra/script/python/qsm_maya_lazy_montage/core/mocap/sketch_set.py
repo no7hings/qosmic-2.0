@@ -12,12 +12,6 @@ from ..base import sketch_set as _bsc_sketch_set
 
 class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
     @classmethod
-    def find_root(cls, namespace):
-        _ = cmds.ls('|{}:*'.format(namespace, long=1))
-        if _:
-            return _[0]
-
-    @classmethod
     def find_roots(cls, namespace):
         return cmds.ls('|{}:*'.format(namespace, long=1))
 
@@ -32,6 +26,21 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
         return list_
 
     @classmethod
+    def find_valid_locations(cls):
+        list_ = []
+        for i_ptn in ['Hips', '*:Hips']:
+            i_results = cmds.ls(i_ptn, long=1) or []
+            if i_results:
+                list_.extend(i_results)
+        return list_
+
+    @classmethod
+    def find_valid_location(cls, namespace):
+        _ = cmds.ls('{}:Hips'.format(namespace), long=1) or []
+        if _:
+            return _[0]
+
+    @classmethod
     def generate(cls, namespace):
         # todo, may has more than one root
         paths = []
@@ -40,6 +49,20 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
             if i_paths:
                 paths.extend(i_paths)
         return cls(paths)
+
+    @classmethod
+    def generate_by_namespace(cls, namespace):
+        # todo, may has more than one root
+        paths = []
+        for i_location in cls.find_roots(namespace):
+            i_paths = cmds.ls(i_location, type='joint', long=1, dag=1) or []
+            if i_paths:
+                paths.extend(i_paths)
+        return cls(paths)
+
+    @classmethod
+    def generate_by_location(cls, location):
+        return cls(cmds.ls(location, type='joint', long=1, dag=1) or [])
 
     def __init__(self, *args, **kwargs):
         super(MocapSketchSet, self).__init__(*args, **kwargs)

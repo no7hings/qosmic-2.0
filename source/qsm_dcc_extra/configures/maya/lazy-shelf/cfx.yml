@@ -20,6 +20,18 @@ build:
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-workspace")'
                     dbl_script: ''
 
+                tool_1:
+                    name: 'Lazy Autosave'
+                    name_chs: '懒人自动保存'
+                    tool_tip: 'To be supplemented.'
+                    tool_tip_chs: '待补充。'
+                    button_style: 'text_and_icon'
+                    button_name: 'Save'
+                    button_name_chs: '保存'
+                    icon: 'tool/save'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-workspace-autosave")'
+                    dbl_script: ''
+
         cfx:
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '解算。'

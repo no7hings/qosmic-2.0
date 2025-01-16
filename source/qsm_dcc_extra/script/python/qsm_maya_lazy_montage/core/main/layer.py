@@ -748,7 +748,7 @@ class MtgMasterLayer(AbsMtgLayer):
         elif _mcp_resource.MocapResource.check_is_valid(rig_namespace) is True:
             start_frame, end_frame = self.get_frame_range()
 
-            mocap_resource = _mcp_resource.MocapResource(rig_namespace)
+            mocap_resource = _mcp_resource.MocapResource(namespace=rig_namespace)
 
             mocap_resource.sketch_set.bake_all_keyframes(
                 start_frame, end_frame,

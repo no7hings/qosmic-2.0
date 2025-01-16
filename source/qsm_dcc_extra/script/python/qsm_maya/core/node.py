@@ -56,9 +56,10 @@ class Node(object):
 
     @classmethod
     def is_exists(cls, name):
+        # ignore when name is empty, etc. '' or None
         if name:
             return cmds.objExists(name)
-        raise False
+        return False
 
     @classmethod
     def get_uuid(cls, name):

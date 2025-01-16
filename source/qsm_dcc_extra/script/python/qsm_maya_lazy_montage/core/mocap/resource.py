@@ -15,20 +15,23 @@ class MocapResource(object):
             return True
         return False
 
-    def __init__(self, namespace):
-        self._namespace = namespace
+    def __init__(self, namespace=None, location=None):
+        if namespace is not None:
+            self._sketch_location = _sketch_set.MocapSketchSet.find_valid_location(namespace)
+        elif location is not None:
+            self._sketch_location = location
+        else:
+            raise RuntimeError()
 
-        self._sketch_set = _sketch_set.MocapSketchSet.generate(self._namespace)
+        if qsm_mya_core.Node.is_exists(self._sketch_location) is False:
+            raise RuntimeError(
+                'No valid location found.'
+            )
 
-    def find_root(self):
-        _ = cmds.ls('|{}:*'.format(self._namespace), long=1)
-        if _:
-            return _[0]
+        self._sketch_set = _sketch_set.MocapSketchSet.generate_by_location(self._sketch_location)
 
     def find_root_location(self):
-        _ = cmds.ls('|{}:*'.format(self._namespace), long=1)
-        if _:
-            return _[0]
+        return self._sketch_location
 
     @property
     def sketch_set(self):

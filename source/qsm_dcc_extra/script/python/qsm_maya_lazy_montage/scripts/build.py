@@ -39,7 +39,7 @@ class MtgBuildScp(object):
         qsm_mya_core.SceneFile.reference_file(
             bsc_resource.ExtendResource.get('rig/{}.ma'.format(rig_name)), self._rig_namespace
         )
-        self._mocap_resource = _mcp_resource.MocapResource(self._rig_namespace)
+        self._mocap_resource = _mcp_resource.MocapResource(namespace=self._rig_namespace)
         self._mtg_master_layer = _man_layer.MtgMasterLayer.generate_fnc(self._rig_namespace)
         self._mtg_master_layer.connect_to_mocap(self._mocap_resource)
 

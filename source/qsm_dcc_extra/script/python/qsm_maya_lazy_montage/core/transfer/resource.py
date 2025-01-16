@@ -29,6 +29,10 @@ class TransferResource(_bsc_abc.AbsMontage):
     def find_mocap_namespaces(cls):
         return _mcp_sketch_set.MocapSketchSet.find_valid_namespaces()
 
+    @classmethod
+    def find_mocap_locations(cls):
+        return _mcp_sketch_set.MocapSketchSet.find_valid_locations()
+
     def find_root_location(self):
         _ = cmds.ls('|{}:*'.format(self._namespace, long=1))
         if _:

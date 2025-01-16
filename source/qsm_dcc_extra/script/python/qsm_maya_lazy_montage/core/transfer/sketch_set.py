@@ -47,7 +47,7 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
         graph.create_all()
 
     @classmethod
-    def find_root(cls, namespace):
+    def find_root_location(cls, namespace):
         _ = cmds.ls('|{}:*'.format(namespace, long=1))
         if _:
             return _[0]
@@ -55,7 +55,7 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
     @classmethod
     def generate(cls, namespace):
         return cls(
-            cmds.ls(cls.find_root(namespace), type='joint', long=1, dag=1) or []
+            cmds.ls(cls.find_root_location(namespace), type='joint', long=1, dag=1) or []
         )
 
     def __init__(self, *args, **kwargs):

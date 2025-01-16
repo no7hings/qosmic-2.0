@@ -24,7 +24,7 @@ class MocapTransferHandle(object):
         self._transfer_resource = _resource.TransferResource(
             _resource.TransferResource.Namespaces.Transfer
         )
-        self._mocap_resource = _mcp_resource.MocapResource(self._mocap_namespace)
+        self._mocap_resource = _mcp_resource.MocapResource(namespace=self._mocap_namespace)
 
     def connect_to_mocap(self):
         self._transfer_resource.connect_from_mocap(self._mocap_resource)
@@ -85,7 +85,7 @@ class MocapToAdvHandle(object):
             _resource.TransferResource.Namespaces.Transfer
         )
 
-        self._mocap_resource = _mcp_resource.MocapResource(self._mocap_namespace)
+        self._mocap_resource = _mcp_resource.MocapResource(namespace=self._mocap_namespace)
         self._adv_resource = _adv_resource.AdvResource(self._adv_namespace)
 
     def create_mocap_resource_connection(self):

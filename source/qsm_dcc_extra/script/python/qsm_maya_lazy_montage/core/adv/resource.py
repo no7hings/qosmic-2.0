@@ -36,11 +36,6 @@ class AdvResource(object):
             self.get_data()
         )
 
-    def find_root(self):
-        _ = cmds.ls('|{}:*'.format(self._namespace), long=1)
-        if _:
-            return _[0]
-
     def find_root_location(self):
         _ = cmds.ls('|{}:*'.format(self._namespace), long=1)
         if _:
