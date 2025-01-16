@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_lazy_rsc.gui.abstracts as _abstracts
+import qsm_lazy_resource.gui.abstracts as _abstracts
 
 from .pages import register as _page_register
 

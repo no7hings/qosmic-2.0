@@ -106,7 +106,7 @@ class ToolsetUnitForCfxRigExport(
     def do_dcc_export_cfx_cloth_cache_by_checked_as_backstage(self):
         import lxbasic.web as bsc_web
 
-        import qsm_lazy_bks.worker as lzy_bks_worker
+        import qsm_lazy_backstage.worker as lzy_bks_worker
 
         if lzy_bks_worker.TaskClient.get_server_status():
             args = self._get_export_args()

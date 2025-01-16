@@ -83,7 +83,7 @@ def cfx_cloth_cache_generate_fnc(option_opt):
 def shot_animation_cache_export_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy_wsp.tasks.shot_animation.dcc_scripts as s
+    import qsm_maya_lazy_workspace.tasks.shot_animation.dcc_scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
@@ -97,7 +97,7 @@ def shot_animation_cache_export_fnc(option_opt):
 def shot_cfx_cloth_cache_export_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy_wsp.tasks.shot_cfx_cloth.dcc_scripts as s
+    import qsm_maya_lazy_workspace.tasks.shot_cfx_cloth.dcc_scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
@@ -139,7 +139,7 @@ def scenery_validation_fnc(option_opt):
 def mesh_count_generate_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy_rsc.scripts as s
+    import qsm_maya_lazy_resource.scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
@@ -153,7 +153,7 @@ def mesh_count_generate_fnc(option_opt):
 def snapshot_generate_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy_rsc.scripts as s
+    import qsm_maya_lazy_resource.scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
@@ -167,7 +167,7 @@ def snapshot_generate_fnc(option_opt):
 def unit_assembly_generate_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy_rsc.scripts as s
+    import qsm_maya_lazy_resource.scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
@@ -181,7 +181,7 @@ def unit_assembly_generate_fnc(option_opt):
 def motion_generate_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy_mtg.scripts as s
+    import qsm_maya_lazy_montage.scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
@@ -195,7 +195,7 @@ def motion_generate_fnc(option_opt):
 def mocap_fbx_motion_generate_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy_mtg.scripts as s
+    import qsm_maya_lazy_montage.scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()

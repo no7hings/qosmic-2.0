@@ -25,7 +25,7 @@ import qsm_maya.handles.scenery.core as qsm_mya_hdl_scn_core
 
 import qsm_maya.handles.scenery.scripts as qsm_mya_hdl_scn_scripts
 
-import qsm_maya_lazy_rsc.scripts as qsm_mya_lzy_rsc_scripts
+import qsm_maya_lazy_resource.scripts as qsm_mya_lzy_rsc_scripts
 
 import qsm_maya_gui.core as qsm_mya_gui_core
 

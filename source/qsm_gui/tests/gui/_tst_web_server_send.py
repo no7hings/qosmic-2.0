@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.web as bsc_web
 
-import qsm_lazy_bks.worker as lzy_bks_worker
+import qsm_lazy_backstage.worker as lzy_bks_worker
 
 skt = bsc_web.WebSocket(
     lzy_bks_worker.NoticeWebServerBase.HOST, lzy_bks_worker.NoticeWebServerBase.PORT

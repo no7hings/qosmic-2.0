@@ -13,7 +13,7 @@ import qsm_general.core as qsm_gnl_core
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya_lazy_rsc.scripts as qsm_mya_lzy_scr_scripts
+import qsm_maya_lazy_resource.scripts as qsm_mya_lzy_scr_scripts
 
 from .. import core as _vld_core
 

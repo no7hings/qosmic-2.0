@@ -4,7 +4,7 @@
 def main(session):
     import lxgui.proxy.core as gui_prx_core
 
-    import qsm_maya_lazy_wsp.gui.main as m
+    import qsm_maya_lazy_workspace.gui.main as m
 
     gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
         m.PrxLazyWorkspaceTool,

@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_lazy_rsc.scripts as s
+import qsm_lazy_resource.scripts as s
 
 s.StlMotionRegisterBatch(
     'X:/studio_library',
