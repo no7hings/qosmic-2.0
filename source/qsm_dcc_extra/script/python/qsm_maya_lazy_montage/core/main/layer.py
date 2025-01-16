@@ -553,7 +553,7 @@ class MtgLayer(AbsMtgLayer):
         self,
         frame_range,
         is_start=False, is_end=False,
-        pre_blend=2, post_blend=2, blend_type='flat',
+        pre_blend=4, post_blend=4, blend_type='flat',
         **kwargs
     ):
         curve_opt = self.get_main_weight_curve_opt()
@@ -871,7 +871,7 @@ class MtgMasterLayer(AbsMtgLayer):
         self,
         motion_json,
         pre_cycle=1, post_cycle=1,
-        pre_blend=2, post_blend=2, blend_type='flat',
+        pre_blend=4, post_blend=4, blend_type='flat',
         **kwargs
     ):
         if not bsc_storage.StgPath.get_is_file(motion_json):

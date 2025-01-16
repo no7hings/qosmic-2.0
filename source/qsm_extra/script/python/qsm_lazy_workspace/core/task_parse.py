@@ -52,7 +52,7 @@ class TaskParse(object):
     
     @classmethod
     def autosave_source_scene_scr(cls):
-        return None
+        return False
 
     def __init__(self, *args, **kwargs):
         pass

@@ -143,6 +143,7 @@ class MtgStage(object):
         return model_stage
 
     def __init__(self, rig_namespace):
+        self._rig_namespace = rig_namespace
         self._master_layer_location = _layer.MtgMasterLayer.find_one_master_layer_location(rig_namespace)
 
     def generate_track_data(self):
@@ -156,11 +157,11 @@ class MtgStage(object):
             list_.append(i_track_data)
         return list_
 
-    def generate_stage_model(self):
-        model_stage = bsc_model.TrackModelStage()
+    def generate_track_model_stage(self):
+        track_model_stage = bsc_model.TrackModelStage()
         for i_track_data in self.generate_track_data():
-            model_stage.create_one(widget=None, **i_track_data)
-        return model_stage
+            track_model_stage.create_one(widget=None, **i_track_data)
+        return track_model_stage
 
     def look_from_persp_cam(self):
         _layer.MtgMasterLayer(self._master_layer_location).look_from_persp_cam()
@@ -195,6 +196,25 @@ class MtgStage(object):
         ).set_write(
             data
         )
+
+    def import_motion_json(self, motion_json_path):
+        master_layer_location = _layer.MtgMasterLayer.find_one_master_layer_location(self._rig_namespace)
+
+        if master_layer_location:
+            mtg_master_layer = _layer.MtgMasterLayer(master_layer_location)
+            mtg_master_layer.append_layer(
+                motion_json_path,
+                post_cycle=1,
+                pre_blend=4, post_blend=4, blend_type='flat',
+            )
+
+            start_frame, end_frame = mtg_master_layer.get_frame_range()
+            qsm_mya_core.Frame.set_frame_range(
+                start_frame, end_frame
+            )
+            qsm_mya_core.Frame.set_current(end_frame)
+        # flush undo
+        qsm_mya_core.Undo.flush()
 
     def import_track_json(self, track_json_path):
         track_data_list = bsc_storage.StgFileOpt(track_json_path).set_read()

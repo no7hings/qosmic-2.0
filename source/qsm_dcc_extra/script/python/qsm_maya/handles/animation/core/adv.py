@@ -290,7 +290,7 @@ class AdvRigAsset(qsm_mya_rsc_core.Asset):
 
     def pull_geometry_topology_data(self):
         if self._file_path:
-            data_path = qsm_gnl_core.MayaCache.generate_rig_geometry_data_file(
+            data_path = qsm_gnl_core.DccCache.generate_rig_geometry_data_file(
                 self._file_path, 'topology'
             )
             if bsc_storage.StgPath.get_is_file(data_path) is True:

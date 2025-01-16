@@ -1,13 +1,15 @@
 # coding:utf-8
+import functools
+
 import lxgui.core as gui_core
+
+import qsm_general.prc_task as qsm_gnl_prc_task
+
+import qsm_lazy_montage.scripts as qsm_lzy_mtg_scripts
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
-
 import qsm_maya_lazy_montage.core as qsm_mya_lzy_mtg_core
-
-import qsm_maya_lazy_montage.scripts as qsm_mya_lzy_mtg_scripts
 
 from qsm_lazy_montage.gui.abstracts import page_for_splicing as _page_for_splicing
 
@@ -121,6 +123,36 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
                 'No motion to import.',
                 status='warning'
             )
+
+    @classmethod
+    def _on_dcc_import_motion_fnc(cls, rig_namespace, motion_json_path):
+        mtg_stage = qsm_mya_lzy_mtg_core.MtgStage(rig_namespace)
+        mtg_stage.import_motion_json(motion_json_path)
+
+    def _on_dcc_import_fbx(self):
+        if self._rig_namespace is not None:
+            fbx_path = gui_core.GuiStorageDialog.open_file(
+                ext_filter='All File (*.fbx)', parent=self._qt_widget
+            )
+            if fbx_path:
+                task_name, cmd_script, motion_json_path = qsm_lzy_mtg_scripts.MoCapFbxMotionGenerateAuto(
+                    fbx_path
+                ).generate_args()
+                if cmd_script is not None:
+                    qsm_gnl_prc_task.SubprocessTaskSubmit.execute_one(
+                        task_name, cmd_script,
+                        completed_fnc=functools.partial(
+                            self._on_dcc_import_motion_fnc,
+                            self._rig_namespace,
+                            motion_json_path
+                        ),
+                        window_title='Motion Generate (MoCap fbx)',
+                        window_title_chs='动作生成（MoCap fbx）',
+                    )
+                else:
+                    self._on_dcc_import_motion_fnc(
+                        self._rig_namespace, motion_json_path
+                    )
 
     def _on_dcc_delete(self):
         if self._rig_namespace is not None:

@@ -31,7 +31,7 @@ class AssetUnitAssemblyGenerateOpt(_asset_general.AssetGeneralOpt):
                 self.TASK_KEY, bsc_storage.StgFileOpt(file_path).name
             )
     
-            cache_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file_new(file_path)
+            cache_path = qsm_gnl_core.DccCache.generate_asset_unit_assembly_file_new(file_path)
             if bsc_storage.StgFileOpt(cache_path).get_is_file() is False:
                 cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script_by_option_dict(
                     self.TASK_KEY,
@@ -49,7 +49,7 @@ class AssetUnitAssemblyGenerateOpt(_asset_general.AssetGeneralOpt):
         if not file_path:
             return
 
-        cache_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file_new(file_path)
+        cache_path = qsm_gnl_core.DccCache.generate_asset_unit_assembly_file_new(file_path)
 
         scr_stage.create_or_update_parameters(
             self._scr_node_path, 'unit_assembly_cache', cache_path

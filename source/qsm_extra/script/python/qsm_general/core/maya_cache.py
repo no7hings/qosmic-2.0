@@ -1,10 +1,14 @@
 # coding:utf-8
+import os
+
 import lxbasic.core as bsc_core
+
+import lxbasic.pinyin as bsc_pinyin
 
 import lxbasic.storage as bsc_storage
 
 
-class MayaCache(object):
+class DccCache(object):
     class ApiVersions:
         UnitAssembly = 1.0
 
@@ -76,6 +80,17 @@ class MayaCache(object):
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.asset-cache/control-motion/{}/{}/{}.json'.format(
             root, user_name, region, key
+        )
+
+    @classmethod
+    def generate_fbx_motion_file(cls, fbx_path, api_version='1.0.0'):
+        key_str = os.path.splitext(os.path.basename(fbx_path))[0]
+        name = '_'.join([x.lower() for x in bsc_pinyin.Text.split_any_to_words_extra(key_str)])
+        root = bsc_core.BscEnviron.get_cache_temporary_root()
+        key = cls.get_key(fbx_path, api_version)
+        region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
+        return '{}/.asset-cache/fbx-motion/{}/{}/{}.json'.format(
+            root, region, key, name
         )
 
     @classmethod

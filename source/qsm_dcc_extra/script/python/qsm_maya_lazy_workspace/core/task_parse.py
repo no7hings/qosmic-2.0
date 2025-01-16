@@ -1,4 +1,6 @@
 # coding:utf-8
+import lxgui.core as gui_core
+
 import qsm_lazy_workspace.core as lzy_wsp_core
 
 import qsm_maya.core as qsm_mya_core
@@ -43,7 +45,22 @@ class TaskParse(lzy_wsp_core.TaskParse):
     def autosave_source_scene_scr(cls):
         task_session = cls.generate_task_session_by_resource_source_scene_src_auto()
         if task_session is not None:
-            return task_session.increment_and_save_source_task_scene_src()
+            variants = task_session.increment_and_save_source_task_scene_src()
+            # variants is dict
+            if variants:
+                gui_core.GuiApplication.exec_message_dialog(
+                    'Save scene successful: {}.'.format(variants['result']),
+                    title='Save Scene',
+                    size=(320, 120),
+                    status='correct',
+                )
+        else:
+            gui_core.GuiApplication.exec_message_dialog(
+                'Save scene field, not a valid task scene: {}.'.format(qsm_mya_core.SceneFile.get_current()),
+                title='Save Scene',
+                size=(320, 120),
+                status='warning',
+            )
         return False
 
     def __init__(self):

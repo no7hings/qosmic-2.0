@@ -27,8 +27,8 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneralOpt):
             self.TASK_KEY, bsc_storage.StgFileOpt(file_path).name
         )
 
-        cache_path = qsm_gnl_core.MayaCache.generate_asset_mesh_count_file(file_path, version=self.API_VERSION)
-        image_path = qsm_gnl_core.MayaCache.generate_asset_snapshot_file(file_path, version=self.API_VERSION)
+        cache_path = qsm_gnl_core.DccCache.generate_asset_mesh_count_file(file_path, version=self.API_VERSION)
+        image_path = qsm_gnl_core.DccCache.generate_asset_snapshot_file(file_path, version=self.API_VERSION)
         # check is existing
         if bsc_storage.StgFileOpt(cache_path).get_is_file() is False:
             # unregister first
@@ -78,8 +78,8 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneralOpt):
         if not file_path:
             return
 
-        cache_path = qsm_gnl_core.MayaCache.generate_asset_mesh_count_file(file_path, version=self.API_VERSION)
-        image_path = qsm_gnl_core.MayaCache.generate_asset_snapshot_file(file_path, version=self.API_VERSION)
+        cache_path = qsm_gnl_core.DccCache.generate_asset_mesh_count_file(file_path, version=self.API_VERSION)
+        image_path = qsm_gnl_core.DccCache.generate_asset_snapshot_file(file_path, version=self.API_VERSION)
 
         data = bsc_storage.StgFileOpt(cache_path).set_read()
         

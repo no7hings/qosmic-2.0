@@ -75,9 +75,10 @@ class MocapTransferHandle(object):
 
 
 class MocapToAdvHandle(object):
-    def __init__(self, adv_namespace, mocap_namespace):
+    def __init__(self, adv_namespace, mocap_namespace=None, mocap_location=None):
         self._adv_namespace = adv_namespace
         self._mocap_namespace = mocap_namespace
+        self._mocap_location = mocap_location
 
     def setup(self):
         _resource.TransferResource.create_sketches()
@@ -85,7 +86,9 @@ class MocapToAdvHandle(object):
             _resource.TransferResource.Namespaces.Transfer
         )
 
-        self._mocap_resource = _mcp_resource.MocapResource(namespace=self._mocap_namespace)
+        self._mocap_resource = _mcp_resource.MocapResource(
+            namespace=self._mocap_namespace, location=self._mocap_location
+        )
         self._adv_resource = _adv_resource.AdvResource(self._adv_namespace)
 
     def create_mocap_resource_connection(self):
@@ -103,7 +106,7 @@ class MocapToAdvHandle(object):
 
     @classmethod
     def test(cls):
-        h = cls('rig', 'mixamorig')
+        h = cls('sam_Skin', mocap_location='|Hips')
         h.setup()
         h.create_mocap_resource_connection()
         h.create_adv_connection()

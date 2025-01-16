@@ -27,7 +27,7 @@ class AssetSnapShotGenerateOpt(_asset_general.AssetGeneralOpt):
             self.TASK_KEY, bsc_storage.StgFileOpt(file_path).name
         )
 
-        image_path = qsm_gnl_core.MayaCache.generate_asset_snapshot_file(file_path, version=self.API_VERSION)
+        image_path = qsm_gnl_core.DccCache.generate_asset_snapshot_file(file_path, version=self.API_VERSION)
         if bsc_storage.StgFileOpt(image_path).get_is_file() is False:
             # unregister first
             self.unregister()
@@ -59,7 +59,7 @@ class AssetSnapShotGenerateOpt(_asset_general.AssetGeneralOpt):
         if not file_path:
             return
 
-        image_path = qsm_gnl_core.MayaCache.generate_asset_snapshot_file(file_path, version=self.API_VERSION)
+        image_path = qsm_gnl_core.DccCache.generate_asset_snapshot_file(file_path, version=self.API_VERSION)
 
         scr_stage.upload_node_preview(
             self._scr_node_path, image_path

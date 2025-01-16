@@ -662,11 +662,11 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
         task_session = self._task_parse.generate_task_session_by_resource_source_scene_src_auto()
         if task_session:
             with self._window.gui_minimized():
-                properties = task_session.increment_and_save_source_task_scene_src()
-                if properties:
-                    scene_path = properties.get('result')
+                task_unit_scene_variants = task_session.increment_and_save_source_task_scene_src()
+                if task_unit_scene_variants:
+                    scene_path = task_unit_scene_variants.get('result')
                     if scene_path:
-                        self.gui_load_task_unit_scene(properties)
+                        self.gui_load_task_unit_scene(task_unit_scene_variants)
 
     def on_save_task_scene_as(self):
         task_session = self._task_parse.generate_task_session_by_resource_source_scene_src_auto()
@@ -709,8 +709,8 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
     def dcc_set_scene_project(self, task_session):
         pass
 
-    def gui_load_task_unit_scene(self, scene_properties):
-        scene_path = scene_properties.get('result')
+    def gui_load_task_unit_scene(self, task_unit_scene_variants):
+        scene_path = task_unit_scene_variants.get('result')
         if scene_path:
             task_session = self._task_parse.generate_task_session_by_resource_source_scene_src(scene_path)
             if task_session:
@@ -721,15 +721,15 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
                 task_unit_path = task_session.task_unit_path
                 if task_unit_path in self._gui_task_opt.gui_get_all_task_unit_paths():
                     self.do_gui_refresh_task_unit(task_unit_path)
-                    self.do_gui_refresh_task_scene_for(scene_properties)
+                    self.do_gui_refresh_task_scene_for(task_unit_scene_variants)
                 else:
                     self.do_gui_refresh_all_tasks()
 
     def do_gui_refresh_task_unit(self, task_unit_path):
         self._gui_task_opt.do_gui_refresh_task_unit(task_unit_path)
 
-    def do_gui_refresh_task_scene_for(self, scene_properties):
-        self._gui_task_scene_opt.do_gui_refresh_task_scene_for(scene_properties)
+    def do_gui_refresh_task_scene_for(self, task_unit_scene_variants):
+        self._gui_task_scene_opt.do_gui_refresh_task_scene_for(task_unit_scene_variants)
 
     def do_gui_refresh_all_tasks(self):
         self._gui_task_opt.gui_load_all_tasks()

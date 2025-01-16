@@ -59,8 +59,3 @@ class StlConvertionProcess(object):
             _motion_export.AdvChrMotionExportOpt(
                 namespace
             ).export(self._cache_file_path)
-
-
-class StlBatchConvertionProcess(object):
-    pass
-

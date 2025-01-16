@@ -16,7 +16,7 @@ from ..core.transfer import handle as _cor_trf_handle
 from . import build as _build
 
 
-class MoCapFbxMotionConvertProcess(object):
+class MoCapFbxMotionGenerateProcess(object):
     def __init__(self, **kwargs):
         self._kwargs = kwargs
 
@@ -43,7 +43,9 @@ class MoCapFbxMotionConvertProcess(object):
             if namespaces:
                 mocap_namespace = namespaces[0]
             else:
-                return
+                raise RuntimeError(
+                    'no valid namespace is found.'
+                )
             l_p.do_update()
 
             # 2. create sketch and export motion json
@@ -53,7 +55,7 @@ class MoCapFbxMotionConvertProcess(object):
             transfer_handle.export_mocap_to(motion_json_path)
             l_p.do_update()
 
-            # 3. import motion
+            # 3. import motion for create preview
             qsm_mya_core.SceneFile.new()
             # load fps
             qsm_mya_core.Frame.set_fps_tag(fps_tag)
@@ -63,7 +65,7 @@ class MoCapFbxMotionConvertProcess(object):
             _build.MtgBuildScp.import_motion_json(preview_rig_namespace, motion_json_path)
             l_p.do_update()
 
-            # 4. playblast
+            # 4. create preview
             camera_shape_name = _cor_bsc_util.MtgRigNamespace.to_persp_camera_shape_name(preview_rig_namespace)
             qsm_mya_hdl_gnl_scripts.PlayblastOpt.execute(
                 preview_mov_path,
@@ -73,3 +75,39 @@ class MoCapFbxMotionConvertProcess(object):
             )
             l_p.do_update()
 
+
+class MoCapFbxMotionGenerateAutoProcess(object):
+    def __init__(self, **kwargs):
+        self._kwargs = kwargs
+
+    def execute(self):
+        fbx_path = self._kwargs.get('fbx_path')
+        motion_json_path = self._kwargs.get('motion_json_path')
+        if not fbx_path:
+            raise RuntimeError()
+
+        if bsc_storage.StgPath.get_is_file(fbx_path) is False:
+            raise RuntimeError()
+
+        with bsc_log.LogProcessContext.create(maximum=2) as l_p:
+
+            # 1. import fbx
+            qsm_mya_core.SceneFile.new()
+            qsm_mya_core.SceneFile.import_fbx(fbx_path, namespace='mocap')
+
+            # mark fbx flag, check is mixamo
+            namespaces = _cor_tsf_resource.TransferResource.find_mocap_namespaces()
+            if namespaces:
+                mocap_namespace = namespaces[0]
+            else:
+                raise RuntimeError(
+                    'no valid namespace is found.'
+                )
+            l_p.do_update()
+
+            # 2. create sketch and export motion json
+            transfer_handle = _cor_trf_handle.MocapTransferHandle(mocap_namespace)
+            transfer_handle.setup()
+            transfer_handle.connect_to_mocap()
+            transfer_handle.export_mocap_to(motion_json_path)
+            l_p.do_update()

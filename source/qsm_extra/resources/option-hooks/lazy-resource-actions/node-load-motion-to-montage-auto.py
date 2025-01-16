@@ -7,8 +7,6 @@ import qsm_screw.core as qsm_scr_core
 
 import qsm_maya_lazy_montage.core as qsm_mya_lzy_mtg_core
 
-import qsm_maya_lazy_montage.scripts as qsm_mya_mtg_scripts
-
 
 class Main(object):
     def __init__(self, session):
@@ -50,13 +48,14 @@ class Main(object):
                     scr_stage = qsm_scr_core.Stage(scr_stage_name)
                     with window.gui_progressing(maximum=len(scr_entities)) as g_p:
                         for i_scr_entity in scr_entities:
-                            i_motion_path = scr_stage.get_node_parameter(i_scr_entity.path, 'motion')
-                            if i_motion_path is None:
+                            i_motion_json_path = scr_stage.get_node_parameter(i_scr_entity.path, 'motion')
+                            if i_motion_json_path is None:
                                 continue
-                            if bsc_storage.StgPath.get_is_file(i_motion_path) is False:
+                            if bsc_storage.StgPath.get_is_file(i_motion_json_path) is False:
                                 continue
 
-                            qsm_mya_mtg_scripts.MtgBuildScp.import_motion_json(rig_namespace, i_motion_path)
+                            mtg_stage = qsm_mya_lzy_mtg_core.MtgStage(rig_namespace)
+                            mtg_stage.import_motion_json(i_motion_json_path)
 
                             g_p.do_update()
 

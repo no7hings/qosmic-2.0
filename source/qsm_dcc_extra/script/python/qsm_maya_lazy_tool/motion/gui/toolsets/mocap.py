@@ -10,8 +10,8 @@ import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 import qsm_maya.adv as qsm_mya_adv
 
 
-class PrxToolsetForImportSplicing(gui_prx_widgets.PrxBaseUnit):
-    GUI_KEY = 'import_motion'
+class PrxToolsetForMoCapImport(gui_prx_widgets.PrxBaseUnit):
+    GUI_KEY = 'import_mocap'
 
     def get_dcc_character_args(self):
         results = []
@@ -29,24 +29,21 @@ class PrxToolsetForImportSplicing(gui_prx_widgets.PrxBaseUnit):
             return
         return results
 
-    def do_dcc_import_character_motion_to_control(self):
+    def do_dcc_import_character_mocap_to_control(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
-            file_path = gui_core.GuiStorageDialog.open_file(
-                ext_filter='All File (*.jsz)', parent=self._window._qt_widget
-            )
-            if file_path:
-                with self._window.gui_progressing(
-                    maximum=len(namespaces), label='import motion to characters'
-                ) as g_p:
-                    for i_namespace in namespaces:
-                        i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
-                        i_opt.load_controls_motion_from(
-                            file_path,
-                            force=True,
-                            frame_offset=0,
-                        )
-                        g_p.do_update()
+            with self._window.gui_progressing(
+                maximum=len(namespaces), label='import motion to characters'
+            ) as g_p:
+                for i_namespace in namespaces:
+                    print i_namespace
+                    # i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
+                    # i_opt.load_controls_motion_from(
+                    #     file_path,
+                    #     force=True,
+                    #     frame_offset=0,
+                    # )
+                    # g_p.do_update()
 
             self._window.popup_message(
                 self.choice_gui_message(
@@ -57,7 +54,7 @@ class PrxToolsetForImportSplicing(gui_prx_widgets.PrxBaseUnit):
             )
 
     def __init__(self, window, page, session):
-        super(PrxToolsetForImportSplicing, self).__init__(window, page, session)
+        super(PrxToolsetForMoCapImport, self).__init__(window, page, session)
 
         self.gui_unit_setup_fnc()
 
@@ -80,5 +77,5 @@ class PrxToolsetForImportSplicing(gui_prx_widgets.PrxBaseUnit):
         self._qt_layout.addWidget(prx_sca.widget)
 
         self._prx_options_node.set(
-            'import_character_motion.to_control', self.do_dcc_import_character_motion_to_control
+            'import_character_mocap.to_control', self.do_dcc_import_character_mocap_to_control
         )

@@ -1,11 +1,9 @@
 # coding:utf-8
-import lxgui.core as gui_core
-
 import lxgui.proxy.widgets as gui_prx_widgets
 
 from .pages import basic as _page_basic
 
-from .pages import splicing as _page_splicing
+from .pages import mocap as _page_mocap
 
 from .pages import fix as _page_fix
 
@@ -17,7 +15,7 @@ class PrxLazyMotionTool(gui_prx_widgets.PrxBasePanel):
 
     PAGE_CLASSES = [
         _page_basic.PrxPageForMotionMain,
-        _page_splicing.PrxPageForMotionSplicing,
+        _page_mocap.PrxPageForMoCap,
         _page_fix.PrxPageForMotionFix
     ]
 

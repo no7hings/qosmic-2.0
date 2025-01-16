@@ -118,7 +118,7 @@ class MtgBuildScp(object):
             mtg_master_layer.append_layer(
                 motion_json_path,
                 post_cycle=1,
-                pre_blend=8, post_blend=8, blend_type='flat',
+                pre_blend=4, post_blend=4, blend_type='flat',
             )
 
             start_frame, end_frame = mtg_master_layer.get_frame_range()
@@ -169,7 +169,7 @@ class MtgBuildScp(object):
         scp._mtg_master_layer.append_layer(
             'Z:/resources/motion_json_new/idle.json',
             post_cycle=4,
-            pre_blend=8, post_blend=8, blend_type='flat',
+            pre_blend=4, post_blend=4, blend_type='flat',
         )
 
         qsm_mya_core.Frame.set_frame_range(

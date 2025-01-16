@@ -27,10 +27,10 @@ class RigValidationOpt(_abc.AbsValidationOpt):
         task_name = '[rig-validation][{}]'.format(
             bsc_storage.StgFileOpt(file_path).name
         )
-        validation_cache_path = qsm_gnl_core.MayaCache.generate_asset_rig_validation_result_file(
+        validation_cache_path = qsm_gnl_core.DccCache.generate_asset_rig_validation_result_file(
             file_path, api_version=option_hash
         )
-        mesh_count_cache_path = qsm_gnl_core.MayaCache.generate_asset_mesh_count_file(
+        mesh_count_cache_path = qsm_gnl_core.DccCache.generate_asset_mesh_count_file(
             file_path, version=api_version
         )
         if (

@@ -3,18 +3,18 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-from ..toolsets import splicing as _toolset_splicing
+from ..toolsets import mocap as _toolset_mocap
 
 
-class PrxPageForMotionSplicing(gui_prx_widgets.PrxBasePage):
+class PrxPageForMoCap(gui_prx_widgets.PrxBasePage):
     GUI_KEY = 'splicing'
 
     UNIT_CLASSES = [
-        _toolset_splicing.PrxToolsetForImportSplicing
+        _toolset_mocap.PrxToolsetForMoCapImport
     ]
 
     def __init__(self, window, session, *args, **kwargs):
-        super(PrxPageForMotionSplicing, self).__init__(window, session, *args, **kwargs)
+        super(PrxPageForMoCap, self).__init__(window, session, *args, **kwargs)
 
         self._configure = self.generate_local_configure()
 

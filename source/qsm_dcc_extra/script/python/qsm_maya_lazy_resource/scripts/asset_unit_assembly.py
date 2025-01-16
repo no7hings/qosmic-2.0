@@ -504,7 +504,7 @@ class AssetUnitAssemblyProcess(object):
         ).directory_path
 
         if cache_path is None:
-            self._cache_file_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file_new(self._file_path)
+            self._cache_file_path = qsm_gnl_core.DccCache.generate_asset_unit_assembly_file_new(self._file_path)
         else:
             self._cache_file_path = cache_path
 

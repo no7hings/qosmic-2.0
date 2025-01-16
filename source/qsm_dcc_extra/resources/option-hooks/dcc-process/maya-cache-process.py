@@ -201,7 +201,21 @@ def mocap_fbx_motion_generate_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.MoCapFbxMotionConvertProcess(
+    s.MoCapFbxMotionGenerateProcess(
+        **kwargs
+    ).execute()
+    
+
+def mocap_fbx_motion_generate_auto_fnc(option_opt):
+    import qsm_general.process as qsm_gnl_process
+
+    import qsm_maya_lazy_montage.scripts as s
+
+    kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
+        option_opt.to_string()
+    )
+
+    s.MoCapFbxMotionGenerateAutoProcess(
         **kwargs
     ).execute()
 
@@ -265,6 +279,8 @@ def main(session):
         motion_generate_fnc(option_opt)
     elif method == 'mocap_fbx_motion_generate':
         mocap_fbx_motion_generate_fnc(option_opt)
+    elif method == 'mocap_fbx_motion_generate_auto':
+        mocap_fbx_motion_generate_auto_fnc(option_opt)
     #
     elif method == 'mesh_count_generate':
         mesh_count_generate_fnc(option_opt)

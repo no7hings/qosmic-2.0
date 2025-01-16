@@ -75,8 +75,8 @@ class QtTimeHandle(
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 self._clear_all_action_flags_()
             # zoom
-            # elif event.type() == QtCore.QEvent.Wheel:
-            #     self._graph.eventFilter(self._graph, event)
+            elif event.type() == QtCore.QEvent.Wheel:
+                self._graph.eventFilter(self._graph, event)
         return False
 
     def paintEvent(self, event):

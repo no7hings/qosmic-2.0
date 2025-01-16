@@ -133,7 +133,7 @@ class PrxToolbarForSceneryReference(
                         self._asset_path = result
                         self._asset_load_qt_button._set_action_enable_(True)
 
-                        unit_assembly_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file_new(result)
+                        unit_assembly_path = qsm_gnl_core.DccCache.generate_asset_unit_assembly_file_new(result)
                         if bsc_storage.StgPath.get_is_file(unit_assembly_path):
                             self._unit_assembly_path = unit_assembly_path
                             self._unit_assembly_load_qt_button._set_action_enable_(True)

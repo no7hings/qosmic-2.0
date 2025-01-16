@@ -55,10 +55,24 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
             i_tool.set_tool_tip(i_tool_tip)
             i_tool.connect_press_clicked_to(i_fnc)
 
-    def _gui_add_export_import_tools(self, prx_tool_box):
+    def _gui_add_export_import_track_tools(self, prx_tool_box):
         for i in [
-            ('export', 'file/jsz', 'action/upload', 'Press to export track', self._on_dcc_export_track),
-            ('import', 'file/jsz', 'action/download', 'Press to import track', self._on_dcc_import_track),
+            ('export track', 'file/jsz', 'action/export', 'Press to export track', self._on_dcc_export_track),
+            ('import track', 'file/jsz', 'action/import', 'Press to import track', self._on_dcc_import_track),
+        ]:
+            i_key, i_icon_name, i_sub_icon_name, i_tool_tip, i_fnc = i
+            i_tool = gui_prx_widgets.PrxIconPressButton()
+            prx_tool_box.add_widget(i_tool)
+            i_tool.set_name(i_key)
+            i_tool.set_icon_name(i_icon_name)
+            if i_sub_icon_name:
+                i_tool.set_sub_icon_name(i_sub_icon_name)
+            i_tool.set_tool_tip(i_tool_tip)
+            i_tool.connect_press_clicked_to(i_fnc)
+
+    def _gui_add_import_motion_tools(self, prx_tool_box):
+        for i in [
+            ('import fbx', 'file/fbx', 'action/import', 'Press to import fbx', self._on_dcc_import_fbx)
         ]:
             i_key, i_icon_name, i_sub_icon_name, i_tool_tip, i_fnc = i
             i_tool = gui_prx_widgets.PrxIconPressButton()
@@ -159,21 +173,28 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         )
         self._gui_add_new_tool(self._new_prx_tool_box)
 
+        # export and import
+        self._export_import_track_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
+            'export and import track'
+        )
+        self._gui_add_export_import_track_tools(self._export_import_track_prx_tool_box)
+
+        self._import_motion_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
+            'import motion'
+        )
+        self._gui_add_import_motion_tools(self._import_motion_prx_tool_box)
+
+        # switch
+        self._rig_switch_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
+            'rig switch'
+        )
+        self._gui_add_rig_switch_tools(self._rig_switch_prx_tool_box)
+
         # main tool box
         self._main_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'main'
         )
         self._gui_add_main_tools(self._main_prx_tool_box)
-
-        self._export_import_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
-            'export import'
-        )
-        self._gui_add_export_import_tools(self._export_import_prx_tool_box)
-
-        self._rig_switch_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
-            'rig switch'
-        )
-        self._gui_add_rig_switch_tools(self._rig_switch_prx_tool_box)
         # track
         self._motion_prx_track_widget = gui_prx_graphs.PrxTrackWidget()
         self._qt_layout.addWidget(self._motion_prx_track_widget.widget)
@@ -235,6 +256,9 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         pass
 
     def _on_dcc_import_track(self):
+        pass
+
+    def _on_dcc_import_fbx(self):
         pass
 
     def _on_dcc_import_motion(self):

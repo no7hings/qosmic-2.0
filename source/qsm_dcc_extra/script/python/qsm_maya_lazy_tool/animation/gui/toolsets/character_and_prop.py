@@ -737,7 +737,7 @@ class PrxToolsetForMotion(
         )
 
     def do_dcc_copy_animation(self):
-        file_path = qsm_gnl_core.MayaCache.generate_character_motion_file(
+        file_path = qsm_gnl_core.DccCache.generate_character_motion_file(
             bsc_core.BscSystem.get_user_name()
         )
 
@@ -754,7 +754,7 @@ class PrxToolsetForMotion(
         qsm_mya_adv.AdvChrOpt(namespace).export_controls_motion_to(file_path)
 
     def do_dcc_paste_animation(self):
-        file_path = qsm_gnl_core.MayaCache.generate_character_motion_file(
+        file_path = qsm_gnl_core.DccCache.generate_character_motion_file(
             bsc_core.BscSystem.get_user_name()
         )
         if bsc_storage.StgPath.get_is_file(file_path) is False:

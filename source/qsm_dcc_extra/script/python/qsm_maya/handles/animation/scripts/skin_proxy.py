@@ -209,10 +209,10 @@ class SkinProxyOpt(qsm_mya_rsc_core.AssetCacheOpt):
             bsc_storage.StgFileOpt(file_path).name
         )
 
-        cache_file_path = qsm_gnl_core.MayaCache.generate_skin_proxy_scene_file(
+        cache_file_path = qsm_gnl_core.DccCache.generate_skin_proxy_scene_file(
             file_path
         )
-        data_file_path = qsm_gnl_core.MayaCache.generate_skin_proxy_data_file(
+        data_file_path = qsm_gnl_core.DccCache.generate_skin_proxy_data_file(
             file_path
         )
         if os.path.isfile(cache_file_path) is False or os.path.isfile(data_file_path) is False:
@@ -809,7 +809,7 @@ class AdvSkinProxyGenerate(object):
             cmds.setAttr(location + '.blackBox', 1, lock=1)
             if cache_file_path is None:
                 file_path = qsm_mya_core.ReferencesCache().get_file(self._namespace)
-                cache_file_path = qsm_gnl_core.MayaCache.generate_skin_proxy_scene_file(
+                cache_file_path = qsm_gnl_core.DccCache.generate_skin_proxy_scene_file(
                     file_path
                 )
             # step 4
