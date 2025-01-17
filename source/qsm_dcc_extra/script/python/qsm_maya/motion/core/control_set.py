@@ -1,5 +1,4 @@
 # coding:utf-8
-import re
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -272,7 +271,8 @@ class ControlSetBake(object):
         self,
         start_frame, end_frame,
         attributes, frame_extend=0,
-        euler_filter=True, reduce_filter=True, **kwargs
+        # todo: reduce_filter make detail lost, default use False?
+        euler_filter=True, reduce_filter=False, **kwargs
     ):
         """
         bakeResults

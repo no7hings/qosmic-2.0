@@ -22,7 +22,6 @@ class _GuiTaskOpt(_unit_base._GuiBaseOpt):
     def __init__(self, *args, **kwargs):
         super(_GuiTaskOpt, self).__init__(*args, **kwargs)
 
-        self._task_unit_path = None
         self._task_unit_path_tmp = None
 
         self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()

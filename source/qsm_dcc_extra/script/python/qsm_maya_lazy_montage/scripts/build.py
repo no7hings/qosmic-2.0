@@ -48,7 +48,7 @@ class MtgBuildScp(object):
             self._rig_namespace
         )
         self._mtg_master_layer = _man_layer.MtgMasterLayer.generate_fnc(self._rig_namespace)
-        self._mtg_master_layer.connect_to_adv(self._adv_resource)
+        self._mtg_master_layer.connect_to_adv_resource(self._adv_resource)
 
     def load_template_(self, template='running_jumping'):
         track_json_path = 'Z:/resources/montage/{}.jsz'.format(template)

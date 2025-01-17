@@ -64,7 +64,7 @@ class AdvResource(object):
         )
         return data
 
-    def get_control_by_sketch_key(self, sketch_key):
+    def find_control_by_sketch_key(self, sketch_key):
         if sketch_key in self._sketch_set.ChrMasterControlMap.Default:
             control_key = self._sketch_set.ChrMasterControlMap.Default[sketch_key]
             return self._control_set.get(control_key)
@@ -96,7 +96,6 @@ class AdvResource(object):
         return self._sketch_set.compute_height()
 
     # to master layer
-
     def fit_scale_to_master_layer(self, master_layer):
         root_height = self.get_root_height()
         master_lower_height = self._sketch_set.DEFAULT_MASTER_LOWER_HEIGHT
@@ -118,13 +117,12 @@ class AdvResource(object):
         # match
         orients = self.get_sketch_master_orients()
         for i_sketch_key, v in orients.items():
-            # master layer
             i_sketch_src = master_layer.get_sketch(i_sketch_key)
             _bsc_sketch.Sketch(i_sketch_src).apply_orients(v)
 
         for i_sketch_key, v in orients.items():
             i_sketch_src = master_layer.get_sketch(i_sketch_key)
-            i_control_dst = self.get_control_by_sketch_key(i_sketch_key)
+            i_control_dst = self.find_control_by_sketch_key(i_sketch_key)
             if i_control_dst is not None:
                 if i_sketch_key == master_layer.ChrMasterSketches.Root_M:
                     # must use this method to constraint
@@ -141,13 +139,13 @@ class AdvResource(object):
         self.constraint_from_master_layer(master_layer)
 
     # to transfer
-    def fit_transfer_resource_scale(self, transfer_resource):
+    def fit_scale_to_transfer_resource(self, transfer_resource):
         root_height = self.get_root_height()
         master_lower_height = self._sketch_set.DEFAULT_MASTER_LOWER_HEIGHT
         scale = root_height/master_lower_height
         transfer_resource.apply_root_scale(scale)
 
-    def fit_transfer_resource_sketches(self, transfer_resource):
+    def fit_sketches_to_transfer_resource(self, transfer_resource):
         for i_sketch_key in self._sketch_set.ChrMasterSketches.Basic:
             # adv sketch
             i_sketch_src = self._sketch_set.get(i_sketch_key)
@@ -157,7 +155,7 @@ class AdvResource(object):
                 _bsc_sketch.Sketch(i_sketch_tgt).match_rotations_from(i_sketch_src)
                 _bsc_sketch.Sketch(i_sketch_tgt).match_orients_from(i_sketch_src)
 
-    def constraint_from_resource_transfer_resource(self, transfer_resource):
+    def constraint_from_transfer_resource(self, transfer_resource):
         self.switch_all_controls_to_fk()
         # match
         orients = self.get_sketch_master_orients()
@@ -167,18 +165,20 @@ class AdvResource(object):
 
         for i_sketch_key, v in orients.items():
             i_sketch_src = transfer_resource.find_sketch(i_sketch_key)
-            i_control_dst = self.get_control_by_sketch_key(i_sketch_key)
+            i_control_dst = self.find_control_by_sketch_key(i_sketch_key)
             if i_control_dst is not None:
                 if i_sketch_key == _bsc_abc.AbsMontage.ChrMasterSketches.Root_M:
                     _bsc_sketch.Sketch(i_sketch_src).create_point_constraint_to_resource(i_control_dst)
-                    _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_resource(i_control_dst, clear_offset=False)
+                    _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_resource(
+                        i_control_dst, clear_offset=False
+                    )
                 else:
                     _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_resource(i_control_dst)
 
     def connect_from_transfer_resource(self, transfer_resource):
-        self.fit_transfer_resource_scale(transfer_resource)
-        self.fit_transfer_resource_sketches(transfer_resource)
-        self.constraint_from_resource_transfer_resource(transfer_resource)
+        self.fit_scale_to_transfer_resource(transfer_resource)
+        self.fit_sketches_to_transfer_resource(transfer_resource)
+        self.constraint_from_transfer_resource(transfer_resource)
 
     def find_reference_file(self):
         return qsm_mya_core.ReferencesCache().get_file(self._namespace)

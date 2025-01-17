@@ -363,14 +363,14 @@ class AbsMontage(object):
             Knee_R='RightLeg',
             Ankle_R='RightFoot',
             Toes_R='RightToeBase',
-            ToesEnd_R='RightToe_End',
+            ToesEnd_R=['RightToe_End', 'RightToeBaseEnd'],
             #
             Spine1_M='Spine',
             Spine2_M='Spine1',
             Chest_M='Spine2',
             Neck_M='Neck',
             Head_M='Head',
-            HeadEnd_M='HeadTop_End',
+            HeadEnd_M=['HeadTop_End', 'HeadEnd'],
             #
             Scapula_R='RightShoulder',
             Shoulder_R='RightArm',
@@ -436,7 +436,7 @@ class AbsMontage(object):
             Knee_L='LeftLeg',
             Ankle_L='LeftFoot',
             Toes_L='LeftToeBase',
-            ToesEnd_L='LeftToe_End',
+            ToesEnd_L=['LeftToe_End', 'LeftToeBaseEnd'],
         )
 
     class AtrKeys:

@@ -460,21 +460,21 @@ class MtgLayer(AbsMtgLayer):
             curve_map[i_key] = i_curve_name
         return curve_map
 
-    def connect_to_master(self, master_motion_layer):
+    def connect_to_master_layer(self, master_motion_layer):
         if isinstance(master_motion_layer, AbsMtgLayer) is True:
             for i_sketch_key in self.ChrMasterSketches.Basic:
                 i_sketch_src = self.get(i_sketch_key)
 
                 i_sketch_dst = master_motion_layer.get(i_sketch_key)
                 if i_sketch_key == self.ChrMasterSketches.Root_M:
-                    _bsc_sketch.Sketch(i_sketch_src).create_point_constraint_to_master_layer(
+                    _bsc_sketch.Sketch(i_sketch_src).create_point_constraint_to_master(
                         i_sketch_dst, break_parent_inverse=True
                     )
-                    _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master_layer(
+                    _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master(
                         i_sketch_dst, break_parent_inverse=True
                     )
                 else:
-                    _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master_layer(
+                    _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master(
                         i_sketch_dst
                     )
 
@@ -836,7 +836,7 @@ class MtgMasterLayer(AbsMtgLayer):
         adv_resource._control_set.export_motion_to(file_path)
         cmds.undo()
 
-    def connect_to_adv(self, adv_resource):
+    def connect_to_adv_resource(self, adv_resource):
         qsm_mya_core.NodeAttribute.set_as_message(
             self._location, 'qsm_resource', adv_resource.find_root_location()
         )
@@ -892,7 +892,7 @@ class MtgMasterLayer(AbsMtgLayer):
         mtg_layer = MtgLayer.generate_fnc(rig_namespace, key)
 
         self.fit_layer_scale(mtg_layer)
-        mtg_layer.connect_to_master(self)
+        mtg_layer.connect_to_master_layer(self)
         data = bsc_storage.StgFileOpt(motion_json).set_read()
 
         qsm_mya_core.NodeAttribute.set_as_message(
@@ -951,7 +951,7 @@ class MtgMasterLayer(AbsMtgLayer):
         mtg_layer = MtgLayer.generate_fnc(rig_namespace, key)
 
         self.fit_layer_scale(mtg_layer)
-        mtg_layer.connect_to_master(self)
+        mtg_layer.connect_to_master_layer(self)
         data = bsc_storage.StgFileOpt(motion_json).set_read()
 
         qsm_mya_core.NodeAttribute.set_as_message(

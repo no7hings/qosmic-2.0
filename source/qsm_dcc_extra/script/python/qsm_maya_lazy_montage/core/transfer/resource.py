@@ -2,6 +2,10 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.core as bsc_core
+
+import lxbasic.storage as bsc_storage
+
 import qsm_maya.core as qsm_mya_core
 
 from ..base import abc as _bsc_abc
@@ -20,10 +24,8 @@ class TransferResource(_bsc_abc.AbsMontage):
         self._sketch_set = _sketch_set.TransferSketchSet.generate(self._namespace)
 
     @classmethod
-    def create_sketches(cls):
-        _sketch_set.TransferSketchSet.create(
-            cls.Namespaces.Transfer
-        )
+    def create_sketches(cls, namespace):
+        _sketch_set.TransferSketchSet.create(namespace)
 
     @classmethod
     def find_mocap_namespaces(cls):
@@ -51,7 +53,7 @@ class TransferResource(_bsc_abc.AbsMontage):
     def get_height(self):
         return self._sketch_set.DEFAULT_MASTER_HEIGHT
 
-    def fit_scale_from_mocap(self, mocap_resource):
+    def fit_scale_from_mocap_resource(self, mocap_resource):
         height_0 = mocap_resource.get_root_height()
         height_1 = self.get_root_height()
 
@@ -77,10 +79,37 @@ class TransferResource(_bsc_abc.AbsMontage):
         )
 
     def connect_from_mocap(self, mocap_resource):
-        self.fit_scale_from_mocap(mocap_resource)
+        self.fit_scale_from_mocap_resource(mocap_resource)
         # do not math sketch to mocap
         # self.fit_sketches_from_mocap(mocap_resource)
         self.constraint_from_mocap(mocap_resource)
+        
+    def fit_scale_to_master_resource(self, master_resource):
+        height_0 = master_resource.get_root_height()
+        height_1 = self.get_root_height()
+
+        scale = height_0/height_1
+
+        root_location = self.find_root_location()
+
+        cmds.setAttr(root_location+'.scale', scale, scale, scale)
+        
+    def connect_to_master_resource(self, master_resource):
+        for i_sketch_key in self.ChrMasterSketches.Basic:
+            i_sketch_src = self.find_sketch(i_sketch_key)
+
+            i_sketch_dst = master_resource.find_sketch(i_sketch_key)
+            if i_sketch_key == self.ChrMasterSketches.Root_M:
+                _bsc_sketch.Sketch(i_sketch_src).create_point_constraint_to_master(
+                    i_sketch_dst, break_parent_inverse=True
+                )
+                _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master(
+                    i_sketch_dst, break_parent_inverse=True
+                )
+            else:
+                _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master(
+                    i_sketch_dst
+                )
 
     def find_sketch(self, sketch_key):
         return self._sketch_set.find_one(sketch_key)
@@ -94,6 +123,26 @@ class TransferResource(_bsc_abc.AbsMontage):
             ]
         )
 
+    def export_motion_to(self, start_frame, end_frame, motion_json_path):
+        self.bake_sketches_keyframes(start_frame, end_frame)
+        bsc_storage.StgFileOpt(motion_json_path).set_write(
+            self.get_motion_data(start_frame, end_frame)
+        )
+
+    def get_motion_data(self, start_frame, end_frame):
+        data = self._sketch_set.get_data(start_frame, end_frame)
+        data['root_height'] = self.get_root_height()
+        data['metadata'] = dict(
+            ctime=bsc_core.BscSystem.generate_timestamp(),
+            user=bsc_core.BscSystem.get_user_name(),
+            host=bsc_core.BscSystem.get_host(),
+            start_frame=start_frame,
+            end_frame=end_frame,
+            fps=qsm_mya_core.Frame.get_fps(),
+            api_version='1.0.1'
+        )
+        return data
+
     def do_delete(self):
         location = self.find_root_location()
         qsm_mya_core.Node.delete(location)
@@ -101,4 +150,3 @@ class TransferResource(_bsc_abc.AbsMontage):
     @classmethod
     def test(cls):
         pass
-

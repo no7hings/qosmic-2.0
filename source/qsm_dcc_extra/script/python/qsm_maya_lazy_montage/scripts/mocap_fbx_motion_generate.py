@@ -52,7 +52,7 @@ class MoCapFbxMotionGenerateProcess(object):
             transfer_handle = _cor_trf_handle.MocapTransferHandle(mocap_namespace)
             transfer_handle.setup()
             transfer_handle.connect_to_mocap()
-            transfer_handle.export_mocap_to(motion_json_path)
+            transfer_handle.export_motion_to(motion_json_path)
             l_p.do_update()
 
             # 3. import motion for create preview
@@ -109,5 +109,5 @@ class MoCapFbxMotionGenerateAutoProcess(object):
             transfer_handle = _cor_trf_handle.MocapTransferHandle(mocap_namespace)
             transfer_handle.setup()
             transfer_handle.connect_to_mocap()
-            transfer_handle.export_mocap_to(motion_json_path)
+            transfer_handle.export_motion_to(motion_json_path)
             l_p.do_update()

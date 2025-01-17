@@ -34,7 +34,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
     def __init__(self, *args, **kwargs):
         super(_GuiSourceTaskOpt, self).__init__(*args, **kwargs)
 
-        self._task_unit_path = None
+        self._task_unit_history_key = 'lazy-workspace.{resource_type}-task_unit'
         self._task_unit_path_tmp = None
 
         self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()
@@ -122,7 +122,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
             item._item_model.set_expanded(True)
             item._item_model.set_icon_name('workspace/null')
 
-    def gui_load_all_tasks(self, force=False):
+    def gui_load_all_tasks(self):
         def cache_fnc_():
             _task_dir_ptn_opt = self._unit._task_parse.generate_pattern_opt_for(
                 '{}-source-task-dir'.format(self._unit.RESOURCE_TYPE), **resource_properties
@@ -147,11 +147,12 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
 
         self._unit.gui_update_task_session()
 
-        if force is True:
-            # restore this variant?
-            self._task_unit_path_tmp = None
-
         resource_properties = self._unit._resource_properties
+        resource_type = resource_properties['resource_type']
+
+        # if force is True:
+        #     # restore this variant?
+        self.gui_load_task_unit_history(resource_type)
 
         if resource_properties is None:
             return
@@ -208,7 +209,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
             qt_item._item_model.set_assign_properties(task_variants)
 
             qt_item._item_model.set_icon_name('workspace/task')
-
+            qt_item._item_model.set_expanded(True)
             qt_item._item_model.set_show_fnc(cache_fnc_, build_fnc_)
 
     def gui_add_task_unit(self, task_unit_variants, gui_thread_flag):
@@ -256,6 +257,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
         directory_path = task_unit_variants['result']
         task_unit = task_unit_variants['task_unit']
         path = self._unit._task_parse.to_wsp_task_unit_path(**task_unit_variants)
+        resource_type = task_unit_variants['resource_type']
 
         flag, qt_item = self._qt_tree_widget._view_model.create_item(path)
         if flag is True:
@@ -280,19 +282,20 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
                         )
                 else:
                     if path.endswith('main'):
-                        self._task_unit_path_tmp = path
+                        self.gui_save_task_unit_history(path, resource_type)
                         qt_item._item_model.focus_select()
             else:
                 if self._task_unit_path_tmp is None:
                     # select main as default
                     if path.endswith('main'):
-                        self._task_unit_path_tmp = path
+                        self.gui_save_task_unit_history(path, resource_type)
                         qt_item._item_model.focus_select()
                 else:
                     if path == self._task_unit_path_tmp:
                         qt_item._item_model.focus_select()
 
             qt_item._item_model.set_show_fnc(cache_fnc_, build_fnc_)
+        return path
 
     def gui_get_current_entity_variants(self):
         items = self._qt_tree_widget._view_model.get_selected_items()
@@ -337,6 +340,18 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
             if qt_item is not None:
                 qt_item._item_model.set_status(qt_item._item_model.Status.Correct)
                 qt_item._item_model.focus_select()
+
+    def gui_load_task_unit_history(self, resource_type=None):
+        self._task_unit_path_tmp = gui_core.GuiHistory.get_one(
+            self._task_unit_history_key.format(resource_type=resource_type)
+        )
+        return self._task_unit_path_tmp
+
+    def gui_save_task_unit_history(self, task_unit_path, resource_type=None):
+        self._task_unit_path_tmp = task_unit_path
+        gui_core.GuiHistory.set_one(
+            self._task_unit_history_key.format(resource_type=resource_type), self._task_unit_path_tmp
+        )
 
     def gui_restore(self):
         self._qt_tree_widget._view_model.restore()
@@ -655,7 +670,8 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
 
     def gui_update_current_task_unit(self, task_unit_scene_variants):
         path = self._task_parse.to_wsp_task_unit_path(**task_unit_scene_variants)
-        self._gui_task_opt._task_unit_path_tmp = path
+        resource_type = task_unit_scene_variants['resource_type']
+        self._gui_task_opt.gui_save_task_unit_history(path, resource_type)
 
     def on_increment_and_save_task_scene(self):
         # regenerate a session to save
@@ -858,7 +874,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
         if resource_properties != self._resource_properties:
             self._resource_properties = resource_properties
 
-            self._gui_task_opt.gui_load_all_tasks(True)
+            self._gui_task_opt.gui_load_all_tasks()
 
     def gui_get_resource_properties(self):
         return self._resource_properties

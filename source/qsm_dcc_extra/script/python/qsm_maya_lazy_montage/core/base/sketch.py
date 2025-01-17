@@ -52,7 +52,7 @@ class Sketch(object):
     def apply_rotations(self, rotations):
         pass
 
-    def create_point_constraint_to_master_layer(self, target_node, break_parent_inverse=False):
+    def create_point_constraint_to_master(self, target_node, break_parent_inverse=False):
         # when is created, connect to exists
         results = qsm_mya_core.PointConstraint.get_all_from_source(target_node)
         if results:
@@ -93,7 +93,7 @@ class Sketch(object):
                     cmds.disconnectAttr(source, target)
             return node
 
-    def create_orient_constraint_to_master_layer(self, target_node, break_parent_inverse=False):
+    def create_orient_constraint_to_master(self, target_node, break_parent_inverse=False):
         # when is created, connect to exists
         results = qsm_mya_core.OrientConstraint.get_all_from_source(target_node)
         if results:

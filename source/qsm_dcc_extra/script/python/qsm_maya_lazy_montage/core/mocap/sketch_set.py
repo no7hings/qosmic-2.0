@@ -113,6 +113,13 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
                 i_path = self.get(i_key_dst)
                 if i_path:
                     dict_[i_key] = i_path
+            # many target keys available
+            elif isinstance(v, (tuple, list)):
+                for j_key_dst in v:
+                    j_path = self.get(j_key_dst)
+                    if j_path:
+                        dict_[i_key] = j_path
+                        break
         return dict_
 
     def get_frame_range(self):

@@ -46,7 +46,6 @@ class _GuiPackageOpt(_GuiBaseOpt):
     def __init__(self, *args, **kwargs):
         super(_GuiPackageOpt, self).__init__(*args, **kwargs)
 
-        self._task_unit_path = None
         self._task_unit_path_tmp = None
 
         self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()
@@ -65,7 +64,6 @@ class _GuiLaunchOpt(_GuiBaseOpt):
     def __init__(self, *args, **kwargs):
         super(_GuiLaunchOpt, self).__init__(*args, **kwargs)
 
-        self._task_unit_path = None
         self._task_unit_path_tmp = None
 
         self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()
