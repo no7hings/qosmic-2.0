@@ -5,16 +5,20 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
+from .pages import compose as _compose
 
-class AbsPrxPanelForMontage(gui_prx_widgets.PrxBasePanel):
-    CONFIGURE_KEY = 'lazy-montage/gui/main'
 
-    HST_TAB_KEY_CURRENT = 'lazy-montage.page_key_current'
+class PrxPanelForMosaic(gui_prx_widgets.PrxBasePanel):
+    CONFIGURE_KEY = 'lazy-mosaic/gui/main'
 
-    PAGE_CLASSES = []
+    HST_TAB_KEY_CURRENT = 'lazy-mosaic.page_key_current'
+
+    PAGE_CLASSES = [
+        _compose.AbsPrxPageForCompose
+    ]
 
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxPanelForMontage, self).__init__(window, session, *args, **kwargs)
+        super(PrxPanelForMosaic, self).__init__(window, session, *args, **kwargs)
 
     def gui_close_fnc(self):
         self._page_prx_tab_tool_box.save_history()

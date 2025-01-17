@@ -11,7 +11,9 @@ class LRUCache:
         return key in self._dict
 
     def __str__(self):
-        return "LRUCache({})".format(self._dict.items())
+        return "{}({})".format(
+            self.__class__.__name__, self._dict.items()
+        )
 
     def __repr__(self):
         return '\n'+self.__str__()
@@ -38,3 +40,6 @@ class LRUCache:
         elif len(self._dict) >= self._maximum:
             self._dict.popitem(last=False)
         self._dict[key] = value
+
+
+

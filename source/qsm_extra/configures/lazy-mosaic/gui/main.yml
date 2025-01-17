@@ -1,0 +1,35 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Lazy Mosaic'
+        name_chs: '懒人模块管理'
+        group_name: 'Animation(s)'
+        #
+        icon_name: 'lazy/mosaic'
+        tool_tip:
+            |-
+            To be supplemented.
+        #
+        tool_tip_chs:
+            |-
+            待补充。
+
+        size: [960, 720]
+
+build:
+    compose:
+        tab:
+            name: 'Compose'
+            name_chs: '组装'
+
+            tool_tip:
+                |-
+                To be supplemented.
+            #
+            tool_tip_chs:
+                |-
+                待补充。

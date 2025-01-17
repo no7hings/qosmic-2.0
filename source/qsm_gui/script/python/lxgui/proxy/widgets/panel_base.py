@@ -187,11 +187,11 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
         core_version = bsc_core.BscEnviron.get_core_version()
         extend_version = bsc_core.BscEnviron.get_extend_version()
         if extend_version:
-            window_title = u'{} ver.{}({})'.format(
+            window_title = u'{} - ver.{}({})'.format(
                 gui_name, core_version, extend_version
             )
         else:
-            window_title = u'{} ver.{}'.format(
+            window_title = u'{} - ver.{}'.format(
                 gui_name, core_version
             )
 

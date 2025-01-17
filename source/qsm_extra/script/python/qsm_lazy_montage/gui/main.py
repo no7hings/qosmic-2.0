@@ -1,8 +1,6 @@
 # coding:utf-8
 from . import abstracts as _abstracts
 
-from .pages import resource as _page_resource
-
 from .pages import splicing as _page_splicing
 
 from .subpanels import new_splicing as _subpanel_new_splicing

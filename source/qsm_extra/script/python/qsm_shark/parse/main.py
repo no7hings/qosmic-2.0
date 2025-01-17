@@ -474,6 +474,7 @@ class Stage(_abc.AbsBase):
 
     @classmethod
     def _pull_next_entities_sync_cache(cls, entity_type, entity_variants):
+        # save cache on server for share
         cache_key = cls._generate_next_entities_cache_key(entity_type, entity_variants)
         cache_path = cls._generate_next_entities_cache_path_(cache_key)
         data = bsc_storage.StgFileOpt(cache_path).set_read()

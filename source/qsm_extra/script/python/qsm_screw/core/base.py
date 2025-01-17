@@ -583,7 +583,7 @@ FLUSH PRIVILEGES;
         if _.exists():
             return self._to_entity(entity_type, _.first().__data__)
 
-    def find_all(self, entity_type, filters=None):
+    def _find_all_fnc(self, entity_type, filters=None):
         dtb_entity_type = self._to_dtb_entity_type(entity_type)
         if not filters:
             filters = []
@@ -602,8 +602,15 @@ FLUSH PRIVILEGES;
         else:
             _ = dtb_entity_type.select()
         if _.exists():
-            return map(lambda x: self._to_entity(entity_type, x.__data__), _)
+            return _
         return []
+
+    def find_all(self, entity_type, filters=None):
+        return map(lambda x: self._to_entity(entity_type, x.__data__), self._find_all_fnc(entity_type, filters))
+
+    def find_all_iter(self, entity_type, filters=None):
+        for x in self._find_all_fnc(entity_type, filters):
+            yield self._to_entity(entity_type, x.__data__)
 
     # noinspection PyUnusedLocal
     def find_all_by_ctime_tag(self, entity_type, tag='today', filters=None):

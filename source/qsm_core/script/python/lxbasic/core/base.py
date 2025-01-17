@@ -339,7 +339,7 @@ class BscStorage(object):
     PATHSEP = '/'
     PATHSEP_EXTRA = '//'
 
-    WINDOWS_USER_CACHE = _cache.LRUCache(maximum=1024)
+    USER_CACHE = _cache.LRUCache(maximum=1024)
 
     @classmethod
     def shit_path_auto_convert(cls, path):
@@ -485,10 +485,10 @@ class BscStorage(object):
             elif BscStorage.get_platform_is_windows():
                 m_time = cls.get_mtime(path)
                 key = u'{}@{}'.format(path, m_time)
-                if key in cls.WINDOWS_USER_CACHE:
-                    return cls.WINDOWS_USER_CACHE[key]
+                if key in cls.USER_CACHE:
+                    return cls.USER_CACHE[key]
                 user = cls._windows_get_user_2(path)
-                cls.WINDOWS_USER_CACHE[key] = user
+                cls.USER_CACHE[key] = user
                 return user
         return 'unknown'
 

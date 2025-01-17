@@ -3,6 +3,8 @@ from .configure import *
 
 from .cache import *
 
+from .lru_cache import *
+
 from .base import *
 
 from .thread import *
