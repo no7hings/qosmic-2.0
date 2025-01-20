@@ -718,11 +718,11 @@ class PrxToolsetForMotion(
         )
         # transformation
         self._prx_options_node.set(
-            'transformation.create_control_move_locator', self.do_dcc_create_transformation_locator
+            'transformation.create_control_move_locator', self.do_dcc_create_control_move_locator
         )
 
         self._prx_options_node.set(
-            'transformation.remove_control_move_locator', self.do_dcc_remove_transformation_locator
+            'transformation.remove_control_move_locator', self.do_dcc_remove_control_move_locator
         )
 
         # animation transfer
@@ -828,14 +828,14 @@ class PrxToolsetForMotion(
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 1) for x in i_controls]
 
     @staticmethod
-    def do_dcc_create_transformation_locator():
+    def do_dcc_create_control_move_locator():
         import lxbasic.session as bsc_session
         bsc_session.OptionHook.execute(
             "option_hook_key=dcc-script/maya/qsm-control-move-create-script"
         )
 
     @staticmethod
-    def do_dcc_remove_transformation_locator():
+    def do_dcc_remove_control_move_locator():
         import lxbasic.session as bsc_session
         bsc_session.OptionHook.execute(
             "option_hook_key=dcc-script/maya/qsm-control-move-remove-script"

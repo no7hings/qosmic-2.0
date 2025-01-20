@@ -90,6 +90,9 @@ class PrxTrackWidget(
     def set_current_frame(self, frame):
         self._qt_widget._track_timeline._set_current_timeframe_(frame)
 
+    def update(self):
+        self._qt_widget._graph._update_stage_()
+
     def restore(self):
         self._qt_widget._graph._restore_graph_()
 

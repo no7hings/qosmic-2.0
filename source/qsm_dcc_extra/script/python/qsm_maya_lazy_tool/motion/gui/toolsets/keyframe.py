@@ -18,7 +18,7 @@ class ToolsetForMotionKeyframe(
     GUI_KEY = 'keyframe'
 
     def _do_dcc_select_all_curves(self):
-        curves = qsm_mya_core.AnimCurveNodes.get_all(reference=False, excludes=['timewarp', 'qsm_timewarp'])
+        curves = qsm_mya_core.AnmCurveNodes.get_all(reference=False, excludes=['timewarp', 'qsm_timewarp'])
         qsm_mya_core.Selection.set(curves)
 
         self._window.popup_message(
@@ -59,7 +59,7 @@ class ToolsetForMotionKeyframe(
     def _on_dcc_euler_filter(self):
         anm_curves = qsm_mya_core.Selection.get_all_anm_curves()
         if anm_curves:
-            qsm_mya_core.AnimCurveNodes.euler_filter(anm_curves)
+            qsm_mya_core.AnmCurveNodes.euler_filter(anm_curves)
 
     def _do_gui_refresh_timewrap_frame_range(self):
         frame_range_src, frame_range_tgt = qsm_mya_mtn_core.TimewarpOpt.get_frame_range_args()

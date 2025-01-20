@@ -1366,10 +1366,15 @@ class StgDirectoryOpt(StgPathOpt):
             for i_location, _, i_file_names in os.walk(path, topdown=0):
                 for j_name in i_file_names:
                     j_file_path = os.path.join(i_location, j_name).replace('\\', '/')
-                    # double check file is existing.
-                    if os.path.exists(j_file_path):
+                    # file may not exist?
+                    try:
                         os.remove(j_file_path)
-                os.removedirs(i_location)
+                    except WindowsError:
+                        pass
+                try:
+                    os.removedirs(i_location)
+                except WindowsError:
+                    pass
 
 
 class StgFileOpt(StgPathOpt):

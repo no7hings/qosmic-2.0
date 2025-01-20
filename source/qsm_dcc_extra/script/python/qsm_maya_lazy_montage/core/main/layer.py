@@ -63,13 +63,13 @@ class AbsMtgLayer(_bsc_abc.AbsMontage):
             i_curve_opt.set_tangent_types_at_time(start_frame, 'auto', 'step')
 
     @classmethod
-    def update_root_start_fnc(cls, mtg_layer, mtg_layer_last, start_frame):
-        # update last layer output end
-        mtg_layer_last._node_opt.set('output_end', start_frame-1)
-        # use last root end
-        pre_root_end_opt = qsm_mya_core.EtrNodeOpt(mtg_layer_last.find_root_end())
+    def update_root_start_fnc(cls, mtg_layer, pre_mtg_layer, start_frame):
+        # update pre layer output end
+        pre_mtg_layer._node_opt.set('output_end', start_frame-1)
+        # use pre root end
+        pre_root_end_opt = qsm_mya_core.EtrNodeOpt(pre_mtg_layer.find_root_end())
         mtg_layer._node_opt.set(
-            'root_start_input_from', mtg_layer_last._node_opt.get('key')
+            'root_start_input_from', pre_mtg_layer._node_opt.get('key')
         )
 
         for i_key, i_atr_src in [
@@ -882,7 +882,7 @@ class MtgMasterLayer(AbsMtgLayer):
         layers_opt = MtgLayersOpt(self.get_all_layer_locations())
 
         stage_end_frame = layers_opt.get_end_frame()
-        mtg_layer_last = layers_opt.get_end_layer()
+        pre_mtg_layer = layers_opt.get_end_layer()
 
         layer_index = self.get_next_layer_index()
 
@@ -914,7 +914,7 @@ class MtgMasterLayer(AbsMtgLayer):
         mtg_layer.restore_main_weight_curve()
         mtg_layer.restore_root_start_input_transformation_curves()
 
-        is_start = mtg_layer_last is None
+        is_start = pre_mtg_layer is None
         if is_start:
             mtg_layer.update_main_weight(
                 (clip_start, clip_end),
@@ -931,8 +931,8 @@ class MtgMasterLayer(AbsMtgLayer):
                 is_start=False, is_end=True,
                 pre_blend=pre_blend, post_blend=post_blend, blend_type='flat'
             )
-            self.update_root_start_fnc(mtg_layer, mtg_layer_last, clip_start)
-            mtg_layer_last.update_main_weight_auto(is_start=False, is_end=False)
+            self.update_root_start_fnc(mtg_layer, pre_mtg_layer, clip_start)
+            pre_mtg_layer.update_main_weight_auto(is_start=False, is_end=False)
 
         # update for follow camera
         self.update_root_loc_for(mtg_layer, is_start, clip_start, clip_end)
@@ -996,7 +996,7 @@ class MtgMasterLayer(AbsMtgLayer):
 
         # filter root track curve later
         if curve_names:
-            qsm_mya_core.AnimCurveNodes.euler_filter(curve_names)
+            qsm_mya_core.AnmCurveNodes.euler_filter(curve_names)
 
     def update_root_loc_end_for(self, mtg_layer, start_frame, end_frame):
         root_end = mtg_layer.find_root_end()
@@ -1018,7 +1018,7 @@ class MtgMasterLayer(AbsMtgLayer):
 
         # filter root track curve later
         if curve_names:
-            qsm_mya_core.AnimCurveNodes.euler_filter(curve_names)
+            qsm_mya_core.AnmCurveNodes.euler_filter(curve_names)
 
     def fit_layer_scale(self, layer_opt):
         scale = cmds.getAttr(self._location+'.scaleX')

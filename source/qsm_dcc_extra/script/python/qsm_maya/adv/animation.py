@@ -240,5 +240,5 @@ class AdvChrOpt(AdvOpt):
 
     def find_all_anm_curves(self):
         controls = self.find_all_controls()
-        return _mya_core.AnimCurveNodes.get_all_from(controls)
+        return _mya_core.AnmCurveNodes.get_all_from(controls)
 

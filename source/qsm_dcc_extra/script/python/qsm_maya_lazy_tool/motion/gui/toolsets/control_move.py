@@ -16,17 +16,31 @@ class ToolsetForMotionControlAndMove(
     GUI_KEY = 'control_and_move'
 
     @staticmethod
-    def do_dcc_create_transformation_locator():
+    def do_dcc_create_control_move_locator():
         import lxbasic.session as bsc_session
         bsc_session.OptionHook.execute(
             "option_hook_key=dcc-script/maya/qsm-control-move-create-script"
         )
 
     @staticmethod
-    def do_dcc_remove_transformation_locator():
+    def do_dcc_remove_control_move_locator():
         import lxbasic.session as bsc_session
         bsc_session.OptionHook.execute(
             "option_hook_key=dcc-script/maya/qsm-control-move-remove-script"
+        )
+
+    @staticmethod
+    def do_dcc_create_control_transform_locator():
+        import lxbasic.session as bsc_session
+        bsc_session.OptionHook.execute(
+            "option_hook_key=dcc-script/maya/qsm-control-transform-create-script"
+        )
+
+    @staticmethod
+    def do_dcc_remove_control_transform_locator():
+        import lxbasic.session as bsc_session
+        bsc_session.OptionHook.execute(
+            "option_hook_key=dcc-script/maya/qsm-control-transform-remove-script"
         )
 
     def get_dcc_character_args(self):
@@ -84,13 +98,23 @@ class ToolsetForMotionControlAndMove(
                 self._window._language, self._page._configure.get('build.units.{}'.format(self.GUI_KEY))
             )
         )
-
+        
+        # control move
         self._prx_options_node.set(
-            'transformation.create_control_move_locator', self.do_dcc_create_transformation_locator
+            'control_move.create_locator', self.do_dcc_create_control_move_locator
         )
 
         self._prx_options_node.set(
-            'transformation.remove_control_move_locator', self.do_dcc_remove_transformation_locator
+            'control_move.remove_locator', self.do_dcc_remove_control_move_locator
+        )
+        
+        # control transform
+        self._prx_options_node.set(
+            'control_transform.create_locator', self.do_dcc_create_control_transform_locator
+        )
+
+        self._prx_options_node.set(
+            'control_transform.remove_locator', self.do_dcc_remove_control_transform_locator
         )
 
         # control

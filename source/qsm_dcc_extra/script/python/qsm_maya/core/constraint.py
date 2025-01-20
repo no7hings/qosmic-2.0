@@ -14,9 +14,18 @@ class ParentConstraint(object):
     NODE_TYPE = 'parentConstraint'
 
     @classmethod
-    def create(cls, parent_node, child_node, maintain_offset=0):
+    def create(cls, parent_node, child_node, maintain_offset=False, break_parent_inverse=False):
         # parentConstraint -mo -weight 1
-        return cmds.parentConstraint(parent_node, child_node, maintainOffset=maintain_offset)[0]
+        node = cmds.parentConstraint(parent_node, child_node, maintainOffset=maintain_offset)[0]
+        if break_parent_inverse is True:
+            target = node+'.constraintParentInverseMatrix'
+            _ = cmds.listConnections(
+                target, destination=0, source=1, plugs=1
+            )
+            if _:
+                source = _[0]
+                cmds.disconnectAttr(source, target)
+        return node
 
     @classmethod
     def get_all_from_source(cls, target_node):
@@ -153,6 +162,13 @@ class PointConstraint(object):
             cmds.setAttr(
                 '{}.{}'.format(node, i), translate[seq]
             )
+
+    @classmethod
+    def clear_all_from_source(cls, target_node):
+        _ = cls.get_all_from_source(target_node)
+        if _:
+            for i in _:
+                cmds.delete(i)
 
 
 class OrientConstraint(object):

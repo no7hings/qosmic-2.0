@@ -3,6 +3,8 @@ import copy
 
 import lxbasic.content as bsc_content
 
+from . import task_parse as _task_parse
+
 
 class DccTaskCreateOpt(object):
     RESOURCE_TYPE = None
@@ -67,6 +69,26 @@ class DccTaskCreateOpt(object):
 
         task_create_opt = task_session.generate_opt_for(cls)
         return task_create_opt, kwargs_new, scene_src_path, thumbnail_path
+
+    @classmethod
+    def get_task_unit_names(cls, resource_properties):
+        task_parse = _task_parse.TaskParse()
+        step, task = cls.STEP, cls.TASK
+        kwargs = copy.copy(resource_properties)
+        resource_type = resource_properties['resource_type']
+        kwargs['step'] = step
+        kwargs['task'] = task
+        task_unit_pth_opt = task_parse.generate_pattern_opt_for(
+            '{}-source-task_unit-dir'.format(resource_type), **kwargs
+        )
+        list_ = ['main']
+        matches = task_unit_pth_opt.find_matches()
+        if matches:
+            for i_match in matches:
+                i_task_unit = i_match['task_unit']
+                if i_task_unit not in list_:
+                    list_.append(i_task_unit)
+        return list_
 
     def build_scene_src_fnc(self, *args, **kwargs):
         raise NotImplementedError()

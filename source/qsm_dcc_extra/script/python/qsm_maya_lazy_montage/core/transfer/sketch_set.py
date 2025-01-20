@@ -169,7 +169,7 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
             i_curve_nodes = qsm_mya_mtn_core.ControlMotionOpt(i).get_all_curve_nodes()
             curve_nodes.extend(i_curve_nodes)
         if curve_nodes:
-            return qsm_mya_core.AnimCurveNodes.get_range(curve_nodes)
+            return qsm_mya_core.AnmCurveNodes.get_range(curve_nodes)
         return qsm_mya_core.Frame.get_frame_range()
 
     def find_one(self, sketch_key):

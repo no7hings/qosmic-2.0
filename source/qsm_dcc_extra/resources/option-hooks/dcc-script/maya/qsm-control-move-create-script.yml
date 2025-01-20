@@ -7,7 +7,7 @@ option:
     gui:
         group_name: 'python'
         #
-        name: 'Create Control Move'
+        name: 'Create Control Move Create'
         icon_name: 'application/python'
 #
 hook_option:

@@ -31,7 +31,7 @@ class AdvControlSet(_bsc_control_set.AbsControlSet):
             curve_nodes.extend(i_curve_nodes)
 
         if curve_nodes:
-            return qsm_mya_core.AnimCurveNodes.get_range(curve_nodes)
+            return qsm_mya_core.AnmCurveNodes.get_range(curve_nodes)
         return qsm_mya_core.Frame.get_frame_range()
 
     def generate_motion_dict(self):

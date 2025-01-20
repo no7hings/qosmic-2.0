@@ -28,7 +28,7 @@ def auto_keyframe_context(auto_keyframe=False):
         cmds.autoKeyframe(state=True)
 
 
-class AnimCurveNodes(object):
+class AnmCurveNodes(object):
     @classmethod
     def get_all_from_selection(cls):
         nodes = cmds.ls(sl=True) or []
@@ -303,13 +303,21 @@ class AnmCurveNodeOpt(object):
             )
 
     def get_points(self):
-        index_count = self.get_index_count()
         list_ = []
+        index_count = self.get_index_count()
         for i_index in range(index_count):
             i_time = self.get_time_at(i_index)
             i_value = self.get_value_at(i_index)
             i_tangent = self.get_tangents_at(i_index)
             list_.append((i_time, i_value, i_tangent))
+        return list_
+
+    def get_time_samples(self):
+        list_ = []
+        index_count = self.get_index_count()
+        for i_index in range(index_count):
+            i_time = self.get_time_at(i_index)
+            list_.append(i_time)
         return list_
 
     def get_infinities(self):

@@ -9,6 +9,8 @@ from .control_set import *
 
 from .move import *
 
+from .control_transform import *
+
 from .rotation_to_translate import *
 
 from .fk_ik import *

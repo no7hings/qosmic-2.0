@@ -57,11 +57,11 @@ class TimewarpOpt(object):
     def apply(cls):
         if _mya_core.Node.is_exists(cls.NODE_NAME) is True:
             opt = cls(cls.NODE_NAME)
-            curves = _mya_core.AnimCurveNodes.get_all(reference=False, excludes=['timewarp', 'qsm_timewarp'])
+            curves = _mya_core.AnmCurveNodes.get_all(reference=False, excludes=['timewarp', 'qsm_timewarp'])
 
             offset = opt.offset
             if offset != 0:
-                _mya_core.AnimCurveNodes.offset(
+                _mya_core.AnmCurveNodes.offset(
                     curves, offset
                 )
 
@@ -72,7 +72,7 @@ class TimewarpOpt(object):
             scale = opt.scale
             if scale != 1.0:
                 scale_pivot = opt.start_frame_tgt
-                _mya_core.AnimCurveNodes.scale_by_pivot(
+                _mya_core.AnmCurveNodes.scale_by_pivot(
                     curves, opt.scale, opt.start_frame_tgt
                 )
 

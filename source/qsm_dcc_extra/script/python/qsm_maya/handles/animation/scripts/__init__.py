@@ -3,4 +3,6 @@ from .skin_proxy import *
 
 from .dynamic_gpu import *
 
-from .transformation_locator import *
+from .control_move import *
+
+from .control_transform import *

@@ -617,15 +617,15 @@ build:
                 name_chs: '选项'
 
                 parameters:
-                    transformation:
+                    control_move:
                         widget: group
-                        name: 'Transformation'
-                        name_chs: '变换'
+                        name: 'Control Move'
+                        name_chs: '控制器移动'
 
-                    transformation/create_control_move_locator:
+                    control_move/create_locator:
                         widget: button
-                        name: 'Create Control Move Locator'
-                        name_chs: '创建控制器移动定位器（Locator）'
+                        name: 'Create Locator'
+                        name_chs: '创建定位器（Locator）'
                         icon: 'tool/maya/move'
                         join_to_next: True
                         tool_tip:
@@ -638,10 +638,10 @@ build:
                                 可以给这些定位器打组进行整体移动；
                                 移动后务必不要手动删除定位器，请使用“移除变换定位器（Locator）”移除。
 
-                    transformation/remove_control_move_locator:
+                    control_move/remove_locator:
                         widget: button
-                        name: 'Remove Control Move Locator'
-                        name_chs: '移除控制器移动定位器（Locator）'
+                        name: 'Remove Locator'
+                        name_chs: '移除定位器（Locator）'
                         icon: 'tool/maya/delete'
                         tool_tip:
                             |-
@@ -649,7 +649,37 @@ build:
                         tool_tip_chs:
                             |-
                             点击移除定位器，移除后会把定位器的位移和旋转数据偏移到控制器上。
+                    
+                    control_transform:
+                        widget: group
+                        name: 'Control Transform'
+                        name_chs: '控制器变换'
+                    
+                    control_transform/create_locator:
+                        widget: button
+                        name: 'Create Locator'
+                        name_chs: '创建定位器（Locator）'
+                        icon: 'tool/maya/move'
+                        join_to_next: True
+                        tool_tip:
+                            |-
+                            To be supplemented.
+                        tool_tip_chs:
+                            |-
+                            待补充。
 
+                    control_transform/remove_locator:
+                        widget: button
+                        name: 'Remove Locator'
+                        name_chs: '移除定位器（Locator）'
+                        icon: 'tool/maya/delete'
+                        tool_tip:
+                            |-
+                            To be supplemented.
+                        tool_tip_chs:
+                            |-
+                            待补充。
+                    
                     control:
                         widget: group
                         name: 'Control'
@@ -669,7 +699,6 @@ build:
                         name_chs: '关闭控制器播放可见'
                         icon: 'tool/hide'
                         tool_tip: '...'
-
 
         constrain_and_deform:
             name: 'Constrain & Deform'

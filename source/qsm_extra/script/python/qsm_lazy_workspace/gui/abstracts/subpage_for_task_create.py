@@ -38,6 +38,11 @@ class AbsPrxSubpageForTaskCreate(gui_prx_widgets.PrxBaseSubpage):
             self._configure.get('build')
         )
 
+    def get_task_unit_names(self):
+        return self.TASK_CREATE_OPT_CLS.get_task_unit_names(
+            self._subwindow._resource_properties
+        )
+
     def gui_page_setup_fnc(self):
         prx_sca = gui_prx_widgets.PrxVScrollArea()
         self._qt_layout.addWidget(prx_sca.widget)
@@ -53,8 +58,9 @@ class AbsPrxSubpageForTaskCreate(gui_prx_widgets.PrxBaseSubpage):
             self._configure.get('build.options.parameters'),
         )
 
+        task_unit_names = self.get_task_unit_names()
         self._prx_options_node.get_port('task_unit').set_options(
-            ['main', 'test', bsc_core.BscSystem.get_user_name()]
+            task_unit_names
         )
 
         bottom_tool_bar = gui_prx_widgets.PrxHToolBar()

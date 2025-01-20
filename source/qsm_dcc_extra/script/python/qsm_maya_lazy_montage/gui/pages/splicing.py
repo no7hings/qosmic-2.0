@@ -81,6 +81,8 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
             if data:
                 for i_kwargs in data:
                     self._motion_prx_track_widget.create_node(**i_kwargs)
+
+                self._motion_prx_track_widget.update()
         else:
             self.gui_restore()
 

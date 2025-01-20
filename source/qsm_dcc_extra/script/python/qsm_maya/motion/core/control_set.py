@@ -320,7 +320,7 @@ class ControlSetBake(object):
         self._simplify(start_frame, end_frame, attributes)
 
         # filter
-        curves = _mya_core.AnimCurveNodes.get_all_from(self._paths)
+        curves = _mya_core.AnmCurveNodes.get_all_from(self._paths)
 
         # euler filter
         if euler_filter is True:
