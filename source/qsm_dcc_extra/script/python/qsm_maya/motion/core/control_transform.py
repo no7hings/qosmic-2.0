@@ -113,12 +113,6 @@ class ControlTransform:
             _mya_core.NodeAttribute.set_as_tuple(main_locator_shape, 'localScale', (w/2, 0, d/2))
             _mya_core.NodeDrawOverride.set_color(main_locator_path, (1.0, .0, .0))
             _mya_core.NodeAttribute.create_as_string(main_locator_path, 'qsm_mark', 'move_locator')
-
-            # match to main control
-            # _mya_core.ParentConstraint.create(
-            #     main_control, main_locator_path
-            # )
-            # _mya_core.ParentConstraint.clear_all_from_source(main_locator_path)
             # todo: use point constraint?
             _mya_core.PointConstraint.create(
                 main_control, main_locator_path
@@ -160,8 +154,12 @@ class ControlTransform:
     def remove_locator_fnc(cls, main_locator):
         frame_mark = _mya_core.Frame.get_current()
         atr_names = [
-            'inTranslateX', 'inTranslateY', 'inTranslateZ',
-            'inRotateX', 'inRotateY', 'inRotateZ',
+            'inTranslateX',
+            'inTranslateY',
+            'inTranslateZ',
+            'inRotateX',
+            'inRotateY',
+            'inRotateZ',
         ]
 
         main_locator_shape = _mya_core.Transform.get_shape(main_locator)
@@ -174,41 +172,43 @@ class ControlTransform:
         if pair_blend_node:
             # get all time samples
             time_samples = cls._get_time_samples(pair_blend_node)
-            rebuild_args = []
-            for i_atr_name in atr_names:
-                i_atr_name_1 = '{}1'.format(i_atr_name)
-                i_atr_name_2 = '{}2'.format(i_atr_name)
-                i_curve_name = _mya_core.NodeAttributeKeyframe.find_curve_node(pair_blend_node, i_atr_name_1)
-                i_samples = []
-                for j_frame in time_samples:
-                    _mya_core.Frame.set_current(j_frame)
-                    j_value = _mya_core.NodeAttribute.get_value(pair_blend_node, i_atr_name_2)
-                    i_samples.append((j_frame, j_value))
 
-                rebuild_args.append(
-                    ('curve', (i_curve_name, i_atr_name_1, i_samples))
-                )
+            rebuild_dict = {}
+            for i_frame in time_samples:
+                _mya_core.Frame.set_current(i_frame)
+                for j_atr_name in atr_names:
+                    j_atr_name_1 = '{}1'.format(j_atr_name)
+                    j_atr_name_2 = '{}2'.format(j_atr_name)
+                    j_curve_name = _mya_core.NodeAttributeKeyframe.find_curve_node(pair_blend_node, j_atr_name_1)
+                    j_value = _mya_core.NodeAttribute.get_value(pair_blend_node, j_atr_name_2)
+                    key = (j_curve_name, j_atr_name_1)
+                    rebuild_dict.setdefault(
+                        key, []
+                    ).append((i_frame, j_value))
 
-            for i_args in rebuild_args:
-                i_tag, i_data = i_args
-                if i_tag == 'curve':
-                    i_curve_name, i_atr_name_1, i_samples = i_data
-                    if i_curve_name is not None:
-                        i_curve_opt = _mya_core.AnmCurveNodeOpt(i_curve_name)
-                        i_time_samples = i_curve_opt.get_time_samples()
+            for k, v in rebuild_dict.items():
+                i_curve_name, i_atr_name_1 = k
+                i_samples = v
+                if i_curve_name is not None:
+                    i_curve_opt = _mya_core.AnmCurveNodeOpt(i_curve_name)
+                    i_time_samples = i_curve_opt.get_time_samples()
+                    if i_samples:
                         for j_frame, j_value in i_samples:
                             # when not time sample, create value at frame
                             if j_frame not in i_time_samples:
                                 i_curve_opt.create_value_at_time(j_frame, j_value)
                             else:
                                 i_curve_opt.set_value_at_time(j_frame, j_value)
-                    else:
-                        i_curve_opt = _mya_core.AnmCurveNodeOpt.create(
-                            pair_blend_node, i_atr_name_1
+                else:
+                    if i_samples:
+                        i_first_frame = i_samples[0][0]
+                        i_curve_name = _mya_core.NodeAttributeKeyframe.create_at(
+                            pair_blend_node, i_atr_name_1, i_first_frame
                         )
+                        i_curve_opt = _mya_core.AnmCurveNodeOpt(i_curve_name)
                         for j_frame, j_value in i_samples:
                             i_curve_opt.create_value_at_time(j_frame, j_value)
-            #
+
             _mya_core.NodeAttribute.break_source(
                 pair_blend_node, 'weight'
             )

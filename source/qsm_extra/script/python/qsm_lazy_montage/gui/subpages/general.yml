@@ -52,6 +52,8 @@ build:
                 name: 'Rig'
                 name_chs: '绑定'
                 options: ['alpha', 'beta']
+                option_names: ['Alpha (male)', 'Beta (Female)']
+                option_names_chs: ['Alpha （男）', 'Beta （女）']
                 default: ['alpha']
                 history_key: 'tool-panels.lazy-montage.new-splicing.mocap-rig'
                 pull_history_latest: True

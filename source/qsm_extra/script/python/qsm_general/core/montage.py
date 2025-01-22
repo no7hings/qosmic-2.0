@@ -2,4 +2,5 @@
 
 
 class Montage:
-    API_VERSION = '1.0.3'
+    # 1.0.4: update constrain mode, use pair blend fix rotation euler error
+    API_VERSION = '1.0.4'

@@ -107,7 +107,9 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
 
     def generate_sketch_map(self):
         dict_ = {}
-        for i_key, v in self.ChrMasterSketchMap.MoCap.items():
+        mocap_sketch_key_query = self._configure.mocap_sketch_key_query
+
+        for i_key, v in mocap_sketch_key_query.items():
             if isinstance(v, six.string_types):
                 i_key_dst = v
                 i_path = self.get(i_key_dst)
@@ -132,11 +134,12 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
         return qsm_mya_core.Frame.get_frame_range()
 
     def constraint_to_transfer_sketch(self, sketch_set, break_parent_inverse=False):
+        root_sketch_key = self._configure.root_sketch_key
         for i_sketch_key, v in self._sketch_map.items():
             i_src = v
             i_tgt = sketch_set.get(i_sketch_key)
 
-            if i_sketch_key == self.ChrMasterSketches.Root_M:
+            if i_sketch_key == root_sketch_key:
                 qsm_mya_core.PointConstraint.create(
                     i_src, i_tgt, break_parent_inverse=break_parent_inverse
                 )
@@ -144,13 +147,22 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
             qsm_mya_core.OrientConstraint.create(
                 i_src, i_tgt, maintain_offset=1
             )
+            i_pair_blend = qsm_mya_core.NodeAttribute.get_source_node(
+                i_tgt, 'rotateX', 'pairBlend'
+            )
+            if i_pair_blend:
+                # set rotation interpolation to quaternions
+                qsm_mya_core.NodeAttribute.set_value(
+                    i_pair_blend, 'rotInterpolation', 1
+                )
 
-    def constraint_from_master_layer(self, master_layer):
+    def constraint_from_master_layer(self, mtg_master_layer):
+        root_sketch_key = self._configure.root_sketch_key
         for i_sketch_key, v in self._sketch_map.items():
-            i_sketch_src = master_layer.get_sketch(i_sketch_key)
+            i_sketch_src = mtg_master_layer.get_sketch(i_sketch_key)
             i_sketch_tgt = v
 
-            if i_sketch_key == self.ChrMasterSketches.Root_M:
+            if i_sketch_key == root_sketch_key:
                 qsm_mya_core.PointConstraint.create(
                     i_sketch_src, i_sketch_tgt
                 )

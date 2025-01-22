@@ -6,6 +6,8 @@ from ..base import abc as _bsc_abc
 
 class AbsControlSet(_bsc_abc.AbsMontage):
     def __init__(self, paths):
+        super(AbsControlSet, self).__init__()
+
         self._paths = paths
         self._namespace = qsm_mya_core.DagNode.extract_namespace(self._paths[0])
 

@@ -94,18 +94,21 @@ class BscTimePrettify(object):
     def to_prettify_by_timetuple(cls, timetuple, language=1):
         year, month, day, hour, minute, second, week, count_day, is_dst = timetuple
         timetuple_cur = time.localtime(time.time())
-        year_cur, month_cur, day_cur, hour_cur, minute_cur, second_cur, week_cur, count_day_cur, is_dst_cur = timetuple_cur
+        (
+            year_cur, month_cur, day_cur, hour_cur, minute_cur, second_cur, week_cur, count_day_cur, is_dst_cur
+        ) = timetuple_cur
         #
         monday = day-week
         monday_cur = day_cur-week_cur
-        # same year, return year
+
+        # same year
         if timetuple_cur[:1] == timetuple[:1]:
-            # same month, return month day
+            # same month
             if timetuple_cur[:2] == timetuple[:2]:
-                # same week, return week
+                # same week
                 if monday_cur == monday:
                     week_str = u'{0}'.format(cls.WEEK[int(week)][language])
-                    # same day, return time
+                    # same day
                     if day_cur == day:
                         time_str = [
                             u'今天{}点{}分{}秒'.format(str(hour).zfill(2), str(minute).zfill(2), str(second).zfill(2)),
@@ -118,8 +121,16 @@ class BscTimePrettify(object):
             day_str = cls.to_day(day, language)
             if language == 0:
                 return u'{}{}'.format(month_str, day_str)
-            return '{} {}'.format(day_str, month_str)
-        #
+            return '{} {}'.format(month_str, day_str)
+
+        # last year
+        if int(year) - int(year_cur) <= 1:
+            year_str = cls.get_year(year, language)
+            month_str = cls.to_month(month, language)
+            if language == 0:
+                return u'{}{}'.format(year_str, month_str)
+            return '{}, {}'.format(month_str, year_str)
+
         year_str = cls.get_year(year, language)
         return year_str
 

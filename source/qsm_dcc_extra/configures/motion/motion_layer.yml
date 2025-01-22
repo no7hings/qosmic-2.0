@@ -54,6 +54,11 @@ dag_nodes:
             rotateY: 0.0
             rotateZ: 0.0
             visibility: 0
+
+            overrideEnabled: 1
+            overrideRGBColors: 1
+            overrideColorRGB: [0, 0, 0]
+
     /montage_master/ROOT/Root_M:
         type: joint
         properties:
@@ -1830,6 +1835,10 @@ containers:
                 type: float3
                 value: [0, 0, 0]
 
+            rgb:
+                type: float3
+                value: [0, 0, 0]
+
             layer_index:
                 type: integer
                 value: 0
@@ -1926,3 +1935,6 @@ containers:
             - '<options.namespace>:ROOT_START_INPUT.rotateY'
             - '<options.namespace>:LAYER.root_start_input_rz'
             - '<options.namespace>:ROOT_START_INPUT.rotateZ'
+            #
+            - '<options.namespace>:LAYER.rgb'
+            - '<options.namespace>:ROOT.overrideColorRGB'

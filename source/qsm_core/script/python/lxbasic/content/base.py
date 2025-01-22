@@ -1,5 +1,6 @@
 # coding:utf-8
 import os
+import threading
 
 import six
 
@@ -218,6 +219,7 @@ class ContentYamlBase(object):
 
     @classmethod
     def load(cls, stream):
+        # use safe loader
         class _Cls(yaml.SafeLoader):
             pass
 
@@ -252,6 +254,8 @@ class ContentYaml(object):
 
 
 class ContentFile(object):
+    LOCK = threading.Lock()
+
     def __init__(self, file_path):
         self.__file_path = file_path
 
@@ -276,36 +280,37 @@ class ContentFile(object):
                     return raw
 
     def write(self, raw):
-        path = self.__file_path
-        ext = os.path.splitext(path)[-1]
-        directory = os.path.dirname(path)
-        if os.path.isdir(directory) is False:
-            # noinspection PyBroadException
-            try:
-                os.makedirs(directory)
-            except Exception:
-                return
+        with self.LOCK:
+            path = self.__file_path
+            ext = os.path.splitext(path)[-1]
+            directory = os.path.dirname(path)
+            if os.path.isdir(directory) is False:
+                # noinspection PyBroadException
+                try:
+                    os.makedirs(directory)
+                except Exception:
+                    return
 
-        if ext in {'.json'}:
-            with open(path, 'w') as j:
-                json.dump(
-                    raw,
-                    j,
-                    indent=4
-                )
-        elif ext in {'.yml'}:
-            with open(path, 'w') as y:
-                ContentYamlBase.dump(
-                    raw,
-                    y,
-                    indent=4,
-                    default_flow_style=False,
-                )
-        else:
-            with open(path, 'w') as f:
-                if isinstance(raw, six.text_type):
-                    raw = raw.encode('utf-8')
-                f.write(raw)
+            if ext in {'.json'}:
+                with open(path, 'w') as j:
+                    json.dump(
+                        raw,
+                        j,
+                        indent=4
+                    )
+            elif ext in {'.yml'}:
+                with open(path, 'w') as y:
+                    ContentYamlBase.dump(
+                        raw,
+                        y,
+                        indent=4,
+                        default_flow_style=False,
+                    )
+            else:
+                with open(path, 'w') as f:
+                    if isinstance(raw, six.text_type):
+                        raw = raw.encode('utf-8')
+                    f.write(raw)
 
 
 class ContentVariant(object):

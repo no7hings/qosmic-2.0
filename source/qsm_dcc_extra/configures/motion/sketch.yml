@@ -37,6 +37,9 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            overrideEnabled: 1
+            overrideRGBColors: 1
+            overrideColorRGB: [1, 1, 0]
     /montage_master/sketch/Root_M:
         type: joint
         properties:

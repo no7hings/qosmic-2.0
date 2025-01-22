@@ -1,6 +1,8 @@
 # coding:utf-8
 import sys
 
+import inspect
+
 import six
 
 import copy
@@ -510,3 +512,26 @@ class DictProperties(dict):
                 ['    {}={}'.format(k, v) for k, v in self.items()]
             )
         )
+
+
+class Configure(object):
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def _get_subclass_file_path(self):
+        frame = inspect.currentframe().f_back
+        subclass = frame.f_locals.get('self', None)
+        if subclass and isinstance(subclass, self.__class__):
+            file_path = inspect.getfile(type(subclass))
+            return os.path.abspath(file_path)
+        return None
+
+    def generate_local_configure(self):
+        self._configure_local_flag = True
+
+        file_path = self._get_subclass_file_path()
+        cfg_file_path = '{}.yml'.format(os.path.splitext(file_path)[0].replace('\\', '/'))
+        if os.path.isfile(cfg_file_path):
+            return Dict(value=cfg_file_path)
+        else:
+            raise RuntimeError()

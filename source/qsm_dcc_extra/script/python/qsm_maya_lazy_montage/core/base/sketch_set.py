@@ -13,6 +13,8 @@ from ..base import abc as _bsc_abc
 
 class AbsSketchSet(_bsc_abc.AbsMontage):
     def __init__(self, paths):
+        super(AbsSketchSet, self).__init__()
+
         self._paths = paths
         self._namespace = qsm_mya_core.DagNode.extract_namespace(self._paths[0])
 
@@ -38,3 +40,14 @@ class AbsSketchSet(_bsc_abc.AbsMontage):
             start_frame, end_frame,
             attributes=attributes, reduce_filter=False
         )
+
+    def create_all_keyframe_at(self, frame):
+        atr_names = [
+            'translateX', 'translateY', 'translateZ',
+            'rotateX', 'rotateY', 'rotateZ',
+        ]
+        for i_sketch in self._paths:
+            for j_atr_name in atr_names:
+                qsm_mya_core.NodeAttributeKeyframe.create_at(
+                    i_sketch, j_atr_name, frame
+                )

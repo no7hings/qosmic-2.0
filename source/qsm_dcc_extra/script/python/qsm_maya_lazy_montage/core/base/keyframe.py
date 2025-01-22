@@ -112,9 +112,13 @@ class SketchCurve(object):
         else:
             value_scale = 1.0
 
+        pre_value = None
         for i_index, i_value in enumerate(values):
             i_frame = i_index+start_frame
-            curve_opt.create_value_at_time(i_frame, i_value*value_scale)
+            if i_value != pre_value:
+                curve_opt.create_value_at_time(i_frame, i_value*value_scale)
+
+            pre_value = i_value
 
         curve_opt.do_euler_filter()
 

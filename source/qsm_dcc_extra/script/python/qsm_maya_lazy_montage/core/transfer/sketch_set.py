@@ -100,7 +100,8 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
 
     def generate_sketch_map(self):
         dict_ = {}
-        for i_key in self.ChrMasterSketches.All:
+        all_sketch_keys = self._configure.all_sketch_keys
+        for i_key in all_sketch_keys:
             i_path = self.get(i_key)
             dict_[i_key] = i_path
         return dict_
@@ -109,9 +110,10 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
         qsm_mya_core.Frame.set_current(frame)
 
         dict_ = {}
+        root_sketch_key = self._configure.root_sketch_key
         for i_sketch_key, i_sketch_path in self._sketch_map.items():
             i_sketch = _bsc_sketch.Sketch(i_sketch_path)
-            if i_sketch_key == self.ChrMasterSketches.Root_M:
+            if i_sketch_key == root_sketch_key:
                 dict_[i_sketch_key] = i_sketch.get_data(
                     [
                         'translateX', 'translateY', 'translateZ',

@@ -98,3 +98,14 @@ class AxisVector(object):
         dict_['y_axis'] = mtx[4:7]
         dict_['z_axis'] = mtx[8:11]
         return dict_
+
+    @classmethod
+    def generate_angle(cls, path):
+        data_0 = {'y_axis': [0.0, 1.0, 0.0], 'x_axis': [1.0, 0.0, 0.0], 'z_axis': [0.0, 0.0, 1.0]}
+        data_1 = cls.generate_for(path)
+        x_axis, y_axis, z_axis = data_1['x_axis'], data_1['y_axis'], data_1['z_axis']
+        x_axis_src, y_axis_src, z_axis_src = data_0['x_axis'], data_0['y_axis'], data_0['z_axis']
+        x_angle = cls.compute_angle(x_axis_src, x_axis)
+        y_angle = cls.compute_angle(y_axis_src, y_axis)
+        z_angle = cls.compute_angle(z_axis_src, z_axis)
+        return x_angle, y_angle, z_angle

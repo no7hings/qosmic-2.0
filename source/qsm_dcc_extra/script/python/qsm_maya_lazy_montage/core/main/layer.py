@@ -102,6 +102,8 @@ class AbsMtgLayer(_bsc_abc.AbsMontage):
             return MtgMasterLayer(_)
 
     def __init__(self, location):
+        super(AbsMtgLayer, self).__init__()
+
         self._location = location
 
         self._namespace = qsm_mya_core.DagNode.extract_namespace(self._location)
@@ -127,8 +129,14 @@ class AbsMtgLayer(_bsc_abc.AbsMontage):
         if _:
             return _[0]
 
+    def find_sketch_root_location(self):
+        _ = cmds.ls('{}:ROOT'.format(self._namespace), long=1)
+        if _:
+            return _[0]
+
     def find_root_sketch(self):
-        _ = cmds.ls('{}:{}'.format(self._namespace, self.ChrMasterSketches.Root_M), long=1)
+        root_sketch_key = self._configure.get_sketch_key('Root_M')
+        _ = cmds.ls('{}:{}'.format(self._namespace, root_sketch_key), long=1)
         if _:
             return _[0]
 
@@ -149,9 +157,11 @@ class AbsMtgLayer(_bsc_abc.AbsMontage):
         return self._cache_dict.values()
 
     def reset(self):
-        for i_sketch_key in self.ChrMasterSketches.Basic:
+        basic_sketch_keys = self._configure.basic_sketch_keys
+        root_sketch_key = self._configure.root_sketch_key
+        for i_sketch_key in basic_sketch_keys:
             i_sketch = self.get(i_sketch_key)
-            if i_sketch_key == self.ChrMasterSketches.Root_M:
+            if i_sketch_key == root_sketch_key:
                 _bsc_sketch.Sketch(i_sketch).reset_translations()
             _bsc_sketch.Sketch(i_sketch).reset_rotations()
 
@@ -301,18 +311,20 @@ class MtgLayer(AbsMtgLayer):
         return cls(layer_name)
 
     @classmethod
-    def create_curves_for(cls, layer_opt):
+    def create_curves_for(cls, mtg_layer):
         curve_nodes = []
-        time_container = layer_opt.get_time_container()
-        for i_sketch_key in layer_opt.ChrMasterSketches.Basic:
-            i_sketch = layer_opt.get(i_sketch_key)
+        time_container = mtg_layer.get_time_container()
+        basic_sketch_keys = mtg_layer._configure.basic_sketch_keys
+        root_sketch_key = mtg_layer._configure.root_sketch_key
+        for i_sketch_key in basic_sketch_keys:
+            i_sketch = mtg_layer.get(i_sketch_key)
             if i_sketch is None:
                 continue
 
-            if i_sketch_key == layer_opt.ChrMasterSketches.Root_M:
-                i_atr_names = layer_opt.AtrKeys.Root
+            if i_sketch_key == root_sketch_key:
+                i_atr_names = mtg_layer.AtrKeys.Root
             else:
-                i_atr_names = layer_opt.AtrKeys.Default
+                i_atr_names = mtg_layer.AtrKeys.Default
 
             for j_atr_name in i_atr_names:
                 j_curve_node = _bsc_keyframe.SketchCurve.create(
@@ -328,13 +340,13 @@ class MtgLayer(AbsMtgLayer):
     @classmethod
     def apply_data_for(
         cls,
-        layer_opt, data,
+        mtg_layer, data,
         start_frame=1,
         pre_cycle=0, post_cycle=1,
         pre_blend=4, post_blend=4, blend_type='flat',
         **kwargs
     ):
-        location = layer_opt.location
+        location = mtg_layer.location
         sketch_data = data['sketches']
 
         frame_count = data['frame_count']
@@ -408,14 +420,14 @@ class MtgLayer(AbsMtgLayer):
         )
         #
         for i_sketch_key, i_v in sketch_data.items():
-            i_sketch_path = layer_opt.get(i_sketch_key)
+            i_sketch_path = mtg_layer.get(i_sketch_key)
             i_orients = i_v['orients']
             i_time_samples = i_v['time_samples']
             cls.apply_orient_for(i_sketch_path, i_orients)
             cls.apply_time_samples_for_(i_sketch_path, i_time_samples, source_start, translation_scale)
 
         # connect main_weight to constraint
-        weight_attributes = layer_opt.get_constraint_weight_attributes()
+        weight_attributes = mtg_layer.get_constraint_weight_attributes()
         for i_weight_atr in weight_attributes:
             cmds.connectAttr(
                 location+'.main_weight_output', i_weight_atr,
@@ -462,27 +474,35 @@ class MtgLayer(AbsMtgLayer):
 
     def connect_to_master_layer(self, master_motion_layer):
         if isinstance(master_motion_layer, AbsMtgLayer) is True:
-            for i_sketch_key in self.ChrMasterSketches.Basic:
+            basic_sketch_keys = self._configure.basic_sketch_keys
+            root_sketch_key = self._configure.root_sketch_key
+            for i_sketch_key in basic_sketch_keys:
                 i_sketch_src = self.get(i_sketch_key)
 
                 i_sketch_dst = master_motion_layer.get(i_sketch_key)
-                if i_sketch_key == self.ChrMasterSketches.Root_M:
+                if i_sketch_key == root_sketch_key:
                     _bsc_sketch.Sketch(i_sketch_src).create_point_constraint_to_master(
-                        i_sketch_dst, break_parent_inverse=True
+                        i_sketch_dst,
+                        break_parent_inverse=True
                     )
                     _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master(
-                        i_sketch_dst, break_parent_inverse=True
+                        i_sketch_dst,
+                        break_parent_inverse=True, interp_type=1
                     )
                 else:
                     _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master(
-                        i_sketch_dst
+                        i_sketch_dst, interp_type=1,
+                        # do not break parent inverse
+                        # break_parent_inverse=True
                     )
 
     def get_constraint_weight_attributes(self):
         list_ = []
-        for i_sketch_key in self.ChrMasterSketches.Basic:
+        basic_sketch_keys = self._configure.basic_sketch_keys
+        root_sketch_key = self._configure.root_sketch_key
+        for i_sketch_key in basic_sketch_keys:
             i_sketch_src = self.get(i_sketch_key)
-            if i_sketch_key == self.ChrMasterSketches.Root_M:
+            if i_sketch_key == root_sketch_key:
                 i_translate_connections = qsm_mya_core.NodeAttribute.get_all_target_connections(
                     i_sketch_src+'.translate'
                 )
@@ -547,6 +567,11 @@ class MtgLayer(AbsMtgLayer):
     def set_layer_index(self, layer_index):
         qsm_mya_core.NodeAttribute.set_value(
             self._location, 'layer_index', layer_index
+        )
+
+    def set_rgb(self, rgb):
+        qsm_mya_core.NodeAttribute.set_as_tuple(
+            self._location, 'rgb', rgb
         )
 
     def update_main_weight(
@@ -701,10 +726,10 @@ class MtgMasterLayer(AbsMtgLayer):
         master_layer_namespace = _bsc_util.MtgRigNamespace.to_master_layer_namespace(rig_namespace)
         is_create, layer_name = MtgLayerBase.create_master_layer(master_layer_namespace)
         if is_create is True:
-            master_layer = cls(layer_name)
-            master_layer.look_from_persp_cam()
+            mtg_master_layer = cls(layer_name)
+            mtg_master_layer.look_from_persp_cam()
             cmds.select(clear=1)
-            return master_layer
+            return mtg_master_layer
         return cls(layer_name)
 
     def __init__(self, *args, **kwargs):
@@ -726,10 +751,11 @@ class MtgMasterLayer(AbsMtgLayer):
     def do_bake(self):
         rig_namespace = self.get_rig_namespace()
 
+        control_key_query = self._configure.control_key_query
         if qsm_mya_adv.AdvOpt.check_is_valid(rig_namespace) is True:
             start_frame, end_frame = self.get_frame_range()
             adv_resource = _adv_resource.AdvResource(rig_namespace)
-            main_control_keys = self.ChrMasterControlMap.Default.values()
+            main_control_keys = control_key_query.values()
 
             main_controls = [adv_resource._control_set.get(x) for x in main_control_keys]
             main_controls = list(filter(None, main_controls))
@@ -817,10 +843,11 @@ class MtgMasterLayer(AbsMtgLayer):
             qsm_mya_core.Camera.over_persp_look(persp_cam)
 
     def export_motion_to(self, file_path):
+        control_key_query = self._configure.control_key_query
         rig_namespace = self.get_rig_namespace()
         start_frame, end_frame = self.get_frame_range()
         adv_resource = _adv_resource.AdvResource(rig_namespace)
-        main_control_keys = self.ChrMasterControlMap.Default.values()
+        main_control_keys = control_key_query.values()
         main_controls = [adv_resource._control_set.get(x) for x in main_control_keys]
         main_controls = list(filter(None, main_controls))
 
@@ -899,6 +926,8 @@ class MtgMasterLayer(AbsMtgLayer):
             self._location, 'qsm_layers.layer_{}'.format(layer_index), mtg_layer.location
         )
         mtg_layer.set_layer_index(layer_index)
+        rgb = bsc_core.BscTextOpt(key).to_hash_rgb(maximum=1.0, s_p=(15, 35), v_p=(75, 95))
+        mtg_layer.set_rgb(rgb)
         qsm_mya_core.NodeAttribute.set_as_string(
             mtg_layer.location, 'motion_json', motion_json
         )
@@ -1020,9 +1049,9 @@ class MtgMasterLayer(AbsMtgLayer):
         if curve_names:
             qsm_mya_core.AnmCurveNodes.euler_filter(curve_names)
 
-    def fit_layer_scale(self, layer_opt):
+    def fit_layer_scale(self, mtg_layer):
         scale = cmds.getAttr(self._location+'.scaleX')
-        layer_opt.apply_root_scale(scale)
+        mtg_layer.apply_root_scale(scale)
 
     def get_all_layer_locations(self):
         list_ = []

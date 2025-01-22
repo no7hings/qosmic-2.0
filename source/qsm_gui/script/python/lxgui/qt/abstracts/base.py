@@ -1059,7 +1059,7 @@ class AbsQtIconBaseDef(object):
 
         self._icon_frame_draw_rect = QtCore.QRect()
         self._icon_draw_rect = QtCore.QRect()
-        self._icon_sub_draw_rect = QtCore.QRect()
+        self._sub_icon_draw_rect = QtCore.QRect()
 
         self._color_icon_draw_rect = QtCore.QRect()
         self._name_icon_draw_rect = QtCore.QRect()
@@ -1070,7 +1070,7 @@ class AbsQtIconBaseDef(object):
 
         self._icon_draw_size = 16, 16
         self._icon_draw_percent = .75
-        self._sub_icon_draw_size = 10, 10
+        self._sub_icon_draw_size = 8, 8
         self._icon_sub_draw_percent = .5
 
         self._icon_color_draw_size = 16, 16
@@ -1202,7 +1202,7 @@ class AbsQtIconBaseDef(object):
         )
 
     def _set_sub_icon_file_draw_rect_(self, x, y, w, h):
-        self._icon_sub_draw_rect.setRect(
+        self._sub_icon_draw_rect.setRect(
             x, y, w, h
         )
 

@@ -19,6 +19,8 @@ from . import sketch_set as _sketch_set
 
 class TransferResource(_bsc_abc.AbsMontage):
     def __init__(self, namespace):
+        super(TransferResource, self).__init__()
+
         self._namespace = namespace
 
         self._sketch_set = _sketch_set.TransferSketchSet.generate(self._namespace)
@@ -64,7 +66,8 @@ class TransferResource(_bsc_abc.AbsMontage):
         cmds.setAttr(root_location+'.scale', scale, scale, scale)
 
     def fit_sketches_from_mocap(self, mocap_resource):
-        for i_sketch_key in self._sketch_set.ChrMasterSketches.Basic:
+        basic_sketch_keys = self._configure.basic_sketch_keys
+        for i_sketch_key in basic_sketch_keys:
             # mocap
             i_sketch_src = mocap_resource.find_sketch(i_sketch_key)
             # transfer
@@ -82,6 +85,8 @@ class TransferResource(_bsc_abc.AbsMontage):
         self.fit_scale_from_mocap_resource(mocap_resource)
         # do not math sketch to mocap
         # self.fit_sketches_from_mocap(mocap_resource)
+        start_frame, end_frame = mocap_resource.get_frame_range()
+        self._sketch_set.create_all_keyframe_at(start_frame)
         self.constraint_from_mocap(mocap_resource)
         
     def fit_scale_to_master_resource(self, master_resource):
@@ -95,11 +100,13 @@ class TransferResource(_bsc_abc.AbsMontage):
         cmds.setAttr(root_location+'.scale', scale, scale, scale)
         
     def connect_to_master_resource(self, master_resource):
-        for i_sketch_key in self.ChrMasterSketches.Basic:
+        basic_sketch_keys = self._configure.basic_sketch_keys
+        root_sketch_key = self._configure.root_sketch_key
+        for i_sketch_key in basic_sketch_keys:
             i_sketch_src = self.find_sketch(i_sketch_key)
 
             i_sketch_dst = master_resource.find_sketch(i_sketch_key)
-            if i_sketch_key == self.ChrMasterSketches.Root_M:
+            if i_sketch_key == root_sketch_key:
                 _bsc_sketch.Sketch(i_sketch_src).create_point_constraint_to_master(
                     i_sketch_dst, break_parent_inverse=True
                 )

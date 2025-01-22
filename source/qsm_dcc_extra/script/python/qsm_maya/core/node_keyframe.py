@@ -31,6 +31,11 @@ class NodeAttributeKeyframe:
                 return node
         return None
 
+    @classmethod
+    def create_at(cls, path, atr_name, frame=0):
+        cmds.setKeyframe(path, attribute=atr_name, time=frame)
+        return cls.find_curve_node(path, atr_name)
+
 
 class NodeAttributeKeyframeOpt(object):
     DATA_KEYS = [

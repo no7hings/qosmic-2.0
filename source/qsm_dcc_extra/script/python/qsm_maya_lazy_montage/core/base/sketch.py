@@ -56,107 +56,108 @@ class Sketch(object):
         # when is created, connect to exists
         results = qsm_mya_core.PointConstraint.get_all_from_source(target_node)
         if results:
-            node = results[0]
-            next_index = qsm_mya_core.PointConstraint.get_next_index(node)
+            constraint_node = results[0]
+            next_index = qsm_mya_core.PointConstraint.get_next_index(constraint_node)
             cmds.connectAttr(
-                self._path+'.translate', node+'.target[{}].targetTranslate'.format(next_index)
+                self._path+'.translate', constraint_node+'.target[{}].targetTranslate'.format(next_index)
             )
             cmds.connectAttr(
-                self._path+'.rotatePivot', node+'.target[{}].targetRotatePivot'.format(next_index)
+                self._path+'.rotatePivot', constraint_node+'.target[{}].targetRotatePivot'.format(next_index)
             )
             cmds.connectAttr(
-                self._path+'.rotatePivotTranslate', node+'.target[{}].targetRotateTranslate'.format(next_index)
+                self._path+'.rotatePivotTranslate', constraint_node+'.target[{}].targetRotateTranslate'.format(next_index)
             )
             cmds.connectAttr(
-                self._path+'.parentMatrix[0]', node+'.target[{}].targetParentMatrix'.format(next_index)
+                self._path+'.parentMatrix[0]', constraint_node+'.target[{}].targetParentMatrix'.format(next_index)
             )
-            return node
+            return constraint_node
         else:
             translate = cmds.getAttr(target_node+'.translate')[0]
             _ = cmds.pointConstraint(
                 self._path, target_node,
                 # maintainOffset=1, weight=1
             )
-            node = _[0]
+            constraint_node = _[0]
 
             # update reset
-            qsm_mya_core.PointConstraint.update_reset(node, translate)
+            qsm_mya_core.PointConstraint.update_reset(constraint_node, translate)
             
             # break parent inverse
             if break_parent_inverse is True:
-                target = node+'.constraintParentInverseMatrix'
+                target = constraint_node+'.constraintParentInverseMatrix'
                 _ = cmds.listConnections(
                     target, destination=0, source=1, plugs=1
                 )
                 if _:
                     source = _[0]
                     cmds.disconnectAttr(source, target)
-            return node
+            return constraint_node
 
-    def create_orient_constraint_to_master(self, target_node, break_parent_inverse=False):
+    def create_orient_constraint_to_master(self, target_node, break_parent_inverse=False, interp_type=2):
         # when is created, connect to exists
         results = qsm_mya_core.OrientConstraint.get_all_from_source(target_node)
         if results:
-            node = results[0]
-            next_index = qsm_mya_core.OrientConstraint.get_next_index(node)
+            constraint_node = results[0]
+            next_index = qsm_mya_core.OrientConstraint.get_next_index(constraint_node)
             cmds.connectAttr(
-                self._path+'.rotate', node+'.target[{}].targetRotate'.format(next_index)
+                self._path+'.rotate', constraint_node+'.target[{}].targetRotate'.format(next_index)
             )
             cmds.connectAttr(
-                self._path+'.jointOrient', node+'.target[{}].targetJointOrient'.format(next_index)
+                self._path+'.jointOrient', constraint_node+'.target[{}].targetJointOrient'.format(next_index)
             )
             cmds.connectAttr(
-                self._path+'.rotateOrder', node+'.target[{}].targetRotateOrder'.format(next_index)
+                self._path+'.rotateOrder', constraint_node+'.target[{}].targetRotateOrder'.format(next_index)
             )
             cmds.connectAttr(
-                self._path+'.parentMatrix[0]', node+'.target[{}].targetParentMatrix'.format(next_index)
+                self._path+'.parentMatrix[0]', constraint_node+'.target[{}].targetParentMatrix'.format(next_index)
             )
-            return node
+            return constraint_node
         else:
             rotate = cmds.getAttr(target_node+'.rotate')[0]
 
             _ = cmds.orientConstraint(
                 self._path, target_node, maintainOffset=1, weight=1
             )
-            node = _[0]
+            constraint_node = _[0]
 
             # update reset
-            qsm_mya_core.OrientConstraint.update_reset(node, rotate)
+            qsm_mya_core.OrientConstraint.update_reset(constraint_node, rotate)
             
             # todo: shortest has euler error
-            cmds.setAttr(node+'.interpType', 2)
+            # 1: average, 2: shortest
+            cmds.setAttr(constraint_node+'.interpType', interp_type)
             # remove offset?
             for i in ['offsetX', 'offsetY', 'offsetZ']:
                 cmds.setAttr(
-                    node+'.'+i, 0
+                    constraint_node+'.'+i, 0
                 )
 
             # break parent inverse
             if break_parent_inverse is True:
-                target = node+'.constraintParentInverseMatrix'
+                target = constraint_node+'.constraintParentInverseMatrix'
                 _ = cmds.listConnections(
                     target, destination=0, source=1, plugs=1
                 )
                 if _:
                     source = _[0]
                     cmds.disconnectAttr(source, target)
-            return node
+            return constraint_node
 
     def create_point_constraint_to_resource(self, target_node):
         _ = cmds.pointConstraint(
             self._path, target_node,
             # maintainOffset=1, weight=1
         )
-        node = _[0]
-        return node
+        constraint_node = _[0]
+        return constraint_node
 
     def create_orient_constraint_to_resource(self, target_node, clear_offset=True):
         _ = cmds.orientConstraint(
             self._path, target_node, maintainOffset=1, weight=1
         )
-        node = _[0]
+        constraint_node = _[0]
         # todo: shortest has euler error
-        cmds.setAttr(node+'.interpType', 2)
+        cmds.setAttr(constraint_node+'.interpType', 2)
         if clear_offset is True:
             for i in [
                 'offsetX',
@@ -164,9 +165,9 @@ class Sketch(object):
                 'offsetZ'
             ]:
                 cmds.setAttr(
-                    node+'.'+i, 0
+                    constraint_node+'.'+i, 0
                 )
-        return node
+        return constraint_node
 
     def reset_rotations(self):
         for i in [

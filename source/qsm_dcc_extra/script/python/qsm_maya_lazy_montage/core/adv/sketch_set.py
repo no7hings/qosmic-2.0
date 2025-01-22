@@ -51,28 +51,16 @@ class AdvChrSketchSet(AdvSketchSet):
     def get_all_keys(self):
         return self._sketch_map.keys()
 
-    def find_spine_for(self, sketch_key):
-        if sketch_key == self.ChrMasterSketches.Spine1_M:
-            if self.get(self.ChrMasterSketches.Spine1_M):
-                return self.ChrMasterSketches.Spine1_M
-        elif sketch_key == self.ChrMasterSketches.Spine2_M:
-            if self.get(self.ChrMasterSketches.Spine2_M):
-                return self.ChrMasterSketches.Spine2_M
-        return None
-
     def generate_sketch_map(self):
         dict_ = {}
-        for k, v in self.ChrMasterSketchMap.ADV.items():
+        adv_sketch_key_query = self._configure.adv_sketch_key_query
+
+        for k, v in adv_sketch_key_query.items():
             if isinstance(v, six.string_types):
                 i_key_dst = v
                 i_path = self.get(i_key_dst)
                 if i_path:
                     dict_[k] = i_path
-            # else:
-            #     i_key_dst = v(self, k)
-            #     if i_key_dst is not None:
-            #         i_path = self.get(i_key_dst)
-            #         dict_[k] = i_path
         return dict_
 
     def get_orients(self):
@@ -116,9 +104,11 @@ class AdvChrSketchSet(AdvSketchSet):
         qsm_mya_core.Frame.set_current(frame)
 
         dict_ = {}
+        root_sketch_key = self._configure.root_sketch_key
+        extra_sketch_key_query = self._configure.extra_sketch_key_query
         for i_sketch_key, i_sketch_path in self._sketch_map.items():
             i_sketch = _bsc_sketch.Sketch(i_sketch_path)
-            if i_sketch_key == self.ChrMasterSketches.Root_M:
+            if i_sketch_key == root_sketch_key:
                 dict_[i_sketch_key] = i_sketch.get_data(
                     [
                         'translateX', 'translateY', 'translateZ',
@@ -126,8 +116,8 @@ class AdvChrSketchSet(AdvSketchSet):
                     ]
                 )
             else:
-                if i_sketch_key in self.ChrMasterSketches.ExtraQuery:
-                    i_sketch_key_upper = self.ChrMasterSketches.ExtraQuery[i_sketch_key]
+                if i_sketch_key in extra_sketch_key_query:
+                    i_sketch_key_upper = extra_sketch_key_query[i_sketch_key]
                     i_sketch_path_upper = self.get(i_sketch_key_upper)
                     dict_[i_sketch_key] = i_sketch.get_rotation_between(i_sketch_path_upper)
                 else:

@@ -711,14 +711,13 @@ class QtIconPressButton(
                     self._sub_icon_text or \
                     self._icon_state_draw_is_enable:
                 if self._icon_state_draw_is_enable is True:
-                    icn_s_p = self._icon_sub_draw_percent
-                    icn_s_w, icn_s_h = icn_frm_w*icn_s_p, icn_frm_h*icn_s_p
+                    icn_s_w, icn_s_h = self._sub_icon_draw_size
                     o_x, o_y = icn_x, icn_y
                     self._icon_draw_rect.setRect(
                         x+1, y+1, icn_w, icn_h
                     )
                     icn_s_w, icn_s_h = min(icn_s_w, 16), min(icn_s_h, 16)
-                    self._icon_sub_draw_rect.setRect(
+                    self._sub_icon_draw_rect.setRect(
                         x+icn_frm_w-icn_s_w-1-o_x, y+icn_frm_h-icn_s_h-1-o_y, icn_s_w, icn_s_h
                     )
                     icn_sst_p = self._icon_state_draw_percent
@@ -732,13 +731,12 @@ class QtIconPressButton(
                         x+icn_frm_w-icn_stt_w-1, y+icn_frm_h-icn_stt_h-1, icn_stt_w, icn_stt_h
                     )
                 else:
-                    icn_s_p = self._icon_sub_draw_percent
-                    icn_s_w, icn_s_h = icn_frm_w*icn_s_p, icn_frm_h*icn_s_p
+                    icn_s_w, icn_s_h = self._sub_icon_draw_size
                     icn_s_w, icn_s_h = min(icn_s_w, 16), min(icn_s_h, 16)
                     self._icon_draw_rect.setRect(
                         icn_x, icn_y, icn_w, icn_h
                     )
-                    self._icon_sub_draw_rect.setRect(
+                    self._sub_icon_draw_rect.setRect(
                         x+icn_frm_w-icn_s_w-1, y+icn_frm_h-icn_s_h-1, icn_s_w, icn_s_h
                     )
             else:
@@ -900,7 +898,7 @@ class QtIconPressButton(
             #
             if self._sub_icon_file_path:
                 painter._draw_image_use_file_path_by_rect_(
-                    rect=self._icon_sub_draw_rect,
+                    rect=self._sub_icon_draw_rect,
                     file_path=self._sub_icon_file_path,
                     offset=offset,
                     is_hovered=self._is_hovered,
@@ -1223,10 +1221,9 @@ class QtIconToggleButton(
                 self._icon_draw_rect.setRect(
                     x+2, y+2, icn_w, icn_h
                 )
-                #
-                icn_s_p = self._icon_sub_draw_percent
-                icn_s_w, icn_s_h = icn_frm_w*icn_s_p, icn_frm_h*icn_s_p
-                self._icon_sub_draw_rect.setRect(
+
+                icn_s_w, icn_s_h = self._sub_icon_draw_size
+                self._sub_icon_draw_rect.setRect(
                     x+w-icn_s_w-1, y+h-icn_s_h-1, icn_s_w, icn_s_h
                 )
             # state
@@ -1298,14 +1295,14 @@ class QtIconToggleButton(
                 )
                 if self._sub_icon_text:
                     painter._draw_image_use_text_by_rect_(
-                        rect=self._icon_sub_draw_rect,
+                        rect=self._sub_icon_draw_rect,
                         text=self._sub_icon_text,
                         border_radius=4,
                         offset=offset
                     )
                 elif self._sub_icon_file_path:
                     painter._draw_icon_file_by_rect_(
-                        rect=self._icon_sub_draw_rect,
+                        rect=self._sub_icon_draw_rect,
                         file_path=self._sub_icon_file_path,
                         offset=offset,
                         is_hovered=self._is_hovered

@@ -1,0 +1,403 @@
+sketches:
+    Root_M:
+        key: Root_M
+        basic: true
+        control: RootX_M
+        adv_key: Root_M
+        mocap_key: Hips
+    Spine1_M:
+        key: Spine1_M
+        basic: true
+        control: FKSpine1_M
+        adv_key: Spine1_M
+        mocap_key: Spine
+    Spine2_M:
+        key: Spine2_M
+        basic: true
+        control: FKSpine2_M
+        adv_key: Spine2_M
+        mocap_key: Spine1
+    Chest_M:
+        key: Chest_M
+        basic: true
+        control: FKChest_M
+        adv_key: Chest_M
+        mocap_key: Spine2
+    Neck_M:
+        key: Neck_M
+        basic: true
+        control: FKNeck_M
+        adv_key: Neck_M
+        mocap_key: Neck
+    Head_M:
+        key: Head_M
+        basic: true
+        control: FKHead_M
+        adv_key: Head_M
+        mocap_key: Head
+    HeadEnd_M:
+        key: HeadEnd_M
+        basic: false
+        adv_key: HeadEnd_M
+        mocap_key:
+        - HeadTop_End
+        - HeadEnd
+    Hip_R:
+        key: Hip_R
+        basic: true
+        control: FKHip_R
+        adv_key: Hip_R
+        mocap_key: RightUpLeg
+    Knee_R:
+        key: Knee_R
+        basic: true
+        extra: Hip_R
+        control: FKKnee_R
+        adv_key: Knee_R
+        mocap_key: RightLeg
+    Ankle_R:
+        key: Ankle_R
+        basic: true
+        control: FKAnkle_R
+        adv_key: Ankle_R
+        mocap_key: RightFoot
+    Toes_R:
+        key: Toes_R
+        basic: true
+        control: FKToes_R
+        adv_key: Toes_R
+        mocap_key: RightToeBase
+    ToesEnd_R:
+        key: ToesEnd_R
+        basic: false
+        adv_key: ToesEnd_R
+        mocap_key:
+        - RightToe_End
+        - RightToeBaseEnd
+    Scapula_R:
+        key: Scapula_R
+        basic: true
+        control: FKScapula_R
+        adv_key: Scapula_R
+        mocap_key: RightShoulder
+    Shoulder_R:
+        key: Shoulder_R
+        basic: true
+        control: FKShoulder_R
+        adv_key: Shoulder_R
+        mocap_key: RightArm
+    Elbow_R:
+        key: Elbow_R
+        basic: true
+        extra: Shoulder_R
+        control: FKElbow_R
+        adv_key: Elbow_R
+        mocap_key: RightForeArm
+    Wrist_R:
+        key: Wrist_R
+        basic: true
+        extra: Elbow_R
+        control: FKWrist_R
+        adv_key: Wrist_R
+        mocap_key: RightHand
+    Cup_R:
+        key: Cup_R
+        basic: true
+        adv_key: Cup_R
+    ThumbFinger1_R:
+        key: ThumbFinger1_R
+        basic: true
+        control: FKThumbFinger1_R
+        adv_key: ThumbFinger1_R
+        mocap_key: RightHandThumb1
+    ThumbFinger2_R:
+        key: ThumbFinger2_R
+        basic: true
+        control: FKThumbFinger2_R
+        adv_key: ThumbFinger2_R
+        mocap_key: RightHandThumb2
+    ThumbFinger3_R:
+        key: ThumbFinger3_R
+        basic: true
+        control: FKThumbFinger3_R
+        adv_key: ThumbFinger3_R
+        mocap_key: RightHandThumb3
+    ThumbFinger4_R:
+        key: ThumbFinger4_R
+        basic: false
+        adv_key: ThumbFinger4_R
+        mocap_key: RightHandThumb4
+    IndexFinger1_R:
+        key: IndexFinger1_R
+        basic: true
+        control: FKIndexFinger1_R
+        adv_key: IndexFinger1_R
+        mocap_key: RightHandIndex1
+    IndexFinger2_R:
+        key: IndexFinger2_R
+        basic: true
+        control: FKIndexFinger2_R
+        adv_key: IndexFinger2_R
+        mocap_key: RightHandIndex2
+    IndexFinger3_R:
+        key: IndexFinger3_R
+        basic: true
+        control: FKIndexFinger3_R
+        adv_key: IndexFinger3_R
+        mocap_key: RightHandIndex3
+    IndexFinger4_R:
+        key: IndexFinger4_R
+        basic: false
+        adv_key: IndexFinger4_R
+        mocap_key: RightHandIndex4
+    MiddleFinger1_R:
+        key: MiddleFinger1_R
+        basic: true
+        control: FKMiddleFinger1_R
+        adv_key: MiddleFinger1_R
+        mocap_key: RightHandMiddle1
+    MiddleFinger2_R:
+        key: MiddleFinger2_R
+        basic: true
+        control: FKMiddleFinger2_R
+        adv_key: MiddleFinger2_R
+        mocap_key: RightHandMiddle2
+    MiddleFinger3_R:
+        key: MiddleFinger3_R
+        basic: true
+        control: FKMiddleFinger3_R
+        adv_key: MiddleFinger3_R
+        mocap_key: RightHandMiddle3
+    MiddleFinger4_R:
+        key: MiddleFinger4_R
+        basic: false
+        adv_key: MiddleFinger4_R
+        mocap_key: RightHandMiddle4
+    RingFinger1_R:
+        key: RingFinger1_R
+        basic: true
+        control: FKRingFinger1_R
+        adv_key: RingFinger1_R
+        mocap_key: RightHandRing1
+    RingFinger2_R:
+        key: RingFinger2_R
+        basic: true
+        control: FKRingFinger2_R
+        adv_key: RingFinger2_R
+        mocap_key: RightHandRing2
+    RingFinger3_R:
+        key: RingFinger3_R
+        basic: true
+        control: FKRingFinger3_R
+        adv_key: RingFinger3_R
+        mocap_key: RightHandRing3
+    RingFinger4_R:
+        key: RingFinger4_R
+        basic: false
+        adv_key: RingFinger4_R
+        mocap_key: RightHandRing4
+    PinkyFinger1_R:
+        key: PinkyFinger1_R
+        basic: true
+        control: FKPinkyFinger1_R
+        adv_key: PinkyFinger1_R
+        mocap_key: RightHandPinky1
+    PinkyFinger2_R:
+        key: PinkyFinger2_R
+        basic: true
+        control: FKPinkyFinger2_R
+        adv_key: PinkyFinger2_R
+        mocap_key: RightHandPinky2
+    PinkyFinger3_R:
+        key: PinkyFinger3_R
+        basic: true
+        control: FKPinkyFinger3_R
+        adv_key: PinkyFinger3_R
+        mocap_key: RightHandPinky3
+    PinkyFinger4_R:
+        key: PinkyFinger4_R
+        basic: false
+        adv_key: PinkyFinger4_R
+        mocap_key: RightHandPinky4
+    Hip_L:
+        key: Hip_L
+        basic: true
+        control: FKHip_L
+        adv_key: Hip_L
+        mocap_key: LeftUpLeg
+    Knee_L:
+        key: Knee_L
+        basic: true
+        extra: Hip_L
+        control: FKKnee_L
+        adv_key: Knee_L
+        mocap_key: LeftLeg
+    Ankle_L:
+        key: Ankle_L
+        basic: true
+        control: FKAnkle_L
+        adv_key: Ankle_L
+        mocap_key: LeftFoot
+    Toes_L:
+        key: Toes_L
+        basic: true
+        control: FKToes_L
+        adv_key: Toes_L
+        mocap_key: LeftToeBase
+    ToesEnd_L:
+        key: ToesEnd_L
+        basic: false
+        adv_key: ToesEnd_L
+        mocap_key:
+        - LeftToe_End
+        - LeftToeBaseEnd
+    Scapula_L:
+        key: Scapula_L
+        basic: true
+        control: FKScapula_L
+        adv_key: Scapula_L
+        mocap_key: LeftShoulder
+    Shoulder_L:
+        key: Shoulder_L
+        basic: true
+        control: FKShoulder_L
+        adv_key: Shoulder_L
+        mocap_key: LeftArm
+    Elbow_L:
+        key: Elbow_L
+        basic: true
+        extra: Shoulder_L
+        control: FKElbow_L
+        adv_key: Elbow_L
+        mocap_key: LeftForeArm
+    Wrist_L:
+        key: Wrist_L
+        basic: true
+        extra: Elbow_L
+        control: FKWrist_L
+        adv_key: Wrist_L
+        mocap_key: LeftHand
+    Cup_L:
+        key: Cup_L
+        basic: true
+        adv_key: Cup_L
+    ThumbFinger1_L:
+        key: ThumbFinger1_L
+        basic: true
+        control: FKThumbFinger1_L
+        adv_key: ThumbFinger1_L
+        mocap_key: LeftHandThumb1
+    ThumbFinger2_L:
+        key: ThumbFinger2_L
+        basic: true
+        control: FKThumbFinger2_L
+        adv_key: ThumbFinger2_L
+        mocap_key: LeftHandThumb2
+    ThumbFinger3_L:
+        key: ThumbFinger3_L
+        basic: true
+        control: FKThumbFinger3_L
+        adv_key: ThumbFinger3_L
+        mocap_key: LeftHandThumb3
+    ThumbFinger4_L:
+        key: ThumbFinger4_L
+        basic: false
+        control: FKThumbFinger4_L
+        adv_key: ThumbFinger4_L
+        mocap_key: LeftHandThumb4
+    IndexFinger1_L:
+        key: IndexFinger1_L
+        basic: true
+        control: FKIndexFinger1_L
+        adv_key: IndexFinger1_L
+        mocap_key: LeftHandIndex1
+    IndexFinger2_L:
+        key: IndexFinger2_L
+        basic: true
+        control: FKIndexFinger2_L
+        adv_key: IndexFinger2_L
+        mocap_key: LeftHandIndex2
+    IndexFinger3_L:
+        key: IndexFinger3_L
+        basic: true
+        control: FKIndexFinger3_L
+        adv_key: IndexFinger3_L
+        mocap_key: LeftHandIndex3
+    IndexFinger4_L:
+        key: IndexFinger4_L
+        basic: false
+        control: FKIndexFinger4_L
+        adv_key: IndexFinger4_L
+        mocap_key: LeftHandIndex4
+    MiddleFinger1_L:
+        key: MiddleFinger1_L
+        basic: true
+        control: FKMiddleFinger1_L
+        adv_key: MiddleFinger1_L
+        mocap_key: LeftHandMiddle1
+    MiddleFinger2_L:
+        key: MiddleFinger2_L
+        basic: true
+        control: FKMiddleFinger2_L
+        adv_key: MiddleFinger2_L
+        mocap_key: LeftHandMiddle2
+    MiddleFinger3_L:
+        key: MiddleFinger3_L
+        basic: true
+        control: FKMiddleFinger3_L
+        adv_key: MiddleFinger3_L
+        mocap_key: LeftHandMiddle3
+    MiddleFinger4_L:
+        key: MiddleFinger4_L
+        basic: false
+        control: FKMiddleFinger4_L
+        adv_key: MiddleFinger4_L
+        mocap_key: LeftHandMiddle4
+    RingFinger1_L:
+        key: RingFinger1_L
+        basic: true
+        control: FKRingFinger1_L
+        adv_key: RingFinger1_L
+        mocap_key: LeftHandRing1
+    RingFinger2_L:
+        key: RingFinger2_L
+        basic: true
+        control: FKRingFinger2_L
+        adv_key: RingFinger2_L
+        mocap_key: LeftHandRing2
+    RingFinger3_L:
+        key: RingFinger3_L
+        basic: true
+        control: FKRingFinger3_L
+        adv_key: RingFinger3_L
+        mocap_key: LeftHandRing3
+    RingFinger4_L:
+        key: RingFinger4_L
+        basic: false
+        control: FKRingFinger4_L
+        adv_key: RingFinger4_L
+        mocap_key: LeftHandRing4
+    PinkyFinger1_L:
+        key: PinkyFinger1_L
+        basic: true
+        control: FKPinkyFinger1_L
+        adv_key: PinkyFinger1_L
+        mocap_key: LeftHandPinky1
+    PinkyFinger2_L:
+        key: PinkyFinger2_L
+        basic: true
+        control: FKPinkyFinger2_L
+        adv_key: PinkyFinger2_L
+        mocap_key: LeftHandPinky2
+    PinkyFinger3_L:
+        key: PinkyFinger3_L
+        basic: true
+        control: FKPinkyFinger3_L
+        adv_key: PinkyFinger3_L
+        mocap_key: LeftHandPinky3
+    PinkyFinger4_L:
+        key: PinkyFinger4_L
+        basic: false
+        control: FKPinkyFinger4_L
+        adv_key: PinkyFinger4_L
+        mocap_key: LeftHandPinky4
