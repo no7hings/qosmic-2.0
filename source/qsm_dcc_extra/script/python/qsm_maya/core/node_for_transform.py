@@ -100,8 +100,20 @@ class Transform(_node_for_dag.DagNode):
         return cmds.xform(path, translation=1, worldSpace=1, query=1)
 
     @classmethod
+    def set_world_translation(cls, path, translation):
+        cmds.xform(path, translation=translation, worldSpace=1)
+
+    @classmethod
     def get_world_rotation(cls, path):
         return cmds.xform(path, rotation=1, worldSpace=1, query=1)
+
+    @classmethod
+    def set_world_rotation(cls, path, rotation):
+        cmds.xform(path, rotation=rotation, worldSpace=1)
+
+    @classmethod
+    def set_world_transformation(cls, path, translation, rotation):
+        cmds.xform(path, translation=translation, rotation=rotation, worldSpace=1)
 
     @classmethod
     def get_world_scale(cls, path):

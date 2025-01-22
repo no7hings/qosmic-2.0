@@ -487,13 +487,15 @@ class MtgLayer(AbsMtgLayer):
                     )
                     _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master(
                         i_sketch_dst,
-                        break_parent_inverse=True, interp_type=1
+                        break_parent_inverse=True,
+                        interp_type=1
                     )
                 else:
                     _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master(
-                        i_sketch_dst, interp_type=1,
+                        i_sketch_dst,
                         # do not break parent inverse
-                        # break_parent_inverse=True
+                        # break_parent_inverse=True,
+                        interp_type=1
                     )
 
     def get_constraint_weight_attributes(self):

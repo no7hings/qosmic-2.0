@@ -123,7 +123,6 @@ class Sketch(object):
             # update reset
             qsm_mya_core.OrientConstraint.update_reset(constraint_node, rotate)
             
-            # todo: shortest has euler error
             # 1: average, 2: shortest
             cmds.setAttr(constraint_node+'.interpType', interp_type)
             # remove offset?

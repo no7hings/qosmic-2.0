@@ -7,8 +7,58 @@ import re
 
 import _abc
 
+try:
+    import numpy as np
+except ImportError:
+    pass
+
 
 class _Matrix:
+    Y2Z = [
+        [1, 0, 0],
+        [0, 0, 1],
+        [0, -1, 0]
+    ]
+
+    Z2Y = [
+        [1, 0, 0],
+        [0, 0, -1],
+        [0, 1, 0]
+    ]
+
+    SB = [
+        [-1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 1]
+    ]
+
+    @staticmethod
+    def rotate_x(angle_deg):
+        angle_rad = np.radians(angle_deg)
+        return np.array([
+            [1, 0, 0],
+            [0, np.cos(angle_rad), -np.sin(angle_rad)],
+            [0, np.sin(angle_rad), np.cos(angle_rad)]
+        ])
+
+    @staticmethod
+    def rotate_y(angle_deg):
+        angle_rad = np.radians(angle_deg)
+        return np.array([
+            [np.cos(angle_rad), 0, np.sin(angle_rad)],
+            [0, 1, 0],
+            [-np.sin(angle_rad), 0, np.cos(angle_rad)]
+        ])
+
+    @staticmethod
+    def rotate_z(angle_deg):
+        angle_rad = np.radians(angle_deg)
+        return np.array([
+            [np.cos(angle_rad), -np.sin(angle_rad), 0],
+            [np.sin(angle_rad), np.cos(angle_rad), 0],
+            [0, 0, 1]
+        ])
+
     @classmethod
     def rotation_matrix_to_euler_angles(cls, matrix):
         """
@@ -26,27 +76,48 @@ class _Matrix:
 
         return [math.degrees(z), math.degrees(y), math.degrees(x)]
         """
-        sy = math.sqrt(matrix[2][1]**2+matrix[2][2]**2)
+        rotate_matrix = matrix[:3]
+
+        # rotate_matrix = cls.rotate_x_fnc(rotate_matrix, -90)
+        # rotate_matrix = cls.rotate_y_fnc(rotate_matrix, -90)
+        # rotate_matrix = cls.rotate_z_fnc(rotate_matrix, 90)
+
+        sy = math.sqrt(rotate_matrix[2][2]**2+rotate_matrix[2][1]**2)
         singular = sy < 1e-6
 
         if not singular:
-            x = math.atan2(matrix[2][1], matrix[2][2])  # Roll
-            y = math.atan2(-matrix[2][0], sy)  # Pitch
-            z = math.atan2(matrix[1][0], matrix[0][0])  # Yaw
+            x = math.atan2(-rotate_matrix[2][1], rotate_matrix[2][2])  # Roll
+            y = math.atan2(rotate_matrix[2][0], sy)  # Pitch
+            z = math.atan2(-rotate_matrix[1][0], rotate_matrix[0][0])  # Yaw
         else:
-            x = math.atan2(-matrix[1][2], matrix[1][1])
-            y = math.atan2(-matrix[2][0], sy)
+            x = math.atan2(-rotate_matrix[1][2], rotate_matrix[1][1])
+            y = math.atan2(rotate_matrix[2][0], sy)
             z = 0
-
         return [math.degrees(x), math.degrees(y), math.degrees(z)]
 
     @classmethod
     def extract_translate_and_rotate(cls, matrix):
         rotation_matrix = [row[:3] for row in matrix[:3]]
-        translate = matrix[3]
+        translate = matrix[3][:3]
 
         rotate = cls.rotation_matrix_to_euler_angles(rotation_matrix)
         return translate, rotate
+
+    @classmethod
+    def transform_matrix_to_new_basis(cls, matrix, basis):
+        return list(np.dot(basis, np.array(matrix)).tolist())
+
+    @classmethod
+    def rotate_x_fnc(cls, matrix, angle_deg):
+        return np.dot(cls.rotate_x(angle_deg), matrix)
+
+    @classmethod
+    def rotate_y_fnc(cls, matrix, angle_deg):
+        return np.dot(cls.rotate_y(angle_deg), matrix)
+
+    @classmethod
+    def rotate_z_fnc(cls, matrix, angle_deg):
+        return np.dot(cls.rotate_z(angle_deg), matrix)
 
 
 class DotAcd(_abc.AbsDotfile):
@@ -63,11 +134,12 @@ class DotAcd(_abc.AbsDotfile):
         dict_ = collections.OrderedDict()
         p_0_0 = r'CSF(\d+)f.*'
         p_0_1 = r'CSF(\d+)f(.*?)'+self.SEP
-        p_0_1_0 = r'<(\d),(\d)>\(matrix3 (.*?)\)'
+        p_0_1_0 = r'<(\d+),(\d+)>\(matrix3 (.*?)\)'
+        p_0_1_1 = r'\[(.*?)\]'
 
         p_1_0 = r'(\d+)f.*'
         p_1_1 = r'(\d+)f(.*?)'+self.SEP
-        p_1_1_0 = r'<(\d),(\d)>\(matrix3 (.*?)\)\{(.*?)\}'
+        p_1_1_0 = r'<(\d+),(\d+)>\(matrix3 (.*?)\)\{(.*?)\}'
 
         for i_idx, i_line in enumerate(self._lines):
             if re.match(p_0_0, i_line, re.DOTALL):
@@ -79,19 +151,21 @@ class DotAcd(_abc.AbsDotfile):
                     if i_r_0_1_0:
                         for j_data in i_r_0_1_0:
                             j_key_0, j_key_1 = j_data[:2]
-                            j_key = int(j_key_0), int(j_key_1)
+                            j_key = '{}_{}'.format(j_key_0, j_key_1)
                             j_matrix_str = j_data[2]
-                            j_matrix = [
-                                [float(y.strip()) for y in x.strip('[]').split(',')]
-                                for x in j_matrix_str.split(' ')
-                            ]
+                            i_r_0_1_1 = re.findall(p_0_1_1, j_matrix_str)
+                            if len(i_r_0_1_1) != 4:
+                                raise RuntimeError()
+
+                            j_matrix = [[float(y.strip()) for y in x.split(',')] for x in i_r_0_1_1]
+
                             j_translate, j_rotate = _Matrix.extract_translate_and_rotate(
                                 j_matrix
                             )
                             dict_.setdefault(
                                 j_key, []
                             ).append(
-                                (i_frame, j_translate, j_rotate)
+                                (i_frame, j_matrix, j_translate, j_rotate)
                             )
             # todo: same data?
             # elif re.match(p_1_0, i_line, re.DOTALL):
