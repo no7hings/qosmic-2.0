@@ -121,4 +121,3 @@ class AssetBatchRegisterOpt(object):
                         self.register_asset(i_asset_path, i_type_path, i_maya_scene_path, 'model')
 
                 l_p.do_update()
-

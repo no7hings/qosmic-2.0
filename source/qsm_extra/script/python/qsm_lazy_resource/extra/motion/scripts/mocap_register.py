@@ -18,7 +18,7 @@ import qsm_general.core as qsm_gnl_core
 import qsm_screw.core as qsm_scr_core
 
 
-class MoCapFbxMotionRegister(object):
+class MoCapDotFbxMotionRegister(object):
     LOG_KEY = 'motion fbx register'
 
     TYPE_PATH_MAP = {
@@ -109,7 +109,7 @@ class MoCapFbxMotionRegister(object):
         )
 
 
-class MoCapFbxMotionRegisterBatch(object):
+class MoCapDotFbxMotionRegisterBatch(object):
     def __init__(self, directory_path, source='mixamo'):
         self._directory_path = directory_path
         self._source = source
@@ -120,4 +120,4 @@ class MoCapFbxMotionRegisterBatch(object):
         fbx_paths = bsc_storage.StgDirectoryOpt(self._directory_path).get_all_file_paths(ext_includes=['.fbx'])
 
         for i_fbx_path in fbx_paths:
-            MoCapFbxMotionRegister(self._scr_stage, self._directory_path, i_fbx_path, self._source).execute()
+            MoCapDotFbxMotionRegister(self._scr_stage, self._directory_path, i_fbx_path, self._source).execute()

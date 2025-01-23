@@ -201,7 +201,7 @@ def mocap_fbx_motion_generate_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.MoCapFbxMotionGenerateProcess(
+    s.MoCapDotFbxMotionGenerateProcess(
         **kwargs
     ).execute()
     
@@ -215,7 +215,7 @@ def mocap_fbx_motion_generate_auto_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.MoCapFbxMotionGenerateAutoProcess(
+    s.MoCapDotFbxMotionGenerateAutoProcess(
         **kwargs
     ).execute()
 

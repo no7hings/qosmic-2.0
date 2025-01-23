@@ -26,11 +26,11 @@ class AssetUnitAssemblyGenerateOpt(_asset_general.AssetGeneralOpt):
             file_path = scr_stage.get_node_parameter(self._scr_node_path, 'scene')
             if not file_path:
                 return
-    
+
             task_name = '[{}][{}]'.format(
                 self.TASK_KEY, bsc_storage.StgFileOpt(file_path).name
             )
-    
+
             cache_path = qsm_gnl_core.DccCache.generate_asset_unit_assembly_file_new(file_path)
             if bsc_storage.StgFileOpt(cache_path).get_is_file() is False:
                 cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script_by_option_dict(

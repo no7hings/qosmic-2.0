@@ -16,7 +16,7 @@ import qsm_general.core as qsm_gnl_core
 import qsm_screw.core as qsm_scr_core
 
 
-class StlMotionRegister(object):
+class STDotAnimRegister(object):
     def __init__(self, scr_stage, root_path, directory_path):
         if isinstance(scr_stage, qsm_scr_core.Stage) is False:
             raise RuntimeError()
@@ -109,7 +109,7 @@ class StlMotionRegister(object):
         return '/'.join(keys)
 
 
-class StlMotionRegisterBatch(object):
+class STDotAnimRegisterBatch(object):
     def __init__(self, root_path, directory_path):
         self._scr_stage = qsm_scr_core.Stage('motion_test')
 
@@ -121,11 +121,10 @@ class StlMotionRegisterBatch(object):
         with bsc_log.LogProcessContext(maximum=len(all_directory_paths)) as l_p:
             for i_directory_path in all_directory_paths:
                 if bsc_core.BscFnmatch.filter([i_directory_path], six.u('{}/*.anim').format(self._directory_path)):
-                    StlMotionRegister(
+                    STDotAnimRegister(
                         self._scr_stage,
                         self._root_path,
                         i_directory_path
                     ).execute()
 
                 l_p.do_update()
-

@@ -137,7 +137,7 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
                 ext_filter='All File (*.fbx)', parent=self._qt_widget
             )
             if fbx_path:
-                task_name, cmd_script, motion_json_path = qsm_lzy_mtg_scripts.MoCapFbxMotionGenerateAuto(
+                task_name, cmd_script, motion_json_path = qsm_lzy_mtg_scripts.MoCapDotFbxMotionGenerateAuto(
                     fbx_path
                 ).generate_args()
                 if cmd_script is not None:

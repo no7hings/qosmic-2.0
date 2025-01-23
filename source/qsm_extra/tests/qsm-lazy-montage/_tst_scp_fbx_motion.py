@@ -3,7 +3,7 @@ import lxbasic.core as bsc_core
 
 import qsm_lazy_montage.scripts as s
 
-task_name, cmd_script = s.MoCapFbxMotionGenerateAuto(
+task_name, cmd_script = s.MoCapDotFbxMotionGenerateAuto(
     'Z:/resources/mixamo/Standing Arguing (1).fbx'
 ).generate_args()
 

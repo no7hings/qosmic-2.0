@@ -16,7 +16,7 @@ from ..core.transfer import handle as _cor_trf_handle
 from . import build as _build
 
 
-class MoCapFbxMotionGenerateProcess(object):
+class MoCapDotFbxMotionGenerateProcess(object):
     def __init__(self, **kwargs):
         self._kwargs = kwargs
 
@@ -76,7 +76,7 @@ class MoCapFbxMotionGenerateProcess(object):
             l_p.do_update()
 
 
-class MoCapFbxMotionGenerateAutoProcess(object):
+class MoCapDotFbxMotionGenerateAutoProcess(object):
     def __init__(self, **kwargs):
         self._kwargs = kwargs
 

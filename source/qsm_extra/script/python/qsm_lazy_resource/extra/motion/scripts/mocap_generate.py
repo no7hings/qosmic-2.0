@@ -10,13 +10,13 @@ import qsm_general.process as qsm_gnl_process
 import qsm_screw.core as qsm_scr_core
 
 
-class MoCapFbxMotionGenerate(object):
+class MoCapDotFbxMotionGenerate(object):
     TASK_KEY = 'mocap_fbx_motion_generate'
 
     def __init__(self, scr_stage_name, scr_node_path):
         self._scr_stage_name = scr_stage_name
         self._scr_node_path = scr_node_path
-    
+
     def generate_args(self):
         scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
 

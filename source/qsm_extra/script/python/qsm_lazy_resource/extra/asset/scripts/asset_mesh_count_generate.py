@@ -21,7 +21,7 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneralOpt):
         scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
         file_path = scr_stage.get_node_parameter(self._scr_node_path, 'scene')
         if not file_path:
-            return 
+            return
 
         task_name = '[{}][{}]'.format(
             self.TASK_KEY, bsc_storage.StgFileOpt(file_path).name
@@ -71,7 +71,7 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneralOpt):
         scr_stage.create_node_tag_assign(
             self._scr_node_path, '/mesh_count/non_cache_face_percentage/unspecified'
         )
-    
+
     def register(self):
         scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
         file_path = scr_stage.get_node_parameter(self._scr_node_path, 'scene')
@@ -82,7 +82,7 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneralOpt):
         image_path = qsm_gnl_core.DccCache.generate_asset_snapshot_file(file_path, version=self.API_VERSION)
 
         data = bsc_storage.StgFileOpt(cache_path).set_read()
-        
+
         mesh_count_data = data['mesh_count']
         mesh_count_data_opt = qsm_gnl_core.MeshCountDataOpt(mesh_count_data)
 

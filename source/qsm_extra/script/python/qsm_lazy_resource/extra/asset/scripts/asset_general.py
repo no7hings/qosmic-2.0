@@ -32,7 +32,7 @@ class AssetTag(object):
             return '500m_to_1b'
         elif b <= count:
             return 'more_than_1b'
-    
+
     @classmethod
     def to_geometry_count_tag(cls, count):
         k = 1000
@@ -121,7 +121,7 @@ class AssetGeneralOpt(object):
         scr_stage.remove_assigns_below(
             self._scr_node_path, '/mesh_count/face'
         )
-        
+
         count_tag = AssetTag.to_face_count_tag(mesh_triangle)
         tag_path = '/mesh_count/face/{}'.format(count_tag)
 
@@ -135,21 +135,21 @@ class AssetGeneralOpt(object):
         scr_stage.remove_assigns_below(
             self._scr_node_path, '/mesh_count/geometry'
         )
-        
+
         count_tag = AssetTag.to_geometry_count_tag(geometry_count)
         tag_path = '/mesh_count/geometry/{}'.format(count_tag)
 
         scr_stage.create_node_tag_assign(
             self._scr_node_path, tag_path
         )
-    
+
     def register_mesh_cache_percentage_tag(self, percentage):
         scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
         # remove exists
         scr_stage.remove_assigns_below(
             self._scr_node_path, '/mesh_count/non_cache_face_percentage'
         )
-        
+
         tag = AssetTag.to_cache_percentage_tag(percentage)
         tag_path = '/mesh_count/non_cache_face_percentage/{}'.format(tag)
 

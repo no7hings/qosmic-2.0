@@ -6,7 +6,7 @@ import qsm_general.process as qsm_gnl_process
 import qsm_screw.core as qsm_scr_core
 
 
-class StlMotionGenerate(object):
+class STDotAnimGenerate(object):
     def __init__(self, scr_stage_name, scr_node_path):
         self._scr_stage_name = scr_stage_name
         self._scr_node_path = scr_node_path

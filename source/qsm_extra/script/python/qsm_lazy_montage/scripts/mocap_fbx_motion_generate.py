@@ -10,7 +10,7 @@ import qsm_general.process as qsm_gnl_process
 import qsm_screw.core as qsm_scr_core
 
 
-class MoCapFbxMotionGenerateAuto(object):
+class MoCapDotFbxMotionGenerateAuto(object):
     TASK_KEY = 'mocap_fbx_motion_generate_auto'
 
     def __init__(self, fbx_path):
