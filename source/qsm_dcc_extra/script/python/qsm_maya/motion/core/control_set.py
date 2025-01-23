@@ -18,6 +18,7 @@ class ControlSetMotionOpt(
     _base.AbsMotion
 ):
     LOG_KEY = 'control set motion'
+    LOG_PROGRESS_MAXIMUM = 150
 
     @classmethod
     def get_args_from_selection(cls):
@@ -51,7 +52,7 @@ class ControlSetMotionOpt(
     def generate_motion_dict(self):
         dict_ = {}
         c = len(self._path_set)
-        if c >= 500:
+        if c >= self.LOG_PROGRESS_MAXIMUM:
             with bsc_log.LogProcessContext.create(maximum=len(self._path_set)) as l_p:
                 for i_path in self._path_set:
                     i_control_opt = _control.ControlMotionOpt(i_path)
@@ -65,15 +66,6 @@ class ControlSetMotionOpt(
 
         return dict_
 
-    def generate_pose_dict(self):
-        dict_ = {}
-
-        for i_path in self._path_set:
-            i_control_opt = _control.ControlMotionOpt(i_path)
-            dict_[i_control_opt.to_control_key(i_path)] = i_control_opt.generate_pose_properties()
-
-        return dict_
-
     @_mya_core.Undo.execute
     def apply_motion_dict(self, data, **kwargs):
         bsc_log.Log.trace_method_result(
@@ -82,15 +74,38 @@ class ControlSetMotionOpt(
         )
 
         key_excludes = kwargs.pop('control_key_excludes') if 'control_key_excludes' in kwargs else None
+        c = len(self._path_set)
+        if c >= self.LOG_PROGRESS_MAXIMUM:
+            with bsc_log.LogProcessContext.create(maximum=len(self._path_set)) as l_p:
+                for i_path in self._path_set:
+                    i_key = _control.ControlMotionOpt.to_control_key(i_path)
+                    if key_excludes:
+                        if i_key in key_excludes:
+                            continue
+
+                    if i_key in data:
+                        _control.ControlMotionOpt(i_path).apply_motion_properties(data[i_key], **kwargs)
+
+                    l_p.do_update()
+        else:
+            for i_path in self._path_set:
+                i_key = _control.ControlMotionOpt.to_control_key(i_path)
+                if key_excludes:
+                    if i_key in key_excludes:
+                        continue
+
+                if i_key in data:
+                    _control.ControlMotionOpt(i_path).apply_motion_properties(data[i_key], **kwargs)
+
+    # pose
+    def generate_pose_dict(self):
+        dict_ = {}
 
         for i_path in self._path_set:
-            i_key = _control.ControlMotionOpt.to_control_key(i_path)
-            if key_excludes:
-                if i_key in key_excludes:
-                    continue
+            i_control_opt = _control.ControlMotionOpt(i_path)
+            dict_[i_control_opt.to_control_key(i_path)] = i_control_opt.generate_pose_properties()
 
-            if i_key in data:
-                _control.ControlMotionOpt(i_path).apply_motion_properties(data[i_key], **kwargs)
+        return dict_
 
     @_mya_core.Undo.execute
     def apply_pose_dict(self, data, **kwargs):

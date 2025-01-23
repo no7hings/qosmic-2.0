@@ -144,6 +144,7 @@ class SceneFile:
         -importFrameRate true
         -importTimeRange "override" "C:/Users/nothings/Downloads/Fast Run (1).fbx";
         """
+        cmds.loadPlugin('fbxmaya', quiet=1)
         nodes = cmds.file(
             file_path,
             i=1,

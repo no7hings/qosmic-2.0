@@ -40,7 +40,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -90,7 +90,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 324.5
+    "width": 324.5,
+    "collapsed": true
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -208,12 +209,13 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "7742e8c75589751e",
+  "active": "159cdc048157b980",
   "lastOpenFiles": [
+    "开发相关/开发进度/优化.md",
+    "随记/动作拼接.md",
     "技术文档/工具安装说明（临时版）.md",
     "技术文档/Qosmic/环境变量（Environment）.md",
     "技术文档/Qosmic/存储结构（Storage Hierarchy）.md",
-    "开发相关/开发进度/优化.md",
     "开发相关/开发文档/解算流程工具.md",
     "开发相关/开发任务/2025-规划.md",
     "随记/2025随记.md",
@@ -243,7 +245,6 @@
     "开发相关/开发文档/images/Pasted image 20250106112317.png",
     "开发相关/开发文档/images/Pasted image 20250106110426.png",
     "开发相关/开发文档/images/Pasted image 20250106110203.png",
-    "随记/动作拼接.md",
     "开发相关/开发进度/maya/7月-动作工具.md",
     "开发相关/开发计划/2024-9.md",
     "开发相关/开发计划/2024-10~11.md",

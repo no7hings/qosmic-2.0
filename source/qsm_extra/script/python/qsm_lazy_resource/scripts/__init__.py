@@ -1,8 +1,6 @@
 # coding:utf-8
 from .video_register import *
 
-from .audio_register import *
-
 from .asset_register import *
 
 from .asset_general import *

@@ -26,12 +26,6 @@ class _Matrix:
         [0, 1, 0]
     ]
 
-    SB = [
-        [-1, 0, 0],
-        [0, 1, 0],
-        [0, 0, 1]
-    ]
-
     @staticmethod
     def rotate_x(angle_deg):
         angle_rad = np.radians(angle_deg)
@@ -60,6 +54,15 @@ class _Matrix:
         ])
 
     @classmethod
+    def fix_fnc(cls, matrix):
+        r_initial = matrix
+
+        r_correction = np.transpose(r_initial)
+
+        result = np.dot(r_correction, r_initial)
+        return result
+
+    @classmethod
     def rotation_matrix_to_euler_angles(cls, matrix):
         """
         sy = math.sqrt(matrix[0][0] * matrix[0][0] + matrix[1][0] * matrix[1][0])
@@ -77,8 +80,9 @@ class _Matrix:
         return [math.degrees(z), math.degrees(y), math.degrees(x)]
         """
         rotate_matrix = matrix[:3]
-
-        # rotate_matrix = cls.rotate_x_fnc(rotate_matrix, -90)
+        rotate_matrix.reverse()
+        rotate_matrix[0][0] = -rotate_matrix[0][0]
+        # rotate_matrix = cls.rotate_x_fnc(rotate_matrix, 90)
         # rotate_matrix = cls.rotate_y_fnc(rotate_matrix, -90)
         # rotate_matrix = cls.rotate_z_fnc(rotate_matrix, 90)
 
@@ -121,10 +125,6 @@ class _Matrix:
 
 
 class DotAcd(_abc.AbsDotfile):
-    """
-    CSF0f<0,1>(matrix3 [-0.8921042680740356,-0.02059752680361271,0.4513603150844574] [-0.04932306334376335,0.9974299073219299,-0.05196893587708473] [-0.4491298794746399,-0.06862417608499527,-0.8908274173736572] [-0.034841522574424744,23.60810089111328,0.007131293416023254])<0,2>(matrix3 [-0.04181754216551781,0.9971072673797607,0.06347089260816574] [0.35092809796333313,-0.044820912182331085,0.9353294372558594] [0.9354686141014099,0.06138698384165764,-0.34803855419158936])
-    CSF1f<0,1>(matrix3 [-0.8921042680740356,-0.02059752680361271,0.4513603150844574] [-0.04932306334376335,0.9974299073219299,-0.05196893587708473] [-0.4491298794746399,-0.06862417608499527,-0.8908274173736572] [-0.034841522574424744,23.60810089111328,0.007131293416023254])<0,2>(matrix3 [-0.04181754216551781,0.9971072673797607,0.06347089260816574] [0.35092809796333313,-0.044820912182331085,0.9353294372558594] [0.9354686141014099,0.06138698384165764,-0.34803855419158936])
-    """
     SEP = '\n'
 
     def __init__(self, *args, **kwargs):
