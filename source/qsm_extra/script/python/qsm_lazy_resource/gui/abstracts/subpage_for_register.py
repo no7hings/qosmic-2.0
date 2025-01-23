@@ -48,6 +48,9 @@ class AbsPrxSubpageForMotionRegister(
 
     def __init__(self, window, session, subwindow, *args, **kwargs):
         super(AbsPrxSubpageForMotionRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+
+        self._configure = self.generate_local_configure()
+
         self.gui_page_setup_fnc()
 
     def gui_page_setup_fnc(self):
@@ -56,13 +59,13 @@ class AbsPrxSubpageForMotionRegister(
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._subwindow.choice_gui_name(
-                self._subwindow._configure.get('build.{}.options'.format(self.GUI_KEY))
+                self._configure.get('build.options')
             )
         )
         prx_sca.add_widget(self._prx_options_node)
 
         self._prx_options_node.build_by_data(
-            self._subwindow._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
+            self._configure.get('build.options.parameters'),
         )
 
         self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
@@ -70,7 +73,7 @@ class AbsPrxSubpageForMotionRegister(
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
             gui_core.GuiUtil.choice_gui_name(
-                self._subwindow._language, self._subwindow._configure.get('build.{}.filter'.format(self.GUI_KEY))
+                self._subwindow._language, self._configure.get('build.filter')
             )
         )
         qt_widget_0 = gui_qt_widgets.QtTranslucentWidget()
@@ -96,6 +99,9 @@ class _AbsPrxPageForAnyRegister(
     def __init__(self, window, session, subwindow, *args, **kwargs):
         super(_AbsPrxPageForAnyRegister, self).__init__(window, session, subwindow, *args, **kwargs)
         self._init_base()
+
+        self._configure = self.generate_local_configure()
+
         self.gui_page_setup_fnc()
 
     def _on_apply(self):
@@ -221,13 +227,13 @@ class _AbsPrxPageForAnyRegister(
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._subwindow.choice_gui_name(
-                self._subwindow._configure.get('build.{}.options'.format(self.GUI_KEY))
+                self._configure.get('build.options')
             )
         )
         prx_sca.add_widget(self._prx_options_node)
 
         self._prx_options_node.build_by_data(
-            self._subwindow._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
+            self._configure.get('build.options.parameters'),
         )
 
         self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
@@ -235,7 +241,7 @@ class _AbsPrxPageForAnyRegister(
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
             gui_core.GuiUtil.choice_gui_name(
-                self._subwindow._language, self._subwindow._configure.get('build.{}.filter'.format(self.GUI_KEY))
+                self._subwindow._language, self._configure.get('build.filter')
             )
         )
         qt_widget_0 = gui_qt_widgets.QtTranslucentWidget()
@@ -262,7 +268,7 @@ class _AbsPrxPageForAnyRegister(
         bottom_tool_bar.add_widget(self._apply_and_close_button)
         self._apply_and_close_button._set_name_text_(
             self._subwindow.choice_gui_name(
-                self._subwindow._configure.get('build.main.buttons.apply_and_close')
+                self._configure.get('build.buttons.apply_and_close')
             )
         )
         self._apply_and_close_button.press_clicked.connect(self._on_apply_and_close)
@@ -271,7 +277,7 @@ class _AbsPrxPageForAnyRegister(
         bottom_tool_bar.add_widget(self._apply_button)
         self._apply_button._set_name_text_(
             self._subwindow.choice_gui_name(
-                self._subwindow._configure.get('build.main.buttons.apply')
+                self._configure.get('build.buttons.apply')
             )
         )
         self._apply_button.press_clicked.connect(self._on_apply)
@@ -280,7 +286,7 @@ class _AbsPrxPageForAnyRegister(
         bottom_tool_bar.add_widget(self._close_button)
         self._close_button._set_name_text_(
             self._subwindow.choice_gui_name(
-                self._subwindow._configure.get('build.main.buttons.close')
+                self._configure.get('build.buttons.close')
             )
         )
         self._close_button.press_clicked.connect(self._on_close)
@@ -320,7 +326,7 @@ class AbsPrxSubpageForVideoRegister(_AbsPrxPageForAnyRegister):
 
             self._subwindow.popup_message(
                 self._subwindow.choice_gui_message(
-                    self._subwindow._configure.get('build.main.messages.register_successful')
+                    self._configure.get('build.messages.register_successful')
                 )
             )
 
@@ -350,7 +356,7 @@ class AbsPrxSubpageForAudioRegister(_AbsPrxPageForAnyRegister):
 
             self._subwindow.popup_message(
                 self._subwindow.choice_gui_message(
-                    self._subwindow._configure.get('build.main.messages.register_successful')
+                    self._configure.get('build.messages.register_successful')
                 )
             )
 
@@ -365,7 +371,11 @@ class AbsPrxSubpageForAssetRegister(
 ):
     def __init__(self, window, session, subwindow, *args, **kwargs):
         super(AbsPrxSubpageForAssetRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+
         self._init_base()
+
+        self._configure = self.generate_local_configure()
+
         self.gui_page_setup_fnc()
 
     def gui_page_setup_fnc(self):

@@ -1,21 +1,7 @@
 # coding:utf-8
-import copy
-
-import functools
-
-import six
-
 import lxbasic.core as bsc_core
 
-import lxbasic.storage as bsc_storage
-
-import lxbasic.resource as bsc_resource
-
-import lxbasic.pinyin as bsc_pinyin
-
 import lxgui.core as gui_core
-
-import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
@@ -82,7 +68,11 @@ class AbsPrxSubpageForAnyAssign(
 ):
     def __init__(self, window, session, subwindow, *args, **kwargs):
         super(AbsPrxSubpageForAnyAssign, self).__init__(window, session, subwindow, *args, **kwargs)
+
+        self._configure = self.generate_local_configure()
+
         self._init_base()
+
         self.gui_page_setup_fnc()
 
     def _on_apply(self):
@@ -101,13 +91,13 @@ class AbsPrxSubpageForAnyAssign(
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._subwindow.choice_gui_name(
-                self._subwindow._configure.get('build.{}.options'.format(self.GUI_KEY))
+                self._configure.get('build.options')
             )
         )
         prx_sca.add_widget(self._prx_options_node)
 
         self._prx_options_node.build_by_data(
-            self._subwindow._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
+            self._configure.get('build.options.parameters'),
         )
 
         self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
@@ -115,7 +105,7 @@ class AbsPrxSubpageForAnyAssign(
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
             gui_core.GuiUtil.choice_gui_name(
-                self._subwindow._language, self._subwindow._configure.get('build.{}.filter'.format(self.GUI_KEY))
+                self._subwindow._language, self._configure.get('build.filter'.format(self.GUI_KEY))
             )
         )
         self._qt_tag_widget = gui_qt_vew_widgets.QtTagWidget()
@@ -132,7 +122,7 @@ class AbsPrxSubpageForAnyAssign(
         bottom_tool_bar.add_widget(self._apply_and_close_button)
         self._apply_and_close_button._set_name_text_(
             self._subwindow.choice_gui_name(
-                self._subwindow._configure.get('build.main.buttons.apply_and_close')
+                self._configure.get('build.buttons.apply_and_close')
             )
         )
         self._apply_and_close_button.press_clicked.connect(self._on_apply_and_close)
@@ -141,7 +131,7 @@ class AbsPrxSubpageForAnyAssign(
         bottom_tool_bar.add_widget(self._apply_button)
         self._apply_button._set_name_text_(
             self._subwindow.choice_gui_name(
-                self._subwindow._configure.get('build.main.buttons.apply')
+                self._configure.get('build.buttons.apply')
             )
         )
         self._apply_button.press_clicked.connect(self._on_apply)
@@ -150,7 +140,7 @@ class AbsPrxSubpageForAnyAssign(
         bottom_tool_bar.add_widget(self._close_button)
         self._close_button._set_name_text_(
             self._subwindow.choice_gui_name(
-                self._subwindow._configure.get('build.main.buttons.close')
+                self._configure.get('build.buttons.close')
             )
         )
         self._close_button.press_clicked.connect(self._on_close)

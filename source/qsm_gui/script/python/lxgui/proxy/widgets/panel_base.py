@@ -527,6 +527,7 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
 
     def _init_base_panel_def(self, window, session, *args, **kwargs):
         self._window = window
+
         if self._window is not None:
             self._qt_widget.setParent(window._qt_widget, gui_qt_core.QtCore.Qt.Tool)
             self._qt_widget.setWindowFlags(gui_qt_core.QtCore.Qt.Tool)
@@ -543,6 +544,7 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
 
     def _gui_main_fnc(self, configure_key):
         self._configure = bsc_resource.RscExtendConfigure.get_as_content(configure_key)
+
         self._option_configure = self._configure.get_as_content('option')
         self._gui_configure = self._configure.get_as_content('option.gui')
 
@@ -602,3 +604,23 @@ class PrxBaseSubpage(
 
     def do_gui_refresh_all(self):
         pass
+
+    def get_gui_name(self):
+        if self._configure_local_flag is True:
+            # use for local
+            return self.choice_gui_name(
+                self._configure.get('build')
+            )
+        return self.choice_gui_name(
+            self._configure.get('build.{}'.format(self.GUI_KEY))
+        )
+
+    def get_gui_tool_tip(self):
+        if self._configure_local_flag is True:
+            # use for local
+            return self.choice_gui_tool_tip(
+                self._configure.get('build')
+            )
+        return self.choice_gui_tool_tip(
+            self._configure.get('build.{}'.format(self.GUI_KEY))
+        )
