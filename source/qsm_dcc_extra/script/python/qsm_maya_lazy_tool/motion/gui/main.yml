@@ -5,11 +5,11 @@ option:
         - '*-maya'
     #
     gui:
-        name: 'Lazy Motion Tool'
-        name_chs: '懒人动作工具'
+        name: 'Lazy Motion'
+        name_chs: '懒人动作'
         group_name: 'General(s)'
         #
-        icon_name: 'qosmic/lazy-cfx-tool'
+        icon_name: 'lazy/motion'
         tool_tip:
             |-
             For Motion.

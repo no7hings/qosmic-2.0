@@ -1,0 +1,21 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+
+    gui:
+        name: 'Resister'
+        name_chs: '登记'
+        group_name: 'General(s)'
+
+        icon_name: 'application/python'
+        tool_tip:
+            |-
+            For resource register.
+
+        tool_tip_chs:
+            |-
+            用于资源登记。
+
+        size: [480, 720]

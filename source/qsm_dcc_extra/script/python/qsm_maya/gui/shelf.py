@@ -29,5 +29,5 @@ class MainShelf(object):
         )
 
         _shelf_build.ShelfBuild('maya/lazy-shelf/general').execute()
-        # _shelf_build.ShelfBuild('maya/lazy-shelf/animation').execute()
+        _shelf_build.ShelfBuild('maya/lazy-shelf/animation').execute()
         _shelf_build.ShelfBuild('maya/lazy-shelf/cfx').execute()

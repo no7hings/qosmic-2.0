@@ -109,7 +109,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
         self._setting_qt_button = gui_qt_widgets.QtIconPressButton()
         self._extra_qt_tool_box._add_widget_(self._setting_qt_button)
         self._setting_qt_button._set_name_text_('setting')
-        self._setting_qt_button._set_icon_name_('lazy/setting')
+        self._setting_qt_button._set_icon_name_('option')
         self._setting_qt_button._set_tool_tip_('Press Show Setting')
 
     def gui_add_root_auto(self, path):

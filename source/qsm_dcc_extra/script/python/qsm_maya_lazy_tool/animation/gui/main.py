@@ -17,7 +17,7 @@ from .pages import character_and_prop as _page_character_and_prop
 from .pages import scenery as _page_scenery
 
 
-class PrxLazyAnimationTool(gui_prx_widgets.PrxBasePanel):
+class PrxLazyAnimation(gui_prx_widgets.PrxBasePanel):
     SCRIPT_JOB_NAME = 'lazy_tool_for_animation'
 
     CONFIGURE_KEY = 'lazy-animation/gui/tool'
@@ -41,7 +41,7 @@ class PrxLazyAnimationTool(gui_prx_widgets.PrxBasePanel):
         self._script_job_opt.destroy()
 
     def __init__(self, window, session, *args, **kwargs):
-        super(PrxLazyAnimationTool, self).__init__(window, session, *args, **kwargs)
+        super(PrxLazyAnimation, self).__init__(window, session, *args, **kwargs)
 
     # noinspection PyUnresolvedReferences
     def gui_setup_fnc(self):
@@ -79,7 +79,7 @@ class PrxLazyAnimationTool(gui_prx_widgets.PrxBasePanel):
             )
         )
 
-        self._scenery_prx_page = _page_scenery.PrxPageForSceneryResource(
+        self._scenery_prx_page = _page_scenery.PrxPageForScenery(
             self, self._session
         )
         scenery_prx_sca.add_widget(self._scenery_prx_page)
@@ -119,7 +119,7 @@ class PrxLazyAnimationTool(gui_prx_widgets.PrxBasePanel):
         self._chr_and_prp_prx_page._page_prx_tab_tool_box.save_history()
         self._scenery_prx_page._page_prx_tab_tool_box.save_history()
 
-    def show_help(self):
+    def show_help_unit(self):
         import os
 
         _0 = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'

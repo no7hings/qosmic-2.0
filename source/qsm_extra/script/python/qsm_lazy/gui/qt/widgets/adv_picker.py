@@ -93,6 +93,10 @@ class _Keys(object):
 
     secondary_cloth = 'secondary_cloth'
 
+    enter_head_M = 'enter_head_M'
+    enter_hand_L = 'enter_hand_L'
+    enter_hand_R = 'enter_hand_R'
+
     All = [
         main,
 
@@ -149,6 +153,9 @@ class _Keys(object):
         leg_ik_heel_L, leg_ik_heel_R,
 
         secondary_cloth,
+
+        enter_head_M,
+        enter_hand_L, enter_hand_R,
     ]
 
 
@@ -348,7 +355,7 @@ class QtAdvCharacterPicker(
 
         self._adv_control_cfg = qsm_gnl_core.AdvCharacterControlConfigure()
 
-        self._body_json_file = bsc_resource.ExtendResource.get('gui/adv-picker/v1.json')
+        self._body_json_file = bsc_resource.ExtendResource.get('gui/adv-picker/v2.json')
         if self._body_json_file is None:
             raise RuntimeError()
 
@@ -371,9 +378,6 @@ class QtAdvCharacterPicker(
         self._sketch_key_current = None
         self._sketch_key_set_tmp = set()
         self._sketch_key_set_selected = set()
-
-        self._left_frame_rect = QtCore.QRect()
-        self._right_frame_rect = QtCore.QRect()
 
         self._select_mode = 0
 
@@ -446,8 +450,7 @@ class QtAdvCharacterPicker(
 
         for i_key, i_path in self._draw_path_dict.items():
             if i_key in _Keys.All:
-                # select
-                # hover
+                # hover or select
                 if i_key == self._sketch_key_hover:
                     i_r, i_g, i_b, _ = gui_core.GuiRgba.LightOrange
                     painter._set_border_color_(i_r, i_g, i_b, 255)
@@ -479,6 +482,8 @@ class QtAdvCharacterPicker(
                         i_r, i_g, i_b, _ = gui_core.GuiRgba.Pink
                     elif '_ik_' in i_key:
                         i_r, i_g, i_b, _ = gui_core.GuiRgba.LemonYellow
+                    elif i_key.startswith('enter_'):
+                        i_r, i_g, i_b, _ = gui_core.GuiRgba.LightGray
                     elif i_key.startswith('secondary_'):
                         i_r, i_g, i_b, _ = gui_core.GuiRgba.NeonGreen
                     else:

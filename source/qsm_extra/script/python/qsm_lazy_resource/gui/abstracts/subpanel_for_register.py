@@ -5,7 +5,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 
 class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubpanel):
-    CONFIGURE_KEY = 'lazy-resource/gui/register'
+    # CONFIGURE_KEY = 'lazy-resource/gui/register'
 
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxSubPanelForRegister, self).__init__(window, session, *args, **kwargs)

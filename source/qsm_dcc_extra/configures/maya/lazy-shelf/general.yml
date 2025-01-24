@@ -20,12 +20,12 @@ build:
                     button_name: 'ANI'
                     button_name_chs: '动画'
                     icon: 'application/resource_library'
-                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-asset-manager")'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-animation")'
                     dbl_script: ''
 
                 tool_1:
-                    name: 'Lazy Motion Tool'
-                    name_chs: '懒人动作工具'
+                    name: 'Lazy Motion'
+                    name_chs: '懒人动作'
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs:
                         |-
@@ -34,7 +34,7 @@ build:
                     button_style: 'text_and_icon'
                     button_name: 'MTN'
                     button_name_chs: '动作'
-                    icon: 'application/lineup'
+                    icon: 'lazy/motion'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-motion-tool")'
                     dbl_script: ''
 
@@ -175,6 +175,7 @@ build:
                     button_name_chs: 'FK/IK'
                     icon: 'tool/maya/fk-ik-switch'
                     script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-fk-ik-switch-script")'
+
         scenery:
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '场景。'

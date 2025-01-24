@@ -4,7 +4,7 @@
 def main(session):
     import qsm_maya_lazy_tool.animation.gui.main as m
 
-    w = m.PrxLazyAnimationTool(window=None, session=None)
+    w = m.PrxLazyAnimation(window=None, session=None)
     w.show_window_auto()
 
 

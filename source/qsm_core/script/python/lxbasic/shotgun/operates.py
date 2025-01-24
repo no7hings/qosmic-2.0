@@ -386,7 +386,7 @@ class StgVersionOpt(AbsStgObjOpt):
                 u'file="{}" is non-exists'.format(file_path)
             )
 
-    def set_log_add(self, text):
+    def append_log(self, text):
         key = 'sg_td_batch_log'
         _ = self._stg_obj_query.get(key) or u''
         if _:

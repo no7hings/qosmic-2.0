@@ -107,8 +107,8 @@ build:
 
             tools:
                 tool_0:
-                    name: 'Lazy Motion Tool'
-                    name_chs: '懒人动作工具'
+                    name: 'Lazy Motion'
+                    name_chs: '懒人动作'
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs:
                         |-
@@ -117,7 +117,7 @@ build:
                     button_style: 'text_and_icon'
                     button_name: 'MTN'
                     button_name_chs: '动作'
-                    icon: 'application/lineup'
+                    icon: 'lazy/motion'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-motion-tool")'
                     dbl_script: ''
 
@@ -137,7 +137,11 @@ build:
                     icon: 'lazy/montage'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-montage")'
                     dbl_script: ''
+        resource:
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '资源。'
 
+            tools:
                 tool_1:
                     name: 'Lazy Resource'
                     name_chs: '懒人资源'
@@ -149,3 +153,4 @@ build:
                     icon: 'lazy/resource'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-resource")'
                     dbl_script: ''
+

@@ -41,6 +41,8 @@ class PrxLazyMotionTool(gui_prx_widgets.PrxBasePanel):
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
             i_prx_page = self._window.gui_generate_page_for(i_page_key)
+            i_prx_sca.add_widget(i_prx_page)
+
             self._page_prx_tab_tool_box.add_widget(
                 i_prx_sca,
                 key=i_page_key,
@@ -49,7 +51,6 @@ class PrxLazyMotionTool(gui_prx_widgets.PrxBasePanel):
                 tool_tip=i_prx_page.get_gui_tool_tip()
             )
             self._tab_widget_dict[i_page_key] = i_prx_page
-            i_prx_sca.add_widget(i_prx_page)
 
     def do_gui_refresh_all(self):
         self._page_prx_tab_tool_box.save_history()

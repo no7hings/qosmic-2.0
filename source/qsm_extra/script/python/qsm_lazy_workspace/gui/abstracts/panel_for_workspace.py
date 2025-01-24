@@ -74,7 +74,7 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
         if page is not None:
             page.do_gui_refresh_all()
 
-    def show_help(self):
+    def show_help_unit(self):
         import os
 
         _0 = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'

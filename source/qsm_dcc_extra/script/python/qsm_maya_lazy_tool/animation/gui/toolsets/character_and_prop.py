@@ -73,7 +73,7 @@ class PrxToolbarForCharacterAndPropReference(
                 self._window._configure.get('build.rig.buttons.reference')
             )
         )
-        self._asset_load_qt_button.setFixedWidth(64)
+        self._asset_load_qt_button._set_auto_width_(True)
         self._asset_load_qt_button._set_action_enable_(False)
         self._asset_load_qt_button.press_clicked.connect(self._on_dcc_load_asset)
 
@@ -89,7 +89,7 @@ class PrxToolbarForCharacterAndPropReference(
             )
         )
         self._asset_prx_input.add_widget(self._asset_replace_qt_button)
-        self._asset_replace_qt_button.setFixedWidth(64)
+        self._asset_replace_qt_button._set_auto_width_(True)
         self._asset_replace_qt_button._set_action_enable_(False)
         self._asset_replace_qt_button.press_clicked.connect(self._on_dcc_replace_to_asset)
 

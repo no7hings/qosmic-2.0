@@ -9,7 +9,7 @@ import qsm_screw.core as qsm_scr_core
 
 
 class AbsPrxSubPanelForAssign(gui_prx_widgets.PrxBaseSubpanel):
-    CONFIGURE_KEY = 'lazy-resource/gui/assign'
+    # CONFIGURE_KEY = 'lazy-resource/gui/assign'
 
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxSubPanelForAssign, self).__init__(window, session, *args, **kwargs)

@@ -5,7 +5,7 @@ option:
         - '*-maya'
     #
     gui:
-        name: 'Lazy Animation Tool'
+        name: 'Lazy Animation'
         name_chs: '懒人动画工具'
         group_name: 'Asset(s)'
         #

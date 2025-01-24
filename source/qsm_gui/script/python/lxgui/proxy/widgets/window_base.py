@@ -68,13 +68,14 @@ class PrxBaseWindow(
         _prx_core.GuiProxyLogBridge.generate_all()
 
         self._qt_widget._create_window_shortcut_action_for_(
-            self.show_help, 'F1'
+            self.show_help_unit, 'F1'
         )
 
         self.set_show_menu_raw(
             [
                 ('Log', 'log', self.show_log_unit),
-                ('Help', 'help', self.show_help)
+                ('Help', 'help', self.show_help_unit),
+                ('Option', 'option', self.show_option_unit),
             ]
         )
         self.set_debugger_menu_raw(
@@ -116,9 +117,9 @@ class PrxBaseWindow(
         self._init_layer_base_def_(self._qt_central_layout)
         #
         self.__build_main_layer()
-        self.__build_option_layer()
         self.__build_log_layer()
         self.__build_help_layer()
+        self.__build_option_layer()
         self.__build_loading_layer()
         self.__build_expression_layer()
         self.__build_message_layer()
@@ -260,7 +261,7 @@ class PrxBaseWindow(
     def get_option_layer_widget(self):
         return self.get_layer_widget('window_option_0')
 
-    def set_option_unit_clear(self):
+    def restore_option_unit(self):
         self.get_layer_widget('window_option_0').clear()
 
     def start_window_loading(self, method, post_fnc=None, delay_time=250):
@@ -317,7 +318,7 @@ class PrxBaseWindow(
     def get_log_text_browser(self):
         return self._log_text_browser_0
 
-    def set_log_add(self, text):
+    def append_log(self, text):
         text_browser = self.get_log_text_browser()
         text_browser.add_result(text)
 
@@ -337,7 +338,7 @@ class PrxBaseWindow(
                 log.close()
 
     # help
-    def show_help(self):
+    def show_help_unit(self):
         self.switch_current_layer_to('window_help_0')
         #
         if self.HELP_FILE_PATH is not None:

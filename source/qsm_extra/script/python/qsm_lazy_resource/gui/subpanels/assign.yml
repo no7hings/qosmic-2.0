@@ -1,0 +1,21 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+
+    gui:
+        name: 'Assign'
+        name_chs: '指定'
+        group_name: 'General(s)'
+
+        icon_name: 'application/python'
+        tool_tip:
+            |-
+            For type/tag assign.
+
+        tool_tip_chs:
+            |-
+            用于类型/标签指定。
+
+        size: [480, 720]

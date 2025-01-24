@@ -12,7 +12,7 @@ import qsm_maya_gui.core as qsm_mya_gui_core
 from ..toolsets import scenery as _toolsets_scenery
 
 
-class PrxPageForSceneryResource(gui_prx_widgets.PrxBasePage):
+class PrxPageForScenery(gui_prx_widgets.PrxBasePage):
     SCRIPT_JOB_NAME = 'lazy_tool_for_scenery'
 
     def _gui_filter_update_visible(self, boolean):
@@ -108,7 +108,7 @@ class PrxPageForSceneryResource(gui_prx_widgets.PrxBasePage):
         self._gui_asset_prx_unit.do_gui_refresh_tools()
 
     def __init__(self, window, session, *args, **kwargs):
-        super(PrxPageForSceneryResource, self).__init__(window, session, *args, **kwargs)
+        super(PrxPageForScenery, self).__init__(window, session, *args, **kwargs)
 
         self.gui_page_setup_fnc()
 
@@ -119,24 +119,27 @@ class PrxPageForSceneryResource(gui_prx_widgets.PrxBasePage):
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Expanding
         )
+
         # top toolbar
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         self._qt_layout.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
+
         # main tool
         self._main_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'main'
         )
         self._gui_add_main_tools()
+
         # reference tool
         self._asset_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'reference', size_mode=1
         )
+
         # reference
         self._asset_prx_input = lzy_gui_prx_widgets.PrxInputForAssetScenery()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
-        # self._asset_prx_input.widget.setMaximumWidth(488)
 
         self._gui_rig_reference_prx_toolbar_unit = _toolsets_scenery.PrxToolbarForSceneryReference(
             self._window, self, self._session, self._asset_prx_input
@@ -144,6 +147,7 @@ class PrxPageForSceneryResource(gui_prx_widgets.PrxBasePage):
 
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
         self._qt_layout.addWidget(self._prx_h_splitter.widget)
+
         # resource tag
         self._asset_tag_filter_tree_view = gui_prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._asset_tag_filter_tree_view)

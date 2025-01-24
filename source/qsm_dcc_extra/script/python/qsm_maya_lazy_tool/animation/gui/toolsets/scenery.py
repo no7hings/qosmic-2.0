@@ -70,7 +70,7 @@ class PrxToolbarForSceneryReference(
                 self._window._configure.get('build.scenery.buttons.reference')
             )
         )
-        self._asset_load_qt_button.setFixedWidth(96)
+        self._asset_load_qt_button._set_auto_width_(True)
         self._asset_load_qt_button.press_clicked.connect(self._on_dcc_load_asset)
         self._asset_load_qt_button._set_action_enable_(False)
 
@@ -86,7 +86,7 @@ class PrxToolbarForSceneryReference(
                 self._window._configure.get('build.scenery.buttons.load_unit_assembly')
             )
         )
-        self._unit_assembly_load_qt_button.setFixedWidth(96)
+        self._unit_assembly_load_qt_button._set_auto_width_(True)
         self._unit_assembly_load_qt_button.press_clicked.connect(self._on_dcc_load_unit_assembly)
         self._unit_assembly_load_qt_button._set_action_enable_(False)
 

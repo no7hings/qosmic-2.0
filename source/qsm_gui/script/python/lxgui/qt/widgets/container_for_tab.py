@@ -440,7 +440,7 @@ class _AbsQtHTabToolBox(
             if event.type() == QtCore.QEvent.Enter:
                 pass
             elif event.type() == QtCore.QEvent.Leave:
-                self._clear_item_hover_()
+                self._do_leave_()
             elif event.type() == QtCore.QEvent.ToolTip:
                 self._do_show_tool_tip_(event)
             elif event.type() == QtCore.QEvent.Resize:
@@ -486,7 +486,7 @@ class _AbsQtHTabToolBox(
                 return True
         elif widget == self._viewport_widget:
             if event.type() == QtCore.QEvent.Enter:
-                self._clear_item_hover_()
+                self._do_leave_()
         return False
 
     def paintEvent(self, event):
@@ -551,6 +551,7 @@ class _AbsQtHTabToolBox(
         else:
             if self._expand_hover_flag is True:
                 self._execute_action_expand_()
+                self._expand_hover_flag = False
 
     def _refresh_expand_(self):
         self._update_expand_icon_file_()
@@ -566,8 +567,10 @@ class _AbsQtHTabToolBox(
         self._index_press = None
         self._refresh_widget_all_()
 
-    def _clear_item_hover_(self):
+    def _do_leave_(self):
         self._hover_tab_index = None
+
+        self._expand_hover_flag = False
 
         self._refresh_widget_draw_()
 

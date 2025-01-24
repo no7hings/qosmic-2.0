@@ -179,6 +179,7 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
             self.load_local_configure()
         else:
             self._configure = bsc_resource.RscExtendConfigure.get_as_content(configure_key)
+
         self._option_configure = self._configure.get_as_content('option')
         self._gui_configure = self._configure.get_as_content('option.gui')
 
@@ -475,6 +476,24 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
 
     SUB_PAGE_KEYS = []
 
+    def _get_subclass_file_path(self):
+        frame = inspect.currentframe().f_back
+        subclass = frame.f_locals.get('self', None)
+        if subclass and isinstance(subclass, self.__class__):
+            file_path = inspect.getfile(type(subclass))
+            return os.path.abspath(file_path)
+        return None
+
+    def load_local_configure(self):
+        file_path = self._get_subclass_file_path()
+        cfg_file_path = '{}.yml'.format(os.path.splitext(file_path)[0].replace('\\', '/'))
+        if os.path.isfile(cfg_file_path):
+            self._configure = bsc_content.Dict(
+                value=cfg_file_path
+            )
+        else:
+            raise RuntimeError()
+
     def __init__(self, window, session, *args, **kwargs):
         super(PrxBaseSubpanel, self).__init__(*args, **kwargs)
 
@@ -543,7 +562,10 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
         )
 
     def _gui_main_fnc(self, configure_key):
-        self._configure = bsc_resource.RscExtendConfigure.get_as_content(configure_key)
+        if configure_key is None:
+            self.load_local_configure()
+        else:
+            self._configure = bsc_resource.RscExtendConfigure.get_as_content(configure_key)
 
         self._option_configure = self._configure.get_as_content('option')
         self._gui_configure = self._configure.get_as_content('option.gui')
