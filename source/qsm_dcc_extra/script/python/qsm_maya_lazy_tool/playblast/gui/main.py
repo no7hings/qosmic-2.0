@@ -7,7 +7,7 @@ from .pages import basic as _page_basic
 
 
 class PrxLazyPlayblastTool(gui_prx_widgets.PrxBasePanel):
-    CONFIGURE_KEY = None
+    # CONFIGURE_KEY = None
 
     def __init__(self, *args, **kwargs):
         super(PrxLazyPlayblastTool, self).__init__(*args, **kwargs)

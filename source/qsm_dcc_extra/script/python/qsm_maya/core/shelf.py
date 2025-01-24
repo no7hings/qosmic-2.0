@@ -67,10 +67,22 @@ class Shelf(object):
 
     @classmethod
     def create_button(cls, shelf, **kwargs):
+        """
+        font:
+        "boldLabelFont"
+        "smallBoldLabelFont"
+        "tinyBoldLabelFont"
+        "plainLabelFont"
+        "smallPlainLabelFont"
+        "obliqueLabelFont"
+        "smallObliqueLabelFont"
+        "fixedWidthFont"
+        "smallFixedWidthFont"
+        """
         options = dict(
             enable=1,
             manage=1,
-            font='plainLabelFont',
+            font='fixedWidthFont',
             commandRepeatable=1,
             style='iconOnly',
             image=gui_core.GuiIcon.get('tool/python_base'),

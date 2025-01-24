@@ -50,6 +50,9 @@ class ShelfBuild(object):
             for j_k, j_v in i_tools.items():
                 j_name = gui_core.GuiUtil.choice_gui_name(language, j_v)
                 j_tool_tip = gui_core.GuiUtil.choice_gui_tool_tip(language, j_v)
+                j_annotation = u'{}\n{}'.format(j_name, j_tool_tip)
+
+                j_auto_label_color = j_v.get('auto_label_color', True)
                 j_script = j_v['script']
                 j_dbl_script = j_v.get('dbl_script') or ''
                 i_button_style = j_v.get('button_style') or 'text_and_icon'
@@ -59,7 +62,7 @@ class ShelfBuild(object):
                         shelf,
                         label=j_name,
                         image=j_icon,
-                        annotation=j_tool_tip,
+                        annotation=j_annotation,
                         command=j_script,
                         doubleClickCommand=j_dbl_script,
                         style='iconOnly',
@@ -72,19 +75,29 @@ class ShelfBuild(object):
 
                     j_icon = gui_core.GuiIcon.get(j_v['icon'])
                     background_rgb = bsc_core.BscTextOpt(j_name).to_hash_rgb(maximum=1.0, s_p=(32, 55), v_p=(55, 85))
-                    j_button = _mya_core.Shelf.create_button(
-                        shelf,
+                    j_kwargs = dict(
                         label=j_name,
                         image=j_icon,
-                        annotation=j_tool_tip,
+                        annotation=j_annotation,
                         command=j_script,
                         doubleClickCommand=j_dbl_script,
                         style='textOnly',
                         imageOverlayLabel=j_button_name,
                         overlayLabelColor=(1.0, 1.0, 1.0),
-                        overlayLabelBackColor=(background_rgb[0], background_rgb[1], background_rgb[2], 1.0),
-                        font='boldLabelFont',
+                        overlayLabelBackColor=(.25, .25, .25, .5),
+                        font='fixedWidthFont',
                         align='center',
+                    )
+                    if j_auto_label_color is True:
+                        j_kwargs.update(
+                            dict(
+                                overlayLabelBackColor=(background_rgb[0], background_rgb[1], background_rgb[2], 1.0),
+                            )
+                        )
+
+                    j_button = _mya_core.Shelf.create_button(
+                        shelf,
+                        **j_kwargs
                     )
                 else:
                     raise RuntimeError()

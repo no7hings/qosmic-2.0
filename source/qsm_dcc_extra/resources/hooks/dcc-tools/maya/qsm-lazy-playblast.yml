@@ -3,19 +3,19 @@ option:
     # config used system
     systems:
         - '*-maya'
-
+    #
     gui:
-        name: 'Assign Tool'
-        name_chs: '指定工具'
+        name: 'Lazy Playblast'
+        name_chs: '懒人拍屏'
         group_name: 'General(s)'
-
-        icon_name: 'application/python'
+        #
+        icon_name: 'lazy/playblast'
         tool_tip:
             |-
-            For type/tag assign.
-
+            Playblast tool as simplify.
+        #
         tool_tip_chs:
             |-
-            用于类型/标签指定。
-
+            简化的拍屏工具。
+        #
         size: [480, 720]

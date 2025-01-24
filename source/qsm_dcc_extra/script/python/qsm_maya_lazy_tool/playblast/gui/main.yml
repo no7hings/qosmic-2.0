@@ -6,10 +6,10 @@ option:
     #
     gui:
         name: 'Lazy Playblast'
-        name_chs: '懒人拍屏工具'
+        name_chs: '懒人拍屏'
         group_name: 'General(s)'
         #
-        icon_name: 'application/playblast'
+        icon_name: 'lazy/playblast'
         tool_tip:
             |-
             Playblast tool as simplify.

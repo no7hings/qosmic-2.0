@@ -9,7 +9,7 @@ option:
         name_chs: '懒人解算工具'
         group_name: 'General(s)'
         #
-        icon_name: 'qosmic/lazy-cfx-tool'
+        icon_name: 'lazy/cfx'
         tool_tip:
             |-
             For CFX.

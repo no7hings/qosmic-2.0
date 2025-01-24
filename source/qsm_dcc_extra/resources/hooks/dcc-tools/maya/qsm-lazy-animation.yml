@@ -9,7 +9,7 @@ option:
         name_chs: '懒人动画工具'
         group_name: 'Asset(s)'
         #
-        icon_name: 'application/resource_library'
+        icon_name: 'lazy/animation'
         tool_tip:
             |-
             include tools for rig, assembly, ...

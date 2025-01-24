@@ -5,8 +5,8 @@ option:
         - '*-maya'
 
     gui:
-        name: 'Lazy Resource Manager'
-        name_chs: '懒人资源管理'
+        name: 'Lazy Resource'
+        name_chs: '懒人资源'
         group_name: 'General(s)'
 
         icon_name: 'lazy/resource'

@@ -9,7 +9,7 @@ option:
         name_chs: '懒人动作拼接'
         group_name: 'Animation(s)'
         #
-        icon_name: 'qosmic/lazy-resource-tool'
+        icon_name: 'lazy/montage'
         tool_tip:
             |-
             For motion composition.

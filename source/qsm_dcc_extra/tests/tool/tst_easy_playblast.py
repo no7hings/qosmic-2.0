@@ -12,5 +12,5 @@ bsc_core.PyReloader2(
 import lxsession.commands as ssn_commands
 
 ssn_commands.execute_hook(
-    '*/*/qsm-lazy-playblast-tool'
+    '*/*/qsm-lazy-playblast'
 )

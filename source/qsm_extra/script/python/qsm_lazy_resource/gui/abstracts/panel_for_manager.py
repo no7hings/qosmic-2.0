@@ -11,7 +11,7 @@ import qsm_screw.core as qsm_scr_core
 
 
 class AbsPrxResourceTool(gui_prx_widgets.PrxBasePanel):
-    # CONFIGURE_KEY = 'lazy-resource/gui/manager'
+    CONFIGURE_KEY = 'lazy-resource/gui/main'
 
     KEY_TAB_KEYS = 'lazy-resource-manager.page_keys'
     HST_TAB_KEY_CURRENT = 'lazy-resource-manager.page_key_current'

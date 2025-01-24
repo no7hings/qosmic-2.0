@@ -14,8 +14,9 @@ build:
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs: '待补充。'
                     button_style: 'text_and_icon'
-                    button_name: 'Work'
+                    button_name: 'Workspace'
                     button_name_chs: '工作'
+                    auto_label_color: False
                     icon: 'lazy/workspace'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-workspace")'
                     dbl_script: ''
@@ -26,7 +27,7 @@ build:
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs: '待补充。'
                     button_style: 'text_and_icon'
-                    button_name: 'Save'
+                    button_name: 'Autosave'
                     button_name_chs: '保存'
                     icon: 'tool/save'
                     script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-workspace-autosave")'
@@ -46,8 +47,9 @@ build:
                         点击打开动画工具：
                             包含简模代理，动态GPU，元素组装，相机遮罩等工具。
                     button_style: 'text_and_icon'
-                    button_name: 'ANI'
+                    button_name: 'Animation'
                     button_name_chs: '动画'
+                    auto_label_color: False
                     icon: 'lazy/animation'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-animation")'
                     dbl_script: ''
@@ -64,7 +66,7 @@ build:
                             简模代理会在后台生成（如果角色已经生成过数据，会直接加载），生成成功后会自动加载到场景中，请耐心等待；
                             加载成功后选中删除可移除。
                     button_style: 'text_and_icon'
-                    button_name: 'PRX'
+                    button_name: 'Proxy'
                     button_name_chs: '简模'
                     icon: 'tool/maya/load-skin-proxy'
                     script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-skin-proxy-load-script")'
@@ -111,7 +113,7 @@ build:
                             刷新GPU缓存：
                                 如果遇到某一帧的GPU缓存不显示，可以点这个按钮强行刷新。
                     button_style: 'text_and_icon'
-                    button_name: 'ASB'
+                    button_name: 'Assembly'
                     button_name_chs: '组装'
                     icon: 'tool/scenery'
                     script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-unit-assembly-load-script")'
@@ -142,7 +144,7 @@ build:
                             移除相机遮罩：
                                 移除所有相机遮罩
                     button_style: 'text_and_icon'
-                    button_name: 'HID'
+                    button_name: 'Hide'
                     button_name_chs: '隐藏'
                     icon: 'tool/hide'
                     script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-camera-mask-create-script&scheme=dynamic")'
@@ -168,10 +170,11 @@ build:
                         点击打开拍屏工具
 
                     button_style: 'text_and_icon'
-                    button_name: 'PLB'
+                    button_name: 'Playblast'
                     button_name_chs: '拍屏'
-                    icon: 'application/playblast'
-                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-playblast-tool")'
+                    auto_label_color: False
+                    icon: 'lazy/playblast'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-playblast")'
 
                 tool_1:
                     name: 'Lazy Playblast'
@@ -184,7 +187,7 @@ build:
                             这个拍屏工具输出的视频更小，更清晰，默认会自动生成在MAYA文件相同的目录。
 
                     button_style: 'text_and_icon'
-                    button_name: 'PLB'
+                    button_name: 'Playblast'
                     button_name_chs: '拍屏'
                     icon: 'tool/play-start'
                     icon_text: 'P'
@@ -220,8 +223,9 @@ build:
                         点击打开动作工具：
                             包含拷贝，粘贴动作，镜像动作，翻转动作，绑定移动等工具。
                     button_style: 'text_and_icon'
-                    button_name: 'MTN'
+                    button_name: 'Motion'
                     button_name_chs: '动作'
+                    auto_label_color: False
                     icon: 'lazy/motion'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-motion-tool")'
                     dbl_script: ''
@@ -236,23 +240,49 @@ build:
                             需要选择绑定或者相机的主控制器（大环）或者根组；
                             用于批量移动带动画的角色，道具和相机；
                             可以给这些定位器打组进行整体移动；
-                            移动后务必不要手动删除定位器，请使用右键菜单中的“移除变换定位器（Locator）”移除。
+                            移动后务必不要手动删除定位器，请使用右键菜单中的“移除移动定位器（Locator）”移除。
                         右键菜单：
                             移除定位器：
                                 点击移除定位器，移除后会把定位器的位移和旋转数据偏移到控制器上。
                     button_style: 'text_and_icon'
-                    button_name: 'MOV'
-                    button_name_chs: '移动'
+                    button_name: 'Transform'
+                    button_name_chs: '变换'
                     icon: 'tool/maya/create-locator'
                     script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-control-move-create-script")'
 
                     actions:
                         action_0:
                             name: 'Remove Control Move(Locator)'
-                            name_chs: '移除控制器移动（定位器）'
+                            name_chs: '移除移动定位器（Locator）'
                             script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-control-move-remove-script")'
 
                 tool_2:
+                    name: 'Control Transform'
+                    name_chs: '控制器变换'
+                    tool_tip: 'To be supplemented.'
+                    tool_tip_chs:
+                        |-
+                        点击创建一个定位器（Locator）：
+                            需要选择绑定或者相机的主控制器（大环）或者根组；
+                            用于批量移动带动画的角色，道具和相机；
+                            可以给这些定位器打组进行整体移动；
+                            移动后务必不要手动删除定位器，请使用右键菜单中的“移除变换定位器（Locator）”移除。
+                        右键菜单：
+                            移除定位器：
+                                点击移除定位器，移除后会把定位器的位移和旋转数据偏移到控制器上。
+                    button_style: 'text_and_icon'
+                    button_name: 'Move'
+                    button_name_chs: '移动'
+                    icon: 'tool/maya/create-locator'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-control-transform-create-script")'
+
+                    actions:
+                        action_0:
+                            name: 'Remove Control Move(Locator)'
+                            name_chs: '移除变换定位器（Locator）'
+                            script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-control-transform-remove-script")'
+
+                tool_3:
                     name: 'FK/IK Switch'
                     name_chs: 'FK/IK 切换'
                     tool_tip: 'To be supplemented.'
@@ -278,8 +308,9 @@ build:
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs: '待补充。'
                     button_style: 'text_and_icon'
-                    button_name: 'SPC'
+                    button_name: 'Montage'
                     button_name_chs: '拼接'
+                    auto_label_color: False
                     icon: 'lazy/montage'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-montage")'
                     dbl_script: ''
@@ -295,8 +326,9 @@ build:
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs: '待补充。'
                     button_style: 'text_and_icon'
-                    button_name: 'RSC'
+                    button_name: 'Resource'
                     button_name_chs: '资源'
+                    auto_label_color: False
                     icon: 'lazy/resource'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-resource")'
                     dbl_script: ''

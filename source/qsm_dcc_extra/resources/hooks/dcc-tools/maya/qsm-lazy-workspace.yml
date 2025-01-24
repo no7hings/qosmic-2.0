@@ -9,7 +9,7 @@ option:
         name_chs: '懒人工作区'
         group_name: 'General(s)'
         #
-        icon_name: 'qosmic/lazy-resource-tool'
+        icon_name: 'lazy/workspace'
         tool_tip:
             |-
             To be supplemented.

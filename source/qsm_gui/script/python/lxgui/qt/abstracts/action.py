@@ -69,8 +69,9 @@ class AbsQtActionBaseDef(object):
         if self._action_is_busied is False:
             if self._action_flag is not None:
                 if self._action_flag in {
-                    self.ActionFlag.Press,
-                    self.ActionFlag.PressDblClick,
+                    # fixme: unset cursor bug in maya, do not set cursor when press or dbl click
+                    # self.ActionFlag.Press,
+                    # self.ActionFlag.PressDblClick,
                     # track
                     self.ActionFlag.TrackPress,
                     #

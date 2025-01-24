@@ -20,7 +20,7 @@ from .pages import scenery as _page_scenery
 class PrxLazyAnimation(gui_prx_widgets.PrxBasePanel):
     SCRIPT_JOB_NAME = 'lazy_tool_for_animation'
 
-    CONFIGURE_KEY = 'lazy-animation/gui/tool'
+    # CONFIGURE_KEY = 'lazy-animation/gui/tool'
 
     HST_TAB_KEY_CURRENT = 'lazy-animation-tool.page_key_current'
 

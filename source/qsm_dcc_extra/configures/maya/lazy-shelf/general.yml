@@ -48,8 +48,8 @@ build:
                     button_style: 'text_and_icon'
                     button_name: 'PLB'
                     button_name_chs: '拍屏'
-                    icon: 'application/playblast'
-                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-playblast-tool")'
+                    icon: 'lazy/playblast'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-playblast")'
 
         character_and_prop:
             tool_tip: 'To be supplemented.'

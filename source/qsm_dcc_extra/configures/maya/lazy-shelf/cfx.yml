@@ -14,8 +14,9 @@ build:
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs: '待补充。'
                     button_style: 'text_and_icon'
-                    button_name: 'Work'
+                    button_name: 'Workspace'
                     button_name_chs: '工作'
+                    auto_label_color: False
                     icon: 'lazy/workspace'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-workspace")'
                     dbl_script: ''
@@ -26,7 +27,7 @@ build:
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs: '待补充。'
                     button_style: 'text_and_icon'
-                    button_name: 'Save'
+                    button_name: 'Autosave'
                     button_name_chs: '保存'
                     icon: 'tool/save'
                     script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-workspace-autosave")'
@@ -45,7 +46,8 @@ build:
                     button_style: 'text_and_icon'
                     button_name: 'CFX'
                     button_name_chs: '解算'
-                    icon: 'tool/kit'
+                    auto_label_color: False
+                    icon: 'lazy/cfx'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-cfx-tool")'
                     dbl_script: ''
 
@@ -63,10 +65,11 @@ build:
                         点击打开拍屏工具
 
                     button_style: 'text_and_icon'
-                    button_name: 'PLB'
+                    button_name: 'Playblast'
                     button_name_chs: '拍屏'
-                    icon: 'application/playblast'
-                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-playblast-tool")'
+                    auto_label_color: False
+                    icon: 'lazy/playblast'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-playblast")'
 
                 tool_1:
                     name: 'Lazy Playblast'
@@ -79,7 +82,7 @@ build:
                             这个拍屏工具输出的视频更小，更清晰，默认会自动生成在MAYA文件相同的目录。
 
                     button_style: 'text_and_icon'
-                    button_name: 'PLB'
+                    button_name: 'Playblast'
                     button_name_chs: '拍屏'
                     icon: 'tool/play-start'
                     icon_text: 'P'
@@ -115,8 +118,9 @@ build:
                         点击打开动作工具：
                             包含拷贝，粘贴动作，镜像动作，翻转动作，绑定移动等工具。
                     button_style: 'text_and_icon'
-                    button_name: 'MTN'
+                    button_name: 'Motion'
                     button_name_chs: '动作'
+                    auto_label_color: False
                     icon: 'lazy/motion'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-motion-tool")'
                     dbl_script: ''
@@ -132,8 +136,9 @@ build:
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs: '待补充。'
                     button_style: 'text_and_icon'
-                    button_name: 'SPC'
+                    button_name: 'Montage'
                     button_name_chs: '拼接'
+                    auto_label_color: False
                     icon: 'lazy/montage'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-montage")'
                     dbl_script: ''
@@ -148,8 +153,9 @@ build:
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs: '待补充。'
                     button_style: 'text_and_icon'
-                    button_name: 'RSC'
+                    button_name: 'Resource'
                     button_name_chs: '资源'
+                    auto_label_color: False
                     icon: 'lazy/resource'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-resource")'
                     dbl_script: ''

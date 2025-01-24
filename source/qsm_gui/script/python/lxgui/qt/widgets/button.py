@@ -501,8 +501,8 @@ class QtPressButton(
                     elif self._action_flag == self.ActionFlag.MenuPress:
                         self._popup_menu_()
                     #
-                    self._action_flag = None
-                    self.update()
+                    self._set_hovered_(False)
+                    self._clear_all_action_flags_()
         return False
 
     def paintEvent(self, event):
@@ -793,8 +793,8 @@ class QtIconPressButton(
                     if event.button() == QtCore.Qt.LeftButton:
                         if self._choose_enable is True:
                             pass
-                        self.pressed.emit()
                         self._set_action_flag_(self.ActionFlag.Press)
+                        self.pressed.emit()
                     elif event.button() == QtCore.Qt.RightButton:
                         self._popup_menu_()
                     self._refresh_widget_draw_()
