@@ -227,7 +227,7 @@ build:
                     button_name_chs: '动作'
                     auto_label_color: False
                     icon: 'lazy/motion'
-                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-motion-tool")'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-motion")'
                     dbl_script: ''
 
                 tool_1:

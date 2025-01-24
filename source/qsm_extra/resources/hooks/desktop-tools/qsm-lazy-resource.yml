@@ -7,7 +7,7 @@ option:
     gui:
         name: 'Lazy Resource'
         name_chs: '懒人资源'
-        group_name: 'General(s)'
+        group_name: 'General'
 
         icon_name: 'lazy/resource'
         tool_tip:

@@ -65,13 +65,14 @@ class _GuiBaseOpt(
         )
         if c:
             for i in c:
+                # update override options when var is dict
                 if isinstance(i, dict):
                     i_key = i.keys()[0]
                     i_value = i.values()[0]
                 else:
                     i_key = i
                     i_value = {}
-                #
+                # update option from database
                 i_kwargs = dict(
                     option_hook_key=i_key,
                     stage_name=scr_stage_name,
@@ -82,7 +83,7 @@ class _GuiBaseOpt(
                 options.append(
                     bsc_core.ArgDictStringOpt(i_kwargs).to_string(),
                 )
-            return bsc_session.OptionHook.generate_menu_contents(options, self._window._language)
+            return bsc_session.OptionHook.generate_menu_content(options, self._window._language)
 
     def generate_scr_entity_menu_content(self, scr_entity, extra_key=None):
         scr_stage_type = self._page._scr_stage.type
@@ -114,7 +115,7 @@ class _GuiBaseOpt(
                 options.append(
                     bsc_core.ArgDictStringOpt(i_kwargs).to_string(),
                 )
-            return bsc_session.OptionHook.generate_menu_contents(options, self._window._language)
+            return bsc_session.OptionHook.generate_menu_content(options, self._window._language)
 
     def gui_update_thread_flag(self):
         self._gui_thread_flag += 1

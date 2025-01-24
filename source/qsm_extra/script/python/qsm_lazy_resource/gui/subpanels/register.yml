@@ -7,7 +7,7 @@ option:
     gui:
         name: 'Resister'
         name_chs: '登记'
-        group_name: 'General(s)'
+        group_name: 'General'
 
         icon_name: 'application/python'
         tool_tip:

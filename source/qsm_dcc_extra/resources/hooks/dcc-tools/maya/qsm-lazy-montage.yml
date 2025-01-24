@@ -6,8 +6,8 @@ option:
     #
     gui:
         name: 'Lazy Montage'
-        name_chs: '懒人动作拼接'
-        group_name: 'Animation(s)'
+        name_chs: '懒人动作'
+        group_name: 'General'
         #
         icon_name: 'lazy/montage'
         tool_tip:

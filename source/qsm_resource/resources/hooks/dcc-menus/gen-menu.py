@@ -6,6 +6,8 @@ def main(session):
 
     import lxbasic.core as bsc_core
 
+    import lxbasic.session as bsc_session
+
     import lxsession.commands as ssn_commands
 
     import lxgui.qt.core as gui_qt_core
@@ -50,8 +52,16 @@ def main(session):
     else:
         raise NotImplementedError()
 
-    menu_content = ssn_commands.get_menu_content_by_hooks(configure.get('hooks'))
-    menu_content.update_from(ssn_commands.get_menu_content_by_hook_options_(configure.get('option-hooks')))
+    menu_content = bsc_session.Hook.generate_menu_content(
+        configure.get('hooks'),
+        language=bsc_core.BscEnviron.get_gui_language()
+    )
+    menu_content.update_from(
+        bsc_session.OptionHook.generate_menu_content(
+            configure.get('option-hooks'),
+            language=bsc_core.BscEnviron.get_gui_language(),
+        )
+    )
 
     gui_qt_core.GuiQtMenuOpt(menu).create_by_content(
         menu_content

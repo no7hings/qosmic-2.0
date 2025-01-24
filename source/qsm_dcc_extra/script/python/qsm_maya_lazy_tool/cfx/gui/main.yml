@@ -7,7 +7,7 @@ option:
     gui:
         name: 'Lazy CFX Tool'
         name_chs: '懒人解算工具'
-        group_name: 'General(s)'
+        group_name: 'General'
         #
         icon_name: 'lazy/cfx'
         tool_tip:

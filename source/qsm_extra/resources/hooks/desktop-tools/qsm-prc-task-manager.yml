@@ -7,7 +7,7 @@ option:
     gui:
         name: 'Lazy Backstage Task'
         name_chs: '懒人后台任务'
-        group_name: 'General(s)'
+        group_name: 'General'
         #
         icon_name: 'lazy/backstage'
         tool_tip:

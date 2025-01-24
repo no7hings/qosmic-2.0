@@ -7,7 +7,7 @@ option:
     gui:
         name: 'Asset Task Create'
         name_chs: '资产任务创建'
-        group_name: 'General(s)'
+        group_name: 'General'
         #
         icon_name: 'lazy/asset-workspace'
         tool_tip:

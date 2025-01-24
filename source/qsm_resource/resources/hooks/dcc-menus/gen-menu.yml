@@ -5,24 +5,23 @@ option:
         - '*-maya'
     #
     gui:
-        name: 'TD Tool(s)'
+        name: 'QSM'
         group_name: ''
         #
         icon_name: ''
         tool_tip: ''
 #
 hooks:
-    # asset
-    # shot
-    # test
-    - 'dcc-tools/maya/qsm-lazy-animation': {gui_parent: '/Test'}
+    # lazy
     # general
-    - 'dcc-tools/gen-tool-kit': {gui_parent: '/General'}
-    - 'dcc-tools/gen-asset-dcc-texture-manager': {gui_parent: '/General'}
+    - 'dcc-tools/maya/qsm-lazy-workspace': {gui_parent: '/Lazy'}
+    - 'dcc-tools/maya/qsm-lazy-motion': {gui_parent: '/Lazy'}
+    - 'dcc-tools/maya/qsm-lazy-montage': {gui_parent: '/Lazy'}
+    - 'dcc-tools/maya/qsm-lazy-resource': {gui_parent: '/Lazy'}
+    # shot
+    - 'dcc-tools/maya/qsm-lazy-animation': {gui_parent: '/Lazy'}
+    - 'dcc-tools/maya/qsm-lazy-cfx': {gui_parent: '/Lazy'}
     # maya
-    - 'dcc-tools/maya/scene-clearner': {gui_parent: '/General'}
-    - 'dcc-actions/maya/create-socket-connection': {gui_parent: '/General'}
-    # lib
-    - 'desktop-tools/resource-library': {gui_parent: '/Asset', gui_icon_name: 'window/loader'}
+    - 'dcc-tools/maya/scene-clearner': {gui_parent: '/Other'}
 #
 option-hooks: {}

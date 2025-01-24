@@ -7,9 +7,9 @@ option:
     gui:
         name: 'Lazy Motion'
         name_chs: '懒人动作'
-        group_name: 'General(s)'
+        group_name: 'General'
         #
-        icon_name: 'qosmic/lazy-cfx-tool'
+        icon_name: 'lazy/motion'
         tool_tip:
             |-
             For Motion.

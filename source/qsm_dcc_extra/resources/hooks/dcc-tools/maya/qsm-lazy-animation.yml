@@ -7,7 +7,7 @@ option:
     gui:
         name: 'Lazy Animation'
         name_chs: '懒人动画工具'
-        group_name: 'Asset(s)'
+        group_name: 'Shot'
         #
         icon_name: 'lazy/animation'
         tool_tip:
