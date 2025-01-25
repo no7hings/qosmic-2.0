@@ -55,7 +55,7 @@ from ..core import time_ as _cor_time
 
 from ..core import process as _cor_process
 
-from ..core import thread as _cor_thread
+from ..core import thread_ as _cor_thread
 
 
 class StgRpc(object):

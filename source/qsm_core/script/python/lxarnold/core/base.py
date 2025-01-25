@@ -1,4 +1,6 @@
 # coding:utf-8
+import six
+
 import re
 
 import ctypes
@@ -390,7 +392,7 @@ class AndNodeOpt(object):
     @classmethod
     def set_name_clear(cls, name):
         return re.sub(
-            ur'[^\u4e00-\u9fa5a-zA-Z0-9]', '_', name
+            six.u(r'[^\u4e00-\u9fa5a-zA-Z0-9]'), '_', name
         )
 
     def set_name_prettify(self, index, look_pass_name=None, time_tag=None):

@@ -3,16 +3,6 @@ import math
 
 
 class BscMeshFaceVertexIndicesOpt(object):
-    # print BscMeshFaceVertexIndicesOpt(
-    #     [0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 4, 5, 9, 8, 5, 6, 10, 9, 6, 7, 11, 10, 8, 9, 13, 12, 9, 10, 14, 13, 10, 11, 15, 14]
-    # ).reverse_by_counts(
-    #     [4, 4, 4, 4, 4, 4, 4, 4, 4]
-    # )
-    # print BscMeshFaceVertexIndicesOpt(
-    #     [0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 4, 5, 9, 8, 5, 6, 10, 9, 6, 7, 11, 10, 8, 9, 13, 12, 9, 10, 14, 13, 10, 11, 15, 14]
-    # ).reverse_by_start_indices(
-    #     [0, 4, 8, 12, 16, 20, 24, 28, 32, 36]
-    # )
     def __init__(self, face_vertex_indices):
         self._raw = face_vertex_indices
 
@@ -63,9 +53,6 @@ class BscMeshFaceShellOpt(object):
 
     @classmethod
     def generate_shell_dict_from_face_vertices(cls, vertex_counts, vertex_indices):
-        # StgFileOpt(
-        #     '/data/f/shell_id_test/input.json'
-        # ).set_write([vertex_counts, vertex_indices])
         face_to_vertex_dict, vertex_to_face_dict = cls._generate_face_and_vertex_query_dict(
             vertex_counts, vertex_indices
         )
@@ -153,7 +140,9 @@ class BscCamera(object):
     get_front_transformation = compute_front_transformation
 
     @classmethod
-    def compute_project_transformation(cls, size, scale_percent, margin_percent, camera_fov, camera_screen_mode, render_resolution):
+    def compute_project_transformation(
+        cls, size, scale_percent, margin_percent, camera_fov, camera_screen_mode, render_resolution
+    ):
         # s = 1, x = y = -0
         # s = .5, x = y = -.25
         # s = .25, x = y = -.375

@@ -88,7 +88,7 @@ class BscScriptExecute(object):
             )
         )
         kwargs['__name__'] = '__main__'
-        execfile(file_path, kwargs)
+        _base.BscSystem.execfile(file_path, kwargs)
         _bsc_log.Log.trace_method_result(
             cls.LOG_KEY, 'complete for: "{}"'.format(
                 file_path
@@ -103,17 +103,17 @@ class BscScriptExecute(object):
             )
         )
         if _base.BscPlatform.get_is_linux():
-            cmds = [
+            cmd_args = [
                 'gnome-terminal', '-t', kwargs.get('title') or 'untitled',
                 '-e "bash -l {}"'.format(file_path)
             ]
             _process.BscProcess.execute_as_trace(
-                ' '.join(cmds)
+                ' '.join(cmd_args)
             )
         elif _base.BscPlatform.get_is_windows():
-            cmds = ['start', 'cmd', '/k', file_path]
+            cmd_args = ['start', 'cmd', '/k', file_path]
             _process.BscProcess.execute_as_trace(
-                ' '.join(cmds)
+                ' '.join(cmd_args)
             )
         _bsc_log.Log.trace_method_result(
             'option-hook', 'complete for: "{}"'.format(
@@ -124,18 +124,18 @@ class BscScriptExecute(object):
     @staticmethod
     def execute_shell_script_use_terminal(cmd, **kwargs):
         if _base.BscPlatform.get_is_linux():
-            cmds = [
+            cmd_args = [
                 'gnome-terminal',
                 '-t', kwargs.get('title') or 'untitled',
                 '--', 'bash', '-l', '-c', cmd
             ]
             _process.BscProcess.execute_as_trace(
-                ' '.join(cmds)
+                ' '.join(cmd_args)
             )
         elif _base.BscPlatform.get_is_windows():
-            cmds = ['start', 'cmd', '/k', cmd]
+            cmd_args = ['start', 'cmd', '/k', cmd]
             _process.BscProcess.execute_as_trace(
-                ' '.join(cmds)
+                ' '.join(cmd_args)
             )
 
     @staticmethod

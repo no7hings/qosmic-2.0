@@ -1,4 +1,6 @@
 # coding:utf-8
+import six
+
 import fnmatch
 
 import re
@@ -195,7 +197,7 @@ class BscNodePath:
     @classmethod
     def cleanup_dag_path(cls, path, pathsep='/'):
         return re.sub(
-            ur'[^\u4e00-\u9fa5a-zA-Z0-9{}]'.format(pathsep), '_', path
+            six.u(r'[^\u4e00-\u9fa5a-zA-Z0-9{}]').format(pathsep), '_', path
         )
 
     # leaf path is which path has no children

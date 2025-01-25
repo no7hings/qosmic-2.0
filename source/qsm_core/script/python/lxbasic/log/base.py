@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import os
 
 import six
@@ -563,4 +565,4 @@ class LogException(object):
 
 
 if __name__ == '__main__':
-    print LogBase.get_user_debug_directory('qt')
+    print(LogBase.get_user_debug_directory('qt'))

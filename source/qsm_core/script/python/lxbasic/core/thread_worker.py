@@ -9,7 +9,7 @@ import six
 # process
 from . import configure as _configure
 
-from . import thread as _thread
+from . import thread_ as _thread
 
 from . import process as _process
 

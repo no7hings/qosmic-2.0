@@ -287,7 +287,7 @@ class AbsSsnGener(
             )
         )
         kwargs['__name__'] = '__main__'
-        execfile(file_path, kwargs)
+        bsc_core.BscSystem.execfile(file_path, kwargs)
         bsc_log.Log.trace_method_result(
             'option-hook', 'complete for: "{}"'.format(
                 file_path

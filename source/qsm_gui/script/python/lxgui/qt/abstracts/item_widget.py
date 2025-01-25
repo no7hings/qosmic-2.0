@@ -11,7 +11,7 @@ from .. import core as _qt_core
 
 from . import widget as _widget
 
-from . import thread as _thread
+from . import thread_ as _thread
 
 
 class AbsQtMediaBaseDef(

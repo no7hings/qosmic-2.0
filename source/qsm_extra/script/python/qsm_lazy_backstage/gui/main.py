@@ -16,11 +16,11 @@ from .pages import task as _page_task
 from .pages import notice as _page_notice
 
 
-class PrxLazyBackstageTool(gui_prx_widgets.PrxSessionWindow):
+class PrxLazyBackstage(gui_prx_widgets.PrxSessionWindow):
     SERVER_FLAG = True
 
     def __init__(self, session, *args, **kwargs):
-        super(PrxLazyBackstageTool, self).__init__(session, *args, **kwargs)
+        super(PrxLazyBackstage, self).__init__(session, *args, **kwargs)
 
     def gui_setup_fnc(self):
         self.set_main_style_mode(1)

@@ -15,7 +15,7 @@ from .show import *
 
 from .dcc import *
 
-from .thread import *
+from .thread_ import *
 
 from .thread_worker import *
 

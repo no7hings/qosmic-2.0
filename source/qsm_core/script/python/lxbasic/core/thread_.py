@@ -93,7 +93,7 @@ class TrdCommandPool(threading.Thread):
         self._index = index
 
         self._kill_flag = False
-        
+
         self._signal_status_changed = TrdSignal(object, int)
         self._signal_completed = TrdSignal(object, list)
         self._signal_failed = TrdSignal(object, list)

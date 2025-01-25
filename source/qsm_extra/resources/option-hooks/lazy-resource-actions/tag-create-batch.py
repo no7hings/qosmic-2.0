@@ -6,6 +6,8 @@ def main(session):
     if not window:
         return
 
+    import six
+
     import re
 
     import lxgui.core as gui_core
@@ -26,7 +28,7 @@ def main(session):
         title=window.choice_gui_name(session.gui_configure.get('window'))
     )
     if input_result:
-        texts = re.split(ur'[^\w\u4e00-\u9fff]+', input_result)
+        texts = re.split(six.u(r'[^\w\u4e00-\u9fff]+'), input_result)
         if texts:
             page = window.gui_get_current_page()
             for i_seq, i_text in enumerate(texts):

@@ -379,6 +379,15 @@ class BscSystem(object):
                 i_t.start()
                 break
 
+    @staticmethod
+    def execfile(filepath, globals=None, locals=None):
+        if globals is None:
+            globals = {}
+        if locals is None:
+            locals = globals
+        with open(filepath, 'rb') as file:
+            exec (compile(file.read(), filepath, 'exec'), globals, locals)
+
 
 class BscStorage(object):
     PATHSEP = '/'
@@ -1017,7 +1026,7 @@ class SPathMtd(object):
     )
     SAFE_MAP = {}
     SAFE_QUOTERS = {}
-    for i, c in zip(xrange(256), str(bytearray(xrange(256)))):
+    for i, c in zip(range(256), str(bytearray(range(256)))):
         SAFE_MAP[c] = c if (i < 128 and c in ALWAYS_SAFE) else '%{:02X}'.format(i)
 
     RE_ASCII = re.compile('([\x00-\x7f]+)')

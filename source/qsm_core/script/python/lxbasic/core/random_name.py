@@ -1,9 +1,16 @@
 # coding:utf-8
+import sys as _sys
+
 import os as _os
 
 from random import Random as _Random
 
-import dummy_thread as _thread
+if _sys.version_info[0] < 3:
+    # python 2
+    import dummy_thread as _thread
+else:
+    # python 3
+    import _dummy_thread as _thread
 
 _allocate_lock = _thread.allocate_lock
 

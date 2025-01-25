@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import hashlib
 
 import six
@@ -997,11 +999,11 @@ class BscTextOpt(object):
                 r'[^a-zA-Z0-9]', '0', string
             ).lower()
             value_txt = str(value).ljust(gap*3, '0')[:gap*3]
-            print value_txt
+            print(value_txt)
             h_a = int(value_txt[0:gap], 32)
             s_a = int(value_txt[gap:gap*2], 32)
             v_a = int(value_txt[gap*2:gap*3], 32)
-            print h_a, s_a, v_a
+            print(h_a, s_a, v_a)
             h = float(h_a%(360+seed)*d)/d
             s = float(s_p_min+s_a%(s_p_max-s_p_min))/100.0
             v = float(v_p_min+v_a%(v_p_max-v_p_min))/100.0

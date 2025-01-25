@@ -7,7 +7,7 @@ from .lru_cache import *
 
 from .base import *
 
-from .thread import *
+from .thread_ import *
 
 from .thread_worker import *
 
