@@ -90,8 +90,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 324.5,
-    "collapsed": true
+    "width": 324.5
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -107,7 +106,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "随记/动作拼接.md",
+                "file": "开发相关/开发进度/优化.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -124,7 +123,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "随记/动作拼接.md",
+                "file": "开发相关/开发进度/优化.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -147,7 +146,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "随记/动作拼接.md"
+                "file": "开发相关/开发进度/优化.md"
               }
             }
           },
@@ -169,7 +168,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "随记/动作拼接.md"
+                "file": "开发相关/开发进度/优化.md"
               }
             }
           },

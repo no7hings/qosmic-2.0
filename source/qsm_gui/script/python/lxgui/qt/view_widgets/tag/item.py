@@ -59,7 +59,7 @@ class _AbsTagItem(object):
     def _init_tag_base_(self, widget):
         self._widget = widget
 
-        self._item_model = _vew_mod_item.TagItemMode(self)
+        self._item_model = _vew_mod_item.TagItemModel(self)
 
         self._view_widget = None
         self._parent_widget = None

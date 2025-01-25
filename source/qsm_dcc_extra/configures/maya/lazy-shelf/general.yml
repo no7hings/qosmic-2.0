@@ -247,7 +247,7 @@ build:
             tools:
                 tool_0:
                     name: 'Lazy Montage'
-                    name_chs: '懒人动作拼接'
+                    name_chs: '懒人剪辑'
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs: '待补充。'
                     button_style: 'text_and_icon'

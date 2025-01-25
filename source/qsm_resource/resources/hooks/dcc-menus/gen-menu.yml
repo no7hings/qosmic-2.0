@@ -6,6 +6,7 @@ option:
     #
     gui:
         name: 'QSM'
+        name_chs: 'QSM'
         group_name: ''
         #
         icon_name: ''
@@ -14,14 +15,14 @@ option:
 hooks:
     # lazy
     # general
-    - 'dcc-tools/maya/qsm-lazy-workspace': {gui_parent: '/Lazy'}
-    - 'dcc-tools/maya/qsm-lazy-motion': {gui_parent: '/Lazy'}
-    - 'dcc-tools/maya/qsm-lazy-montage': {gui_parent: '/Lazy'}
-    - 'dcc-tools/maya/qsm-lazy-resource': {gui_parent: '/Lazy'}
+    - 'separator': {gui_parent: '/Tool', gui_parent_chs: '/工具', gui_name: 'general', gui_name_chs: '通用'}
+    - 'dcc-tools/maya/qsm-lazy-workspace': {gui_parent: '/Tool', gui_parent_chs: '/工具'}
+    - 'dcc-tools/maya/qsm-lazy-resource': {gui_parent: '/Tool', gui_parent_chs: '/工具'}
+    - 'dcc-tools/maya/qsm-lazy-motion': {gui_parent: '/Tool', gui_parent_chs: '/工具'}
+    - 'dcc-tools/maya/qsm-lazy-montage': {gui_parent: '/Tool', gui_parent_chs: '/工具'}
     # shot
-    - 'dcc-tools/maya/qsm-lazy-animation': {gui_parent: '/Lazy'}
-    - 'dcc-tools/maya/qsm-lazy-cfx': {gui_parent: '/Lazy'}
-    # maya
-    - 'dcc-tools/maya/scene-clearner': {gui_parent: '/Other'}
-#
+    - 'separator': {gui_parent: '/Tool', gui_parent_chs: '/工具', gui_name: 'shot', gui_name_chs: '镜头'}
+    - 'dcc-tools/maya/qsm-lazy-animation': {gui_parent: '/Tool', gui_parent_chs: '/工具'}
+    - 'dcc-tools/maya/qsm-lazy-cfx': {gui_parent: '/Tool', gui_parent_chs: '/工具'}
+
 option-hooks: {}

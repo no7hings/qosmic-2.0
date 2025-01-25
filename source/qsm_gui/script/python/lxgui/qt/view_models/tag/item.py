@@ -4,13 +4,13 @@ from .. import base as _base
 from .. import item_base as _item_base
 
 
-class TagItemMode(_item_base.AbsItemModel):
+class TagItemModel(_item_base.AbsItemModel):
     WAIT_PLAY_DELAY = 50
 
     NUMBER_TEXT_FORMAT = '({})'
 
     def __init__(self, item):
-        super(TagItemMode, self).__init__(
+        super(TagItemModel, self).__init__(
             item,
             _base._Data()
         )

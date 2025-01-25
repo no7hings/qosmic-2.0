@@ -245,8 +245,8 @@ build:
                             移除定位器：
                                 点击移除定位器，移除后会把定位器的位移和旋转数据偏移到控制器上。
                     button_style: 'text_and_icon'
-                    button_name: 'Transform'
-                    button_name_chs: '变换'
+                    button_name: 'Move'
+                    button_name_chs: '移动'
                     icon: 'tool/maya/create-locator'
                     script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-control-move-create-script")'
 
@@ -262,17 +262,10 @@ build:
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs:
                         |-
-                        点击创建一个定位器（Locator）：
-                            需要选择绑定或者相机的主控制器（大环）或者根组；
-                            用于批量移动带动画的角色，道具和相机；
-                            可以给这些定位器打组进行整体移动；
-                            移动后务必不要手动删除定位器，请使用右键菜单中的“移除变换定位器（Locator）”移除。
-                        右键菜单：
-                            移除定位器：
-                                点击移除定位器，移除后会把定位器的位移和旋转数据偏移到控制器上。
+                        待补充。
                     button_style: 'text_and_icon'
-                    button_name: 'Move'
-                    button_name_chs: '移动'
+                    button_name: 'Transform'
+                    button_name_chs: '变换'
                     icon: 'tool/maya/create-locator'
                     script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-control-transform-create-script")'
 
@@ -304,12 +297,12 @@ build:
             tools:
                 tool_0:
                     name: 'Lazy Montage'
-                    name_chs: '懒人动作拼接'
+                    name_chs: '懒人剪辑'
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs: '待补充。'
                     button_style: 'text_and_icon'
                     button_name: 'Montage'
-                    button_name_chs: '拼接'
+                    button_name_chs: '剪辑'
                     auto_label_color: False
                     icon: 'lazy/montage'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-montage")'

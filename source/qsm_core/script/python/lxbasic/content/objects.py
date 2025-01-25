@@ -175,6 +175,7 @@ class AbsContent(object):
                     _key = six.u('{}.{}').format(k_, _k)
                 else:
                     _key = _k
+
                 list_.append(_key)
                 if isinstance(_v, dict):
                     rcs_fnc_(_key, _v)

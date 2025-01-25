@@ -6,7 +6,7 @@ option:
     #
     gui:
         name: 'Lazy Workspace'
-        name_chs: '懒人工作区'
+        name_chs: '懒人工作'
         group_name: 'General'
         #
         icon_name: 'lazy/workspace'

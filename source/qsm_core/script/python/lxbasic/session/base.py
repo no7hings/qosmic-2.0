@@ -23,10 +23,10 @@ class AbsSsnConfigureBaseDef(object):
 
     def _init_configure_base_def_(self):
         self._basic_configure = self.configure.get_as_content(
-            'option'
+            'option', relative=True
         )
         self._gui_configure = self.configure.get_as_content(
-            'option.gui'
+            'option.gui', relative=True
         )
 
     def get_basic_configure(self):
