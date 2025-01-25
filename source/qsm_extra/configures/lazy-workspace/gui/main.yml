@@ -6,7 +6,7 @@ option:
     #
     gui:
         name: 'Lazy Workspace'
-        name_chs: '懒人工作'
+        name_chs: '懒人工作空间'
         group_name: 'General'
         #
         icon_name: 'lazy/workspace'
@@ -19,6 +19,8 @@ option:
             待补充。
 
         size: [800, 800]
+
+        help_url: 'http://{host}/dokuwiki/doku.php?id=%E6%87%92%E4%BA%BA%E5%B7%A5%E5%85%B7:%E6%87%92%E4%BA%BA%E5%B7%A5%E4%BD%9C%E7%A9%BA%E9%97%B4'
 
 build:
     messages:

@@ -502,6 +502,7 @@ class _GuiTagOpt(
         self._page._prx_v_splitter_0.add_widget(self._qt_tag_widget)
 
         self._qt_tag_widget.refresh.connect(self.do_gui_refresh_all)
+        self._qt_tag_widget._view_model.set_item_color_enable(True)
         self._qt_tag_widget._view.check_paths_changed.connect(
             self._page.do_gui_node_refresh_by_tag_check
         )

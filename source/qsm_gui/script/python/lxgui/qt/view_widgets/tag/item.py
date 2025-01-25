@@ -248,8 +248,23 @@ class _QtTagNodeItem(
 
         font = item_model_data.text.font
 
+        add_w = 0
+
+        color_frm_w = 20
+        icn_w = 16
+
+        icn_y = y+(h-icn_w)/2
+
+        if item_model_data.color_enable is True:
+            add_w += color_frm_w
+            item_model_data.color.rect.setRect(
+                x+(color_frm_w-icn_w)/2, icn_y, icn_w, icn_w
+            )
+
         txt_w, txt_h = QtGui.QFontMetrics(font).width(item_model_data.name.text)+8, h
-        self._frame_border_radius = 2
+
+        c_x += add_w
+
         # text
         item_model_data.name.rect.setRect(
             c_x, y, txt_w, txt_h
@@ -265,11 +280,8 @@ class _QtTagNodeItem(
             c_x += num_w
 
         fix_w = c_x
-        self._frame_draw_rect.setRect(
-            x+1, y+1, fix_w-1, h-1
-        )
         item_model_data.frame.rect.setRect(
-            x+1, y+1, fix_w-1, h-1
+            x+add_w+1, y+1, fix_w-add_w-1, h-1
         )
         self.setFixedWidth(fix_w)
 
@@ -313,13 +325,28 @@ class _QtTagNodeItem(
 
             txt_color = QtGui.QColor(*_gui_core.GuiRgba.LightBlack)
 
+        painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
+        # frame
         painter.setPen(QtGui.QColor(0, 0, 0, 0))
         painter.setBrush(bkg_color)
         painter.drawRect(item_model_data.frame.rect)
 
+        # color
+        if item_model_data.color_enable is True:
+            rgb = item_model_data.color.rgb
+            if item_model_data.number_enable is True:
+                if item_model_data.number.flag is False:
+                    rgb = _gui_core.GuiRgba.DarkGray
+
+            self._item_model._draw_color(
+                painter,
+                item_model_data.color.rect, rgb
+            )
+
+        # name
         painter.setPen(txt_color)
         painter.setFont(item_model_data.text.font)
-        # text
+
         text = painter.fontMetrics().elidedText(
             item_model_data.name.text,
             QtCore.Qt.ElideMiddle,
@@ -370,7 +397,7 @@ class _QtTagNodeItem(
 
     def _do_show_tool_tip_(self, event):
         if self._tool_tip_css is not None:
-            p = self._frame_draw_rect.bottomLeft()
+            p = self._item_model._data.frame.rect.bottomLeft()
             p = self.mapToGlobal(p)+QtCore.QPoint(0, -15)
             # noinspection PyArgumentList
             QtWidgets.QToolTip.showText(
@@ -394,11 +421,6 @@ class _QtTagNodeItem(
         self._init_tag_base_(self)
 
         self._painter_flag = False
-
-        self._frame_draw_rect = QtCore.QRect()
-        self._frame_border_radius = 0
-        self._frame_background_color = _gui_core.GuiRgba.DarkWhite
-        self._frame_background_color_checked = _gui_core.GuiRgba.LightAzureBlue
 
         self.installEventFilter(self)
 

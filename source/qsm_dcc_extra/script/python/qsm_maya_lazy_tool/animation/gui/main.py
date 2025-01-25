@@ -119,31 +119,31 @@ class PrxLazyAnimation(gui_prx_widgets.PrxBasePanel):
         self._chr_and_prp_prx_page._page_prx_tab_tool_box.save_history()
         self._scenery_prx_page._page_prx_tab_tool_box.save_history()
 
-    def show_help_unit(self):
-        import os
-
-        _0 = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
-        if os.path.isfile(_0):
-            cmd_script = '"{}" "{}"'.format(
-                _0,
-                bsc_resource.ExtendResource.get(
-                    'docs/resource-manager.pdf'
-                )
-            )
-
-            bsc_core.BscProcess.execute_use_thread(
-                cmd_script
-            )
-        else:
-            _1 = 'C:/Program Files (x86)/Adobe/Reader 11.0/Reader/AcroRd32.exe'
-            if os.path.isfile(_1):
-                cmd_script = '"{}" "{}"'.format(
-                    _1,
-                    bsc_resource.ExtendResource.get(
-                        'docs/resource-manager.pdf'
-                    )
-                )
-
-                bsc_core.BscProcess.execute_use_thread(
-                    cmd_script
-                )
+    # def show_help_unit(self):
+    #     import os
+    #
+    #     _0 = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
+    #     if os.path.isfile(_0):
+    #         cmd_script = '"{}" "{}"'.format(
+    #             _0,
+    #             bsc_resource.ExtendResource.get(
+    #                 'docs/resource-manager.pdf'
+    #             )
+    #         )
+    #
+    #         bsc_core.BscProcess.execute_use_thread(
+    #             cmd_script
+    #         )
+    #     else:
+    #         _1 = 'C:/Program Files (x86)/Adobe/Reader 11.0/Reader/AcroRd32.exe'
+    #         if os.path.isfile(_1):
+    #             cmd_script = '"{}" "{}"'.format(
+    #                 _1,
+    #                 bsc_resource.ExtendResource.get(
+    #                     'docs/resource-manager.pdf'
+    #                 )
+    #             )
+    #
+    #             bsc_core.BscProcess.execute_use_thread(
+    #                 cmd_script
+    #             )

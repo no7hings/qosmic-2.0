@@ -814,7 +814,7 @@ class AbsItemModel(object):
     @classmethod
     def _draw_color(cls, painter, rect, rgb):
         painter.setPen(
-            QtGui.QColor(*_gui_core.GuiRgba.LightGray)
+            QtGui.QColor(*_gui_core.GuiRgba.Gray)
         )
         painter.setBrush(
             QtGui.QColor(*rgb)

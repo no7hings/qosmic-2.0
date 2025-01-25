@@ -33,6 +33,10 @@ import glob
 
 import socket
 
+import threading
+
+import functools
+
 import collections
 # process
 from . import configure as _configure
@@ -333,6 +337,47 @@ class BscSystem(object):
     @classmethod
     def trace_error(cls, text):
         return sys.stderr.write(text+'\n')
+
+    @classmethod
+    def get_is_dev(cls):
+        return getpass.getuser() == 'nothings'
+
+    @classmethod
+    def execute_cmd_script(cls, cmd_script):
+        s_p = subprocess.Popen(
+            cmd_script,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+
+        output, unused_err = s_p.communicate()
+        if s_p.returncode != 0:
+            raise subprocess.CalledProcessError(s_p.returncode, cmd_script)
+
+        s_p.wait()
+        return output.splitlines()
+
+    @classmethod
+    def open_url(cls, url):
+        paths = [
+            'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+            'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
+            'C:/Program Files (x86)/Internet Explorer/iexplore.exe',
+        ]
+        for i in paths:
+            if os.path.isfile(i):
+                i_cmd_script = '"{}" "{}"'.format(
+                    i, url
+                )
+                i_t = threading.Thread(
+                    target=functools.partial(
+                        cls.execute_cmd_script,
+                        i_cmd_script
+                    )
+                )
+                i_t.start()
+                break
 
 
 class BscStorage(object):

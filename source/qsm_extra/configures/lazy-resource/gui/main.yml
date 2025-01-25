@@ -23,6 +23,8 @@ option:
         item_icon_frame_size: [20, 20]
         item_icon_size: [20, 20]
 
+        help_url: 'http://{host}/dokuwiki/doku.php?id=%E6%87%92%E4%BA%BA%E5%B7%A5%E5%85%B7:%E6%87%92%E4%BA%BA%E8%B5%84%E6%BA%90'
+
 # for all entities
 entity-type-actions:
     video:

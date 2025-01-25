@@ -74,34 +74,34 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
         if page is not None:
             page.do_gui_refresh_all()
 
-    def show_help_unit(self):
-        import os
-
-        _0 = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
-        if os.path.isfile(_0):
-            cmd_script = '"{}" "{}"'.format(
-                _0,
-                bsc_resource.ExtendResource.get(
-                    'docs/cfx-flow.pdf'
-                )
-            )
-
-            bsc_core.BscProcess.execute_use_thread(
-                cmd_script
-            )
-        else:
-            _1 = 'C:/Program Files (x86)/Adobe/Reader 11.0/Reader/AcroRd32.exe'
-            if os.path.isfile(_1):
-                cmd_script = '"{}" "{}"'.format(
-                    _1,
-                    bsc_resource.ExtendResource.get(
-                        'docs/cfx-flow.pdf'
-                    )
-                )
-
-                bsc_core.BscProcess.execute_use_thread(
-                    cmd_script
-                )
+    # def show_help_unit(self):
+    #     import os
+    #
+    #     _0 = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
+    #     if os.path.isfile(_0):
+    #         cmd_script = '"{}" "{}"'.format(
+    #             _0,
+    #             bsc_resource.ExtendResource.get(
+    #                 'docs/cfx-flow.pdf'
+    #             )
+    #         )
+    #
+    #         bsc_core.BscProcess.execute_use_thread(
+    #             cmd_script
+    #         )
+    #     else:
+    #         _1 = 'C:/Program Files (x86)/Adobe/Reader 11.0/Reader/AcroRd32.exe'
+    #         if os.path.isfile(_1):
+    #             cmd_script = '"{}" "{}"'.format(
+    #                 _1,
+    #                 bsc_resource.ExtendResource.get(
+    #                     'docs/cfx-flow.pdf'
+    #                 )
+    #             )
+    #
+    #             bsc_core.BscProcess.execute_use_thread(
+    #                 cmd_script
+    #             )
 
     def gui_set_current_page(self, key):
         result = self._page_prx_tab_tool_box.set_current_key(key)

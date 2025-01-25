@@ -151,6 +151,12 @@ class _QtTagViewWidget(
         group_widget = self._item_dict[bsc_core.BscNodePath.get_dag_parent_path(path)]
         widget = group_widget._create_node_(path, *args, **kwargs)
 
+        # update item properties
+        if self._view_model.is_item_color_enable() is True:
+            path_opt = bsc_core.BscNodePathOpt(path)
+            name = path_opt.get_name()
+            widget._item_model.set_color_rgb(bsc_core.BscTextOpt(name).to_hash_rgb(s_p=(35, 50), v_p=(75, 95)))
+
         widget._set_view_(self)
         self._item_dict[path] = widget
         widget.user_filter_checked.connect(self._user_filter_check_cbk_)

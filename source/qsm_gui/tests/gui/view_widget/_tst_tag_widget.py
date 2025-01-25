@@ -18,6 +18,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         self._d_0 = gui_qt_vew_widgets.QtTagWidget(self._qt_widget)
         self.add_widget(self._d_0)
+        self._d_0._view_model.set_item_color_enable(True)
 
         self._scr_stage = qsm_scr_core.Stage(
             'asset_test'

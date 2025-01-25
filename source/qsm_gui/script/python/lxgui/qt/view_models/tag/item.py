@@ -7,7 +7,7 @@ from .. import item_base as _item_base
 class TagItemModel(_item_base.AbsItemModel):
     WAIT_PLAY_DELAY = 50
 
-    NUMBER_TEXT_FORMAT = '({})'
+    NUMBER_TEXT_FORMAT = '{}'
 
     def __init__(self, item):
         super(TagItemModel, self).__init__(

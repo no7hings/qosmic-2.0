@@ -71,19 +71,6 @@ class PrxBaseWindow(
             self.show_help_unit, 'F1'
         )
 
-        self.set_show_menu_raw(
-            [
-                ('Log', 'log', self.show_log_unit),
-                ('Help', 'help', self.show_help_unit),
-                ('Option', 'option', self.show_option_unit),
-            ]
-        )
-        self.set_debugger_menu_raw(
-            [
-                ('Log bar visible', 'box-check', (self._log_tool_bar.get_is_visible, self.swap_log_bar_visible)),
-            ]
-        )
-
     def _gui_build_(self):
         self._language = gui_core.GuiUtil.get_language()
 
@@ -127,6 +114,27 @@ class PrxBaseWindow(
         self._set_waiting_def_init_()
         #
         self.set_current_layer('window_main_0')
+        if self._language == 'chs':
+            show_menu_data = [
+                ('日志', 'log', self.show_log_unit),
+                ('选项', 'option', self.show_option_unit),
+                ('帮助', 'help', self.show_help_unit),
+            ]
+            debugger_menu_data = [
+                ('日志显示', 'box-check', (self._log_tool_bar.get_is_visible, self.swap_log_bar_visible)),
+            ]
+        else:
+            show_menu_data = [
+                ('Log', 'log', self.show_log_unit),
+                ('Option', 'option', self.show_option_unit),
+                ('Help', 'help', self.show_help_unit),
+            ]
+            debugger_menu_data = [
+                ('Log visible', 'box-check', (self._log_tool_bar.get_is_visible, self.swap_log_bar_visible)),
+            ]
+
+        self.set_show_menu_data(show_menu_data)
+        self.set_debugger_menu_data(debugger_menu_data)
 
     def switch_to_main_layer(self):
         self.switch_current_layer_to('window_main_0')
@@ -239,12 +247,12 @@ class PrxBaseWindow(
         self._window_bottom_tool_bar.add_widget(widget)
         self._window_bottom_tool_bar.set_show()
 
-    def set_show_menu_raw(self, menu_raw):
+    def set_show_menu_data(self, menu_raw):
         if menu_raw:
             menu = self.__show_menu
             menu.execute(menu_raw)
 
-    def set_debugger_menu_raw(self, menu_raw):
+    def set_debugger_menu_data(self, menu_raw):
         if menu_raw:
             menu = self.__debug_menu
             menu.execute(menu_raw)

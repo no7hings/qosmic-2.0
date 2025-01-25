@@ -3,6 +3,8 @@ import lxbasic.core as bsc_core
 # qt
 from ....qt.core.wrap import *
 
+from .... import core as _gui_core
+
 from .. import base as _base
 
 from .. import item_base as _item_base
@@ -91,21 +93,21 @@ class TreeItemModel(_item_base.AbsItemModel):
             if self._data.check_enable is True:
                 check_frm_w = 20
                 self._data.check.rect.setRect(
-                    x+(check_frm_w-icn_w)/2+1, icn_y, icn_w, icn_w
+                    x+(check_frm_w-icn_w)/2, icn_y, icn_w, icn_w
                 )
             # color
             color_frm_w = 0
             if self._data.color_enable is True:
                 color_frm_w = 20
                 self._data.color.rect.setRect(
-                    x+check_frm_w+(color_frm_w-icn_w)/2+1, icn_y, icn_w, icn_w
+                    x+check_frm_w+(color_frm_w-icn_w)/2, icn_y, icn_w, icn_w
                 )
             # icon
             icon_frm_w = 0
             if self._data.icon_enable is True:
                 icon_frm_w = 20
                 self._data.icon.rect.setRect(
-                    x+check_frm_w+color_frm_w+(icon_frm_w-icn_w)/2+1, icn_y, icn_w, icn_w
+                    x+check_frm_w+color_frm_w+(icon_frm_w-icn_w)/2, icn_y, icn_w, icn_w
                 )
 
             txt_y = y+h-item_h
@@ -214,7 +216,12 @@ class TreeItemModel(_item_base.AbsItemModel):
                 self._draw_icon_by_file(painter, self._data.check.rect, self._data.check.file)
             # draw color
             if self._data.color_enable is True:
-                self._draw_color(painter, self._data.color.rect, self._data.color.rgb)
+                rgb = self._data.color.rgb
+                if self._data.number_enable is True:
+                    if self._data.number.flag is False:
+                        rgb = _gui_core.GuiRgba.DarkGray
+
+                self._draw_color(painter, self._data.color.rect, rgb)
             # draw icon
             if self._data.icon_enable is True:
                 if self._data.icon.file_flag is True:
