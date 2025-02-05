@@ -1,4 +1,6 @@
 # coding=utf-8
+from __future__ import print_function
+
 import lxbasic.core as bsc_core
 # gui
 from ... import core as _gui_core
@@ -9,8 +11,6 @@ from .. import core as _qt_core
 
 from .. import abstracts as _qt_abstracts
 # qt widgets
-from . import base as _base
-
 from . import player_for_video as _player_for_video
 
 
@@ -35,10 +35,10 @@ class QtTestWidget(
         w, h = pixmap.width(), pixmap.height()
         for i_x in range(w):
             for i_y in range(h):
-                print i_x, i_y
+                print(i_x, i_y)
                 i_p = image.pixel(i_x, i_y)
                 i_c = QtGui.QColor(i_p)
-                print i_c.red(), i_c.green(), i_c.blue(), i_c.alpha()
+                print(i_c.red(), i_c.green(), i_c.blue(), i_c.alpha())
 
 
 class QtItemWidgetForList(

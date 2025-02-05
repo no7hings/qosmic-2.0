@@ -9,14 +9,6 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 
 class AbsToolKitForDcc(gui_prx_widgets.PrxSessionWindow):
-    """
-# coding:utf-8
-import lxkatana
-
-lxkatana.set_reload()
-import lxsession.commands as ssn_commands; ssn_commands.execute_hook("dcc-tools/gen-tool-kit")
-    """
-
     def __init__(self, session, *args, **kwargs):
         super(AbsToolKitForDcc, self).__init__(session, *args, **kwargs)
 

@@ -1,5 +1,4 @@
 # coding=utf-8
-import sys
 # qt
 from ...core.wrap import *
 

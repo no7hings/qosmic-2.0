@@ -38,4 +38,3 @@ class AbsView(object):
 
     press_released = qt_signal()
     info_text_accepted = qt_signal(str)
-

@@ -1,6 +1,4 @@
 # coding=utf-8
-# gui
-from .... import core as _gui_core
 # qt
 from ...core.wrap import *
 
@@ -89,4 +87,3 @@ class QtTimeHandle(
 
     def _set_graph_(self, widget):
         self._graph = widget
-

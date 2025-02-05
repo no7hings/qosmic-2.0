@@ -15,4 +15,5 @@ if _cv2:
         'cv2', 'load successful'
     )
 
+    # noinspection PyUnresolvedReferences
     import cv2

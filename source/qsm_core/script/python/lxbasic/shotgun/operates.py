@@ -100,7 +100,7 @@ class StgImageOpt(object):
 
 
 class AbsStgObjOpt(object):
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         if args[0] is None:
             raise RuntimeError(
                 'entity "None" is not available'
@@ -228,7 +228,6 @@ class StgTaskOpt(AbsStgObjOpt):
         return self._stg_obj_query.get('task_assignees') or []
 
     def get_cc_stg_users(self):
-        # print [self._stg_obj_query._stg_connector.to_query(i).get('name').decode('utf-8') for i in stg_users_assign+stg_users_cc]
         return self._stg_obj_query.get('addressings_cc') or []
 
     def get_notice_stg_users(self):

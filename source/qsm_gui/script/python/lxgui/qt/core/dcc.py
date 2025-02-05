@@ -1,6 +1,8 @@
 # coding:utf-8
 import sys
 
+import six
+
 import lxbasic.log as bsc_log
 
 import lxbasic.storage as bsc_storage
@@ -35,8 +37,10 @@ class QtMaya(object):
     def to_qt_object(cls, ptr, base=QtWidgets.QWidget):
         # noinspection PyUnresolvedReferences
         from shiboken2 import wrapInstance
-
-        return wrapInstance(long(ptr), base)
+        if six.PY2:
+            # noinspection PyCompatibility
+            return wrapInstance(long(ptr), base)
+        return wrapInstance(int(str), base)
 
     @classmethod
     def get_qt_menu_bar(cls):

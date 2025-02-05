@@ -6,7 +6,7 @@ option:
     #
     gui:
         name: 'Lazy Montage'
-        name_chs: '懒人动作'
+        name_chs: '懒人剪辑'
         group_name: 'General'
         #
         icon_name: 'lazy/montage'

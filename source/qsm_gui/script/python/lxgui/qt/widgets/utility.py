@@ -1,4 +1,6 @@
 # coding=utf-8
+from __future__ import print_function
+
 import six
 
 import functools
@@ -113,7 +115,7 @@ class QtTestPaint(QtWidgets.QWidget):
             painter.translate(QtCore.QPoint(0, -r_w-r_x))
 
             rect_new = QtCore.QRect(r_y, 0, r_h, r_w)
-            print rect_new
+            print(rect_new)
 
             painter.fillRect(
                 rect_new, QtGui.QColor(255, 0, 0, 255)

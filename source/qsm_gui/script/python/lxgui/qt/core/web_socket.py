@@ -3,8 +3,6 @@ import functools
 
 import six
 
-import socket
-
 import lxbasic.log as bsc_log
 
 import lxbasic.web as bsc_web

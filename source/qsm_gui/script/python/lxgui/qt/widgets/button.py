@@ -711,7 +711,8 @@ class QtIconPressButton(
                     self._sub_icon_text or \
                     self._icon_state_draw_is_enable:
                 if self._icon_state_draw_is_enable is True:
-                    icn_s_w, icn_s_h = self._sub_icon_draw_size
+                    icn_s_p = self._icon_sub_draw_percent
+                    icn_s_w, icn_s_h = icn_frm_w*icn_s_p, icn_frm_h*icn_s_p
                     o_x, o_y = icn_x, icn_y
                     self._icon_draw_rect.setRect(
                         x+1, y+1, icn_w, icn_h
@@ -731,7 +732,8 @@ class QtIconPressButton(
                         x+icn_frm_w-icn_stt_w-1, y+icn_frm_h-icn_stt_h-1, icn_stt_w, icn_stt_h
                     )
                 else:
-                    icn_s_w, icn_s_h = self._sub_icon_draw_size
+                    icn_s_p = self._icon_sub_draw_percent
+                    icn_s_w, icn_s_h = icn_frm_w*icn_s_p, icn_frm_h*icn_s_p
                     icn_s_w, icn_s_h = min(icn_s_w, 16), min(icn_s_h, 16)
                     self._icon_draw_rect.setRect(
                         icn_x, icn_y, icn_w, icn_h
@@ -1222,7 +1224,8 @@ class QtIconToggleButton(
                     x+2, y+2, icn_w, icn_h
                 )
 
-                icn_s_w, icn_s_h = self._sub_icon_draw_size
+                icn_s_p = self._icon_sub_draw_percent
+                icn_s_w, icn_s_h = icn_frm_w*icn_s_p, icn_frm_h*icn_s_p
                 self._sub_icon_draw_rect.setRect(
                     x+w-icn_s_w-1, y+h-icn_s_h-1, icn_s_w, icn_s_h
                 )

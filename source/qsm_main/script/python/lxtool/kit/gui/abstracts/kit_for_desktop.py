@@ -108,7 +108,7 @@ class _GuiQuery(object):
         self.__dict[key] = value
 
     def register_tool_name(self, page_name, group_sub_name, name, tool_key):
-        p = '/{}/{}/{}'.format(page_name, group_sub_name, name)
+        p = u'/{}/{}/{}'.format(page_name, group_sub_name, name)
         self.__tool_name_dict.setdefault(
             p, set()
         ).add(tool_key)
@@ -139,7 +139,7 @@ class _GuiQuery(object):
             self.__tool_name_dict.pop(i)
 
     def get_tool_group_layout(self, page_name):
-        return self.__dict.get('/{}'.format(page_name))
+        return self.__dict.get(u'/{}'.format(page_name))
 
 
 # noinspection PyUnusedLocal
@@ -413,7 +413,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         ).accept_create(mode='create')
 
     def __save_main_icon_to_file(self, page_name, group_sub_name, session):
-        tool_path = '/{}/{}/{}'.format(
+        tool_path = u'/{}/{}/{}'.format(
             page_name, group_sub_name, bsc_core.BscUuid.generate_by_text(session.get_hook())
         )
         if self.__gui_query.get_is_exists(tool_path):
@@ -464,7 +464,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         return page_name, group_sub_name
 
     def gui_get_group_args(self, page_name, tool_data=None, switch_to=False):
-        gui_path = '/{}'.format(page_name)
+        gui_path = u'/{}'.format(page_name)
         if self.__gui_query.get_is_exists(gui_path) is True:
             return self.__gui_query.get(gui_path)
 
@@ -517,7 +517,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
 
     def gui_get_view_args(self, page_name=None, group_sub_name=None, tool_data=None, group_name_over=None):
         tool_group_layout_widget = self.gui_get_group_args(page_name, tool_data=tool_data)
-        gui_path = '/{}/{}'.format(page_name, group_sub_name)
+        gui_path = u'/{}/{}'.format(page_name, group_sub_name)
         if self.__gui_query.get_is_exists(gui_path) is True:
             qt_tool_group, grid_layout_widget = self.__gui_query.get(gui_path)
         else:
@@ -583,7 +583,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
             self.gui_sort_tool_group_order_at(i)
 
     def gui_sort_tool_group_order_at(self, page_name):
-        names = gui_core.GuiHistory.get_one('{}.{}'.format(self.KEY_TOOL_GROUP_ORDER, page_name)) or []
+        names = gui_core.GuiHistory.get_one(u'{}.{}'.format(self.KEY_TOOL_GROUP_ORDER, page_name)) or []
         if names:
             tool_group_layout = self.__gui_query.get_tool_group_layout(page_name)
             tool_group_layout._sort_widgets_by_name_texts_(names)
@@ -785,7 +785,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
 
     def gui_delete_group_for(self, page_name):
         self.gui_delete_tool_groups_for_page(page_name)
-        gui_path = '/{}'.format(page_name)
+        gui_path = u'/{}'.format(page_name)
         self.__gui_query.delete(gui_path)
 
     def _gui_tab_add_page(self, page_name, switch_to=False):
@@ -793,7 +793,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         self.gui_add_builtin_for_page(page_name, switch_to=switch_to)
 
     def gui_delete_tool_groups_for_page(self, page_name):
-        gui_path = '/{}'.format(page_name)
+        gui_path = u'/{}'.format(page_name)
         self.__gui_query.delete_all_below(gui_path)
 
         if self.__gui_query.get_is_exists(gui_path) is True:
@@ -812,16 +812,16 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
 
         if page_name in self.__hook_dict:
             hook_data = self.__hook_dict[page_name]
-            for i_hook_args, i_group_name, i_grou_sub_name in hook_data:
+            for i_hook_args, i_group_name, i_group_sub_name in hook_data:
                 self.add_tool(
-                    i_hook_args, i_group_name, i_grou_sub_name
+                    i_hook_args, i_group_name, i_group_sub_name
                 )
 
         if page_name in self.__option_hook_dict:
             option_hook_data = self.__option_hook_dict[page_name]
-            for i_hook_args, i_group_name, i_grou_sub_name in option_hook_data:
+            for i_hook_args, i_group_name, i_group_sub_name in option_hook_data:
                 self.add_option_tool(
-                    i_hook_args, i_group_name, i_grou_sub_name
+                    i_hook_args, i_group_name, i_group_sub_name
                 )
 
     def refresh_current_group(self):
@@ -839,7 +839,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                 page_name, group_sub_name
             )
 
-            tool_path = '/{}/{}/{}'.format(
+            tool_path = u'/{}/{}/{}'.format(
                 page_name, group_sub_name, bsc_core.BscUuid.generate_by_text(session.get_hook())
             )
 
@@ -855,7 +855,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                 name = gui_configure.get('name')
                 name_index = self.__gui_query.register_tool_name(page_name, group_sub_name, name, tool_path)
                 if name_index > 0:
-                    name = '{}({})'.format(name, name_index)
+                    name = u'{}({})'.format(name, name_index)
                 icon_name = gui_configure.get('icon_name')
                 icon_sub_name = gui_configure.get('icon_sub_name')
                 icon_style = gui_configure.get('icon_style')
@@ -894,7 +894,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                 page_name, group_sub_name
             )
 
-            tool_path = '/{}/{}/{}'.format(
+            tool_path = u'/{}/{}/{}'.format(
                 page_name, group_sub_name, bsc_core.BscUuid.generate_by_text(session.get_hook())
             )
             if self.__gui_query.get_is_exists(tool_path) is True:

@@ -12,6 +12,7 @@ from contextlib import contextmanager
 import maya.mel as mel
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
+import six
 # noinspection PyUnresolvedReferences
 from maya import OpenMayaUI
 # noinspection PyUnresolvedReferences,PyPep8Naming
@@ -969,8 +970,10 @@ class AbsNodeTemplate(AbsTemplateBase):
                 ptr = OpenMayaUI.MQtUtil.findMenuItem(maya_ui_name)
         #
         if ptr is not None:
-            obj = shiboken2.wrapInstance(long(ptr), qt_type)
-            return obj
+            if six.PY2:
+                # noinspection PyCompatibility
+                return shiboken2.wrapInstance(long(ptr), qt_type)
+            return shiboken2.wrapInstance(int(ptr), qt_type)
 
     @classmethod
     def get_current_widget(cls):

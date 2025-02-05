@@ -15,7 +15,7 @@ option:
             include tools for rig, assembly, ...
 
         tool_tip_chs:
-            包含绑定，场景等相关工具
+            包含角色，道具，场景等相关工具。
         #
         size: [560, 720]
 

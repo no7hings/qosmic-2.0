@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import parse
 
 import time
@@ -9,7 +11,14 @@ import os
 
 import collections
 
-import xmlrpclib
+if six.PY2:
+    # python 2
+    # noinspection PyCompatibility
+    from xmlrpclib import ServerProxy as _ServerProxy
+else:
+    # python 3
+    # noinspection PyCompatibility
+    from xmlrpc.client import ServerProxy as _ServerProxy
 
 import threading
 
@@ -67,7 +76,7 @@ class StgRpc(object):
 
     @classmethod
     def get_client(cls, port_addition=0):
-        return xmlrpclib.ServerProxy(
+        return _ServerProxy(
             'http://{0}:{1}'.format(cls.RPC_SERVER, cls.RPC_PORT+port_addition)
         )
 
@@ -350,7 +359,7 @@ class StgSsh(object):
             **kwargs
         )
         result = cls._set_nas_cmd_run_(cmd)
-        print result
+        # print(result)
         dict_ = collections.OrderedDict()
         if result is not None:
             for i in result.split('\n'):
@@ -370,7 +379,7 @@ class StgSsh(object):
             **kwargs
         )
         result = cls._set_nas_cmd_run_(cmd)
-        print result
+        # print(result)
         list_ = []
         if result is not None:
             for i in result.split('\n'):
@@ -392,7 +401,7 @@ class StgSsh(object):
             **kwargs
         )
         result = cls._set_nas_cmd_run_(cmd)
-        print result
+        # print(result)
         list_ = []
         if result is not None:
             for i in result.split('\n'):
@@ -414,7 +423,7 @@ class StgSsh(object):
             **kwargs
         )
         result = cls._set_nas_cmd_run_(cmd)
-        print result
+        # print(result)
         list_ = []
         if result is not None:
             for i in result.split('\n'):
@@ -483,7 +492,7 @@ class StgSshOpt(object):
         user_data = StgSsh._get_all_user_data_(self._nas_path)
         user_data.reverse()
         for i_user_name, i_index, i_content in user_data:
-            print i_user_name, i_index
+            # print(i_user_name, i_index)
             i_kwargs = dict(
                 path=self._nas_path,
                 index=i_index
@@ -1942,16 +1951,6 @@ class StgPermissionBaseMtd(object):
 
     @classmethod
     def get_method(cls, path):
-        """
-print StgPermissionBaseMtd.get_method(
-    '/l/prod'
-)
-print StgPermissionBaseMtd.get_method(
-    '/production/shows'
-)
-        :param path:
-        :return:
-        """
         return cls.METHOD_DICT[cls.get_scheme(path)]
 
 
@@ -2034,14 +2033,6 @@ class StgTextureMtd(object):
 
     @classmethod
     def get_udim_region_args(cls, path):
-        """
-        print StgTextureMtd.get_udim_region_args(
-            '/data/e/workspace/lynxi/test/maya/vertex-color/test.1002.jpg'
-        )
-        print StgTextureMtd.get_udim_region_args(
-            '/data/e/workspace/lynxi/test/maya/vertex-color/test.<udim>.jpg'
-        )
-        """
         d = os.path.dirname(path)
         n = os.path.basename(path)
         if os.path.isfile(path):
@@ -2068,14 +2059,6 @@ class StgTextureMtd(object):
 
     @classmethod
     def get_unit_paths(cls, path):
-        """
-        print StgTextureMtd.get_unit_paths(
-            '/data/e/workspace/lynxi/test/maya/vertex-color/test.1001.jpg'
-        )
-        print StgTextureMtd.get_unit_paths(
-            '/data/e/workspace/lynxi/test/maya/vertex-color/test.<udim>.jpg'
-        )
-        """
         if os.path.isfile(path):
             return [path]
         d = os.path.dirname(path)

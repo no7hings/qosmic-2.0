@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
@@ -397,7 +399,7 @@ class DdlJobMonitor(object):
         self.logging.send_emit(
             result
         )
-        print result
+        print(result)
 
     def __set_job_status_changed_(self, status):
         if self.__is_active is True:

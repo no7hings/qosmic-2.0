@@ -3,11 +3,7 @@ import os
 
 import parse
 
-import subprocess
-
 from lxbasic.core import configure as bsc_cor_configure
-
-from lxbasic.core import base as bsc_cor_base
 
 from lxbasic.core import raw as bsc_cor_raw
 

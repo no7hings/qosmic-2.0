@@ -11,8 +11,6 @@ import pyaudio
 
 import threading
 
-import six
-
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage

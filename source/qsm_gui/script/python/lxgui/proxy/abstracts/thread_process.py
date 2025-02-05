@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
@@ -35,7 +37,7 @@ class AbsQtThreadProcessBase(object):
                         '\n'.join(results)
                     )
             else:
-                print '\n'.join(results)
+                print('\n'.join(results))
 
         def status_changed_fnc_(index, status):
             button.set_status_at(index, status)

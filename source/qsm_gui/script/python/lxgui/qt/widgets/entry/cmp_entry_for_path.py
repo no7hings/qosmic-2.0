@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.core as bsc_core
 
 import lxbasic.content as bsc_content
@@ -149,7 +151,7 @@ class QtCmpEntryForPath(QtWidgets.QWidget):
     def _switch_component_at_(self, index, delta):
         path = self._entry_bubble_widget._get_component_at_(index)
         if path.get_is_root() is False:
-            print path
+            print(path)
 
     def _do_key_enter_press_(self):
         return self._enter_next_(self._entry_widget.text())

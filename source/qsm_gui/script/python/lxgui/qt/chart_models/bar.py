@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import os
 
 import collections
@@ -263,7 +265,7 @@ class ChartModelForBar(object):
                 i_branch.index = i_branch_idx+1
                 i_branch.index_text = str(i_branch_idx+1)
                 if i_branch_idx == 2047:
-                    print i_frm_y, 'AAA'
+                    print(i_frm_y, 'AAA')
                 i_branch.index_rect.setRect(i_index_x, i_frm_y, index_w-spc, leaf_h)
                 i_name_x = i_index_x+index_w+spc
                 i_branch.name_rect.setRect(i_name_x, i_frm_y, name_w, leaf_h)

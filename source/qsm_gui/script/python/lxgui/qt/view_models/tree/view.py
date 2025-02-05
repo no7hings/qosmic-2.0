@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.core as bsc_core
 
 from .... import core as _gui_core
@@ -20,7 +22,7 @@ class TreeViewModel(_view_base.AbsViewModel):
 
     def do_drop(self, event):
         data = event.mimeData()
-        print data
+        print(data)
 
     def refresh_info(self):
         c = len(self.get_checked_leaf_items())

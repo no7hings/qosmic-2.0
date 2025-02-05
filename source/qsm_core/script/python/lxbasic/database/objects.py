@@ -1,6 +1,8 @@
 # coding:utf-8
 import collections
 
+import types
+
 import copy
 
 import six
@@ -622,6 +624,7 @@ class DtbOptForResource(DtbBaseOpt):
         for seq, i in enumerate(components):
             i_kwargs = dict(path=i.get_path())
             i_method = method_args[seq]
+            # noinspection PyArgumentList
             results.append(i_method(**i_kwargs))
         #
         return results[-1]

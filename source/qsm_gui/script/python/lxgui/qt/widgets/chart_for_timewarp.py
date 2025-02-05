@@ -1,9 +1,5 @@
 # coding=utf-8
-import lxbasic.core as bsc_core
-
 import lxbasic.model as bsc_model
-# gui
-from ... import core as _gui_core
 # qt
 from ...qt.core.wrap import *
 

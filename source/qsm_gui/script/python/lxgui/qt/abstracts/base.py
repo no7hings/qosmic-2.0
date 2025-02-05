@@ -3,8 +3,6 @@ import os
 
 import collections
 
-import enum
-
 import fnmatch
 
 import urllib
@@ -13,13 +11,9 @@ import six
 
 import contextlib
 
-import functools
-
 import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
-
-import lxbasic.storage as bsc_storage
 
 import lxbasic.pinyin as bsc_pinyin
 # gui
@@ -466,8 +460,8 @@ class AbsQtSubProcessBaseDef(object):
         self._sub_process_timestamp_costed = bsc_core.BscSystem.generate_timestamp()-self._sub_process_timestamp_started
         if self._sub_process_finished_value > 1:
             self._sub_process_finished_timestamp_estimated = (
-                                                                 self._sub_process_timestamp_costed/self._sub_process_finished_value
-                                                             )*self._sub_process_finished_maximum
+                self._sub_process_timestamp_costed/self._sub_process_finished_value
+            )*self._sub_process_finished_maximum
         else:
             self._sub_process_finished_timestamp_estimated = 0
 
@@ -1071,7 +1065,7 @@ class AbsQtIconBaseDef(object):
         self._icon_draw_size = 16, 16
         self._icon_draw_percent = .75
         self._sub_icon_draw_size = 8, 8
-        self._icon_sub_draw_percent = .5
+        self._icon_sub_draw_percent = .425
 
         self._icon_color_draw_size = 16, 16
         self._name_icon_draw_size = 16, 16

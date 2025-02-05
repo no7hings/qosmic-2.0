@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import fnmatch
 
 import re
@@ -137,7 +139,7 @@ class DdlLog(AbsDdlLog):
                 raw = raw.lstrip().rstrip()
                 pattern_1_outs.append(raw)
                 if status == 'ERROR':
-                    print i
+                    print(i)
                 self._memories.append(memory)
         #
         pattern_2 = DdlLogPattern('[{module}] {content}')
@@ -149,7 +151,7 @@ class DdlLog(AbsDdlLog):
                 pattern_2.format, i
             )
             if p:
-                print p['module']
+                print(p['module'])
 
     def _get_stouts_(self, content=False):
         lis = []

@@ -49,7 +49,7 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
         self.__task_dict = {}
 
         self.__stg_task = None
-        self.__result_dict = None
+        self.__result_dict = {}
 
         import lxbasic.shotgun as bsc_shotgun
 
@@ -283,7 +283,8 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
 
     def __update_task(self, path_text):
         self.__stg_task = None
-        self.__result_dict = None
+        self.__result_dict = {}
+
         if path_text:
             path = bsc_core.BscNodePathOpt(path_text)
             cs = path.get_components()
@@ -381,7 +382,7 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
             self.__signals.dict_accepted.emit(dict_)
 
     def is_valid(self):
-        return self.__result_dict is not None
+        return bool(self.__result_dict)
 
     def get_result(self):
         return self.__result_dict

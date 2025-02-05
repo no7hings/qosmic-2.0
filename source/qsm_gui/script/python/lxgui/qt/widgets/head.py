@@ -85,7 +85,7 @@ class AbsQtHead(
 
         if self._sub_icon_file_path is not None:
             frm_x, frm_y = c_x+(frm_w-icn_frm_w)/2, c_y+(frm_h-icn_frm_h)/2
-            sub_icn_w, sub_icn_h = self._sub_icon_draw_size
+            sub_icn_w, sub_icn_h = icn_frm_w*self._icon_sub_draw_percent, icn_frm_h*self._icon_sub_draw_percent
             self._set_icon_file_draw_rect_(
                 c_x+icn_frm_m_w, c_y+icn_frm_m_h, icn_w, icn_h
             )
@@ -216,7 +216,7 @@ class QtHeadStyleB(AbsQtHead):
 
         if self._sub_icon_file_path is not None:
             frm_x, frm_y = c_x+(frm_w-icn_frm_w)/2, c_y+(frm_h-icn_frm_h)/2
-            sub_icn_w, sub_icn_h = self._sub_icon_draw_size
+            sub_icn_w, sub_icn_h = icn_frm_w*self._icon_sub_draw_percent, icn_frm_h*self._icon_sub_draw_percent
             self._set_icon_file_draw_rect_(
                 c_x+icn_frm_m_w, c_y+icn_frm_m_h, icn_w, icn_h
             )
@@ -313,7 +313,7 @@ class QtHeadStyleC(AbsQtHead):
 
         if self._sub_icon_file_path is not None:
             frm_x, frm_y = c_x+(frm_w-icn_frm_w)/2, c_y+(frm_h-icn_frm_h)/2
-            sub_icn_w, sub_icn_h = self._sub_icon_draw_size
+            sub_icn_w, sub_icn_h = icn_frm_w*self._icon_sub_draw_percent, icn_frm_h*self._icon_sub_draw_percent
             self._set_icon_file_draw_rect_(
                 c_x+icn_frm_m_w, c_y+icn_frm_m_h, icn_w, icn_h
             )

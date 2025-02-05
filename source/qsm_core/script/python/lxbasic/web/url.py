@@ -3,7 +3,14 @@ import six
 
 import urllib
 
-import urlparse
+if six.PY2:
+    # python 2
+    # noinspection PyCompatibility
+    from urlparse import parse_qs, unquote
+else:
+    # python 3
+    # noinspection PyUnresolvedReferences,PyCompatibility
+    from urllib.parse import parse_qs, unquote
 
 import socket
 
@@ -16,7 +23,7 @@ class UrlOptions(object):
     @classmethod
     def to_dict(cls, text):
         dict_ = {}
-        for k, v in urlparse.parse_qs(text).iteritems():
+        for k, v in parse_qs(text).items():
             dict_[k] = v[0] if len(v) == 1 else v
         return dict_
 
@@ -51,7 +58,7 @@ class UrlValue(object):
 
     @classmethod
     def unquote(cls, text):
-        return urlparse.unquote(text)
+        return unquote(text)
 
 
 class Socket(object):

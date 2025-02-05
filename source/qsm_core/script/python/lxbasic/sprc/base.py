@@ -1,6 +1,5 @@
 # coding:utf-8
-import os
-
+from __future__ import print_function
 import subprocess
 
 
@@ -39,7 +38,7 @@ class Subprocess(object):
             shell=True,
             stderr=subprocess.STDOUT
         )
-        print result
+        print(result)
 
 
 class SprcDag(object):

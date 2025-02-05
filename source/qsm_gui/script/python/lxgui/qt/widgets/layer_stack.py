@@ -1,7 +1,5 @@
 # coding=utf-8
 # gui
-import sys
-
 from ... import core as _gui_core
 # qt
 from ..core.wrap import *

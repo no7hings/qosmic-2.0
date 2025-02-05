@@ -20,7 +20,9 @@ class QtDrag(QtGui.QDrag):
         super(QtDrag, self).__init__(*args, **kwargs)
         self.installEventFilter(self)
         self._current_action = QtCore.Qt.IgnoreAction
+        # noinspection PyUnresolvedReferences
         self.actionChanged.connect(self._update_action_)
+        # noinspection PyUnresolvedReferences
         self.targetChanged.connect(self._update_target_)
         self._drag_count = 1
 
@@ -110,6 +112,7 @@ class QtDrag(QtGui.QDrag):
         return False
 
 
+# noinspection PyArgumentList
 class QtDragForTreeItem(QtGui.QDrag):
     def __init__(self, *args, **kwargs):
         super(QtDragForTreeItem, self).__init__(*args, **kwargs)
@@ -122,6 +125,7 @@ class QtDragForTreeItem(QtGui.QDrag):
         drag = self
         widget = self.parent()
         #
+        # noinspection PyArgumentList
         QtWidgets.QApplication.setOverrideCursor(
             QtCore.Qt.BusyCursor
         )

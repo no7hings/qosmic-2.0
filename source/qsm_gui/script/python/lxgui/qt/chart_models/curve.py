@@ -1,13 +1,5 @@
 # coding:utf-8
-import math
-
-import lxbasic.core as bsc_core
-
-from ... import core as _gui_core
-
 from ..core.wrap import *
-
-from .. import core as _qt_core
 
 from . import base as _base
 

@@ -74,9 +74,3 @@ class StgBase(object):
             _ = project.get('sg_resolution')
             if _:
                 return [int(i) for i in _.split('*')]
-
-
-if __name__ == '__main__':
-    cn = StgBase.generate_connection()
-    print cn
-

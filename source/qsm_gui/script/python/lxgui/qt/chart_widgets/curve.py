@@ -1,5 +1,4 @@
 # coding=utf-8
-import os
 # gui
 from ... import core as _gui_core
 # qt

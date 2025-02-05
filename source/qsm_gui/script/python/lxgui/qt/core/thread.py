@@ -1,5 +1,5 @@
 # coding:utf-8
-import functools
+from __future__ import print_function
 
 import lxbasic.core as bsc_core
 # gui
@@ -139,7 +139,7 @@ class QtBuildThread(QtCore.QThread):
             except Exception:
                 self.run_failed.emit()
                 self.set_status(self.Status.Failed)
-                print 'thread failed'
+                print('thread failed')
                 bsc_core.BscException.print_stack()
             #
             finally:

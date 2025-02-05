@@ -7,7 +7,11 @@ import sqlite3
 
 import threading
 
-import Queue
+if six.PY2:
+    import Queue  # Python 2
+else:
+    # noinspection PyPep8Naming
+    import queue as Queue  # Python 3
 
 
 class DtbSqlThread(threading.Thread):

@@ -1,8 +1,6 @@
 # coding:utf-8
 import six
 
-import fnmatch
-
 import collections
 
 import functools

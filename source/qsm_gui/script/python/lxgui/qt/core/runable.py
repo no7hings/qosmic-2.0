@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import functools
 
 import lxbasic.core as bsc_core
@@ -65,8 +67,8 @@ class QtBuildRunnable(QtCore.QRunnable):
             except Exception:
                 self._build_signals.run_failed.emit()
                 self.set_status(self.Status.Failed)
-                print 'runnable failed'
-                print bsc_core.BscException.get_stack_()
+                print('runnable failed')
+                print(bsc_core.BscException.get_stack_())
             #
             finally:
                 self._build_signals.run_finished.emit()

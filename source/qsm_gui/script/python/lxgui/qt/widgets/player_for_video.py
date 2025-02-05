@@ -1,6 +1,4 @@
 # coding=utf-8
-import time
-
 import lxbasic.core as bsc_core
 # gui
 from ... import core as _gui_core

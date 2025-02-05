@@ -1365,8 +1365,10 @@ class QtControlOpt(object):
     def _to_qt_instance_(cls, ptr, base):
         # noinspection PyUnresolvedReferences
         from shiboken2 import wrapInstance
-
-        return wrapInstance(long(ptr), base)
+        if six.PY2:
+            # noinspection PyCompatibility
+            return wrapInstance(long(ptr), base)
+        return wrapInstance(int(ptr), base)
 
     def to_qt_widget(self):
         # noinspection PyUnresolvedReferences

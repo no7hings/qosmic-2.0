@@ -15,8 +15,6 @@ import json
 
 import hashlib
 
-import yaml
-
 from . import base as _base
 
 
@@ -394,6 +392,7 @@ class AbsContent(object):
         else:
             if six.PY2:
                 # Ensure proper handling of non-ASCII characters in Python 2
+                # noinspection PyCompatibility
                 return unicode(repr(data), 'utf-8')
             else:
                 return str(repr(data))

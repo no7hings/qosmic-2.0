@@ -1328,7 +1328,7 @@ class QtBubbleAsChoose(
             elif event.type() == QtCore.QEvent.Resize:
                 self._refresh_widget_all_()
             elif event.type == QtCore.QEvent.WindowDeactivate:
-                print 'AAA'
+                pass
 
             elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.button() == QtCore.Qt.LeftButton:

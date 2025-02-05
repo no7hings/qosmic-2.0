@@ -1,5 +1,8 @@
 # coding:utf-8
+from __future__ import print_function
+
 import os
+
 import threading
 
 import six
@@ -529,6 +532,26 @@ class ContentVariant(object):
 
 
 class ContentEnvironment(ContentVariant):
+    """
+    env = ContentVariant()
+
+    print('set "a" to PATH')
+    env.PATH = 'a'
+    print('append "a" to PATH')
+    env.PATH += 'b'
+    print('set "A" to TEST')
+    env.TEST = 'A'
+    print('append "a" to TEST')
+    env.TEST += 'B'
+    print('remove "B" to TEST')
+    env.TEST -= 'B'
+
+    print(env.PATH)
+
+    print(env.OPT_STACK)
+    print(env.OPT_CACHE)
+    print(env)
+    """
     OPT_STACK = []
 
     OPT_CACHE = dict()
@@ -751,24 +774,3 @@ class ToString(object):
 
     def generate(self):
         return self.ensure_string(''.join(self._lines))
-
-
-if __name__ == '__main__':
-    env = ContentVariant()
-
-    print 'set "a" to PATH'
-    env.PATH = 'a'
-    print 'append a to PATH'
-    env.PATH += 'b'
-    print 'set "A" to TEST'
-    env.TEST = 'A'
-    print 'append "a" to TEST'
-    env.TEST += 'B'
-    print 'remove "B" to TEST'
-    env.TEST -= 'B'
-
-    print env.PATH
-
-    print env.OPT_STACK
-    print env.OPT_CACHE
-    print env
