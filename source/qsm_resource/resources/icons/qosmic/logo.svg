@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 29.1.0, SVG Export Plug-In . SVG Version: 9.03 Build 55587)  -->
+<svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFB163;}
+	.st1{fill:#1F1F1F;}
+	.st2{fill:#7F7FFF;}
+	.st3{fill:#BFBFFF;}
+	.st4{fill:#5F5FFF;}
+</style>
+<g>
+	<polygon class="st0" points="42,2 38,6 18,6 10,14 2,22 2,42 2,62 22,62 42,62 50,54 58,46 58,26 62,22 62,2 	"/>
+	<path class="st1" d="M42.8,64H0V21.2L17.2,4h20l4-4H64v22.8l-4,4v20L42.8,64z M4,60h37.2L56,45.2v-20l4-4V4H42.8l-4,4h-20L4,22.8
+		C4,22.8,4,60,4,60z"/>
+</g>
+<g>
+	<g>
+		<rect x="2" y="42" class="st2" width="20" height="20"/>
+		<rect x="2" y="22" class="st2" width="20" height="20"/>
+		<rect x="22" y="42" class="st2" width="20" height="20"/>
+	</g>
+	<g>
+		<polygon class="st3" points="2,22 10,14 30,14 22,22 		"/>
+		<polygon class="st3" points="10,14 18,6 38,6 30,14 		"/>
+	</g>
+	<g>
+		<polygon class="st4" points="50,34 50,54 42,62 42,42 		"/>
+		<polygon class="st4" points="58,26 58,46 50,54 50,34 		"/>
+	</g>
+	<g>
+		<polygon class="st3" points="50,34 30,34 22,42 42,42 		"/>
+		<polygon class="st3" points="58,26 38,26 30,34 50,34 		"/>
+	</g>
+	<g>
+		<polygon class="st4" points="30,14 22,22 22,42 30,34 		"/>
+		<polygon class="st4" points="38,6 30,14 30,34 38,26 		"/>
+	</g>
+	<g>
+		<rect x="34" y="10" class="st2" width="20" height="20"/>
+		<polygon class="st4" points="62,2 62,22 54,30 54,10 		"/>
+		<polygon class="st3" points="34,10 42,2 62,2 54,10 		"/>
+	</g>
+</g>
+<path class="st1" d="M50,33H32l3-3h-1v-1l-3,3V14l3-3v-1l4-4h-1l-7,7H11l-2,2h19l-6,6H3l-1,1v1h19v18H2v2h19v19h2V43h18v19h1l1-1V42
+	l6-6v19l2-2V34l7-7v-1l-4,4h-1L50,33z M23,22l6-6v18l-6,6V22z M42,41H24l6-6h18L42,41z"/>
+<path class="st1" d="M62,3V2h-1l-7,7H36l7-7h-1l-8,8v20h20l8-8v-1l-7,7V10L62,3z M53,29H35V11h18V29z"/>
+</svg>

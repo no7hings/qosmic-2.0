@@ -37,7 +37,7 @@ build:
                             Select one character (any part) first, add select one MoCap(any part), press button
                         tool_tip_chs:
                             |-
-                            先选中一个角色（任意部件），再选中一个动捕（任意部件），点按钮。
+                            先选中一个角色（任意部件），再选中一个动捕骨骼（任意部件），点按钮。
 
     messages:
         no_selection:

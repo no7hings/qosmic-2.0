@@ -87,6 +87,7 @@ class MocapToAdvHandle(object):
     def delete_transfer_resource(self):
         self._transfer_resource.do_delete()
 
+    @qsm_mya_core.Undo.execute
     def execute(self):
         self.setup()
 

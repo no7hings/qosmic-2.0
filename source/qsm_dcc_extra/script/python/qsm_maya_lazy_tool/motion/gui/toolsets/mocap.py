@@ -11,7 +11,7 @@ import qsm_maya.adv as qsm_mya_adv
 class PrxToolsetForMoCapImport(gui_prx_widgets.PrxBaseUnit):
     GUI_KEY = 'import_mocap'
 
-    def get_dcc_args(self):
+    def do_dcc_import_character_mocap_to_control(self):
         locations = qsm_mya_core.Selection.get()
         if len(locations) >=2:
             location_0, location_1 = locations[:2]
@@ -61,33 +61,6 @@ class PrxToolsetForMoCapImport(gui_prx_widgets.PrxBaseUnit):
                 status='warning'
             )
             return
-        # results = []
-        # namespaces = qsm_mya_core.Namespaces.extract_from_selection()
-        # if namespaces:
-        #     results = qsm_mya_hdl_anm_core.AdvRigAsset.filter_namespaces(namespaces)
-        #
-        # if not results:
-        #     self._window.exec_message_dialog(
-        #         self.choice_gui_message(
-        #             self._page._configure.get('build.messages.no_character')
-        #         ),
-        #         status='warning'
-        #     )
-        #     return
-        # return results
-
-    def do_dcc_import_character_mocap_to_control(self):
-        namespaces = self.get_dcc_args()
-        if namespaces:
-            pass
-
-            self._window.popup_message(
-                self.choice_gui_message(
-                    self._page._configure.get(
-                        'build.messages.import_mocap'
-                    )
-                )
-            )
 
     def __init__(self, window, page, session):
         super(PrxToolsetForMoCapImport, self).__init__(window, page, session)

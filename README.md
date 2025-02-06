@@ -1,4 +1,4 @@
-# Animation Frame
+# Animation Pipeline Frame
 ## 2024 update
 ### Main
 [https://rk8o3v6r7h.feishu.cn/docx/HlNOddq7EonL1yxnIjlcKE14nWd]

@@ -51,6 +51,7 @@ class ControlSetMotionOpt(
     # motion
     def generate_motion_dict(self):
         dict_ = {}
+
         c = len(self._path_set)
         if c >= self.LOG_PROGRESS_MAXIMUM:
             with bsc_log.LogProcessContext.create(maximum=len(self._path_set)) as l_p:
@@ -196,19 +197,41 @@ class ControlSetMotionOpt(
 
         key_excludes = kwargs.pop('control_key_excludes') if 'control_key_excludes' in kwargs else None
 
-        for i_key, i_data in data.items():
-            if key_excludes:
-                if i_key in key_excludes:
+        c = len(self._path_set)
+        if c >= self.LOG_PROGRESS_MAXIMUM:
+            with bsc_log.LogProcessContext.create(maximum=len(self._path_set)) as l_p:
+                for i_key, i_data in data.items():
+                    if key_excludes:
+                        if i_key in key_excludes:
+                            l_p.do_update()
+                            continue
+
+                    i_path = self.find_one_control(i_key)
+                    # ignore neither has "translate", "rotate"
+                    if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
+                        l_p.do_update()
+                        continue
+
+                    _control.ControlMotionOpt(i_path).do_mirror_auto(
+                        data_override=i_data, axis_vector_dict=axis_vector_dict, **kwargs
+                    )
+
+                    l_p.do_update()
+        else:
+
+            for i_key, i_data in data.items():
+                if key_excludes:
+                    if i_key in key_excludes:
+                        continue
+
+                i_path = self.find_one_control(i_key)
+                # ignore neither has "translate", "rotate"
+                if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
                     continue
 
-            i_path = self.find_one_control(i_key)
-            # ignore neither has "translate", "rotate"
-            if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
-                continue
-
-            _control.ControlMotionOpt(i_path).do_mirror_auto(
-                data_override=i_data, axis_vector_dict=axis_vector_dict, **kwargs
-            )
+                _control.ControlMotionOpt(i_path).do_mirror_auto(
+                    data_override=i_data, axis_vector_dict=axis_vector_dict, **kwargs
+                )
 
     @_mya_core.Undo.execute
     def reset_transformation(self, translate=False, rotate=False, auto_keyframe=False):

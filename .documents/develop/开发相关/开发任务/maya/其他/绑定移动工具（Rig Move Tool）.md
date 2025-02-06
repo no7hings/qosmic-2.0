@@ -1,1 +1,1 @@
->加入[[动画工具（Animation Tool）]]
+>加入[[懒人动画（Lazy Animation）]]

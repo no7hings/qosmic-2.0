@@ -13,7 +13,7 @@ import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 class ToolsetForMotionControlAndMove(
     gui_prx_widgets.PrxVirtualBaseUnit
 ):
-    GUI_KEY = 'control_and_move'
+    GUI_KEY = 'control'
 
     @staticmethod
     def do_dcc_create_control_move_locator():

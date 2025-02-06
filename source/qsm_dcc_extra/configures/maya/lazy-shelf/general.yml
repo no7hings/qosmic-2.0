@@ -37,7 +37,7 @@ build:
                     button_name: 'Animation'
                     button_name_chs: '动画'
                     auto_label_color: False
-                    icon: 'application/resource_library'
+                    icon: 'lazy/animation'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-animation")'
                     dbl_script: ''
 

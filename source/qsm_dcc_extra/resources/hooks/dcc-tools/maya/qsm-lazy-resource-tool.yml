@@ -9,7 +9,7 @@ option:
         name_chs: '懒人资源工具'
         group_name: 'General'
         #
-        icon_name: 'qosmic/lazy-resource-tool'
+        icon_name: 'lazy/resource'
         tool_tip:
             |-
             For resource register or load.
