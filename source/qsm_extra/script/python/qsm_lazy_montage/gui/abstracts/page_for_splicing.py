@@ -1,17 +1,5 @@
 # coding:utf-8
-import copy
-
 import functools
-
-import six
-
-import lxbasic.core as bsc_core
-
-import lxbasic.storage as bsc_storage
-
-import lxbasic.resource as bsc_resource
-
-import lxbasic.pinyin as bsc_pinyin
 
 import lxgui.core as gui_core
 
@@ -19,15 +7,11 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
-import lxgui.proxy.abstracts as gui_prx_abstracts
-
 import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.graphs as gui_prx_graphs
 
 import qsm_scan as qsm_scan
-
-import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
 
 
 class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
@@ -41,12 +25,19 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         pass
 
     def _gui_add_main_tools(self, prx_tool_box):
-        for i in [
-            # ('refresh', 'refresh', 'Press to refresh GUI', functools.partial(self.do_gui_refresh_all, force=True)),
-            ('delete', 'montage/delete', 'Press to delete splicing', self._on_dcc_delete),
-            ('bake', 'montage/bake-keyframe', 'Press to bake splicing', self._on_dcc_bake),
-            ('look_from_persp_cam', 'tool/camera', 'Press Look from Persp Camera', self._on_dcc_look_from_persp_cam)
-        ]:
+        if gui_core.GuiUtil.language_is_chs():
+            tool_data = [
+                ('删除拼接', 'montage/delete', '点击删除拼接', self._on_dcc_delete),
+                ('烘培拼接', 'montage/bake-keyframe', '点击烘培拼接', self._on_dcc_bake),
+                ('通过相机查看', 'tool/camera', '点击从预览相机查看', self._on_dcc_look_from_persp_cam)
+            ]
+        else:
+            tool_data = [
+                ('delete splice', 'montage/delete', 'Press to delete splicing', self._on_dcc_delete),
+                ('bake splice', 'montage/bake-keyframe', 'Press to bake splicing', self._on_dcc_bake),
+                ('look from camera', 'tool/camera', 'Press Look from Persp Camera', self._on_dcc_look_from_persp_cam)
+            ]
+        for i in tool_data:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
             i_tool = gui_prx_widgets.PrxIconPressButton()
             prx_tool_box.add_widget(i_tool)
@@ -56,10 +47,17 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
             i_tool.connect_press_clicked_to(i_fnc)
 
     def _gui_add_export_import_track_tools(self, prx_tool_box):
-        for i in [
-            ('export track', 'file/jsz', 'action/export', 'Press to export track', self._on_dcc_export_track),
-            ('import track', 'file/jsz', 'action/import', 'Press to import track', self._on_dcc_import_track),
-        ]:
+        if gui_core.GuiUtil.language_is_chs():
+            tool_data = [
+                ('导出轨道', 'file/jsz', 'action/export', '点击导出拼接数据', self._on_dcc_export_track),
+                ('导入轨道', 'file/jsz', 'action/import', '点击导入拼接数据', self._on_dcc_import_track),
+            ]
+        else:
+            tool_data = [
+                ('export track', 'file/jsz', 'action/export', 'Press to export track', self._on_dcc_export_track),
+                ('import track', 'file/jsz', 'action/import', 'Press to import track', self._on_dcc_import_track),
+            ]
+        for i in tool_data:
             i_key, i_icon_name, i_sub_icon_name, i_tool_tip, i_fnc = i
             i_tool = gui_prx_widgets.PrxIconPressButton()
             prx_tool_box.add_widget(i_tool)
@@ -71,9 +69,15 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
             i_tool.connect_press_clicked_to(i_fnc)
 
     def _gui_add_import_motion_tools(self, prx_tool_box):
-        for i in [
-            ('import fbx', 'file/fbx', 'action/import', 'Press to import fbx', self._on_dcc_import_fbx)
-        ]:
+        if gui_core.GuiUtil.language_is_chs():
+            tool_data = [
+                ('导入FBX', 'file/fbx', 'action/import', '点击导入FBX', self._on_dcc_import_fbx)
+            ]
+        else:
+            tool_data = [
+                ('import fbx', 'file/fbx', 'action/import', 'Press to import fbx', self._on_dcc_import_fbx)
+            ]
+        for i in tool_data:
             i_key, i_icon_name, i_sub_icon_name, i_tool_tip, i_fnc = i
             i_tool = gui_prx_widgets.PrxIconPressButton()
             prx_tool_box.add_widget(i_tool)
@@ -87,7 +91,12 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
     def _gui_add_rig_switch_tools(self, prx_tool_box):
         self._rig_namespace_switch_qt_button = gui_qt_widgets.QtIconPressButton()
         prx_tool_box.add_widget(self._rig_namespace_switch_qt_button)
-        self._rig_namespace_switch_qt_button._set_name_text_('rig namespace switch')
+        if gui_core.GuiUtil.language_is_chs():
+            self._rig_namespace_switch_qt_button._set_name_text_('绑定切换')
+            self._rig_namespace_switch_qt_button._set_tool_tip_('点击切换绑定')
+        else:
+            self._rig_namespace_switch_qt_button._set_name_text_('rig switch')
+            self._rig_namespace_switch_qt_button._set_tool_tip_('Press to switch rig')
         self._rig_namespace_switch_qt_button._set_icon_name_('montage/layers')
         self._rig_namespace_switch_qt_button.press_clicked.connect(self._on_gui_switch_rig_namespace)
 

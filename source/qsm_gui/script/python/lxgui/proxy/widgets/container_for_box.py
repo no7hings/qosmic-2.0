@@ -59,9 +59,7 @@ class PrxHToolBox(gui_prx_abstracts.AbsPrxWidget):
         self._qt_head._refresh_expand_()
 
     def set_name(self, name):
-        self._qt_head._set_name_text_(
-            'tool box for "{}"'.format(name)
-        )
+        self._qt_head._set_name_text_(name)
 
     def set_expanded(self, boolean):
         self._qt_head._set_expanded_(boolean)

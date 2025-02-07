@@ -45,7 +45,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "开发相关/开发文档/懒人动画（Lazy Animation）.md",
+                "file": "开发相关/开发文档/解算流程工具.md",
                 "mode": "source",
                 "source": false
               }
@@ -118,7 +118,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发相关/开发文档/懒人动画（Lazy Animation）.md",
+                "file": "开发相关/开发文档/解算流程工具.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -135,7 +135,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发相关/开发文档/懒人动画（Lazy Animation）.md",
+                "file": "开发相关/开发文档/解算流程工具.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -158,7 +158,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "开发相关/开发文档/懒人动画（Lazy Animation）.md"
+                "file": "开发相关/开发文档/解算流程工具.md"
               }
             }
           },
@@ -180,7 +180,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "开发相关/开发文档/懒人动画（Lazy Animation）.md"
+                "file": "开发相关/开发文档/解算流程工具.md"
               }
             }
           },
@@ -222,23 +222,28 @@
   },
   "active": "3a5911e81aa83ad0",
   "lastOpenFiles": [
+    "images/Pasted image 20241120183518.png",
+    "开发相关/开发文档/解算流程工具.md",
+    "images/Pasted image 20241121123828.png",
+    "images/Pasted image 20241121132300.png",
+    "随记/动作拼接.md",
+    "images/Pasted image 20241121133157.png",
+    "images/Pasted image 20241121133029.png",
+    "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
+    "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
+    "开发相关/开发文档/懒人动画（Lazy Animation）.md",
     "开发相关/开发任务/maya/绑定相关/动态GPU（Dynamic GPU）.md",
     "开发相关/开发任务/maya/绑定相关/简模代理（Skin Proxy）.md",
-    "开发相关/开发文档/懒人动画（Lazy Animation）.md",
     "开发相关/开发进度/优化.md",
-    "随记/动作拼接.md",
     "技术文档/工具安装说明（临时版）.md",
     "技术文档/Qosmic/环境变量（Environment）.md",
     "技术文档/Qosmic/存储结构（Storage Hierarchy）.md",
-    "开发相关/开发文档/解算流程工具.md",
     "开发相关/开发任务/2025-规划.md",
     "随记/2025随记.md",
     "Pasted image 20250109134709.png",
     "Pasted image 20250109134209.png",
     "Pasted image 20250109134149.png",
     "Pasted image 20250109133827.png",
-    "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
-    "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
     "开发相关/开发任务/maya/解算相关/节点图模版工具（Node Graph Template Tool）.md",
     "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
     "开发相关/开发任务/maya/动作相关/动作工具.md",
@@ -254,11 +259,6 @@
     "开发相关/开发计划/2024-4~5.md",
     "开发相关/开发计划/总览.md",
     "开发相关/开发文档/images/Pasted image 20250106113022.png",
-    "开发相关/开发文档/images/Pasted image 20250106112605.png",
-    "开发相关/开发文档/images/Pasted image 20250106112317.png",
-    "开发相关/开发文档/images/Pasted image 20250106110426.png",
-    "开发相关/开发文档/images/Pasted image 20250106110203.png",
-    "开发相关/开发进度/maya/7月-动作工具.md",
     "images",
     "USD/植被流程/流程图.canvas",
     "USD/植被流程",

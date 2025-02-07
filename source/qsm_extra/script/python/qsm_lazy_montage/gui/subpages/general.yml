@@ -32,8 +32,8 @@ build:
                 name: 'Rig Scheme'
                 name_chs: '绑定方案'
                 options: ['adv', 'mocap']
-                options_names: ['ADV', 'MoCap']
-                options_names_chs: ['ADV', '动捕']
+                option_names: ['ADV', 'MoCap']
+                option_names_chs: ['ADV', '动捕']
                 default: 'adv'
                 history_key: 'tool-panels.lazy-montage.new-splicing.rig-scheme'
                 pull_history_latest: True

@@ -280,6 +280,45 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
 
     def on_playblast_subprocess(self):
         pass
+        # def open_fnc_(movie_file_path_):
+        #     bsc_storage.StgFileOpt(movie_file_path_).start_in_system()
+        #
+        # camera = qsm_mya_core.Camera.get_non_default_with_dialog()
+        # frame = qsm_mya_core.Frame.get_frame_range()
+        # fps = qsm_mya_core.Frame.get_fps()
+        # resolution = qsm_mya_core.RenderSettings.get_resolution()
+        #
+        # task_name, file_path, movie_file_path, cmd_script = PlayblastProcess.generate_subprocess_args(
+        #     camera_path=camera,
+        #     frame=frame,
+        #     clip_start=clip_start,
+        #     frame_step=1,
+        #     fps=fps,
+        #     resolution=resolution,
+        #     texture_enable=True, light_enable=False, shadow_enable=False
+        # )
+        #
+        # import lxgui.proxy.widgets as gui_prx_widgets
+        #
+        # task_window = gui_prx_widgets.PrxSprcTaskWindow()
+        # if task_window._language == 'chs':
+        #     task_window.set_window_title('拍屏')
+        #     task_window.set_tip(
+        #         '正在拍屏，请耐心等待；\n'
+        #         '这个过程可能会让MAYA前台操作产生些许卡顿；\n'
+        #         '如需要终止任务，请点击“关闭”'
+        #     )
+        # else:
+        #     task_window.set_window_title('Playblast')
+        #
+        # task_window.submit(
+        #     'playblast',
+        #     task_name,
+        #     cmd_script,
+        #     completed_fnc=functools.partial(open_fnc_, movie_file_path),
+        # )
+        #
+        # task_window.show_window_auto(exclusive=False)
 
     def on_playblast_backstage(self):
         import lxbasic.web as bsc_web
@@ -360,6 +399,9 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 status='warning'
             )
 
+    def on_playblast_farm(self):
+        pass
+
     def do_gui_load_active_camera(self):
         self.do_gui_refresh_camera_by_scheme()
 
@@ -432,6 +474,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         qt_lot.addWidget(tool_bar.widget)
         tool_bar.set_expanded(True)
 
+        # main
         self._playblast_button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(self._playblast_button)
         self._playblast_button.set_name(
@@ -441,6 +484,17 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         )
         self._playblast_button.connect_press_clicked_to(self.on_playblast)
 
+        # subprocess
+        self._playblast_subprocess_button = gui_prx_widgets.PrxPressButton()
+        tool_bar.add_widget(self._playblast_subprocess_button)
+        self._playblast_subprocess_button.set_name(
+            gui_core.GuiUtil.choice_gui_name(
+                self._window._language, self._window._configure.get('build.main.buttons.playblast_subprocess')
+            )
+        )
+        self._playblast_subprocess_button.connect_press_clicked_to(self.on_playblast_subprocess)
+
+        # backstage
         self._playblast_backstage_button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(self._playblast_backstage_button)
         self._playblast_backstage_button.set_name(
@@ -449,6 +503,16 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
             )
         )
         self._playblast_backstage_button.connect_press_clicked_to(self.on_playblast_backstage)
+
+        # farm
+        self._playblast_farm_button = gui_prx_widgets.PrxPressButton()
+        tool_bar.add_widget(self._playblast_farm_button)
+        self._playblast_farm_button.set_name(
+            gui_core.GuiUtil.choice_gui_name(
+                self._window._language, self._window._configure.get('build.main.buttons.playblast_farm')
+            )
+        )
+        self._playblast_farm_button.connect_press_clicked_to(self.on_playblast_farm)
 
         self._do_dcc_register_all_script_jobs()
         self._window.register_window_close_method(self._do_dcc_destroy_all_script_jobs)

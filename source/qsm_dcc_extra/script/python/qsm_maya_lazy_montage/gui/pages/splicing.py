@@ -114,6 +114,7 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
             )
 
     def _on_dcc_import_track(self):
+        # todo: update is not work
         if self._rig_namespace is not None:
             track_json_path = gui_core.GuiStorageDialog.open_file(
                 ext_filter='All File (*.jsz)', parent=self._qt_widget

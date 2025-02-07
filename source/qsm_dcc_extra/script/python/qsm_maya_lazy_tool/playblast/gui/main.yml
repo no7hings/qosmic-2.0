@@ -347,9 +347,17 @@ build:
                 name: 'Playblast'
                 name_chs: '拍屏'
 
+            playblast_subprocess:
+                name: 'Playblast as Backstage'
+                name_chs: '拍屏（子进程）'
+
             playblast_backstage:
                 name: 'Playblast as Backstage'
                 name_chs: '拍屏（后台）'
+
+            playblast_farm:
+                name: 'Playblast as Backstage'
+                name_chs: '拍屏（农场）'
 
         messages:
             no_task_server:

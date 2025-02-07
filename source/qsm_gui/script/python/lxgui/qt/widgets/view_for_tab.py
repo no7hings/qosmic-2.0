@@ -700,10 +700,20 @@ class QtTabView(
 
     def _tab_item_menu_gain_fnc_(self):
         if self._index_press_tmp is not None:
-            return [
-                ('close tab', 'close-hover', functools.partial(self._delete_widget_at_, self._index_press_tmp)),
-                # ('close other tabs', 'close-hover', None)
-            ]
+            if _gui_core.GuiUtil.language_is_chs():
+                return [
+                    (
+                        '关闭页面', 'close-hover',
+                        functools.partial(self._delete_widget_at_, self._index_press_tmp)
+                    ),
+                ]
+            else:
+                return [
+                    (
+                        'close page', 'close-hover',
+                        functools.partial(self._delete_widget_at_, self._index_press_tmp)
+                    ),
+                ]
         return []
 
     def _do_scroll_to_(self, index):
