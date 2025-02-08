@@ -232,13 +232,13 @@ class PlayblastOpt(object):
             try:
                 movie_file_path = cls.generate_movie_file_path(directory_path=None, update_scheme='no_version')
                 camera = qsm_mya_core.Camera.get_non_default_with_dialog()
-                frame = qsm_mya_core.Frame.get_frame_range()
+                frame_range = qsm_mya_core.Frame.get_frame_range()
                 fps = qsm_mya_core.Frame.get_fps()
                 resolution = qsm_mya_core.RenderSettings.get_resolution()
                 cls.execute(
                     movie_file_path=movie_file_path,
                     camera=camera,
-                    frame=frame, clip_start=clip_start, fps=fps,
+                    frame=frame_range, clip_start=clip_start, fps=fps,
                     resolution=resolution,
                     texture_enable=True, hud_enable=True, play_enable=True,
                     camera_display_options=None
@@ -254,13 +254,13 @@ class PlayblastOpt(object):
                 bsc_storage.StgFileOpt(movie_file_path_).start_in_system()
 
             camera = qsm_mya_core.Camera.get_non_default_with_dialog()
-            frame = qsm_mya_core.Frame.get_frame_range()
+            frame_range = qsm_mya_core.Frame.get_frame_range()
             fps = qsm_mya_core.Frame.get_fps()
             resolution = qsm_mya_core.RenderSettings.get_resolution()
 
             task_name, file_path, movie_file_path, cmd_script = PlayblastProcess.generate_subprocess_args(
-                camera_path=camera,
-                frame=frame, 
+                camera=camera,
+                frame=frame_range,
                 clip_start=clip_start, 
                 frame_step=1, 
                 fps=fps,
@@ -294,13 +294,13 @@ class PlayblastOpt(object):
                 return
 
             camera = qsm_mya_core.Camera.get_non_default_with_dialog()
-            frame = qsm_mya_core.Frame.get_frame_range()
+            frame_range = qsm_mya_core.Frame.get_frame_range()
             fps = qsm_mya_core.Frame.get_fps()
             resolution = qsm_mya_core.RenderSettings.get_resolution()
 
             task_name, file_path, movie_file_path, cmd_script = PlayblastProcess.generate_subprocess_args(
-                camera_path=camera,
-                frame=frame, 
+                camera=camera,
+                frame=frame_range,
                 clip_start=clip_start, 
                 frame_step=1, 
                 fps=fps,
@@ -327,13 +327,13 @@ class PlayblastOpt(object):
                 return
 
             camera = qsm_mya_core.Camera.get_non_default_with_dialog()
-            frame = qsm_mya_core.Frame.get_frame_range()
+            frame_range = qsm_mya_core.Frame.get_frame_range()
             fps = qsm_mya_core.Frame.get_fps()
             resolution = qsm_mya_core.RenderSettings.get_resolution()
 
             option_hook = PlayblastProcess.generate_farm_hook_option(
-                camera_path=camera,
-                frame=frame, 
+                camera=camera,
+                frame=frame_range,
                 clip_start=clip_start, 
                 frame_step=1, 
                 fps=fps,
@@ -427,16 +427,14 @@ class PlayblastProcess(object):
     @classmethod
     def generate_subprocess_args(
         cls,
-        camera_path,
+        camera,
         frame, clip_start, frame_step, fps,
         resolution,
         texture_enable, light_enable, shadow_enable
     ):
         file_current = qsm_mya_core.SceneFile.get_current()
         file_opt_current = bsc_storage.StgFileOpt(file_current)
-        ptn = six.u(
-            '{}/playblast/{}.v{{version}}.ma'
-        ).format(
+        ptn = u'{}/playblast/{}.v{{version}}.ma'.format(
             bsc_core.ensure_unicode(file_opt_current.directory_path),
             bsc_core.ensure_unicode(file_opt_current.name_base),
         )
@@ -456,7 +454,7 @@ class PlayblastProcess(object):
             dict(
                 file=file_path,
                 movie=movie_file_path,
-                camera=camera_path,
+                camera=camera,
                 start_frame=start_frame, end_frame=end_frame, 
                 clip_start=clip_start, 
                 frame_step=frame_step, 
@@ -465,7 +463,7 @@ class PlayblastProcess(object):
                 texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
             )
         )
-        task_name = '[playblast][{}][{}][{}]'.format(
+        task_name = u'[playblast][{}][{}][{}]'.format(
             file_opt.name, '{}x{}'.format(width, height), '{}-{}'.format(start_frame, end_frame)
         )
         return task_name, file_path, movie_file_path, cmd_script
@@ -473,7 +471,7 @@ class PlayblastProcess(object):
     @classmethod
     def generate_farm_hook_option(
         cls,
-        camera_path,
+        camera,
         frame, 
         clip_start, 
         frame_step, 
@@ -483,9 +481,7 @@ class PlayblastProcess(object):
     ):
         file_current = qsm_mya_core.SceneFile.get_current()
         file_opt_current = bsc_storage.StgFileOpt(file_current)
-        ptn = six.u(
-            '{}/playblast/{}.v{{version}}.ma'
-        ).format(
+        ptn = u'{}/playblast/{}.v{{version}}.ma'.format(
             bsc_core.ensure_unicode(file_opt_current.directory_path),
             bsc_core.ensure_unicode(file_opt_current.name_base),
         )
@@ -501,7 +497,7 @@ class PlayblastProcess(object):
         width, height = resolution
         movie_file_path = six.u('{}.mov').format(bsc_core.ensure_unicode(file_opt.path_base))
 
-        task_name = '[playblast][{}][{}][{}]'.format(
+        task_name = u'[playblast][{}][{}][{}]'.format(
             file_opt.name, '{}x{}'.format(width, height), '{}-{}'.format(start_frame, end_frame)
         )
 
@@ -510,7 +506,7 @@ class PlayblastProcess(object):
             dict(
                 file=file_path,
                 movie=movie_file_path,
-                camera=camera_path,
+                camera=camera,
                 start_frame=start_frame, end_frame=end_frame, 
                 clip_start=clip_start, 
                 frame_step=frame_step, 

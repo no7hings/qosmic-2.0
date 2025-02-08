@@ -5,8 +5,6 @@ import lxgui.core as gui_core
 
 import lxsession.commands as ssn_commands
 
-from .. import process as _process
-
 
 class FarmTaskSubmit:
 

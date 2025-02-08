@@ -46,8 +46,8 @@
               "type": "markdown",
               "state": {
                 "file": "开发相关/开发文档/解算流程工具.md",
-                "mode": "source",
-                "source": false
+                "mode": "preview",
+                "source": true
               }
             }
           }
@@ -222,8 +222,12 @@
   },
   "active": "3a5911e81aa83ad0",
   "lastOpenFiles": [
-    "images/Pasted image 20241120183518.png",
+    "开发相关/开发文档/懒人动画（Lazy Animation）.md",
     "开发相关/开发文档/解算流程工具.md",
+    "开发相关/开发进度/maya/10月-资产检查工具.md",
+    "开发相关/制作相关/资产.md",
+    "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
+    "images/Pasted image 20241120183518.png",
     "images/Pasted image 20241121123828.png",
     "images/Pasted image 20241121132300.png",
     "随记/动作拼接.md",
@@ -231,7 +235,6 @@
     "images/Pasted image 20241121133029.png",
     "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
     "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
-    "开发相关/开发文档/懒人动画（Lazy Animation）.md",
     "开发相关/开发任务/maya/绑定相关/动态GPU（Dynamic GPU）.md",
     "开发相关/开发任务/maya/绑定相关/简模代理（Skin Proxy）.md",
     "开发相关/开发进度/优化.md",
@@ -255,10 +258,7 @@
     "开发相关/开发任务/maya/动作相关/动作拼接工具.md",
     "开发相关/开发文档/images/Pasted image 20241216112647.png",
     "技术文档/Qosmic.md",
-    "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
     "开发相关/开发计划/2024-4~5.md",
-    "开发相关/开发计划/总览.md",
-    "开发相关/开发文档/images/Pasted image 20250106113022.png",
     "images",
     "USD/植被流程/流程图.canvas",
     "USD/植被流程",

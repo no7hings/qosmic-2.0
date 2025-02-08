@@ -71,23 +71,23 @@ def __execute_option_hook(hook_option):
     import lxbasic.log as bsc_log
 
     import lxbasic.core as bsc_core
-    #
+
+    import lxbasic.session as bsc_session
+
     import lxbasic.extra.methods as bsc_etr_methods
-    #
+
     import lxresolver.core as rsv_core
-    #
-    import lxsession.core as ssn_core
-    #
+
     resolver = rsv_core.RsvBase.generate_root()
-    #
-    all_hook_engines = ssn_core.SsnHookEngineMtd.get_all()
+
+    all_hook_engines = bsc_session.SsnHookEngine.get_all()
     option_opt = bsc_core.ArgDictStringOpt(hook_option)
-    #
+
     project = option_opt.get('project')
     rsv_project = resolver.get_rsv_project(project=project)
     if rsv_project is None:
         raise RuntimeError()
-    #
+
     hook_engine = option_opt.get('hook_engine')
     # check engine is in configure
     if hook_engine not in all_hook_engines:
@@ -97,13 +97,13 @@ def __execute_option_hook(hook_option):
                 'engine="{}" is not available'.format(hook_engine)
             )
         )
-    #
+
     test_flag = option_opt.get('test_flag') or False
     if test_flag is True:
         bsc_core.BscEnviron.set(
             'QSM_TEST', '1'
         )
-    #
+
     kwargs = option_opt.value
     kwargs.update(
         dict(
@@ -119,13 +119,13 @@ def __execute_option_hook(hook_option):
         opt_packages_extend.extend(
             hook_packages_extend
         )
-    #
+
     opt_args_execute.append(
-        ssn_core.SsnHookEngineMtd.get_command(
+        bsc_session.SsnHookEngine.get_command(
             **kwargs
         )
     )
-    #
+
     application = hook_engine.split('-')[0]
     if application == 'katana':
         # todo: use configure
@@ -133,32 +133,32 @@ def __execute_option_hook(hook_option):
         if katana_version:
             if katana_version >= '4.5':
                 application = 'katana4.5'
-    #
+
     rsv_app = rsv_project.get_rsv_app(
         application=application
     )
     if rsv_app is None:
         raise RuntimeError()
-    #
+
     use_thread = option_opt.get('use_thread') or False
     # add extend environs
     environs_extend = {}
-    #
+
     _ = bsc_core.BscEnviron.get('QSM_EXTEND_RESOURCES')
     if _:
         environs_extend['QSM_EXTEND_RESOURCES'] = _
-    #
+
     framework_scheme = rsv_project.get_framework_scheme()
     m = bsc_etr_methods.get_module(framework_scheme)
     framework_packages_extend = m.EtrBase.get_base_packages_extend()
     if framework_packages_extend:
         opt_packages_extend.extend(framework_packages_extend)
-    #
+
     command = rsv_app.get_command(
         args_execute=opt_args_execute,
         packages_extend=opt_packages_extend
     )
-    #
+
     if use_thread is True:
         rsv_app.execute_with_result_use_thread(
             command, environs_extend=environs_extend
@@ -174,11 +174,7 @@ def __execute_option_hook_new(hook_option):
 
     import lxbasic.core as bsc_core
 
-    import lxbasic.extra.methods as bsc_etr_methods
-
-    import lxresolver.core as rsv_core
-
-    import lxsession.core as ssn_core
+    import lxbasic.session as bsc_session
 
     # fixme, option has ""
     if hook_option.startswith('"'):
@@ -194,7 +190,7 @@ def __execute_option_hook_new(hook_option):
             )
         )
 
-    all_hook_engines = ssn_core.SsnHookEngineMtd.get_all()
+    all_hook_engines = bsc_session.SsnHookEngine.get_all()
     if hook_engine not in all_hook_engines:
         raise RuntimeError(
             bsc_log.Log.trace_method_error(
@@ -227,7 +223,7 @@ def __execute_option_hook_new(hook_option):
         )
 
     opt_args_execute.append(
-        ssn_core.SsnHookEngineMtd.get_command(
+        bsc_session.SsnHookEngine.get_command(
             **kwargs
         )
     )

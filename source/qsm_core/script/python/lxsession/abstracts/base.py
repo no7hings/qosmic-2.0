@@ -540,7 +540,6 @@ class ValidationChecker(object):
 
     def get_data(self):
         result_file_path = self._get_data_file_path_()
-        print result_file_path
         raw = bsc_storage.StgFileOpt(
             result_file_path
         ).set_read()

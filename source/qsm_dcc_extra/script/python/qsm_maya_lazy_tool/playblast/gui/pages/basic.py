@@ -1,7 +1,11 @@
 # coding:utf-8
 import six
 
+import functools
+
 import lxbasic.core as bsc_core
+
+import lxbasic.storage as bsc_storage
 
 import lxgui.core as gui_core
 
@@ -12,6 +16,8 @@ import lxgui.qt.widgets as qt_widgets
 import lxgui.proxy.abstracts as prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
+
+import qsm_general.prc_task as qsm_gnl_prc_task
 
 import qsm_maya.core as qsm_mya_core
 
@@ -175,7 +181,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
     def gui_get_camera_path(self):
         scheme = self._camera_scheme_port.get()
         if scheme == 'auto':
-            return qsm_mya_core.Camera.get_active()
+            return qsm_mya_core.Camera.get_non_default_with_dialog()
         elif scheme == 'camera_path':
             return self._camera_path_port.get()
 
@@ -224,26 +230,21 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         if movie_path is None:
             return
 
-        camera_path = self.gui_get_camera_path()
-        if camera_path is None:
+        camera = self.gui_get_camera_path()
+        if camera is None:
             return
 
-        resolution_size = self.gui_get_resolution_size()
+        resolution = self.gui_get_resolution_size()
         frame_range = self.gui_get_frame_range()
         frame_step = self._prx_options_node.get(
             'frame.step'
         )
         fps = self._fps_port.get()
 
-        texture_enable = self._prx_options_node.get(
-            'render_setting.texture_enable'
-        )
-        light_enable = self._prx_options_node.get(
-            'render_setting.light_enable'
-        )
-        shadow_enable = self._prx_options_node.get(
-            'render_setting.shadow_enable'
-        )
+        texture_enable = self._prx_options_node.get('render_setting.texture_enable')
+        light_enable = self._prx_options_node.get('render_setting.light_enable')
+        shadow_enable = self._prx_options_node.get('render_setting.shadow_enable')
+
         hud_enable = self._prx_options_node.get(
             'display_setting.hud_enable'
         )
@@ -263,8 +264,8 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         try:
             qsm_mya_hdl_gnl_scripts.PlayblastOpt.execute(
                 movie_path,
-                camera=camera_path,
-                resolution=resolution_size,
+                camera=camera,
+                resolution=resolution,
                 frame=frame_range, frame_step=frame_step, fps=fps,
                 texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable,
                 show_window=False, play_enable=play_enable,
@@ -279,46 +280,55 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 i.switch_to_cache()
 
     def on_playblast_subprocess(self):
-        pass
-        # def open_fnc_(movie_file_path_):
-        #     bsc_storage.StgFileOpt(movie_file_path_).start_in_system()
-        #
-        # camera = qsm_mya_core.Camera.get_non_default_with_dialog()
-        # frame = qsm_mya_core.Frame.get_frame_range()
-        # fps = qsm_mya_core.Frame.get_fps()
-        # resolution = qsm_mya_core.RenderSettings.get_resolution()
-        #
-        # task_name, file_path, movie_file_path, cmd_script = PlayblastProcess.generate_subprocess_args(
-        #     camera_path=camera,
-        #     frame=frame,
-        #     clip_start=clip_start,
-        #     frame_step=1,
-        #     fps=fps,
-        #     resolution=resolution,
-        #     texture_enable=True, light_enable=False, shadow_enable=False
-        # )
-        #
-        # import lxgui.proxy.widgets as gui_prx_widgets
-        #
-        # task_window = gui_prx_widgets.PrxSprcTaskWindow()
-        # if task_window._language == 'chs':
-        #     task_window.set_window_title('拍屏')
-        #     task_window.set_tip(
-        #         '正在拍屏，请耐心等待；\n'
-        #         '这个过程可能会让MAYA前台操作产生些许卡顿；\n'
-        #         '如需要终止任务，请点击“关闭”'
-        #     )
-        # else:
-        #     task_window.set_window_title('Playblast')
-        #
-        # task_window.submit(
-        #     'playblast',
-        #     task_name,
-        #     cmd_script,
-        #     completed_fnc=functools.partial(open_fnc_, movie_file_path),
-        # )
-        #
-        # task_window.show_window_auto(exclusive=False)
+        def open_fnc_(movie_file_path_):
+            bsc_storage.StgFileOpt(movie_file_path_).start_in_system()
+
+        camera = self.gui_get_camera_path()
+        if camera is None:
+            raise RuntimeError()
+
+        resolution = self.gui_get_resolution_size()
+        frame_range = self.gui_get_frame_range()
+        frame_step = self._prx_options_node.get(
+            'frame.step'
+        )
+        fps = self._fps_port.get()
+
+        texture_enable = self._prx_options_node.get('render_setting.texture_enable')
+        light_enable = self._prx_options_node.get('render_setting.light_enable')
+        shadow_enable = self._prx_options_node.get('render_setting.shadow_enable')
+
+        (
+            task_name, file_path, movie_file_path, cmd_script
+        ) = qsm_mya_hdl_gnl_scripts.PlayblastProcess.generate_subprocess_args(
+            camera=camera,
+            frame=frame_range,
+            clip_start=None,
+            frame_step=frame_step,
+            fps=fps,
+            resolution=resolution,
+            texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
+        )
+
+        task_window = gui_prx_widgets.PrxSprcTaskWindow()
+        if task_window._language == 'chs':
+            task_window.set_window_title('拍屏')
+            task_window.set_tip(
+                '正在拍屏，请耐心等待；\n'
+                '这个过程可能会让MAYA前台操作产生些许卡顿；\n'
+                '如需要终止任务，请点击“关闭”'
+            )
+        else:
+            task_window.set_window_title('Playblast')
+
+        task_window.submit(
+            'playblast',
+            task_name,
+            cmd_script,
+            completed_fnc=functools.partial(open_fnc_, movie_file_path),
+        )
+
+        task_window.show_window_auto(exclusive=False)
 
     def on_playblast_backstage(self):
         import lxbasic.web as bsc_web
@@ -326,40 +336,30 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         import qsm_lazy_backstage.worker as lzy_bks_worker
 
         if lzy_bks_worker.TaskClient.get_server_status():
-            movie_path = self.gui_get_file_path()
-            if movie_path is None:
+            camera = self.gui_get_camera_path()
+            if camera is None:
                 raise RuntimeError()
 
-            camera_path = self.gui_get_camera_path()
-            if camera_path is None:
-                raise RuntimeError()
-
-            resolution_size = self.gui_get_resolution_size()
+            resolution = self.gui_get_resolution_size()
             frame_range = self.gui_get_frame_range()
             frame_step = self._prx_options_node.get(
                 'frame.step'
             )
             fps = self._fps_port.get()
 
-            texture_enable = self._prx_options_node.get(
-                'render_setting.texture_enable'
-            )
-            light_enable = self._prx_options_node.get(
-                'render_setting.light_enable'
-            )
-            shadow_enable = self._prx_options_node.get(
-                'render_setting.shadow_enable'
-            )
-            hud_enable = self._prx_options_node.get(
-                'display_setting.hud_enable'
-            )
+            texture_enable = self._prx_options_node.get('render_setting.texture_enable')
+            light_enable = self._prx_options_node.get('render_setting.light_enable')
+            shadow_enable = self._prx_options_node.get('render_setting.shadow_enable')
 
             (
                 task_name, file_path, movie_file_path, cmd_script
             ) = qsm_mya_hdl_gnl_scripts.PlayblastProcess.generate_subprocess_args(
-                camera_path=camera_path,
-                frame=frame_range, clip_start=None, frame_step=frame_step, fps=fps,
-                resolution=resolution_size,
+                camera=camera,
+                frame=frame_range,
+                clip_start=None,
+                frame_step=frame_step,
+                fps=fps,
+                resolution=resolution,
                 texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
             )
 
@@ -400,7 +400,35 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
             )
 
     def on_playblast_farm(self):
-        pass
+        if qsm_gnl_prc_task.FarmTaskSubmit.check_is_valid() is False:
+            return
+
+        camera = self.gui_get_camera_path()
+        if camera is None:
+            raise RuntimeError()
+
+        resolution = self.gui_get_resolution_size()
+        frame_range = self.gui_get_frame_range()
+        frame_step = self._prx_options_node.get(
+            'frame.step'
+        )
+        fps = self._fps_port.get()
+
+        texture_enable = self._prx_options_node.get('render_setting.texture_enable')
+        light_enable = self._prx_options_node.get('render_setting.light_enable')
+        shadow_enable = self._prx_options_node.get('render_setting.shadow_enable')
+
+        option_hook = qsm_mya_hdl_gnl_scripts.PlayblastProcess.generate_farm_hook_option(
+            camera=camera,
+            frame=frame_range,
+            clip_start=None,
+            frame_step=frame_step,
+            fps=fps,
+            resolution=resolution,
+            texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
+        )
+
+        qsm_gnl_prc_task.FarmTaskSubmit.execute_by_hook_option(option_hook)
 
     def do_gui_load_active_camera(self):
         self.do_gui_refresh_camera_by_scheme()
