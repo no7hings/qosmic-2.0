@@ -59,7 +59,7 @@ build:
                         Add some screenshots as preview.
                     tool_tip_chs:
                         |-
-                        加入审核图片（截屏）。
+                        加入审核图片（截屏），图片会被自动拼接成一个视频。
 
                     visible_condition: {
                         operator: 'is', port: 'preview_scheme', value: 'image'
@@ -95,6 +95,18 @@ build:
                     tool_tip_chs:
                         |-
                         填写发布备注，记录更新信息。
+
+                notice:
+                    widget: script
+                    name: 'Notice'
+                    name_chs: '通知'
+                    height: 120
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        待补充。
 
                 rig_variant:
                     widget: enumerate

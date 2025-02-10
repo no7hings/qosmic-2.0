@@ -22,7 +22,12 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._page_prx_tab_tool_box)
 
-        self.gui_setup_pages_for(['task_manager', 'task_tool', 'task_release', 'task_tracker'])
+        self.gui_setup_pages_for(
+            [
+                'task_overview', 'task_manager', 'task_tracker',
+                'task_tool', 'task_release'
+            ]
+        )
 
         self._page_prx_tab_tool_box.set_history_key('lazy-workspace.{}-page'.format(self.RESOURCE_TYPE))
         self._page_prx_tab_tool_box.load_history()

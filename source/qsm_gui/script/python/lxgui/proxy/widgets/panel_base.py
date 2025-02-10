@@ -244,7 +244,6 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
 
     def show_help_unit(self):
         url_p = self._gui_configure.get('help_url')
-        print url_p
         if url_p:
             cfg = bsc_resource.RscExtendConfigure.get_as_content('dokuwiki/main')
             if bsc_core.BscSystem.get_is_dev():

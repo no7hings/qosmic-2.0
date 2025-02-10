@@ -1,7 +1,10 @@
 # coding:utf-8
 import collections
+
 import json
+
 import shutil
+
 import sys
 
 import copy
@@ -31,6 +34,7 @@ class RezPackage:
     BUILD_JSON = '{build_root}/{version}/package.json'
 
     PACKAGES = [
+        # package, enable
         ('qsm_main', True),
         ('qsm_core', True),
         ('qsm_gui', True),
