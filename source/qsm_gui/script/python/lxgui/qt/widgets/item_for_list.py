@@ -631,8 +631,8 @@ class QtListItemWidget(
         offset = self._get_action_offset_()
         is_actioned = self._get_is_actioned_()
         #
-        base_rect = QtCore.QRect(bsc_x, bsc_y, bsc_w, bsc_h)
-        shadow_rect = QtCore.QRect(bsc_x+2, bsc_y+2, bsc_w-2, bsc_h-2)
+        base_rect = qt_rect(bsc_x, bsc_y, bsc_w, bsc_h)
+        shadow_rect = qt_rect(bsc_x+2, bsc_y+2, bsc_w-2, bsc_h-2)
 
         bkg_color = painter._get_frame_background_color_by_rect_(
             rect=base_rect,

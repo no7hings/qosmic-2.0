@@ -181,7 +181,7 @@ class QtTrackTimeline(
 
         self._play_start_timeframe, self._play_end_timeframe = self._start_timeframe, self._end_timeframe
 
-        self._timeline_frame_rect = QtCore.QRect()
+        self._timeline_frame_rect = qt_rect()
 
         self._coord_model = None
 
@@ -193,13 +193,13 @@ class QtTrackTimeline(
         self._play_thread.set_interval(int(1000.0/self._fps))
 
         self._timeframe_current_handle_w = 20
-        self._timeframe_current_handle_rect = QtCore.QRect()
+        self._timeframe_current_handle_rect = qt_rect()
 
         self._timehandle_path = _qt_core.QtPainterPath()
-        self._timehandle_text_rect = QtCore.QRect()
+        self._timehandle_text_rect = qt_rect()
         self._unit_current_coord = 0
 
-        self._timeframe_bubble_rect = QtCore.QRect()
+        self._timeframe_bubble_rect = qt_rect()
 
         self._draw_offset = -1
 

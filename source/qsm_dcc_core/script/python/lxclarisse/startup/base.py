@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.content as bsc_content
 # clarisse
 from ..core.wrap import *
@@ -77,7 +79,7 @@ class MenuBuild(object):
                             gui_core.GuiIcon.get(i_icon_name)
                         )
 
-                print 'add {}: "{}"'.format(i_type, '.'.join(i_args))
+                print('add {}: "{}"'.format(i_type, '.'.join(i_args)))
 
     def execute(self):
         pass

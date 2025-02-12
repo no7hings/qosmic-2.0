@@ -34,7 +34,7 @@ def commands():
     env.KATANA_RESOURCES.append('{root}/startup/katana')
     # arnold-setup
     # env.ARNOLD_PLUGIN_PATH.append('{root}/script/python/.setup/arnold/shaders')
-    # clarisse
+    # clarisse-setup
     # env.CLARISSE_STARTUP_SCRIPT.append('{root}/script/python/.setup/clarisse/startup_script.py')
 
 

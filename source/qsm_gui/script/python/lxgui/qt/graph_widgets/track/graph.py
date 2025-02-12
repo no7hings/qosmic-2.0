@@ -67,7 +67,7 @@ class QtTrackGraph(
         x, y = 0, 0
         width, height = self.width(), self.height()
 
-        rect = QtCore.QRect(
+        rect = qt_rect(
             x, y, width, height
         )
         # x axis for timeline
@@ -88,7 +88,7 @@ class QtTrackGraph(
             self.rect()
         )
         self._track_layer.setGeometry(
-            QtCore.QRect(
+            qt_rect(
                 self.x(), self.y(), self.width(), self.height()
             )
         )

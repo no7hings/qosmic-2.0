@@ -7,14 +7,14 @@ import lxbasic.log as bsc_log
 
 import qsm_maya.core as qsm_mya_core
 
-from qsm_maya.handles import _abc
+from qsm_maya.handles import abc_
 
 from . import dcc_organize as _cfx_rig_operate
 
 from . import dcc_asset as _rig_operate
 
 
-class AssetCfxRigHandle(_abc.AbsGroupOpt):
+class AssetCfxRigHandle(abc_.AbsGroupOpt):
     LOCATION = '|master|cfx_rig'
     LOCATION_NAME = 'cfx_rig'
 

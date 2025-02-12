@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import locale
 
 import lxbasic.content as bsc_content
@@ -117,7 +119,7 @@ class AbsHookExecutor(object):
         if output_file_path:
             # path maybe has chinese word
             output_file_path = bsc_web.UrlValue.unquote(output_file_path)
-            print output_file_path
+            print(output_file_path)
             self._ddl_job_submiter.option.set('deadline.output_file', output_file_path)
         # render
         renderer = hook_option_opt.get('renderer')

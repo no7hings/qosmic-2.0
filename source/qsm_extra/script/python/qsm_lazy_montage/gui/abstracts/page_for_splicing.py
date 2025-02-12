@@ -242,7 +242,6 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
     def gui_refresh_fnc(self, force=False):
         pass
 
-    @gui_qt_core.qt_slot()
     def on_dcc_stage_update(self):
         pass
 

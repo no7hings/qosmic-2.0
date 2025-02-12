@@ -166,7 +166,6 @@ class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
     def _set_window_show_normal_(self, *args):
         r = args[0]
         if r == self.Trigger:
-            # print 'AAA'
             # if self._window.isVisible():
             #     self._window.hide()
             # else:
@@ -229,11 +228,11 @@ class _QtSeparator(QtWidgets.QWidget):
         )
 
         self._text = None
-        self._text_rect = QtCore.QRect()
+        self._text_rect = qt_rect()
         self._font = _base.QtFonts.MenuSeparator
         self._font_metrics = QtGui.QFontMetrics(self._font)
 
-        self._rect = QtCore.QRect()
+        self._rect = qt_rect()
 
         self.installEventFilter(self)
 
@@ -304,7 +303,8 @@ class GuiQtMenuOpt(object):
 
     @_gui_core.GuiModifier.run_with_exception_catch
     def _set_cmd_debug_run_(self, cmd_str):
-        exec cmd_str
+        # for python3
+        exec (cmd_str)
 
     @_gui_core.GuiModifier.run_with_exception_catch
     def _set_fnc_debug_run_(self, fnc):

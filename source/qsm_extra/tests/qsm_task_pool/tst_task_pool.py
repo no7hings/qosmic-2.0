@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import qsm_lazy_backstage.core as lzy_bks_core
 
 p = lzy_bks_core.TaskPool.generate()
@@ -11,5 +13,5 @@ for i in range(5):
     )
 
 for i_task in p.get_tasks():
-    print i_task
-    # print i_task.get_status()
+    print(i_task)
+    # print(i_task.get_status())

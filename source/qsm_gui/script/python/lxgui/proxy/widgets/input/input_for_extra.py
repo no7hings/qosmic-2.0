@@ -9,7 +9,7 @@ from ....qt.widgets import button as _qt_wgt_button
 
 from ....qt.widgets.input import input_for_extend as _qt_wgt_ipt_for_extend
 
-import _input_base
+from . import _input_base
 
 
 #   boolean as check box

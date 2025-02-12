@@ -221,7 +221,7 @@ class QtTreeWidgetItem(
                     border_color = _qt_core.QtRgba.BdrIcon
                     #
                     s_w, s_h = w*.5, h*.5
-                    state_rect = QtCore.QRect(
+                    state_rect = qt_rect(
                         x, y+h-s_h, s_w, s_h
                     )
                     if self._icon_state == _gui_core.GuiState.LOCKED:
@@ -388,7 +388,7 @@ class QtTreeWidgetItem(
                         border_color = _qt_core.QtRgba.BdrIcon
                         #
                         s_w, s_h = w*.5, h*.5
-                        status_rect = QtCore.QRect(
+                        status_rect = qt_rect(
                             x+w-s_w, y+h-s_h, s_w, s_h
                         )
                         # draw status
@@ -424,7 +424,7 @@ class QtTreeWidgetItem(
                 #
                 if self._menu_content is not None or self._menu_data:
                     m_w, m_h = w/2, h/4
-                    menu_mark_rect = QtCore.QRect(
+                    menu_mark_rect = qt_rect(
                         x+w-m_w, y, m_w, m_h
                     )
                     painter._draw_icon_file_by_rect_(

@@ -606,7 +606,7 @@ FLUSH PRIVILEGES;
         return []
 
     def find_all(self, entity_type, filters=None):
-        return map(lambda x: self._to_entity(entity_type, x.__data__), self._find_all_fnc(entity_type, filters))
+        return list(map(lambda x: self._to_entity(entity_type, x.__data__), self._find_all_fnc(entity_type, filters)))
 
     def find_all_iter(self, entity_type, filters=None):
         for x in self._find_all_fnc(entity_type, filters):
@@ -648,7 +648,7 @@ FLUSH PRIVILEGES;
                 eval(conditions[tag])
             )
         if _.exists():
-            return map(lambda x: self._to_entity(entity_type, x.__data__), _)
+            return list(map(lambda x: self._to_entity(entity_type, x.__data__), _))
         return []
 
     def entity_is_exists(self, entity_type, path):
@@ -707,7 +707,7 @@ FLUSH PRIVILEGES;
                     v = v
                 else:
                     v = json.dumps(v)
-                exec six.u(r'csr.{} = {}').format(k, v)
+                exec (six.u(r'csr.{} = {}').format(k, v))
             csr.save()
             return True
         return False

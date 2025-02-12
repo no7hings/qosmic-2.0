@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import os
 
 import inspect
@@ -184,16 +186,18 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
         self._gui_configure = self._configure.get_as_content('option.gui')
 
         gui_name = gui_core.GuiUtil.choice_gui_name(self._language, self._configure.get('option.gui'))
-        
+
+        python_version = bsc_core.BscSystem.get_python_version()
+
         core_version = bsc_core.BscEnviron.get_core_version()
         extend_version = bsc_core.BscEnviron.get_extend_version()
         if extend_version:
-            window_title = u'{} - ver.{}({})'.format(
-                gui_name, core_version, extend_version
+            window_title = u'{} - ver.{}({}) - python.{}'.format(
+                gui_name, core_version, extend_version, python_version
             )
         else:
-            window_title = u'{} - ver.{}'.format(
-                gui_name, core_version
+            window_title = u'{} - ver.{} - python.{}'.format(
+                gui_name, core_version, python_version
             )
 
         self.set_window_title(window_title)

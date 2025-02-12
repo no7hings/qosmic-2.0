@@ -7,7 +7,7 @@ from ....qt.widgets import utility as _qt_wgt_utility
 
 from ....qt.widgets.input import input_for_constant as _qt_wgt_ipt_for_constant
 
-import _input_base
+from . import _input_base
 
 
 # any constant choose, etc. enumerate

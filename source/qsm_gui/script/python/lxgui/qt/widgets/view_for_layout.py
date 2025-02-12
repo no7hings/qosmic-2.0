@@ -152,7 +152,7 @@ class QtToolGridLayoutWidget(
 
         self._layout_margins = 4, 4, 4, 4
 
-        self._viewport_rect = QtCore.QRect()
+        self._viewport_rect = qt_rect()
 
     def __init__(self, *args, **kwargs):
         super(QtToolGridLayoutWidget, self).__init__(*args, **kwargs)
@@ -457,7 +457,7 @@ class QtToolGroupVLayoutWidget(
 
         self._layout_model.set_item_h(self._drag_h)
 
-        self._viewport_rect = QtCore.QRect()
+        self._viewport_rect = qt_rect()
 
         self.installEventFilter(self)
 

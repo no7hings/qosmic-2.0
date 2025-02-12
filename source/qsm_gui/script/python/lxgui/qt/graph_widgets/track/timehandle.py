@@ -49,7 +49,7 @@ class QtTimeHandle(
 
         self._init_action_base_def_(self)
 
-        self._rect = QtCore.QRect()
+        self._rect = qt_rect()
 
         self._graph = None
 

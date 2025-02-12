@@ -416,10 +416,6 @@ class PrxBaseWindow(
                 self.widget, pos, size=self.get_definition_window_size()
             )
 
-    def append_log(self, text):
-        text_browser = self.get_log_text_browser()
-        text_browser.append_log(text)
-
     def append_log_use_signal(self, text):
         text_browser = self.get_log_text_browser()
         text_browser.append_log_use_signal(text)

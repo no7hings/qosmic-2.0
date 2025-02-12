@@ -159,7 +159,7 @@ class QtChartAsRgbaChoose(
         if self._color_rgba_255 is not None:
             painter._set_border_color_(255, 255, 255, 255)
             #
-            text_rect = QtCore.QRect(
+            text_rect = qt_rect(
                 8, 8,
                 width, height
             )
@@ -173,7 +173,7 @@ class QtChartAsRgbaChoose(
             )
             #
             sh, ss, sv = self._color_hsv
-            text_rect = QtCore.QRect(
+            text_rect = qt_rect(
                 8, 64,
                 width, height
             )
@@ -186,7 +186,7 @@ class QtChartAsRgbaChoose(
                 'H : {0}\r\nS : {1}\r\nV : {2}'.format(round(sh%360, 2), round(ss, 2), round(sv, 2))
             )
             #
-            text_rect = QtCore.QRect(
+            text_rect = qt_rect(
                 8, 128,
                 width, height
             )
@@ -458,10 +458,10 @@ class QtChartAsProgressing(
                 x, y = 0, 0
                 w, h = self.width(), self.height()
                 frm_w, frm_h = 96, 96
-                frame_rect = QtCore.QRect(
+                frame_rect = qt_rect(
                     x+(w-frm_w)/2, y+(h-frm_h)/2, frm_w, frm_h
                 )
-                base_rect = QtCore.QRect(
+                base_rect = qt_rect(
                     x, y, w, h
                 )
                 painter._set_border_color_(0, 0, 0, 0)
@@ -534,7 +534,7 @@ class QtInfoChartBar(
 
         self._text = ''
 
-        self._info_draw_rect = QtCore.QRect()
+        self._info_draw_rect = qt_rect()
         self._frame_size = 160, 24
 
     def _refresh_widget_geometry_(self, x, y, w, h):
@@ -621,7 +621,7 @@ class QtChartAsWaiting(
         self._waiting_draw_radius = 64
         self._waiting_draw_item_radius = 12
         self._waiting_draw_count = 10
-        self._waiting_draw_rect = QtCore.QRect()
+        self._waiting_draw_rect = qt_rect()
         self._waiting_positions = []
         self._waiting_timestamp = 0
 
@@ -678,7 +678,7 @@ class QtChartAsWaiting(
             #
             if seq == cur_index:
                 painter.drawEllipse(
-                    i_x-i_r/2, i_y-i_r/2, i_r, i_r
+                    int(i_x-i_r/2), int(i_y-i_r/2), int(i_r), int(i_r)
                 )
             else:
                 i_a = 360.0/c*seq
@@ -1011,7 +1011,7 @@ class QtChartAsPie(
                 painter._set_background_style_(QtCore.Qt.FDiagPattern)
                 painter.drawPath(current_shadow_path)
             # Explain
-            rect = QtCore.QRect(
+            rect = qt_rect(
                 side, side,
                 radius-side*2, radius-side*2
             )
@@ -1165,7 +1165,7 @@ class QtChartAsHistogram(
         value_scale_x, value_scale_y = self._zoom_scale_x, self._zoom_scale_y
         #
         painter = _qt_core.QtPainter(self)
-        rect = QtCore.QRect(
+        rect = qt_rect(
             x, y, width, height
         )
         painter._draw_grid_(
@@ -1356,7 +1356,7 @@ class QtChartAsSequence(
         count = index_maximum-index_minimum+1
         #
         if count > 0:
-            name_rect = QtCore.QRect(
+            name_rect = qt_rect(
                 pos_x+side, pos_y+side, name_w, height-side*2
             )
             painter._set_font_(_qt_core.QtFont.generate(size=10))
@@ -1379,7 +1379,7 @@ class QtChartAsSequence(
             #
             x, y = pos_x+name_w+side+spacing, pos_y+side
             sequence_w = width-name_w-spacing-side*2
-            sequence_rect = QtCore.QRect(
+            sequence_rect = qt_rect(
                 x, y, sequence_w, height-side*2
             )
             painter.drawRect(sequence_rect)
@@ -1398,7 +1398,7 @@ class QtChartAsSequence(
                         #
                         i_percent = float(1)/float(count)
                         #
-                        i_rect = QtCore.QRect(i_x, i_y, i_w, i_h)
+                        i_rect = qt_rect(i_x, i_y, i_w, i_h)
                         i_c_h = c_h-(1-i_percent)*c_h
                         i_c_r, i_c_g, i_c_b = bsc_core.BscColor.hsv2rgb(i_c_h, c_s, c_v)
                         if self._hover_flag is True:
@@ -1426,7 +1426,7 @@ class QtChartAsSequence(
                         #
                         i_percent = float(i_end_index-i_start_index+1)/float(count)
                         #
-                        i_rect = QtCore.QRect(i_x, i_y, i_w, i_h)
+                        i_rect = qt_rect(i_x, i_y, i_w, i_h)
                         i_c_h = c_h-(1-i_percent)*c_h
                         if i_percent == 1:
                             i_c_h = 140

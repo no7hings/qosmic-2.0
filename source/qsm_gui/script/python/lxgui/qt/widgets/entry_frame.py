@@ -102,7 +102,7 @@ class QtEntryFrame(
 
         self._tip_draw_enable = False
         self._tip_text = None
-        self._tip_draw_rect = QtCore.QRect()
+        self._tip_draw_rect = qt_rect()
         # self._resize_handle._set_resize_target_(self)
 
     def eventFilter(self, *args):
@@ -200,7 +200,7 @@ class QtEntryFrame(
 
     def _set_entry_count_(self, size):
         self._entry_count = size
-        self._frame_draw_rects = [QtCore.QRect() for _ in range(size)]
+        self._frame_draw_rects = [qt_rect() for _ in range(size)]
 
     def _set_size_policy_height_fixed_mode_(self):
         self._entry_widget.setSizePolicy(

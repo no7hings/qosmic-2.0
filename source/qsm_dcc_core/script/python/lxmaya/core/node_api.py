@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
@@ -74,7 +76,7 @@ class Om2Base(object):
     #
     @classmethod
     def to_integer_array(cls, om2_int_array):
-        return map(int, om2_int_array)
+        return list(map(int, om2_int_array))
 
     @classmethod
     def _to_float_array_(cls, om2_float_array):
@@ -86,7 +88,7 @@ class Om2Base(object):
                 ...
             )
         """
-        return map(float, om2_float_array)
+        return list(map(float, om2_float_array))
 
     @classmethod
     def to_point(cls, om2_point, round_count=None):
@@ -97,7 +99,7 @@ class Om2Base(object):
 
     @classmethod
     def to_point_array(cls, om2_point_array, round_count=None):
-        return map(lambda x: cls.to_point(x, round_count=round_count), om2_point_array)
+        return list(map(lambda x: cls.to_point(x, round_count=round_count), om2_point_array))
 
     @classmethod
     def _get_float_vector_(cls, om2_float_vector):
@@ -396,7 +398,7 @@ class Om2CurveOpt(object):
         return points, knots, degree, form
 
     def _test_(self):
-        print self._om2_obj_fnc.cvs()
+        print(self._om2_obj_fnc.cvs())
 
     @staticmethod
     def _get_curve_knots_(count, degree, form):
@@ -575,7 +577,7 @@ class Om2MeshOpt(object):
         if isinstance(uv_coords_maps, dict):
             if uv_coords_maps:
                 if 'map1' not in uv_coords_maps:
-                    uv_coords_maps['map1'] = uv_coords_maps.values()[0]
+                    uv_coords_maps['map1'] = list(uv_coords_maps.values())[0]
                 for i_map_name, i_uv_coords in uv_coords_maps.items():
                     if i_map_name != 'map1':
                         om2_fnc.createUVSet(i_map_name)
@@ -742,7 +744,7 @@ class Om2MeshOpt(object):
         vertex_index = 11144
         om2_vertex_itr = om2.MItMeshVertex(self._om2_obj_fnc.object())
         om2_vertex_itr.setIndex(vertex_index)
-        print om2_vertex_itr.getConnectedFaces()
+        print(om2_vertex_itr.getConnectedFaces())
 
     def get_face_shell_ids(self):
         counts, indices = self.get_face_vertices()
@@ -776,7 +778,7 @@ class Om2MeshOpt(object):
 
     def assign_uv_maps(self, maps):
         if 'map1' not in maps:
-            maps['map1'] = maps.values()[0]
+            maps['map1'] = list(maps.values())[0]
         #
         for uv_map_name, uv_map in maps.items():
             self.assign_uv_map(uv_map_name, uv_map)

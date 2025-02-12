@@ -352,7 +352,6 @@ class AbsQtShowBaseForViewDef(object):
             self._get_all_show_items_()
         )
 
-    @qt_slot()
     def _refresh_viewport_showable_by_scroll_(self):
         self._refresh_viewport_showable_auto_()
 

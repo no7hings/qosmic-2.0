@@ -1282,8 +1282,8 @@ class NGNodeOpt(object):
                 i_name = i
                 self.create_input(i_name)
             elif isinstance(i, dict):
-                i_name = i.keys()[0]
-                i_metadata = i.values()[0]
+                i_name = list(i.keys())[0]
+                i_metadata = list(i.values())[0]
                 self.create_input(i_name)
                 i_port = self._ktn_obj.getInputPort(i_name)
                 for j_k, j_v in i_metadata.items():
@@ -1448,14 +1448,14 @@ class NGNodeOpt(object):
                     script = hint_dict['scriptText']
                     # noinspection PyUnusedLocal
                     node = self._ktn_obj
-                    exec script
+                    exec (script)
                 elif widget in {'scriptToolbar'}:
                     tools = hint_dict['buttonData']
                     if isinstance(index, int):
                         script = tools[index]['scriptText']
                         # noinspection PyUnusedLocal
                         node = self._ktn_obj
-                        exec script
+                        exec (script)
 
     def create_output(self, port_path):
         _ = self._ktn_obj.getOutputPort(port_path)
@@ -2195,7 +2195,7 @@ class NGPortOpt(object):
         hint_string = self.ktn_port.getHintString()
         if hint_string:
             hint_dict = eval(hint_string)
-            return map(str, hint_dict.get('options', []))
+            return list(map(str, hint_dict.get('options', [])))
         return []
 
     def set_capsule_strings(self, strings):

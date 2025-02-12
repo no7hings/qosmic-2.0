@@ -1,4 +1,6 @@
 # coding=utf-8
+from __future__ import print_function
+
 import os
 
 import collections
@@ -27,7 +29,7 @@ from .. import core as _qt_core
 class AbsQtWidgetBaseDef(object):
     def _init_widget_base_def_(self, widget):
         self._widget = widget
-        self._basic_rect = QtCore.QRect()
+        self._basic_rect = qt_rect()
         self._w, self._h = 0, 0
 
     def _get_text_draw_width_(self, text=None):
@@ -62,7 +64,7 @@ class AbsQtFocusDef(object):
     def _init_focus_def_(self, widget):
         self._widget = widget
         self._is_focused = False
-        self._focus_rect = QtCore.QRect()
+        self._focus_rect = qt_rect()
 
     def _set_focused_(self, boolean):
         self._is_focused = boolean
@@ -121,8 +123,8 @@ class AbsQtMenuBaseDef(object):
         self._widget = widget
         
         self._menu_flag = False
-        self._menu_rect = QtCore.QRect()
-        self._menu_icon_draw_rect = QtCore.QRect()
+        self._menu_rect = qt_rect()
+        self._menu_icon_draw_rect = qt_rect()
         self._menu_icon_file_path = _gui_core.GuiIcon.get('tab-menu-v')
 
         self._menu_title_text = None
@@ -322,7 +324,7 @@ class AbsQtStatusBaseDef(object):
         self._status_border_color = _qt_core.QtRgba.Transparent
         self._hover_status_border_color = _qt_core.QtRgba.Transparent
         #
-        self._status_rect = QtCore.QRect()
+        self._status_rect = qt_rect()
 
     def _refresh_widget_draw_(self):
         raise NotImplementedError()
@@ -371,7 +373,7 @@ class AbsQtSubProcessBaseDef(object):
         self._sub_process_status_colors = []
         self._hover_sub_process_status_colors = []
         #
-        self._sub_process_status_rect = QtCore.QRect()
+        self._sub_process_status_rect = qt_rect()
 
         self._sub_process_finished_results = []
 
@@ -519,7 +521,7 @@ class AbsQtValidatorBaseDef(object):
         self._validator_status_colors = []
         self._hover_validator_status_colors = []
 
-        self._validator_status_rect = QtCore.QRect()
+        self._validator_status_rect = qt_rect()
 
     def _set_validator_status_at_(self, index, status):
         self._validator_statuses[index] = status
@@ -579,8 +581,8 @@ class AbsQtFrameBaseDef(object):
         self._frame_border_radius = 0
         #
         self._frame_draw_is_enable = False
-        self._frame_rect = QtCore.QRect()
-        self._frame_draw_rect = QtCore.QRect()
+        self._frame_rect = qt_rect()
+        self._frame_draw_rect = qt_rect()
         self._frame_draw_margins = 0, 0, 0, 0
         self._frame_size = 20, 20
         self._frame_border_draw_style = QtCore.Qt.SolidLine
@@ -588,7 +590,7 @@ class AbsQtFrameBaseDef(object):
 
         self._margins_offset_frame = 0, 0, 0, 0
 
-        self._frame_draw_rects = [QtCore.QRect()]
+        self._frame_draw_rects = [qt_rect()]
 
     def _set_frame_margins_(self, m_l, m_t, m_r, m_b):
         self._margins_offset_frame = m_l, m_t, m_r, m_b
@@ -641,8 +643,8 @@ class AbsQtResizeBaseDef(object):
         self._resize_alignment = self.ResizeAlignment.Right
 
         self._resize_is_enable = False
-        self._resize_draw_rect = QtCore.QRect()
-        self._resize_action_rect = QtCore.QRect()
+        self._resize_draw_rect = qt_rect()
+        self._resize_action_rect = qt_rect()
 
         self._resize_icon_file_paths = [
             _gui_core.GuiIcon.get('resize-left'), _gui_core.GuiIcon.get('resize-right')
@@ -651,7 +653,7 @@ class AbsQtResizeBaseDef(object):
         #
         self._resize_frame_draw_size = 20, 20
         self._resize_icon_draw_size = 16, 16
-        self._resize_icon_draw_rect = QtCore.QRect()
+        self._resize_icon_draw_rect = qt_rect()
 
         self._resize_point_start = QtCore.QPoint()
         self._resize_value_temp = 0
@@ -710,16 +712,16 @@ class AbsQtPopupBaseDef(object):
 
         self._h_popup_top_toolbar = 20
 
-        self._rect_popup_top_toolbar = QtCore.QRect()
-        self._rect_popup_top_toolbar_tool_tip = QtCore.QRect()
+        self._rect_popup_top_toolbar = qt_rect()
+        self._rect_popup_top_toolbar_tool_tip = qt_rect()
 
-        self._rect_popup_bottom_toolbar = QtCore.QRect()
+        self._rect_popup_bottom_toolbar = qt_rect()
 
         self._popup_auto_resize_is_enable = False
 
         self._popup_style = self.PopupStyle.FromFrame
 
-        self._popup_press_rect = QtCore.QRect()
+        self._popup_press_rect = qt_rect()
 
         self._use_as_storage = False
 
@@ -1004,11 +1006,11 @@ class AbsQtActionForDropDef(object):
 
         self._index_drag_child_polish_start = None
         self._index_drag_child_polish = None
-        self._drag_rect_child_polish = QtCore.QRect()
+        self._drag_rect_child_polish = qt_rect()
 
         self._index_drag_child_add_start = None
         self._index_drag_child_add = None
-        self._drag_rect_child_add = QtCore.QRect()
+        self._drag_rect_child_add = qt_rect()
 
         self._drag_and_drop_scheme = 'unknown'
 
@@ -1051,12 +1053,12 @@ class AbsQtIconBaseDef(object):
 
         self._icon = None
 
-        self._icon_frame_draw_rect = QtCore.QRect()
-        self._icon_draw_rect = QtCore.QRect()
-        self._sub_icon_draw_rect = QtCore.QRect()
+        self._icon_frame_draw_rect = qt_rect()
+        self._icon_draw_rect = qt_rect()
+        self._sub_icon_draw_rect = qt_rect()
 
-        self._color_icon_draw_rect = QtCore.QRect()
-        self._name_icon_draw_rect = QtCore.QRect()
+        self._color_icon_draw_rect = qt_rect()
+        self._name_icon_draw_rect = qt_rect()
 
         self._icon_hover_color = None
 
@@ -1072,8 +1074,8 @@ class AbsQtIconBaseDef(object):
         self._icon_text_draw_percent = .675
 
         self._icon_state_draw_is_enable = False
-        self._icon_state_draw_rect = QtCore.QRect()
-        self._icon_state_rect = QtCore.QRect()
+        self._icon_state_draw_rect = qt_rect()
+        self._icon_state_rect = qt_rect()
         self._icon_state_file_path = None
         self._icon_state_draw_percent = .25
         self._icon_state_draw_rgb = 72, 72, 72
@@ -1223,7 +1225,7 @@ class AbsQtIconsBaseDef(object):
         self._icon_draw_size = 16, 16
         self._icon_frame_draw_enable = False
         #
-        self._icon_frame_draw_rect = QtCore.QRect()
+        self._icon_frame_draw_rect = qt_rect()
 
     def _set_icon_file_path_(self, file_path):
         self._set_icon_file_paths_(
@@ -1252,7 +1254,7 @@ class AbsQtIconsBaseDef(object):
         self._icon_rects = []
         for _ in self._get_icon_indices_():
             self._icon_rects.append(
-                QtCore.QRect()
+                qt_rect()
             )
 
     def _get_icon_as_pixmap_at_(self, index):
@@ -1268,7 +1270,7 @@ class AbsQtIconsBaseDef(object):
         self._icon_rects = []
         for _ in self._get_icon_indices_():
             self._icon_rects.append(
-                QtCore.QRect()
+                qt_rect()
             )
 
     def _set_icons_by_name_text_(self, texts):
@@ -1277,7 +1279,7 @@ class AbsQtIconsBaseDef(object):
         self._icon_rects = []
         for _ in self._get_icon_indices_():
             self._icon_rects.append(
-                QtCore.QRect()
+                qt_rect()
             )
 
     def _get_icon_name_text_at_(self, index=0):
@@ -1288,7 +1290,7 @@ class AbsQtIconsBaseDef(object):
 
     def _set_icon_file_path_add_(self, file_path):
         self._icon_file_paths.append(file_path)
-        self._icon_rects.append(QtCore.QRect())
+        self._icon_rects.append(qt_rect())
 
     def _get_icon_file_paths_(self):
         return self._icon_file_paths
@@ -1324,7 +1326,7 @@ class AbsQtIndexBaseDef(object):
         
         self._index_margin = 8
 
-        self._index_draw_rect = QtCore.QRect()
+        self._index_draw_rect = qt_rect()
 
     def _set_index_draw_flag_(self, boolean):
         self._index_draw_flag = boolean
@@ -1347,7 +1349,7 @@ class AbsQtTypeDef(object):
         self._widget = widget
         #
         self._type_text = None
-        self._type_rect = QtCore.QRect()
+        self._type_rect = qt_rect()
         self._type_color = QtGui.QColor(127, 127, 127, 255)
 
     def _set_type_text_(self, text):
@@ -1567,9 +1569,9 @@ class AbsQtNameBaseDef(object):
         #
         self._name_frame_size = 20, 20
         self._name_draw_size = 16, 16
-        self._name_frame_draw_rect = QtCore.QRect()
-        self._name_draw_rect = QtCore.QRect()
-        self._sub_name_draw_rect = QtCore.QRect()
+        self._name_frame_draw_rect = qt_rect()
+        self._name_draw_rect = qt_rect()
+        self._sub_name_draw_rect = qt_rect()
 
         self._tool_tip_text = None
         self._tool_action_tip_text = None
@@ -1676,13 +1678,16 @@ class AbsQtNameBaseDef(object):
             if text:
                 # add split line
                 css += '<p><hr></p>\n'
-                text = bsc_core.ensure_string(text)
-                if isinstance(text, six.string_types):
-                    texts = text.split('\n')
-                elif isinstance(text, (tuple, list)):
+                if isinstance(text, (tuple, list)):
                     texts = text
                 else:
-                    raise RuntimeError()
+                    if isinstance(text, six.string_types):
+                        texts = text.split('\n')
+                    elif isinstance(text, six.binary_type):
+                        text = bsc_core.ensure_string(text)
+                        texts = text.split('\n')
+                    else:
+                        raise RuntimeError()
                 #
                 for i_text in texts:
                     i_text = bsc_core.ensure_string(i_text)
@@ -1803,7 +1808,7 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
         #
         self._names_draw_range = None
         #
-        self._name_frame_draw_rect = QtCore.QRect(0, 0, 0, 0)
+        self._name_frame_draw_rect = qt_rect(0, 0, 0, 0)
 
     def _set_name_text_at_(self, text, index=0):
         self._name_texts[index] = text
@@ -1840,7 +1845,7 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
         self._name_draw_rects = []
         for _ in self._get_name_indices_():
             self._name_draw_rects.append(
-                QtCore.QRect()
+                qt_rect()
             )
         #
         self._refresh_widget_all_()
@@ -1969,7 +1974,7 @@ class AbsQtProgressBaseDef(object):
         self._progress_map_maximum = 10
         self._progress_map_value = 0
         #
-        self._progress_rect = QtCore.QRect()
+        self._progress_rect = qt_rect()
         #
         self._progress_raw = []
 
@@ -2045,9 +2050,9 @@ class AbsQtImageBaseDef(object):
         self._image_frame_draw_enable = False
         self._image_draw_as_full = False
         #
-        self._image_frame_rect = QtCore.QRect(0, 0, 0, 0)
-        self._image_draw_rect = QtCore.QRect(0, 0, 0, 0)
-        self._image_sub_draw_rect = QtCore.QRect(0, 0, 0, 0)
+        self._image_frame_rect = qt_rect(0, 0, 0, 0)
+        self._image_draw_rect = qt_rect(0, 0, 0, 0)
+        self._image_sub_draw_rect = qt_rect(0, 0, 0, 0)
 
     def _refresh_widget_draw_(self):
         raise NotImplementedError()
@@ -2140,7 +2145,7 @@ class AbsQtMovieBaseDef(object):
 
     def _init_movie_base_def_(self):
         self._play_draw_enable = False
-        self._video_play_rect = QtCore.QRect()
+        self._video_play_rect = qt_rect()
 
     def _get_play_draw_is_enable_(self):
         return self._play_draw_enable
@@ -2559,7 +2564,7 @@ class AbsQtItemMovieActionDef(object):
     movie_play_press_clicked = qt_signal()
 
     def _set_item_movie_action_def_init_(self):
-        self._item_movie_play_rect = QtCore.QRect()
+        self._item_movie_play_rect = qt_rect()
 
     def _set_item_movie_play_rect_(self, x, y, w, h):
         self._item_movie_play_rect.setRect(x, y, w, h)
@@ -3220,8 +3225,8 @@ class AbsQtDeleteBaseDef(object):
         self._delete_action_is_enable = False
         #
         self._delete_draw_is_enable = False
-        self._delete_action_rect = QtCore.QRect()
-        self._delete_icon_draw_rect = QtCore.QRect()
+        self._delete_action_rect = qt_rect()
+        self._delete_icon_draw_rect = qt_rect()
         #
         self._delete_icon_file_draw_size = 12, 12
         self._delete_is_pressed = False
@@ -3257,8 +3262,8 @@ class AbsQtHelpBaseDef(object):
         self._help_text_is_enable = False
         #
         self._help_text_draw_size = 320, 240
-        self._help_frame_draw_rect = QtCore.QRect()
-        self._help_draw_rect = QtCore.QRect()
+        self._help_frame_draw_rect = qt_rect()
+        self._help_draw_rect = qt_rect()
         self._help_text = ''
 
     def _set_help_text_(self, text):

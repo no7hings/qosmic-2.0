@@ -21,7 +21,7 @@ class AbsQtActionBaseDef(object):
         self._action_mdf_flags = []
 
         self._action_state = self.ActionState.Normal
-        self._action_state_rect = QtCore.QRect()
+        self._action_state_rect = qt_rect()
 
         self._action_is_busied = False
 
@@ -316,7 +316,7 @@ class AbsQtActionForPressDef(object):
         #
         self._press_is_hovered = False
         #
-        self._press_action_rect = QtCore.QRect()
+        self._press_action_rect = qt_rect()
         self._press_point = QtCore.QPoint()
 
         self._action_press_dbl_clicked_methods = []
@@ -376,10 +376,10 @@ class AbsQtActionForCheckDef(object):
         self._check_action_is_enable = False
         #
         self._is_checked = False
-        self._check_frame_rect = QtCore.QRect()
+        self._check_frame_rect = qt_rect()
         self._check_frame_size = 20, 20
-        self._check_icon_frame_draw_rect = QtCore.QRect()
-        self._check_icon_draw_rect = QtCore.QRect()
+        self._check_icon_frame_draw_rect = qt_rect()
+        self._check_icon_draw_rect = qt_rect()
         self._check_is_pressed = False
         self._is_check_hovered = False
         #
@@ -396,7 +396,7 @@ class AbsQtActionForCheckDef(object):
 
         self._check_exclusive_widgets = []
 
-        self._check_state_draw_rect = QtCore.QRect()
+        self._check_state_draw_rect = qt_rect()
 
     def _get_action_is_enable_(self):
         raise NotImplementedError()
@@ -531,8 +531,8 @@ class AbsQtActionForExpandDef(object):
         self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('expand-open')
         self._expand_icon_file_path_current = self._expand_icon_file_path_0
         #
-        self._expand_frame_rect = QtCore.QRect()
-        self._expand_icon_draw_rect = QtCore.QRect()
+        self._expand_frame_rect = qt_rect()
+        self._expand_icon_draw_rect = qt_rect()
         #
         self._expand_direction = self.ExpandDirection.TopToBottom
 
@@ -581,8 +581,8 @@ class AbsQtActionForOptionPressDef(object):
         self._option_click_is_enable = False
         self._option_icon_file_path = _gui_core.GuiIcon.get('option')
         #
-        self._option_rect = QtCore.QRect()
-        self._option_icon_draw_rect = QtCore.QRect()
+        self._option_rect = qt_rect()
+        self._option_icon_draw_rect = qt_rect()
 
     def _set_option_click_enable_(self, boolean):
         self._option_click_is_enable = boolean

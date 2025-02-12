@@ -51,10 +51,14 @@ class TaskBase(object):
             )
 
     @classmethod
-    def ensure_string(cls, text):
-        if isinstance(text, six.text_type):
-            return text.encode('utf-8')
-        return text
+    def ensure_string(cls, s):
+        if isinstance(s, six.text_type):
+            if six.PY2:
+                return s.encode('utf-8')
+        elif isinstance(s, six.binary_type):
+            if six.PY3:
+                return s.decode('utf-8')
+        return s
 
     @classmethod
     def stdout(cls, name, text):

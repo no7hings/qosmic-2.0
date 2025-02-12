@@ -47,7 +47,7 @@ class AbsWindowNoticeBaseDef(object):
         self._layout_model.update()
         x_0, y_0, w_0, h_0 = self._layout_model.get_geometry_at(c-1)
         x, y = self._w_d-self._w_i-y_0, self._h_d-self._h_i-x_0
-        return x, y, self._w_i, self._h_i
+        return int(x), int(y), int(self._w_i), int(self._h_i)
 
     def _notice_show_fnc_(self, widget):
         widget.show()
@@ -185,8 +185,8 @@ class QtMainWindow(
         self.menuBar().setStyleSheet(
             _qt_core.QtStyle.get('QMenuBar')
         )
-        self._frame_draw_rect = QtCore.QRect()
-        self._menu_frame_draw_rect = QtCore.QRect()
+        self._frame_draw_rect = qt_rect()
+        self._menu_frame_draw_rect = qt_rect()
 
         self.installEventFilter(self)
 

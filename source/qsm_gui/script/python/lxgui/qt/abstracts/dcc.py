@@ -18,7 +18,7 @@ class AsbGuiQtDccMenuSetup(object):
 
     @classmethod
     def get_fnc(cls, text):
-        exec text
+        exec (text)
 
     @classmethod
     def add_action_fnc(cls, action_item, action_data):

@@ -75,8 +75,8 @@ if QT_USD_FLAG is True:
             self._is_focused = False
 
             self._frame_draw_margins = 0, 0, 0, 0
-            self._frame_draw_rect = QtCore.QRect()
-            self._stage_view_draw_rect = QtCore.QRect()
+            self._frame_draw_rect = qt_rect()
+            self._stage_view_draw_rect = qt_rect()
             self._frame_border_color = _qt_core.QtRgba.BorderLight
             self._hovered_frame_border_color = _qt_core.QtRgba.BorderHover
             self._selected_frame_border_color = _qt_core.QtRgba.BorderSelect

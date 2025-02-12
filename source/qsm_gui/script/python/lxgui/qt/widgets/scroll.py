@@ -54,12 +54,12 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
 
                 self._scroll_button_frame.show()
                 self._scroll_button_frame.setGeometry(
-                    c_x_1, c_y_1, btn_f_r, btn_f_h
+                    int(c_x_1), int(c_y_1), int(btn_f_r), int(btn_f_h)
                 )
 
                 self._scroll_previous_button.show()
                 self._scroll_previous_button.setGeometry(
-                    c_x_1+(btn_f_w-btn_w)/2, y+(h-btn_h_1)/2, btn_w_1, btn_h_1
+                    int(c_x_1+(btn_f_w-btn_w)/2), int(y+(h-btn_h_1)/2), int(btn_w_1), int(btn_h_1)
                 )
                 if self._scroll_bar_model.get_is_minimum():
                     self._scroll_previous_button._set_icon_file_path_(self._icons_0[1])
@@ -68,7 +68,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
 
                 self._scroll_next_button.show()
                 self._scroll_next_button.setGeometry(
-                    c_x_1+(btn_f_w-btn_w)/2+btn_w_1, y+(h-btn_h_1)/2, btn_w_1, btn_h_1
+                    int(c_x_1+(btn_f_w-btn_w)/2+btn_w_1), int(y+(h-btn_h_1)/2), int(btn_w_1), int(btn_h_1)
                 )
                 if self._scroll_bar_model.get_is_maximum():
                     self._scroll_next_button._set_icon_file_path_(self._icons_1[1])
@@ -77,14 +77,14 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
                     self._scroll_next_button._set_icon_file_path_(self._icons_1[0])
 
                 self._viewport.setGeometry(
-                    x-value_scroll, y, abs_w, h
+                    int(x-value_scroll), int(y), int(abs_w), int(h)
                 )
             else:
                 self._scroll_button_frame.hide()
                 self._scroll_previous_button.hide()
                 self._scroll_next_button.hide()
                 self._viewport.setGeometry(
-                    x, y, abs_w, h
+                    int(x), int(y), int(abs_w), int(h)
                 )
 
         elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
@@ -107,12 +107,12 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
 
                 self._scroll_button_frame.show()
                 self._scroll_button_frame.setGeometry(
-                    c_x_1, c_y_1, btn_f_r, btn_f_h
+                    int(c_x_1), int(c_y_1), int(btn_f_r), int(btn_f_h)
                 )
 
                 self._scroll_previous_button.show()
                 self._scroll_previous_button.setGeometry(
-                    x+(w-btn_w)/2, c_y_1+(btn_f_h-btn_h_1)/2, btn_w_1, btn_h_1
+                    int(x+(w-btn_w)/2), int(c_y_1+(btn_f_h-btn_h_1)/2), int(btn_w_1), int(btn_h_1)
                 )
                 if self._scroll_bar_model.get_is_minimum():
                     self._scroll_previous_button._set_icon_file_path_(self._icons_0[1])
@@ -121,7 +121,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
 
                 self._scroll_next_button.show()
                 self._scroll_next_button.setGeometry(
-                    x+(w-btn_w)/2, c_y_1+(btn_f_h-btn_h_1)/2+btn_h_1, btn_w_1, btn_h_1
+                    int(x+(w-btn_w)/2), int(c_y_1+(btn_f_h-btn_h_1)/2+btn_h_1), int(btn_w_1), int(btn_h_1)
                 )
                 if self._scroll_bar_model.get_is_maximum():
                     self._scroll_next_button._set_icon_file_path_(self._icons_1[1])
@@ -130,7 +130,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
                     self._scroll_next_button._set_icon_file_path_(self._icons_1[0])
 
                 self._viewport.setGeometry(
-                    x, y-value_scroll, w, abs_h
+                    int(x), int(y-value_scroll), int(w), int(abs_h)
                 )
             else:
                 self._scroll_button_frame.hide()
@@ -138,7 +138,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
                 self._scroll_next_button.hide()
 
                 self._viewport.setGeometry(
-                    x, y, w, abs_h
+                    int(x), int(y), int(w), int(abs_h)
                 )
 
     def __init__(self, *args, **kwargs):

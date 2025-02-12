@@ -112,7 +112,7 @@ class ModelForBaseGraph(object):
         self._graph_end_point = QtCore.QPoint(
             self._graph_basic_w*self._graph_scale_x, self._graph_basic_h*self._graph_scale_y
         )
-        self._graph_rect = QtCore.QRect(0, 0, self._graph_basic_w, self._graph_basic_h)
+        self._graph_rect = qt_rect(0, 0, self._graph_basic_w, self._graph_basic_h)
 
         self._graph_translate_x_enable, self._graph_translate_y_enable = True, True
         self._graph_scale_x_enable, self._graph_scale_y_enable = True, True

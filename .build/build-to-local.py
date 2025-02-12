@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import copy
 
 import os
@@ -68,5 +70,5 @@ class Main(object):
 
 
 if __name__ == '__main__':
-    print Main.generate()
+    print(Main.generate())
 

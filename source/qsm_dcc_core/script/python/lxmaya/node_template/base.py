@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import inspect
 
 import os.path
@@ -647,7 +649,7 @@ class AttrControlGrp(object):
         try:
             self.control = cmd(*args, **kwargs)
         except RuntimeError:
-            print "Error creating %s:"%cmd.__name__
+            print("Error creating %s:"%cmd.__name__)
             raise
         if self.callback:
             cmds.scriptJob(
@@ -1019,7 +1021,7 @@ class AeMtd(object):
                     class_obj = module.__dict__[class_name]
                     class_obj(node_name)
         except Exception as e:
-            print 'Error loading AE Template for node type {}'.format(node_type)
+            print('Error loading AE Template for node type {}'.format(node_type))
             import traceback
 
             traceback.print_exc()
@@ -1044,9 +1046,9 @@ class AeMtd2(object):
                 inst = f(cmds.nodeType(nodeName))
                 inst._doSetup(nodeName)
             else:
-                print "AE Object %s has Invalid Type %s"%(f, type(f))
+                print("AE Object %s has Invalid Type %s"%(f, type(f)))
         except Exception:
-            print "Failed to Load Python Attribute Editor Template '%s.%s'"%(modName, objName)
+            print("Failed to Load Python Attribute Editor Template '%s.%s'"%(modName, objName))
             import traceback
 
             traceback.print_exc()
@@ -1304,7 +1306,7 @@ class EnumerateControl(ControlBase):
 class IconButtonControls(ControlBase):
     @classmethod
     def execute_fnc(cls, *args, **kwargs):
-        print args, kwargs
+        print(args, kwargs)
 
     @classmethod
     def gui_new_fnc(cls, atr_path, labels, icons, data_port_path):

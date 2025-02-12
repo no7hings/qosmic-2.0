@@ -98,7 +98,7 @@ class QtTabView(
             )
             self._tab_add_button.show()
             self._tab_add_button.setGeometry(
-                x+(btn_f_w-btn_w)/2, y+(btn_f_h-btn_h)/2, btn_w, btn_h
+                int(x+(btn_f_w-btn_w)/2), int(y+(btn_f_h-btn_h)/2), int(btn_w), int(btn_h)
             )
             tab_btn_x += t_h
             scroll_w -= t_h
@@ -179,7 +179,7 @@ class QtTabView(
                 self._tab_choose_button.hide()
 
             scroll_value = self._scroll_bar_model.get_value()
-            widths = self._item_width_dict.values()
+            widths = list(self._item_width_dict.values())
             if self._is_action_flag_match_(
                 self.ActionFlag.DragChildPolish
             ):
@@ -268,12 +268,12 @@ class QtTabView(
         
         self._init_history_base_def_(self)
 
-        self._tab_bar_rect = QtCore.QRect()
-        self._tab_bar_draw_rect = QtCore.QRect()
-        self._tab_left_tool_box_rect = QtCore.QRect()
-        self._tab_left_tool_box_draw_rect = QtCore.QRect()
-        self._tab_right_tool_box_rect = QtCore.QRect()
-        self._tab_right_tool_box_draw_rect = QtCore.QRect()
+        self._tab_bar_rect = qt_rect()
+        self._tab_bar_draw_rect = qt_rect()
+        self._tab_left_tool_box_rect = qt_rect()
+        self._tab_left_tool_box_draw_rect = qt_rect()
+        self._tab_right_tool_box_rect = qt_rect()
+        self._tab_right_tool_box_draw_rect = qt_rect()
 
         self._tab_add_is_enable = False
         self._tab_add_button = _qt_wgt_button.QtIconMenuButton(self)

@@ -1,6 +1,8 @@
 # coding=utf-8
 import six
 
+import lxbasic.core as bsc_core
+
 import lxbasic.storage as bsc_storage
 # qt
 from ....qt.core.wrap import *
@@ -145,18 +147,16 @@ class QtEntryForContent(
     def _append_value_(self, text):
         def add_fnc_(value_):
             if value_ is not None:
-                if isinstance(value_, six.text_type):
-                    value_ = value_.encode('utf-8')
+                _value = bsc_core.ensure_string(value_)
 
                 self.moveCursor(QtGui.QTextCursor.End)
-                self.insertPlainText(value_+'\n')
+                self.insertPlainText(_value+'\n')
 
-        #
         if isinstance(text, (tuple, list)):
             [add_fnc_(i) for i in text]
         else:
             add_fnc_(text)
-        #
+
         self.update()
 
     def _set_content_(self, text):
@@ -173,9 +173,7 @@ class QtEntryForContent(
 
     def _set_value_(self, value):
         if value is not None:
-            if isinstance(value, six.text_type):
-                value = value.encode('utf-8')
-            #
+            value = bsc_core.ensure_string(value)
             self.setText(
                 value
             )

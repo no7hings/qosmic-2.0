@@ -82,11 +82,11 @@ class ChartModelForLine(object):
             i_branch = _base._Data(
                 index=i_idx,
                 index_text=str(i_idx+1),
-                index_rect=QtCore.QRect(),
+                index_rect=qt_rect(),
                 path=i_k,
                 name=bsc_core.BscNodePath.to_dag_name(i_k),
-                rect=QtCore.QRect(),
-                name_rect=QtCore.QRect(),
+                rect=qt_rect(),
+                name_rect=qt_rect(),
                 leafs={},
             )
             for j_data_key in self._data_keys:
@@ -109,9 +109,9 @@ class ChartModelForLine(object):
                 j_leaf = _base._Data(
                     value=j_value,
                     value_text=j_value_text,
-                    value_rect=QtCore.QRect(),
+                    value_rect=qt_rect(),
 
-                    point_rect=QtCore.QRect(),
+                    point_rect=qt_rect(),
                     point_line=QtCore.QLine(),
 
                     color=QtGui.QColor(j_r, j_g, j_b),

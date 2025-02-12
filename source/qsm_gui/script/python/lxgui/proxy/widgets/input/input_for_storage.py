@@ -5,7 +5,7 @@ from ....qt.widgets.input import input_for_storage as _qt_wgt_ipt_for_storage
 
 from ....qt.widgets import utility as _qt_wgt_utility
 
-import _input_base
+from . import _input_base
 
 
 # storage

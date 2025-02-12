@@ -47,7 +47,7 @@ class QtTrackNode(QtWidgets.QWidget):
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
 
-        self.__anim_cycle_msec = 1000/self.DELAY_TIME_FPS
+        self.__anim_cycle_msec = int(1000/self.DELAY_TIME_FPS)
         self.__anim_timer = QtCore.QTimer(self)
         self.__anim_index_maximum = int(self.DELAY_TIME/self.__anim_cycle_msec)
         self.__anim_timer.timeout.connect(self.__do_swap_start)
@@ -156,7 +156,7 @@ class QtLayerStack(QtWidgets.QWidget):
         self.__index_pre = None
         self.__index_swap = None
 
-        self.__anim_cycle_msec = 1000/self.DELAY_TIME_FPS
+        self.__anim_cycle_msec = int(1000/self.DELAY_TIME_FPS)
         self.__anim_timer = QtCore.QTimer(self)
         self.__anim_index_maximum = int(self.DELAY_TIME/self.__anim_cycle_msec)
         self.__anim_timer.timeout.connect(self.__do_swap_start)
@@ -164,7 +164,7 @@ class QtLayerStack(QtWidgets.QWidget):
 
         self.__swap_pixmap_0, self.__swap_pixmap_1 = None, None
 
-        self.__swap_rect_0, self.__swap_rect_1 = QtCore.QRect(), QtCore.QRect()
+        self.__swap_rect_0, self.__swap_rect_1 = qt_rect(), qt_rect()
 
         self.__swap_flag = False
         self.__swap_switch_direction = _gui_core.GuiDirections.LeftToRight

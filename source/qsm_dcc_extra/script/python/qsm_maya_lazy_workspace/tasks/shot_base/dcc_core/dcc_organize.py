@@ -1,10 +1,10 @@
 # coding:utf-8
 import qsm_maya.core as qsm_mya_core
 
-from qsm_maya.handles import _abc
+from qsm_maya.handles import abc_
 
 
-class ShotAssetsAnimationGroupOrg(_abc.AbsGroupOpt):
+class ShotAssetsAnimationGroupOrg(abc_.AbsGroupOpt):
     LOCATION = '|assets|animation'
 
     def __init__(self, *args, **kwargs):
@@ -42,7 +42,7 @@ class ShotAssetsAnimationGroupOrg(_abc.AbsGroupOpt):
         )
 
 
-class ShotAssetsCfxGroupOrg(_abc.AbsGroupOpt):
+class ShotAssetsCfxGroupOrg(abc_.AbsGroupOpt):
     LOCATION = '|assets|cfx'
 
     def __init__(self, *args, **kwargs):

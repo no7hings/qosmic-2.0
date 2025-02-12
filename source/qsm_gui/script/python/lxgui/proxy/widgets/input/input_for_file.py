@@ -11,7 +11,7 @@ from ....qt.widgets import utility as _qt_wgt_utility
 
 from .. import view_for_tree as _wgt_view_for_tree
 
-import _input_base
+from . import _input_base
 
 
 #   files

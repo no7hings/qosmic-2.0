@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
@@ -136,7 +138,7 @@ class FncExporterForProxyAss(gnl_fnc_abstracts.AbsFncOptionBase):
             i_color_port = i.get_port('base_color')
             i_source_obj = i_color_port.get_source_obj()
             if i_source_obj.type_name == 'osl_color_correct':
-                print i
+                print(i)
             else:
                 i_source = i_color_port.get_source()
                 i_osl_color_correct = mya_dcc_objects.Shader(

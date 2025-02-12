@@ -61,8 +61,8 @@ class _GuiBaseOpt(object):
         if c:
             for i in c:
                 if isinstance(i, dict):
-                    i_key = i.keys()[0]
-                    i_value = i.values()[0]
+                    i_key = list(i.keys())[0]
+                    i_value = list(i.values())[0]
                 else:
                     i_key = i
                     i_value = {}
@@ -92,8 +92,8 @@ class _GuiBaseOpt(object):
         if c:
             for i in c:
                 if isinstance(i, dict):
-                    i_key = i.keys()[0]
-                    i_value = i.values()[0]
+                    i_key = list(i.keys())[0]
+                    i_value = list(i.values())[0]
                 else:
                     i_key = i
                     i_value = {}
@@ -127,8 +127,8 @@ class _GuiBaseOpt(object):
         if c:
             for i in c:
                 if isinstance(i, dict):
-                    i_key = i.keys()[0]
-                    i_value = i.values()[0]
+                    i_key = list(i.keys())[0]
+                    i_value = list(i.values())[0]
                 else:
                     i_key = i
                     i_value = {}
@@ -1545,8 +1545,8 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         if c:
             for i in c:
                 if isinstance(i, dict):
-                    i_key = i.keys()[0]
-                    i_value = i.values()[0]
+                    i_key = list(i.keys())[0]
+                    i_value = list(i.values())[0]
                 else:
                     i_key = i
                     i_value = {}

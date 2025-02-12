@@ -20,10 +20,14 @@ import collections
 import itertools
 
 
-def ensure_string(text):
-    if isinstance(text, six.text_type):
-        return text.encode('utf-8')
-    return text
+def ensure_string(s):
+    if isinstance(s, six.text_type):
+        if six.PY2:
+            return s.encode('utf-8')
+    elif isinstance(s, six.binary_type):
+        if six.PY3:
+            return s.decode('utf-8')
+    return s
 
 
 def auto_unicode(text):
@@ -793,8 +797,8 @@ class BscText(object):
 
     @classmethod
     def to_integer(cls, text):
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
+        text = ensure_string(text)
+
         _ = re.sub(
             r'[^a-zA-Z0-9]', '0', text
         ).lower()
@@ -803,8 +807,8 @@ class BscText(object):
     @classmethod
     def get_first_word(cls, text):
         if text:
-            if isinstance(text, six.text_type):
-                text = text.encode('utf-8')
+            text = ensure_string(text)
+
             _ = re.findall(
                 r'[\u4e00-\u9fa5a-zA-Z0-9]', text
             )
@@ -841,21 +845,18 @@ class BscText(object):
 
     @staticmethod
     def split_to(text):
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
+        text = ensure_string(text)
         return re.compile(r'[;,/\-\s]\s*').split(text)
 
     @staticmethod
     def split_any_to(text):
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
+        text = ensure_string(text)
         # noinspection RegExpUnnecessaryNonCapturingGroup
         return re.findall(r'[A-Z](?:[a-z]+)?|[A-Za-z]+|(?:[0-9]+)|[;,/\-\s]\s*', text)
 
     @staticmethod
     def find_words(text):
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
+        text = ensure_string(text)
         return re.findall(r'[A-Z](?:[a-z]+)?|[A-Za-z]+', text)
 
 
@@ -936,7 +937,6 @@ class BscTextOpt(object):
             h = float(a%(360+seed)*d)/d
             s = float((s_p/2)+a%(s_p/2))/100.0
             v = float((v_p/2)+a%(v_p/2))/100.0
-            # print h, s, v
             return BscColor.hsv2rgb(h, s, v, maximum)
         return 0, 0, 0
 
@@ -978,7 +978,8 @@ class BscTextOpt(object):
             d = 1000.0
             s_p_min, s_p_max = s_p
             v_p_min, v_p_max = v_p
-            hash_ = hashlib.md5(ensure_string(string)).hexdigest()
+            string = ensure_string(string)
+            hash_ = hashlib.md5(string.encode('utf-8')).hexdigest()
             h_a = int(hash_[0:8], 16)
             s_a = int(hash_[8:16], 16)
             v_a = int(hash_[16:24], 16)

@@ -423,11 +423,11 @@ class QtItemWidgetForList(
         self._frame_border_radius = 0
         self._frame_spacing = 2
 
-        self._frame_main_rect = QtCore.QRect()
+        self._frame_main_rect = qt_rect()
 
-        self._basic_draw_rect = QtCore.QRect()
-        self._frame_draw_rect = QtCore.QRect()
-        self._shadow_draw_rect = QtCore.QRect()
+        self._basic_draw_rect = qt_rect()
+        self._frame_draw_rect = qt_rect()
+        self._shadow_draw_rect = qt_rect()
 
         self._pixmap_cache = QtGui.QPixmap()
 

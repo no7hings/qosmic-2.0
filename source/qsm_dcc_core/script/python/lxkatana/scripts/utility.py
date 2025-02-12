@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import re
 # katana
 from ..core.wrap import *
@@ -25,7 +27,7 @@ class ScpLookAssignsReplace(object):
     def _get_values_(cls, p):
         ptn = '[(](.*?)[)]'
         value = p.getValue(0)
-        print value
+        print(value)
         if value:
             _ = re.findall(ptn, value)
             if _:
@@ -40,7 +42,7 @@ class ScpLookAssignsReplace(object):
                 value = values[0]
             else:
                 value = '({})'.format(' '.join(values))
-            print value
+            print(value)
             # p.setValue(value, 0)
 
     @ktn_core.Modifier.undo_debug_run

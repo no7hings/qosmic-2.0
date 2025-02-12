@@ -32,7 +32,7 @@ class QtTrackLayer(
         self._coord_model = None
         self._graph = None
 
-        self._layer_rect = QtCore.QRect()
+        self._layer_rect = qt_rect()
 
         self._current_index = 0
 
@@ -70,7 +70,7 @@ class QtTrackLayer(
         for i in range(c):
             i_layer_index = self._coord_model.compute_draw_index_at(i)
             i_y = self._coord_model.compute_draw_coord_at(i)
-            i_rect = QtCore.QRect(x, i_y, w, self._coord_model.unit_size)
+            i_rect = qt_rect(x, i_y, w, self._coord_model.unit_size)
             if i_layer_index % 2:
                 i_rgba =_gui_core.GuiRgba.Dark
                 painter._set_border_color_(i_rgba)

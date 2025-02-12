@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 from ..core.wrap import *
 
 
@@ -61,7 +63,7 @@ class CurveRebuild(object):
                     cmds.rebuildCurve(k, rebuildType=0, spans=span_count)
                 reverse = v.get('reverse', False)
                 if reverse is True:
-                    print 'reverse curve: "{}"'.format(k)
+                    print('reverse curve: "{}"'.format(k))
                     cmds.reverseCurve(k, constructionHistory=0, replaceOriginal=1)
 
     def _get_curve_derivatives_(self, om2_curve):

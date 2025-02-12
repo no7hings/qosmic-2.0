@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.core as bsc_core
 
 import lxgui.core as gui_core
@@ -10,7 +12,7 @@ def main(session):
 
         s_c = gnl_dcc_core.SocketConnectForMaya()
         if s_c.is_valid():
-            print 'AAA'
+            print('AAA')
 
     # get checked resources
     window = session.find_window()

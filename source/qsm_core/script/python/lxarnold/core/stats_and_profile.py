@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
@@ -147,7 +149,7 @@ class StatsFileOpt(object):
     def get_render_microsecond_(self):
         ks = self._content.get_keys('*.microseconds')
         for i in ks:
-            print i, self._content.get(i)
+            print(i, self._content.get(i))
 
     def get_microsecond(self):
         return self._content.get(
@@ -170,7 +172,7 @@ class StatsFileOpt(object):
             return bsc_core.BscInteger.microsecond_to_hours(ms)
 
     def _test_(self):
-        print self.get_warnings()
+        print(self.get_warnings())
 
     def get_warnings(self):
         lis = []

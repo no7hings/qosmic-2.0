@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import os
 
 import lxbasic.core as bsc_core
@@ -131,4 +133,4 @@ class XgenUsdExporter(gnl_fnc_abstracts.AbsFncOptionBase):
         group = mya_dcc_objects.Group(mya_location)
         if group.get_is_exists() is True:
             mya_objs = group.get_descendants()
-            print mya_objs
+            print(mya_objs)

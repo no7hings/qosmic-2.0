@@ -54,8 +54,8 @@ class QtChartAsPoolStatus(QtWidgets.QWidget):
         self._p_w, self._p_h = 12, 12
         self._h = self.HEIGHT
 
-        self._text_rect = QtCore.QRect()
-        self._rects = [QtCore.QRect()]
+        self._text_rect = qt_rect()
+        self._rects = [qt_rect()]
 
         self.installEventFilter(self)
 
@@ -65,7 +65,7 @@ class QtChartAsPoolStatus(QtWidgets.QWidget):
         self._rects = []
 
         for i in range(self._maximum):
-            self._rects.append(QtCore.QRect())
+            self._rects.append(qt_rect())
 
     def _set_value_(self, value):
         self._value = value

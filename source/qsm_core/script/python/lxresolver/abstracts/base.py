@@ -1937,9 +1937,11 @@ class AbsRsvProject(
         return bsc_resource.RscExtendIcon.get('resolver/project')
 
     def get_all_workspaces(self):
-        return self._rsv_properties.get(
-            self.VariantCategories.Workspaces
-        ).values()
+        return list(
+            self._rsv_properties.get(
+                self.VariantCategories.Workspaces
+            ).values()
+        )
 
     def to_workspace(self, workspace_key):
         return self._rsv_properties.get(
@@ -1976,9 +1978,11 @@ class AbsRsvProject(
         )
 
     def get_all_roles(self):
-        return self._rsv_properties.get(
-            self.VariantCategories.Roles
-        ).values()
+        return list(
+            self._rsv_properties.get(
+                self.VariantCategories.Roles
+            ).values()
+        )
 
     def get_all_tags(self, branch):
         if branch == self.EntityTypes.Asset:

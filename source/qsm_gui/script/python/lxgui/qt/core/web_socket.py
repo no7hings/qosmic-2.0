@@ -15,10 +15,14 @@ class AbsQtWebServerForWindowNotice(QtCore.QObject):
     NAME = 'Qosmic Window Notice'
 
     @staticmethod
-    def ensure_string(text):
-        if isinstance(text, six.text_type):
-            return text.encode('utf-8')
-        return text
+    def ensure_string(s):
+        if isinstance(s, six.text_type):
+            if six.PY2:
+                return s.encode('utf-8')
+        elif isinstance(s, six.binary_type):
+            if six.PY3:
+                return s.decode('utf-8')
+        return s
 
     @classmethod
     def auto_unicode(cls, text):
@@ -73,7 +77,6 @@ class AbsQtWebServerForWindowNotice(QtCore.QObject):
                 self.LOG_KEY, 'received: "{}"'.format(text)
             )
 
-    @qt_slot()
     def _new_connection_fnc_(self):
         skt = self._web_server.nextPendingConnection()
         self._sockets.append(skt)
@@ -84,7 +87,6 @@ class AbsQtWebServerForWindowNotice(QtCore.QObject):
                 self.LOG_KEY, 'new connection'
             )
 
-    @qt_slot()
     def _disconnected_fnc_(self, skt):
         self._sockets.remove(skt)
         skt.close()
@@ -131,7 +133,7 @@ class QtWebServerForDcc(AbsQtWebServerForWindowNotice):
     @qt_slot(str)
     def _process_fnc_(self, text):
         text = self.ensure_string(text)
-        exec text
+        exec (text)
         for i in self._sockets:
             i.sendTextMessage(text)
 

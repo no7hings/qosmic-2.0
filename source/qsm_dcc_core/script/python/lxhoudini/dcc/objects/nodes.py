@@ -139,7 +139,7 @@ class FileReferencesOld(object):
         self._node_raw = {}
         self.__get_by_definition()
         self.__get_by_custom()
-        return self._node_raw.values()
+        return list(self._node_raw.values())
 
 
 class TextureReferences(AbsFileReferences):

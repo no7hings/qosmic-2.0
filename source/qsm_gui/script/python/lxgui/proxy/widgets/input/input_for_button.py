@@ -13,7 +13,7 @@ from ....qt.widgets import button as _qt_wgt_button
 # proxy widgets
 from .. import utility as _utility
 
-import _input_base
+from . import _input_base
 
 
 # press button
@@ -34,7 +34,7 @@ class PrxInputForPressButton(_input_base.AbsPrxInput):
     @staticmethod
     @_gui_core.GuiModifier.run_with_exception_catch
     def __exec_scp(script):
-        exec script
+        exec (script)
 
     def set(self, raw=None, **kwargs):
         if isinstance(raw, (types.MethodType, types.FunctionType, functools.partial, types.LambdaType)):

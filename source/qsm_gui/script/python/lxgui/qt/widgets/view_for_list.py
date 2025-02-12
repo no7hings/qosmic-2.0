@@ -315,7 +315,7 @@ class QtListWidget(
         self._item_pixmap_cache = QtGui.QPixmap(size)
         self._item_pixmap_cache.fill(QtGui.QColor(*_gui_core.GuiRgba.Dim))
         painter = _qt_core.QtPainter(self._item_pixmap_cache)
-        rect = QtCore.QRect(0, 0, size.width(), size.height())
+        rect = qt_rect(0, 0, size.width(), size.height())
 
         i_x, i_y, i_w, i_h = rect.x(), rect.y(), rect.width(), rect.height()
         painter._set_border_color_(
@@ -325,7 +325,7 @@ class QtListWidget(
             _gui_core.GuiRgba.Dim
         )
         painter.drawRect(
-            QtCore.QRect(i_x+2, i_y+2, i_w-4, i_h-4)
+            qt_rect(i_x+2, i_y+2, i_w-4, i_h-4)
         )
 
         painter._draw_empty_image_by_rect_(
@@ -376,7 +376,6 @@ class QtListWidget(
             # self.adjustSize()
 
     # noinspection PyUnusedLocal
-    @qt_slot()
     def _refresh_check_info_(self, *args, **kwargs):
         c = sum([self.item(i)._is_checked_() for i in range(self.count())])
         if c:

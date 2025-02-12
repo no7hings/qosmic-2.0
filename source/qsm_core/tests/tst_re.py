@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import re
 
 path = '|unit_assembly_dgc|region_2_AR|region_2_AR_NS:region_2_GRP|region_2_AR_NS:crate_grp|region_2_AR_NS:crate_grpShape'
@@ -8,8 +10,8 @@ m = re.search(
     r'(\|.*{name})(\|.*{name}_NS.*:.*).*'.format(name='region_2_AR'), path2
 )
 
-print m.group(1)
+print(m.group(1))
 
 namespace = path.split('|')[-1].split(':')[-2]
 
-print namespace
+print(namespace)

@@ -126,7 +126,7 @@ class ChartModelForCurve(object):
                     painter.setPen(pen)
                     painter.setBrush(QtGui.QColor(0, 255, 0, 255))
                     painter.drawLine(i_point_pre, i_out_tangent_point_pre)
-                    i_out_tangent_rect_pre = QtCore.QRect(
+                    i_out_tangent_rect_pre = qt_rect(
                         i_out_tangent_point_pre.x()-2, i_out_tangent_point_pre.y()-3, 6, 6
                     )
                     painter.drawEllipse(i_out_tangent_rect_pre)
@@ -137,7 +137,7 @@ class ChartModelForCurve(object):
                     painter.setPen(pen)
                     painter.setBrush(QtGui.QColor(255, 0, 0, 255))
                     painter.drawLine(i_point, i_in_tangent_point)
-                    i_in_tangent_rect = QtCore.QRect(
+                    i_in_tangent_rect = qt_rect(
                         i_in_tangent_point.x()-2, i_in_tangent_point.y()-3, 6, 6
                     )
                     painter.drawEllipse(i_in_tangent_rect)
@@ -149,7 +149,7 @@ class ChartModelForCurve(object):
             painter.setBrush(
                 QtGui.QColor(255, 255, 0)
             )
-            i_point_rect = QtCore.QRect(
+            i_point_rect = qt_rect(
                 i_point.x()-3, i_point.y()-3, 6, 6
             )
             painter.drawEllipse(i_point_rect)

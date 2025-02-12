@@ -7,7 +7,7 @@ import threading
 
 import _my_sql
 
-import _abc
+import abc_
 
 import _base
 
@@ -31,7 +31,7 @@ class Entity(dict):
         return '\n'+self.__str__()
 
 
-class Database(_abc.AbsBase):
+class Database(abc_.AbsBase):
     LOCK = threading.Lock()
     
     @classmethod

@@ -78,10 +78,10 @@ class QtTrackTrim(
         )
         self._init_sbj_base_def_(self)
 
-        self._frame_rect = QtCore.QRect()
-        self._head_frame_rect = QtCore.QRect()
-        self._body_frame_rect = QtCore.QRect()
-        self._text_rect = QtCore.QRect()
+        self._frame_rect = qt_rect()
+        self._head_frame_rect = qt_rect()
+        self._body_frame_rect = qt_rect()
+        self._text_rect = qt_rect()
 
         self._trim_flag = self.TrimFlag.Start
 
@@ -456,18 +456,18 @@ class QtTrackNode(
         self._init_node_def_(self)
         self._init_bypass_def_(self)
 
-        self._time_start_rect = QtCore.QRect()
-        self._time_clip_start_rect, self._time_clip_end_rect = QtCore.QRect(), QtCore.QRect()
+        self._time_start_rect = qt_rect()
+        self._time_clip_start_rect, self._time_clip_end_rect = qt_rect(), qt_rect()
         self._time_start_draw_line = QtCore.QLine()
-        self._time_source_rect = QtCore.QRect()
-        self._count_draw_rect = QtCore.QRect()
-        self._trim_left_rect, self._trim_right_rect = QtCore.QRect(), QtCore.QRect()
-        self._scale_left_rect, self._scale_right_rect = QtCore.QRect(), QtCore.QRect()
+        self._time_source_rect = qt_rect()
+        self._count_draw_rect = qt_rect()
+        self._trim_left_rect, self._trim_right_rect = qt_rect(), qt_rect()
+        self._scale_left_rect, self._scale_right_rect = qt_rect(), qt_rect()
 
-        self._pre_blend_rect = QtCore.QRect()
+        self._pre_blend_rect = qt_rect()
         self._pre_blend_flag = False
         self._pre_blend_tmp = 0
-        self._post_blend_rect = QtCore.QRect()
+        self._post_blend_rect = qt_rect()
         self._post_blend_flag = False
         self._post_blend_tmp = 0
 
@@ -476,11 +476,11 @@ class QtTrackNode(
         self._track_model = None
         self._last_track_model = None
 
-        self._time_basic_frame_rect = QtCore.QRect()
+        self._time_basic_frame_rect = qt_rect()
         self._time_left_draw_flag = False
-        self._time_left_frame_rect = QtCore.QRect()
+        self._time_left_frame_rect = qt_rect()
         self._time_right_draw_flag = False
-        self._time_right_frame_rect = QtCore.QRect()
+        self._time_right_frame_rect = qt_rect()
 
         self._layer_index = 0
 
@@ -680,7 +680,7 @@ class QtTrackNode(
         if self._is_selected:
             border_rgba = _gui_core.GuiRgba.LightAzureBlue
             border_width = 2
-            rect = QtCore.QRect(x+border_width/2, y+border_width/2, w-border_width/2, h-border_width/2)
+            rect = qt_rect(x+border_width/2, y+border_width/2, w-border_width/2, h-border_width/2)
         else:
             rect = self._frame_draw_rect
             border_rgba = _gui_core.GuiRgba.LightGray
@@ -716,7 +716,7 @@ class QtTrackNode(
         for i in range(post_cycle):
             i_x, i_y = x_mid+i*cycle_w, y_mid
             if i % 2:
-                i_rect = QtCore.QRect(
+                i_rect = qt_rect(
                     i_x+1, i_y+1, cycle_w, cycle_h
                 )
 
@@ -729,7 +729,7 @@ class QtTrackNode(
         for i in range(pre_cycle+1):
             i_x, i_y = x_mid-i*cycle_w, y_mid
             if i % 2:
-                i_rect = QtCore.QRect(
+                i_rect = qt_rect(
                     i_x+1, i_y+1, cycle_w, cycle_h
                 )
                 painter.setPen(QtGui.QColor(0, 0, 0, 0))

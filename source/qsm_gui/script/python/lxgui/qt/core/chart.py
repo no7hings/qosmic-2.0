@@ -97,7 +97,7 @@ class GuiQtChartDrawDataForSector(object):
             [QtCore.QPoint(x1, y1), QtCore.QPoint(x2, y2), QtCore.QPoint(x3, y3), QtCore.QPoint(x4-e_r, y4)]
         )
         text_point = QtCore.QPoint(x4+e_r+4, y4+4)
-        text_ellipse = QtCore.QRect(x4-e_r, y4-e_r, e_r*2, e_r*2)
+        text_ellipse = qt_rect(x4-e_r, y4-e_r, e_r*2, e_r*2)
         text_size = tape_w/3
         return (
             background_rgba, border_rgba, total_path, occupy_path, text_point, text_line, text_ellipse, text_size, text
@@ -428,7 +428,7 @@ class GuiQtChartDrawDataForRadar(object):
         #
         text_point_0 = QtCore.QPoint(text_x_0-text_w_0/2, text_y_0-text_h/2)
         text_point_1 = QtCore.QPoint(text_x_0-text_w_1/2, text_y_0+text_h/2)
-        mark_ellipse = QtCore.QRect(map_x_0-e_r, map_y_0-e_r, e_r*2, e_r*2)
+        mark_ellipse = qt_rect(map_x_0-e_r, map_y_0-e_r, e_r*2, e_r*2)
         #
         point_tgt = QtCore.QPoint(map_x_0, map_y_0)
         point_src = QtCore.QPoint(map_x_1, map_y_1)

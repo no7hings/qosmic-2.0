@@ -111,15 +111,15 @@ class QtTrackGuide(
 
         self._init_action_base_def_(self)
 
-        self._frame_rect = QtCore.QRect()
+        self._frame_rect = qt_rect()
 
         self._text_w = 48
 
-        self._track_start_rect = QtCore.QRect()
-        self._track_end_rect = QtCore.QRect()
+        self._track_start_rect = qt_rect()
+        self._track_end_rect = qt_rect()
 
-        self._left_trim_rect = QtCore.QRect()
-        self._right_trim_rect = QtCore.QRect()
+        self._left_trim_rect = qt_rect()
+        self._right_trim_rect = qt_rect()
 
         self._graph = None
 
@@ -359,14 +359,14 @@ class QtTrackGuide(
 
         # one track
         if condition == [True, True]:
-            name_rect = QtCore.QRect(
+            name_rect = qt_rect(
                 start_x, y, end_x-start_x, text_h
             )
-            frame_rect = QtCore.QRect(
+            frame_rect = qt_rect(
                 start_x, y+text_h, end_x-start_x, text_h
             )
 
-            basic_rect = QtCore.QRect(
+            basic_rect = qt_rect(
                 start_x-1, y, end_x-start_x+2, h
             )
 
@@ -377,14 +377,14 @@ class QtTrackGuide(
 
         # start track, more than one
         elif condition == [True, False]:
-            name_rect = QtCore.QRect(
+            name_rect = qt_rect(
                 start_x, y, node_post_blend_end_x-start_x, text_h
             )
-            frame_rect = QtCore.QRect(
+            frame_rect = qt_rect(
                 start_x, y+text_h, next_node_pre_blend_start_x-start_x, text_h
             )
 
-            basic_rect = QtCore.QRect(
+            basic_rect = qt_rect(
                 start_x-1, y, node_post_blend_end_x-start_x+2, h
             )
 
@@ -395,14 +395,14 @@ class QtTrackGuide(
 
         # end track
         elif condition == [False, True]:
-            name_rect = QtCore.QRect(
+            name_rect = qt_rect(
                 pre_node_post_blend_end_x, y, end_x-pre_node_post_blend_end_x, text_h
             )
-            frame_rect = QtCore.QRect(
+            frame_rect = qt_rect(
                 node_pre_blend_start_x, y+text_h, end_x-node_pre_blend_start_x, text_h
             )
 
-            basic_rect = QtCore.QRect(
+            basic_rect = qt_rect(
                 pre_node_post_blend_end_x-1, y, end_x-pre_node_post_blend_end_x+2, h
             )
 
@@ -416,14 +416,14 @@ class QtTrackGuide(
 
         # middle track
         else:
-            name_rect = QtCore.QRect(
+            name_rect = qt_rect(
                 pre_node_post_blend_end_x, y, node_post_blend_end_x-pre_node_post_blend_end_x, text_h
             )
-            frame_rect = QtCore.QRect(
+            frame_rect = qt_rect(
                 node_pre_blend_start_x, y+text_h, next_node_pre_blend_start_x-node_pre_blend_start_x, text_h
             )
 
-            basic_rect = QtCore.QRect(
+            basic_rect = qt_rect(
                 pre_node_post_blend_end_x-1, y, node_post_blend_end_x-pre_node_post_blend_end_x+2, h
             )
 

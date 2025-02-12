@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import collections
 
 import copy
@@ -24,7 +26,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 import qsm_screw.core as qsm_scr_core
 
 
-class _GuiThreadExtra:
+class _GuiThreadExtra(object):
     def _init_gui_thread_extra_(self, window):
         self._window = window
         self._gui_thread_flag = 0
@@ -42,7 +44,7 @@ class _GuiThreadExtra:
 
 
 class _GuiBaseOpt(
-    object,
+    # object,
     _GuiThreadExtra
 ):
     GUI_NAMESPACE = None
@@ -67,8 +69,8 @@ class _GuiBaseOpt(
             for i in c:
                 # update override options when var is dict
                 if isinstance(i, dict):
-                    i_key = i.keys()[0]
-                    i_value = i.values()[0]
+                    i_key = list(i.keys())[0]
+                    i_value = list(i.values())[0]
                 else:
                     i_key = i
                     i_value = {}
@@ -98,8 +100,8 @@ class _GuiBaseOpt(
         if c:
             for i in c:
                 if isinstance(i, dict):
-                    i_key = i.keys()[0]
-                    i_value = i.values()[0]
+                    i_key = list(i.keys())[0]
+                    i_value = list(i.values())[0]
                 else:
                     i_key = i
                     i_value = {}
@@ -456,9 +458,11 @@ class _GuiTypeOpt(
         build_fnc_(cache_fnc_())
 
     def do_gui_refresh_all(self):
+        # restore resource
         self._page._gui_node_opt.restore_all()
-
+        # restore self
         self.restore_all()
+        # add all entities
         self.gui_add_all_entities()
 
     def get_selected_and_checked_entity_paths(self):
@@ -1217,7 +1221,7 @@ class AbsPrxPageForManager(
 
     def _gui_update_keyword_filter_path_set_fnc(self, *args, **kwargs):
         keyword = args[0]
-        print keyword
+        print(keyword)
 
     def _gui_update_keyword_filter_texts(self):
         def cache_fnc_(gui_thread_flag_):

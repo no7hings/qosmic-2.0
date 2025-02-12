@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: smmap2
+Version: 3.0.1
+Summary: A mirror package for smmap
+Home-page: https://github.com/gitpython-developers/smmap
+Author: Sebastian Thiel
+Author-email: byronimo@gmail.com
+License: UNKNOWN
+Description: This is a mirror package for `smmap <https://pypi.org/project/smmap/>`_. Consider installing it directly instead.
+Platform: UNKNOWN

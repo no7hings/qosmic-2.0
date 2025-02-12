@@ -60,7 +60,7 @@ class AbsQtScreenshotBaseDef(_qt_abstracts.AbsQtHelpBaseDef):
 
         self._screenshot_file_path = None
 
-        self._screenshot_rect = QtCore.QRect()
+        self._screenshot_rect = qt_rect()
 
         self._screenshot_is_activated = False
         #
@@ -77,13 +77,13 @@ class AbsQtScreenshotBaseDef(_qt_abstracts.AbsQtHelpBaseDef):
 
         self._screenshot_modify_gap = 8
 
-        self._frame_draw_rect = QtCore.QRect()
+        self._frame_draw_rect = qt_rect()
 
         self._position_text = '0, 0'
         self._position_text_color = _gui_core.GuiRgba.LightAzureBlue
         self._position_frame_region = self.RectRegion.BottomRight
         self._position_frame_h = 24
-        self._position_frame_draw_rect = QtCore.QRect()
+        self._position_frame_draw_rect = qt_rect()
         self._position_text_font = _qt_core.QtFont.generate(size=12)
 
         self._position_h_line = QtCore.QLine()
@@ -92,15 +92,15 @@ class AbsQtScreenshotBaseDef(_qt_abstracts.AbsQtHelpBaseDef):
         self._geometry_text = '0, 0, 0, 0'
         self._geometry_text_color = _gui_core.GuiRgba.LightAzureBlue
         self._geometry_frame_h = 24
-        self._geometry_frame_draw_rect = QtCore.QRect()
+        self._geometry_frame_draw_rect = qt_rect()
         self._geometry_text_font = _qt_core.QtFont.generate(size=12)
 
-        self._record_frame_draw_rect = QtCore.QRect()
+        self._record_frame_draw_rect = qt_rect()
         self._record_frame_h = 36
         self._record_frame_w = 240
 
-        self._record_button_frame_rect = QtCore.QRect()
-        self._record_button_draw_rect = QtCore.QRect()
+        self._record_button_frame_rect = qt_rect()
+        self._record_button_draw_rect = qt_rect()
 
         self._record_button_frame_s = 24
 
@@ -120,7 +120,7 @@ class AbsQtScreenshotBaseDef(_qt_abstracts.AbsQtHelpBaseDef):
         self._record_frame_index = 0
         self._record_fps = 24
         self._record_frame_interval = int(1000/self._record_fps)
-        self._record_text_draw_rect = QtCore.QRect()
+        self._record_text_draw_rect = qt_rect()
         self._record_text_color = _gui_core.GuiRgba.DarkWhite
         self._record_text_start_color = _gui_core.GuiRgba.LightRed
         self._record_text_font = _qt_core.QtFont.generate(size=12, weight=75)

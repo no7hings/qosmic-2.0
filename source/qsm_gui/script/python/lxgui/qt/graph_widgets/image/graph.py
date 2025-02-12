@@ -103,7 +103,7 @@ class QtImageGraph(_gnl_graph.QtGeneralNodeGraph):
         x, y = 0, 0
         width, height = self.width(), self.height()
 
-        rect = QtCore.QRect(
+        rect = qt_rect(
             x, y, width, height
         )
 
@@ -230,7 +230,7 @@ class QtImageGraph(_gnl_graph.QtGeneralNodeGraph):
         for i_ng_node in ng_nodes:
             i_t_h = i_ng_node._ng_draw_name_h_basic*scale
             i_i_w, i_i_h = i_ng_node._node_basic_w*scale, i_ng_node._node_basic_h*scale-i_t_h
-            i_t_rect = QtCore.QRect(
+            i_t_rect = qt_rect(
                 x_0, h_-i_i_h-m-i_t_h, i_i_w, i_t_h
             )
             i_t_font_size = i_ng_node._ng_draw_font_h_basic*scale
@@ -247,7 +247,7 @@ class QtImageGraph(_gnl_graph.QtGeneralNodeGraph):
                 offset=offset,
                 word_warp=True
             )
-            i_i_rect = QtCore.QRect(
+            i_i_rect = qt_rect(
                 x_0, h_-i_i_h-m, i_i_w, i_i_h
             )
             i_image_path = i_ng_node._get_image_path_()

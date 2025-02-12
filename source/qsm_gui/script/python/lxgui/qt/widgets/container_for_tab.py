@@ -178,7 +178,7 @@ class _AbsQtHTabToolBox(
                     self._tab_choose_button.hide()
                 # tab items
                 scroll_value = self._scroll_bar_model.get_value()
-                widths = self._item_width_or_height_dict.values()
+                widths = list(self._item_width_or_height_dict.values())
                 for i_index, i_tab_item in enumerate(tab_items):
                     i_x = sum(widths[:i_index])
                     i_w = self._item_width_or_height_dict[i_index]
@@ -368,11 +368,11 @@ class _AbsQtHTabToolBox(
 
         self._tab_text_font = _qt_core.QtFont.generate(size=11, weight=75)
 
-        self._tab_bar_rect = QtCore.QRect()
-        self._tab_bar_draw_rect = QtCore.QRect()
+        self._tab_bar_rect = qt_rect()
+        self._tab_bar_draw_rect = qt_rect()
 
-        self._tab_scroll_tool_box_rect = QtCore.QRect()
-        self._tab_scroll_tool_box_draw_rect = QtCore.QRect()
+        self._tab_scroll_tool_box_rect = qt_rect()
+        self._tab_scroll_tool_box_draw_rect = qt_rect()
         
         self._icons_0 = [
             _gui_core.GuiIcon.get('window_base/scroll-left'),
@@ -430,7 +430,7 @@ class _AbsQtHTabToolBox(
         self._viewport_layout.setContentsMargins(*[0]*4)
         self._viewport_layout.setSpacing(0)
 
-        self._viewport_rect = QtCore.QRect()
+        self._viewport_rect = qt_rect()
 
         self.installEventFilter(self)
 

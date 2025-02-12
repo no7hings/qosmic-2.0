@@ -14,7 +14,7 @@ from ....qt.widgets.input import input_for_constant as _qt_wgt_ipt_for_constant
 
 from .. import view_for_tree as _wgt_view_for_tree
 
-import _input_base
+from . import _input_base
 
 
 # entity

@@ -1,7 +1,7 @@
 # coding:utf-8
-import re
+from __future__ import print_function
 
-import _abc
+import re
 
 import lxbasic.log as bsc_log
 
@@ -11,8 +11,10 @@ import lxbasic.storage as bsc_storage
 
 import lxbasic.translate as bsc_translate
 
+from . import abc_
 
-class MayaMelPreset(_abc.AbsDotfile):
+
+class MayaMelPreset(abc_.AbsDotfile):
     LOCATION = 'C:/Program Files/Autodesk/Maya2020/presets/attrPresets'
 
     def __init__(self, *args, **kwargs):
@@ -20,7 +22,7 @@ class MayaMelPreset(_abc.AbsDotfile):
 
     @classmethod
     def generate_from_preset_mel(cls, mel_path):
-        print mel_path
+        print(mel_path)
 
     def to_dict(self):
         dict_ = {}

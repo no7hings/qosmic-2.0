@@ -1,4 +1,6 @@
 # coding:utf-8
+import sys
+
 import six
 
 import functools
@@ -14,6 +16,7 @@ import lxbasic.resource as bsc_resource
 import lxbasic.storage as bsc_storage
 
 import lxbasic.extra.methods as bsc_etr_methods
+import os
 
 
 class AbsSsnConfigureBaseDef(object):
@@ -277,10 +280,6 @@ class AbsSsnGener(
 
     @staticmethod
     def execute_python_file(file_path, **kwargs):
-        # use for python 3
-        # with open(file_path, 'r') as f:
-        #     exec (f.read())
-        # use for python 2
         bsc_log.Log.trace_method_result(
             'option-hook', 'start for : "{}"'.format(
                 file_path
@@ -298,7 +297,8 @@ class AbsSsnGener(
     def execute_python_script(cmd, **kwargs):
         # noinspection PyUnusedLocal
         session = kwargs['session']
-        exec cmd
+        # for python3
+        exec (cmd)
 
     @staticmethod
     def execute_shell_file_use_terminal(file_path, **kwargs):

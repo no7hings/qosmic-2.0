@@ -115,7 +115,7 @@ class FncExporterForGeometryAbc(object):
                 _ = list(raw)
             else:
                 raise TypeError()
-            return map(lambda x: bsc_core.BscNodePathOpt(x).translate_to('|').to_string(), _)
+            return list(map(lambda x: bsc_core.BscNodePathOpt(x).translate_to('|').to_string(), _))
         return []
 
     @classmethod

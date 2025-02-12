@@ -16,35 +16,35 @@ from ....qt.widgets import utility as _qt_wgt_utility
 from ... import abstracts as _prx_abstracts
 # proxy widgets
 
-import _port_for_constant
+from. import _port_for_constant
 
-import _port_for_array
+from. import _port_for_array
 
-import _port_for_extra
+from. import _port_for_extra
 
-import _port_for_storage
+from. import _port_for_storage
 
-import _port_for_stg_array
+from. import _port_for_stg_array
 
-import _port_for_choose
+from. import _port_for_choose
 
-import _port_for_capsule
+from. import _port_for_capsule
 
-import _port_for_script
+from. import _port_for_script
 
-import _port_for_tuple
+from. import _port_for_tuple
 
-import _port_for_button
+from. import _port_for_button
 
-import _port_for_resolver
+from. import _port_for_resolver
 
-import _port_for_shotgun
+from. import _port_for_shotgun
 
-import _port_for_dcc
+from. import _port_for_dcc
 
-import _port_for_file
+from. import _port_for_file
 
-import _port_for_group
+from. import _port_for_group
 
 
 class _PortStackNode(unr_abstracts.AbsObjStack):

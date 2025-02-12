@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import collections
 
 import fnmatch
@@ -499,7 +501,7 @@ class DotMaOptOld(_AbsDotFile):
                             port_variant['port_raw']
                         dict_[port_name] = port_type, port_raw
                 else:
-                    print 'error: line [{}...] is to large({})'.format(p_line[:50], p_line_size)
+                    print('error: line [{}...] is to large({})'.format(p_line[:50], p_line_size))
             else:
                 is_end = True
             if c == p_maximum:
@@ -574,7 +576,7 @@ class DotMaOptOld(_AbsDotFile):
             p = parse.parse(
                 pattern.parse_pattern, result
             )
-            print p
+            print(p)
 
     def _test_(self):
         self._get_file_paths()
@@ -582,7 +584,7 @@ class DotMaOptOld(_AbsDotFile):
     def _get_file_paths(self):
         list_ = []
         obj_raws = self._generate_node_args()
-        print 'start file-path: "{}"'.format(self.file_path)
+        print('start file-path: "{}"'.format(self.file_path))
         for i_obj_raw in obj_raws:
             i_line, i_variants = i_obj_raw
             i_obj_type = i_variants['obj_type']
@@ -623,7 +625,7 @@ class DotMaOptOld(_AbsDotFile):
                         #
                         list_.append(raw)
                     # print 'end obj: "{}"'.format(obj_name)
-        print 'end file-path: "{}"'.format(self.file_path)
+        print('end file-path: "{}"'.format(self.file_path))
         return list_
 
     def get_file_paths(self):
@@ -664,7 +666,7 @@ class DotMtlxOptOld(_AbsDotFile):
 
             property_line = self._lines[index]
             pattern = '{l}<property >{r}'
-            print property_line
+            print(property_line)
 
     def get_material_assign_raws(self):
         return self._get_material_assign_matches()
@@ -701,13 +703,13 @@ class DotOslOptOld(_AbsDotFile):
             pattern='shader {shader_name}({extra}',
             lines=self.lines
         )
-        print _
+        print(_)
 
     def get_port_args(self):
-        print self._generate_match_args(
+        print(self._generate_match_args(
             pattern='',
             lines=self.lines
-        )
+        ))
 
 
 class DotMtlxOpt(_AbsDotFile):
@@ -812,9 +814,6 @@ class DotMaMeshMtd(object):
                 cls._set_face_vertices_update_(
                     data, face_vertex_counts, face_vertex_indices, face_edge_indices, edge_vertex_indices
                     )
-        # print 'edge_vertex_indices =', edge_vertex_indices
-        # print 'face_edge_indices =', face_edge_indices
-        # print 'face_vertex_indices =', face_vertex_indices
         return face_vertex_counts, face_vertex_indices
 
     @classmethod
@@ -1230,7 +1229,7 @@ class DotMaOpt(_AbsDotFile):
                             info['points-uuid'] = points_uuid
                             info['point-count'] = point_count
             else:
-                print 'root is not exists'
+                print('root is not exists')
         return dict_
 
     def get_reference_file_paths(self, auto_convert=True):

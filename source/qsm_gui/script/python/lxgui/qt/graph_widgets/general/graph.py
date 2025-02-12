@@ -249,7 +249,7 @@ class QtGeneralNodeGraph(
         x, y = 0, 0
         width, height = self.width(), self.height()
 
-        rect = QtCore.QRect(
+        rect = qt_rect(
             x, y, width, height
         )
         if self._ng_draw_graph_grid_enable is True:
@@ -319,7 +319,7 @@ class QtGeneralNodeGraph(
         i_h = 20
         y = height-i_h*c
         for i, (i_key, i_value) in enumerate(infos.items()):
-            i_rect = QtCore.QRect(
+            i_rect = qt_rect(
                 x+40, y+i*20, width, i_h
             )
             painter._set_text_draw_by_rect_use_key_value_(

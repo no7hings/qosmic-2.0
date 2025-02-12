@@ -1,6 +1,6 @@
 # coding:utf-8
 # proxy widgets
-import _port_base
+from . import _port_base
 
 from ..input import input_for_extra as _input_for_extra
 

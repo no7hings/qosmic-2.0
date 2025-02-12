@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import six
 
 import lxbasic.log as bsc_log
@@ -353,7 +355,7 @@ class GeometryDebugger(gnl_fnc_abstracts.AbsFncOptionBase):
                 if i_obj_type_name == 'Mesh':
                     i_input_mesh = UsdGeom.Mesh(i_input_prim)
                     i_input_mesh_opt = usd_core.UsdMeshOpt(i_input_mesh)
-                    print i_input_mesh_opt.get_face_vertex_indices()
+                    print(i_input_mesh_opt.get_face_vertex_indices())
 
 
 class FncGeometryExporter(gnl_fnc_abstracts.AbsFncOptionBase):

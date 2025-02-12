@@ -205,7 +205,7 @@ class AbsTextureReferences(object):
 
     def get_objs(self, paths_exclude=None, include_paths=None):
         self._set_customize_update_(paths_exclude=paths_exclude, include_paths=include_paths)
-        return self._raw.values()
+        return list(self._raw.values())
 
     @classmethod
     def repath_fnc(cls, obj, port_path, file_path_new, remove_expression=False):

@@ -1,4 +1,7 @@
+from __future__ import print_function
+
 import maya.cmds as cmds
+
 import pymel.core as pm
 
 
@@ -27,7 +30,7 @@ def getVertexWeights():
             skinVals = cmds.skinPercent(meshSkinCluster, each, query=True, value=True)
             # get joints list which affect vetex
             jointVals = cmds.skinPercent(meshSkinCluster, each, query=True, transform=None)
-            print jointVals
+            print(jointVals)
             # clear list before creating child
             vertexWeightList = []
             for i in range(len(jointVals)):
@@ -54,7 +57,7 @@ def setBorderWeights():
         return cmds.error("Please select vetices with skin weighs")
     else:
         obj = cmds.ls(verts[0], objectsOnly=True)
-        print obj
+        print(obj)
 
         history = cmds.listHistory(obj)
         # get mesh skin cluster
@@ -63,19 +66,19 @@ def setBorderWeights():
                 meshSkinCluster = historyNode
                 # get namespace
         objNamespace = pm.selected()[0].namespace()
-        print objNamespace
+        print(objNamespace)
         # if there is no namespace apply weight frome the stored list without changes
         if objNamespace == '':
             for i in range(len(verts)):
                 cmds.skinPercent(meshSkinCluster, verts[i], transformValue=weightsList[i])
-                print 'no namespace'
+                print('no namespace')
         # apply weights from the stored list to selected vertice
         else:
             for i in range(len(verts)):
                 for j in range(len(weightsList[i])):
                     tempName = weightsList[i][j][0]
                     weightsList[i][j][0] = objNamespace+tempName
-                    print weightsList[i][j][0]
+                    print(weightsList[i][j][0])
             for i in range(len(verts)):
                 cmds.skinPercent(meshSkinCluster, verts[i], transformValue=weightsList[i])
         cmds.button("applyWeightsBtn", edit=True, enable=False)

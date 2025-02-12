@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import fnmatch
 
 import lxbasic.log as bsc_log
@@ -271,7 +273,7 @@ class CallbackMtd(object):
                 try:
                     EventMtd.set_arnold_ramp_write(ktn_obj_opt)
                 except Exception:
-                    print ktn_obj_opt.name
+                    print(ktn_obj_opt.name)
 
     @classmethod
     def add_arnold_callbacks(cls):

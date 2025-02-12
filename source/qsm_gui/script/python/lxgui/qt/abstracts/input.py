@@ -179,8 +179,8 @@ class AbsQtInputForOtherBaseDef(AbsQtInputBaseDef):
     def _init_input_as_other_base_def_(self, widget):
         self._init_input_base_def_(widget)
 
-        self._value_rect = QtCore.QRect()
-        self._value_draw_rect = QtCore.QRect()
+        self._value_rect = qt_rect()
+        self._value_draw_rect = qt_rect()
         self._value_draw_width, self._value_draw_height = 16, 16
 
     def _get_value_rect_(self):

@@ -832,7 +832,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                     if 'expression' in v:
                         value = None
                         e = 'value{}'.format(v['expression'])
-                        exec e
+                        exec (e)
                         self._settings_prx_node.set(
                             k.replace('/', '.'), value
                         )
@@ -1400,7 +1400,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
                     if 'expression' in v:
                         value = None
                         e = 'value{}'.format(v['expression'])
-                        exec e
+                        exec (e)
                         self._settings_prx_node.set(
                             k.replace('/', '.'), value
                         )

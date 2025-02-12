@@ -7,7 +7,7 @@ from ....qt.widgets import utility as _qt_wgt_utility
 # proxy widgets
 from .. import container as _container
 
-import _port_base
+from . import _port_base
 
 
 # node

@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
@@ -172,7 +174,7 @@ class ScpResourcesAddFor3dPlant(object):
 
         resource_name = '{}_{}{}_rsc'.format(name, var, str(int(variants['number'])).zfill(3)).lower()
 
-        print type_dtb_path, resource_name
+        print(type_dtb_path, resource_name)
 
         resource_dtb_path = '/{}/{}'.format(category_group, resource_name)
         version_name = 'v0001'

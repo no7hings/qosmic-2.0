@@ -1,4 +1,5 @@
 # encoding=utf-8
+from __future__ import print_function
 # maya
 from ...core.wrap import *
 
@@ -122,7 +123,7 @@ class AndRenderOption(object):
             port_names = obj_ports_opt.get_port_names()
             for port_name in port_names:
                 port = obj.get_port(port_name)
-                print port, port.get(), port.get_default()
+                print(port, port.get(), port.get_default())
 
     def set_aa_sample(self, value):
         self._options_obj.get_port('AASamples').set(value)

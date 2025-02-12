@@ -8,7 +8,7 @@ from ....qt.widgets.input import input_for_constant as _qt_wgt_ipt_for_constant
 
 from ....qt.widgets.input import input_for_array as _qt_wgt_ipt_for_array
 
-import _input_base
+from . import _input_base
 
 
 #   entity

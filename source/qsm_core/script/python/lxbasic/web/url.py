@@ -45,10 +45,14 @@ class UrlValue(object):
             return s
 
     @staticmethod
-    def ensure_string(path):
-        if isinstance(path, six.text_type):
-            return path.encode('utf-8')
-        return path
+    def ensure_string(s):
+        if isinstance(s, six.text_type):
+            if six.PY2:
+                return s.encode('utf-8')
+        elif isinstance(s, six.binary_type):
+            if six.PY3:
+                return s.decode('utf-8')
+        return s
 
     @classmethod
     def quote(cls, text):

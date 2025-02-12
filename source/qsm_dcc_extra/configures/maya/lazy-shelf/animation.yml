@@ -326,3 +326,19 @@ build:
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-resource")'
                     dbl_script: ''
 
+        other:
+            tool_tip: 'Other.'
+            tool_tip_chs: '其他。'
+
+            tools:
+                tool_1:
+                    name: 'Show Help'
+                    name_chs: '显示帮助'
+                    tool_tip: 'To be supplemented.'
+                    tool_tip_chs: '待补充。'
+                    button_style: 'text_and_icon'
+                    button_name: 'Help'
+                    button_name_chs: '帮助'
+                    icon: 'help'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("other/qsm-show-help")'
+                    dbl_script: ''

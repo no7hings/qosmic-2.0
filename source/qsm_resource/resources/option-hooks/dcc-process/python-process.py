@@ -1,4 +1,5 @@
 # coding:utf-8
+from __future__ import print_function
 
 
 def test(option_opt):
@@ -6,7 +7,7 @@ def test(option_opt):
 
     import lxbasic.log as bsc_log
 
-    print option_opt
+    print(option_opt)
 
     _m = 20
 

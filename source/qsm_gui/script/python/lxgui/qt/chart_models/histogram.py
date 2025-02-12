@@ -49,12 +49,12 @@ class ChartModelForHistogram(object):
                 i_value_total = sum([x[1] for x in i_leaf_data])
                 i_value_total_text = bsc_core.BscInteger.to_prettify(i_value_total, i_value_total)
                 i_branch = _base._Data(
-                    rect=QtCore.QRect(),
+                    rect=qt_rect(),
                     key_text=i_k,
-                    key_text_rect=QtCore.QRect(),
+                    key_text_rect=qt_rect(),
                     color=QtGui.QColor(47, 47, 47),
                     value=i_value_total,
-                    value_text_rect=QtCore.QRect(),
+                    value_text_rect=qt_rect(),
                     value_text=i_value_total_text,
                     leafs=[],
                 )
@@ -82,22 +82,22 @@ class ChartModelForHistogram(object):
                     j_leaf = _base._Data(
                         index=j_idx,
                         index_text=str(j_idx+1),
-                        index_rect=QtCore.QRect(),
+                        index_rect=qt_rect(),
                         
                         key_text=j_k,
-                        key_text_rect=QtCore.QRect(),
+                        key_text_rect=qt_rect(),
                         
                         value=j_v,
                         value_text=bsc_core.BscInteger.to_prettify(
                             j_v, language=_gui_core.GuiUtil.get_language()
                         ),
-                        value_text_rect=QtCore.QRect(),
+                        value_text_rect=qt_rect(),
                         
                         percent=j_percent,
-                        percent_text_rect=QtCore.QRect(),
+                        percent_text_rect=qt_rect(),
                         percent_text=j_percent_text,
                         
-                        value_frame_rect=QtCore.QRect(),
+                        value_frame_rect=qt_rect(),
                         
                         # color_0=QtGui.QColor(i_r_0, i_g_0, i_b_0),
                         # color=QtGui.QColor(i_r_1, i_g_1, i_b_1),

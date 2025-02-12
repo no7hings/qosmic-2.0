@@ -18,15 +18,15 @@ import lxbasic.storage as bsc_storage
 
 import lxbasic.pinyin as bsc_pinyin
 
-import _abc
+from . import abc_
 
 
-class Entity(_abc.AbsEntity):
+class Entity(abc_.AbsEntity):
     def __init__(self, *args, **kwargs):
         super(Entity, self).__init__(*args, **kwargs)
 
 
-class Stage(_abc.AbsBase):
+class Stage(abc_.AbsBase):
     class Roots:
         """
         virtual value, real value is from configure.

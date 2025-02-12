@@ -33,7 +33,7 @@ class QtHResizeHandle(
         #
         icn_w, icn_h = self._resize_icon_draw_size
         self._resize_icon_draw_rect.setRect(
-            x+(w-icn_w)/2, y+(h-icn_h)/2, icn_w, icn_h
+            int(x+(w-icn_w)/2), int(y+(h-icn_h)/2), icn_w, icn_h
         )
 
     def __init__(self, *args, **kwargs):

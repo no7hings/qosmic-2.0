@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import urllib
 
 HOST = 'localhost'
@@ -14,4 +16,4 @@ _ = urllib.urlopen(
 )
 
 if _:
-    print _.read()
+    print(_.read())

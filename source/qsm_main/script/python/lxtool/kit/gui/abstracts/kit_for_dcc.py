@@ -113,8 +113,8 @@ class AbsToolKitForDcc(gui_prx_widgets.PrxSessionWindow):
                         i_key
                     )
                 elif isinstance(i_args, dict):
-                    i_key = i_args.keys()[0]
-                    i_extend_kwargs = i_args.values()[0]
+                    i_key = list(i_args.keys())[0]
+                    i_extend_kwargs = list(i_args.values())[0]
                     i_hook_args = ssn_commands.get_hook_args(
                         i_key
                     )

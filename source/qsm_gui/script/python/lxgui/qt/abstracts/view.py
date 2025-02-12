@@ -155,7 +155,6 @@ class AbsQtTreeWidget(
         pass
 
     # noinspection PyUnusedLocal
-    @qt_slot()
     def _popup_menu_cbk_(self, *args):
         indices = self.selectedIndexes()
         if indices:
@@ -237,7 +236,7 @@ class AbsQtListWidget(
         # self._get_view_v_scroll_bar_().rangeChanged.connect(
         #     self._refresh_all_item_widgets_
         # )
-        self._viewport_rect = QtCore.QRect()
+        self._viewport_rect = qt_rect()
         self._item_rects = []
         #
         self.setStyleSheet(
@@ -358,7 +357,6 @@ class AbsQtListWidget(
     def _get_checked_items_(self):
         return [i for i in self._get_all_items_() if i._is_checked_() is True]
 
-    @qt_slot()
     def _item_widget_select_cbk_(self):
         # unselect pre
         if self._pre_selected_items:

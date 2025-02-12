@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import six
 
 import os
@@ -327,7 +329,7 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
     def format_create_fnc(self, button, ext_tgt, width, copy_same_ext):
         def finished_fnc_(index, status, results):
             button.set_finished_at(index, status)
-            print '\n'.join(results)
+            print('\n'.join(results))
 
         def status_update_at_fnc_(index, status):
             button.set_status_at(index, status)
@@ -531,7 +533,7 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
     def color_space_create_fnc(self, button, ext_tgt, copy_same_ext):
         def finished_fnc_(index, status, results):
             button.set_finished_at(index, status)
-            print '\n'.join(results)
+            print('\n'.join(results))
 
         def status_update_at_fnc_(index, status):
             button.set_status_at(index, status)

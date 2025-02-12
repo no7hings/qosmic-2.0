@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import sys
 
 
@@ -9,7 +11,7 @@ def test_(option_opt):
 
     import lxbasic.core as bsc_core
 
-    print option_opt
+    print(option_opt)
 
     _m = 10
 

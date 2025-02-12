@@ -453,13 +453,13 @@ class ListItemModel(_item_base.AbsItemModel):
             self._pixmap_cache.fill(QtGui.QColor(*_gui_core.GuiRgba.Dim))
 
             painter = QtGui.QPainter(self._pixmap_cache)
-            rect = QtCore.QRect(0, 0, rect.width(), rect.height())
+            rect = qt_rect(0, 0, rect.width(), rect.height())
 
             x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
             bsc_w, bsc_h = w, h
 
             frm_x, frm_y, frm_w, frm_h = x+2, y+2, bsc_w-4, bsc_h-4
-            frame_rect = QtCore.QRect(frm_x, frm_y, frm_w, frm_h)
+            frame_rect = qt_rect(frm_x, frm_y, frm_w, frm_h)
             # basic frame
             painter.setPen(QtGui.QColor(0, 0, 0, 0))
             painter.setBrush(self._data.frame.brush)
@@ -473,12 +473,12 @@ class ListItemModel(_item_base.AbsItemModel):
                 # draw base frame
                 self._draw_rect(painter, frame_rect, QtGui.QColor(0, 0, 0))
                 # draw video image
-                video_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
+                video_rect = qt_rect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
                 self._draw_pixmap(painter, video_rect, self._data.video.pixmap)
             # audio
             elif self._data.audio_enable is True:
                 # fill to frame rect
-                img_rect = QtCore.QRect(frm_x, frm_y, frm_w, frm_h)
+                img_rect = qt_rect(frm_x, frm_y, frm_w, frm_h)
                 self._draw_pixmap(painter, img_rect, self._data.audio.pixmap)
                 # draw frame
                 painter.setPen(self._data.frame.color)
@@ -512,13 +512,13 @@ class ListItemModel(_item_base.AbsItemModel):
                 # draw base frame
                 self._draw_rect_0(painter, frame_rect, QtGui.QColor(0, 0, 0))
                 # draw image
-                img_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
+                img_rect = qt_rect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
                 self._draw_pixmap(painter, img_rect, self._data.image_sequence.pixmap)
             # image
             elif self._data.image_enable is True:
                 source_type = self._data.image.source_type
                 if source_type == 'audio':
-                    img_rect = QtCore.QRect(frm_x, frm_y, frm_w, frm_h)
+                    img_rect = qt_rect(frm_x, frm_y, frm_w, frm_h)
                     self._draw_pixmap(painter, img_rect, self._data.image.pixmap)
                     # draw frame
                     painter.setPen(self._data.frame.color)
@@ -529,7 +529,7 @@ class ListItemModel(_item_base.AbsItemModel):
                     img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
                         (img_w, img_h), (frm_w, frm_h)
                     )
-                    img_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
+                    img_rect = qt_rect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
                     self._draw_pixmap(painter, img_rect, self._data.image.pixmap)
             # placeholder
             else:
@@ -553,7 +553,7 @@ class ListItemModel(_item_base.AbsItemModel):
                         time_txt = self._data.play.time_index_text
                         if self._data.play.progress_enable is True:
                             progress_w = int(frm_w*self._data.play.progress_percent)
-                            progress_rect = QtCore.QRect(
+                            progress_rect = qt_rect(
                                 frm_x, frm_y+frm_h-2, progress_w, 2
                             )
                             if self._data.autoplay.flag is True:
@@ -567,7 +567,7 @@ class ListItemModel(_item_base.AbsItemModel):
                         time_txt = self._data.play.time_maximum_text
 
                         play_s = min([40, frm_w/2, frm_h/2])
-                        play_rect = QtCore.QRect(
+                        play_rect = qt_rect(
                             frm_x+(frm_w-play_s)/2, frm_y+(frm_h-play_s)/2, play_s, play_s
                         )
                         self._draw_icon_by_file(painter, play_rect, self._data.play.file)
@@ -575,7 +575,7 @@ class ListItemModel(_item_base.AbsItemModel):
                     mrg = 2
 
                     time_txt_w = self.compute_text_width_by(time_txt)
-                    time_rect = QtCore.QRect(
+                    time_rect = qt_rect(
                         frm_x+frm_w-time_txt_w-mrg, frm_y+frm_h-16-mrg, time_txt_w, 16
                     )
 
@@ -598,7 +598,7 @@ class ListItemModel(_item_base.AbsItemModel):
         # check rect is change
         if rect != self._data.rect:
             # need rebuild instance
-            self._data.rect = QtCore.QRect(rect)
+            self._data.rect = qt_rect(rect)
 
             txt_h = self._data.text.height
 
@@ -972,7 +972,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 play_thread=None,
 
                 progress_percent=0.0,
-                progress_rect=QtCore.QRect(),
+                progress_rect=qt_rect(),
                 progress_color=QtGui.QColor(255, 255, 255, 31),
 
                 handle_line=QtCore.QLine(),
@@ -1186,7 +1186,7 @@ class ListGroupItemModel(_item_base.AbsItemModel):
                 ),
                 expand_enable=True,
                 expand=_base._Data(
-                    rect=QtCore.QRect(),
+                    rect=qt_rect(),
                     file=_gui_core.GuiIcon.get('expand-open')
                 )
             )
@@ -1196,7 +1196,7 @@ class ListGroupItemModel(_item_base.AbsItemModel):
         # check rect is change
         if rect != self._data.rect:
             # need rebuild instance
-            self._data.rect = QtCore.QRect(rect)
+            self._data.rect = qt_rect(rect)
 
             x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
 

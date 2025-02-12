@@ -383,7 +383,7 @@ class QtEntryForConstant(
     def _get_value_as_rgba_255_(self):
         text = self.text()
         _ = map(lambda x: max(min(int(x), 255), 0) if x else 255, map(lambda x: str(x).strip(), text.split(',')))
-        c = len(_)
+        c = len(list(_))
         if c == 4:
             return tuple(_)
         elif c > 4:

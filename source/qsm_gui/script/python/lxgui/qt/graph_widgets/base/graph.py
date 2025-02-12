@@ -78,7 +78,7 @@ class _AbsQtSbjRectSelectDef(object):
         self._widget = widget
 
         self._action_rect_select_point_start = QtCore.QPoint(0, 0)
-        self._rect_selection_rect = QtCore.QRect(
+        self._rect_selection_rect = qt_rect(
             0, 0, 0, 0
         )
 

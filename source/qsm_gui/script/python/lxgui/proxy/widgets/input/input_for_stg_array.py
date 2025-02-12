@@ -17,7 +17,7 @@ from ....qt.widgets.input import input_for_array as _qt_wgt_ipt_for_array
 # proxy widgets
 from .. import utility as _utility
 
-import _input_base
+from . import _input_base
 
 
 # storage array

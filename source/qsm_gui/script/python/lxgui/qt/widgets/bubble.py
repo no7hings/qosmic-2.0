@@ -73,7 +73,7 @@ class QtTextBubble(
         self._init_action_base_def_(self)
         self._init_action_for_press_def_(self)
 
-        self._frame_draw_rect = QtCore.QRect()
+        self._frame_draw_rect = qt_rect()
 
         self._is_hovered = False
         self._delete_is_hovered = False
@@ -85,9 +85,9 @@ class QtTextBubble(
         self._text = None
         self._text_font = _qt_core.QtFont.generate(size=8)
         self.setFont(self._text_font)
-        self._text_draw_rect = QtCore.QRect()
-        self._delete_frame_rect = QtCore.QRect()
-        self._delete_draw_rect = QtCore.QRect()
+        self._text_draw_rect = qt_rect()
+        self._delete_frame_rect = qt_rect()
+        self._delete_draw_rect = qt_rect()
         self._delete_icon_size = 8, 8
         self._delete_icon_file_path_0 = _gui_core.GuiIcon.get('close')
         self._delete_icon_file_path_1 = _gui_core.GuiIcon.get('close-hover')
@@ -239,9 +239,9 @@ class QtInfoBubble(
         self._text = None
         self._text_font = _qt_core.QtFont.generate(size=8)
         self.setFont(self._text_font)
-        self._text_draw_rect = QtCore.QRect()
+        self._text_draw_rect = qt_rect()
 
-        self._frame_draw_rect = QtCore.QRect()
+        self._frame_draw_rect = qt_rect()
 
         self._text_draw_percent = 0.5
 
@@ -344,13 +344,13 @@ class QtMessageBubble(
         )
 
         self._text = None
-        self._text_draw_rect = QtCore.QRect()
+        self._text_draw_rect = qt_rect()
         self._text_font = _qt_core.QtFont.generate(size=10)
         self._text_color = _gui_core.GuiRgba.LightBlack
 
         self._frame_border_color = _gui_core.GuiRgba.LightBlack
         self._frame_background_color = _gui_core.GuiRgba.LightNeonGreen
-        self._frame_draw_rect = QtCore.QRect()
+        self._frame_draw_rect = qt_rect()
         self._frame_border_radius = 3
 
         self._opacity = 1.0
@@ -616,8 +616,8 @@ class QtPathBubble(
         self._components = None
         self._frame_rects = []
         self._text_rects = []
-        self._next_rect = QtCore.QRect()
-        self._next_text_rect = QtCore.QRect()
+        self._next_rect = qt_rect()
+        self._next_text_rect = qt_rect()
 
         self._text_w_maximum = 120
 
@@ -794,8 +794,8 @@ class QtPathBubble(
             self._components = self._path.get_components()
             self._components.reverse()
             c = len(self._components)
-            self._frame_rects = [QtCore.QRect() for _ in range(c)]
-            self._text_rects = [QtCore.QRect() for _ in range(c)]
+            self._frame_rects = [qt_rect() for _ in range(c)]
+            self._text_rects = [qt_rect() for _ in range(c)]
 
             self.value_changed.emit()
 
@@ -856,7 +856,7 @@ class QtBubbleAsChoice(
                 t_w = painter.fontMetrics().width(text)
                 a_w = (w-t_w)/2+a_t_w
 
-                a_rect = QtCore.QRect(x_d, y_d, a_w, h_d)
+                a_rect = qt_rect(x_d, y_d, a_w, h_d)
 
                 painter._set_border_color_(0, 0, 0, 0)
                 painter._set_background_color_(highlight_color)
@@ -967,7 +967,7 @@ class QtBubbleAsChoice(
         self._text_h_input = 20
         self._text_h_maximum, self._text_h_minimum = 32, 4
 
-        self.__rect_input = QtCore.QRect()
+        self.__rect_input = qt_rect()
         self._rects = []
 
         self.__font_input = _qt_core.QtFont.generate(size=12)
@@ -1045,7 +1045,7 @@ class QtBubbleAsChoice(
             x, y = 0, 0
             w, h = self.width(), self.height()
 
-            rect = QtCore.QRect(x, y, w, h)
+            rect = qt_rect(x, y, w, h)
             painter._set_border_color_(0, 0, 0, 0)
             painter._set_background_color_(0, 0, 0, 127)
             painter.drawRect(rect)
@@ -1062,9 +1062,9 @@ class QtBubbleAsChoice(
                         painter._set_background_color_(63, 63, 63, alpha)
 
                         if i_w > w:
-                            i_rect_draw = QtCore.QRect(x+3, i_y+1, w-7, i_h-2)
+                            i_rect_draw = qt_rect(x+3, i_y+1, w-7, i_h-2)
                         else:
-                            i_rect_draw = QtCore.QRect(i_x, i_y+1, i_w, i_h-2)
+                            i_rect_draw = qt_rect(i_x, i_y+1, i_w, i_h-2)
 
                         painter.drawRect(i_rect_draw)
 
@@ -1088,15 +1088,15 @@ class QtBubbleAsChoice(
                     w_c = t_w_c+4
                     x_c, y_c = x_cc-t_w_c/2-2, y_cc-h_c/2+1
 
-                    rect_cur_0 = QtCore.QRect(
+                    rect_cur_0 = qt_rect(
                         x_c, y_cc-h_c/2, w_c, h_c
                     )
                     if w_c > w:
-                        rect_draw_cur = QtCore.QRect(
+                        rect_draw_cur = qt_rect(
                             x+3, y_cc-h_c/2+1, w-7, h_c-2
                         )
                     else:
-                        rect_draw_cur = QtCore.QRect(
+                        rect_draw_cur = qt_rect(
                             x_c, y_cc-h_c/2+1, w_c, h_c-2
                         )
 
@@ -1204,7 +1204,7 @@ class QtBubbleAsChoice(
 
     def _set_texts_(self, texts):
         self._texts = texts
-        self._rects = [QtCore.QRect() for _ in range(len(self._texts))]
+        self._rects = [qt_rect() for _ in range(len(self._texts))]
 
     def _start_(self):
         if self.__is_active is True:
@@ -1301,7 +1301,7 @@ class QtBubbleAsChoose(
         self._margin = 16
 
         self._tips = 'untitled'
-        self._tips_draw_rect = QtCore.QRect()
+        self._tips_draw_rect = qt_rect()
         self._tips_font_siz = 16
 
         self._texts = []
@@ -1316,7 +1316,7 @@ class QtBubbleAsChoose(
 
         self._result = None
         
-        self._close_draw_rect = QtCore.QRect()
+        self._close_draw_rect = qt_rect()
 
         self.installEventFilter(self)
 
@@ -1477,7 +1477,7 @@ class QtBubbleAsChoose(
         self._texts_draw = map(
             bsc_pinyin.Text.to_prettify, self._texts
         )
-        self._rects = [QtCore.QRect() for _ in range(len(self._texts))]
+        self._rects = [qt_rect() for _ in range(len(self._texts))]
         self._idx_maximum = len(self._texts)-1
         self._idx_all = range(len(self._texts))
 

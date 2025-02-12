@@ -15,8 +15,8 @@ def get_menu_content_by_hooks(hooks):
             i_hook_key = i_hook
             i_extra_kwargs = None
         elif isinstance(i_hook, dict):
-            i_hook_key = i_hook.keys()[0]
-            i_extra_kwargs = i_hook.values()[0]
+            i_hook_key = list(i_hook.keys())[0]
+            i_extra_kwargs = list(i_hook.values())[0]
         else:
             raise RuntimeError()
         #

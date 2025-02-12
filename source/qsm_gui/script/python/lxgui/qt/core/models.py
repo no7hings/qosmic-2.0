@@ -11,9 +11,9 @@ class GuiQtModForTabItem(object):
         self._name_text = None
         self._name_icon_text = None
         self._tool_tip = 'N/a'
-        self._rect = QtCore.QRect()
-        self._draw_rect = QtCore.QRect()
-        self._popup_rect = QtCore.QRect()
+        self._rect = qt_rect()
+        self._draw_rect = qt_rect()
+        self._popup_rect = qt_rect()
 
         self._is_drawable = False
 

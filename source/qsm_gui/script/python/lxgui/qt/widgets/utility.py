@@ -54,7 +54,7 @@ class QtWidget(
             border_color = color
             pox_x, pos_y = 0, 0
             width, height = self.width(), self.height()
-            frame_rect = QtCore.QRect(
+            frame_rect = qt_rect(
                 pox_x+1, pos_y+1, width-2, height-2
             )
 
@@ -81,8 +81,8 @@ class QtTestPaint(QtWidgets.QWidget):
         # left to right
         # for seq, rect in enumerate(
         #     [
-        #         QtCore.QRect(0, 0, btn_h, btn_w),
-        #         QtCore.QRect(0, btn_w, btn_h, btn_w)
+        #         qt_rect(0, 0, btn_h, btn_w),
+        #         qt_rect(0, btn_w, btn_h, btn_w)
         #     ]
         # ):
         #     r_x, r_y, r_w, r_h = rect.x(), rect.y(), rect.width(), rect.height()
@@ -90,7 +90,7 @@ class QtTestPaint(QtWidgets.QWidget):
         #     painter.rotate(-90)
         #     painter.translate(QtCore.QPoint(-r_y-(r_y+r_h), 0))
         #
-        #     rect_new = QtCore.QRect(r_y, r_x, r_h, r_w)
+        #     rect_new = qt_rect(r_y, r_x, r_h, r_w)
         #
         #     painter.fillRect(
         #         rect_new, QtGui.QColor(255, 0, 0, 255)
@@ -105,8 +105,8 @@ class QtTestPaint(QtWidgets.QWidget):
         # right to left
         for seq, rect in enumerate(
             [
-                QtCore.QRect(w-btn_h, 0, btn_h, btn_w),
-                QtCore.QRect(w-btn_h, btn_w, btn_h, btn_w)
+                qt_rect(w-btn_h, 0, btn_h, btn_w),
+                qt_rect(w-btn_h, btn_w, btn_h, btn_w)
             ]
         ):
             r_x, r_y, r_w, r_h = rect.x(), rect.y(), rect.width(), rect.height()
@@ -114,7 +114,7 @@ class QtTestPaint(QtWidgets.QWidget):
             painter.rotate(90)
             painter.translate(QtCore.QPoint(0, -r_w-r_x))
 
-            rect_new = QtCore.QRect(r_y, 0, r_h, r_w)
+            rect_new = qt_rect(r_y, 0, r_h, r_w)
             print(rect_new)
 
             painter.fillRect(
@@ -127,7 +127,7 @@ class QtTestPaint(QtWidgets.QWidget):
             )
             painter.resetTransform()
 
-        # rect = QtCore.QRect(0, 0, 60, 20)
+        # rect = qt_rect(0, 0, 60, 20)
         # painter.fillRect(
         #     rect, QtGui.QColor(0, 255, 0, 255)
         # )
@@ -223,7 +223,7 @@ class QtVLine(
         o_x, o_y = self._line_draw_offset_x, self._line_draw_offset_y
         x, y = o_x+offset, o_y+offset
         w, h = self.width()-o_x*2-offset, self.height()-o_y*2-offset
-        rect = QtCore.QRect(x, y, w, h)
+        rect = qt_rect(x, y, w, h)
         if self._line_draw_is_enable is True:
             painter._draw_line_by_points_(
                 point_0=rect.topLeft(),
@@ -292,7 +292,7 @@ class QtLineWidget(QtWidgets.QWidget):
         painter._set_border_color_(_gui_core.GuiRgba.Transparent)
         painter._set_background_color_(self._background_color)
         painter.drawRect(
-            QtCore.QRect(0, 0, self.width(), self.height())
+            qt_rect(0, 0, self.width(), self.height())
         )
         for seq, i in enumerate(self._line_styles):
             i_line = self._lines[seq]
@@ -342,7 +342,7 @@ class QtHFrame(QtWidgets.QWidget):
             55, 55, 55, 255
         )
         painter.drawRect(
-            QtCore.QRect(
+            qt_rect(
                 0, 0, self.width(), self.height()
             )
         )
@@ -401,7 +401,7 @@ class QtMenu(QtWidgets.QMenu):
 
     @classmethod
     def _set_cmd_run_(cls, cmd_str):
-        exec cmd_str
+        exec (cmd_str)
 
     def _create_sub_menu_(self, qt_menu, data):
         name, icon_name, sub_data = data
@@ -552,7 +552,7 @@ class QtMenu(QtWidgets.QMenu):
         )
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
-        icon_rect = QtCore.QRect(
+        icon_rect = qt_rect(
             x+(w-c_w)/2, y+(h-c_h)/2,
             c_w, c_h
         )
@@ -885,7 +885,7 @@ class QtInfoLabel(
         )
 
         self._text = ''
-        self._text_draw_rect = QtCore.QRect()
+        self._text_draw_rect = qt_rect()
 
         self._text_font = _qt_core.QtFont.generate(size=8)
 
@@ -958,7 +958,7 @@ class QtStyledItemDelegate(QtWidgets.QStyledItemDelegate):
                 rect = option.rect
                 x, y = rect.x(), rect.y()
                 w, h = rect.width(), rect.height()
-                hover_rect = QtCore.QRect(
+                hover_rect = qt_rect(
                     x, y, 4, h
                 )
                 painter.fillRect(
@@ -969,7 +969,7 @@ class QtStyledItemDelegate(QtWidgets.QStyledItemDelegate):
                 rect = option.rect
                 x, y = rect.x(), rect.y()
                 w, h = rect.width(), rect.height()
-                hover_rect = QtCore.QRect(
+                hover_rect = qt_rect(
                     x, y, 4, h
                 )
                 painter.fillRect(
@@ -1054,7 +1054,7 @@ class QtProgressBar(
                     #
                     i_x, i_y = w*i_range_start, (h-p_h)/2
                     i_x += 1
-                    i_rect = QtCore.QRect(i_x, i_y, p_w+1, p_h)
+                    i_rect = qt_rect(i_x, i_y, p_w+1, p_h)
                     #
                     i_p = float(layer_index)/float(layer_count)
                     r_1, g_1, b_1 = bsc_core.BscColor.hsv2rgb(120*i_p, .5, 1)
@@ -1084,7 +1084,7 @@ class QtProgressBar(
                 if cur_rect is not None:
                     c_x, c_y = cur_rect.x(), cur_rect.y()
                     c_w, c_h = cur_rect.width(), cur_rect.height()
-                    rect = QtCore.QRect(
+                    rect = qt_rect(
                         c_x+c_w-2, 0, 2, h
                     )
                     painter._draw_frame_by_rect_(

@@ -1,5 +1,9 @@
+from __future__ import print_function
+
 from flask import Flask
+
 import sys
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
 from PyQt5.QtCore import QThread, pyqtSignal
 import multiprocessing
@@ -26,7 +30,7 @@ class MainWindow(QMainWindow):
         self.label.setGeometry(50, 50, 500, 50)
 
     def display_error(self, error_message):
-        print error_message
+        print(error_message)
         # self.label.setText(f"Error: {error_message}")
 
 

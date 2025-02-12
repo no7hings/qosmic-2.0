@@ -84,20 +84,20 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         self._node_basic_w, self._node_basic_h = 192, 80
         self._node_basic_last_w, self._node_basic_last_h = 192, 80
 
-        self._node_rect = QtCore.QRect(0, 0, 0, 0)
-        self._node_global_selection_rect = QtCore.QRect(0, 0, 0, 0)
-        self._node_selection_rect = QtCore.QRect(0, 0, 0, 0)
-        self._node_rect_frame = QtCore.QRect(0, 0, 0, 0)
-        self._head_frame_rect = QtCore.QRect(0, 0, 0, 0)
-        self._body_frame_rect = QtCore.QRect(0, 0, 0, 0)
+        self._node_rect = qt_rect(0, 0, 0, 0)
+        self._node_global_selection_rect = qt_rect(0, 0, 0, 0)
+        self._node_selection_rect = qt_rect(0, 0, 0, 0)
+        self._node_rect_frame = qt_rect(0, 0, 0, 0)
+        self._head_frame_rect = qt_rect(0, 0, 0, 0)
+        self._body_frame_rect = qt_rect(0, 0, 0, 0)
 
-        self._node_intput_rect = QtCore.QRect(0, 0, 0, 0)
-        self._node_output_rect = QtCore.QRect(0, 0, 0, 0)
+        self._node_intput_rect = qt_rect(0, 0, 0, 0)
+        self._node_output_rect = qt_rect(0, 0, 0, 0)
 
         self._ng_node_connection_starts = []
         self._ng_node_connection_ends = []
 
-        self._ng_node_resize_rect = QtCore.QRect(0, 0, 0, 0)
+        self._ng_node_resize_rect = qt_rect(0, 0, 0, 0)
 
         self._resize_start_point_0, self._resize_start_size = QtCore.QPoint(), QtCore.QPoint()
 

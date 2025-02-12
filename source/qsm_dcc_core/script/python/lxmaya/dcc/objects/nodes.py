@@ -410,7 +410,7 @@ class AbsFileReferences(object):
         self._raw = {}
         self.__get_by_definition(with_reference)
         self.__get_by_custom(with_reference)
-        return self._raw.values()
+        return list(self._raw.values())
 
     def get_types(self):
         pass

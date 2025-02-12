@@ -200,18 +200,18 @@ class QtItemForHistoryEntity(
         self._storage_path = None
         self._storage_icon = None
 
-        self._frame_draw_rect = QtCore.QRect()
+        self._frame_draw_rect = qt_rect()
         
         self._frame_draw_line = QtCore.QLine()
         self._frame_draw_line_left = QtCore.QLine()
         self._frame_draw_line_right = QtCore.QLine()
         
-        self._name_draw_rect = QtCore.QRect()
-        self._storage_icon_draw_rect = QtCore.QRect()
-        self._storage_path_draw_rect = QtCore.QRect()
-        self._time_draw_rect = QtCore.QRect()
+        self._name_draw_rect = qt_rect()
+        self._storage_icon_draw_rect = qt_rect()
+        self._storage_path_draw_rect = qt_rect()
+        self._time_draw_rect = qt_rect()
 
-        self._associate_draw_rect = QtCore.QRect()
+        self._associate_draw_rect = qt_rect()
 
         self._file_icon_s = 24
         self._info_h = self.TEXT_HEIGHT

@@ -3,17 +3,11 @@ import six
 
 import os as _os
 
+import threading as _threading
+
 from random import Random as _Random
 
-if six.PY2:
-    # python 2
-    import dummy_thread as _thread
-else:
-    # python 3
-    # noinspection PyUnresolvedReferences
-    import _dummy_thread as _thread
-
-_allocate_lock = _thread.allocate_lock
+_allocate_lock = _threading.Lock
 
 
 class BscRandomName:

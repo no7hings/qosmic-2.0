@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.storage as bsc_storage
 
 import lxgeneral.texture as gnl_texture
@@ -32,6 +34,6 @@ class ScpTextureResourceData(object):
 
 
 if __name__ == '__main__':
-    print ScpTextureResourceData(
+    print(ScpTextureResourceData(
         '/production/library/resource/all/surface/mossy_ground_umkkfcolw/v0001/texture/acescg/tx'
-    ).get_texture_assign()
+    ).get_texture_assign())

@@ -145,14 +145,13 @@ class W(qt_widgets.QtMainWindow):
         c_o = bsc_core.BscColorChoiceOpt()
 
         rects = self._rects
-        print 'draw {} rects'.format(len(rects))
         rect_cur = None
         for i_idx, i_rect in enumerate(rects):
             # print i_rect.args
 
             i_s = min(i_rect.w, i_rect.h)
             i_rect_ = i_rect.exact_rect
-            i_q_rect = QtCore.QRect(i_rect_.x+1, i_rect_.y+1, i_rect_.w-2, i_rect_.h-2)
+            i_q_rect = qt_rect(i_rect_.x+1, i_rect_.y+1, i_rect_.w-2, i_rect_.h-2)
 
             i_rgb = c_o.generate()
             i_color = QtGui.QColor(*i_rgb)
@@ -179,7 +178,7 @@ class W(qt_widgets.QtMainWindow):
         if rect_cur is not None:
             space_rect = rect_cur.space
             if space_rect is not None:
-                q_space_rect = QtCore.QRect(space_rect.x+1, space_rect.y+1, space_rect.w-2, space_rect.h-2)
+                q_space_rect = qt_rect(space_rect.x+1, space_rect.y+1, space_rect.w-2, space_rect.h-2)
                 painter.setPen(QtGui.QColor(0, 255, 0, 255))
                 painter.setBrush(QtGui.QBrush(QtGui.QColor(0, 0, 0, 0)))
                 painter.drawRect(
@@ -188,14 +187,14 @@ class W(qt_widgets.QtMainWindow):
 
                 piece_parent = space_rect.parent
                 if piece_parent is not None:
-                    qt_space_rect_parent = QtCore.QRect(*piece_parent.args)
+                    qt_space_rect_parent = qt_rect(*piece_parent.args)
                     painter.setPen(QtGui.QColor(0, 0, 255, 255))
                     painter.setBrush(QtGui.QBrush(QtGui.QColor(0, 0, 0, 0)))
                     painter.drawRect(qt_space_rect_parent)
 
                 area_rect = space_rect.area
                 if area_rect.is_valid() is True:
-                    q_area_rect = QtCore.QRect(area_rect.x-1, area_rect.y-1, area_rect.w+2, area_rect.h+2)
+                    q_area_rect = qt_rect(area_rect.x-1, area_rect.y-1, area_rect.w+2, area_rect.h+2)
                     painter.setPen(QtGui.QColor(0, 0, 0, 255))
                     painter.setBrush(QtGui.QBrush(QtGui.QColor(0, 0, 0, 0)))
                     painter.drawRect(q_area_rect)

@@ -1,4 +1,5 @@
 # coding:utf-8
+from __future__ import print_function
 
 
 class ScpTexture(object):
@@ -35,7 +36,7 @@ class ScpTexture(object):
                         cmds.setAttr(
                             '{}.fileTextureName'.format(i), i_results[0], type='string'
                         )
-                        print 'repair "{}" tile mode'.format(i)
+                        print('repair "{}" tile mode'.format(i))
         #
         for i in fs:
             mel.eval('generateUvTilePreview {}'.format(i))
@@ -58,4 +59,4 @@ class ScpTexture(object):
 
         index = cmds.scriptJob(parent='modelPanel4', event=['SceneOpened', fnc_])
 
-        print 'create script job: "texture tiles preview generate" at {}'.format(index)
+        print('create script job: "texture tiles preview generate" at {}'.format(index))

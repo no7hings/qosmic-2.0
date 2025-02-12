@@ -219,12 +219,7 @@ class QtTreeWidget(
                 # A filled circle
                 circle_r = _gui_core.GuiDpiScale.get(2)
                 # painter.setPen(self.PEN_BRANCH_HIGHLIGHT if highlight else self.PEN_BRANCH)
-                painter.drawEllipse(
-                    cx-circle_r,
-                    cy-circle_r,
-                    circle_r*2,
-                    circle_r*2
-                )
+                painter.drawEllipse(int(cx-circle_r), int(cy-circle_r), int(circle_r*2), int(circle_r*2))
                 # Restore the old brush
                 painter.setBrush(brush_old)
         # Draw other vertical and horizontal lines on the left of the indicator
@@ -344,7 +339,7 @@ class QtTreeWidget(
         #
         d_w = 4
         #
-        select_rect = QtCore.QRect(
+        select_rect = qt_rect(
             x, y, d_w, h
         )
         is_selected = False
@@ -365,11 +360,11 @@ class QtTreeWidget(
                 x, y = rect.x(), rect.y()
                 w, h = rect.width(), rect.height()
                 if is_selected is True:
-                    check_rect = QtCore.QRect(
+                    check_rect = qt_rect(
                         x, y, d_w/2, h
                     )
                 else:
-                    check_rect = QtCore.QRect(
+                    check_rect = qt_rect(
                         x, y, d_w, h
                     )
                 painter.fillRect(

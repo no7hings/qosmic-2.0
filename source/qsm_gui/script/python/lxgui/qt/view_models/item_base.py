@@ -124,10 +124,10 @@ class AbsItemModel(object):
         self._item = item
         self._data = data
 
-        self._data.rect = QtCore.QRect()
+        self._data.rect = qt_rect()
         # basic
         self._data.basic = _base._Data(
-            rect=QtCore.QRect(),
+            rect=qt_rect(),
             size=QtCore.QSize(),
         )
         # text option for draw
@@ -140,7 +140,7 @@ class AbsItemModel(object):
         )
         # frame for draw
         self._data.frame = _base._Data(
-            rect=QtCore.QRect(),
+            rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.Dark),
             brush=QtGui.QBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
         )
@@ -165,13 +165,13 @@ class AbsItemModel(object):
         self._data.name_enable = True
         self._data.name = _base._Data(
             text=None,
-            rect=QtCore.QRect(),
+            rect=qt_rect(),
         )
         # sub name
         self._data.subname_enable = False
         self._data.subname = _base._Data(
             text=None,
-            rect=QtCore.QRect(),
+            rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.TxtTemporary)
         )
         # mtime
@@ -183,7 +183,7 @@ class AbsItemModel(object):
             flag=False,
             value=0,
             text=None,
-            rect=QtCore.QRect(),
+            rect=qt_rect(),
         )
         # status
         self._data.status_enable = False
@@ -197,7 +197,7 @@ class AbsItemModel(object):
 
             pixmap_flag=False,
             pixmap=None,
-            rect=QtCore.QRect(),
+            rect=qt_rect(),
         )
         # color
         self._data.color_enable = False
@@ -205,14 +205,14 @@ class AbsItemModel(object):
         self._data.select = _base._Data(
             enable=True,
             flag=False,
-            rect=QtCore.QRect(),
+            rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue),
         )
         # action for hover
         self._data.hover = _base._Data(
             enable=True,
             flag=False,
-            rect=QtCore.QRect(),
+            rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.LightOrange),
         )
         # action for check
@@ -376,7 +376,7 @@ class AbsItemModel(object):
                 text='',
                 text_color=_qt_core.QtRgba.TxtMtime,
                 text_alignment=QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter,
-                rect=QtCore.QRect(),
+                rect=qt_rect(),
             )
 
     def set_mtime(self, timestamp):
@@ -396,7 +396,7 @@ class AbsItemModel(object):
                 text='',
                 text_color=_qt_core.QtRgba.TxtUser,
                 text_alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter,
-                rect=QtCore.QRect(),
+                rect=qt_rect(),
             )
 
     def set_user(self, user_name):
@@ -459,7 +459,7 @@ class AbsItemModel(object):
             self._data.color = _base._Data(
                 rgb=(255, 255, 255),
                 hex='FFFFFF',
-                rect=QtCore.QRect()
+                rect=qt_rect()
             )
 
     def set_color_rgb(self, rgb):
@@ -570,7 +570,7 @@ class AbsItemModel(object):
             self._data.status = _base._Data(
                 file=_gui_core.GuiIcon.get('star'),
                 value=self.Status.Normal,
-                rect=QtCore.QRect()
+                rect=qt_rect()
             )
 
         self._update_status_rect(self._data.rect)
@@ -876,7 +876,7 @@ class AbsItemModel(object):
         if boolean is True:
             self._data.lock = _base._Data(
                 flag=False,
-                rect=QtCore.QRect(),
+                rect=qt_rect(),
                 file=_gui_core.GuiIcon.get('lock-watermark'),
             )
 
@@ -896,7 +896,7 @@ class AbsItemModel(object):
         if boolean is True:
             self._data.check = _base._Data(
                 flag=False,
-                rect=QtCore.QRect(),
+                rect=qt_rect(),
                 color=QtGui.QColor(*_gui_core.GuiRgba.LightPurple),
 
                 file=_gui_core.GuiIcon.get('tag-filter-unchecked'),

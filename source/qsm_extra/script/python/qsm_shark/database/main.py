@@ -1,14 +1,14 @@
 # coding:utf-8
-import _my_sql
-
 import re
 
-import _abc
+from . import _my_sql
 
-import _handle
+from . import abc_
+
+from . import _handle
 
 
-class Stage(_abc.AbsBase):
+class Stage(abc_.AbsBase):
 
     def __init__(self):
         pass

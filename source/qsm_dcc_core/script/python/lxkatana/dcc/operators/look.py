@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import re
 
 import lxbasic.core as bsc_core
@@ -60,7 +62,7 @@ class AndShaderOpt(gnl_dcc_abstracts.AbsNodeOpt):
         self._obj.ktn_obj.setAttributes(attributes)
 
     def set_duplicate_with_source(self):
-        print self.get_properties()
+        print(self.get_properties())
         # source_objs = self._obj.get_all_source_objs()
         # for source_obj in source_objs:
         #     print source_obj.get_properties()

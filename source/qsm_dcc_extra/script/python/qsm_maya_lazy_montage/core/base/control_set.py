@@ -25,4 +25,4 @@ class AbsControlSet(_bsc_abc.AbsMontage):
         return self._cache_dict.get(control_key)
 
     def get_all(self):
-        return self._cache_dict.values()
+        return list(self._cache_dict.values())

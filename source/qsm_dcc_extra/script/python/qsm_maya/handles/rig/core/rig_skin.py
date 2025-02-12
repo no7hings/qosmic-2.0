@@ -2,10 +2,10 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-from ... import _abc
+from ... import abc_
 
 
-class MeshSkinOpt(_abc.AbsMeshOpt):
+class MeshSkinOpt(abc_.AbsMeshOpt):
     """
     smooth skin
     """

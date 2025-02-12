@@ -5,6 +5,7 @@ import os
 
 
 class BscEnviron(object):
+    PYTHON_VERSION = 'QSM_PYTHON_VERSION'
     CORE_ROOT = 'QSM_CORE_BASE'
 
     GUI_LANGUAGE_KEY = 'QSM_UI_LANGUAGE'

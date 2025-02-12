@@ -1,4 +1,5 @@
 # coding:utf-8
+from __future__ import print_function
 import urllib
 
 import urlparse
@@ -12,6 +13,6 @@ d = dict(
 
 
 d_ = urllib.urlencode(d)
-print d_
+print(d_)
 
 print urlparse.parse_qs(d_)

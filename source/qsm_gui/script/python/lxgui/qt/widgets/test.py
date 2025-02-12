@@ -12,7 +12,7 @@ class QtTestForFit(QtWidgets.QWidget):
         painter = QtGui.QPainter(self)
         w, h = self.width(), self.height()
         painter.fillRect(
-            QtCore.QRect(
+            qt_rect(
                 0, 0, self.width(), self.height()
             ),
             QtGui.QColor(255, 0, 0)
@@ -23,7 +23,7 @@ class QtTestForFit(QtWidgets.QWidget):
         )
 
         painter.fillRect(
-            QtCore.QRect(
+            qt_rect(
                 x_0, y_0, w_0, h_0
             ),
             QtGui.QColor(0, 255, 0)

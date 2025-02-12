@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import fnmatch
 
 import re
@@ -1016,7 +1018,7 @@ class AssetWorkspaceOld(object):
     def _get_geometry_location_(cls, dcc_obj):
         if dcc_obj.get_is_exists() is True:
             s = ktn_core.KtnStageOpt(dcc_obj.ktn_obj)
-            print s.is_obj_exists('/root/world/geo/master')
+            print(s.is_obj_exists('/root/world/geo/master'))
 
     @ktn_core.Modifier.undo_debug_run
     def set_light_rig_update(self):

@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import six
 
 import lxbasic.log as bsc_log
@@ -28,7 +30,7 @@ class ObjPortsOpt(object):
         #
         if port_names:
             for port_name in port_names:
-                print port_name
+                print(port_name)
         return lis
 
 

@@ -48,7 +48,7 @@ class DictMtd(object):
     def sort_key_by_value_to(cls, dict_):
         value_to_key_dict = {v: k for k, v in dict_.items()}
         dict_1 = collections.OrderedDict()
-        values = dict_.values()
+        values = list(dict_.values())
         values.sort()
         for i_value in values:
             i_key = value_to_key_dict[i_value]

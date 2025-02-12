@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import copy
 
 import lxbasic.log as bsc_log
@@ -189,7 +191,7 @@ class UsdMeshSubdiv(object):
 
         self._subdiv_dict = self._get_subdiv_dict_(dict_src, dict_tgt)
 
-        print self._subdiv_dict
+        print(self._subdiv_dict)
 
 
 class UsdMeshCompare(object):
@@ -232,10 +234,10 @@ class UsdMeshCompare(object):
         # bsc_storage.StgFileOpt('/data/f/usd_uv_map_export_test/a_0.yml').set_write(a_src)
         # a_tgt = m_opt_tgt.get_face_vertex_indices()
         # bsc_storage.StgFileOpt('/data/f/usd_uv_map_export_test/a_1.yml').set_write(a_tgt)
-        print m_opt_src.get_face_vertices_as_uuid()
-        print m_opt_tgt.get_face_vertices_as_uuid()
-        print len(m_opt_src.get_face_vertex_counts())
-        print len(m_opt_tgt.get_face_vertex_counts())
+        print(m_opt_src.get_face_vertices_as_uuid())
+        print(m_opt_tgt.get_face_vertices_as_uuid())
+        print(len(m_opt_src.get_face_vertex_counts()))
+        print(len(m_opt_tgt.get_face_vertex_counts()))
 
 
 if __name__ == '__main__':

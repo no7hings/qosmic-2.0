@@ -1,10 +1,10 @@
 # coding:utf-8
 import qsm_maya.core as qsm_mya_core
 
-from qsm_maya.handles import _abc
+from qsm_maya.handles import abc_
 
 
-class ShotCfxRigGroupOrg(_abc.AbsGroupOpt):
+class ShotCfxRigGroupOrg(abc_.AbsGroupOpt):
     LOCATION = '|assets|cfx|cfx_rig_grp'
 
     def __init__(self, *args, **kwargs):

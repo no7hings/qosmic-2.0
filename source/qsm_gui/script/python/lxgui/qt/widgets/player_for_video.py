@@ -170,7 +170,7 @@ class QtVideoPlayWidget(
         self._init_widget_close_base_def_(self)
         self._init_thread_extra_def_(self)
 
-        self._frame_rect = QtCore.QRect()
+        self._frame_rect = qt_rect()
 
         self._video_path = None
         self._play_flag = False
@@ -183,13 +183,13 @@ class QtVideoPlayWidget(
         self._pixmap_current = None
         self._image_cover = None
         self._pixmap_cover = None
-        self._image_frame_rect = QtCore.QRect()
-        self._image_draw_rect = QtCore.QRect()
+        self._image_frame_rect = qt_rect()
+        self._image_draw_rect = qt_rect()
 
         self._play_mode = _gui_core.GuiPlayModes.Video
 
         self._progress_h = 2
-        self._progress_draw_rect = QtCore.QRect()
+        self._progress_draw_rect = qt_rect()
 
         self._video_play_flag = False
 
@@ -206,8 +206,8 @@ class QtVideoPlayWidget(
         self._play_thread.set_interval(self._frame_interval)
 
         self._text = '00:00:00:00'
-        self._text_draw_rect = QtCore.QRect()
-        self._text_frame_draw_rect = QtCore.QRect()
+        self._text_draw_rect = qt_rect()
+        self._text_frame_draw_rect = qt_rect()
         self._text_frm_h = 16
         self._text_frm_w = 96
         self._text_font = _qt_core.QtFont.generate(size=8)
@@ -287,7 +287,7 @@ class QtVideoPlayWidget(
 
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
-        rect_new = QtCore.QRect(
+        rect_new = qt_rect(
             x, y, w*percent, h
         )
         painter._set_border_color_(

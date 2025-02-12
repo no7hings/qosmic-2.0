@@ -146,14 +146,14 @@ class _AbsQtSplitterHandle(
 
         self._contract_enable = True
         #
-        self._contract_l_rect = QtCore.QRect()
-        self._contract_l_draw_rect = QtCore.QRect()
+        self._contract_l_rect = qt_rect()
+        self._contract_l_draw_rect = qt_rect()
         self._contract_l_draw_icon_file_path = gui_core.GuiIcon.get(self._contract_icon_name_l)
-        self._contract_r_rect = QtCore.QRect()
-        self._contract_r_draw_rect = QtCore.QRect()
+        self._contract_r_rect = qt_rect()
+        self._contract_r_draw_rect = qt_rect()
         self._contract_r_draw_icon_file_path = gui_core.GuiIcon.get(self._contract_icon_name_r)
-        self._swap_rect = QtCore.QRect()
-        self._swap_draw_rect = QtCore.QRect()
+        self._swap_rect = qt_rect()
+        self._swap_draw_rect = qt_rect()
         self._swap_icon_file_path = gui_core.GuiIcon.get(self._swap_icon_name)
         #
         self._is_hovered = False
@@ -174,7 +174,7 @@ class _AbsQtSplitterHandle(
         self._actioned_frame_background_color = _qt_core.QtRgba.BackgroundAction
         #
         self._handle_draw_rects = [
-            QtCore.QRect(), QtCore.QRect()
+            qt_rect(), qt_rect()
         ]
         if self._get_orientation_() == QtCore.Qt.Horizontal:
             self._resize_icon_file_path = gui_core.GuiIcon.get('resize-handle-v')
@@ -812,7 +812,7 @@ class _AbsQtSplitter(QtWidgets.QWidget):
                     i_hide = self._hide_dict[i_idx]
 
                 i_handle.setGeometry(
-                    i_h_x, i_h_y, i_h_w, i_h_h
+                    int(i_h_x), int(i_h_y), int(i_h_w), int(i_h_h)
                 )
 
                 i_handle_rect.setRect(
@@ -827,7 +827,7 @@ class _AbsQtSplitter(QtWidgets.QWidget):
                 )
 
                 i_widget.setGeometry(
-                    i_w_x, i_w_y, i_w_w, i_w_h
+                    int(i_w_x), int(i_w_y), int(i_w_w), int(i_w_h)
                 )
             elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
                 # handle
@@ -839,7 +839,7 @@ class _AbsQtSplitter(QtWidgets.QWidget):
                 else:
                     i_handle.show()
                 i_handle.setGeometry(
-                    i_h_x, i_h_y, i_h_w, i_h_h
+                    int(i_h_x), int(i_h_y), int(i_h_w), int(i_h_h)
                 )
                 #
                 i_handle_rect.setRect(
@@ -854,7 +854,7 @@ class _AbsQtSplitter(QtWidgets.QWidget):
                 )
                 #
                 i_widget.setGeometry(
-                    i_w_x, i_w_y, i_w_w, i_w_h
+                    int(i_w_x), int(i_w_y), int(i_w_w), int(i_w_h)
                 )
             #
             c_pos += i_size
@@ -979,13 +979,13 @@ class _AbsQtSplitter(QtWidgets.QWidget):
             # hide all
             for i_s in ss:
                 i_s.setGeometry(
-                    0, 0, w_e, h_e
+                    0, 0, int(w_e), int(h_e)
                 )
                 i_s.raise_()
                 i_s._hide_all_handles_and_widgets_([widget_current, widget_current.parent()])
             # full size current
             widget_current.setGeometry(
-                x_e, y_e, w_e, h_e
+                int(x_e), int(y_e), int(w_e), int(h_e)
             )
             widget_current.show()
             widget_current.raise_()
@@ -1052,8 +1052,8 @@ class _AbsQtSplitter(QtWidgets.QWidget):
             self._index_maximum = len(self._indices)-1
             self._is_contracted_dict[index] = False
 
-        self._handle_rects.append(QtCore.QRect())
-        self._widget_rects.append(QtCore.QRect())
+        self._handle_rects.append(qt_rect())
+        self._widget_rects.append(qt_rect())
 
         if not isinstance(widget, _AbsQtSplitter):
             widget.installEventFilter(self)

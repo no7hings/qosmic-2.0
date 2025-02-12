@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
@@ -898,7 +900,7 @@ class AbsOptionRsvTaskBatcherSession(
 
 
 if __name__ == '__main__':
-    print bsc_session.AbsSsnGener._match_fnc_(
+    print(bsc_session.AbsSsnGener._match_fnc_(
         'branch=asset&step=srf',
         {
             "root": "/production/shows",
@@ -918,4 +920,4 @@ if __name__ == '__main__':
             "user": "",
             "artist": "dongchangbao"
         }
-    )
+    ))

@@ -409,7 +409,6 @@ class BscNodePathOpt(object):
     def get_name_namespace(self, namespacesep=':'):
         name = self.get_name()
         _ = name.split(namespacesep)
-        # print _
         return namespacesep.join(_[:-1])
 
     def get_color_from_name(self, count=1000, maximum=255, offset=0, seed=0):
@@ -505,7 +504,7 @@ for i in [
     '/master/cfx',
     '/master/grm'
 ]:
-    print s.get(i)
+    print(s.get(i))
     """
 
     def __init__(self, mapper, pathsep='/'):

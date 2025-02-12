@@ -13,8 +13,6 @@ import lxbasic.storage as bsc_storage
 
 import lxgui.core as gui_core
 
-import lxgui.qt.core as gui_qt_core
-
 import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets

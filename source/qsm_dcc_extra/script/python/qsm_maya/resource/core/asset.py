@@ -151,7 +151,7 @@ class AssetsQuery(object):
         return dict_
 
     def get_all(self):
-        return self._cache_dict.values()
+        return list(self._cache_dict.values())
 
     def get(self, namespace):
         if namespace in self._cache_dict:

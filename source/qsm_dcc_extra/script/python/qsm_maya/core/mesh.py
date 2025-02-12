@@ -141,7 +141,7 @@ class MeshShapeOpt(_shape.ShapeOpt):
     
     @classmethod
     def to_point_array(cls, om2_point_array, round_count=None):
-        return map(lambda x: cls.to_point(x, round_count=round_count), om2_point_array)
+        return list(map(lambda x: cls.to_point(x, round_count=round_count), om2_point_array))
 
     def __init__(self, path):
         """

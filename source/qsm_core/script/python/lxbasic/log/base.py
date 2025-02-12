@@ -29,10 +29,14 @@ class LogBase(object):
     TIME_TAG_FORMAT = '%Y_%m%d_%H%M_%S_%f'
 
     @staticmethod
-    def ensure_string(text):
-        if isinstance(text, six.text_type):
-            return text.encode('utf-8')
-        return text
+    def ensure_string(s):
+        if isinstance(s, six.text_type):
+            if six.PY2:
+                return s.encode('utf-8')
+        elif isinstance(s, six.binary_type):
+            if six.PY3:
+                return s.decode('utf-8')
+        return s
 
     @staticmethod
     def generate_timestamp():
@@ -434,12 +438,12 @@ class LogProcessContext(object):
 
         self.__label = label
         self.__use_as_bar = use_as_progress_bar
-        #
+
         self._start_timestamp = LogBase.generate_timestamp()
         self._pre_timestamp = LogBase.generate_timestamp()
-        #
+
         self._p = 0
-        #
+
         Log.trace_method_result(
             self.__label,
             'process is started, total is {}'.format(self.__maximum)

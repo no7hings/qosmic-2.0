@@ -833,14 +833,16 @@ class DtbOptForResource(DtbBaseOpt):
             path = _
         else:
             raise RuntimeError()
-        return map(
-            lambda x: x.node, self.get_entities(
-                entity_type=self.EntityTypes.Types,
-                filters=[
-                    ('kind', 'is', self.Kinds.ResourceType),
-                    #
-                    ('value', 'startswith', path)
-                ]
+        return list(
+            map(
+                lambda x: x.node, self.get_entities(
+                    entity_type=self.EntityTypes.Types,
+                    filters=[
+                        ('kind', 'is', self.Kinds.ResourceType),
+                        #
+                        ('value', 'startswith', path)
+                    ]
+                )
             )
         )
 
@@ -852,15 +854,17 @@ class DtbOptForResource(DtbBaseOpt):
             path = _
         else:
             raise RuntimeError()
-        return map(
-            lambda x: self.get_resource(x.node),
-            self.get_entities(
-                entity_type=self.EntityTypes.Types,
-                filters=[
-                    ('kind', 'is', self.Kinds.ResourceType),
-                    #
-                    ('value', 'startswith', path)
-                ]
+        return list(
+            map(
+                lambda x: self.get_resource(x.node),
+                self.get_entities(
+                    entity_type=self.EntityTypes.Types,
+                    filters=[
+                        ('kind', 'is', self.Kinds.ResourceType),
+                        #
+                        ('value', 'startswith', path)
+                    ]
+                )
             )
         )
 

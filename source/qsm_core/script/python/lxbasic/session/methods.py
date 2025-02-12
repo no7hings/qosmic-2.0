@@ -66,8 +66,8 @@ class Hook(object):
                 i_hook_key = i_key
                 i_extra_kwargs = None
             elif isinstance(i_key, dict):
-                i_hook_key = i_key.keys()[0]
-                i_extra_kwargs = i_key.values()[0]
+                i_hook_key = list(i_key.keys())[0]
+                i_extra_kwargs = list(i_key.values())[0]
             else:
                 raise RuntimeError()
 

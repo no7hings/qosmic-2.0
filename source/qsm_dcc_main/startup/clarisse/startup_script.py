@@ -1,4 +1,5 @@
 # coding:utf-8
+from __future__ import print_function
 
 
 class Setup(object):
@@ -6,7 +7,7 @@ class Setup(object):
         pass
 
     def run(self):
-        print 'lx-dcc menu setup: is started'
+        print('lx-dcc menu setup: is started')
         import lxbasic.resource as bsc_resource
 
         import lxclarisse.startup as crs_startup
@@ -14,7 +15,7 @@ class Setup(object):
         crs_startup.MenuBuild._create_by_yaml_(
             bsc_resource.RscExtendConfigure.get_yaml('clarisse/gui/menu')
         )
-        print 'lx-dcc menu setup: is completed'
+        print('lx-dcc menu setup: is completed')
 
 
 if __name__ == '__main__':

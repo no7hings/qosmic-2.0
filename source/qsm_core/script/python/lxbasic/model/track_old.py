@@ -946,7 +946,7 @@ class TrackModelStage(object):
             return _._track_model
 
     def get_all_nodes(self):
-        return self._track_widget_dict.values()
+        return list(self._track_widget_dict.values())
 
     def get_all_models(self):
         return [x._track_model for x in self._track_widget_dict.values()]

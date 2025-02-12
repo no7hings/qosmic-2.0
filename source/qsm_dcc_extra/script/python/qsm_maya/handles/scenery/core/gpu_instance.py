@@ -161,7 +161,7 @@ class GpuInstancesQuery(object):
                 self._path_query[j_path] = j_opt
 
     def get_all(self):
-        return self._cache_dict.values()
+        return list(self._cache_dict.values())
 
     def to_mapper(self, paths):
         dict_ = {}

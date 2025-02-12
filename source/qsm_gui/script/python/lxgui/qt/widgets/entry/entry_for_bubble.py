@@ -64,8 +64,8 @@ class QtEntryForTextBubble(
         self._init_action_base_def_(self)
         self._init_action_for_press_def_(self)
 
-        self._frame_draw_rect = QtCore.QRect()
-        self._text_draw_rect = QtCore.QRect()
+        self._frame_draw_rect = qt_rect()
+        self._text_draw_rect = qt_rect()
 
         self._draw_texts = []
 
@@ -87,7 +87,7 @@ class QtEntryForTextBubble(
             )
         )
 
-        self._popup_icon_rect = QtCore.QRect()
+        self._popup_icon_rect = qt_rect()
         self._popup_icon_file = _gui_core.GuiIcon.get('state/popup')
 
         self.installEventFilter(self)
@@ -138,7 +138,7 @@ class QtEntryForTextBubble(
             color_bkg, color_txt = _qt_core.QtColor.generate_color_args_by_text(draw_text)
 
             rect_frame = self._frame_draw_rect
-            rect_frame = QtCore.QRect(
+            rect_frame = qt_rect(
                 rect_frame.x()+offset, rect_frame.y()+offset, rect_frame.width()-offset, rect_frame.height()-offset
             )
             painter._set_border_color_(_qt_core.QtRgba.BdrBubble)
@@ -156,7 +156,7 @@ class QtEntryForTextBubble(
             )
 
             rect_text = self._text_draw_rect
-            rect_text = QtCore.QRect(
+            rect_text = qt_rect(
                 rect_text.x()+offset, rect_text.y()+offset, rect_text.width()-offset, rect_text.height()-offset
             )
 

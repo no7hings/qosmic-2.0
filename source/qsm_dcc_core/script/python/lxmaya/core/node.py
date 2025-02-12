@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import six
 
 import fnmatch
@@ -53,7 +55,7 @@ class CmdXgenSplineGuideOpt(object):
             for i in range(int(c)):
                 cmd += ' -p '
                 cmd += ' '.join([str(i) for i in cmds.getAttr('xgGuide1Shape.vtx[{}]'.format(i))[0]])
-        print cmd
+        print(cmd)
 
 
 class CmdAtrQueryOpt(object):

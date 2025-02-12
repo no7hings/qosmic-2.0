@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import six
 
 import time
@@ -91,8 +93,8 @@ class KtnSGNodeOpt(object):
                 _c = _p.getNumberOfChildren()
                 for _i in range(_c):
                     _i_p = _p.getChildByIndex(_i)
-                    print _i_p
-                    print dir(_i_p)
+                    print(_i_p)
+                    print(dir(_i_p))
 
         ps = bsc_content.Properties(self)
         tvl = self._traversal

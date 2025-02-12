@@ -5,12 +5,12 @@ import collections
 
 import re
 
-import _abc
-
 try:
     import numpy as np
 except ImportError:
     pass
+
+from . import abc_
 
 
 class _Matrix:
@@ -124,7 +124,7 @@ class _Matrix:
         return np.dot(cls.rotate_z(angle_deg), matrix)
 
 
-class DotAcd(_abc.AbsDotfile):
+class DotAcd(abc_.AbsDotfile):
     SEP = '\n'
 
     def __init__(self, *args, **kwargs):

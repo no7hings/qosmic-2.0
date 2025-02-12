@@ -5,14 +5,14 @@ import re
 
 from datetime import datetime
 
-import _abc
-
 import lxbasic.core as bsc_core
 
 from ..core import dcc_base as _dcc_base
 
+from . import abc_
 
-class MayaAscii(_abc.AbsDotfile):
+
+class MayaAscii(abc_.AbsDotfile):
     SEP = ';\n'
 
     def __init__(self, *args, **kwargs):

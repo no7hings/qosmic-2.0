@@ -78,10 +78,6 @@ class BscScriptExecute(object):
 
     @classmethod
     def execute_python_file(cls, file_path, **kwargs):
-        # use for python 3
-        # with open(file_path, 'r') as f:
-        #     exec (f.read())
-        # use for python 2
         _bsc_log.Log.trace_method_result(
             cls.LOG_KEY, 'start for : "{}"'.format(
                 file_path

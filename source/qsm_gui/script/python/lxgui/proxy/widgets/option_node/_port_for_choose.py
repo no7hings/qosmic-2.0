@@ -1,5 +1,5 @@
 # coding:utf-8
-import _port_base
+from . import _port_base
 
 from ..input import input_for_choose as _input_for_choose
 

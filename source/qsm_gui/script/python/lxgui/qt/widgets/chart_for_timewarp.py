@@ -69,7 +69,7 @@ class QtChartAsTimeWrap(
         self._start_frame = 1
         self._end_frame = 48
 
-        self._timeline_frame_rect = QtCore.QRect()
+        self._timeline_frame_rect = qt_rect()
 
         self._coord_model = bsc_model.CoordModel()
         self._coord_model.setup(100)

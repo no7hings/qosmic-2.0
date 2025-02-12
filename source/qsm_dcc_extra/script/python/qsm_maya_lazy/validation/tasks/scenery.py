@@ -15,10 +15,10 @@ import qsm_maya_lazy_resource.scripts as qsm_mya_lzy_scr_scripts
 
 from . import task_prc as _task_prc
 
-import _abc
+from . import abc_
 
 
-class SceneryValidationTask(_abc.AbsValidationTask):
+class SceneryValidationTask(abc_.AbsValidationTask):
     LOG_KEY = 'scenery validation'
 
     OPTION_KEY = 'lazy-validation/option/scenery'

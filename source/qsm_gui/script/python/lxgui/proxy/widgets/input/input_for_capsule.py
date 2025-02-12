@@ -3,7 +3,7 @@ from ....qt.widgets import utility as _qt_wgt_utility
 
 from ....qt.widgets.input import input_for_capsule as _qt_wgt_input_for_capsule
 
-import _input_base
+from . import _input_base
 
 
 #   capsule

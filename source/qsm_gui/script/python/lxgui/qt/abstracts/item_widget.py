@@ -68,8 +68,8 @@ class AbsQtMediaBaseDef(
         self._image_flag = False
         self._image_draw_flag = False
 
-        self._image_frame_rect = QtCore.QRect()
-        self._image_draw_rect = QtCore.QRect()
+        self._image_frame_rect = qt_rect()
+        self._image_draw_rect = qt_rect()
 
         self._image_margin = 4
 
@@ -83,7 +83,7 @@ class AbsQtMediaBaseDef(
         self._auto_play_flag = False
         self._play_mode = None
 
-        self._video_play_rect = QtCore.QRect()
+        self._video_play_rect = qt_rect()
         self._video_play_s = 24
         self._video_path = None
         self._image_paths = None
@@ -180,7 +180,7 @@ class AbsQtItemWidgetBaseDef(object):
         self._name_flag = False
 
         self._name_text = None
-        self._name_draw_rect = QtCore.QRect()
+        self._name_draw_rect = qt_rect()
         self._name_text_draw_flag = False
 
         self._name_dict = {}
@@ -218,7 +218,7 @@ class AbsQtItemWidgetBaseDef(object):
         keys.sort()
         for i_key in keys:
             self._name_dict_draw_data.append(
-                (i_key, self._name_dict[i_key], QtCore.QRect())
+                (i_key, self._name_dict[i_key], qt_rect())
             )
 
     def _set_tool_tip_(self, content):

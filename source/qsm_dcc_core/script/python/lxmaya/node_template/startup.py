@@ -1,4 +1,6 @@
 # encoding=utf-8
+from __future__ import print_function
+
 import inspect
 
 import sys
@@ -34,10 +36,10 @@ def setup_node_template_prcs(directory_paths):
                     templates.append(i_method_name)
                     register_node_template_prc(i_module_name, i_method_name, i_proc_name)
             except Exception:
-                print 'error loading ae template file "{}"'.format(i_node_name)
+                print('error loading ae template file "{}"'.format(i_node_name))
                 import traceback
 
-                print traceback.format_exc()
+                print(traceback.format_exc())
 
 
 def register_node_template_prc(module_name, method_name, proc_name):
@@ -62,9 +64,9 @@ def load_node_template_prc(module_name, method_name, nodeName):
             if hasattr(inst, '_doSetup'):
                 inst._doSetup(nodeName)
         else:
-            print "AE Object %s has Invalid Type %s"%(method, type(method))
+            print("AE Object %s has Invalid Type %s"%(method, type(method)))
     except Exception as e:
-        print "Failed to Load Python Attribute Editor Template '%s.%s'"%(module_name, method_name)
+        print("Failed to Load Python Attribute Editor Template '%s.%s'"%(module_name, method_name))
         import traceback
 
         traceback.print_exc()

@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
@@ -61,7 +63,7 @@ class AndShader(ktn_abstracts.AbsKtnObj):
         self.ktn_obj.setAttributes(attributes)
 
     def set_duplicate_with_source(self):
-        print self.get_shader_properties()
+        print(self.get_shader_properties())
         # source_objs = self.get_all_source_objs()
         # for source_obj in source_objs:
         #     print source_obj.get_shader_properties()

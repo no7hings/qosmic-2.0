@@ -12,10 +12,14 @@ class QtWebServerForTask(QtCore.QObject):
     text_message_accepted = qt_signal(str)
 
     @staticmethod
-    def ensure_string(text):
-        if isinstance(text, six.text_type):
-            return text.encode('utf-8')
-        return text
+    def ensure_string(s):
+        if isinstance(s, six.text_type):
+            if six.PY2:
+                return s.encode('utf-8')
+        elif isinstance(s, six.binary_type):
+            if six.PY3:
+                return s.decode('utf-8')
+        return s
 
     def __init__(self, *args, **kwargs):
         super(QtWebServerForTask, self).__init__(*args, **kwargs)
@@ -56,7 +60,6 @@ class QtWebServerForTask(QtCore.QObject):
                 self.LOG_KEY, 'received: "{}"'.format(text)
             )
 
-    @qt_slot()
     def _new_connection_fnc_(self):
         skt = self._web_server.nextPendingConnection()
         skt.textMessageReceived.connect(self._process_fnc_)
@@ -67,7 +70,6 @@ class QtWebServerForTask(QtCore.QObject):
                 self.LOG_KEY, 'new connection'
             )
 
-    @qt_slot()
     def _disconnected_fnc_(self):
         skt = self.sender()
         self._sockets.remove(skt)

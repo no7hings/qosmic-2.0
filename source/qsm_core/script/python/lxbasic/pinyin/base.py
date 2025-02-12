@@ -1,4 +1,6 @@
 # coding:utf-8
+from ..wrap import *
+
 import six
 
 import re
@@ -12,18 +14,16 @@ class Text(object):
     @staticmethod
     def split_any_to_texts(text):
         # to string
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
-        return re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
+        text = ensure_string(text)
+        return re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text)
 
     @classmethod
     def split_any_to_words(cls, text):
         list_ = []
         # to string
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
+        text = ensure_string(text)
 
-        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
+        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text)
         for i_c in chars:
             # is chinese
             if re.match(six.u(r'[\u4e00-\u9fff]+'), i_c):
@@ -42,8 +42,7 @@ class Text(object):
     def split_any_to_words_extra(text):
         list_ = []
         # to string
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
+        text = ensure_string(text)
 
         chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
         for i_c in chars:
@@ -58,8 +57,7 @@ class Text(object):
     def to_pinyin_name(cls, text):
         list_ = []
         # to string
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
+        text = ensure_string(text)
 
         chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
         for i_c in chars:
@@ -75,8 +73,7 @@ class Text(object):
         dict_ = {}
         list_ = []
         # to string
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
+        text = ensure_string(text)
 
         chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
         for i_c in chars:
@@ -90,8 +87,7 @@ class Text(object):
     @classmethod
     def find_first_chr(cls, text):
         # to string
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
+        text = ensure_string(text)
 
         chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
 
@@ -105,8 +101,7 @@ class Text(object):
     def cleanup(cls, text):
         list_ = []
         # to string
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
+        text = ensure_string(text)
 
         chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
         for i_c in chars:

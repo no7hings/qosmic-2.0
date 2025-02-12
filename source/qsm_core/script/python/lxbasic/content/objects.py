@@ -367,35 +367,7 @@ class AbsContent(object):
 
     @classmethod
     def serialize(cls, data, indent=0, level=0):
-        """ Recursively serialize a complex structure with custom indentation. """
-        ind = ' '*indent*level  # Current indentation
-        if isinstance(data, dict):
-            # Handle dictionaries
-            items = []
-            for key, value in six.iteritems(data):  # Compatible way to iterate dicts in both Py2 and Py3
-                items.append(u"%s%r: %s"%(ind, key, cls.serialize(value, indent, level+1)))
-            return u'{\n'+u',\n'.join(items)+u'\n'+(' '*indent*(level-1))+u'}'
-        elif isinstance(data, list):
-            # Handle lists
-            items = [u"%s%s"%(ind, cls.serialize(item, indent, level+1)) for item in data]
-            return u'[\n'+u',\n'.join(items)+u'\n'+(' '*indent*(level-1))+u']'
-        elif isinstance(data, tuple):
-            # Handle tuples
-            items = [u"%s%s"%(ind, cls.serialize(item, indent, level+1)) for item in data]
-            return u'(\n'+u',\n'.join(items)+u'\n'+(' '*indent*(level-1))+u')'
-        elif isinstance(data, six.text_type):
-            # Handle Unicode strings explicitly (six.text_type is 'unicode' in Py2, 'str' in Py3)
-            return u"u'%s'"%data
-        elif isinstance(data, six.binary_type):
-            # Handle byte strings explicitly (six.binary_type is 'str' in Py2, 'bytes' in Py3)
-            return repr(data)
-        else:
-            if six.PY2:
-                # Ensure proper handling of non-ASCII characters in Python 2
-                # noinspection PyCompatibility
-                return unicode(repr(data), 'utf-8')
-            else:
-                return str(repr(data))
+        pass
 
     def items(self):
         return self.__value.items()

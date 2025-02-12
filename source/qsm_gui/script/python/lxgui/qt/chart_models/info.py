@@ -11,7 +11,7 @@ class ChartModelForInfo(object):
         self._count = 0
         self._branches = []
 
-        self._rect = QtCore.QRect()
+        self._rect = qt_rect()
 
         self._font = _qt_core.QtFont.generate(size=8)
         self._font_metrics = QtGui.QFontMetrics(self._font)
@@ -25,8 +25,8 @@ class ChartModelForInfo(object):
                 continue
             i_branch = _base._Data(
                 text=k,
-                rect=QtCore.QRect(),
-                text_rect=QtCore.QRect(),
+                rect=qt_rect(),
+                text_rect=qt_rect(),
                 leafs=[]
             )
             if isinstance(v, (tuple, list)):
@@ -37,7 +37,7 @@ class ChartModelForInfo(object):
             for j_text in i_texts:
                 j_leaf = _base._Data(
                     text=j_text,
-                    text_rect=QtCore.QRect()
+                    text_rect=qt_rect()
                 )
                 i_branch.leafs.append(j_leaf)
 

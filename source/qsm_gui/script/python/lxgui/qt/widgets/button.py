@@ -122,7 +122,7 @@ class QtCheckButton(
             # elif event.type() == QtCore.QEvent.ToolTip:
             #     pos = event.globalPos()
             #     QtWidgets.QToolTip.showText(
-            #         pos, self._tool_tip_text, self, QtCore.QRect(pos.x(), pos.y(), 480, 160)
+            #         pos, self._tool_tip_text, self, qt_rect(pos.x(), pos.y(), 480, 160)
             #     )
         return False
 

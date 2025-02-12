@@ -7,7 +7,7 @@ from ....qt.widgets.input import input_for_constant as _qt_wgt_ipt_for_constant
 
 from ....qt.widgets.input import input_for_content as _qt_wgt_ipt_for_content
 
-import _input_base
+from . import _input_base
 
 
 #   text

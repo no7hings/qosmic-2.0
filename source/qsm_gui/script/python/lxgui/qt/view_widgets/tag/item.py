@@ -790,9 +790,9 @@ class _QtTagGroupItem(
         self._update_check_icon_file_()
 
         self._sub_text = None
-        self._sub_text_draw_rect = QtCore.QRect()
+        self._sub_text_draw_rect = qt_rect()
 
-        self._head_frame_rect = QtCore.QRect()
+        self._head_frame_rect = qt_rect()
         self._frame_border_color = _gui_core.GuiRgba.Gray
         self._frame_background_color = _gui_core.GuiRgba.Basic
 

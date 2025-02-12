@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import six
 
 import collections
@@ -482,10 +484,10 @@ class UsdStageOpt(UsdBasic):
         _ = self._usd_stage.GetUsedLayers()
         for i in _:
             i_prims = i.rootPrims
-            print i.pseudoRoot, 'AAA'
+            print(i.pseudoRoot, 'AAA')
             if i_prims:
-                print i_prims[0].path
-                print i_prims[0].layer
+                print(i_prims[0].path)
+                print(i_prims[0].layer)
                 # print i.subLayerPaths
                 # print i.realPath
             # dict_[i_prim.GetPath().pathString] = i_prim.realPath
@@ -857,15 +859,15 @@ class UsdTransformOpt(UsdPrimOpt):
 class UsdBase(object):
     @classmethod
     def to_integer_array(cls, usd_integer_array):
-        return map(int, usd_integer_array)
+        return list(map(int, usd_integer_array))
 
     @classmethod
     def to_point_array(cls, usd_point_array):
-        return map(tuple, usd_point_array)
+        return list(map(tuple, usd_point_array))
 
     @classmethod
     def to_coord_array(cls, usd_coord_array):
-        return map(tuple, usd_coord_array)
+        return list(map(tuple, usd_coord_array))
 
     @classmethod
     def to_matrix(cls, usd_matrix):
@@ -1047,9 +1049,11 @@ class UsdInstancerOpt(UsdGeometryOpt):
         self._usd_fnc = UsdGeom.PointInstancer(self._usd_prim)
 
     def get_proto_prims(self):
-        return map(
-            lambda x: self._usd_prim.GetStage().GetPrimAtPath(x),
-            self._usd_fnc.GetPrototypesRel().GetForwardedTargets()
+        return list(
+            map(
+                lambda x: self._usd_prim.GetStage().GetPrimAtPath(x),
+                self._usd_fnc.GetPrototypesRel().GetForwardedTargets()
+            )
         )
 
     def clear_proto(self):
@@ -2032,9 +2036,3 @@ class UsdTransformation(object):
         m_t_0 = Gf.Matrix4d()
         m_t_0.SetTranslate(self._translate*-1)
         return m_t_0*m_r*m_s*m_t
-
-
-if __name__ == '__main__':
-    print NpBBoxRange(
-        (-10, -10, -10), (10, 10, 10)
-    ).compute_contain_points([(1, 0, 0), (12, 12, 0)])

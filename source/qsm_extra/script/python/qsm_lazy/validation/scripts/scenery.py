@@ -9,10 +9,10 @@ import qsm_general.core as qsm_gnl_core
 
 import qsm_general.process as qsm_gnl_process
 
-import _abc
+import abc_
 
 
-class SceneryValidationOpt(_abc.AbsValidationOpt):
+class SceneryValidationOpt(abc_.AbsValidationOpt):
     OPTION_KEY = 'lazy-validation/option/scenery'
 
     def generate_process_args(self, file_path, process_options=None):

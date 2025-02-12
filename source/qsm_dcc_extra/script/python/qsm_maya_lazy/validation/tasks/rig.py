@@ -19,11 +19,11 @@ from .. import core as _vld_core
 
 from . import task_prc as _task_prc
 
-import _abc
+from . import abc_
 
 
 class RigValidationTask(
-    _abc.AbsValidationTask,
+    abc_.AbsValidationTask,
     _vld_core.RigValidationBase
 ):
     LOG_KEY = 'rig validation'

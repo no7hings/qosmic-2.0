@@ -365,7 +365,7 @@ class QtAdvCharacterPicker(
 
         self._namespace = None
         self._main_text = None
-        self._main_frame_rect = QtCore.QRect()
+        self._main_frame_rect = qt_rect()
         self._main_h = 20
         self._main_font = gui_qt_core.QtFont.generate(size=10)
         self._main_text_color = gui_core.GuiRgba.LightBlack

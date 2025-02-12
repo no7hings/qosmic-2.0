@@ -1,10 +1,10 @@
 # coding:utf-8
 import qsm_maya.core as qsm_mya_core
 
-from qsm_maya.handles import _abc
+from qsm_maya.handles import abc_
 
 
-class ShotAnimationCacheGroupOrg(_abc.AbsGroupOpt):
+class ShotAnimationCacheGroupOrg(abc_.AbsGroupOpt):
     LOCATION = '|assets|animation|ani_cache_grp'
 
     def __init__(self, *args, **kwargs):

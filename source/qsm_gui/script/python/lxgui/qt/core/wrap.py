@@ -143,3 +143,21 @@ def qt_is_deleted(*args):
     # noinspection PyUnresolvedReferences
     module_name, method_name = load_dic[_sys._getframe().f_code.co_name][QT_LOAD_INDEX]
     return __Loader(module_name).get_method(method_name)(*args)
+
+
+def qt_rect(*args):
+    class _QRect(QtCore.QRect):
+        def __init__(self, *_args):
+            super(_QRect, self).__init__(*_args)
+
+        def setRect(self, *_args):
+            return super(_QRect, self).setRect(
+                *map(int, _args)
+            )
+    if args:
+        if len(args) == 4:
+            # convert to int
+            x, y, w, h = args
+            return _QRect(int(x), int(y), int(w), int(h))
+        return _QRect(*args)
+    return _QRect()

@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxkatana.core as ktn_core
 
 import lxkatana.dcc.objects as ktn_dcc_objects
@@ -74,7 +76,7 @@ class PnlManagerForAssetTextureDcc(mng_gui_abstracts.AbsPnlManagerForAssetTextur
                 geometry_location_sub = self._options_prx_node.get('dcc.location')
                 geometry_location = '/root/world/geo'
                 location = '{}{}'.format(geometry_location, geometry_location_sub)
-                print scheme
+                print(scheme)
                 if scheme == 'assignment':
                     dcc_shaders = scp.get_all_dcc_geometry_shaders_by_location(location)
                 elif scheme == 'all':

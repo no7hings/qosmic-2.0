@@ -258,7 +258,7 @@ class QtContentDialog(_QtDialog):
         if script is not None:
             # noinspection PyBroadException
             try:
-                exec script
+                exec (script)
             except Exception:
                 import traceback
                 traceback.print_exc()

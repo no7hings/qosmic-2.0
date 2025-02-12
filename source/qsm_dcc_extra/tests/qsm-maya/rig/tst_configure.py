@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lxbasic.resource as bsc_resource
 
 ctt = bsc_resource.RscExtendConfigure.get_as_content(
@@ -7,4 +9,4 @@ ctt = bsc_resource.RscExtendConfigure.get_as_content(
 ctt.set('option.namespace', 'test')
 ctt.do_flatten()
 
-print ctt.get_as_content('skeleton_new')
+print(ctt.get_as_content('skeleton_new'))

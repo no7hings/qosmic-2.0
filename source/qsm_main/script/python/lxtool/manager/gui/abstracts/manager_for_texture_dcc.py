@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import time
 
 import lxbasic.log as bsc_log
@@ -339,7 +341,7 @@ class AbsPnlManagerForAssetTextureDcc(gui_prx_widgets.PrxSessionWindow):
     def _set_target_create_by_data_(self, button, post_fnc=None):
         def finished_fnc_(index, status, results):
             button.set_finished_at(index, status)
-            print '\n'.join(results)
+            print('\n'.join(results))
 
         def status_update_at_fnc_(index, status):
             button.set_status_at(index, status)

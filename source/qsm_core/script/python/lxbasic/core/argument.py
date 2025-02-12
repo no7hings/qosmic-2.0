@@ -16,7 +16,8 @@ class ArgDictString(object):
     @classmethod
     def to_string(cls, **kwargs):
         vars_ = []
-        keys = kwargs.keys()
+        # for python3
+        keys = list(kwargs.keys())
         keys.sort()
         for k in keys:
             v = kwargs[k]

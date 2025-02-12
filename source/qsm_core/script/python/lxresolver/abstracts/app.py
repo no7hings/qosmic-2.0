@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import copy
 
 import threading
@@ -198,7 +200,7 @@ class AbsRsvAppDef(object):
         # t_0.join()
 
     def _test_(self):
-        print self.get_package('pglauncher')
+        print(self.get_package('pglauncher'))
 
     def __str__(self):
         return str(self._configure)

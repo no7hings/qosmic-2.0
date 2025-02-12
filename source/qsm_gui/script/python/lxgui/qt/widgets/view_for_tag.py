@@ -283,7 +283,7 @@ class _QtTagNodeItem(
 
         self._painter_flag = False
 
-        self._frame_draw_rect = QtCore.QRect()
+        self._frame_draw_rect = qt_rect()
         self._frame_border_radius = 0
         self._frame_background_color = _gui_core.GuiRgba.DarkWhite
         self._frame_background_color_checked = _gui_core.GuiRgba.LightAzureBlue
@@ -295,12 +295,12 @@ class _QtTagNodeItem(
 
         self._text_font = _qt_core.QtFont.generate(size=8)
 
-        self._text_draw_rect = QtCore.QRect()
+        self._text_draw_rect = qt_rect()
 
         self._number_flag = False
         self._number = None
         self._number_text = None
-        self._number_draw_rect = QtCore.QRect()
+        self._number_draw_rect = qt_rect()
 
         self._number_font = _qt_core.QtFont.generate(size=8)
         
@@ -678,13 +678,13 @@ class _QtTagGroupItem(
         self._text = None
         self._text_color = _gui_core.GuiRgba.Light
 
-        self._text_draw_rect = QtCore.QRect()
+        self._text_draw_rect = qt_rect()
 
         self._sub_text = None
         self._sub_text_font = _qt_core.QtFont.generate(size=8)
-        self._sub_text_draw_rect = QtCore.QRect()
+        self._sub_text_draw_rect = qt_rect()
 
-        self._head_frame_rect = QtCore.QRect()
+        self._head_frame_rect = qt_rect()
         self._frame_border_color = _gui_core.GuiRgba.Gray
         self._frame_background_color = _gui_core.GuiRgba.Basic
 
@@ -693,7 +693,7 @@ class _QtTagGroupItem(
         self._number_flag = False
         self._number = None
         self._number_text = None
-        self._number_draw_rect = QtCore.QRect()
+        self._number_draw_rect = qt_rect()
 
         self._number_font = _qt_core.QtFont.generate(size=8)
 

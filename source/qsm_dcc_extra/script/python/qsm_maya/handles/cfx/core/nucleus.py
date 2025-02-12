@@ -1,8 +1,8 @@
 # coding:utf-8
-from ... import _abc
+from ... import abc_
 
 
-class NCloth(_abc.AbsShapeOpt):
+class NCloth(abc_.AbsShapeOpt):
     SHAPE_TYPE = 'nCloth'
 
     DEFAULT_PROPERTIES = dict(
@@ -17,7 +17,7 @@ class NCloth(_abc.AbsShapeOpt):
         super(NCloth, self).__init__(*args, **kwargs)
 
 
-class NRigid(_abc.AbsShapeOpt):
+class NRigid(abc_.AbsShapeOpt):
     SHAPE_TYPE = 'nRigid'
 
     DEFAULT_PROPERTIES = dict(

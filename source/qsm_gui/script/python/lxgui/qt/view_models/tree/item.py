@@ -83,7 +83,7 @@ class TreeItemModel(_item_base.AbsItemModel):
         # check rect is change
         if rect != self._data.rect or self._data.force_refresh_flag is True:
             # need re instance
-            self._data.rect = QtCore.QRect(rect)
+            self._data.rect = qt_rect(rect)
             item_h = 20
             x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
             # check icon
@@ -174,7 +174,7 @@ class TreeItemModel(_item_base.AbsItemModel):
     def draw_background(self, painter, option, index):
         x, y, w, h = option.rect.x(), option.rect.y(), option.rect.width(), option.rect.height()
         column = index.column()
-        rect = QtCore.QRect(x+1, y+1, w-1, h-2)
+        rect = qt_rect(x+1, y+1, w-1, h-2)
         condition = (self._data.hover.flag, self._data.select.flag)
         # hover
         if condition == (True, False):
@@ -240,7 +240,7 @@ class TreeItemModel(_item_base.AbsItemModel):
             rect = self._data.name.rect
             text = self.get_name()
         else:
-            rect = QtCore.QRect(x, y, w, h)
+            rect = qt_rect(x, y, w, h)
             text = self._item.text(column)
 
         status_color = self._get_status_color()

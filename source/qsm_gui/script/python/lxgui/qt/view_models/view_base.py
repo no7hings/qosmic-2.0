@@ -24,7 +24,6 @@ class AbsViewModel(object):
     def do_drop(self, event):
         pass
 
-    @qt_slot()
     def _on_item_check_changed(self):
         self.refresh_info()
 

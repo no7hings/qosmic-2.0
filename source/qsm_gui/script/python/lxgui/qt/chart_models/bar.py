@@ -171,11 +171,11 @@ class ChartModelForBar(object):
             leafs={},
             path=path,
             name=bsc_core.BscNodePath.to_dag_name(path),
-            frame_rect=QtCore.QRect(),
+            frame_rect=qt_rect(),
             index=index,
             index_text=str(index+1),
-            index_rect=QtCore.QRect(),
-            name_rect=QtCore.QRect(),
+            index_rect=qt_rect(),
+            name_rect=qt_rect(),
             visible=branch_data.get('visible', True)
         )
         for i_data_key in self._data_keys:
@@ -206,9 +206,9 @@ class ChartModelForBar(object):
             # branch[i_data_key] = i_value
 
             i_leaf = _base._Data(
-                frame_rect=QtCore.QRect(),
-                value_rect=QtCore.QRect(),
-                value_text_rect=QtCore.QRect(),
+                frame_rect=qt_rect(),
+                value_rect=qt_rect(),
+                value_text_rect=qt_rect(),
                 value_color=QtGui.QColor(i_r, i_g, i_b),
                 name=i_data_key,
                 value=i_value,
@@ -228,7 +228,7 @@ class ChartModelForBar(object):
                 if i_value > i_value_limit:
                     i_leaf.value_is_over = True
                     i_leaf['value_limit'] = i_value_limit
-                    i_leaf['value_rect_over'] = QtCore.QRect()
+                    i_leaf['value_rect_over'] = qt_rect()
                     i_leaf['value_color_over'] = QtGui.QColor(255, 0, 0)
                     i_value_text = '{}(>{})'.format(
                         bsc_core.ensure_string(i_value_text), bsc_core.ensure_string(i_value_text_limit)

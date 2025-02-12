@@ -81,7 +81,6 @@ class QtChartForSprcTask(
         else:
             self._refresh_widget_draw_()
 
-    @qt_slot()
     def _on_started_(self):
         self._profile.update_timestamp('started')
         if self._trd is not None:
@@ -90,7 +89,6 @@ class QtChartForSprcTask(
             self._profile.update('command', self._trd.fnc_string)
         self.started.emit()
 
-    @qt_slot()
     def _on_finished_(self):
         self._profile.update_timestamp('finished')
         if self._trd is not None:
@@ -102,7 +100,6 @@ class QtChartForSprcTask(
             self.profile_accepted.emit(self._profile.data)
         self.finished.emit()
 
-    @qt_slot()
     def _on_completed_(self):
         self.completed.emit()
 
@@ -127,7 +124,6 @@ class QtChartForSprcTask(
 
         self.failed.emit()
 
-    @qt_slot()
     def _on_killed_(self):
         self.killed.emit()
 
@@ -234,10 +230,10 @@ class QtChartForSprcTask(
         
         self._timeout = None
 
-        self._frame_draw_rect = QtCore.QRect()
-        self._progress_draw_rect = QtCore.QRect()
-        self._main_text_draw_rect = QtCore.QRect()
-        self._percent_text_draw_rect = QtCore.QRect()
+        self._frame_draw_rect = qt_rect()
+        self._progress_draw_rect = qt_rect()
+        self._main_text_draw_rect = qt_rect()
+        self._percent_text_draw_rect = qt_rect()
 
         self._status = self.Status.Waiting
         (

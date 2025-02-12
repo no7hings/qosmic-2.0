@@ -243,7 +243,7 @@ class _AbsQtPopupAsChoose(
         # tag filter
         self._popup_item_tag_filter_is_enable = False
         self._popup_tag_filter_width_percent = 0.375
-        self._rect_tag_filter_view = QtCore.QRect()
+        self._rect_tag_filter_view = qt_rect()
         self._popup_tag_filter_view = _QtViewForPopup(self)
         self._popup_tag_filter_view.hide()
         self._popup_tag_filter_view.setGridSize(
@@ -333,7 +333,7 @@ class _AbsQtPopupAsChoose(
             x, y = 0, 0
             w, h = self.width(), self.height()
             #
-            bck_rect = QtCore.QRect(
+            bck_rect = qt_rect(
                 x, y, w-1, h-1
             )
             #
@@ -1122,7 +1122,7 @@ class QtPopupAsChooseForGuide(
         x, y = 0, 0
         w, h = self.width(), self.height()
         #
-        bck_rect = QtCore.QRect(
+        bck_rect = qt_rect(
             x, y, w-1, h-1
         )
         painter = _qt_core.QtPainter(self)
@@ -1358,7 +1358,7 @@ class QtPopupAsChooseForRgba(
         x, y = 0, 0
         w, h = self.width(), self.height()
         #
-        bck_rect = QtCore.QRect(
+        bck_rect = qt_rect(
             x, y, w-1, h-1
         )
         painter = _qt_core.QtPainter(self)

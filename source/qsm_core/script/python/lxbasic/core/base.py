@@ -44,10 +44,14 @@ from . import configure as _configure
 from . import cache as _cache
 
 
-def ensure_string(text):
-    if isinstance(text, six.text_type):
-        return text.encode('utf-8')
-    return text
+def ensure_string(s):
+    if isinstance(s, six.text_type):
+        if six.PY2:
+            return s.encode('utf-8')
+    elif isinstance(s, six.binary_type):
+        if six.PY3:
+            return s.decode('utf-8')
+    return s
 
 
 def auto_unicode(text):
@@ -174,6 +178,11 @@ class BscSystem(object):
     #
     TIME_TAG_FORMAT = '%Y_%m%d_%H%M_%S_%f'
     DATE_TAG_FORMAT = '%Y_%m%d'
+
+    @classmethod
+    def get_python_version(cls):
+        # noinspection PyUnresolvedReferences
+        return sys.winver
 
     @classmethod
     def get_time(cls, exact=False):
@@ -812,9 +821,6 @@ class StgBasePathMapMtd(object):
     @classmethod
     def map_to_linux(cls, path):
         """
-        print Path.map_to_linux(
-            'l:/a'
-        )
         :param path:
         :return:
         """

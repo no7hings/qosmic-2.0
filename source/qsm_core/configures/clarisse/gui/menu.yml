@@ -26,4 +26,4 @@ TD-tool(s):
         Reload all Package(s):
             type: action
             icon_name: 'file/png/python'
-            command: 'print "A"'
+            command: 'print("A")'

@@ -272,10 +272,16 @@ class ContentFile(object):
                     j.close()
                     return raw
             elif ext in {'.yml'}:
-                with open(path) as y:
-                    raw = ContentYamlBase.load(y)
-                    y.close()
-                    return raw
+                if six.PY2:
+                    with open(path) as y:
+                        raw = ContentYamlBase.load(y)
+                        y.close()
+                        return raw
+                else:
+                    with open(path, encoding='utf-8', errors='ignore') as y:
+                        raw = ContentYamlBase.load(y)
+                        y.close()
+                        return raw
             else:
                 with open(path) as f:
                     raw = f.read()
@@ -567,10 +573,14 @@ class ContentEnvironment(ContentVariant):
 
 class ToString(object):
     @staticmethod
-    def ensure_string(text):
-        if isinstance(text, six.text_type):
-            return text.encode('utf-8')
-        return text
+    def ensure_string(s):
+        if isinstance(s, six.text_type):
+            if six.PY2:
+                return s.encode('utf-8')
+        elif isinstance(s, six.binary_type):
+            if six.PY3:
+                return s.decode('utf-8')
+        return s
 
     def __init__(self, value):
         self._indent = 4

@@ -202,7 +202,7 @@ class QtUtil(object):
             x, y = (w_p - w_1)/2 + x_p, (w_h - h_1)/2 + y_p
         #
         widget.setGeometry(
-            max(x, 0), max(y, 0), w_1, h_1
+            int(max(x, 0)), int(max(y, 0)), int(w_1), int(h_1)
         )
         if use_exec is True:
             widget.exec_()
@@ -379,7 +379,7 @@ class QtIcon(object):
         )
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
-        icon_rect = QtCore.QRect(
+        icon_rect = qt_rect(
             x + (w - c_w) / 2, y + (h - c_h) / 2,
             c_w, c_h
         )
@@ -412,7 +412,7 @@ class QtIcon(object):
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
         rd = min(w, h)
-        icon_rect = QtCore.QRect(
+        icon_rect = qt_rect(
             x + (w - c_w) / 2, y + (h - c_h) / 2,
             c_w, c_h
         )
@@ -621,7 +621,7 @@ class QtPixmap(object):
         painter = QtGui.QPainter(pxm_new)
         pxm_new.fill(QtCore.Qt.black)
         painter.drawPixmap(
-            QtCore.QRect(0, 0, w, h), pixmap
+            qt_rect(0, 0, w, h), pixmap
         )
         painter.end()
 
@@ -656,7 +656,7 @@ class QtPixmap(object):
             _style.QtRgba.BdrIcon
         )
         rd = min(w, h)
-        icon_rect = QtCore.QRect(
+        icon_rect = qt_rect(
             x, y, w - 1, h - 1
         )
         if text is not None:
@@ -721,7 +721,7 @@ class QtPixmap(object):
             icon_percent=icon_percent,
             gray=gray
         )
-        base_rect = QtCore.QRect(
+        base_rect = qt_rect(
             x, y, icn_w, icn_h
         )
 
@@ -738,7 +738,7 @@ class QtPixmap(object):
         w, h = rect.width(), rect.height()
         rd = min(w, h)
         txt_w, txt_h = rd / 2, rd / 2
-        tag_rect = QtCore.QRect(
+        tag_rect = qt_rect(
             x + w - txt_w - 2, y + h - txt_h - 2, txt_w, txt_h
         )
         background_color_, text_color_ = QtColor.generate_color_args_by_text(tag)
@@ -851,7 +851,7 @@ class GuiQtTreeWidget(object):
                 for column, a in enumerate(array_grid):
                     for row, b in enumerate(a):
                         b_x, b_y = x + (w - b_w * column) - 2, y + (h - b_h * row) - 4
-                        box_rect = QtCore.QRect(
+                        box_rect = qt_rect(
                             b_x, b_y,
                             b_w, b_h
                         )

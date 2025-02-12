@@ -1,14 +1,15 @@
 # coding:utf-8
+from __future__ import print_function
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-from ... import _abc
+from ... import abc_
 
 
-class MeshValidationOpt(_abc.AbsMeshOpt):
+class MeshValidationOpt(abc_.AbsMeshOpt):
     @classmethod
     def test(cls):
-        print cls('pCube1').get_lamina_face_names()
+        print(cls('pCube1').get_lamina_face_names())
 
     def __init__(self, path_or_name):
         super(MeshValidationOpt, self).__init__(path_or_name)

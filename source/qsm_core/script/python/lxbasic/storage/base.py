@@ -995,10 +995,14 @@ class StgPathOpt(object):
         return path
 
     @classmethod
-    def ensure_string(cls, path):
-        if isinstance(path, six.text_type):
-            return path.encode('utf-8')
-        return path
+    def ensure_string(cls, s):
+        if isinstance(s, six.text_type):
+            if six.PY2:
+                return s.encode('utf-8')
+        elif isinstance(s, six.binary_type):
+            if six.PY3:
+                return s.decode('utf-8')
+        return s
 
     def __init__(self, path, cleanup=True):
         # auto convert to unicode
@@ -1150,8 +1154,10 @@ class StgPathOpt(object):
         return self.get_component_paths()[1:]
 
     def get_ancestors(self):
-        return map(
-            self.__class__, self.get_ancestor_paths()
+        return list(
+            map(
+                self.__class__, self.get_ancestor_paths()
+            )
         )
 
     def get_path_prettify(self):
@@ -1299,8 +1305,10 @@ class StgDirectoryOpt(StgPathOpt):
         )
 
     def get_files(self, ext_includes=None):
-        return map(
-            StgFileOpt, self.get_file_paths(ext_includes)
+        return list(
+            map(
+                StgFileOpt, self.get_file_paths(ext_includes)
+            )
         )
 
     def get_all_file_paths(self, ext_includes=None):
@@ -1309,8 +1317,10 @@ class StgDirectoryOpt(StgPathOpt):
         )
 
     def get_all_files(self, ext_includes=None):
-        return map(
-            StgFileOpt, self.get_all_file_paths(ext_includes)
+        return list(
+            map(
+                StgFileOpt, self.get_all_file_paths(ext_includes)
+            )
         )
 
     def get_directory_paths(self):
@@ -1320,8 +1330,10 @@ class StgDirectoryOpt(StgPathOpt):
         return _
 
     def get_directories(self):
-        return map(
-            self.__class__, self.get_directory_paths()
+        return list(
+            map(
+                self.__class__, self.get_directory_paths()
+            )
         )
 
     def get_all_directory_paths(self):
@@ -1330,8 +1342,10 @@ class StgDirectoryOpt(StgPathOpt):
         )
 
     def get_all_directories(self):
-        return map(
-            self.__class__, self.get_all_directory_paths()
+        return list(
+            map(
+                self.__class__, self.get_all_directory_paths()
+            )
         )
 
     def get_all_paths(self):
@@ -1340,8 +1354,10 @@ class StgDirectoryOpt(StgPathOpt):
         )
 
     def get_all(self):
-        return map(
-            lambda x: StgDirectoryOpt(x) if os.path.isdir(x) else StgFileOpt(x), self.get_all_paths()
+        return list(
+            map(
+                lambda x: StgDirectoryOpt(x) if os.path.isdir(x) else StgFileOpt(x), self.get_all_paths()
+            )
         )
 
     def get_child_names(self):
@@ -2079,8 +2095,10 @@ class StgTextureOpt(StgFileOpt):
         super(StgTextureOpt, self).__init__(*args, **kwargs)
 
     def get_units(self):
-        return map(
-            self.__class__, StgTextureMtd.get_unit_paths(self.get_path())
+        return list(
+            map(
+                self.__class__, StgTextureMtd.get_unit_paths(self.get_path())
+            )
         )
 
     def get_unit_paths(self):
