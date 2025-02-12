@@ -728,8 +728,8 @@ class AbsSsnRsvTaskOptionMethod(
 
         self.__completion_option_by_rsv_scene_properties_()
         #
-        # print self.get_option_opt()
-        # print self.get_option()
+        # print(self.get_option_opt())
+        # print(self.get_option())
 
         self._validation_checker = ValidationChecker(self)
 

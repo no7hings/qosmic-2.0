@@ -53,4 +53,4 @@ class _RandomNameSequence:
 
 if __name__ == '__main__':
 
-    print _RandomNameSequence().next()
+    print(_RandomNameSequence().next())

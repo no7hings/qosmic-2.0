@@ -1,7 +1,7 @@
 # coding:utf-8
-import _base
+from . import _base
 
-import _root
+from . import _root
 
 
 class Stage(object):

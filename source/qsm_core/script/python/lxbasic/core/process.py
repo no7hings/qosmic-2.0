@@ -183,7 +183,7 @@ class BscProcess(object):
         #     r'(.*)/windows/paper\s(.*)'
         # ]
         #
-        # # print 'command is', cmd_script
+        # # print('command is', cmd_script)
         # for i_p in ps:
         #     if re.search(i_p, cmd_script) is not None:
         #         return True

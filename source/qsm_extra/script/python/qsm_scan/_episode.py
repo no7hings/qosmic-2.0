@@ -1,11 +1,11 @@
 # coding:utf-8
-import _base
+from . import _base
 
-import _sequence
+from . import _sequence
 
-import _shot
+from . import _shot
 
-import _task
+from . import _task
 
 
 class Episode(_base.AbsEntity):

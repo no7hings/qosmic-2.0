@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import copy
 import functools
 import math
@@ -235,10 +237,10 @@ class FKIKSwitch(object):
                 break
 
         ik_splines = cmds.ls('{namespace}:Spine*_{direction}'.format(**options), long=1)
-        print ik_splines
+        print(ik_splines)
 
         for i_key in keys:
-            print i_key
+            print(i_key)
 
     @classmethod
     def switch_torso_to_fk(cls, content, namespace, direction):

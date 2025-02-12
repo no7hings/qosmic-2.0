@@ -142,7 +142,6 @@ class AssetWorkspaceOld(object):
             )
             for j_path in i_geometry_paths:
                 j_obj_opt = ktn_core.KtnSGNodeOpt(i_s_opt, j_path)
-                # print j_path, j_obj_opt.get('materialAssign', use_global=True), 'AAA'
                 if not j_obj_opt.get('materialAssign'):
                     list_.append(
                         (i_pass_name, j_path)

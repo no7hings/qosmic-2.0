@@ -357,9 +357,9 @@ class Log(object):
     @classmethod
     def filter_process_start(cls, text):
         """
-        print Log.filter_process_start(
+        print(Log.filter_process_start(
             '2023-09-13 15:25:20         | <test> process is started, total is 20'
-        )
+        ))
         """
         p = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}).*\|\s<(.*)> process is started, total is (\d+)'
         m = re.search(p, text)
@@ -372,9 +372,9 @@ class Log(object):
     @classmethod
     def filter_progress(cls, text):
         """
-        print Log.filter_progress(
+        print(Log.filter_progress(
             '2023-09-13 15:50:27         | <test> ■□□□□□□□□□□□□□□□□□□□   10%, cost time 00:00:00.5006'
-        )
+        ))
         """
         p = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}).*\|\s<(.*)>.*\s(\d+)\%, cost time (\d+)'
         m = re.search(p, text)
@@ -387,9 +387,9 @@ class Log(object):
     @classmethod
     def filter_result(cls, text):
         """
-        print Log.filter_result(
+        print(Log.filter_result(
             '2023-09-13 15:25:20         | process is started, total is 20'
-        )
+        ))
         """
         p = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}).*\|\s(.*)'
         m = re.search(p, text)

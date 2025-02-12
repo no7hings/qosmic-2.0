@@ -32,7 +32,7 @@ from ..core.wrap import *
 from .. import core as gui_qt_usd_core
 
 
-if QT_USD_FLAG is True:
+if QT_USD_VIEWPORT_FLAG is True:
     class QtUsdStageView(Usdviewq.stageView.StageView):
         def __init__(self, *args, **kwargs):
             super(QtUsdStageView, self).__init__(*args, **kwargs)
@@ -1747,6 +1747,6 @@ if QT_USD_FLAG is True:
             return self._stageView
 
 else:
-    class QtUsdStageWidgetProxy(QtWidgets.QWidget):
+    class QtUsdStageWidget(QtWidgets.QWidget):
         def __init__(self, *args, **kwargs):
-            super(QtUsdStageWidgetProxy, self).__init__(*args, **kwargs)
+            super(QtUsdStageWidget, self).__init__(*args, **kwargs)

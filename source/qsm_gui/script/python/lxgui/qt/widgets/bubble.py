@@ -45,7 +45,7 @@ class QtTextBubble(
             # fit to max size
             txt_w = min(txt_w, self._text_w_maximum)
             wgt_w = txt_w+dlt_w
-            self.setFixedWidth(wgt_w)
+            self.setFixedWidth(int(wgt_w))
 
             dlt_icon_w, dlt_icon_h = self._delete_icon_size
 
@@ -212,7 +212,7 @@ class QtInfoBubble(
             w_c = txt_w+s_t*2
 
             if self._size_mode == self.SizeMode.Auto:
-                self.setFixedWidth(w_c)
+                self.setFixedWidth(int(w_c))
                 self._frame_draw_rect.setRect(
                     x+1, y+1, w_c-1, h-1
                 )
@@ -591,7 +591,7 @@ class QtPathBubble(
 
             c_x += w_d
 
-            self.setFixedWidth(c_x)
+            self.setFixedWidth(int(c_x))
 
     def __init__(self, *args, **kwargs):
         super(QtPathBubble, self).__init__(*args, **kwargs)

@@ -90,7 +90,7 @@ class Shelf(object):
             width=35,
             height=34,
             flat=1,
-            command='print "Test"',
+            command='print("Test")',
             overlayLabelBackColor=(0, 0, 0, 0)
         )
         options.update(

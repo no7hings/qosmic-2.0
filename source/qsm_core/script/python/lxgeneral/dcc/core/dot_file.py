@@ -407,13 +407,11 @@ class DotXgenOpt(_AbsDotFile):
                 if '\t' not in i_obj_type:
                     for j_port_name, (j_port_type, j_port_raw) in i_port_dict.items():
                         j_key = '{}.{}'.format(i_key, j_port_name)
-                        # print j_key, j_port_raw
+                        # print(j_key, j_port_raw)
                         d.set(j_key, j_port_raw)
                 else:
-                    pass
                     j_key = '{}.extra'.format(cur_description_name)
                     d.append_element(j_key, i_obj_type)
-                    # print i_obj_type
         return d
 
     def get_collection_data_directory_path(self):
@@ -592,7 +590,6 @@ class DotMaOptOld(_AbsDotFile):
             if i_obj_type in self.FILE_REFERENCE_DICT:
                 i_port_name = self.FILE_REFERENCE_DICT[i_obj_type]
                 if i_port_name is not None:
-                    # print 'start obj: "{}"'.format(obj_name)
                     port_raws = self._generate_obj_port_dict(i_line)
                     if i_port_name in port_raws:
                         i_port_type, i_port_raw = port_raws[i_port_name]
@@ -624,7 +621,6 @@ class DotMaOptOld(_AbsDotFile):
                                         raw['port_raw'] = i_file_path
                         #
                         list_.append(raw)
-                    # print 'end obj: "{}"'.format(obj_name)
         print('end file-path: "{}"'.format(self.file_path))
         return list_
 
@@ -1030,8 +1026,7 @@ class DotMaOpt(_AbsDotFile):
                             properties['line'] = line
                             properties['obj_type'] = i_obj_type
                             properties['obj_name'] = i_obj_name
-                            #
-                            # print '<obj-create> "{}"'.format(i_obj_path)
+
                             dict_[i_obj_path] = properties
         return dict_
 
@@ -1141,7 +1136,7 @@ class DotMaOpt(_AbsDotFile):
                 if data_type == 'array':
                     properties['size'] = int(raw.get('size'))
                 dict_[port_path] = properties
-                # print '<port-create> "{}"'.format('{}.{}'.format(obj_path, port_path))
+
         return dict_
 
     def _get_obj_is_io_(self, obj_properties):

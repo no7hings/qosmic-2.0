@@ -56,9 +56,9 @@ class SsnHookFileMtd(object):
     def get_hook_abs_path(cls, src_key, tgt_key):
         """
         for i in ['../shotgun/shotgun-create', '../maya/geometry-export', '../maya/look-export']:
-            print SsnHookFileMtd.get_hook_abs_path(
+            print(SsnHookFileMtd.get_hook_abs_path(
                 'rsv-task-methods/asset/usd/usd-create', i
-            )
+            ))
 
         rsv-task-methods/asset/shotgun/shotgun-create
         rsv-task-methods/asset/maya/geometry-export

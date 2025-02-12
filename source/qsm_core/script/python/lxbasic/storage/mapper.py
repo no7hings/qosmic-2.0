@@ -58,9 +58,9 @@ class StgPathMapper(object):
     @classmethod
     def map_to_linux(cls, path):
         """
-print Path.map_to_linux(
+print(Path.map_to_linux(
     'l:/a'
-)
+))
         :param path:
         :return:
         """

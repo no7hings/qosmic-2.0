@@ -192,7 +192,6 @@ class EtrNodePortOpt(object):
                         elif type_name in 'vectorArray':
                             cmds.setAttr(path, len(value), *value, type=type_name)
                         else:
-                            # print path, type_name, value
                             cmds.setAttr(path, *value, clamp=1, type=type_name)
                     else:
                         if isinstance(value, bool):
@@ -200,8 +199,7 @@ class EtrNodePortOpt(object):
                         elif isinstance(value, (float, int)):
                             cmds.setAttr(path, value)
                         else:
-                            # print path, type_name, value
-                            # Debug ( Clamp Maximum or Minimum Value )
+                            # debug (clamp maximum or minimum value)
                             cmds.setAttr(path, value, clamp=1)
         except Exception:
             import traceback

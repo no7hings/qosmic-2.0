@@ -7,7 +7,7 @@ import six
 
 import sys
 
-import _base
+from . import _base
 
 
 class AbsBase(object):

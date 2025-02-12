@@ -242,7 +242,7 @@ m = mya_dcc_objects.Mesh('mesh_001')
 
 m_o = mya_dcc_operators.MeshLookOpt(m)
 
-print m_o.get_subsets_by_material_assign()
+print(m_o.get_subsets_by_material_assign())
         :return:
         """
         subset_dict = {}

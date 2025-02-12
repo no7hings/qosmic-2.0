@@ -146,7 +146,6 @@ class ImgOiioMtd(object):
             # '--text:x=100:y=200:font="Arial":color=1,0,0:size=60 "Go Big Red!"',
             '-o "{output}"',
         ]
-        # print ' '.join(cmd_args).format(**option)
         bsc_cor_process.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**option)
         )

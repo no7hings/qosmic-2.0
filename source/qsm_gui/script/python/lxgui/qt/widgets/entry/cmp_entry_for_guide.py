@@ -183,8 +183,6 @@ class QtCmpEntryForGuide(
         self._delete_icon_draw_rect.setRect(
             w-frm_w+(frm_w-dlt_w)/2, c_y+(frm_h-dlt_h)/2, dlt_w, dlt_h
         )
-        #
-        # self.setFixedWidth(c_x)
 
     def eventFilter(self, *args):
         widget, event = args

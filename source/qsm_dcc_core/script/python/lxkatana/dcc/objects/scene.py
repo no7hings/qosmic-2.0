@@ -153,7 +153,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         while tvl.valid():
             i_obj_path = tvl.getLocationPath()
             i_obj_type_name = tvl.getLocationData().getAttrs().getChildByName('type').getData()[0]
-            # print i_obj_type_name
+
             _obj = self._create_obj_(i_obj_type_name, i_obj_path)
             _obj.obj_opt = self._scene_graph_opt.generate_obj_opt(i_obj_path)
             tvl.next()

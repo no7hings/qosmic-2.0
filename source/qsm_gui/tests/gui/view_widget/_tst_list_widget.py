@@ -126,6 +126,7 @@ def test():
 
     from lxgui.qt.core import wrap
 
+    # f.setDefaultFormat(f)
     app = wrap.QtWidgets.QApplication(sys.argv)
 
     w = W()

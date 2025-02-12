@@ -15,17 +15,17 @@ _UuidCreate(b)
 
 bytes_ = b.raw
 
-int_ = long(('%02x'*16) % tuple(map(ord, bytes_)), 16)
+int_ = int(('%02x'*16) % tuple(map(ord, bytes_)), 16)
 
 hex_ = '%032x' % int_
 
-print hex_
+print(hex_)
 
-# print bsc_core.BscIntegerOpt(100).encode_to_36()
+# print(bsc_core.BscIntegerOpt(100).encode_to_36())
 #
-# print bsc_core.BscIntegerOpt(100).encode_to_36()
+# print(bsc_core.BscIntegerOpt(100).encode_to_36())
 
 # for i in range(10):
-#     print str(uuid.uuid1()).upper()
+#     print(str(uuid.uuid1()).upper())
 
 

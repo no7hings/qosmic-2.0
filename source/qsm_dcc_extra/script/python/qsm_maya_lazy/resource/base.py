@@ -287,7 +287,6 @@ class AbsNodeGraphOpt(object):
         return file_path
     
     def apply_data(self, file_path, frame_offset=None):
-        print frame_offset
         nodes = qsm_mya_core.SceneFile.import_as_node_graph(
             file_path
         )

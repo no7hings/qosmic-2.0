@@ -63,11 +63,7 @@ class _QtViewAsIconForPopup(_qt_abstracts.AbsQtListWidget):
 
     # noinspection PyUnusedLocal
     def _compute_height_maximum_(self, row_maximum, includes=None):
-        # w, h = self.viewport().width(), self.viewport().height()
         c_w, c_h = self.gridSize().width(), self.gridSize().height()
-        # print w, c_w
-        # row_count = int(w/c_w)
-        # print row_count
         adjust = 1+5
         return c_h*row_maximum+adjust
 
@@ -132,7 +128,7 @@ class _AbsQtPopupAsChoose(
             c_h -= h_top_tbr
 
             if self._popup_item_tag_filter_is_enable is True:
-                t_f_w = c_w*self._popup_tag_filter_width_percent
+                t_f_w = int(c_w*self._popup_tag_filter_width_percent)
                 self._popup_tag_filter_view.setGeometry(
                     c_x+1, c_y+1, t_f_w-2, c_h-2
                 )

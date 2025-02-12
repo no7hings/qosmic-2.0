@@ -177,11 +177,11 @@ class HardwareRenderSettings(object):
             'ornament',  # 21
         ]
 
-        args = [0L]*len(keys)
+        args = [0]*len(keys)
         for i_idx, i in enumerate(keys):
             if i in kwargs:
                 if kwargs[i]:
-                    args[i_idx] = 1L
+                    args[i_idx] = 1
 
         cmds.setAttr(
             'hardwareRenderingGlobals.objectTypeFilterValueArray',
@@ -193,11 +193,11 @@ class HardwareRenderSettings(object):
         sub_keys = [
             'gpu_cache'
         ]
-        sub_args = [0L]*len(sub_keys)
+        sub_args = [0]*len(sub_keys)
         for i_idx, i in enumerate(sub_keys):
             if i in kwargs:
                 if kwargs[i]:
-                    sub_args[i_idx] = 1L
+                    sub_args[i_idx] = 1
 
         cmds.setAttr(
             'hardwareRenderingGlobals.pluginObjectTypeFilterValueArray',

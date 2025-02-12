@@ -205,7 +205,6 @@ class GuiQtModForScroll(object):
         if self._is_valid:
             value_pre = self.__value
             self.__value = int(max(min(v, self.__maximum), self.__minimum))
-            # print self.__maximum, self.__minimum, v, self.__value
             if self.__value != value_pre:
                 return True
             return False

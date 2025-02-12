@@ -164,7 +164,7 @@ class OptionHook(object):
         )
         if _:
             hook_type, hook_key, hook_configure, yaml_file_path, python_file_path, shell_file_path = _
-            # print hook_type, hook_key, hook_configure, yaml_file_path, python_file_path, shell_file_path
+            # print(hook_type, hook_key, hook_configure, yaml_file_path, python_file_path, shell_file_path)
 
             session = _base.GenerOptionSession(
                 type=hook_type,

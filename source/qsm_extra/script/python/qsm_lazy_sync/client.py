@@ -7,11 +7,11 @@ import shutil
 
 import requests
 
-import _base
+from . import _base
 
-import _url
+from . import _url
 
-import _configure
+from . import _configure
 
 
 class TaskClient(object):

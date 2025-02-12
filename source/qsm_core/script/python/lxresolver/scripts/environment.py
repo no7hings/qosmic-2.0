@@ -7,7 +7,7 @@ from .. import core as rsv_core
 class ScpEnvironment(object):
     """
 import lxresolver.scripts as rsv_scripts
-print rsv_scripts.ScpEnvironment.get_data('/production/shows/nsa_dev/assets/chr/td_test/user/work.dongchangbao/katana/scenes/surface/td_test.srf.surface.v000_002.katana')
+print(rsv_scripts.ScpEnvironment.get_data('/production/shows/nsa_dev/assets/chr/td_test/user/work.dongchangbao/katana/scenes/surface/td_test.srf.surface.v000_002.katana'))
     """
 
     @classmethod

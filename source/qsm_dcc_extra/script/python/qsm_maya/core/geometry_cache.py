@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import six
 
 import copy
@@ -144,7 +146,7 @@ cacheFile -attachFile -fileName "carol_Skin" -directory "Z:/temeporaries/dongcha
             '}} ;'
         ).format(**kwargs)
 
-        print mel_script
+        # print(mel_script)
 
         return mel.eval(mel_script)
 

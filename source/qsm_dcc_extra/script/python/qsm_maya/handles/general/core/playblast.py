@@ -42,7 +42,7 @@ class RenderSetting(object):
             # set filter
             cmds.setAttr(
                 'hardwareRenderingGlobals.pluginObjectTypeFilterValueArray',
-                [1L],
+                [1],
                 type='Int32Array'
             )
 

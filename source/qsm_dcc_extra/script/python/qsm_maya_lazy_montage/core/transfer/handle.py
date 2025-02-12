@@ -50,7 +50,7 @@ class MocapTransferHandle(object):
             # bake key frame first
             # motion_json_file = tempfile.mktemp(suffix='.motion.json')
             # handle.export_motion_to(motion_json_file)
-            # print motion_json_file
+            # print(motion_json_file)
 
 
 class MocapToAdvHandle(object):

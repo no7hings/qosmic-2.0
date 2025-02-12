@@ -521,7 +521,6 @@ class PlayblastProcess(object):
         return hook_option
 
     def execute(self):
-        # print self._file_path
         file_opt = bsc_storage.StgFileOpt(self._file_path)
         if file_opt.get_is_file():
             with bsc_log.LogProcessContext.create(maximum=3) as l_p:

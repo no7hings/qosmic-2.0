@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import collections
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -549,7 +551,7 @@ class MtgLayer(AbsMtgLayer):
             self.find_root_sketch(),
             translation=1, worldSpace=1, query=1
         )
-        print transformations, root_scale
+        print(transformations, root_scale)
 
     def find_root_start(self):
         _ = cmds.ls('{}:{}'.format(self._namespace, 'ROOT_START'), long=1)

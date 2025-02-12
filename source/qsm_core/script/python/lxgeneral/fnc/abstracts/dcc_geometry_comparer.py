@@ -593,7 +593,7 @@ class AbsFncComparerForDccGeometry(_base.AbsFncOptionBase):
         ).execute()
 
     def do_repair_mesh(self, path_src, path_tgt, check_statuses):
-        # print path_src
+        # print(path_src)
         usd_prim_src = self._dcc_scene_src.usd_stage.GetPrimAtPath(path_src)
         if usd_prim_src.IsValid() is True:
             self.FNC_REPAIRER_FOR_USD_MESH_CLS(

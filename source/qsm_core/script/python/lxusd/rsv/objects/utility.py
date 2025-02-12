@@ -633,7 +633,7 @@ class RsvUsdAssetSetCreator(object):
         new_raw = t.render(
             c.value
         )
-        # print new_raw
+        # print(new_raw)
         #
         bsc_storage.StgFileOpt(
             usd_file_path

@@ -1,4 +1,5 @@
 # coding:utf-8
+from __future__ import print_function
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -215,8 +216,8 @@ class Sketch(object):
 
     @classmethod
     def test(cls):
-        print cls(
+        print(cls(
             qsm_mya_core.DagNode.to_path('sam_Skin:Elbow_R')
         ).get_rotation_between(
             qsm_mya_core.DagNode.to_path('sam_Skin:Shoulder_R')
-        )
+        ))

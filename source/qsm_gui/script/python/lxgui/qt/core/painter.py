@@ -787,7 +787,7 @@ class QtPainter(QtGui.QPainter):
 
     def _set_font_pixel_size_(self, size):
         f = self.font()
-        f.setPixelSize(size)
+        f.setPixelSize(int(size))
         self.setFont(f)
 
     def _set_font_option_(self, size, weight):

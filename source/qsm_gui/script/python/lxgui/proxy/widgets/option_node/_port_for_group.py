@@ -209,7 +209,7 @@ class PrxNodePortGroup(_port_base.AbsPrxPortBaseDef):
                 if i_child.KEY_HIDE is False:
                     if i_width > 0:
                         if i_child.LABEL_HIDED is False:
-                            i_key_widget.setFixedWidth(i_width)
+                            i_key_widget.setFixedWidth(int(i_width))
                         else:
                             if i_child.get_use_enable() is True:
                                 i_key_widget.setFixedWidth(22)

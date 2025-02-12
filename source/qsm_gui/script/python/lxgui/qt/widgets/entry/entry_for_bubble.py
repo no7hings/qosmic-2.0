@@ -31,7 +31,7 @@ class QtEntryForTextBubble(
             w, h = self.width(), self.height()
             w_c = max([QtGui.QFontMetrics(self._text_font).width(_x)+16 for _x in self._draw_texts])
 
-            self.setFixedWidth(w_c)
+            self.setFixedWidth(int(w_c))
 
             self._frame_draw_rect.setRect(
                 x+1, y+1, w_c-1, h-1

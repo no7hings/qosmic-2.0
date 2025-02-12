@@ -31,7 +31,7 @@ class QtChartAsRgbaChoose(
             _i_pos = x, y
             if _i_pos not in poses:
                 poses.append(_i_pos)
-                _i_color_point = QtCore.QPoint(x, y)
+                _i_color_point = QtCore.QPoint(int(x), int(y))
                 if color_path_main.contains(_i_color_point):
                     _i_sub_points = _gui_core.GuiChat.get_regular_polygon_points(
                         x, y, side_count, radius_sub-1, side=0

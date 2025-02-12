@@ -870,7 +870,7 @@ class QtInfoLabel(
         x, y = 0, 0
         w, h = self.width(), self.height()
         w_t, h_t = QtGui.QFontMetrics(self._text_font).width(self._text)+8, h
-        self.setFixedWidth(w_t)
+        self.setFixedWidth(int(w_t))
         self._text_draw_rect.setRect(
             x, y, w_t, h
         )

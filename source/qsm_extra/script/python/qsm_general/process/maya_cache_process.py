@@ -3,7 +3,7 @@ import lxbasic.storage as bsc_storage
 
 import lxbasic.core as bsc_core
 
-import _base
+from . import _base
 
 
 class MayaCacheSubprocess(_base.DccProcess):

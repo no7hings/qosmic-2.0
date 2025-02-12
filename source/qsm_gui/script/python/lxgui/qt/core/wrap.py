@@ -41,6 +41,20 @@ else:
             'qt wrap', 'load form "PySide2"'
         )
 
+__pyside6 = _pkgutil.find_loader('PySide6')
+if __pyside6 is not None:
+    QT_LOAD_INDEX = 1
+    QT_LOAD_FLAG = 'pyside'
+    # noinspection PyUnresolvedReferences
+    from PySide6 import QtGui, QtCore, QtWidgets, QtSvg, QtWebSockets
+    # noinspection PyUnresolvedReferences
+    from PySide6 import QtMultimedia
+
+    _sys.modules['QtSide'] = _sys.modules['PySide6']
+    _log_core.Log.trace_method_result(
+        'qt wrap', 'load form "PySide6"'
+    )
+
 
 if QT_LOAD_INDEX is None:
     raise ImportError(

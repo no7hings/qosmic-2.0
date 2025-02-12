@@ -44,7 +44,7 @@ class Text(object):
         # to string
         text = ensure_string(text)
 
-        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
+        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text)
         for i_c in chars:
             list_.append(i_c)
             # is chinese
@@ -59,7 +59,7 @@ class Text(object):
         # to string
         text = ensure_string(text)
 
-        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
+        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text)
         for i_c in chars:
             # chs
             if re.match(six.u(r'[\u4e00-\u9fff]+'), i_c):
@@ -75,7 +75,7 @@ class Text(object):
         # to string
         text = ensure_string(text)
 
-        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
+        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text)
         for i_c in chars:
             list_.append(i_c)
             # chs
@@ -89,7 +89,7 @@ class Text(object):
         # to string
         text = ensure_string(text)
 
-        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
+        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text)
 
         if chars:
             c = chars[0]
@@ -103,7 +103,7 @@ class Text(object):
         # to string
         text = ensure_string(text)
 
-        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
+        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text)
         for i_c in chars:
             # chs
             if re.match(six.u(r'[\u4e00-\u9fff]+'), i_c):

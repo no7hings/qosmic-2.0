@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import os.path
 
 # noinspection PyUnresolvedReferences
@@ -156,4 +158,4 @@ class ShitFixer(object):
         for i_shape_path in shape_paths:
             i_transform_path = qsm_mya_core.Shape.get_transform(i_shape_path)
             _ = cmds.ls(i_transform_path, type='mesh', noIntermediate=0, dag=1, long=1)
-            print _
+            print(_)

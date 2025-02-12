@@ -117,7 +117,7 @@ class AssetsQuery(object):
 
     def do_update_by(self, data):
         self._cache_dict.clear()
-        keys = data.keys()
+        keys = list(data.keys())
         keys.sort()
         for i_namespace in keys:
             i_node_path, i_is_loaded, i_file_path, i_variants = data[i_namespace]

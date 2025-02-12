@@ -6,7 +6,7 @@ from . import base as _base
 
 class RscExtendConfigure(_base.AbsResource):
     """
-print RscConfigure.get_yaml('database/library/resource-basic')
+print(RscConfigure.get_yaml('database/library/resource-basic'))
     """
     CACHE = {}
     ENVIRON_KEY = 'QSM_EXTEND_CONFIGURES'
@@ -45,7 +45,7 @@ print(
     )
 )
 
-print RscJinjaConfigure.get_template('usda/shot-asset-set')
+print(RscJinjaConfigure.get_template('usda/shot-asset-set'))
 print(
     RscJinjaConfigure.get_result(
         'katana/images',

@@ -1,5 +1,5 @@
 # coding:utf-8
-import _base
+from . import _base
 
 
 class MayaTaskSubprocess(_base.DccProcess):

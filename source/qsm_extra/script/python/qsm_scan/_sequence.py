@@ -1,11 +1,11 @@
 # coding:utf-8
 import lxbasic.pinyin as bsc_pinyin
 
-import _base
+from . import _base
 
-import _shot
+from . import _shot
 
-import _task
+from . import _task
 
 
 class Sequence(_base.AbsEntity):

@@ -118,7 +118,7 @@ class QtHResizeHandle(
             else:
                 raise RuntimeError()
             if self._resize_minimum+10 <= w_1 <= self._resize_maximum+10:
-                self._resize_target.setFixedWidth(w_1)
+                self._resize_target.setFixedWidth(int(w_1))
                 # self._resize_target.setMaximumWidth(w_1)
                 self.size_changed.emit(w_1)
 

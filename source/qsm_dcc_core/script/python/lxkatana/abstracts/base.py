@@ -200,16 +200,16 @@ class AbsKtnPort(gnl_dcc_abstracts.AbsDccPort):
                 self._set_disconnect_(self, i_target)
 
     def get_targets(self):
-        lis = []
+        list_ = []
         input_ktn_ports = self.ktn_port.getConnectedPorts()
         if input_ktn_ports:
             for i_input_ktn_port in input_ktn_ports:
                 i_ktn_obj = i_input_ktn_port.getNode()
                 i_obj = self.obj.__class__(i_ktn_obj.getName())
-                lis.append(
+                list_.append(
                     i_obj.get_input_port(i_input_ktn_port.getName())
                 )
-        return lis
+        return list_
 
     def set_target(self, input_port, force=False, validation=False):
         if force is True:
@@ -358,20 +358,20 @@ class AbsKtnObj(gnl_dcc_abstracts.AbsDccNode):
                         _i_path = '{}{}{}'.format(self.path, pathsep, _i.getName())
                         _rcs_fnc(lis_, _i_path)
 
-        lis = []
+        list_ = []
         pathsep = self.pathsep
-        _rcs_fnc(lis, self.name)
-        return lis
+        _rcs_fnc(list_, self.name)
+        return list_
 
     def get_child_paths(self):
-        lis = []
+        list_ = []
         ktn_obj = self._generate_ktn_obj()
         if ktn_obj is not None:
             if hasattr(ktn_obj, 'getChildren'):
                 _ = ktn_obj.getChildren() or []
                 for i in _:
-                    lis.append('{}{}{}'.format(self.path, self.pathsep, i.getName()))
-        return lis
+                    list_.append('{}{}{}'.format(self.path, self.pathsep, i.getName()))
+        return list_
 
     def _get_child_(self, path):
         return self.__class__(path)
@@ -401,20 +401,20 @@ class AbsKtnObj(gnl_dcc_abstracts.AbsDccNode):
         [i.do_delete() for i in self.get_children()]
 
     def get_source_ktn_connections(self):
-        lis = []
+        list_ = []
         ktn_obj = self._generate_ktn_obj()
         _ = ktn_obj.getInputPorts() or []
         for target_ktn_port in _:
             source_ktn_ports = target_ktn_port.getConnectedPorts()
             if source_ktn_ports:
                 for source_ktn_port in source_ktn_ports:
-                    lis.append((target_ktn_port, source_ktn_port))
-        return lis
+                    list_.append((target_ktn_port, source_ktn_port))
+        return list_
 
     def _get_source_connection_raw_(self, **kwargs):
         inner = kwargs.get('inner') or False
-        # print inner
-        lis = []
+
+        list_ = []
         ktn_obj = self._generate_ktn_obj()
         _ = ktn_obj.getInputPorts() or []
         for target_ktn_port in _:
@@ -432,17 +432,17 @@ class AbsKtnObj(gnl_dcc_abstracts.AbsDccNode):
                     target_atr_path = bsc_core.BscAttributePath.join_by(
                         target_obj_name, target_port_name
                     )
-                    lis.append(
+                    list_.append(
                         (i_source_atr_path, target_atr_path)
                     )
-        return lis
+        return list_
 
     # def get_all_source_objs(self, *args, **kwargs):
     #     # TODO, fix this code
     #     return [self.__class__(i.getName()) for i in ktn_core.NGNodeOpt(self._generate_ktn_obj()).get_all_source_objs()]
 
     def get_target_connections(self):
-        lis = []
+        list_ = []
         ktn_obj = self._generate_ktn_obj()
         _ = ktn_obj.getOutputPorts() or []
         for source_ktn_port in _:
@@ -453,8 +453,8 @@ class AbsKtnObj(gnl_dcc_abstracts.AbsDccNode):
                     target_ktn_obj = target_ktn_port.getNode()
                     source_port = self.__class__(source_ktn_obj.getName()).get_output_port(source_ktn_port.getName())
                     target_port = self.__class__(target_ktn_obj.getName()).get_input_port(target_ktn_port.getName())
-                    lis.append(self.DCC_CONNECTION_CLS(source_port, target_port))
-        return lis
+                    list_.append(self.DCC_CONNECTION_CLS(source_port, target_port))
+        return list_
 
     #
     def get_sources(self):
@@ -601,18 +601,18 @@ class AbsKtnObj(gnl_dcc_abstracts.AbsDccNode):
             else:
                 _type = ktn_port_.getType()
                 if _type != 'group':
-                    lis.append(
+                    list_.append(
                         self.get_port(_port_path)
                     )
 
         #
-        lis = []
+        list_ = []
         port_pathsep = self.DCC_PORT_CLS.PATHSEP
         root_ktn_port = self.ktn_obj.getParameters()
         for i in root_ktn_port.getChildren():
             rcs_fnc_(i, None)
 
-        return lis
+        return list_
 
     def get_attributes(self):
         attributes = bsc_content.Properties(self)
@@ -664,13 +664,13 @@ class AbsKtnObjs(gnl_dcc_abstracts.AbsDccNodes):
     def get_paths(cls, **kwargs):
         cls.pre_run_fnc()
         #
-        lis = []
+        list_ = []
         for i in cls.DCC_TYPES_INCLUDE:
             _ = NodegraphAPI.GetAllNodesByType(i) or []
             for ktn_node in _:
                 obj_path = cls.DCC_NODE_CLS._get_ktn_obj_path_(ktn_node.getName())
-                lis.append(obj_path)
-        return lis
+                list_.append(obj_path)
+        return list_
 
 
 class AbsKtnObjConnection(gnl_dcc_abstracts.AbsDccNodeConnection):

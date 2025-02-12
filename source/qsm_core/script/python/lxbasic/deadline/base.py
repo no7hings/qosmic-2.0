@@ -7,6 +7,8 @@ import re
 
 import parse
 
+from .wrap import *
+
 import lxbasic.resource as bsc_resource
 
 
@@ -19,6 +21,7 @@ class DdlBase(object):
     def _generate_content(cls):
         if cls.CONTENT is not None:
             return cls.CONTENT
+
         cls.CONTENT = bsc_resource.RscExtendConfigure.get_as_content('deadline/main')
         cls.CONTENT.do_flatten()
         return cls.CONTENT
@@ -28,23 +31,23 @@ class DdlBase(object):
         if cls.CONNECTION is not None:
             return cls.CONNECTION
 
-        from Deadline import DeadlineConnect
-
         import qsm_general.core as qsm_gnl_core
 
         cct = cls._generate_content()
 
-        if qsm_gnl_core.scheme_is_release():
-            c = DeadlineConnect.DeadlineCon(
-                cct.get('connection_new.host'), cct.get('connection_new.port')
-            )
-        else:
-            c = DeadlineConnect.DeadlineCon(
-                cct.get('connection_default.host'), cct.get('connection_default.port')
-            )
+        if DEADLINE_FLAG is True:
+            if qsm_gnl_core.scheme_is_release():
+                c = DeadlineConnect.DeadlineCon(
+                    cct.get('connection_new.host'), cct.get('connection_new.port')
+                )
+            else:
+                c = DeadlineConnect.DeadlineCon(
+                    cct.get('connection_default.host'), cct.get('connection_default.port')
+                )
 
-        cls.CONNECTION = c
-        return c
+            cls.CONNECTION = c
+            return c
+        return None
 
 
 class DdlLogPattern(object):

@@ -25,12 +25,12 @@ class HardwareRenderSetup(object):
             # set filter
             cmds.setAttr(
                 'hardwareRenderingGlobals.objectTypeFilterValueArray',
-                [0L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L],
+                [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 type='Int32Array'
             )
             # gpu
             cmds.setAttr(
                 'hardwareRenderingGlobals.pluginObjectTypeFilterValueArray',
-                [1L],
+                [1],
                 type='Int32Array'
             )

@@ -147,7 +147,7 @@ class GpuInstanceProcess(object):
 
         if list_for_grid:
             mapper = qsm_mya_asb_core.GridSpace(list_for_grid, _core.Assembly.DIMENSION_MINIMUM).generate()
-            keys = mapper.keys()
+            keys = list(mapper.keys())
             keys.sort()
             for i_seq, i_key in enumerate(keys):
                 i_hash_key = bsc_core.BscHash.to_hash_key(i_key)

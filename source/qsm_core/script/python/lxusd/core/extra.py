@@ -488,8 +488,8 @@ class UsdStageOpt(UsdBasic):
             if i_prims:
                 print(i_prims[0].path)
                 print(i_prims[0].layer)
-                # print i.subLayerPaths
-                # print i.realPath
+                # print(i.subLayerPaths)
+                # print(i.realPath)
             # dict_[i_prim.GetPath().pathString] = i_prim.realPath
         return dict_
 
@@ -1302,11 +1302,11 @@ class NpKDTree(object):
 
     def compute_closed_index(self, point):
         """
-    print NpKDTree(
+    print(NpKDTree(
         [(0, 1, 0), (0, 2, 0), (0, 3, 0)]
     ).get_closed_point(
         (0, 2.15, 0)
-    )
+    ))
         """
         return self._kd_tree.query(self._np_array_fnc(list(point)))[1]
 
@@ -1942,7 +1942,7 @@ class UsdMatrix(object):
     def to_transformation(self):
         """
 if __name__ == '__main__':
-    print UsdMatrix(
+    print(UsdMatrix(
         Gf.Matrix4d(
             [
                 (4.92403876506104, 0.0, -0.8682408883346516, 0.0),
@@ -1951,9 +1951,9 @@ if __name__ == '__main__':
                 (0.0, 10.0, 0.0, 1.0)
             ]
         )
-    ).to_transformation()
+    ).to_transformation())
 
-    print UsdMatrix(
+    print(UsdMatrix(
         Gf.Matrix4d(
             [
                 (4.990105983120342, 0.2615203729623543, -0.1744974835125049, 0.0),
@@ -1963,7 +1963,7 @@ if __name__ == '__main__':
             ]
 
         )
-    ).to_transformation()
+    ).to_transformation())
 
         """
         _, r, s, u, t, p = self._usd_fnc.Factor()
@@ -2004,9 +2004,9 @@ class UsdQuaternion(object):
     def to_rotate(self):
         """
 if __name__ == '__main__':
-    print UsdQuaternion(
+    print(UsdQuaternion(
         (0.731934, 0.0433655, -0.679688, 0.00678253)
-    ).to_rotate()
+    ).to_rotate())
         """
         x, y, z = self._usd_fnc.GetImaginary()
         return Gf.Vec3d(x*360.0/math.pi, y*360.0/math.pi, z*360.0/math.pi)

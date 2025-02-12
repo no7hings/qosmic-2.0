@@ -8,8 +8,8 @@ import glob
 
 class AbsResource(object):
     """
-print ExtendResource.get('icons/file/file.svg')
-print ExtendResource.get('icons/file/folder.svg')
+print(ExtendResource.get('icons/file/file.svg'))
+print(ExtendResource.get('icons/file/folder.svg'))
     """
     CACHE = {}
 

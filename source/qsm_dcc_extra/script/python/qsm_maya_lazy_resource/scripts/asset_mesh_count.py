@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -93,7 +95,7 @@ class AssetGpuMeshCountData(object):
         # _asset_general.ProcessUtils.find_all_gpu_caches_and_textures_from(
         #     'X:/QSM_TST/Assets/scn/test_gpu_assembly/Maya/Final/test_gpu_assembly.ma'
         # )
-        print cls('test_gpu_assembly').generate()
+        print(cls('test_gpu_assembly').generate())
 
 
 class AssetMeshCountData(object):
@@ -163,7 +165,7 @@ class AssetMeshCountData(object):
 
     @classmethod
     def test(cls):
-        print cls('test_gpu_assembly').generate()
+        print(cls('test_gpu_assembly').generate())
 
 
 class AssetMeshCountGenerate(object):
@@ -188,7 +190,7 @@ class AssetMeshCountGenerate(object):
         file_path = qsm_mya_core.ReferencesCache().get_file(namespace)
         _asset_general.ProcessUtils.pre_process(namespace, file_path)
         data = cls(namespace).generate()
-        print data['mesh_count']['gpu_caches']
+        print(data['mesh_count']['gpu_caches'])
 
 
 class AssetMeshCountProcess(object):

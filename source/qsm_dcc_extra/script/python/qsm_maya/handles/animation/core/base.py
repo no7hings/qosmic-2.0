@@ -1,4 +1,5 @@
 # coding:utf-8
+from __future__ import print_function
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -77,4 +78,4 @@ class AdvQuery(object):
         return self._geometry_query
 
     def test(self):
-        print self._skeleton_query
+        print(self._skeleton_query)

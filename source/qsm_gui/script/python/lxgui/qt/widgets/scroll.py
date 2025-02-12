@@ -26,7 +26,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
 
         if fix_bug is True:
             w, h = self.width(), self.height()
-            self._viewport.resize(w/2, h)
+            self._viewport.resize(int(w/2), h)
             self._viewport.resize(w, h)
             self._viewport.hide()
             self._viewport.show()

@@ -183,7 +183,7 @@ class RigValidationTask(
         #     ['lamina_faces', 'non_manifold_vertices'],
         #     task_prc_cls=_task_prc.ValidationTaskPrc
         # )
-        # print task._result_content
+        # print(task._result_content)
 
 
 class RigValidationTaskSubprocess(object):

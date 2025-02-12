@@ -3,10 +3,6 @@ import lxbasic.core as bsc_core
 
 a = range(25)
 
-# print bsc_core.BscList.split_to(
-#     a, 16
-# )
-
 
 def split_list(lst, min_size, max_chunks):
     if len(lst) <= min_size:
@@ -33,7 +29,7 @@ lst = list(range(1, 1000))
 
 # 每个切片数量不小于64，总切片数量不超过32，超过32个切片时平均分配
 chunks = split_list(lst, 64, 32)
-print len(chunks)
+print(len(chunks))
 for chunk in chunks:
     print(chunk)
 

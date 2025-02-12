@@ -6,7 +6,3 @@ c = 'Y:/deploy/rez-packages/external/ffmpeg/7.0.1/platform-windows/bin/ffmpeg.ex
 bsc_core.BscProcess.execute_as_trace(
     c
 )
-
-# print bsc_core.BscFfmpegVideo.get_frame_count(
-#     'C:/Users/nothings/.qosmic/temporary/2024_0628/EEAB9B0F-3534-11EF-A0A2-4074E0DA267B/ffmpeg-output.24.mov'
-# )

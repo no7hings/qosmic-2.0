@@ -53,7 +53,7 @@ class PrxHSplitter(gui_prx_abstracts.AbsPrxWidget):
         self._qt_widget._set_window_(widget)
 
     def set_width(self, value):
-        self._qt_widget.setFixedWidth(value)
+        self._qt_widget.setFixedWidth(int(value))
 
     def install_full_size_shortcut(self):
         self._qt_widget._install_full_size_shortcut_()

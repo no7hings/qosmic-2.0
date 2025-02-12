@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import functools
 
 import lxbasic.core as bsc_core
@@ -501,7 +503,7 @@ class PrxPageForTaskMonitor(prx_abstracts.AbsPrxWidget):
         self.gui_page_setup_fnc()
 
     def _message_process_(self, text):
-        print text, 'abc'
+        print(text, 'abc')
 
     def _gui_add_main_tools(self):
         for i in [

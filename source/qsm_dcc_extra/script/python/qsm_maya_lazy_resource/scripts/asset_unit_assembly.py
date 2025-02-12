@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import print_function
+
 import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -116,12 +118,12 @@ class _SceneRegionPrc(object):
 
         if mesh_paths:
             grid_map = qsm_mya_asb_core.GridSpace(mesh_paths, grid_size).generate()
-            keys = grid_map.keys()
+            keys = list(grid_map.keys())
             keys.sort()
             for i_seq, i_key in enumerate(keys):
                 # fixme: comp maybe grid again
                 i_shape_paths = grid_map[i_key]
-                print qsm_mya_core.MeshShapes.get_triangle_number(i_shape_paths), 'AAAA'
+                # print(qsm_mya_core.MeshShapes.get_triangle_number(i_shape_paths), 'AAAA')
                 i_ar_path_new = self.prc(i_key, i_seq, i_shape_paths)
                 # fixme: maybe None
                 if i_ar_path_new:

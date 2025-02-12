@@ -393,7 +393,6 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
                     )
                     # has blend
                     if i_blend_nodes:
-                        print i_mesh_transform_tgt
                         self.add_to_bridge_and_auto_blend(
                             i_mesh_transform_src, i_mesh_transform_tgt
                         )

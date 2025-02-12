@@ -777,9 +777,8 @@ class BscIntegerOpt(object):
 class BscText(object):
     @classmethod
     def to_number_embedded_args(cls, text):
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
-        #
+        text = ensure_string(text)
+
         pieces = re.compile(r'(\d+)').split(text)
         pieces[1::2] = map(int, pieces[1::2])
         return pieces
@@ -962,7 +961,11 @@ class BscTextOpt(object):
         string = self.__raw
         if string:
             d = 1000.0
-            hash_ = hashlib.md5(string.encode('utf-8')).hexdigest()
+            string = ensure_string(string)
+            if six.PY2:
+                hash_ = hashlib.md5(string).hexdigest()
+            else:
+                hash_ = hashlib.md5(string.encode('utf-8')).hexdigest()
             h_a = int(hash_[0:8], 16)
             s_a = int(hash_[8:16], 16)
             v_a = int(hash_[16:24], 16)
@@ -979,7 +982,10 @@ class BscTextOpt(object):
             s_p_min, s_p_max = s_p
             v_p_min, v_p_max = v_p
             string = ensure_string(string)
-            hash_ = hashlib.md5(string.encode('utf-8')).hexdigest()
+            if six.PY2:
+                hash_ = hashlib.md5(string).hexdigest()
+            else:
+                hash_ = hashlib.md5(string.encode('utf-8')).hexdigest()
             h_a = int(hash_[0:8], 16)
             s_a = int(hash_[8:16], 16)
             v_a = int(hash_[16:24], 16)

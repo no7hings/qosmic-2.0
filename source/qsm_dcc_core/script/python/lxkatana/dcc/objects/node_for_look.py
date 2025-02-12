@@ -64,9 +64,6 @@ class AndShader(ktn_abstracts.AbsKtnObj):
 
     def set_duplicate_with_source(self):
         print(self.get_shader_properties())
-        # source_objs = self.get_all_source_objs()
-        # for source_obj in source_objs:
-        #     print source_obj.get_shader_properties()
 
     def get_shader_properties(self):
         properties = bsc_content.Properties(self)
@@ -182,7 +179,6 @@ class AndRamp(AndShader):
     def set_ramp_positions(self, value):
         self.get_port('parameters.ramp_Knots.enable').set(True)
         self.get_port('parameters.ramp_Knots.value').set(value)
-        # print self.get_port('parameters.ramp_Knots').ktn_port.getXML()
 
     def get_ramp_interpolation(self):
         return self.get_port('parameters.ramp_Interpolation.value').get()
@@ -204,7 +200,6 @@ class AndRamp(AndShader):
     def set_ramp_floats(self, value):
         self.get_port('parameters.ramp_Floats.enable').set(True)
         self.get_port('parameters.ramp_Floats.value').set(value)
-        # print self.get_port('parameters.ramp_Floats').ktn_port.getXML()
 
     def get_ramp_value(self):
         return self.get_port('parameters.ramp_Floats.value').get()

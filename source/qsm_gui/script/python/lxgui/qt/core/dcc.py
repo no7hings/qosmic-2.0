@@ -40,7 +40,7 @@ class QtMaya(object):
         if six.PY2:
             # noinspection PyCompatibility
             return wrapInstance(long(ptr), base)
-        return wrapInstance(int(str), base)
+        return wrapInstance(int(ptr), base)
 
     @classmethod
     def get_qt_menu_bar(cls):

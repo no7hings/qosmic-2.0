@@ -860,9 +860,11 @@ class BscHash(object):
 
     @classmethod
     def to_hash_key(cls, raw, as_unique_id=False):
-        s = hashlib.md5(
-            json.dumps(raw)
-        ).hexdigest()
+        if six.PY2:
+            s = hashlib.md5(json.dumps(raw)).hexdigest()
+        else:
+            s = hashlib.md5(json.dumps(raw).encode('utf-8')).hexdigest()
+
         if as_unique_id is True:
             return BscUuid.generate_by_hash_value(s)
         return s.upper()

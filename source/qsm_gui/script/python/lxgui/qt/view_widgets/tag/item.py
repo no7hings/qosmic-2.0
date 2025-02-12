@@ -283,7 +283,7 @@ class _QtTagNodeItem(
         item_model_data.frame.rect.setRect(
             x+add_w+1, y+1, fix_w-add_w-1, h-1
         )
-        self.setFixedWidth(fix_w)
+        self.setFixedWidth(int(fix_w))
 
     def _generate_pixmap_cache_(self):
         if self.isHidden():

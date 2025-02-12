@@ -259,7 +259,7 @@ class UnitAssemblyProcess(object):
 
         if list_for_grid:
             mapper = qsm_mya_asb_core.GridSpace(list_for_grid, grid_size).generate()
-            keys = mapper.keys()
+            keys = list(mapper.keys())
             keys.sort()
             with bsc_log.LogProcessContext.create(maximum=len(keys), label='grid process') as l_p:
                 for i_seq, i_key in enumerate(keys):

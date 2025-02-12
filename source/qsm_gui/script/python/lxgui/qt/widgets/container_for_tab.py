@@ -298,7 +298,7 @@ class _AbsQtHTabToolBox(
                     self._tab_choose_button.hide()
                 # tab items
                 scroll_value = self._scroll_bar_model.get_value()
-                heights = self._item_width_or_height_dict.values()
+                heights = list(self._item_width_or_height_dict.values())
                 for i_index, i_tab_item in enumerate(tab_items):
                     i_y = sum(heights[:i_index])
                     i_h = self._item_width_or_height_dict[i_index]

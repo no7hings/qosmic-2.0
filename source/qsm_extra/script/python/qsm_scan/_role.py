@@ -1,11 +1,9 @@
 # coding:utf-8
-import _base
+from . import _base
 
-import _asset
+from . import _asset
 
-import _shot
-
-import _task
+from . import _task
 
 
 class Role(_base.AbsEntity):

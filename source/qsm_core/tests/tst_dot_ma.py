@@ -6,4 +6,4 @@ o = gnl_dcc_core.DotMaOpt(
 )
 
 for i in o.get_node_paths():
-    print i
+    print(i)

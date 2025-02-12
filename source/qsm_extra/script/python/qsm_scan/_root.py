@@ -1,7 +1,7 @@
 # coding:utf-8
-import _base
+from . import _base
 
-from . import _project as _project
+from . import _project
 
 
 class Root(_base.AbsEntity):

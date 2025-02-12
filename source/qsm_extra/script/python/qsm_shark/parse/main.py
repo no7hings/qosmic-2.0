@@ -83,7 +83,7 @@ class Stage(abc_.AbsBase):
         if scheme in cls.INSTANCE_DICT:
             return cls.INSTANCE_DICT[scheme]
 
-        self = super(Stage, cls).__new__(cls, *args, **kwargs)
+        self = super(Stage, cls).__new__(cls)
 
         self._scheme = scheme
         self._platform = bsc_core.BscPlatform.get_current()

@@ -36,10 +36,9 @@ class QtToolGridLayoutWidget(
         m_l, m_t, m_r, m_b = self._layout_margins
         v_x, v_y = m_l, m_t
         v_w, v_h = w-m_l-m_r, h-m_t-m_b
-        #
+
         self._layout_model.set_pos(v_x, v_y)
         self._layout_model.set_size(v_w, v_h)
-        # print self, self._get_action_flag_()
         # swap when flag is drag child polish or add
         if self._is_action_flag_match_(
             self.ActionFlag.DragChildPolish
@@ -59,8 +58,6 @@ class QtToolGridLayoutWidget(
                     i_index_cur = i_index-1
                 elif self._index_drag_child_polish <= i_index < self._index_drag_child_polish_start:
                     i_index_cur = i_index+1
-
-                # print i_index, i_index_cur, self._index_drag_child_polish_start, self._index_drag_child_polish
 
                 i_x, i_y, i_w, i_h = self._layout_model.get_geometry_at(i_index_cur)
 

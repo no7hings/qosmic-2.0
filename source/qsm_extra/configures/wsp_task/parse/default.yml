@@ -56,7 +56,7 @@ entities:
                 - '{root_release}/{project}/QSM/{space}/episodes/{episode}'
         Sequence:
             disorder:
-                - '{root_disorder}/{project}/{episode}/{sequence}/分镜'
+                - '{root_disorder}/{project}/{episode}/{sequence}{seq_IGN}/分镜'
             source:
                 - '{root_source}/{project}/{space}/sequences/{sequence}'
                 - '{root_source}/{project}/{space}/shots/{sequence}'

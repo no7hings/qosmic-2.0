@@ -22,7 +22,6 @@ class GridSpace(object):
             i_y_region = 0
             i_z_region = int(i_z//self._grid_size)
             i_key = (i_x_region, i_y_region, i_z_region)
-            # print i_key, (i_x, i_y, i_z), i_shape_path
             dict_.setdefault(
                 i_key, []
             ).append(i_shape_path)

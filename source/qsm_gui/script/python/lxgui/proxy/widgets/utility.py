@@ -440,7 +440,7 @@ class PrxPressButton(gui_prx_abstracts.AbsPrxWidget):
         pass
 
     def set_width(self, w):
-        self.widget.setFixedWidth(w)
+        self.widget.setFixedWidth(int(w))
 
     def set_icon_size(self, w, h):
         self.widget._icon_draw_size = w, h

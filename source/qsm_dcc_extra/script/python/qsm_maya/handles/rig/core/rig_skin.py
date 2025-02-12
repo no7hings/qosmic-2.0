@@ -1,4 +1,5 @@
 # coding:utf-8
+from __future__ import print_function
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -65,7 +66,4 @@ class MeshSkinOpt(abc_.AbsMeshOpt):
     @classmethod
     def test(cls):
         _ = cls('pSphere1')
-        # print _.is_valid()
-        # print _.get_skin_cluster()
-        # print _.get_joints()
-        print _.get_deficiency_weight_vertex_names()
+        print(_.get_deficiency_weight_vertex_names())

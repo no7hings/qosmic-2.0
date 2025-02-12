@@ -368,7 +368,7 @@ class QtPressButton(
 
         if self._auto_width_flag is True:
             txt_w = QtGui.QFontMetrics(self._name_draw_font).width(self._name_text)+16
-            self.setFixedWidth(txt_w+btn_width)
+            self.setFixedWidth(int(txt_w+btn_width))
 
         # progress
         if progress_enable is True:

@@ -629,7 +629,7 @@ class AbsQtFrameBaseDef(object):
         self._frame_border_radius = radius
 
     def _set_width_(self, value):
-        self._widget.setFixedWidth(value)
+        self._widget.setFixedWidth(int(value))
 
 
 class AbsQtResizeBaseDef(object):
@@ -1603,7 +1603,7 @@ class AbsQtNameBaseDef(object):
         w = _qt_core.GuiQtText.get_draw_width(
             self._widget, self._name_text
         )
-        self._widget.setFixedWidth(w+16+(width_add or 0))
+        self._widget.setFixedWidth(int(w+16+(width_add or 0)))
 
     def _get_name_text_(self):
         if self._name_flag is True:

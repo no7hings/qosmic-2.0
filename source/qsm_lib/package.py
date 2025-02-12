@@ -25,7 +25,7 @@ def commands():
     # python
     if 'QSM_PYTHON_VERSION' in os.environ:
         if os.environ['QSM_PYTHON_VERSION'] == '3':
-            sys.stderr.write('you are in python 3 environment.\n')
+            sys.stderr.write('qosmic: use python3.\n')
             if platform.system() == 'Linux':
                 env.PYTHONPATH.append('{root}/lib/linux-python-3.10/site-packages')
             else:

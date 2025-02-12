@@ -6,7 +6,7 @@ default:
             Role: '{root}/{project}/Assets/{role}'
             Asset: '{root}/{project}/Assets/{role}/{asset}'
             Episode: '{root}/{project}/{episode}'
-            Sequence: '{root}/{project}/{episode}/{sequence}/分镜'
+            Sequence: '{root}/{project}/{episode}{seq_IGN}/{sequence}/分镜'
             # sequence variant has chinese word, so add "{seq_IGN}" for match result.
             Shot: '{root}/{project}/{episode}/{sequence}{seq_IGN}/分镜/通过文件/{shot}.ma'
 

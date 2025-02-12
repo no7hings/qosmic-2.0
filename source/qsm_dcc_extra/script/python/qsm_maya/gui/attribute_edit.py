@@ -1,4 +1,5 @@
 # coding:utf-8
+from __future__ import print_function
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 # noinspection PyUnresolvedReferences
@@ -15,5 +16,5 @@ class AttributeEditor(object):
         _ = gui_qt_core.QtMaya.to_qt_object(ptr)
         if _.isVisible() is True:
             for i in _.children():
-                print i.objectName()
-                print i.children()
+                print(i.objectName())
+                print(i.children())

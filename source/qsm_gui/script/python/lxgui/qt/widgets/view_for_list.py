@@ -263,8 +263,6 @@ class QtListWidget(
             # elif event.type() == QtCore.QEvent.Wheel:
             #     # if self._item_event_override_flag is True:
             #     #     self._do_hover_move_(event)
-            #     print event.pos()
-            #     print self.itemAt(event.pos())
             elif event.type() == QtCore.QEvent.ToolTip:
                 if self._item_event_override_flag is True:
                     self._do_show_tool_tip_(event)
@@ -372,7 +370,6 @@ class QtListWidget(
             w, h = self.viewport().width(), self.viewport().height()
             # self.adjustSize()
             h_add = self.verticalScrollBar().maximum()
-            # print h+h_add
             # self.adjustSize()
 
     # noinspection PyUnusedLocal
