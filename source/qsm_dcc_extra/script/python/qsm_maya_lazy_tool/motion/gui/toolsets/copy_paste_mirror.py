@@ -129,7 +129,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
     def on_dcc_copy_controls(self):
         args = self.get_dcc_control_args()
         if args:
-            namespace, paths = args.keys()[-1], args.values()[-1]
+            namespace, paths = list(args.keys())[-1], list(args.values())[-1]
 
             opt = qsm_mya_mtn_core.ControlSetMotionOpt(namespace, paths)
 
@@ -145,7 +145,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
     def on_dcc_copy_controls_pose(self):
         args = self.get_dcc_control_args()
         if args:
-            namespace, paths = args.keys()[-1], args.values()[-1]
+            namespace, paths = list(args.keys())[-1], list(args.values())[-1]
 
             opt = qsm_mya_mtn_core.ControlSetMotionOpt(namespace, paths)
 

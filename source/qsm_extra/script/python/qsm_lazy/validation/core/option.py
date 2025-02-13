@@ -30,7 +30,7 @@ class DccValidationOptions(object):
     def get_leafs_at(self, branch):
         _ = self._options_cfg.get('options.{}'.format(branch))
         if _:
-            return _.keys()
+            return list(_.keys())
         return []
 
     def to_convertion_name(self, key):

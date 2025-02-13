@@ -12,7 +12,10 @@ def ensure_string(s):
     return s
 
 
-def auto_unicode(text):
-    if not isinstance(text, _six.text_type):
-        return text.decode('utf-8')
-    return text
+def ensure_unicode(s):
+    if isinstance(s, _six.text_type):
+        return s
+    elif isinstance(s, bytes):
+        return s.decode('utf-8')
+    else:
+        return s

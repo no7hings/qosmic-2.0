@@ -1646,7 +1646,7 @@ class AbsRsvConfigureExtraDef(AbsRsvBaseDef):
         self._cleanup_rsv_entity_create_kwargs(rsv_category, kwargs)
 
     def get_keywords(self, regex=None):
-        _ = self._patterns_dict.keys()
+        _ = list(self._patterns_dict.keys())
         if regex is not None:
             return fnmatch.filter(_, regex)
         return _

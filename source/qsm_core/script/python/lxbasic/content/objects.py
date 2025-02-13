@@ -228,9 +228,9 @@ class AbsContent(object):
         if key_path:
             value = self.get(key_path)
             if isinstance(value, dict):
-                return value.keys()
+                return list(value.keys())
             return []
-        return self.value.keys()
+        return list(self.value.keys())
 
     def get_all_leaf_key_as_dag_paths(self):
         keys = self.get_all_leaf_keys()
@@ -245,7 +245,7 @@ class AbsContent(object):
         return []
 
     def get_top_keys(self):
-        return self.__value.keys()
+        return list(self.__value.keys())
 
     def get_keys_by_value(self):
         pass

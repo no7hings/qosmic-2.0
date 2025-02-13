@@ -13,6 +13,8 @@ from email.mime.base import MIMEBase
 
 from email import encoders
 
+from ..wrap import *
+
 
 class MySmtp:
     SERVER = "smtp.qq.com"
@@ -87,13 +89,15 @@ class MyMail(object):
     def send_files_to_xj(cls, directory_path):
         import os
 
+        directory_path = ensure_string()
+
         file_names = os.listdir(directory_path)
 
         name = os.path.basename(directory_path)
 
         for i_file_name in file_names:
-            i_file_path = '{}/{}'.format(directory_path, i_file_name)
-            i_subject = '{}/{}'.format(name, i_file_name)
+            i_file_path = u'{}/{}'.format(directory_path, i_file_name)
+            i_subject = u'{}/{}'.format(name, i_file_name)
             i_body = i_file_path
             cls(
                 smtp_server=MySmtp.SERVER,

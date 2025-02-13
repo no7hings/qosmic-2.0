@@ -217,14 +217,14 @@ class QtUtil(object):
 
     @classmethod
     def create_app(cls):
-        surface_format = QtGui.QSurfaceFormat()
-        surface_format.setRenderableType(surface_format.OpenGL)
-        surface_format.setProfile(surface_format.CoreProfile)
-        surface_format.setVersion(3, 3)
-        surface_format.setSwapBehavior(surface_format.DoubleBuffer)
+        # surface_format = QtGui.QSurfaceFormat()
+        # surface_format.setRenderableType(surface_format.OpenGL)
+        # surface_format.setProfile(surface_format.CoreProfile)
+        # surface_format.setVersion(3, 3)
+        # surface_format.setSwapBehavior(surface_format.DoubleBuffer)
 
         app = QtWidgets.QApplication(sys.argv)
-        app.setAttribute(QtCore.Qt.AA_UseOpenGLES)
+        # app.setAttribute(QtCore.Qt.AA_UseOpenGLES)
         # app.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)
         app.setPalette(cls.generate_qt_palette(tool_tip=True))
         cls.add_qt_fonts(gui_core.GuiFont.get_all())

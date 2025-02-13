@@ -1087,7 +1087,7 @@ class MtgLayersOpt(object):
             for i in self._layers:
                 i_end_frame = i.get_end_frame()
                 dict_.setdefault(i_end_frame, []).append(i)
-            end_frames = dict_.keys()
+            end_frames = list(dict_.keys())
             return dict_[max(end_frames)][-1]
         return None
 

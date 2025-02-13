@@ -14,6 +14,8 @@
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_process/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_extra/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_server/script/python" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/source/qsm_houdini_core/script/python" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/source/qsm_maya_core/script/python" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_lib" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_dcc_extra/resources/rig" />
       <excludeFolder url="file://$MODULE_DIR$/.documents" />
@@ -21,6 +23,8 @@
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_dcc_lib" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_dcc_extra/resources/motion" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_server/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/source/qsm_houdini_core_lib" />
+      <excludeFolder url="file://$MODULE_DIR$/source/qsm_maya_core_lib" />
     </content>
     <orderEntry type="jdk" jdkName="Python 2.7 (qosmic-2.0) (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

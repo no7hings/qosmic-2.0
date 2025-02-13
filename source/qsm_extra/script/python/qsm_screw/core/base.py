@@ -109,7 +109,7 @@ class Entity(dict):
         if args:
             keys = args
         else:
-            keys = self.keys()
+            keys = list(self.keys())
             keys.sort()
         return '\n'.join(['{}: {}'.format(x, bsc_core.ensure_string(self[x])) for x in keys])
 

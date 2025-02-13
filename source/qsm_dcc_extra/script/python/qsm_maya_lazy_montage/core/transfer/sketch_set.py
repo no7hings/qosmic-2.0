@@ -96,7 +96,7 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
         return distance
 
     def get_all_keys(self):
-        return self._sketch_map.keys()
+        return list(self._sketch_map.keys())
 
     def generate_sketch_map(self):
         dict_ = {}

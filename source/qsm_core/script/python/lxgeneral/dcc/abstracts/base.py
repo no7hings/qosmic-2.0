@@ -604,7 +604,7 @@ class AbsDccNodeFileReferenceDef(object):
         self._reference_raw[port_path] = file_path
 
     def get_file_port_paths(self):
-        return self._reference_raw.keys()
+        return list(self._reference_raw.keys())
 
     def get_file_ports(self):
         return [self.DCC_PORT_CLS(self, i) for i in self.get_file_port_paths()]

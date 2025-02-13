@@ -228,7 +228,7 @@ class AndRamp(AndShader):
         return self._ramp_dict
 
     def _set_ramp_dict_(self, value_dict, interpolation_dict):
-        positions = value_dict.keys()
+        positions = list(value_dict.keys())
         positions.sort()
         #
         size = len(positions)+2

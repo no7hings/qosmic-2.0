@@ -34,7 +34,7 @@ class ShelfBuild(object):
 
         shelf = _mya_core.Shelf.create(shelf_name)
 
-        shelf_data = self._c.get('build.shelves')
+        shelf_data = self._c.get('build.elements')
 
         for i_k, i_v in shelf_data.items():
             i_tool_tip = gui_core.GuiUtil.choice_gui_tool_tip(
@@ -45,7 +45,7 @@ class ShelfBuild(object):
                 shelf,
                 annotation=i_tool_tip,
             )
-            i_tools = self._c.get('build.shelves.{}.tools'.format(i_k))
+            i_tools = self._c.get('build.elements.{}.tools'.format(i_k))
 
             for j_k, j_v in i_tools.items():
                 j_name = gui_core.GuiUtil.choice_gui_name(language, j_v)

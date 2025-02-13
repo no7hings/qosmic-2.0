@@ -172,7 +172,7 @@ class PkgContextNew(object):
         #
         if package_data:
             package_data[package_virtual_version] = package
-            keys = package_data.keys()
+            keys = list(package_data.keys())
             keys = bsc_cor_raw.BscTexts.sort_by_number(keys)
             package_latest = package_data[keys[-1]]
             return package_latest
@@ -217,7 +217,7 @@ class PkgContextNew(object):
                                 package_data[k_key] = k_package
             #
             if package_data:
-                keys = package_data.keys()
+                keys = list(package_data.keys())
                 keys = bsc_cor_raw.BscTexts.sort_by_number(keys)
                 package_latest = package_data[keys[-1]]
                 return package_latest

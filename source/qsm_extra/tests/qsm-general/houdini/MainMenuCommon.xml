@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mainMenu>
+    <menuBar>
+        <subMenu id="QSM">
+            <label>QSM</label>
+            <insertBefore>help_menu</insertBefore>
+            <subMenu id="Tool">
+                <label>Tool</label>
+                <scriptItem id="Lazy Workspace">
+                    <label>Lazy Workspace</label>
+                    <scriptCode><![CDATA[import lxbasic.session as bsc_session; bsc_session.Hook.execute("desktop-tools/qsm-lazy-workspace")]]></scriptCode>
+                </scriptItem>
+            </subMenu>
+            <separatorItem />
+            <scriptItem id="Help">
+                <label>Help</label>
+                <scriptCode><![CDATA[import lxbasic.session as bsc_session; bsc_session.Hook.execute("other/qsm-show-help")]]></scriptCode>
+            </scriptItem>
+        </subMenu>
+    </menuBar>
+</mainMenu>

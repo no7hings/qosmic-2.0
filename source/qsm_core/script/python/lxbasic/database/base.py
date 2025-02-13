@@ -74,7 +74,7 @@ class DtbDict(dict):
         return self.__getitem__(item)  # = self[item]
 
     def to_string(self):
-        keys = self.keys()
+        keys = list(self.keys())
         keys.sort()
         return '\n'.join(['{}: {}'.format(i, self[i]) for i in keys])
 

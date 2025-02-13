@@ -23,13 +23,21 @@ class Main(object):
         'qsm_lib',
         'qsm_resource',
         'qsm_extra',
-        #
+
         'qsm_dcc_main',
         'qsm_dcc_core',
         'qsm_dcc_gui',
         'qsm_dcc_lib',
         'qsm_dcc_resource',
         'qsm_dcc_extra',
+
+        'qsm_maya_core',
+        'qsm_maya_core_lib',
+        'qsm_maya_main',
+
+        'qsm_houdini_core',
+        'qsm_houdini_core_lib',
+        'qsm_houdini_main',
     ]
 
     @classmethod

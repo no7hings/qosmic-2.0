@@ -668,7 +668,7 @@ class TrackModelGroup(object):
 
             dict_.setdefault(i_key, []).append(i_track_model)
 
-        keys = dict_.keys()
+        keys = list(dict_.keys())
 
         keys.sort()
         self._track_model_list = []
@@ -742,7 +742,7 @@ class TrackModelStage(object):
             i_clip_end = i_model.clip_end
             dict_0.setdefault(i_clip_end, []).append(i_model)
 
-        clip_end_list = dict_0.keys()
+        clip_end_list = list(dict_0.keys())
         clip_end_list.sort()
         clip_end_list.reverse()
 
@@ -902,7 +902,7 @@ class TrackModelStage(object):
 
             dict_0.setdefault(i_layer_index, []).append(i_model)
 
-        layer_index_list = dict_0.keys()
+        layer_index_list = list(dict_0.keys())
         layer_index_list.sort()
         layer_index_list.reverse()
 
@@ -923,7 +923,7 @@ class TrackModelStage(object):
             for i in missing_frame_ranges:
                 dict_1[i] = None
 
-        keys_1 = dict_1.keys()
+        keys_1 = list(dict_1.keys())
         keys_1.sort()
         for i_key in keys_1:
             self._ordered_track_model_dict[i_key] = dict_1[i_key]

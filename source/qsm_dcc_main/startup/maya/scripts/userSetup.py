@@ -14,7 +14,7 @@ class Setup(object):
         return False
 
     @classmethod
-    def setup_td_menu(cls):
+    def setup_main_menu(cls):
         def fnc_():
             import lxbasic.log as bsc_log
 
@@ -122,7 +122,7 @@ class Setup(object):
             with bsc_log.LogContext.create(cls.LOG_KEY, 'setup'):
                 # cls.setup_arnold()
                 # cls.setup_usd()
-                cls.setup_td_menu()
+                cls.setup_main_menu()
                 # cls.setup_workspace_environment()
                 # cls.setup_workspace_gui()
                 cls.setup_shelves()

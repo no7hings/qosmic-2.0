@@ -46,7 +46,7 @@ class NGLayoutOpt(object):
     def _get_y_query_(self):
         dict_ = {}
         for i_key, i_data in self._size_dict.items():
-            i_indices = i_data.keys()
+            i_indices = list(i_data.keys())
             i_indices.sort()
             i_hs = [i_data[j] for j in i_indices]
             if i_key not in dict_:
@@ -156,7 +156,7 @@ class NGLayoutOpt(object):
         ort, drt_h, drt_v = self._scheme
         #
         position_dict = {}
-        keys = self._graph_dict.keys()
+        keys = list(self._graph_dict.keys())
         keys.sort()
         for i_key in keys:
             i_data = self._graph_dict[i_key]
@@ -747,7 +747,7 @@ class NGNodeOpt(object):
         skip_base_type_names = kwargs.get('skip_base_type_names', [])
         type_includes = kwargs.get('type_includes', [])
         rcs_fnc_(self._ktn_obj, name, 0, 0)
-        list_ = bsc_core.DictMtd.sort_key_by_value_to(index_dict_).keys()
+        list_ = list(bsc_core.DictMtd.sort_key_by_value_to(index_dict_).keys())
         list_.reverse()
         if type_includes:
             _ = [i for i in list_ if NodegraphAPI.GetNode(i).getType() in type_includes]

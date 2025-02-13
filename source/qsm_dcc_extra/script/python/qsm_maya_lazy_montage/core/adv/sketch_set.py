@@ -49,7 +49,7 @@ class AdvChrSketchSet(AdvSketchSet):
         self._sketch_map = self.generate_sketch_map()
 
     def get_all_keys(self):
-        return self._sketch_map.keys()
+        return list(self._sketch_map.keys())
 
     def generate_sketch_map(self):
         dict_ = {}

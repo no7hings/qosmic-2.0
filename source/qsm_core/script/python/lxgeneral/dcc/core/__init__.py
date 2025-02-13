@@ -9,8 +9,6 @@ from .socket_connect import *
 
 from .process import *
 
-from .houdini_menu import *
-
 from .startup import *
 
 

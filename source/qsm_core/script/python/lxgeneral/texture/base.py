@@ -106,7 +106,7 @@ class TxrMethodForBuild(_AbsTxrBase):
             return variants['name'], variants['type'], '{}/{}'.format(file_opt.get_directory_path(), file_name)
 
     def get_all_texture_types(self):
-        return self._keyword_mapper.keys()
+        return list(self._keyword_mapper.keys())
 
     def get_usd_includes(self):
         return copy.copy(self._configure.get('usd.includes'))
@@ -193,7 +193,7 @@ class TxrMethodForColorSpaceAsTxConvert(_AbsTxrBase):
         )
 
     def get_name_patterns(self):
-        return self._color_space_dict.keys()
+        return list(self._color_space_dict.keys())
 
     def get_color_space_mapper(self):
         return self._color_space_dict

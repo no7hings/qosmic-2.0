@@ -101,7 +101,7 @@ class Properties(dict):
         return self.__getitem__(item)  # = self[item]
 
     def __str__(self):
-        keys = self.keys()
+        keys = list(self.keys())
         keys.sort()
         return 'dict(\n{}\n)'.format(
             ',\n'.join(

@@ -170,8 +170,8 @@ def get_menu_content_by_hook_options_(hook_options):
             i_hook_option = i_key
             i_extra_kwargs = None
         elif isinstance(i_key, dict):
-            i_hook_option = i_key.keys()[0]
-            i_extra_kwargs = i_key.values()[0]
+            i_hook_option = list(i_key.keys())[0]
+            i_extra_kwargs = list(i_key.values())[0]
         else:
             raise RuntimeError()
         #

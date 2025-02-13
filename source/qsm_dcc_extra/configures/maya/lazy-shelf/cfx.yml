@@ -2,7 +2,7 @@ build:
     name: 'CFX'
     name_chs: '解算'
 
-    shelves:
+    elements:
         workspace:
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '任务。'

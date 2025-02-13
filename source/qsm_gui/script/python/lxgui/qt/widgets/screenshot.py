@@ -438,7 +438,6 @@ class AbsQtScreenshotBaseDef(_qt_abstracts.AbsQtHelpBaseDef):
     def _save_screenshot_to_(cls, geometry, file_path):
         bsc_storage.StgFileOpt(file_path).create_directory()
         rect = QtCore.QRect(*geometry)
-        app = QtWidgets.QApplication
         # noinspection PyArgumentList
         if QT_LOAD_INDEX == 0:
             app_ = QtWidgets.QApplication

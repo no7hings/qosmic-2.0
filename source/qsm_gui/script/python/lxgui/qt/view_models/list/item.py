@@ -1,4 +1,6 @@
 # coding:utf-8
+import six
+
 import lxbasic.core as bsc_core
 
 import lxbasic.pinyin as bsc_pinyin
@@ -96,7 +98,11 @@ class _AudioPlayThread(QtCore.QThread):
                 if not self._running_flag:
                     break
 
-                chunk = samples[i:i+chunk_size].tostring()
+                if six.PY2:
+                    chunk = samples[i:i+chunk_size].tostring()
+                else:
+                    chunk = samples[i:i+chunk_size].tobytes()
+
                 stream.write(chunk)
 
                 if self._close_flag is False:

@@ -78,7 +78,7 @@ class AbsProperties(object):
     def get_key_names_at(self, key_path):
         value = self.get(key_path)
         if isinstance(value, dict):
-            return value.keys()
+            return list(value.keys())
         return []
 
     def set(self, key_path, value):

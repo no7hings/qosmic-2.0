@@ -62,7 +62,7 @@ class StgEntityQuery(object):
             self.type
         )
         if _:
-            return _.keys()
+            return list(_.keys())
         return []
 
     def get_all(self):
@@ -1099,7 +1099,7 @@ class StgConnector(object):
             if isinstance(i_key, six.string_types):
                 i_value = stg_obj.get(i_key)
             else:
-                i_value = stg_obj.get(i_key.keys()[0])
+                i_value = stg_obj.get(list(i_key.keys())[0])
 
             if isinstance(i_value, six.string_types):
                 tags.append(i_value.decode('utf-8'))

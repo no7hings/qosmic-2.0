@@ -29,7 +29,7 @@ class NonLinear(object):
 
     @classmethod
     def get_all_node_types(cls):
-        return cls.KEY_MAPPER.keys()
+        return list(cls.KEY_MAPPER.keys())
 
     @classmethod
     def create_for(cls, key, target_shape_path, target_any_paths):
