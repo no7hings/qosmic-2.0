@@ -8,7 +8,7 @@
                 <label>Tool</label>
                 <scriptItem id="Lazy Workspace">
                     <label>Lazy Workspace</label>
-                    <scriptCode><![CDATA[import lxbasic.session as bsc_session; bsc_session.Hook.execute("desktop-tools/qsm-lazy-workspace")]]></scriptCode>
+                    <scriptCode><![CDATA[import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/houdini/qsm-lazy-workspace")]]></scriptCode>
                 </scriptItem>
             </subMenu>
             <separatorItem />

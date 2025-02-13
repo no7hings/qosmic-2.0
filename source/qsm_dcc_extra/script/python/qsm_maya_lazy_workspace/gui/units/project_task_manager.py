@@ -1,13 +1,13 @@
 # coding:utf-8
 from qsm_lazy_workspace.gui.abstracts import unit_for_task_manager as _abs_unit_for_task_manager
 
-import qsm_maya_lazy_workspace.core as mya_lzy_wps_core
-
 import qsm_maya.core as qsm_mya_core
+
+from ... import core as _lzy_wps_core
 
 
 class PrxUnitForProjectTaskManager(_abs_unit_for_task_manager.AbsPrxUnitForTaskManager):
-    TASK_PARSE_CLS = mya_lzy_wps_core.TaskParse
+    TASK_PARSE_CLS = _lzy_wps_core.TaskParse
 
     RESOURCE_TYPE = TASK_PARSE_CLS.ResourceTypes.Project
 
