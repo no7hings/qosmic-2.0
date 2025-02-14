@@ -32,12 +32,16 @@ class Main(object):
         'qsm_dcc_extra',
 
         'qsm_maya_core',
-        'qsm_maya_core_lib',
+        'qsm_maya_lib',
         'qsm_maya_main',
 
         'qsm_houdini_core',
-        'qsm_houdini_core_lib',
+        'qsm_houdini_lib',
         'qsm_houdini_main',
+
+        'qsm_katana_core',
+        'qsm_katana_lib',
+        'qsm_katana_main',
     ]
 
     @classmethod
@@ -78,5 +82,8 @@ class Main(object):
 
 
 if __name__ == '__main__':
-    print(Main.generate())
+    py_f = __file__
+    bat_f = os.path.splitext(py_f)[0]+'.bat'
+    with open(bat_f, 'w') as b:
+        b.write(Main.generate())
 

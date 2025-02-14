@@ -25,13 +25,11 @@ def commands():
     env.QSM_DCC_MAIN_BASE = '{root}'
     # python
     env.PYTHONPATH.append('{root}/script/python')
+    # configure
+    env.QSM_EXTEND_CONFIGURES.append('{root}/configures')
+    # resource
+    env.QSM_EXTEND_RESOURCES.append('{root}/resources')
     # startup in dcc
-    # maya
-    env.PYTHONPATH.append('{root}/startup/maya/scripts')
-    # houdini-setup
-    env.HOUDINI_PATH.append('{root}/startup/houdini;&')
-    # katana-setup
-    env.KATANA_RESOURCES.append('{root}/startup/katana')
     # arnold-setup
     # env.ARNOLD_PLUGIN_PATH.append('{root}/script/python/.setup/arnold/shaders')
     # clarisse-setup

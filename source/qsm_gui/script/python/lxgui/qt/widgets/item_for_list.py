@@ -154,6 +154,9 @@ class QtListItem(
             self.__class__.__name__, self._sort_name_key
         )
 
+    def __hash__(self):
+        return hash(self.text())
+
 
 class QtListItemWidget(
     QtWidgets.QWidget,

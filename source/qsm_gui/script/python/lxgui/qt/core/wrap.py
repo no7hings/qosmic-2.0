@@ -18,9 +18,14 @@ if __pyqt5 is not None:
     QT_LOAD_INDEX = 0
     QT_LOAD_FLAG = 'pyqt'
     # noinspection PyUnresolvedReferences
-    from PyQt5 import QtGui, QtCore, QtWidgets, QtSvg, QtWebSockets
+    from PyQt5 import QtGui, QtCore, QtWidgets, QtSvg
     # noinspection PyUnresolvedReferences
     from PyQt5 import QtMultimedia
+
+    try:
+        from PyQt5 import QtWebSockets
+    except ImportError:
+        pass
 
     _sys.modules['QtSide'] = _sys.modules['PyQt5']
     _log_core.Log.trace_method_result(

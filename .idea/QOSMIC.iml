@@ -16,15 +16,19 @@
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_server/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_houdini_core/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_maya_core/script/python" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/source/qsm_lib" />
+      <sourceFolder url="file://$MODULE_DIR$/source/qsm_houdini_main/script/python" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/source/qsm_katana_core/script/python" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/source/qsm_katana_main/script/python" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_dcc_extra/resources/rig" />
       <excludeFolder url="file://$MODULE_DIR$/.documents" />
       <excludeFolder url="file://$MODULE_DIR$/.pycharm" />
-      <excludeFolder url="file://$MODULE_DIR$/source/qsm_dcc_lib" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_dcc_extra/resources/motion" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_server/lib" />
-      <excludeFolder url="file://$MODULE_DIR$/source/qsm_houdini_core_lib" />
-      <excludeFolder url="file://$MODULE_DIR$/source/qsm_maya_core_lib" />
+      <excludeFolder url="file://$MODULE_DIR$/source/qsm_dcc_lib/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/source/qsm_lib/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/source/qsm_lib/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/source/qsm_lib/resources/executes" />
+      <excludeFolder url="file://$MODULE_DIR$/source/qsm_maya_lib/lib" />
     </content>
     <orderEntry type="jdk" jdkName="Python 2.7 (qosmic-2.0) (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

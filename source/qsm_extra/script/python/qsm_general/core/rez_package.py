@@ -48,6 +48,18 @@ class RezPackage:
         ('qsm_dcc_lib', False),
         ('qsm_dcc_resource', True),
         ('qsm_dcc_extra', True),
+        # maya
+        ('qsm_maya_core', True),
+        ('qsm_maya_lib', False),
+        ('qsm_maya_main', True),
+        # houdini
+        ('qsm_houdini_core', True),
+        ('qsm_houdini_lib', False),
+        ('qsm_houdini_main', True),
+        # katana
+        ('qsm_katana_core', True),
+        ('qsm_katana_lib', False),
+        ('qsm_katana_main', True),
     ]
 
     @classmethod

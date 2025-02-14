@@ -27,6 +27,13 @@ class BscEnviron(object):
         return False
 
     @classmethod
+    def get_devlop_flag(cls):
+        _ = cls.get('QSM_TEST')
+        if _ == '-1':
+            return True
+        return False
+
+    @classmethod
     def get_data_paths(cls):
         pass
 
@@ -158,6 +165,8 @@ class BscEnviron(object):
     def get_extend_version(cls):
         if cls.get_test_flag() is True:
             return 'BETA'
+        elif cls.get_devlop_flag() is True:
+            return 'ALPHA'
 
     @classmethod
     def get_core_version(cls):
@@ -181,25 +190,11 @@ class BscEnvironExtra(BscEnviron):
         return cls.get(cls.SCHEME_KEY)
 
     @classmethod
-    def get_test_flag(cls):
-        _ = cls.get(cls.TEST_FLAG_KEY)
-        if str(_).lower() == cls.TRUE:
-            return True
-        return False
-
-    @classmethod
     def set_test_flag(cls, boolean):
         if boolean is True:
             cls.set(cls.TEST_FLAG_KEY, cls.TRUE)
         else:
             cls.set(cls.TEST_FLAG_KEY, cls.FALSE)
-
-    @classmethod
-    def get_devlop_flag(cls):
-        _ = cls.get(cls.DEVLOP_FLAG)
-        if _ == cls.TRUE:
-            return True
-        return False
 
     @classmethod
     def set_devlop_flag(cls, boolean):

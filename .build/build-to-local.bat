@@ -130,15 +130,15 @@ if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_core\99.99.99 (
 ) else (
     mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_core\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_maya_core
 )
-if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_core_lib (
-    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_core_lib is exists
+if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_lib (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_lib is exists
 ) else (
-    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_core_lib
+    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_lib
 )
-if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_core_lib\99.99.99 (
-    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_core_lib\99.99.99 is exists
+if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_lib\99.99.99 (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_lib\99.99.99 is exists
 ) else (
-    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_core_lib\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_maya_core_lib
+    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_lib\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_maya_lib
 )
 if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_main (
     echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_main is exists
@@ -160,15 +160,15 @@ if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_core\99.99.99 (
 ) else (
     mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_core\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_houdini_core
 )
-if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_core_lib (
-    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_core_lib is exists
+if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_lib (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_lib is exists
 ) else (
-    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_core_lib
+    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_lib
 )
-if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_core_lib\99.99.99 (
-    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_core_lib\99.99.99 is exists
+if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_lib\99.99.99 (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_lib\99.99.99 is exists
 ) else (
-    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_core_lib\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_houdini_core_lib
+    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_lib\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_houdini_lib
 )
 if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_main (
     echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_main is exists
@@ -179,6 +179,36 @@ if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_main\99.99.99 (
     echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_main\99.99.99 is exists
 ) else (
     mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_houdini_main\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_houdini_main
+)
+if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_core (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_core is exists
+) else (
+    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_core
+)
+if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_core\99.99.99 (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_core\99.99.99 is exists
+) else (
+    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_core\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_katana_core
+)
+if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_lib (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_lib is exists
+) else (
+    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_lib
+)
+if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_lib\99.99.99 (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_lib\99.99.99 is exists
+) else (
+    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_lib\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_katana_lib
+)
+if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_main (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_main is exists
+) else (
+    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_main
+)
+if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_main\99.99.99 (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_main\99.99.99 is exists
+) else (
+    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_main\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_katana_main
 )
 popd
 echo. & pause

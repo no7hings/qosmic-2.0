@@ -1,5 +1,5 @@
 # coding:utf-8
-name = 'qsm_dcc_main'
+name = 'qsm_maya_main'
 
 version = '0.0.0'
 
@@ -10,17 +10,10 @@ authors = ['']
 tools = []
 
 requires = [
-    # basic
-    'qsm_main',
-    # dcc
-    'qsm_dcc_lib',
-    'qsm_dcc_core',
-    'qsm_dcc_gui',
-    'qsm_dcc_resource',
-    'qsm_dcc_extra',
+    'qsm_dcc_main',
     # maya
     'qsm_maya_core',
-    'qsm_maya_core_lib',
+    'qsm_maya_lib',
 ]
 
 
@@ -28,8 +21,11 @@ def commands():
     env.QSM_DCC_MAIN_BASE = '{root}'
     # python
     env.PYTHONPATH.append('{root}/script/python')
-    # startup in dcc
-    # maya
+    # configure
+    env.QSM_EXTEND_CONFIGURES.append('{root}/configures')
+    # resource
+    env.QSM_EXTEND_RESOURCES.append('{root}/resources')
+    # maya startup
     env.PYTHONPATH.append('{root}/startup/maya/scripts')
 
 

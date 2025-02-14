@@ -1,0 +1,130 @@
+build:
+    options:
+        /:
+            type: shelf
+            name: 'Lazy Tool'
+            name_chs: '懒人工具'
+
+        /separator_0:
+            type: separator
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '待补充。'
+
+        /tool_0_0:
+            type: button
+            name: 'Lazy Workspace'
+            name_chs: '懒人工作区域'
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '待补充。'
+            button_style: 'text_and_icon'
+            button_name: 'Workspace'
+            button_name_chs: '工作'
+            auto_label_color: False
+            icon: 'lazy/workspace'
+            script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-workspace")'
+            dbl_script: ''
+
+        /separator_1:
+            type: separator
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '待补充。'
+
+        /tool_1_0:
+            type: button
+            name: 'Lazy Animation Tool'
+            name_chs: '懒人动画工具'
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs:
+                |-
+                点击打开动画工具：
+                    包含简模代理，动态GPU，元素组装，相机遮罩等工具。
+            button_style: 'text_and_icon'
+            button_name: 'Animation'
+            button_name_chs: '动画'
+            auto_label_color: False
+            icon: 'lazy/animation'
+            script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-animation")'
+            dbl_script: ''
+
+        /tool_1_1:
+            type: button
+            name: 'Lazy Motion'
+            name_chs: '懒人动作'
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs:
+                |-
+                点击打开动作工具：
+                    包含拷贝，粘贴动作，镜像动作，翻转动作，绑定移动等工具。
+            button_style: 'text_and_icon'
+            button_name: 'Motion'
+            button_name_chs: '动作'
+            auto_label_color: False
+            icon: 'lazy/motion'
+            script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-motion")'
+            dbl_script: ''
+
+        /tool_1_2:
+            type: button
+            name: 'Lazy Playblast Tool'
+            name_chs: '懒人拍屏工具'
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs:
+                |-
+                点击打开拍屏工具。
+            button_style: 'text_and_icon'
+            button_name: 'Playblast'
+            button_name_chs: '拍屏'
+            auto_label_color: False
+            icon: 'lazy/playblast'
+            script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-playblast")'
+
+        /separator_2:
+            type: separator
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '待补充。'
+
+        /tool_2_0:
+            type: button
+            name: 'Lazy Montage'
+            name_chs: '懒人剪辑'
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '待补充。'
+            button_style: 'text_and_icon'
+            button_name: 'Montage'
+            button_name_chs: '剪辑'
+            auto_label_color: False
+            icon: 'lazy/montage'
+            script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-montage")'
+            dbl_script: ''
+
+        /tool_2_1:
+            type: button
+            name: 'Lazy Resource'
+            name_chs: '懒人资源'
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '待补充。'
+            button_style: 'text_and_icon'
+            button_name: 'Resource'
+            button_name_chs: '资源'
+            auto_label_color: False
+            icon: 'lazy/resource'
+            script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-resource")'
+            dbl_script: ''
+
+        /separator_3:
+            type: separator
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '待补充。'
+
+        /tool_3_0:
+            type: button
+            name: 'Show Help'
+            name_chs: '显示帮助'
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '待补充。'
+            button_style: 'text_and_icon'
+            button_name: 'Help'
+            button_name_chs: '帮助'
+            icon: 'help'
+            script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("other/qsm-show-help")'
+            dbl_script: ''

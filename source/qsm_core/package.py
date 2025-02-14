@@ -16,7 +16,7 @@ requires = [
 
 def commands():
     import platform
-    #
+
     env.QSM_MARK = 'TRUE'
     # root
     env.QSM_CORE_BASE = '{root}'

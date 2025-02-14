@@ -18,7 +18,7 @@ class SceneFile:
         return hou.hipFile.path()
 
     @classmethod
-    def open(cls, file_path):
+    def open(cls, file_path, add_to_recent=False):
         return hou.hipFile.load(file_path)
 
     @classmethod

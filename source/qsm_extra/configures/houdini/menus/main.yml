@@ -1,0 +1,29 @@
+build:
+    options:
+        /:
+            type: menu
+            name: 'QSM'
+            name_chs: 'QSM'
+
+        /menu_0:
+            type: menu
+            name: 'Tool'
+            name_chs: '工具'
+
+        /menu_0/action_0:
+            type: action
+            name: 'Lazy Workspace'
+            name_chs: '懒人工作空间'
+
+            icon: 'lazy/workspace'
+            script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/houdini/qsm-lazy-workspace")'
+
+        /separator_0:
+            type: separator
+
+        /action_0:
+            type: action
+            name: 'Help'
+            name_chs: '帮助'
+            icon: 'help'
+            script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("other/qsm-show-help")'

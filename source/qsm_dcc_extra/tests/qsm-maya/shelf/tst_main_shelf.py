@@ -11,4 +11,4 @@ bsc_core.PyReloader2(
 
 import qsm_maya.gui as qsm_mya_gui
 
-qsm_mya_gui.MainShelf().create()
+qsm_mya_gui.MayaShelf().create()

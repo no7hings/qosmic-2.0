@@ -13,6 +13,9 @@ class QtListItem(QtWidgets.QListWidgetItem):
 
         self._item_model = _vew_mod_item.ListItemModel(self)
 
+    def __hash__(self):
+        return hash(self._item_model.get_path())
+
 
 class QtListGroupItem(QtWidgets.QListWidgetItem):
     GROUP_FLAG = True

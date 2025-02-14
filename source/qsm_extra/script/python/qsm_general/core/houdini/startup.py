@@ -12,7 +12,7 @@ class HoudiniStartupCreate(object):
 
     def generate_fnc(self, menu_content):
         menu_dict = {}
-        for k, v in menu_content['build'].items():
+        for k, v in menu_content.get('build.options').items():
             i_path = k
             i_path_opt = bsc_core.BscNodePathOpt(i_path)
             i_parent_path = i_path_opt.get_parent_path()
@@ -52,7 +52,7 @@ class HoudiniStartupCreate(object):
     def create_main_menu_xml(self):
         self._menu_bar = _menu.HouMenuXmlForMenuBar()
 
-        content = bsc_resource.RscExtendConfigure.get_as_content('houdini/menu/main')
+        content = bsc_resource.RscExtendConfigure.get_as_content('houdini/menus/main')
 
         self.generate_fnc(content)
         # create_menu_fnc_(content, 0)

@@ -10,17 +10,10 @@ authors = ['']
 tools = []
 
 requires = [
-    # basic
-    'qsm_main',
-    # dcc
-    'qsm_dcc_lib',
-    'qsm_dcc_core',
-    'qsm_dcc_gui',
-    'qsm_dcc_resource',
-    'qsm_dcc_extra',
-    #
-    'qsm_houdini_core',
-    'qsm_houdini_core_lib',
+    'qsm_dcc_main',
+    # katana
+    'qsm_katana_core',
+    'qsm_katana_lib',
 ]
 
 
@@ -28,8 +21,11 @@ def commands():
     env.QSM_DCC_MAIN_BASE = '{root}'
     # python
     env.PYTHONPATH.append('{root}/script/python')
-    # startup in dcc
-    # houdini-setup
+    # configure
+    env.QSM_EXTEND_CONFIGURES.append('{root}/configures')
+    # resource
+    env.QSM_EXTEND_RESOURCES.append('{root}/resources')
+    # houdini startup
     env.HOUDINI_PATH.append('{root}/startup/houdini;&')
 
 

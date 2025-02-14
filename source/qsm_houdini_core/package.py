@@ -10,7 +10,7 @@ authors = ['']
 tools = []
 
 requires = [
-    'qsm_houdini_core_lib'
+    'qsm_houdini_lib'
 ]
 
 

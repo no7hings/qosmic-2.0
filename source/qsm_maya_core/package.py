@@ -10,7 +10,7 @@ authors = ['']
 tools = []
 
 requires = [
-    'qsm_maya_core_lib'
+    'qsm_maya_lib'
 ]
 
 
