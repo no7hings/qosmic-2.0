@@ -11,7 +11,7 @@ import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_screw.core as qsm_scr_core
+import lnx_screw.core as lnx_scr_core
 
 
 class _AbsRegister(object):
@@ -29,7 +29,7 @@ class _AbsRegister(object):
         self._post_fnc = None
 
     def set_scr_stage_key(self, scr_stage_name):
-        self._scr_stage = qsm_scr_core.Stage(scr_stage_name)
+        self._scr_stage = lnx_scr_core.Stage(scr_stage_name)
 
         self._load_type_and_tags()
 
@@ -38,6 +38,20 @@ class _AbsRegister(object):
 
     def set_post_fnc(self, fnc):
         self._post_fnc = fnc
+
+
+class AbsPrxSubpageForManifestRegister(
+    gui_prx_widgets.PrxBaseSubpage,
+    _AbsRegister
+):
+    GUI_KEY = 'manifest'
+
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxSubpageForManifestRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+
+        self._configure = self.generate_local_configure()
+
+        self.gui_page_setup_fnc()
 
 
 class AbsPrxSubpageForMotionRegister(
@@ -264,15 +278,6 @@ class _AbsPrxPageForAnyRegister(
         self._qt_layout.addWidget(bottom_tool_bar.widget)
         bottom_tool_bar.set_expanded(True)
 
-        self._apply_and_close_button = gui_qt_widgets.QtPressButton()
-        bottom_tool_bar.add_widget(self._apply_and_close_button)
-        self._apply_and_close_button._set_name_text_(
-            self._subwindow.choice_gui_name(
-                self._configure.get('build.buttons.apply_and_close')
-            )
-        )
-        self._apply_and_close_button.press_clicked.connect(self._on_apply_and_close)
-
         self._apply_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._apply_button)
         self._apply_button._set_name_text_(
@@ -281,6 +286,15 @@ class _AbsPrxPageForAnyRegister(
             )
         )
         self._apply_button.press_clicked.connect(self._on_apply)
+
+        self._apply_and_close_button = gui_qt_widgets.QtPressButton()
+        bottom_tool_bar.add_widget(self._apply_and_close_button)
+        self._apply_and_close_button._set_name_text_(
+            self._subwindow.choice_gui_name(
+                self._configure.get('build.buttons.apply_and_close')
+            )
+        )
+        self._apply_and_close_button.press_clicked.connect(self._on_apply_and_close)
 
         self._close_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._close_button)
@@ -309,7 +323,7 @@ class AbsPrxSubpageForVideoRegister(_AbsPrxPageForAnyRegister):
         scr_tag_paths = self.gui_get_scr_tag_paths()
 
         if file_paths:
-            import qsm_lazy_resource.extra.video.scripts as lzy_rsc_etr_vdo_scripts
+            import qsm_lazy_resource.resource_types.video.scripts as lzy_rsc_etr_vdo_scripts
 
             lzy_rsc_etr_vdo_scripts.VideoBatchRegister(
                 self._scr_stage.key, file_paths
@@ -348,7 +362,7 @@ class AbsPrxSubpageForAudioRegister(_AbsPrxPageForAnyRegister):
         scr_tag_paths = self.gui_get_scr_tag_paths()
 
         if file_paths:
-            import qsm_lazy_resource.extra.audio.scripts as lzy_rsc_etd_ado_scripts
+            import qsm_lazy_resource.resource_types.audio.scripts as lzy_rsc_etd_ado_scripts
 
             lzy_rsc_etd_ado_scripts.AudioBatchRegister(
                 self._scr_stage.key, file_paths
@@ -369,6 +383,8 @@ class AbsPrxSubpageForAssetRegister(
     gui_prx_widgets.PrxBaseSubpage,
     _AbsRegister
 ):
+    GUI_KEY = 'asset'
+
     def __init__(self, window, session, subwindow, *args, **kwargs):
         super(AbsPrxSubpageForAssetRegister, self).__init__(window, session, subwindow, *args, **kwargs)
 
@@ -380,3 +396,4 @@ class AbsPrxSubpageForAssetRegister(
 
     def gui_page_setup_fnc(self):
         pass
+

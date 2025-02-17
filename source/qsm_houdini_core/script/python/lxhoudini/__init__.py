@@ -19,7 +19,7 @@ def set_reload(modules=None):
                 'lxusd',
                 'lxgui',
                 'lxshotgun',
-                'lxhoudini', 'lxhoudini_gui'
+                'lxhoudini', 'lxhoudini_tool'
             ]
         )
     p.set_reload()

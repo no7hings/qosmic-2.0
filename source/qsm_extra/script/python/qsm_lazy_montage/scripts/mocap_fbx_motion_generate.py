@@ -7,7 +7,7 @@ import qsm_general.core as qsm_gnl_core
 
 import qsm_general.process as qsm_gnl_process
 
-import qsm_screw.core as qsm_scr_core
+import lnx_screw.core as lnx_scr_core
 
 
 class MoCapDotFbxMotionGenerateAuto(object):

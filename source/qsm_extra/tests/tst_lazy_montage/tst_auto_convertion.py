@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_lazy_resource.extra.motion.scripts as s
+import qsm_lazy_resource.resource_types.motion.scripts as s
 
 
 _ = s.STDotAnimGenerate(

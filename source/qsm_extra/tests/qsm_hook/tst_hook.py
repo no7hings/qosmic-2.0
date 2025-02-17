@@ -21,7 +21,7 @@ if lzy_bks_worker.TaskClient.get_server_status():
             # r'rez-env maya-2019 -- mayabatch -command "python(\"print \\\"H\\\"\")"',
             # r'rez-env maya-2019 -- mayabatch -command "python(\"print \\\"I\\\"\")"',
             # r'rez-env maya-2019 -- mayabatch -command "python(\"print \\\"J\\\"\")"',
-            # r'rez-env maya-2019 qsm_dcc_main -- mayabatch -command "python(\"import lxsession.commands as ssn_commands;ssn_commands.execute_option_hook(option=\\\"option_hook_key=dcc-process/maya-cache-process&method=playblast&file=Z:/temeporaries/dongchangbao/playblast/test_source.ma&camera=|persp|perspShape&start_frame=0&end_frame=32&width=1280&height=720\\\")\")"'
+            # r'rez-env maya-2019 qsm_maya_main -- mayabatch -command "python(\"import lxsession.commands as ssn_commands;ssn_commands.execute_option_hook(option=\\\"option_hook_key=dcc-process/maya-cache-process&method=playblast&file=Z:/temeporaries/dongchangbao/playblast/test_source.ma&camera=|persp|perspShape&start_frame=0&end_frame=32&width=1280&height=720\\\")\")"'
         ]
     ):
         lzy_bks_worker.TaskClient.new_entity(

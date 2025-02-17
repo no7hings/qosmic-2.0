@@ -1,7 +1,7 @@
 # coding:utf-8
-import qsm_lazy_resource.gui.abstracts as _abstracts
+import qsm_lazy_tool.resource_cfx.gui.abstracts as _abstracts
 
-import qsm_screw.core as qsm_scr_core
+import lnx_screw.core as lnx_scr_core
 
 import qsm_maya.core as qsm_mya_core
 
@@ -51,11 +51,11 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
             self._type_prx_tag_view.set_item_expand_below('/node_graphs')
         else:
             data_type = self.get_resource_data_type()
-            if data_type == qsm_scr_core.DataTypes.MayaNode:
+            if data_type == lnx_scr_core.DataTypes.MayaNode:
                 self._prx_options_node.set(
                     'gui_name_chs', '未命名节点'
                 )
-            elif data_type == qsm_scr_core.DataTypes.MayaNodeGraph:
+            elif data_type == lnx_scr_core.DataTypes.MayaNodeGraph:
                 self._prx_options_node.set(
                     'gui_name_chs', '未命名节点网络'
                 )
@@ -77,12 +77,12 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
             data_type = self.get_resource_data_type()
             stage_name = self._prx_options_node.get('stage')
             if stage_name in {'maya_cfx'}:
-                if data_type == qsm_scr_core.DataTypes.MayaNode:
+                if data_type == lnx_scr_core.DataTypes.MayaNode:
                     self.do_gui_update_node_opt_by_dcc_selection_for_dynamic(node_paths[0])
-                elif data_type == qsm_scr_core.DataTypes.MayaNodeGraph:
+                elif data_type == lnx_scr_core.DataTypes.MayaNodeGraph:
                     self.do_gui_update_node_graph_opt_by_dcc_selection_for_any(node_paths)
             elif stage_name in {'maya_layout'}:
-                if data_type == qsm_scr_core.DataTypes.MayaNodeGraph:
+                if data_type == lnx_scr_core.DataTypes.MayaNodeGraph:
                     self.do_gui_update_node_graph_opt_by_dcc_selection_for_any(node_paths)
 
     def do_gui_update_node_opt_by_dcc_selection_for_dynamic(self, node_path):
@@ -146,10 +146,10 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
 
     def get_data(self):
         data_type = self.get_resource_data_type()
-        if data_type == qsm_scr_core.DataTypes.MayaNode:
+        if data_type == lnx_scr_core.DataTypes.MayaNode:
             if self._dcc_node_opt is not None:
                 return self._dcc_node_opt.get_data()
-        elif data_type == qsm_scr_core.DataTypes.MayaNodeGraph:
+        elif data_type == lnx_scr_core.DataTypes.MayaNodeGraph:
             if self._dcc_node_graph_opt is not None:
                 return self._dcc_node_graph_opt.get_data()
 

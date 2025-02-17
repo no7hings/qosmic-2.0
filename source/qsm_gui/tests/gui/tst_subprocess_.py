@@ -12,8 +12,8 @@ class W(gui_prx_widgets.PrxBaseWindow):
         button.connect_press_clicked_to(self._test)
 
     def _test(self):
-        cmd_script = r'rez-env maya-2020 mtoa qsm_dcc_main -- mayabatch -command "python(\"import lxsession.commands as ssn_commands;ssn_commands.execute_option_hook(option=\\\"option_hook_key=dcc-process/maya-cache-process&method=mesh_count_generate&method_option=5DA2DA2DC08299EE68F3A28F7BD1AF78\\\")\")"'
-        # cmd_script = r'rez-env maya-2020 mtoa qsm_dcc_main -- mayabatch -command "python(\"import lxsession.commands as ssn_commands;ssn_commands.execute_option_hook(option=\\\"option_hook_key=dcc-process/maya-cache-process&method=mesh_count_generate&method_option=E87227F21ADA6910DB7866EBA4C314F7\\\")\")"'
+        cmd_script = r'rez-env maya-2020 mtoa qsm_maya_main -- mayabatch -command "python(\"import lxsession.commands as ssn_commands;ssn_commands.execute_option_hook(option=\\\"option_hook_key=dcc-process/maya-cache-process&method=mesh_count_generate&method_option=5DA2DA2DC08299EE68F3A28F7BD1AF78\\\")\")"'
+        # cmd_script = r'rez-env maya-2020 mtoa qsm_maya_main -- mayabatch -command "python(\"import lxsession.commands as ssn_commands;ssn_commands.execute_option_hook(option=\\\"option_hook_key=dcc-process/maya-cache-process&method=mesh_count_generate&method_option=E87227F21ADA6910DB7866EBA4C314F7\\\")\")"'
 
         task_window = gui_prx_widgets.PrxSprcTaskWindow()
 

@@ -1,10 +1,10 @@
 # coding:utf-8
-import qsm_lazy_resource.extra.asset.scripts as s
+import qsm_lazy_resource.resource_types.asset.scripts as s
 
-print s.AssetTag.to_face_count_tag(
+print(s.AssetTag.to_face_count_tag(
     10000
-)
+))
 
-print s.AssetTag.to_memory_size_tag(
+print(s.AssetTag.to_memory_size_tag(
     4507869184
-)
+))

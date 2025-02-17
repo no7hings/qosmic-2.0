@@ -1,9 +1,9 @@
 # coding:utf-8
-import qsm_shark.database as dtb
+import lnx_shark.database as dtb
 
 stage = dtb.Stage()
 
-print stage.find_all_projects()
+print(stage.find_all_projects())
 
 # project = stage.get_project(name='QSM_TST')
 

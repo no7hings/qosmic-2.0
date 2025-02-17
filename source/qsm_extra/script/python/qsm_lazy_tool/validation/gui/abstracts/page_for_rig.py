@@ -15,7 +15,7 @@ import lxgui.qt.widgets as qt_widgets
 
 import qsm_general.core as qsm_gnl_core
 
-import qsm_scan as qsm_scan
+import lnx_scan as lnx_scan
 
 import qsm_lazy.validation.scripts as lzy_vld_scripts
 
@@ -127,7 +127,7 @@ class AbsPrxPageForChrRig(gui_prx_widgets.PrxBasePage):
         super(AbsPrxPageForChrRig, self).__init__(window, session, *args, **kwargs)
 
         self._asset_path = None
-        self._scan_root = qsm_scan.Stage().get_root()
+        self._scan_root = lnx_scan.Stage().get_root()
 
         self._validation_opt = lzy_vld_scripts.RigValidationOpt()
 

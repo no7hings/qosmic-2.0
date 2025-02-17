@@ -13,9 +13,10 @@ class DccProcess:
             maya_version = bsc_core.BscApplication.get_maya_version()
         else:
             maya_version = '2020'
+
         # do not use unicode
         # windows
-        main_arg = 'rez-env maya-{} mtoa qsm_dcc_main'.format(maya_version)
+        main_arg = 'rez-env maya-{} mtoa qsm_maya_main'.format(maya_version)
         if isinstance(packages_extend, (tuple, list)):
             main_arg += ' '+' '.join(packages_extend)
 

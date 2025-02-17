@@ -9,7 +9,7 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
-import qsm_screw.core as qsm_scr_core
+import lnx_screw.core as lnx_scr_core
 
 
 class W(gui_prx_widgets.PrxBaseWindow):
@@ -20,7 +20,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self.add_widget(self._d_0)
         self._d_0._view_model.set_item_color_enable(True)
 
-        self._scr_stage = qsm_scr_core.Stage(
+        self._scr_stage = lnx_scr_core.Stage(
             'asset_test'
         )
         # self._scr_stage.connect()

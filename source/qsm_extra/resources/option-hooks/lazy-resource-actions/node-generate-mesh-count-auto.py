@@ -3,7 +3,7 @@ import functools
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy_resource.extra.asset.scripts as lzy_rsc_etr_ast_scripts
+import qsm_lazy_resource.resource_types.asset.scripts as lzy_rsc_etr_ast_scripts
 
 
 class Main(object):

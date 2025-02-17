@@ -9,21 +9,21 @@ import lxbasic.content as bsc_content
 
 import lxbasic.resource as bsc_resource
 
-import qsm_shark.parse as qsm_srk_parse
+import lnx_shark.parse as lnx_srk_parse
 
 from . import task_session as _task_session
 
 
 # todo: support to each project different stage?
 class TaskParse(object):
-    EntityTypes = qsm_srk_parse.Stage.EntityTypes
-    SpaceKeys = qsm_srk_parse.Stage.SpaceKeys
-    ResourceTypes = qsm_srk_parse.Stage.ResourceTypes
+    EntityTypes = lnx_srk_parse.Stage.EntityTypes
+    SpaceKeys = lnx_srk_parse.Stage.SpaceKeys
+    ResourceTypes = lnx_srk_parse.Stage.ResourceTypes
 
-    Roots = qsm_srk_parse.Stage.Roots
-    Spaces = qsm_srk_parse.Stage.Spaces
-    Steps = qsm_srk_parse.Stage.Steps
-    Tasks = qsm_srk_parse.Stage.Tasks
+    Roots = lnx_srk_parse.Stage.Roots
+    Spaces = lnx_srk_parse.Stage.Spaces
+    Steps = lnx_srk_parse.Stage.Steps
+    Tasks = lnx_srk_parse.Stage.Tasks
 
     INSTANCE = None
 
@@ -68,7 +68,7 @@ class TaskParse(object):
         self._dcc_configure = bsc_resource.RscExtendConfigure.get_as_content('wsp_task/dcc/default')
         self._dcc_configure.do_flatten()
 
-        self._parse_stage = qsm_srk_parse.Stage(scheme='default')
+        self._parse_stage = lnx_srk_parse.Stage(scheme='default')
         self.Roots = self._parse_stage.Roots
         self.Spaces = self._parse_stage.Spaces
         self.Steps = self._parse_stage.Steps

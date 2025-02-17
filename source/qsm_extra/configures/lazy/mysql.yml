@@ -5,6 +5,7 @@ options:
     port: 3306
 
 keys:
+    - resource_manifest
     - motion_test
     - motion_splice
     - asset_test

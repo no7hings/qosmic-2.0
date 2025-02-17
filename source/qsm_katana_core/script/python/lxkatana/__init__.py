@@ -19,7 +19,7 @@ def set_reload(modules=None):
                 'lxusd',
                 'lxgui', 'lxtool',
                 'lxshotgun',
-                'lxkatana', 'lxkatana_gui'
+                'lxkatana', 'lxkatana_tool'
             ]
         )
     p.set_reload()

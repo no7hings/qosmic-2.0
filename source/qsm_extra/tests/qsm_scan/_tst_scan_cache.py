@@ -1,7 +1,7 @@
 # coding:utf-8
-import qsm_scan as qsm_scan
+import lnx_scan as lnx_scan
 
-stage = qsm_scan.Stage()
+stage = lnx_scan.Stage()
 
 root = stage.get_root()
 

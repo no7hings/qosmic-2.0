@@ -1,11 +1,11 @@
 # coding:utf-8
-import qsm_scan as qsm_scan
+import lnx_scan as lnx_scan
 
-root = qsm_scan.Stage().get_root()
+root = lnx_scan.Stage().get_root()
 
-print root.projects
+print(root.projects)
 project = root.project('QSM_TST')
-print project.find_assets(dict(role=['chr']))
+print(project.find_assets(dict(role=['chr'])))
 # print project.assets
 # print project.asset('sam')
 # print project.sequences

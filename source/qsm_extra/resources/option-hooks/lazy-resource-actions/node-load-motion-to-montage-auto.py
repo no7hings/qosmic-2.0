@@ -3,7 +3,7 @@ import lxbasic.storage as bsc_storage
 
 import lxgui.core as gui_core
 
-import qsm_screw.core as qsm_scr_core
+import lnx_screw.core as lnx_scr_core
 
 import qsm_maya_lazy_montage.core as qsm_mya_lzy_mtg_core
 
@@ -45,7 +45,7 @@ class Main(object):
 
                 scr_entities = node_opt.gui_get_checked_or_selected_scr_entities()
                 if scr_entities:
-                    scr_stage = qsm_scr_core.Stage(scr_stage_name)
+                    scr_stage = lnx_scr_core.Stage(scr_stage_name)
                     with window.gui_progressing(maximum=len(scr_entities)) as g_p:
                         for i_scr_entity in scr_entities:
                             i_motion_json_path = scr_stage.get_node_parameter(i_scr_entity.path, 'motion')

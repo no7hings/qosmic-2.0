@@ -11,7 +11,7 @@ import lxgui.qt.view_widgets as gui_qt_view_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_shark.parse as qsm_srk_parse
+import lnx_shark.parse as lnx_srk_parse
 
 from ... import core as _wsp_core
 
@@ -60,7 +60,7 @@ class _GuiTaskOpt(_unit_base._GuiBaseOpt):
 
         self.gui_update_thread_flag()
 
-        ett_project = qsm_srk_parse.Stage().project(
+        ett_project = lnx_srk_parse.Stage().project(
             project,
             space_key=space_key
         )
@@ -134,12 +134,12 @@ class _GuiTaskOpt(_unit_base._GuiBaseOpt):
             if gui_thread_flag != self._gui_thread_flag:
                 return [[], 0]
 
-            _source_directory_ptn = qsm_srk_parse.Stage().generate_pattern_opt_for(
+            _source_directory_ptn = lnx_srk_parse.Stage().generate_pattern_opt_for(
                 '{}-source-dir'.format(resource_type), **ett_resource.variants
             )
             _source_directory_path = _source_directory_ptn.get_value()
 
-            _release_directory_ptn = qsm_srk_parse.Stage().generate_pattern_opt_for(
+            _release_directory_ptn = lnx_srk_parse.Stage().generate_pattern_opt_for(
                 '{}-release-dir'.format(resource_type), **ett_resource.variants
             )
             _release_directory_path = _release_directory_ptn.get_value()
@@ -314,12 +314,12 @@ class _GuiVersionOpt(_unit_base._GuiBaseOpt):
             if gui_thread_flag != self._gui_thread_flag:
                 return [[], 0]
 
-            _release_directory_ptn = qsm_srk_parse.Stage().generate_pattern_opt_for(
+            _release_directory_ptn = lnx_srk_parse.Stage().generate_pattern_opt_for(
                 '{}-release-version-dir'.format(resource_type), **ett_version.variants
             )
             _release_directory_path = _release_directory_ptn.get_value()
 
-            _release_preview_ptn = qsm_srk_parse.Stage().generate_pattern_opt_for(
+            _release_preview_ptn = lnx_srk_parse.Stage().generate_pattern_opt_for(
                 '{}-release-preview-mov-file'.format(resource_type), **ett_version.variants
             )
             _release_preview_path = _release_preview_ptn.get_value()

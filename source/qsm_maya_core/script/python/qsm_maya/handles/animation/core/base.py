@@ -14,7 +14,7 @@ class AdvQuery(object):
 
     def __init__(self, namespace):
         ctt = bsc_resource.RscExtendConfigure.get_as_content(
-            'rig/adv'
+            'maya/rig/adv'
         )
         ctt.set('option.namespace', namespace)
         ctt.do_flatten()

@@ -15,7 +15,7 @@ import lxgui.proxy.scripts as gui_prx_scripts
 
 import qsm_general.core as qsm_gnl_core
 
-import qsm_scan as qsm_scan
+import lnx_scan as lnx_scan
 
 import qsm_maya.core as qsm_mya_core
 
@@ -51,7 +51,7 @@ class PrxToolbarForCharacterAndPropReference(
 ):
     def __init__(self, window, unit, session, prx_input_for_asset):
         super(PrxToolbarForCharacterAndPropReference, self).__init__(window, unit, session)
-        self._scan_root = qsm_scan.Stage().get_root()
+        self._scan_root = lnx_scan.Stage().get_root()
 
         self._asset_prx_input = prx_input_for_asset
 

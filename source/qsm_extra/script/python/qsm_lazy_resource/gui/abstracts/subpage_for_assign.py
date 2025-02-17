@@ -9,7 +9,7 @@ import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_screw.core as qsm_scr_core
+import lnx_screw.core as lnx_scr_core
 
 
 class _AbsAssign(object):
@@ -40,7 +40,7 @@ class _AbsAssign(object):
         self._post_fnc = None
 
     def set_scr_stage_key(self, scr_stage_name):
-        self._scr_stage = qsm_scr_core.Stage(scr_stage_name)
+        self._scr_stage = lnx_scr_core.Stage(scr_stage_name)
 
         self._load_type_or_tags()
 
@@ -118,15 +118,6 @@ class AbsPrxSubpageForAnyAssign(
         self._qt_layout.addWidget(bottom_tool_bar.widget)
         bottom_tool_bar.set_expanded(True)
 
-        self._apply_and_close_button = gui_qt_widgets.QtPressButton()
-        bottom_tool_bar.add_widget(self._apply_and_close_button)
-        self._apply_and_close_button._set_name_text_(
-            self._subwindow.choice_gui_name(
-                self._configure.get('build.buttons.apply_and_close')
-            )
-        )
-        self._apply_and_close_button.press_clicked.connect(self._on_apply_and_close)
-
         self._apply_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._apply_button)
         self._apply_button._set_name_text_(
@@ -135,6 +126,15 @@ class AbsPrxSubpageForAnyAssign(
             )
         )
         self._apply_button.press_clicked.connect(self._on_apply)
+
+        self._apply_and_close_button = gui_qt_widgets.QtPressButton()
+        bottom_tool_bar.add_widget(self._apply_and_close_button)
+        self._apply_and_close_button._set_name_text_(
+            self._subwindow.choice_gui_name(
+                self._configure.get('build.buttons.apply_and_close')
+            )
+        )
+        self._apply_and_close_button.press_clicked.connect(self._on_apply_and_close)
 
         self._close_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._close_button)

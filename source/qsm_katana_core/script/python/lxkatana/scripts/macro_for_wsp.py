@@ -1632,8 +1632,6 @@ class ScpWspWorkspace(AbsWsp):
 
     def _build_nodes_(self, data):
         for k, v in data.items():
-            pass
-            # print k, v
             ktn_obj, is_create = ScpMacro._build_node_(v)
 
     def _create_nodes_(self, key, data):

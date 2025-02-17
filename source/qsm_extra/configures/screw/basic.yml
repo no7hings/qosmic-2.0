@@ -1,0 +1,139 @@
+options:
+    type: ''
+
+    gui_name: ''
+    gui_name_chs: ''
+
+    gui_item_frame_size: [128, 128]
+
+entities:
+    types:
+        /:
+            category: 'group'
+            type: 'root'
+            kind: 'builtin'
+
+            gui_name: 'All'
+            gui_name_chs: '所有'
+
+        /unspecified:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: '0-Unspecified'
+            gui_name_chs: '0-未指定'
+
+        /lock:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: '1-Lock'
+            gui_name_chs: '1-锁定'
+            gui_icon_name: 'database/lock'
+
+        /trash:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: '2-Trash'
+            gui_name_chs: '2-回收站'
+            gui_icon_name: 'database/trash'
+
+    tags:
+        /:
+            category: 'group'
+            type: 'root'
+            kind: 'builtin'
+
+            gui_name: 'All'
+            gui_name_chs: '所有'
+            gui_icon_name: 'database/all'
+
+        # creation time
+        /ctime:
+            category: 'group'
+            type: 'group'
+            kind: 'unavailable'
+
+            gui_name: 'Creation Time'
+            gui_name_chs: '创建时间'
+            gui_icon_name: 'database/group'
+
+        /ctime/today:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Today'
+            gui_name_chs: '今天'
+
+        /ctime/yesterday:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Yesterday'
+            gui_name_chs: '昨天'
+
+        /ctime/earlier_this_week:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Earlier this Week'
+            gui_name_chs: '本周早些时候'
+
+        /ctime/last_week:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Last Week'
+            gui_name_chs: '上周'
+
+        /ctime/earlier_this_month:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Earlier This Month'
+            gui_name_chs: '本月早些时候'
+
+        /ctime/last_month:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Last Month'
+            gui_name_chs: '上月'
+
+        /ctime/earlier_this_year:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Earlier This Year'
+            gui_name_chs: '今年早些时候'
+
+        /ctime/long_time_ago:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Long Time Ago'
+            gui_name_chs: '很久以前'
+
+    nodes:
+        /:
+            category: 'group'
+            type: 'root'
+            kind: 'builtin'
+
+            gui_name: 'All'
+            gui_name_chs: '所有'
+            gui_icon_name: 'database/all'
+
+

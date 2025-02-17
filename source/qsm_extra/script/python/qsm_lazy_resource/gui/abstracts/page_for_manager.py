@@ -23,7 +23,7 @@ import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_screw.core as qsm_scr_core
+import lnx_screw.core as lnx_scr_core
 
 
 class _GuiThreadExtra(object):
@@ -217,6 +217,9 @@ class _GuiTypeOpt(
 
     def gui_add_entity_as_group(self, scr_entity, gui_thread_flag):
         def group_cache_fnc_():
+            if scr_entity.kind == 'unavailable':
+                return []
+
             _menu_content = self.generate_scr_entity_menu_content(scr_entity, extra_key='group')
             return [
                 _menu_content
@@ -304,12 +307,23 @@ class _GuiTypeOpt(
                 _src_node_path_set = set([x.path for x in _scr_nodes_lock])
 
                 _menu_content = None
+            elif path == '/trash':
+                _scr_nodes_trash = self._page._scr_stage.find_all(
+                    entity_type=self._page._scr_stage.EntityTypes.Node,
+                    filters=[
+                        ('trash', 'is', True),
+                    ]
+                )
+                _src_node_path_set = set([x.path for x in _scr_nodes_trash])
+
+                _menu_content = None
             else:
                 _scr_assigns = self._page._scr_stage.find_all(
                     entity_type=self._page._scr_stage.EntityTypes.Assign,
                     filters=[
                         ('type', 'is', 'type_assign'),
                         ('lock', 'is', False),
+                        ('trash', 'is', False),
                         ('target', 'is', path),
                     ]
                 )
@@ -379,7 +393,8 @@ class _GuiTypeOpt(
         # update force
         for i_scr_entity_path in [
             '/unspecified',
-            '/lock'
+            '/lock',
+            '/trash',
         ]:
             if i_scr_entity_path not in scr_entity_paths:
                 # update for unspecified latest
@@ -405,7 +420,8 @@ class _GuiTypeOpt(
                             entity_type=self._page._scr_stage.EntityTypes.Node,
                             filters=[
                                 ('type', 'is', 'node'),
-                                ('lock', 'is', False)
+                                ('lock', 'is', False),
+                                ('trash', 'is', False),
                             ]
                         )
                     )
@@ -417,7 +433,8 @@ class _GuiTypeOpt(
                             entity_type=self._page._scr_stage.EntityTypes.Assign,
                             filters=[
                                 ('type', 'is', 'type_assign'),
-                                ('lock', 'is', False)
+                                ('lock', 'is', False),
+                                ('trash', 'is', False)
                             ]
                         )
                     )
@@ -431,12 +448,21 @@ class _GuiTypeOpt(
                     ]
                 )
                 _src_node_path_set = set([x.path for x in _scr_nodes_lock])
+            elif scr_entity.path == '/trash':
+                _scr_nodes_trash = self._page._scr_stage.find_all(
+                    entity_type=self._page._scr_stage.EntityTypes.Node,
+                    filters=[
+                        ('trash', 'is', True),
+                    ]
+                )
+                _src_node_path_set = set([x.path for x in _scr_nodes_trash])
             else:
                 _scr_assigns = self._page._scr_stage.find_all(
                     entity_type=self._page._scr_stage.EntityTypes.Assign,
                     filters=[
                         ('type', 'is', 'type_assign'),
                         ('lock', 'is', False),
+                        ('trash', 'is', False),
                         ('target', 'is', scr_entity.path),
                     ]
                 )
@@ -606,6 +632,7 @@ class _GuiTagOpt(
                             filters=[
                                 ('type', 'is', 'node'),
                                 ('lock', 'is', False),
+                                ('trash', 'is', False),
                             ]
                         )
                     )
@@ -617,6 +644,7 @@ class _GuiTagOpt(
                     filters=[
                         ('type', 'is', 'tag_assign'),
                         ('lock', 'is', False),
+                        ('trash', 'is', False),
                         ('target', 'is', scr_entity.path),
                     ]
                 )
@@ -691,6 +719,7 @@ class _GuiTagOpt(
                 filters=[
                     ('type', 'is', 'tag_assign'),
                     ('lock', 'is', False),
+                    ('trash', 'is', False),
                     ('target', 'is', scr_entity.path),
                 ]
             )
@@ -760,7 +789,8 @@ class _GuiNodeOpt(_GuiBaseOpt):
     def __init__(self, window, page, session):
         super(_GuiNodeOpt, self).__init__(window, page, session)
 
-        item_frame_size = self._page._scr_stage.configure.get('options.gui_item_frame_size')
+        scr_resource_type_options = self._page._scr_stage.resource_type_options
+        item_frame_size = scr_resource_type_options.get('gui_item_frame_size')
         if item_frame_size is None:
             item_frame_size = self._window._gui_configure.get('item_frame_size')
 
@@ -809,7 +839,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
                     data_type=data_type,
                     file=file_path
                 )
-                qsm_scr_core.DataContext.save(data)
+                lnx_scr_core.DataContext.save(data)
 
     # node
     def gui_update_entities(self, node_path_set, gui_thread_flag):
@@ -864,12 +894,17 @@ class _GuiNodeOpt(_GuiBaseOpt):
             i_scr_entity = self._page._scr_stage.get_node(i_entity_path)
             if i_scr_entity:
                 i_source_type = self._page._scr_stage.get_node_parameter(i_entity_path, 'source_type')
-                i_is_locked = i_scr_entity.lock
+                i_lock_flag = i_scr_entity.lock
+                i_trash_flag = i_scr_entity.trash
                 i_thumbnail_path = self._page._scr_stage.get_node_parameter(i_entity_path, 'thumbnail')
                 i_scene_path = self._page._scr_stage.get_node_parameter(i_entity_path, 'scene')
                 i_source_path = self._page._scr_stage.get_node_parameter(i_entity_path, 'source')
                 entity_data.append(
-                    (i_scr_entity, i_source_type, i_is_locked, i_thumbnail_path, i_scene_path, i_source_path)
+                    (
+                        i_scr_entity, i_source_type,
+                        i_lock_flag, i_trash_flag,
+                        i_thumbnail_path, i_scene_path, i_source_path
+                    )
                 )
         return [
             entity_data,
@@ -887,7 +922,11 @@ class _GuiNodeOpt(_GuiBaseOpt):
             self.gui_add_entity(i_entity_data, gui_thread_flag)
 
     def gui_add_entity(self, entity_data, gui_thread_flag):
-        scr_entity, source_type, is_locked, thumbnail_path, scene_path, source_path = entity_data
+        (
+            scr_entity, source_type,
+            lock_flag, trash_flag,
+            thumbnail_path, scene_path, source_path
+        ) = entity_data
 
         path = scr_entity.path
         name = bsc_core.BscNodePath.to_dag_name(path)
@@ -914,7 +953,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
 
         qt_item._item_model.set_name(gui_name)
         qt_item._item_model.set_index(scr_entity.id)
-        qt_item._item_model.set_locked(is_locked)
+        qt_item._item_model.set_locked(lock_flag)
 
         # add thumbnail
         if thumbnail_path:
@@ -953,8 +992,8 @@ class _GuiNodeOpt(_GuiBaseOpt):
                 gui_name = scr_entity.gui_name_chs
             qt_item._item_model.set_name(gui_name)
 
-            is_locked = scr_entity.lock
-            qt_item._item_model.set_locked(is_locked)
+            lock_flag = scr_entity.lock
+            qt_item._item_model.set_locked(lock_flag)
 
             qt_item._item_model.refresh_force()
 
@@ -975,6 +1014,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
             [
                 ('type', 'is', 'tag_assign'),
                 ('lock', 'is', False),
+                ('trash', 'is', False),
                 ('source', 'is', scr_entity.path),
             ]
         )
@@ -1174,7 +1214,7 @@ class AbsPrxPageForManager(
 
     def do_gui_page_initialize(self, key):
         self._scr_stage_name = key
-        self._scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
+        self._scr_stage = lnx_scr_core.Stage(self._scr_stage_name)
 
         self.gui_page_setup_fnc()
 

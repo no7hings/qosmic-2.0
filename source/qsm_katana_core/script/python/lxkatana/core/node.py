@@ -2145,7 +2145,7 @@ class NGPortOpt(object):
             [self.ktn_port.getChildByIndex(i).setValue(value[i], frame) for i in range(size)]
         else:
             _value = value
-            if isinstance(value, unicode):
+            if isinstance(value, six.text_type):
                 _value = str(value)
             #
             if self.is_enumerate() is True:

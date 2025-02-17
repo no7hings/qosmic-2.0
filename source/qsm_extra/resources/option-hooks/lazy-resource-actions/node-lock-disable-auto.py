@@ -7,7 +7,7 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxbasic.storage as bsc_storage
 
-import qsm_screw.core as lzy_src_core
+import lnx_screw.core as lzy_src_core
 
 
 class Main(object):

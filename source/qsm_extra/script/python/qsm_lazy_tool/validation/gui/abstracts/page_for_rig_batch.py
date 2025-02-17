@@ -17,7 +17,7 @@ import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
 import qsm_general.core as qsm_gnl_core
 
-import qsm_scan as qsm_scan
+import lnx_scan as lnx_scan
 
 import qsm_lazy.validation.scripts as lzy_vld_scripts
 
@@ -286,7 +286,7 @@ class AbsPrxPageForChrRigBatch(gui_prx_widgets.PrxBasePage):
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForChrRigBatch, self).__init__(window, session, *args, **kwargs)
 
-        self._scan_root = qsm_scan.Stage().get_root()
+        self._scan_root = lnx_scan.Stage().get_root()
 
         self._signals = gui_qt_core.QtConcurrentGlobSignals(self._qt_widget)
         self._signals.accepted.connect(self._add_asset_fnc)

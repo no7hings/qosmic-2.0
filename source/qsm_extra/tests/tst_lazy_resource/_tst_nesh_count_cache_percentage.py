@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.storage as bsc_storage
 
-import qsm_lazy_resource.extra.asset.scripts as s
+import qsm_lazy_resource.resource_types.asset.scripts as s
 
 import qsm_general.core as qsm_gnl_core
 

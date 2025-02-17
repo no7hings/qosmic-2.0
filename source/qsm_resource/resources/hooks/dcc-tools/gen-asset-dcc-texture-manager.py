@@ -8,10 +8,10 @@ def main(session):
 
     application = session.application
     if application == 'maya':
-        import lxmaya_gui.tool.widgets as mya_tol_widgets
+        import lxmaya_tool.tool.widgets as mya_tol_widgets
         mya_tol_widgets.PnlManagerForAssetTextureDcc(session).show_window_auto()
     elif application == 'katana':
-        import lxkatana_gui.tool.widgets as ktn_gui_tol_widgets
+        import lxkatana_tool.tool.widgets as ktn_gui_tol_widgets
         ktn_gui_tol_widgets.PnlManagerForAssetTextureDcc(session).show_window_auto()
     else:
         content = u'application "{}" is not supported'.format(application)

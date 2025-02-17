@@ -6,7 +6,7 @@ class MayaProcess(object):
     def generate_cmd_script(cls, option):
         # windows
         cmd_args = [
-            'rez-env qsm_dcc_main maya-2019 usd-20.11',
+            'rez-env qsm_maya_main maya-2019 usd-20.11',
             (
                 r'-- mayabatch -command '
                 r'"python('

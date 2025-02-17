@@ -73,7 +73,7 @@ class MotionTimeGraph(_GraphBase):
     def create_all(self, add_to_container=True):
         fps = qsm_mya_core.Frame.get_fps()
         qsm_mya_core.Namespace.create(self._namespace)
-        self._cfg = bsc_resource.RscExtendConfigure.get_as_content('motion/motion_time')
+        self._cfg = bsc_resource.RscExtendConfigure.get_as_content('maya/motion/motion_time')
         self._cfg.set('options.namespace', self._namespace)
         if fps == 24:
             self._cfg.set('options.time_input_factor', 0.004)
@@ -168,4 +168,4 @@ class MotionLayerGraph(_GraphBase):
 
     @classmethod
     def test(cls):
-        cls('test', 'motion/motion_layer').create_all()
+        cls('test', 'maya/motion/motion_layer').create_all()

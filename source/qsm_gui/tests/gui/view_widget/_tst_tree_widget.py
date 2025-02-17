@@ -15,14 +15,14 @@ from lxgui.qt.core.wrap import *
 
 import lxgui.qt.core as gui_qt_core
 
-import qsm_screw.core as qsm_scr_core
+import lnx_screw.core as lnx_scr_core
 
 
 class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        scr_stage = qsm_scr_core.Stage('video_test')
+        scr_stage = lnx_scr_core.Stage('video_test')
 
         self._d = gui_qt_view_widgets.QtTreeWidget()
         self._d._set_item_check_enable_(True)

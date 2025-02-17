@@ -7,7 +7,9 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_screw.core as qsm_scr_core
+import lnx_screw.core as lnx_scr_core
+
+import lnx_screw.scripts as lnx_scr_scripts
 
 
 class AbsPrxResourceTool(gui_prx_widgets.PrxBasePanel):
@@ -16,61 +18,38 @@ class AbsPrxResourceTool(gui_prx_widgets.PrxBasePanel):
     KEY_TAB_KEYS = 'lazy-resource-manager.page_keys'
     HST_TAB_KEY_CURRENT = 'lazy-resource-manager.page_key_current'
 
-    def _gui_tab_add_menu_data_generate_fnc(self):
-        lst = []
-        for i_key in qsm_scr_core.Stage.get_all_keys():
-            if i_key not in self._tag_page_key_opened:
-                i_configure = qsm_scr_core.Stage.get_configure(i_key)
-                # todo: use type to group menu item
-                i_type = i_configure.get('options.type')
-                if self._window._language == 'chs':
-                    i_name = i_configure.get('options.gui_name_chs')
-                else:
-                    i_name = i_configure.get('options.gui_name')
-
-                lst.append(
-                    (
-                        i_name,
-                        'tag',
-                        functools.partial(
-                            self._gui_tab_add_page_fnc, i_key, True
-                        )
-                    )
-                )
-        return lst
-
     def _gui_tab_add_menu_content_generate_fnc(self):
         content = bsc_content.Dict()
-        main_configure = qsm_scr_core.Stage.get_main_configure()
-        for i_key in qsm_scr_core.Stage.get_all_keys():
+        data = lnx_scr_scripts.ManifestStageOpt().get_all_page_data()
+        for k, v in data.items():
+            i_key = k
             if i_key not in self._tag_page_key_opened:
-                i_configure = qsm_scr_core.Stage.get_configure(i_key)
-                # todo: use type to group menu item
-                i_type = i_configure.get('options.type')
+                i_type_name = v['type']['name']
+                i_node_name = v['node']['name']
                 if self._window._language == 'chs':
-                    i_type_name = main_configure.get('types.{}.name_chs'.format(i_type))
-                    i_name = i_configure.get('options.gui_name_chs')
+                    i_type_gui_name = v['type']['gui_name_chs']
+                    i_node_gui_name = v['node']['gui_name_chs']
                 else:
-                    i_type_name = main_configure.get('types.{}.name'.format(i_type))
-                    i_name = i_configure.get('options.gui_name')
+                    i_type_gui_name = v['type']['gui_name']
+                    i_node_gui_name = v['node']['gui_name']
 
-                i_group_path = u'/{}'.format(i_type)
+                i_group_path = u'/{}'.format(i_type_name)
                 content.set(
                     u'{}.properties.type'.format(i_group_path), 'group'
                 )
                 content.set(
-                    u'{}.properties.name'.format(i_group_path), i_type_name
+                    u'{}.properties.name'.format(i_group_path), i_type_gui_name
                 )
                 content.set(
-                    u'{}.properties.icon_name'.format(i_group_path), 'database/{}'.format(i_type)
+                    u'{}.properties.icon_name'.format(i_group_path), 'database/group'
                 )
 
-                i_path = u'{}/{}'.format(i_group_path, i_name)
+                i_path = u'{}/{}'.format(i_group_path, i_node_name)
                 content.set(
                     u'{}.properties.type'.format(i_path), 'action'
                 )
                 content.set(
-                    u'{}.properties.name'.format(i_path), i_name
+                    u'{}.properties.name'.format(i_path), i_node_gui_name
                 )
                 content.set(
                     u'{}.properties.icon_name'.format(i_path), 'tag'
@@ -82,7 +61,7 @@ class AbsPrxResourceTool(gui_prx_widgets.PrxBasePanel):
                     )
                 )
         return content
-    
+
     def _gui_tab_add_page_fnc(self, key, switch_to):
         self._tag_page_key_opened.add(key)
         self._gui_tab_add_page(key, switch_to=switch_to)
@@ -94,11 +73,13 @@ class AbsPrxResourceTool(gui_prx_widgets.PrxBasePanel):
 
     def _gui_tab_add_page(self, key, switch_to=False):
         prx_sca = gui_prx_widgets.PrxVScrollArea()
-        configure = qsm_scr_core.Stage.get_configure(key)
+
+        page_data = lnx_scr_scripts.ManifestStageOpt().get_page_data(key)
+
         if self._window._language == 'chs':
-            name = configure.get('options.gui_name_chs')
+            name = page_data['gui_name_chs']
         else:
-            name = configure.get('options.gui_name')
+            name = page_data['gui_name']
 
         self._prx_tab_view.add_widget(
             prx_sca,
@@ -135,11 +116,10 @@ class AbsPrxResourceTool(gui_prx_widgets.PrxBasePanel):
         self._prx_tab_view.set_add_enable(True)
 
         self._tag_page_key_opened = set()
-        self._all_scr_stage_keys = qsm_scr_core.Stage.get_all_keys()
+        self._all_scr_stage_keys = lnx_scr_core.Stage.get_all_keys()
 
         self._tab_tab_widget_dict = {}
 
-        # self._prx_tab_view.set_add_menu_data_generate_fnc(self._gui_tab_add_menu_data_generate_fnc)
         self._prx_tab_view.set_add_menu_content_generate_fnc(self._gui_tab_add_menu_content_generate_fnc)
 
         history_tag_keys = gui_core.GuiHistory.get_one(self.KEY_TAB_KEYS)

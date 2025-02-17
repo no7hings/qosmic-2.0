@@ -1,0 +1,58 @@
+build:
+    name: 'Manifest'
+    name_chs: '页面管理'
+
+    tool_tip:
+        |-
+        To be supplemented.
+
+    tool_tip_chs:
+        |-
+        待补充。
+
+    buttons:
+        apply_and_close:
+            name: 'Apply and Close'
+            name_chs: '应用并关闭'
+
+        apply:
+            name: 'Apply'
+            name_chs: '应用'
+
+        close:
+            name: 'Close'
+            name_chs: '关闭'
+
+    messages:
+        register_successful:
+            message: 'Register Successful'
+            message_chs: '登记成功'
+
+    options:
+        name: 'Options'
+        name_chs: '选项'
+
+        parameters:
+            resource_type:
+                widget: capsule_string
+                name: 'Resource Type'
+                name_chs: '资源类型'
+                value: []
+
+            gui_name:
+                widget: string
+                name: 'GUI Name'
+                name_chs: '界面名字'
+                value: 'Unnamed'
+
+            gui_name_chs:
+                widget: string
+                name: 'GUI Name(Chinese)'
+                name_chs: '界面名字（中文）'
+                value: '未命名'
+
+            cover:
+                widget: file
+                open_or_save: open
+                name: 'Cover'
+                name_chs: '封面'

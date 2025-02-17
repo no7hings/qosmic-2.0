@@ -37,7 +37,7 @@ class ChartModelForHistogram(object):
 
     def set_data(self, data):
         self._branches = []
-        keys = data.keys()
+        keys = list(data.keys())
         if keys:
             keys.sort(key=lambda _x: bsc_pinyin.Text.split_any_to_words(_x))
             for i_k in keys:

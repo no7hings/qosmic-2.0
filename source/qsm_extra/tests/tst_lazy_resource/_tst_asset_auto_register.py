@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_lazy_resource.extra.asset.scripts as s
+import qsm_lazy_resource.resource_types.asset.scripts as s
 
 s.AssetBatchRegisterOpt(
     'QSM_TST', '测试'

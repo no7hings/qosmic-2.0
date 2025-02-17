@@ -12,7 +12,7 @@ cursor = db.execute_sql('PRAGMA journal_mode;')
 result = cursor.fetchone()
 
 # 输出当前的 journal_mode
-print result
+print(result)
 
 # 关闭数据库连接
 db.close()

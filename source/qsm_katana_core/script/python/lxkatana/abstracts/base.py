@@ -1,4 +1,6 @@
 # coding:utf-8
+import six
+
 import lxbasic.content as bsc_content
 
 import lxbasic.resource as bsc_resource
@@ -120,7 +122,7 @@ class AbsKtnPort(gnl_dcc_abstracts.AbsDccPort):
     @classmethod
     def _set_constant_value_(cls, ktn_port, value, time=0):
         _value = value
-        if isinstance(value, unicode):
+        if isinstance(value, six.text_type):
             _value = str(value)
         #
         ktn_port.setValue(_value, time)

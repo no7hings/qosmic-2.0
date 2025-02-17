@@ -419,18 +419,19 @@ class AbsItemModel(object):
             self._data.number.text = self.NUMBER_TEXT_FORMAT.format(value)
             if value > 0:
                 self._data.number.flag = True
-                self._data.text.font.setItalic(False)
+                # todo: do not set italic?
+                # self._data.text.font.setItalic(False)
                 self._data.text.color = QtGui.QColor(223, 223, 223)
                 self._data.text.action_color = QtGui.QColor(31, 31, 31)
 
-                self._font.setItalic(False)
+                # self._font.setItalic(False)
             else:
                 self._data.number.flag = False
-                self._data.text.font.setItalic(True)
+                # self._data.text.font.setItalic(True)
                 self._data.text.color = QtGui.QColor(127, 127, 127)
                 self._data.text.action_color = QtGui.QColor(127, 127, 127)
 
-                self._font.setItalic(True)
+                # self._font.setItalic(True)
 
             self._update_number(value)
             return True

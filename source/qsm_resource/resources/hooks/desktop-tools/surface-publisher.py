@@ -10,12 +10,12 @@ def main(session):
 
     if bsc_core.BscApplication.get_is_dcc():
         if bsc_core.BscApplication.get_is_katana():
-            import lxkatana_gui.tool.widgets as ktn_gui_tol_widgets
+            import lxkatana_tool.tool.widgets as ktn_gui_tol_widgets
             gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
                 ktn_gui_tol_widgets.PnlPublisherForSurface, session=session
             )
         elif bsc_core.BscApplication.get_is_maya():
-            import lxmaya_gui.tool.widgets as mya_tol_widgets
+            import lxmaya_tool.tool.widgets as mya_tol_widgets
             gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
                 mya_tol_widgets.PnlPublisherForSurface, session=session
             )

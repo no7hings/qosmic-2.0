@@ -13,7 +13,9 @@ import lxgui.proxy.abstracts as gui_prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_screw.core as qsm_scr_core
+import lnx_screw.core as lnx_scr_core
+
+import lnx_screw.scripts as lnx_scr_scripts
 
 
 class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
@@ -28,7 +30,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         self._window = window
         self._session = session
 
-        self._all_scr_stage_keys = qsm_scr_core.Stage.get_all_keys()
+        self._all_scr_stage_keys = lnx_scr_core.Stage.get_all_keys()
         self._scr_stage_name = self._all_scr_stage_keys[0]
         self._scr_stage = None
 
@@ -45,7 +47,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             self._scr_stage.close()
 
         self._scr_stage_name = key
-        self._scr_stage = qsm_scr_core.Stage(
+        self._scr_stage = lnx_scr_core.Stage(
             self._scr_stage_name
         )
         self.do_gui_add_types()
@@ -56,15 +58,15 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         self.do_gui_update_by_dcc_selection()
         
     def do_gui_load_data_types(self):
-        configure = qsm_scr_core.Stage.get_configure(self._scr_stage_name)
-        values = configure.get('options.data_types')
+        # todo, use configure
+        values = ['maya_node', 'maya_node_graph']
 
         pot = self._prx_options_node.get_port('data_type')
         if values:
             if self._window._language == 'chs':
-                value_names = [qsm_scr_core.DataTypes.NAME_CHS_MAP[x] for x in values]
+                value_names = [lnx_scr_core.DataTypes.NAME_CHS_MAP[x] for x in values]
             else:
-                value_names = [qsm_scr_core.DataTypes.NAME_MAP[x] for x in values]
+                value_names = [lnx_scr_core.DataTypes.NAME_MAP[x] for x in values]
 
             pot.set_options(
                 values, value_names
@@ -262,19 +264,19 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             pass
         
         data_type = self.get_resource_data_type()
-        if data_type == qsm_scr_core.DataTypes.MayaNode:
+        if data_type == lnx_scr_core.DataTypes.MayaNode:
             self._scr_stage.upload_node_json(
-                node_path, qsm_scr_core.DataTypes.MayaNode, data
+                node_path, lnx_scr_core.DataTypes.MayaNode, data
             )
-            self._scr_stage.create_or_update_parameters(
-                node_path, 'data_type', qsm_scr_core.DataTypes.MayaNode
+            self._scr_stage.create_or_update_node_parameter(
+                node_path, 'data_type', lnx_scr_core.DataTypes.MayaNode
             )
-        elif data_type == qsm_scr_core.DataTypes.MayaNodeGraph:
+        elif data_type == lnx_scr_core.DataTypes.MayaNodeGraph:
             self._scr_stage.upload_node_maya_scene(
-                node_path, qsm_scr_core.DataTypes.MayaNodeGraph, data
+                node_path, lnx_scr_core.DataTypes.MayaNodeGraph, data
             )
-            self._scr_stage.create_or_update_parameters(
-                node_path, 'data_type', qsm_scr_core.DataTypes.MayaNodeGraph
+            self._scr_stage.create_or_update_node_parameter(
+                node_path, 'data_type', lnx_scr_core.DataTypes.MayaNodeGraph
             )
         self._window.exec_message_dialog(
             gui_core.GuiUtil.choice_gui_message(
@@ -331,12 +333,12 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
         if self._window._language == 'chs':
             gui_names = [
-                qsm_scr_core.Stage.get_configure(x).get('options.gui_name_chs')
+                lnx_scr_scripts.ManifestStageOpt().get_page_data(x)['gui_name_chs']
                 for x in self._all_scr_stage_keys
             ]
         else:
             gui_names = [
-                qsm_scr_core.Stage.get_configure(x).get('options.gui_name')
+                lnx_scr_scripts.ManifestStageOpt().get_page_data(x)['gui_name']
                 for x in self._all_scr_stage_keys
             ]
 
