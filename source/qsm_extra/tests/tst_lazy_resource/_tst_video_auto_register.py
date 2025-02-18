@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.storage as bsc_storage
 
-import qsm_lazy_resource.resource_types.video.scripts as s
+import lnx_resora.resource_types.video.scripts as s
 
 file_paths = bsc_storage.StgDirectoryOpt('X:/videos/测试').get_all_file_paths(ext_includes=['.mov', '.mp4', '.avi'])
 

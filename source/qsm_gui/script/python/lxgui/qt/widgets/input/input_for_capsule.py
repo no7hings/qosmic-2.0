@@ -16,10 +16,10 @@ class QtInputAsCapsule(
 
     _qt_abstracts.AbsQtInputBaseDef,
 ):
+    QT_ENTRY_CLS = _entry_for_capsule.QtEntryAsCapsule
+
     def _pull_history_(self, *args, **kwargs):
         self._entry_widget._set_value_(args[0])
-
-    QT_ENTRY_CLS = _entry_for_capsule.QtEntryAsCapsule
 
     def __init__(self, *args, **kwargs):
         super(QtInputAsCapsule, self).__init__(*args, **kwargs)

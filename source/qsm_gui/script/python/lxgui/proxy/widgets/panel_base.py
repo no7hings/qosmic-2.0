@@ -182,6 +182,8 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
         else:
             self._configure = bsc_resource.RscExtendConfigure.get_as_content(configure_key)
 
+        self._configure.do_flatten()
+
         self._option_configure = self._configure.get_as_content('option')
         self._gui_configure = self._configure.get_as_content('option.gui')
 

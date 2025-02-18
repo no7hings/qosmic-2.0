@@ -14,6 +14,8 @@ requires = [
     'qsm_gui',
     'qsm_resource',
     'qsm_extra',
+    # tools
+    'qsm_resora',
 ]
 
 

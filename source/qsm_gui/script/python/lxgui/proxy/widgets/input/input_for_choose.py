@@ -43,7 +43,7 @@ class PrxInputForConstantChoose(_input_base.AbsPrxInput):
             self._qt_input_widget._set_choose_value_by_index_(int(_))
 
     def set_options(self, *args, **kwargs):
-        self._qt_input_widget._set_value_options_(args[0])
+        self._qt_input_widget._set_value_options_(*args, **kwargs)
 
     def set_icon_file_as_value(self, value, file_path):
         self._qt_input_widget._set_choose_popup_item_icon_file_path_for_(

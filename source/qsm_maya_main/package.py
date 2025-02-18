@@ -14,6 +14,8 @@ requires = [
     # maya
     'qsm_maya_core',
     'qsm_maya_lib',
+    # tools
+    'qsm_maya_resora',
 ]
 
 

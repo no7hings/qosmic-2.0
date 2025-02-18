@@ -249,7 +249,9 @@ class QtInputForConstantChoose(
 
     def _set_choose_values_(self, values, *args, **kwargs):
         super(QtInputForConstantChoose, self)._set_choose_values_(values, *args, **kwargs)
+
         self._refresh_choose_index_()
+
         self._get_entry_widget_()._set_value_options_(
             self._get_choose_values_()
         )

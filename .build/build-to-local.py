@@ -24,6 +24,8 @@ class Main(object):
         'qsm_resource',
         'qsm_extra',
 
+        'qsm_resora',
+
         'qsm_dcc_main',
         'qsm_dcc_core',
         'qsm_dcc_gui',
@@ -33,6 +35,7 @@ class Main(object):
 
         'qsm_maya_core',
         'qsm_maya_lib',
+        'qsm_maya_resora',
         'qsm_maya_main',
 
         'qsm_houdini_core',

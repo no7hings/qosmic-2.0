@@ -2,7 +2,7 @@
 
 
 def main(session):
-    import qsm_maya_lazy_resource.gui.main as m
+    import lnx_maya_resora.gui.main as m
 
     w = m.PrxLazyResourceTool(window=None, session=session)
     w.show_window_auto()

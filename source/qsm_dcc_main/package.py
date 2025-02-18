@@ -18,6 +18,8 @@ requires = [
     'qsm_dcc_gui',
     'qsm_dcc_resource',
     'qsm_dcc_extra',
+    # tool
+    'qsm_resora',
 ]
 
 

@@ -43,7 +43,7 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
         self._language = gui_core.GuiUtil.get_language()
 
         self._configure = bsc_resource.RscExtendConfigure.get_as_content(
-            'lazy-resource/gui/tool'
+            'resora/gui/tool'
         )
 
         self.set_window_title(

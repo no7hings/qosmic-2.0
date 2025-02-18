@@ -92,6 +92,12 @@ class Main(object):
             'QSM_EXTEND_CONFIGURES': ['{root}/configures'],
             'QSM_EXTEND_RESOURCES': ['{root}/resources'],
         },
+        'qsm_resora': {
+            'QSM_RESORA_BASE': '{root}',
+            'PYTHONPATH': ['{root}/script/python'],
+            'QSM_EXTEND_CONFIGURES': ['{root}/configures'],
+            'QSM_EXTEND_RESOURCES': ['{root}/resources'],
+        },
         #
         'qsm_dcc_core': {
             'QSM_DCC_CORE_BASE': '{root}',
@@ -130,6 +136,12 @@ class Main(object):
         },
         'qsm_maya_lib': {
             'QSM_MAYA_LIB_BASE': '{root}',
+        },
+        'qsm_maya_resora': {
+            'QSM_MAYA_RESORA_BASE': '{root}',
+            'PYTHONPATH': ['{root}/script/python'],
+            'QSM_EXTEND_CONFIGURES': ['{root}/configures'],
+            'QSM_EXTEND_RESOURCES': ['{root}/resources'],
         },
         'qsm_maya_main': {
             'QSM_MAYA_MAIN_BASE': '{root}',

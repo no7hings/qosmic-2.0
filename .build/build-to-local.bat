@@ -60,6 +60,16 @@ if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_extra\99.99.99 (
 ) else (
     mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_extra\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_extra
 )
+if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_resora (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_resora is exists
+) else (
+    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_resora
+)
+if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_resora\99.99.99 (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_resora\99.99.99 is exists
+) else (
+    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_resora\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_resora
+)
 if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_dcc_main (
     echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_dcc_main is exists
 ) else (
@@ -139,6 +149,16 @@ if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_lib\99.99.99 (
     echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_lib\99.99.99 is exists
 ) else (
     mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_lib\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_maya_lib
+)
+if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_resora (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_resora is exists
+) else (
+    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_resora
+)
+if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_resora\99.99.99 (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_resora\99.99.99 is exists
+) else (
+    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_resora\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_maya_resora
 )
 if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_main (
     echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_maya_main is exists
