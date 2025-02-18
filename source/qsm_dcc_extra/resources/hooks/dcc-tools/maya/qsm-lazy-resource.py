@@ -4,7 +4,7 @@
 def main(session):
     import lnx_maya_resora.gui.main as m
 
-    w = m.PrxLazyResourceTool(window=None, session=session)
+    w = m.PrxResoraTool(window=None, session=session)
     w.show_window_auto()
 
 

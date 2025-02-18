@@ -1,6 +1,6 @@
 # coding:utf-8
 def main(session):
-    import qsm_maya_lazy_workspace.core as c
+    import lnx_maya_wotrix.core as c
     
     c.TaskParse.autosave_source_scene_scr()
 

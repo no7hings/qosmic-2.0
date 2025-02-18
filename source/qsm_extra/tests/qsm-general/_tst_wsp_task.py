@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_lazy_workspace.core as c
+import lnx_wotrix.core as c
 
 
 task_parse = c.TaskParse()

@@ -6,7 +6,7 @@ from lnx_resora.gui.pages import manager as _page_manager
 from lnx_resora.gui.subpanels import register as _subpanel_register
 
 
-class PrxLazyResourceTool(_abstracts.AbsPrxResourceTool):
+class PrxResoraTool(_abstracts.AbsPrxResoraTool):
     PAGE_CLASS_DICT = dict(
         manager=_page_manager.PrxPageForResourceManager
     )
@@ -19,4 +19,4 @@ class PrxLazyResourceTool(_abstracts.AbsPrxResourceTool):
     HST_TAB_KEY_CURRENT = 'lazy-resource-manager.page_key_current_maya'
 
     def __init__(self, window, session, *args, **kwargs):
-        super(PrxLazyResourceTool, self).__init__(window, session, *args, **kwargs)
+        super(PrxResoraTool, self).__init__(window, session, *args, **kwargs)

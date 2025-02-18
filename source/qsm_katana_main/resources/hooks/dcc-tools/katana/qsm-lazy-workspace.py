@@ -4,10 +4,10 @@
 def main(session):
     import lxgui.proxy.core as gui_prx_core
 
-    import qsm_katana_lazy_workspace.gui.main as m
+    import lnx_katana_wotrix.gui.main as m
 
     gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
-        m.PrxLazyWorkspaceTool,
+        m.PrxWotrixTool,
         window_unique_name=session.get_gui_window_name(),
         window=None,
         session=session

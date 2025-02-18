@@ -7,7 +7,7 @@ def main(session):
     import lnx_resora.gui.main as m
 
     gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
-        m.PrxLazyResourceTool,
+        m.PrxResoraTool,
         window_unique_name=session.get_gui_window_name(),
         window=None, session=session
     )
