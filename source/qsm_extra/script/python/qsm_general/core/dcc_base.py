@@ -58,9 +58,7 @@ class MayaBin:
                 return None
 
         scene_path = bsc_core.ensure_unicode(scene_path)
-        # encode unicode
-        if isinstance(scene_path, six.text_type):
-            scene_path = scene_path.encode('mbcs')
+        scene_path = bsc_core.ensure_mbcs(scene_path)
 
         t = threading.Thread(
             target=fnc_

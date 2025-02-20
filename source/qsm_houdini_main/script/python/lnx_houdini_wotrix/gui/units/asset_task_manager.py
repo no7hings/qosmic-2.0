@@ -22,8 +22,8 @@ class PrxUnitForAssetTaskManager(_abs_unit_for_task_manager.AbsPrxUnitForTaskMan
     def dcc_set_scene_project(self, task_session):
         variants = task_session.properties
         resource_type = variants['resource_type']
-        maya_dir_path = task_session.get_file_for('{}-source-maya-dir'.format(resource_type))
-        lnx_hou_core.Workspace.create(maya_dir_path)
+        houdini_dir_path = task_session.get_file_for('{}-source-houdini-dir'.format(resource_type))
+        lnx_hou_core.Workspace.create(houdini_dir_path)
 
     def __init__(self, *args, **kwargs):
         super(PrxUnitForAssetTaskManager, self).__init__(*args, **kwargs)

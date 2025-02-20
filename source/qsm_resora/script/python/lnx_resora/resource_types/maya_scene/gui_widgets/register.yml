@@ -32,12 +32,6 @@ build:
         name_chs: '选项'
 
         parameters:
-            scheme:
-                widget: capsule_string
-                name: 'Scheme'
-                name_chs: '方案'
-                history_group: ['resora', 'maya_scene_register']
-
             directory:
                 widget: directory
                 open_or_save: open

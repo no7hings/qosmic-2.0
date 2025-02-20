@@ -15,7 +15,14 @@ def ensure_string(s):
 def ensure_unicode(s):
     if isinstance(s, _six.text_type):
         return s
-    elif isinstance(s, bytes):
+    elif isinstance(s, _six.binary_type):
         return s.decode('utf-8')
     else:
         return s
+
+
+def ensure_mbcs(s):
+    if isinstance(s, _six.text_type):
+        if _six.PY2:
+            return s.encode('mbcs')
+    return s

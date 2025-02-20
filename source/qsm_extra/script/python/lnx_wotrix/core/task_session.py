@@ -72,7 +72,7 @@ class TaskSession(object):
         return []
 
     def get_last_version_code(self, application):
-        kwargs = copy.copy(self._properties)
+        kwargs = dict(self._properties)
         if 'version' in kwargs:
             kwargs.pop('version')
 
@@ -163,7 +163,7 @@ class TaskSession(object):
         return ptn_opt.get_variants(file_path, extract=True)
 
     def get_file_for(self, keyword, **kwargs):
-        kwargs_new = copy.copy(self._properties)
+        kwargs_new = dict(self._properties)
         kwargs_new.update(**kwargs)
         ptn_opt = self._task_parse.generate_pattern_opt_for(
             keyword, **kwargs_new
@@ -197,7 +197,7 @@ class TaskSession(object):
             return version, version_latest
 
     def get_latest_file_for(self, keyword, **kwargs):
-        kwargs_new = copy.copy(self._properties)
+        kwargs_new = dict(self._properties)
         kwargs_new.update(**kwargs)
         # remove version key latest
         kwargs_new.pop('version')
@@ -212,7 +212,7 @@ class TaskSession(object):
         return None
 
     def generate_release_new_version_number(self, **kwargs):
-        kwargs_new = copy.copy(self._properties)
+        kwargs_new = dict(self._properties)
         kwargs_new.update(**kwargs)
         resource_type = kwargs_new['resource_type']
         if resource_type == 'asset':

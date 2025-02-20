@@ -65,7 +65,7 @@ class DccTaskCreateOpt(object):
 
         kwargs_new['result'] = scene_src_path
 
-        task_session = task_parse.generate_task_session_by_resource_source_scene_src(scene_src_path)
+        task_session = task_parse.generate_task_session_by_resource_source_scene_src(application, scene_src_path)
 
         task_create_opt = task_session.generate_opt_for(cls)
         return task_create_opt, kwargs_new, scene_src_path, thumbnail_path

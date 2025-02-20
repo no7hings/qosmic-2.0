@@ -647,7 +647,7 @@ class StgExplorer(object):
     @classmethod
     def open_file(cls, path):
         path = _cor_base.ensure_unicode(path)
-        path = path.encode('mbcs')
+        path = _cor_base.ensure_mbcs(path)
         if _cor_base.BscSystem.get_is_windows():
             # must replace '/' to '\\', when path is share like "//nas/test.text"
             cmd = 'explorer /select,"{}"'.format(path.replace('/', '\\'))

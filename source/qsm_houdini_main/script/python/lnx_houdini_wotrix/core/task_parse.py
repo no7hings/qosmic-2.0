@@ -13,8 +13,9 @@ class TaskParse(lnx_wtx_core.TaskParse):
 
     @classmethod
     def generate_task_session_by_resource_source_scene_src_auto(cls):
+        application = 'houdini'
         return cls.generate_task_session_by_resource_source_scene_src(
-            lnx_hou_core.SceneFile.get_current()
+            application, lnx_hou_core.SceneFile.get_current()
         )
 
     @classmethod
@@ -22,7 +23,7 @@ class TaskParse(lnx_wtx_core.TaskParse):
         task_parse = cls()
 
         ptn_opt = task_parse.generate_pattern_opt_for(
-            'asset-release-maya-scene_src-file'
+            'asset-release-houdini-scene_src-file'
         )
         variants = ptn_opt.get_variants(scene_path, extract=True)
         if variants:
@@ -34,7 +35,7 @@ class TaskParse(lnx_wtx_core.TaskParse):
         task_parse = cls()
 
         ptn_opt = task_parse.generate_pattern_opt_for(
-            'shot-release-maya-scene_src-file'
+            'shot-release-houdini-scene_src-file'
         )
         variants = ptn_opt.get_variants(scene_path, extract=True)
         if variants:

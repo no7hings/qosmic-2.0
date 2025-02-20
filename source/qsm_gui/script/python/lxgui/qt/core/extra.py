@@ -145,14 +145,9 @@ class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
         # self.setPalette(_base.GuiQtDcc.generate_qt_palette())
         menu.setAutoFillBackground(True)
         menu.setFont(_base.QtFonts.NameNormal)
-        if QT_LOAD_INDEX == 0:
-            menu.setStyleSheet(
-                _style.QtStyle.get('QMenuNew')
-            )
-        else:
-            menu.setStyleSheet(
-                _style.QtStyle.get('QMenu')
-            )
+        menu.setStyleSheet(
+            _style.QtStyle.get('QMenu')
+        )
         self.setContextMenu(
             menu
         )

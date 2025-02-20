@@ -31,7 +31,7 @@ class AbsItemModel(object):
     @classmethod
     def _draw_status_frame(cls, painter, rect, color):
         w, h = rect.width(), rect.height()
-        x_c, y_c = w/2, h/2
+        x_c, y_c = int(w/2), int(h/2)
         r_c = min(x_c, y_c)
         p1, p2, p3, p4 = rect.topLeft(), rect.topRight(), rect.bottomRight(), rect.bottomLeft()
         (x1, y1), (x2, y2), (x3, y3), (x4, y4) = (p1.x(), p1.y()), (p2.x(), p2.y()), (p3.x(), p3.y()), (p4.x(), p4.y())

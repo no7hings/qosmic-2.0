@@ -329,7 +329,7 @@ class QtUtil(object):
         img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGRA2BGR)
 
         file_path = bsc_core.ensure_unicode(file_path)
-        file_path = file_path.encode('mbcs')
+        file_path = bsc_core.ensure_mbcs(file_path)
         cv2.imwrite(file_path, img_arr)
 
 

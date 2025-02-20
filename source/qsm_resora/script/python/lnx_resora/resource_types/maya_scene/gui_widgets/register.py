@@ -58,6 +58,13 @@ class PrxSubpageForRegister(_abstracts.AbsPrxSubpageForRegister):
                     with_preview=with_preview, preview_pattern=preview_pattern,
                     with_file_reference=with_file_reference, file_reference_pattern=file_reference_pattern,
                 ).execute()
+        else:
+            self._window.exec_message_dialog(
+                'File is not found.',
+                title='Upload Files',
+                size=(480, 480),
+                status='warning',
+            )
 
     def _on_close(self):
         self._subwindow.close_window()

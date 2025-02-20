@@ -384,14 +384,9 @@ class QtMenu(QtWidgets.QMenu):
 
         self.setFont(_qt_core.QtFonts.NameNormal)
 
-        if QT_LOAD_INDEX == 0:
-            self.setStyleSheet(
-                _qt_core.QtStyle.get('QMenuNew')
-            )
-        else:
-            self.setStyleSheet(
-                _qt_core.QtStyle.get('QMenu')
-            )
+        self.setStyleSheet(
+            _qt_core.QtStyle.get('QMenu')
+        )
 
         self._name_dict = kwargs.get('name_dict') or {}
 
@@ -651,7 +646,7 @@ class _QtWidget(
         self._border_color = _qt_core.QtRgba.Transparent
         self._background_color = _qt_core.QtRgba.Basic
 
-        self._empty_icon_name = 'placeholder/disable'
+        self._empty_icon_name = 'placeholder/empty'
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)

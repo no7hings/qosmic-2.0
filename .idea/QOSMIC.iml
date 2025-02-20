@@ -32,6 +32,8 @@
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_lib/lib" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_lib/resources/executes" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_maya_lib/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/source/qsm_houdini_lib/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/source/qsm_katana_lib/lib" />
     </content>
     <orderEntry type="jdk" jdkName="Python 2.7 (qosmic-2.0) (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

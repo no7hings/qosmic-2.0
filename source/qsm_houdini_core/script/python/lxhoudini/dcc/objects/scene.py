@@ -149,7 +149,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
             if cls.get_is_default():
                 f = gui_qt_core.QtWidgets.QFileDialog()
                 s = f.getSaveFileName(
-                    gui_qt_core.GuiQtHoudini.get_qt_main_window(),
+                    gui_qt_core.QtHoudini.get_qt_main_window(),
                     caption='Save File',
                     dir=hou.hipFile.path(),
                     filter="Houdini Files (*.hip, *.hipnc)"

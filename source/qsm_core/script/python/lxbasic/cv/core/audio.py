@@ -139,7 +139,8 @@ class AudioCaptureOpt(object):
         if os.path.exists(directory_path) is False:
             os.makedirs(directory_path)
 
-        file_path = file_path.encode('mbcs')
+        file_path = bsc_core.ensure_unicode(file_path)
+        file_path = bsc_core.ensure_mbcs(file_path)
         cv2.imwrite(file_path, cv_img)
 
     def play_from(self, percent):

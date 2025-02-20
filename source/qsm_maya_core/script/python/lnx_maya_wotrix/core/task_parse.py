@@ -13,8 +13,9 @@ class TaskParse(lnx_wtx_core.TaskParse):
 
     @classmethod
     def generate_task_session_by_resource_source_scene_src_auto(cls):
+        application='maya'
         return cls.generate_task_session_by_resource_source_scene_src(
-            qsm_mya_core.SceneFile.get_current()
+            application, qsm_mya_core.SceneFile.get_current()
         )
 
     @classmethod

@@ -13,11 +13,9 @@ requires = []
 
 
 def commands():
-    import sys
+    import platform
 
     import os
-
-    import platform
     # root
     env.QSM_LIB_BASE = '{root}'
     # resource

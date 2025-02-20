@@ -62,8 +62,8 @@ class Setup(object):
         with bsc_log.LogContext.create(cls.LOG_KEY, 'all'):
             cls.build_menu()
             cls.build_lua()
-            cls.build_hot_key()
-            cls.build_workspace()
+            # cls.build_hot_key()
+            # cls.build_workspace()
 
 
 class ArnoldSetup(object):

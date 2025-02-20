@@ -35,7 +35,7 @@ class TaskSession(lnx_wtx_core.TaskSession):
             )
             thumbnail_path = thumbnail_ptn_opt.get_value()
 
-            gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
+            gui_qt_core.QtHoudini.make_snapshot(thumbnail_path)
             return kwargs_new
         return False
 

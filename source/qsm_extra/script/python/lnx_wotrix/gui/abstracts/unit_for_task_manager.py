@@ -536,12 +536,10 @@ class _GuiSourceTaskUnitSceneOpt(_GuiBaseOpt):
         self._send_to_space_fnc(self._unit._artist_shared, scene_path, thumbnail_path)
 
     def _send_to_space_fnc(self, artist, scene_path, thumbnail_path):
-
         application = self._unit._gui_task_opt._application
-
         # to user
         new_task_session_0 = self._unit._task_parse.generate_task_session_by_resource_source_scene_src(
-            scene_path, artist=artist
+            application, scene_path, artist=artist
         )
 
         task_units = new_task_session_0.get_all_task_units()
@@ -561,7 +559,7 @@ class _GuiSourceTaskUnitSceneOpt(_GuiBaseOpt):
         if result:
             # to task unit
             new_task_session_1 = self._unit._task_parse.generate_task_session_by_resource_source_scene_src(
-                scene_path, artist=artist, task_unit=result
+                application, scene_path, artist=artist, task_unit=result
             )
             new_task_session_1.send_source_task_scene_src(
                 application, scene_path, thumbnail_path
@@ -729,7 +727,8 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
     def gui_load_task_unit_scene(self, task_unit_scene_variants):
         scene_path = task_unit_scene_variants.get('result')
         if scene_path:
-            task_session = self._task_parse.generate_task_session_by_resource_source_scene_src(scene_path)
+            application = self._gui_task_opt._application
+            task_session = self._task_parse.generate_task_session_by_resource_source_scene_src(application, scene_path)
             if task_session:
                 self._task_session = task_session
                 # set project for maya

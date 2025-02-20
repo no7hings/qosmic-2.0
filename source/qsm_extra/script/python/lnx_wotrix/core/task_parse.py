@@ -34,12 +34,12 @@ class TaskParse(object):
         return None
 
     @classmethod
-    def generate_task_session_by_resource_source_scene_src(cls, scene_path, **kwargs_over):
+    def generate_task_session_by_resource_source_scene_src(cls, application, scene_path, **kwargs_over):
         task_parse = cls()
 
         for i_resource_type in cls.ResourceTypes.All:
             i_ptn_opt = task_parse.generate_pattern_opt_for(
-                '{}-source-maya-scene_src-file'.format(i_resource_type)
+                '{}-source-{}-scene_src-file'.format(i_resource_type, application)
             )
             i_variants = i_ptn_opt.get_variants(scene_path, extract=True)
             if i_variants:

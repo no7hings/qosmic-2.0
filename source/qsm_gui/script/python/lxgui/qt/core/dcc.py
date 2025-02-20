@@ -90,39 +90,6 @@ class QtMaya(object):
     def find_all_qt_widgets_by_class(cls, *args, **kwargs):
         return _base.QtUtil.find_all_qt_widgets_by_class(*args, **kwargs)
 
-    # @classmethod
-    # def _test(cls):
-    #     # noinspection PyUnresolvedReferences
-    #     from maya import cmds, mel, OpenMayaUI
-    #     # noinspection PyUnresolvedReferences
-    #     from shiboken2 import wrapInstance, getCppPointer
-    #     width, height = 400, 400
-    #     control_name = 'lynxi_tool'
-    #     control_label = 'Lynxi Tool'
-    #     if cmds.workspaceControl(control_name, query=1, exists=1):
-    #         cmds.workspaceControl(
-    #             control_name, edit=1, visible=1, restore=1,
-    #             initialWidth=width,
-    #             minimumWidth=height
-    #         )
-    #     else:
-    #         LEcomponent = mel.eval(r'getUIComponentDockControl("Channel Box / Layer Editor", false);')
-    #         cmds.workspaceControl(
-    #             control_name,
-    #             label=control_label, tabToControl=(LEcomponent, -1),
-    #             initialWidth=width, initialHeight=height,
-    #             widthProperty='free', heightProperty='free'
-    #         )
-    #         parentPtr = OpenMayaUI.MQtUtil.getCurrentParent()
-    #         parentWidget = wrapInstance(parentPtr, QtWidgets.QWidget)
-    #         import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
-    #         p = lzy_gui_prx_widgets.AbsPrxUnitForWorkarea()
-    #         p.widget.setParent(parentWidget)
-    #         OpenMayaUI.MQtUtil.addWidgetToMayaLayout(
-    #             long(getCppPointer(p.widget)[0]), long(parentPtr)
-    #         )
-    #     pass
-
     @classmethod
     def make_snapshot(cls, file_path):
         bsc_storage.StgFileOpt(file_path).create_directory()
@@ -139,7 +106,8 @@ class QtMaya(object):
             app_.desktop().winId()
         ).copy(rect).toImage()
 
-        _base.QtUtil.save_qt_image(image, file_path)
+        # _base.QtUtil.save_qt_image(image, file_path)
+        image.save(file_path)
 
     @classmethod
     def create_window_shortcut_action(cls, fnc, shortcut):
@@ -152,7 +120,7 @@ class QtMaya(object):
         main_window.addAction(act)
 
 
-class GuiQtHoudini(object):
+class QtHoudini(object):
     @classmethod
     def get_qt_main_window(cls):
         # noinspection PyUnresolvedReferences
@@ -169,8 +137,24 @@ class GuiQtHoudini(object):
             return hou.qt.Icon(icon_name)
         return hou.qt.Icon('MISC_python')
 
+    @classmethod
+    def make_snapshot(cls, file_path):
+        bsc_storage.StgFileOpt(file_path).create_directory()
 
-class GuiQtKatana(object):
+        main_window = cls.get_qt_main_window()
+        rect = main_window.rect()
+
+        app_ = QtWidgets.QApplication
+        # noinspection PyArgumentList
+        image = QtGui.QPixmap.grabWindow(
+            app_.desktop().winId()
+        ).copy(rect).toImage()
+
+        # _base.QtUtil.save_qt_image(image, file_path)
+        image.save(file_path)
+
+
+class QtKatana(object):
     @classmethod
     def get_qt_main_window(cls):
         # noinspection PyUnresolvedReferences
@@ -213,6 +197,22 @@ class GuiQtKatana(object):
                 if i_name == name:
                     return i_child
 
+    @classmethod
+    def make_snapshot(cls, file_path):
+        bsc_storage.StgFileOpt(file_path).create_directory()
+        main_window = cls.get_qt_main_window()
+        rect = main_window.rect()
+
+        app_ = QtWidgets.QApplication
+        # noinspection PyArgumentList
+        screen = app_.primaryScreen()
+
+        pixmap = screen.grabWindow(main_window.winId())
+        image = pixmap.copy(rect).toImage()
+
+        image.save(file_path)
+        # _base.QtUtil.save_qt_image(image, file_path)
+
 
 class GuiQtClarisse(object):
     QT_MAIN_WINDOW = None
@@ -240,9 +240,9 @@ class GuiQtDcc(AbsGuiDcc):
         if cls.get_is_maya():
             return QtMaya.get_qt_main_window()
         elif cls.get_is_houdini():
-            return GuiQtHoudini.get_qt_main_window()
+            return QtHoudini.get_qt_main_window()
         elif cls.get_is_katana():
-            return GuiQtKatana.get_qt_main_window()
+            return QtKatana.get_qt_main_window()
         elif cls.get_is_clarisse():
             return GuiQtClarisse.get_qt_main_window()
         #
@@ -264,7 +264,7 @@ class GuiQtDcc(AbsGuiDcc):
         if cls.get_is_maya():
             return QtMaya.generate_qt_icon_by_name(icon_name)
         elif cls.get_is_houdini():
-            return GuiQtHoudini.generate_qt_icon_by_name(icon_name)
+            return QtHoudini.generate_qt_icon_by_name(icon_name)
         return _base.QtIcon.generate_by_name(icon_name)
 
     @classmethod
@@ -300,7 +300,6 @@ class GuiQtDcc(AbsGuiDcc):
 
         cls.QT_PALETTE_CACHE = fnc_()
         return cls.QT_PALETTE_CACHE
-
 
     @classmethod
     def exit_app(cls, app):

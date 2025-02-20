@@ -25,9 +25,9 @@ class W(gui_prx_widgets.PrxBaseWindow):
         )
         # self._scr_stage.connect()
 
-        self.connect_refresh_action_for(self.test)
+        self._d_0.refresh.connect(self.test)
 
-        self.test()
+        # self.test()
 
     def test(self):
         self._d_0._view_model.restore()

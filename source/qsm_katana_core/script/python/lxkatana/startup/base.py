@@ -12,11 +12,11 @@ class KatanaMenuSetup(gui_qt_abstracts.AsbGuiQtDccMenuSetup):
 
     @classmethod
     def get_menu(cls, name):
-        qt_menu = gui_qt_core.GuiQtKatana.get_menu(name)
+        qt_menu = gui_qt_core.QtKatana.get_menu(name)
         if qt_menu is not None:
             return qt_menu
         #
-        qt_menu_bar = gui_qt_core.GuiQtKatana.get_menu_bar()
+        qt_menu_bar = gui_qt_core.QtKatana.get_menu_bar()
         if qt_menu_bar:
             # must set parent
             qt_menu = gui_qt_core.QtWidgets.QMenu(qt_menu_bar)
