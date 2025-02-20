@@ -100,9 +100,7 @@ class MoCapDotFbxMotionRegister(object):
 
         file_path_tgt = file_opt.copy_to_directory(source_dir_path)
 
-        self._scr_stage.create_or_update_node_parameter(
-            node_path, 'fbx_source', file_path_tgt
-        )
+        self._scr_stage.create_or_update_node_parameter(node_path, 'fbx_source', file_path_tgt)
 
         bsc_log.Log.trace_method_result(
             self.LOG_KEY, 'successful for: {}'.format(self._fbx_path)

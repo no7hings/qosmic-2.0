@@ -1,11 +1,11 @@
 # coding=utf-8
 import functools
 
-import six
-
 import lxbasic.log as bsc_log
 
 import lxbasic.web as bsc_web
+
+import lxbasic.core as bsc_core
 
 from ..core.wrap import *
 
@@ -13,20 +13,6 @@ from ..core.wrap import *
 class AbsQtWebServerForWindowNotice(QtCore.QObject):
     LOG_KEY = 'web socket server'
     NAME = 'Qosmic Window Notice'
-
-    @staticmethod
-    def ensure_string(s):
-        if isinstance(s, six.text_type):
-            if six.PY2:
-                return s.encode('utf-8')
-        elif isinstance(s, six.binary_type):
-            if six.PY3:
-                return s.decode('utf-8')
-        return s
-
-    @classmethod
-    def auto_unicode(cls, text):
-        pass
 
     def __init__(self, *args, **kwargs):
         super(AbsQtWebServerForWindowNotice, self).__init__(*args, **kwargs)
@@ -67,7 +53,7 @@ class AbsQtWebServerForWindowNotice(QtCore.QObject):
 
     @qt_slot(str)
     def _process_fnc_(self, text):
-        text = self.ensure_string(text)
+        text = bsc_core.ensure_string(text)
         self._window._show_notice_(text)
         for i in self._sockets:
             i.sendTextMessage(text)
@@ -113,7 +99,7 @@ class QtWebServerForWindowNotice(AbsQtWebServerForWindowNotice):
 
     @qt_slot(str)
     def _process_fnc_(self, text):
-        text = self.ensure_string(text)
+        text = bsc_core.ensure_string(text)
         self._window._show_notice_(text)
         for i in self._sockets:
             i.sendTextMessage(text)
@@ -132,8 +118,10 @@ class QtWebServerForDcc(AbsQtWebServerForWindowNotice):
 
     @qt_slot(str)
     def _process_fnc_(self, text):
-        text = self.ensure_string(text)
+        text = bsc_core.ensure_string(text)
+
         exec (text)
+
         for i in self._sockets:
             i.sendTextMessage(text)
 

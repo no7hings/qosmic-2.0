@@ -897,7 +897,7 @@ build:
         options: ['root', 'geometry_root', 'deformation_root', 'motion_root', 'main_control']
         option_names_chs: ['根组', '模型组', '骨骼组', '控制器组', '主控制器']
         default: 'main_control'
-        history_key: 'tool-panels.lazy-animation-tool.rig-selection-scheme'
+        history_group: ['animation', 'main']
         tool_tip: 'choose a selection scheme'
         tool_tip_chs:
             |-
@@ -912,7 +912,7 @@ build:
         options: ['root', 'geometry', 'none']
         option_names_chs: ['根组', '模型组', '不选']
         default: 'root'
-        history_key: 'tool-panels.lazy-animation-tool.scenery-selection-scheme'
+        history_group: ['animation', 'main']
         tool_tip: 'choose a selection scheme'
         tool_tip_chs:
             |-

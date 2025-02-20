@@ -47,7 +47,9 @@ def main(session):
                     file_type=file_type_path,
                     file_type_name=file_type_path_opt.get_name(),
                     file=file_path,
-                    port=gui_core.GuiHistory.get_latest('tool-panels.clarisse-socket-connection.port')
+                    port=gui_core.GuiHistoryStage(key='clarisse').get_latest(
+                        'socket-connection.port'
+                    )
                 )
             ).to_string()
         )

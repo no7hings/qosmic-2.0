@@ -164,7 +164,9 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
         self._page_prx_tab_tool_box.connect_current_changed_to(
             self.do_gui_refresh_all
         )
-        self._page_prx_tab_tool_box.set_history_key('lazy-resource-tool.page_key_current')
+        self._page_prx_tab_tool_box.set_history_key(
+            [self._window.GUI_KEY, '{}.page'.format('/cfx')]
+        )
         self._page_prx_tab_tool_box.load_history()
         # for load
         self._window.connect_window_activate_changed_to(self.do_gui_refresh_for_load)
@@ -172,7 +174,7 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
         self._window.register_window_close_method(self.gui_close_fnc)
 
     def gui_close_fnc(self):
-        self._page_prx_tab_tool_box.save_history()
+        pass
 
     def do_gui_refresh_for_load(self):
         if self._page_prx_tab_tool_box.get_current_key() == self.TabKeys.Load:

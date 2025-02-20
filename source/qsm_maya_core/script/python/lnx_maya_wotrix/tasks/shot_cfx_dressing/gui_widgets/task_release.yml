@@ -34,7 +34,7 @@ build:
                     name: 'Video'
                     name_chs: '视频'
                     value: ''
-                    history_key: 'lazy-workspace.task_release_cfx_dressing.videos'
+                    history_group: ['wotrix', 'shot_cfx_dressing', 'task_release']
                     ext_includes: ['.mov']
                     height: 120
                     tool_tip:

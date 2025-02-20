@@ -13,17 +13,6 @@ from ...resource_types.asset.gui_widgets import register as _subpage_asset_regis
 
 
 class PrxSubPanelForRegister(_abstracts.AbsPrxSubPanelForRegister):
-    SUB_PAGE_CLASSES = [
-        # manifest
-        _manifest_manifest_register.PrxSubpageForManifestRegister,
-        # motion
-        _subpage_motion_register.PrxSubpageForMotionRegister,
-        # media
-        _subpage_video_register.PrxSubpageForVideoRegister,
-        _subpage_audio_register.PrxSubpageForAudioRegister,
-        # asset
-        _subpage_asset_register.PrxSubpageForAssetRegister,
-    ]
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxSubPanelForRegister, self).__init__(window, session, *args, **kwargs)

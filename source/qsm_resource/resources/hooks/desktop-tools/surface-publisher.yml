@@ -33,7 +33,7 @@ build:
             resolver/scene_file:
                 widget: file
                 open_or_save: open
-                history_key: 'tool-panels.asset-publisher.file-open'
+                history_group: ['lynxi', 'asset_surface_publisher']
                 pull_history_latest: False
                 value: ''
                 tool_tip: '...'
@@ -121,7 +121,7 @@ build:
                 widget: medias
                 value: ''
                 tool_tip: 'choose many files or make many snapshot for review'
-                history_key: 'tool-panels.asset-publisher.medias-open'
+                history_group: ['lynxi', 'asset_surface_publisher']
                 ext_includes: ['.jpg', '.png', '.exr', '.tx', '.mov', '.mp4', '.avi']
                 enable: True
 

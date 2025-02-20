@@ -37,13 +37,14 @@ build:
                 open_or_save: open
                 name: 'Folder'
                 name_chs: '文件夹'
-                history_key: 'tool-panels.lazy-resource.video_register.directory-open'
+                history_group: ['resora', 'video_register']
 
             formats:
                 widget: string
                 name: 'Formats'
                 name_chs: '格式'
                 value: 'mov, mp4, avi'
+                lock: True
 
             files:
                 widget: files
@@ -52,7 +53,14 @@ build:
                 value: []
                 ext_includes: ['.mov', '.mp4', '.avi']
                 height: 240
-                history_key: 'tool-panels.lazy-resource.video_register.files'
+                history_group: ['resora', 'video_register']
+
+            collect_source:
+                widget: boolean
+                name: 'Collect Source'
+                name_chs: '收集源文件'
+                history_group: ['resora', 'video_register']
+                pull_history_latest: True
 
             recursion_down_enable:
                 widget: boolean

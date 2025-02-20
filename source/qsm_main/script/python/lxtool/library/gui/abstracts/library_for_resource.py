@@ -1518,7 +1518,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
 
         self._dtb_superclass_paths = self._dtb_cfg.get('category_groups')
 
-        self._dtb_superclass_name_history = gui_core.GuiHistory.get_latest(self.HISTORY_KEY)
+        self._dtb_superclass_name_history = gui_core.GuiHistoryStage().get_latest(self.HISTORY_KEY)
         if self._dtb_superclass_name_history is not None:
             self._dtb_superclass_path_cur = self._dtb_superclass_name_history
         else:
@@ -1586,7 +1586,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
 
     def refresh_all(self):
         if self._dtb_superclass_path_cur in self._dtb_superclass_paths:
-            gui_core.GuiHistory.append(
+            gui_core.GuiHistoryStage().append(
                 self.HISTORY_KEY, self._dtb_superclass_path_cur
             )
 

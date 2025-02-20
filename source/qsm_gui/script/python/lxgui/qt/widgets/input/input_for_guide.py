@@ -122,9 +122,8 @@ class QtInputForGuide(
     def _guide_value_completion_extra_gain_fnc_(self, *args, **kwargs):
         keyword = args[0]
         if keyword:
-            if isinstance(keyword, six.text_type):
-                keyword = keyword.encode('utf-8')
-            #
+            keyword = bsc_core.ensure_string(keyword)
+
             path_texts = self._guide_entry._get_guide_valid_path_texts_()
             _ = fnmatch.filter(
                 path_texts, '*{}*'.format(keyword)

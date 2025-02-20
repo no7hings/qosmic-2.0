@@ -1079,7 +1079,7 @@ class AbsStgTexture(
                 )
             # other use oiio
             else:
-                return bsc_storage.ImgOiioMtd.generate_create_cmd_as_ext_tgt(
+                return bsc_storage.ImgOiio.generate_create_cmd_as_ext_tgt(
                     file_path_src,
                     ext_tgt,
                     search_directory_path,
@@ -1096,7 +1096,7 @@ class AbsStgTexture(
 
     @classmethod
     def _generate_unit_jpg_create_cmd(cls, file_path_src, file_path_tgt, use_update_mode=True):
-        return bsc_storage.ImgOiioMtd.generate_create_cmd_as_ext_tgt_(
+        return bsc_storage.ImgOiio.generate_create_cmd_as_ext_tgt_(
             file_path_src, file_path_tgt, use_update_mode
         )
 

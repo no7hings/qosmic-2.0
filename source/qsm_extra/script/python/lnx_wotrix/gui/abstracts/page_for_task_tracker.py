@@ -20,8 +20,8 @@ class AbsPrxPageForTaskTracker(gui_prx_widgets.PrxBasePage):
 
         self._resource_path = None
 
-        self._space_key_history_key = 'lazy-workspace.space_key'
-        self._space_key = gui_core.GuiHistory.get_one(self._space_key_history_key) or 'release'
+        self._space_key_history_key = [self._window.GUI_KEY, 'space_key']
+        self._space_key = gui_core.GuiHistoryStage().get_one(self._space_key_history_key) or 'release'
 
         self.gui_page_setup_fnc()
 
@@ -56,7 +56,7 @@ class AbsPrxPageForTaskTracker(gui_prx_widgets.PrxBasePage):
         if space_key != self._space_key:
             self._space_key = space_key
             self._space_qt_info_bubble._set_text_(self._space_key)
-            gui_core.GuiHistory.set_one(self._space_key_history_key, space_key)
+            gui_core.GuiHistoryStage().set_one(self._space_key_history_key, space_key)
 
             self.do_gui_refresh_all()
 
@@ -82,7 +82,7 @@ class AbsPrxPageForTaskTracker(gui_prx_widgets.PrxBasePage):
             'resource', size_mode=1
         )
         self._scan_resource_prx_input = lzy_gui_prx_widgets.PrxInputForProject(
-            history_key='lazy-workspace.task_tracker.project-path'
+            history_key='wotrix.task_tracker.project-path'
         )
 
         self._resource_prx_tool_box.add_widget(self._scan_resource_prx_input)

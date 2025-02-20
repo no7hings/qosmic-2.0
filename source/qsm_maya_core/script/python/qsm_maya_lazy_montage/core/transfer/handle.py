@@ -17,15 +17,18 @@ from . import resource as _resource
 
 
 class MocapTransferHandle(object):
-    def __init__(self, mocap_namespace):
+    def __init__(self, mocap_namespace=None, mocap_location=None):
         self._mocap_namespace = mocap_namespace
+        self._mocap_location = mocap_location
 
     def setup(self):
         _resource.TransferResource.create_sketches(_resource.TransferResource.Namespaces.Transfer)
         self._transfer_resource = _resource.TransferResource(
             _resource.TransferResource.Namespaces.Transfer
         )
-        self._mocap_resource = _mcp_resource.MocapResource(namespace=self._mocap_namespace)
+        self._mocap_resource = _mcp_resource.MocapResource(
+            namespace=self._mocap_namespace, location=self._mocap_location
+        )
 
     def connect_to_mocap(self):
         self._transfer_resource.connect_from_mocap(self._mocap_resource)
@@ -42,15 +45,12 @@ class MocapTransferHandle(object):
 
     @classmethod
     def mocap_test(cls):
-        namespaces = _resource.TransferResource.find_mocap_namespaces()
-        if namespaces:
-            handle = cls(namespaces[0])
+        locations = _resource.TransferResource.find_mocap_locations()
+        if locations:
+            handle = cls(mocap_location=locations[0])
             handle.setup()
             handle.connect_to_mocap()
-            # bake key frame first
-            # motion_json_file = tempfile.mktemp(suffix='.motion.json')
-            # handle.export_motion_to(motion_json_file)
-            # print(motion_json_file)
+            return
 
 
 class MocapToAdvHandle(object):

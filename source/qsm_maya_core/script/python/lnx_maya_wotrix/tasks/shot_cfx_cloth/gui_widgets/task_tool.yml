@@ -394,7 +394,7 @@ build:
                     name: 'Export Directory'
                     name_chs: '导出目录'
                     value: ''
-                    history_key: 'tool-panels.lazy-cfx-tool.cache_directory-export-version-directory-open'
+                    history_group: ['wotrix', 'shot_cfx_cloth', 'task_tool']
                     tool_tip:
                         |-
                         To be supplemented.

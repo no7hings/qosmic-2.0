@@ -40,14 +40,12 @@ class _AbsRegister(object):
         self._post_fnc = fnc
 
 
-class AbsPrxSubpageForManifestRegister(
+class AbsPrxSubpageForRegister(
     gui_prx_widgets.PrxBaseSubpage,
     _AbsRegister
 ):
-    GUI_KEY = 'manifest'
-
     def __init__(self, window, session, subwindow, *args, **kwargs):
-        super(AbsPrxSubpageForManifestRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+        super(AbsPrxSubpageForRegister, self).__init__(window, session, subwindow, *args, **kwargs)
 
         self._configure = self.generate_local_configure()
 
@@ -105,13 +103,13 @@ class AbsPrxSubpageForMotionRegister(
         )
 
 
-class _AbsPrxPageForAnyRegister(
+class AbsPrxPageForAnyRegister(
     gui_prx_widgets.PrxBaseSubpage,
     _AbsRegister
 ):
 
     def __init__(self, window, session, subwindow, *args, **kwargs):
-        super(_AbsPrxPageForAnyRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+        super(AbsPrxPageForAnyRegister, self).__init__(window, session, subwindow, *args, **kwargs)
         self._init_base()
 
         self._configure = self.generate_local_configure()
@@ -310,23 +308,27 @@ class _AbsPrxPageForAnyRegister(
         )
 
 
-class AbsPrxSubpageForVideoRegister(_AbsPrxPageForAnyRegister):
+class AbsPrxSubpageForVideoRegister(AbsPrxPageForAnyRegister):
     GUI_KEY = 'video'
 
     def __init__(self, window, session, subwindow, *args, **kwargs):
         super(AbsPrxSubpageForVideoRegister, self).__init__(window, session, subwindow, *args, **kwargs)
 
     def _on_apply(self):
-        file_paths = self._prx_options_node.get('files')
+        prx_node = self._prx_options_node
+
+        file_paths = prx_node.get('files')
 
         scr_type_paths = self.gui_get_scr_type_paths()
         scr_tag_paths = self.gui_get_scr_tag_paths()
 
+        collect_source = prx_node.get('collect_source')
+
         if file_paths:
             import lnx_resora.resource_types.video.scripts as lzy_rsc_etr_vdo_scripts
 
-            lzy_rsc_etr_vdo_scripts.VideoBatchRegister(
-                self._scr_stage.key, file_paths
+            lzy_rsc_etr_vdo_scripts.VideoRegisterBatch(
+                self._scr_stage.key, file_paths, collect_source
             ).execute(
                 scr_type_paths, scr_tag_paths
             )
@@ -344,28 +346,32 @@ class AbsPrxSubpageForVideoRegister(_AbsPrxPageForAnyRegister):
                 )
             )
 
-        self._prx_options_node.get_port('files').do_clear()
+        prx_node.get_port('files').do_clear()
 
         self.clear_type_and_tag_checked()
 
 
-class AbsPrxSubpageForAudioRegister(_AbsPrxPageForAnyRegister):
+class AbsPrxSubpageForAudioRegister(AbsPrxPageForAnyRegister):
     GUI_KEY = 'audio'
 
     def __init__(self, window, session, subwindow, *args, **kwargs):
         super(AbsPrxSubpageForAudioRegister, self).__init__(window, session, subwindow, *args, **kwargs)
 
     def _on_apply(self):
-        file_paths = self._prx_options_node.get('files')
+        prx_node = self._prx_options_node
+
+        file_paths = prx_node.get('files')
 
         scr_type_paths = self.gui_get_scr_type_paths()
         scr_tag_paths = self.gui_get_scr_tag_paths()
 
+        collect_source = prx_node.get('collect_source')
+
         if file_paths:
             import lnx_resora.resource_types.audio.scripts as lzy_rsc_etd_ado_scripts
 
-            lzy_rsc_etd_ado_scripts.AudioBatchRegister(
-                self._scr_stage.key, file_paths
+            lzy_rsc_etd_ado_scripts.AudioRegisterBatch(
+                self._scr_stage.key, file_paths, collect_source
             ).execute(scr_type_paths, scr_tag_paths)
 
             self._subwindow.popup_message(
@@ -374,7 +380,7 @@ class AbsPrxSubpageForAudioRegister(_AbsPrxPageForAnyRegister):
                 )
             )
 
-        self._prx_options_node.get_port('files').do_clear()
+        prx_node.get_port('files').do_clear()
 
         self.clear_type_and_tag_checked()
 

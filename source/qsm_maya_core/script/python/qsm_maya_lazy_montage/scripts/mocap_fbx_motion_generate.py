@@ -25,6 +25,7 @@ class MoCapDotFbxMotionGenerateProcess(object):
         motion_json_path = self._kwargs.get('motion_json_path')
         preview_mov_path = self._kwargs.get('preview_mov_path')
         image_sequence_dir_path = self._kwargs.get('image_sequence_dir_path')
+        rig_name = self._kwargs.get('rig_name', 'alpha')
         if not fbx_path:
             raise RuntimeError()
 
@@ -61,7 +62,7 @@ class MoCapDotFbxMotionGenerateProcess(object):
             qsm_mya_core.Frame.set_fps_tag(fps_tag)
             preview_rig_namespace = 'preview'
             scp = _build.MtgBuildScp(preview_rig_namespace)
-            scp.setup_for_mocap()
+            scp.setup_for_mocap(rig_name=rig_name)
             _build.MtgBuildScp.import_motion_json(preview_rig_namespace, motion_json_path)
             l_p.do_update()
 

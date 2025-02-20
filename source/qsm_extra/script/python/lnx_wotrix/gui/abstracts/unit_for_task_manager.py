@@ -34,7 +34,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
     def __init__(self, *args, **kwargs):
         super(_GuiSourceTaskOpt, self).__init__(*args, **kwargs)
 
-        self._task_unit_history_key = 'lazy-workspace.{resource_type}-task_unit'
+        self._task_unit_history_group = [self._window.GUI_KEY, 'task_manager']
         self._task_unit_path_tmp = None
 
         self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()
@@ -342,15 +342,16 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
                 qt_item._item_model.focus_select()
 
     def gui_load_task_unit_history(self, resource_type=None):
-        self._task_unit_path_tmp = gui_core.GuiHistory.get_one(
-            self._task_unit_history_key.format(resource_type=resource_type)
+        self._task_unit_path_tmp = gui_core.GuiHistoryStage().get_one(
+            self._task_unit_history_group+[resource_type]
         )
         return self._task_unit_path_tmp
 
     def gui_save_task_unit_history(self, task_unit_path, resource_type=None):
         self._task_unit_path_tmp = task_unit_path
-        gui_core.GuiHistory.set_one(
-            self._task_unit_history_key.format(resource_type=resource_type), self._task_unit_path_tmp
+        gui_core.GuiHistoryStage().set_one(
+            self._task_unit_history_group+[resource_type],
+            self._task_unit_path_tmp
         )
 
     def gui_restore(self):

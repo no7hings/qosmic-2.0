@@ -1,6 +1,6 @@
 build:
-    name: 'Motion'
-    name_chs: '动作'
+    name: 'Upload Motion'
+    name_chs: '上传动作'
 
     tool_tip:
         |-
@@ -63,7 +63,7 @@ build:
                 name: 'Preview'
                 name_chs: '预览'
                 ext_includes: ['.jpg', '.png', '.mov', '.mp4', '.avi']
-                history_key: 'tool-panels.resource-register.medias-open'
+                history_group: ['resora', 'motion_register']
                 height: 120
 
             playblast:

@@ -1,2 +1,2 @@
 # coding:utf-8
-from .register import *
+from .video_register import *

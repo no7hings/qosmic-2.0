@@ -102,7 +102,7 @@ class AbsPrxUnitForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         self._scene_prx_tool_box.add_widget(self._scene_src_qt_input)
         self._scene_src_qt_input._set_storage_scheme_(self._scene_src_qt_input.StorageScheme.FileOpen)
         self._scene_src_qt_input._set_history_key_(
-            '{}.{}.scene'.format(self._window.GUI_KEY, self._gui_key_path)
+            '{}.{}.scene'.format(self._window.GUI_KEY, self._gui_sub_key)
         )
 
         prx_v_sca = gui_prx_widgets.PrxVScrollArea()

@@ -95,7 +95,7 @@ build:
             directory:
                 widget: directory
                 open_or_save: open
-                history_key: 'tool-panels.texture-manager-search.directory-open'
+                history_group: ['lynxi', 'gen_asset_dcc_test_manager']
                 pull_history_latest: True
                 value: ''
                 tool_tip: 'entry or choose a directory for searching'
@@ -129,7 +129,7 @@ build:
             directory:
                 widget: directory
                 open_or_save: save
-                history_key: 'tool-panels.texture-manager-collection.directory-save'
+                history_group: ['lynxi', 'gen_asset_dcc_test_manager']
                 pull_history_latest: True
                 value: ''
                 tool_tip: 'entry or choose a directory for collection execute'

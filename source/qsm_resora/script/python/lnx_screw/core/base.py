@@ -7,8 +7,6 @@ import time
 
 import json
 
-import os.path
-
 import random
 
 import peewee
@@ -243,10 +241,40 @@ FLUSH PRIVILEGES;
 
     @classmethod
     def get_all_keys(cls):
-        cfg = cls.get_mysql_configure()
-        if bsc_core.BscApplication.get_is_maya():
-            return cfg.get('maya.keys')
-        return cfg.get('keys')
+        manifest_scr_stage = Stage(
+            'resource_manifest'
+        )
+
+        list_ = [
+            'resource_manifest'
+        ]
+
+        main_configure = cls.get_main_configure()
+        type_names = main_configure.get_key_names_at('types')
+
+        scr_nodes = manifest_scr_stage.find_all(
+            entity_type=cls.EntityTypes.Node,
+            filters=[
+                ('type', 'is', 'node'),
+                ('lock', 'is', False),
+                ('trash', 'is', False),
+            ]
+        )
+        for i_scr_node in scr_nodes:
+            i_scr_node_path = i_scr_node.path
+
+            i_resource_type_name = manifest_scr_stage.get_node_parameter(i_scr_node_path, 'resource_type')
+            if i_resource_type_name not in type_names:
+                continue
+
+            i_applications = main_configure.get('types.{}.applications'.format(i_resource_type_name))
+
+            if bsc_core.BscApplication.get_is_maya():
+                if 'maya' not in i_applications:
+                    continue
+
+            list_.append(bsc_core.BscNodePathOpt(i_scr_node.path).get_name())
+        return list_
 
     @classmethod
     def get_mysql_configure(cls):
@@ -1199,6 +1227,9 @@ FLUSH PRIVILEGES;
 
         return False
 
+    def upload_node_thumbnail(self, node_path, file_path):
+        pass
+
     def upload_node_preview_as_image_sequence(self, node_path, file_path):
         if self.node_is_exists(node_path) is False:
             return False
@@ -1231,7 +1262,7 @@ FLUSH PRIVILEGES;
             node_path, 'thumbnail', thumbnail_path
         )
 
-    def upload_node_audio(self, node_path, file_path):
+    def upload_node_audio(self, node_path, file_path, collect_source=False):
         file_opt = bsc_storage.StgFileOpt(file_path)
         if file_opt.get_is_file() is False:
             return False
@@ -1262,11 +1293,15 @@ FLUSH PRIVILEGES;
             node_path, 'audio', preview_audio_mp3_path
         )
 
+        if collect_source is True:
+            source_dir_path = self.generate_node_source_dir_path(node_path)
+            file_path = file_opt.copy_to_directory(source_dir_path)
+
         self.create_or_update_node_parameter(
             node_path, 'source', file_path
         )
 
-    def upload_node_video(self, node_path, file_path):
+    def upload_node_video(self, node_path, file_path, collect_source=False):
         file_opt = bsc_storage.StgFileOpt(file_path)
         if file_opt.get_is_file() is False:
             return False
@@ -1295,6 +1330,10 @@ FLUSH PRIVILEGES;
         self.create_or_update_node_parameter(
             node_path, 'video', preview_video_path
         )
+
+        if collect_source is True:
+            source_dir_path = self.generate_node_source_dir_path(node_path)
+            file_path = file_opt.copy_to_directory(source_dir_path)
 
         self.create_or_update_node_parameter(
             node_path, 'source', file_path

@@ -443,24 +443,25 @@ class Properties(AbsContent):
 # cache for content, auto generate when timestamp is changed
 class ContentCache(object):
     def __init__(self, file_path):
-        self.__file_path = file_path
+        self._f = file_path
         if os.path.isfile(file_path) is False:
             _base.ContentFile(file_path).write({})
 
-        self.__timestamp = os.stat(self.__file_path).st_mtime
-        self.__content = Content(
+        self._t = os.stat(self._f).st_mtime
+        self._c = Content(
             value=file_path
         )
 
     def generate(self):
-        ts = os.stat(self.__file_path).st_mtime
-        if ts == self.__timestamp:
-            return self.__content
-        self.__timestamp = ts
-        self.__content = Content(
-            value=self.__file_path
+        ts = os.stat(self._f).st_mtime
+        if ts == self._t:
+            return self._c
+
+        self._t = ts
+        self._c = Content(
+            value=self._f
         )
-        return self.__content
+        return self._c
 
 
 class NodeProperties(dict):

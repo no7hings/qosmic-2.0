@@ -24,7 +24,7 @@ build:
             file:
                 widget: file
                 open_or_save: open
-                history_key: 'tool-panels.pg-dependencies.file-open'
+                history_group: ['test', 'node']
                 pull_history_latest: True
                 value: ''
                 tool_tip: '...'

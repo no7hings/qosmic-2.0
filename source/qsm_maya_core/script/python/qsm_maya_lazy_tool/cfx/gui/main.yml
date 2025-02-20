@@ -128,7 +128,7 @@ build:
                             open_or_save: save
                             name_chs: '导出目录'
                             value: ''
-                            history_key: 'tool-panels.lazy-cfx-tool.cloth-export-version-directory-open'
+                            history_group: ['cfx', 'main']
 
                         cloth/version_directory:
                             widget: directory
@@ -190,7 +190,7 @@ build:
                             open_or_save: open
                             name_chs: '导入版本目录'
                             value: ''
-                            history_key: 'tool-panels.lazy-cfx-tool.cloth-import-version-directory-open'
+                            history_group: ['cfx', 'main']
 
                         cloth/file_tree:
                             widget: file_tree

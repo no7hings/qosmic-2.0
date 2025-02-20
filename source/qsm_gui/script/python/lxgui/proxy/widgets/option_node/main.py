@@ -221,6 +221,9 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
 
         join_to_next_ = create_options.get('join_to_next') or False
 
+        history_key_ = create_options.get('history_key')
+        history_group_ = create_options.get('history_group')
+
         if widget_type in {'string'}:
             port = _port_for_constant.PrxPortForString(
                 port_path,
@@ -249,9 +252,11 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                 port_path,
                 node_widget=self.widget
             )
-            history_key_ = create_options.get('history_key')
+
             if history_key_:
                 port.set_history_key(history_key_)
+            elif history_group_:
+                port.set_history_group(history_group_)
 
             port.set_default(value_)
 
@@ -267,9 +272,11 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                 port_path,
                 node_widget=self.widget
             )
-            history_key_ = create_options.get('history_key')
+
             if history_key_:
                 port.set_history_key(history_key_)
+            elif history_group_:
+                port.set_history_group(history_group_)
 
             port.set_value_size(2)
 
@@ -291,9 +298,10 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                 port_path,
                 node_widget=self.widget
             )
-            history_key_ = create_options.get('history_key')
             if history_key_:
                 port.set_history_key(history_key_)
+            elif history_group_:
+                port.set_history_group(history_group_)
 
             port.set_default(value_)
 
@@ -335,9 +343,10 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                 node_widget=self.widget
             )
 
-            history_key_ = create_options.get('history_key')
             if history_key_:
                 port.set_history_key(history_key_)
+            elif history_group_:
+                port.set_history_group(history_group_)
 
             port.set_default(value_)
 
@@ -362,9 +371,10 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                     options_ = []
             port.set_options(options_)
 
-            history_key_ = create_options.get('history_key')
             if history_key_:
                 port.set_history_key(history_key_)
+            elif history_group_:
+                port.set_history_group(history_group_)
 
             default__ = None
             default_ = create_options.get('default')
@@ -437,9 +447,10 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             if lock is True:
                 port.set_locked(True)
 
-            history_key_ = create_options.get('history_key')
             if history_key_:
                 port.set_history_key(history_key_)
+            elif history_group_:
+                port.set_history_group(history_group_)
 
             pull_history_latest = create_options.get('pull_history_latest')
             if pull_history_latest is True:
@@ -467,9 +478,10 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             if lock is True:
                 port.set_locked(True)
 
-            history_key_ = create_options.get('history_key')
             if history_key_:
                 port.set_history_key(history_key_)
+            elif history_group_:
+                port.set_history_group(history_group_)
 
             pull_history_latest = create_options.get('pull_history_latest')
             if pull_history_latest is True:
@@ -487,11 +499,12 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                     port_path,
                     node_widget=self.widget
                 )
-            #
-            history_key_ = create_options.get('history_key')
+
             if history_key_:
                 port.set_history_key(history_key_)
-            #
+            elif history_group_:
+                port.set_history_group(history_group_)
+
             port.set(value_)
             port.set_default(value_)
             ext_filter = create_options.get('ext_filter')
@@ -521,14 +534,15 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                     port_path,
                     node_widget=self.widget
                 )
-            #
-            history_key_ = create_options.get('history_key')
+
             if history_key_:
                 port.set_history_key(history_key_)
-            #
+            elif history_group_:
+                port.set_history_group(history_group_)
+
             port.set(value_)
             port.set_default(value_)
-            #
+
             pull_history_latest = create_options.get('pull_history_latest')
             if pull_history_latest:
                 port.pull_history_latest()
@@ -540,11 +554,12 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             )
             port.set(value_)
             port.set_default(value_)
-            #
-            history_key_ = create_options.get('history_key')
+
             if history_key_:
                 port.set_history_key(history_key_)
-            #
+            elif history_group_:
+                port.set_history_group(history_group_)
+
             if 'history_visible' in create_options:
                 port.set_history_button_visible(create_options['history_visible'])
         elif widget_type in {'files'}:
@@ -559,10 +574,11 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             if ext_includes:
                 port.set_ext_includes(ext_includes)
 
-            history_key_ = create_options.get('history_key')
             if history_key_:
                 port.set_history_key(history_key_)
-            #
+            elif history_group_:
+                port.set_history_group(history_group_)
+
             if 'history_visible' in create_options:
                 port.set_history_button_visible(create_options['history_visible'])
         elif widget_type in {'medias'}:
@@ -578,11 +594,12 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             ext_filter = create_options.get('ext_filter')
             if ext_filter:
                 port.set_ext_filter(ext_filter)
-            #
-            history_key_ = create_options.get('history_key')
+
             if history_key_:
                 port.set_history_key(history_key_)
-        #
+            elif history_group_:
+                port.set_history_group(history_group_)
+
         elif widget_type in {'values'}:
             port = _port_for_array.PrxPortForArray(
                 port_path,

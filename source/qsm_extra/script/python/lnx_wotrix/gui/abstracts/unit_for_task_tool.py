@@ -114,7 +114,7 @@ class AbsPrxUnitForTaskTool(gui_prx_widgets.PrxBaseUnit):
         self._scene_prx_tool_box.add_widget(self._scene_src_qt_input)
         self._scene_src_qt_input._set_storage_scheme_(self._scene_src_qt_input.StorageScheme.FileOpen)
         self._scene_src_qt_input._set_history_key_(
-            '{}.{}.scene'.format(self._window.GUI_KEY, self._gui_key_path)
+            '{}.{}.scene'.format(self._window.GUI_KEY, self._gui_sub_key)
         )
 
         prx_v_sca = gui_prx_widgets.PrxVScrollArea()
@@ -133,7 +133,7 @@ class AbsPrxUnitForTaskTool(gui_prx_widgets.PrxBaseUnit):
             self._toolset_prx_tab_tool_box.TabDirections.RightToLeft
         )
         self._toolset_prx_tab_tool_box.set_history_key(
-            '{}.{}.page'.format(self._window.GUI_KEY, self._gui_key_path)
+            [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
         )
 
         for i in self.TOOLSET_CLASSES:
@@ -157,8 +157,6 @@ class AbsPrxUnitForTaskTool(gui_prx_widgets.PrxBaseUnit):
         toolset = self.gui_find_page(key)
         if toolset:
             toolset.do_gui_refresh_all()
-
-        self._toolset_prx_tab_tool_box.save_history()
 
     def do_gui_refresh_all(self):
         task_session = self._page._task_session

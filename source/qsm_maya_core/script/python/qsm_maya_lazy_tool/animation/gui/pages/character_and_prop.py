@@ -101,7 +101,7 @@ class PrxPageForCharacterAndProp(gui_prx_widgets.PrxBasePage):
         )
 
         self._selection_scheme_prx_input.set_history_key(
-            self._window._configure.get('build.rig_selection_scheme.history_key')
+            [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
         )
         self._selection_scheme_prx_input.pull_history_latest()
 
@@ -196,7 +196,9 @@ class PrxPageForCharacterAndProp(gui_prx_widgets.PrxBasePage):
 
         self._window.connect_window_activate_changed_to(self.do_gui_refresh_by_window_active_changing)
         self._page_prx_tab_tool_box.connect_current_changed_to(self.do_gui_refresh_toolset_units)
-        self._page_prx_tab_tool_box.set_history_key('resource-manager.rig_page_key_current')
+        self._page_prx_tab_tool_box.set_history_key(
+            [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
+        )
         self._page_prx_tab_tool_box.load_history()
 
     def gui_setup_post_fnc(self):

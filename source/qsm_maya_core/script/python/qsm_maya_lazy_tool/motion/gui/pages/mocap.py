@@ -51,4 +51,4 @@ class PrxPageForMoCap(gui_prx_widgets.PrxBasePage):
             i_prx_sca.add_widget(i_prx_unit)
 
     def do_gui_refresh_all(self):
-        self._page_prx_tab_tool_box.save_history()
+        pass

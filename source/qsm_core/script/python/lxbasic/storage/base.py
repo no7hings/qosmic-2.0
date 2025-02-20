@@ -970,7 +970,7 @@ class StgFileTiles(object):
     def get_tiles(cls, file_path):
         if os.path.isfile(file_path):
             return [file_path]
-        #
+
         name_base = os.path.basename(file_path)
         name_base_new = cls.to_glob_pattern(name_base)
         if name_base != name_base_new:

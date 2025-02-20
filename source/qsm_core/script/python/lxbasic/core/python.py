@@ -39,7 +39,7 @@ class PyModule(object):
             self._module_name = self._module.__name__
             if hasattr(self._module, '__file__') is True:
                 self._file_path_pyc = self._module.__file__
-                self._file_path_py = self._get_py_(self._file_path_pyc)
+                self._file_path_py = self.to_py_fnc(self._file_path_pyc)
 
     def get_module(self):
         return self._module
@@ -57,7 +57,7 @@ class PyModule(object):
         return self._file_path_pyc
 
     @staticmethod
-    def _get_py_(file_path_pyc):
+    def to_py_fnc(file_path_pyc):
         _ = os.path.splitext(file_path_pyc)
         return '{}.py'.format(_[0])
 
@@ -150,7 +150,8 @@ class PyModule(object):
 
     def get_method(self, key):
         if self._module is not None:
-            return self._module.__dict__[key]
+            if key in self._module.__dict__:
+                return self._module.__dict__[key]
 
     def get_is_exists(self):
         return self._module is not None

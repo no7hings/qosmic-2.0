@@ -197,6 +197,7 @@ class _QtListView(
     def startDrag(self, actions):
         items = self.selectedItems()
         if items:
+            current_item = self.currentItem()
             drag_data = self._view_model.generate_drag_data_for(items)
             if drag_data:
                 mime_data = QtCore.QMimeData()
@@ -209,34 +210,40 @@ class _QtListView(
                 spc = 4
                 frm_w, frm_h = grd_w, 20
                 pxm_w, pxm_h = grd_w, frm_h+spc*(draw_c-1)
-                pixmap = QtGui.QPixmap(pxm_w, pxm_h)
-                pixmap.fill(QtGui.QColor(63, 63, 63, 255))
-                painter = QtGui.QPainter(pixmap)
-                for i_idx in range(draw_c):
-                    i_rect = QtCore.QRect(x+1, y+(i_idx*spc)+1, frm_w-2, frm_h-2)
-                    painter.setPen(QtGui.QColor(*_gui_core.GuiRgba.LightPinkPurple))
-                    painter.setBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
-                    painter.drawRect(i_rect)
-                    # last item
-                    if i_idx == (draw_c-1):
-                        i_item_model = items[i_idx]._item_model
-                        painter.setPen(QtGui.QColor(*_gui_core.GuiRgba.DarkWhite))
-                        i_text_rect = QtCore.QRect(x+1+4, y+(i_idx*spc)+1, frm_w-2-4, frm_h-2)
-                        i_text = six.u('{} x {}').format(i_item_model.get_name(), c)
-                        i_text = i_item_model._font_metrics.elidedText(
-                            i_text,
-                            QtCore.Qt.ElideMiddle,
-                            i_text_rect.width()-4,
-                            QtCore.Qt.TextShowMnemonic
-                        )
-                        painter.drawText(
-                            i_text_rect,
-                            QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
-                            i_text
+                # fixme: painter error
+                # pixmap = QtGui.QPixmap(pxm_w, pxm_h)
+                # pixmap.fill(QtGui.QColor(63, 63, 63, 255))
+                # painter = QtGui.QPainter(pixmap)
+                #
+                # if painter.isActive():
+                #     for i_idx in range(draw_c):
+                #         i_rect = QtCore.QRect(x+1, y+(i_idx*spc)+1, frm_w-2, frm_h-2)
+                #         painter.setPen(QtGui.QColor(*_gui_core.GuiRgba.LightPinkPurple))
+                #         painter.setBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
+                #         painter.drawRect(i_rect)
+                #         # last item
+                #         if i_idx == (draw_c-1):
+                #             i_item_model = items[i_idx]._item_model
+                #             painter.setPen(QtGui.QColor(*_gui_core.GuiRgba.DarkWhite))
+                #             i_text_rect = QtCore.QRect(x+1+4, y+(i_idx*spc)+1, frm_w-2-4, frm_h-2)
+                #             i_name = bsc_core.ensure_unicode(i_item_model.get_name())
+                #             i_text = u'{} x {}'.format(i_name, c)
+                #             i_text = i_item_model._font_metrics.elidedText(
+                #                 i_text,
+                #                 QtCore.Qt.ElideMiddle,
+                #                 i_text_rect.width()-4,
+                #                 QtCore.Qt.TextShowMnemonic
+                #             )
+                #             painter.drawText(
+                #                 i_text_rect,
+                #                 QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
+                #                 i_text
+                #
+                #             )
+                #
+                # painter.end()
 
-                        )
-
-                painter.end()
+                pixmap = current_item._item_model._pixmap_cache
                 drag.setPixmap(pixmap)
 
                 urls = []
@@ -247,7 +254,8 @@ class _QtListView(
                             urls.append(QtCore.QUrl.fromLocalFile(j_v))
                         else:
                             mime_data.setData(
-                                bsc_core.ensure_string(j_k), bsc_core.ensure_string(j_v)
+                                bsc_core.ensure_string(j_k),
+                                QtCore.QByteArray(bsc_core.ensure_string(j_v).encode('utf-8'))
                             )
                 if urls:
                     mime_data.setUrls(urls)

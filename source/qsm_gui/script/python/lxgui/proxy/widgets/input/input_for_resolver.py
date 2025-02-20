@@ -225,12 +225,12 @@ class PrxInputForRsvProject(_input_base.AbsPrxInput):
             project_directory_path = rsv_project.get_directory_path()
             work_directory_path = '{}/work'.format(project_directory_path)
             if bsc_storage.StgPathOpt(work_directory_path).get_is_exists() is True:
-                _gui_core.GuiHistory.append(
+                _gui_core.GuiHistoryStage().append(
                     self.HISTORY_KEY,
                     project
                 )
         #
-        histories = _gui_core.GuiHistory.get_all(
+        histories = _gui_core.GuiHistoryStage().get_all(
             self.HISTORY_KEY
         )
         if histories:
@@ -242,11 +242,11 @@ class PrxInputForRsvProject(_input_base.AbsPrxInput):
             )
 
     def pull_history_latest(self):
-        _ = _gui_core.GuiHistory.get_latest(self.HISTORY_KEY)
+        _ = _gui_core.GuiHistoryStage().get_latest(self.HISTORY_KEY)
         if _:
             self._qt_input_widget._set_value_(_)
 
     def get_histories(self):
-        return _gui_core.GuiHistory.get_all(
+        return _gui_core.GuiHistoryStage().get_all(
             self.HISTORY_KEY
         )

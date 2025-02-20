@@ -90,8 +90,8 @@ entities:
             type: 'node'
             kind: 'unavailable'
 
-            gui_name: 'MAYA (.ma)'
-            gui_name_chs: 'MAYA（.ma）'
+            gui_name: 'MAYA (.ma, .mb)'
+            gui_name_chs: 'MAYA（.ma, .mb）'
 
         /type/houdini_scene:
             category: 'node'
@@ -108,6 +108,14 @@ entities:
 
             gui_name: 'FBX (.fbx)'
             gui_name_chs: 'FBX（.fbx）'
+
+        /type/mocap_fbx:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'MoCap (.fbx)'
+            gui_name_chs: '动捕（.fbx）'
 
     tags:
         /:

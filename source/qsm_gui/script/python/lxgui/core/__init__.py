@@ -5,4 +5,7 @@ from .base import *
 
 from .dialog import *
 
+from .history import *
+
+
 

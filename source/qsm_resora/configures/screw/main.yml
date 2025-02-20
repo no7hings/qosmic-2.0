@@ -2,9 +2,9 @@ options: {}
 
 types:
     manifest:
-        gui_name: 'Manifest'
-        gui_name_chs: '页面管理'
-        gui_item_frame_size: [178, 178]
+        gui_name: 'Page Manifest'
+        gui_name_chs: '页面总览'
+        gui_item_frame_size: [222, 222]
         applications:
             - 'standalone'
 
@@ -38,17 +38,10 @@ types:
         applications:
             - 'standalone'
 
-    scene:
-        gui_name: 'SCENE (.*)'
-        gui_name_chs: 'SCENE（.*）'
-        gui_item_frame_size: [178, 178]
-        applications:
-            - 'standalone'
-
     maya_scene:
-        gui_name: 'MAYA (.ma)'
-        gui_name_chs: 'MAYA（.ma）'
-        gui_item_frame_size: [178, 178]
+        gui_name: 'MAYA (.ma, .mb)'
+        gui_name_chs: 'MAYA（.ma, .mb）'
+        gui_item_frame_size: [222, 128]
         applications:
             - 'standalone'
             - 'maya'
@@ -56,7 +49,7 @@ types:
     houdini_scene:
         gui_name: 'HOUDINI (.hip)'
         gui_name_chs: 'HOUDINI（.hip）'
-        gui_item_frame_size: [178, 178]
+        gui_item_frame_size: [222, 128]
         applications:
             - 'standalone'
             - 'houdini'
@@ -64,6 +57,14 @@ types:
     fbx_cache:
         gui_name: 'FBX (.fbx)'
         gui_name_chs: 'FBX（.fbx）'
+        gui_item_frame_size: [222, 128]
+        applications:
+            - 'standalone'
+            - 'maya'
+
+    mocap_fbx:
+        gui_name: 'MoCap (.fbx)'
+        gui_name_chs: '动捕（.fbx）'
         gui_item_frame_size: [178, 178]
         applications:
             - 'standalone'

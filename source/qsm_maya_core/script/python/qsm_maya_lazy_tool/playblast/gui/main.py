@@ -13,7 +13,7 @@ class PrxLazyPlayblastTool(gui_prx_widgets.PrxBasePanel):
         super(PrxLazyPlayblastTool, self).__init__(*args, **kwargs)
 
     def gui_close_fnc(self):
-        self._page_prx_tab_tool_box.save_history()
+        pass
 
     def gui_setup_fnc(self):
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()

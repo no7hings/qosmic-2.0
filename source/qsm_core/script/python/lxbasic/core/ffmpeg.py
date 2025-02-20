@@ -1028,3 +1028,17 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
         output = json.loads(stdout)
         if "streams" in output and len(output["streams"]) > 0:
             return output["streams"][0].get("codec_name")
+
+    @classmethod
+    def convert_webp(cls, file_path_0, file_path1):
+        # ffmpeg -i input_image.webp output_image.png
+        cmd_args = [
+            cls.get_ffmpeg_source(),
+            '-i', file_path_0, file_path1
+        ]
+
+        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
+
+        cmd_script = ' '.join(cmd_args)
+        s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        s_p.communicate()

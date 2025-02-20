@@ -35,7 +35,7 @@ build:
             directory:
                 widget: directory
                 open_or_save: open
-                history_key: 'tool-panels.resource-library.resource-add-directory'
+                history_group: ['lynxi', 'rcs_add_any']
                 value: '/l/resource/srf/hdri/test_1'
 #                value: '/l/temp/zeqi/lib/shanhu'
                 tool_tip: [ 'choose a directory' ]

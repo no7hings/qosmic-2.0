@@ -18,7 +18,7 @@ for i in fs:
     )
     if bsc_storage.StgFileOpt(i_f_p_tgt).get_is_file() is False:
         print i_f_p_tgt
-        bsc_storage.ImgOiioMtd.fit_to(
+        bsc_storage.ImgOiio.fit_to(
             i,
             i_f_p_tgt,
             (8192, 8192)

@@ -35,7 +35,7 @@ build:
                 value: 55000
                 enable: True
                 tool_tip: '...'
-                history_key: 'tool-panels.clarisse-socket-connection.port'
+                history_group: ['lynxi', 'resource_export_for_clarisse_batch']
                 pull_history_latest: True
 
             file_type:

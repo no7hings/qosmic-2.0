@@ -16,7 +16,7 @@ class AbsPrxInputForStorage(_input_base.AbsPrxInput):
     def __init__(self, *args, **kwargs):
         super(AbsPrxInputForStorage, self).__init__(*args, **kwargs)
         self.set_history_key(
-            'gui.storage'
+            ['storage', 'any']
         )
 
     def set_ext_filter(self, text):
@@ -65,7 +65,7 @@ class PrxInputForFileOpen(AbsPrxInputForStorage):
         self._qt_input_widget._set_storage_scheme_(
             self._qt_input_widget.StorageScheme.FileOpen
         )
-        self.set_history_key('gui.file-open')
+        self.set_history_key(['storage', 'file-open'])
 
     def _value_validation_fnc_(self, path):
         return os.path.isfile(path)
@@ -78,7 +78,7 @@ class PrxInputForFileSave(AbsPrxInputForStorage):
         self._qt_input_widget._set_storage_scheme_(
             self._qt_input_widget.StorageScheme.FileSave
         )
-        self.set_history_key('gui.file-save')
+        self.set_history_key(['storage', 'file-save'])
 
     def _value_validation_fnc_(self, path):
         return os.path.isfile(path)
@@ -91,7 +91,7 @@ class PrxInputForDirectoryOpen(AbsPrxInputForStorage):
         self._qt_input_widget._set_storage_scheme_(
             self._qt_input_widget.StorageScheme.DirectoryOpen
         )
-        self.set_history_key('gui.directory-open')
+        self.set_history_key(['storage', 'directory-open'])
 
     def _value_validation_fnc_(self, path):
         return os.path.isdir(path)
@@ -104,7 +104,7 @@ class PrxInputForDirectorySave(AbsPrxInputForStorage):
         self._qt_input_widget._set_storage_scheme_(
             self._qt_input_widget.StorageScheme.DirectorySave
         )
-        self.set_history_key('gui.directory-save')
+        self.set_history_key(['storage', 'directory-save'])
 
     def _value_validation_fnc_(self, path):
         return os.path.isdir(path)

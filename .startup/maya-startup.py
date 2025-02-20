@@ -127,7 +127,7 @@ class Main(object):
             'QSM_EXTEND_CONFIGURES': ['{root}/configures'],
             'QSM_EXTEND_RESOURCES': ['{root}/resources'],
         },
-        #
+        # maya package
         'qsm_maya_core': {
             'QSM_MAYA_CORE_BASE': '{root}',
             'PYTHONPATH': ['{root}/script/python'],
@@ -137,14 +137,15 @@ class Main(object):
         'qsm_maya_lib': {
             'QSM_MAYA_LIB_BASE': '{root}',
         },
-        'qsm_maya_resora': {
-            'QSM_MAYA_RESORA_BASE': '{root}',
+        'qsm_maya_main': {
+            'QSM_MAYA_MAIN_BASE': '{root}',
             'PYTHONPATH': ['{root}/script/python'],
             'QSM_EXTEND_CONFIGURES': ['{root}/configures'],
             'QSM_EXTEND_RESOURCES': ['{root}/resources'],
         },
-        'qsm_maya_main': {
-            'QSM_MAYA_MAIN_BASE': '{root}',
+        # tool package
+        'qsm_maya_resora': {
+            'QSM_MAYA_RESORA_BASE': '{root}',
             'PYTHONPATH': ['{root}/script/python'],
             'QSM_EXTEND_CONFIGURES': ['{root}/configures'],
             'QSM_EXTEND_RESOURCES': ['{root}/resources'],
@@ -311,7 +312,7 @@ class Main(object):
             i_package_location = cls.PACKAGE_DIR.format(**i_package_variants_latest)
 
             if os.path.isdir(i_package_location) is False:
-                raise RuntimeError(i_package_location)
+                sys.stderr.write('package location is not found: {}'.format(i_package_location))
 
             i_package_variants['root'] = i_package_location
 

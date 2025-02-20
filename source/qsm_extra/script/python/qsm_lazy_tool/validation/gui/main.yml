@@ -76,7 +76,7 @@ build:
                     name_chs: '文件'
                     value: []
                     ext_includes: ['.ma']
-                    history_key: 'tool-panels.lazy-validation.scenery.files'
+                    history_group: ['validation', 'main']
                     height: 240
 
                 control:
@@ -242,7 +242,7 @@ build:
                 directory:
                     widget: directory
                     open_or_save: 'open'
-                    history_key: 'tool-panels.lazy-validation.rig_batch.directory'
+                    history_group: ['validation', 'main']
                     name: 'Directory'
                     name_chs: '目录'
 
@@ -523,7 +523,7 @@ build:
                     name_chs: '文件'
                     value: []
                     ext_includes: ['.ma']
-                    history_key: 'tool-panels.lazy-validation.rig.files'
+                    history_group: ['validation', 'main']
                     height: 240
 
                 mesh:
@@ -618,7 +618,7 @@ build:
                 directory:
                     widget: directory
                     open_or_save: 'open'
-                    history_key: 'tool-panels.lazy-validation.scenery_batch.directory'
+                    history_group: ['validation', 'main']
                     name: 'Directory'
                     name_chs: '目录'
 

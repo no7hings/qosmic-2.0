@@ -82,10 +82,10 @@ class TransferResource(_bsc_abc.AbsMontage):
         )
 
     def connect_from_mocap(self, mocap_resource):
-        self.fit_scale_from_mocap_resource(mocap_resource)
-        # do not math sketch to mocap
-        # self.fit_sketches_from_mocap(mocap_resource)
         start_frame, end_frame = mocap_resource.get_frame_range()
+        qsm_mya_core.Frame.set_current(start_frame)
+        self.fit_scale_from_mocap_resource(mocap_resource)
+        # todo: create keyframe for default?
         self._sketch_set.create_all_keyframe_at(start_frame)
         self.constraint_from_mocap(mocap_resource)
         

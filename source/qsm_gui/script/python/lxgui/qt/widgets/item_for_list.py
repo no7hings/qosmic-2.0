@@ -142,8 +142,7 @@ class QtListItem(
             self.setText(self._sort_number_key)
 
     def _set_sort_name_key_(self, value):
-        if isinstance(value, six.text_type):
-            value = value.encode('utf-8')
+        value = bsc_core.ensure_string(value)
         self._sort_name_key = value
 
         if self._get_view_()._get_sort_mode_() == _gui_core.GuiSortMode.Name:

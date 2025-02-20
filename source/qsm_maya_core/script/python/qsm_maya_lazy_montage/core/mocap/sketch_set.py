@@ -1,4 +1,6 @@
 # coding:utf-8
+import sys
+
 import six
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -51,44 +53,61 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
         return cls(paths)
 
     @classmethod
-    def generate_by_namespace(cls, namespace):
-        # todo, may has more than one root
-        paths = []
-        for i_location in cls.find_roots(namespace):
-            i_paths = cmds.ls(i_location, type='joint', long=1, dag=1) or []
-            if i_paths:
-                paths.extend(i_paths)
-        return cls(paths)
-
-    @classmethod
-    def generate_by_location(cls, location):
-        return cls(cmds.ls(location, type='joint', long=1, dag=1) or [])
+    def generate_by_location(cls, location, include_transform_type=False):
+        if include_transform_type is True:
+            type_includes = ['joint', 'transform']
+        else:
+            type_includes = ['joint']
+        return cls(cmds.ls(location, type=type_includes, long=1, dag=1) or [])
 
     def __init__(self, *args, **kwargs):
         super(MocapSketchSet, self).__init__(*args, **kwargs)
         self._sketch_map = self.generate_sketch_map()
 
     def zero_out(self):
+        root_sketch = self._sketch_map.get('Root_M')
+
+        root_rotate = cmds.getAttr(root_sketch+'.rotate')[0]
+        root_rotate = [round(x, 3) for x in root_rotate]
+        if root_rotate == [0, 0, 0]:
+            sys.stdout.write(
+                'Root is zero, ignore zero out action.\n'
+            )
+            return
+
         for i in self._paths:
             for j_atr_name in ['rotateX', 'rotateY', 'rotateZ']:
                 cmds.setAttr(i+'.'+j_atr_name, 0)
 
         # to floor
         distance = self.compute_root_height()
-        root = self._sketch_map.get('Root_M')
-        cmds.setAttr(root+'.translateY', distance)
+        cmds.setAttr(root_sketch+'.translateY', distance)
 
     def compute_root_height(self):
-        toe = self._sketch_map.get('ToesEnd_R')
-        point_0 = qsm_mya_core.Transform.get_world_translation(toe)
-        root = self._sketch_map.get('Root_M')
-        point_1 = qsm_mya_core.Transform.get_world_translation(root)
+        bottom_sketch = self._sketch_map.get('ToesEnd_R')
+        # may do not had toes end
+        if bottom_sketch is None:
+            sys.stdout.write(
+                'Toes end is not found.\n'
+            )
+            bottom_sketch = self._sketch_map.get('Toes_R')
+
+        point_0 = qsm_mya_core.Transform.get_world_translation(bottom_sketch)
+        root_sketch = self._sketch_map.get('Root_M')
+        point_1 = qsm_mya_core.Transform.get_world_translation(root_sketch)
         distance = qsm_mya_core.Transform.compute_distance(point_0, point_1)
         return distance
 
     def compute_height(self):
-        toe = self._sketch_map.get('ToesEnd_R')
-        point_0 = qsm_mya_core.Transform.get_world_translation(toe)
+        bottom_sketch = self._sketch_map.get('ToesEnd_R')
+        # may do not had toes end
+        if bottom_sketch is None:
+            sys.stdout.write(
+                'Toes end is not found.\n'
+            )
+            bottom_sketch = self._sketch_map.get('Toes_R')
+
+        point_0 = qsm_mya_core.Transform.get_world_translation(bottom_sketch)
         head = self._sketch_map.get('HeadEnd_M')
         point_1 = qsm_mya_core.Transform.get_world_translation(head)
         distance = qsm_mya_core.Transform.compute_distance(point_0, point_1)
@@ -97,8 +116,8 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
     def compute_upper_height(self):
         head = self._sketch_map.get('HeadEnd_M')
         point_0 = qsm_mya_core.Transform.get_world_translation(head)
-        root = self._sketch_map.get('Root_M')
-        point_1 = qsm_mya_core.Transform.get_world_translation(root)
+        root_sketch = self._sketch_map.get('Root_M')
+        point_1 = qsm_mya_core.Transform.get_world_translation(root_sketch)
         distance = qsm_mya_core.Transform.compute_distance(point_0, point_1)
         return distance
 

@@ -72,6 +72,13 @@ class MoCapDotFbxMotionGenerate(object):
         scr_stage.create_or_update_node_parameter(self._scr_node_path, 'start_frame', start_frame)
         scr_stage.create_or_update_node_parameter(self._scr_node_path, 'end_frame', end_frame)
 
+        # thumbnail
+        image_sequence_paths = bsc_storage.StgFileTiles.get_tiles(image_sequence_path)
+        if image_sequence_paths:
+            mid = int(len(image_sequence_paths)/2)
+            image_path = image_sequence_paths[mid]
+            scr_stage.upload_node_preview(self._scr_node_path, image_path)
+
         # remove process tag
         scr_stage.remove_assign(self._scr_node_path, '/mark/unprocessed')
 

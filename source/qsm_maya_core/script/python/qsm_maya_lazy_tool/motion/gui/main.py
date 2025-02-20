@@ -53,6 +53,4 @@ class PrxLazyMotionTool(gui_prx_widgets.PrxBasePanel):
             self._tab_widget_dict[i_page_key] = i_prx_page
 
     def do_gui_refresh_all(self):
-        self._page_prx_tab_tool_box.save_history()
-
         self._tab_widget_dict[self._page_prx_tab_tool_box.get_current_key()].do_gui_refresh_all()

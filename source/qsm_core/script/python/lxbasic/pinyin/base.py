@@ -54,6 +54,15 @@ class Text(object):
         return list_
 
     @classmethod
+    def to_dcc_name(cls, text):
+        pieces = cls.split_any_to_words_extra(text)
+        name = '_'.join([x.lower() for x in pieces])
+        if len(name) > 1:
+            if name[0].isdigit():
+                return '_'+name
+        return name
+
+    @classmethod
     def to_pinyin_name(cls, text):
         list_ = []
         # to string

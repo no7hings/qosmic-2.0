@@ -205,7 +205,9 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._window.register_window_close_method(self._do_dcc_destroy_all_script_jobs)
 
         self._page_prx_tab_tool_box.connect_current_changed_to(self.do_gui_refresh_toolset_units)
-        self._page_prx_tab_tool_box.set_history_key('lazy-cfx-tool.main_page_key_current')
+        self._page_prx_tab_tool_box.set_history_key(
+            [self._window.GUI_KEY, '{}.page'.format('cfx_tool')]
+        )
         self._page_prx_tab_tool_box.load_history()
 
     def do_gui_refresh_all(self, force=False):

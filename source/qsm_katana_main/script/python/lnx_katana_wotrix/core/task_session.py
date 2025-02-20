@@ -15,7 +15,7 @@ class TaskSession(lnx_wtx_core.TaskSession):
         pass
 
     def increment_and_save_source_task_scene_src(self, force=False):
-        application = 'houdini'
+        application = 'katana'
 
         version = self.get_last_version_code(application=application)
 

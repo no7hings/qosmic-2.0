@@ -11,8 +11,6 @@ import six
 
 import lxbasic.core as bsc_core
 
-import lxbasic.storage as bsc_storage
-
 import lxbasic.pinyin as bsc_pinyin
 
 import lxbasic.session as bsc_session
@@ -910,15 +908,15 @@ class _GuiNodeOpt(_GuiBaseOpt):
                 return [[], 0]
 
         entity_data = []
-        for i_entity_path in scr_node_paths:
-            i_scr_entity = self._page._scr_stage.get_node(i_entity_path)
+        for i_scr_entity_path in scr_node_paths:
+            i_scr_entity = self._page._scr_stage.get_node(i_scr_entity_path)
             if i_scr_entity:
-                i_source_type = self._page._scr_stage.get_node_parameter(i_entity_path, 'source_type')
+                i_source_type = self._page._scr_stage.get_node_parameter(i_scr_entity_path, 'source_type')
                 i_lock_flag = i_scr_entity.lock
                 i_trash_flag = i_scr_entity.trash
-                i_thumbnail_path = self._page._scr_stage.get_node_parameter(i_entity_path, 'thumbnail')
-                i_scene_path = self._page._scr_stage.get_node_parameter(i_entity_path, 'scene')
-                i_source_path = self._page._scr_stage.get_node_parameter(i_entity_path, 'source')
+                i_thumbnail_path = self._page._scr_stage.get_node_parameter(i_scr_entity_path, 'thumbnail')
+                i_scene_path = self._page._scr_stage.get_node_parameter(i_scr_entity_path, 'scene')
+                i_source_path = self._page._scr_stage.get_node_parameter(i_scr_entity_path, 'source')
                 entity_data.append(
                     (
                         i_scr_entity, i_source_type,
@@ -1000,7 +998,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
             self._gui_node_show_build_fnc
         )
 
-    def gui_reload_entity(self, scr_entity_path):
+    def gui_reload_entity(self, scr_entity_path, update_thumbnail=False):
         qt_item = self._qt_list_widget._view_model._get_item(scr_entity_path)
         if qt_item:
             scr_entity = self._page._scr_stage.get_node(scr_entity_path)
@@ -1014,6 +1012,12 @@ class _GuiNodeOpt(_GuiBaseOpt):
 
             lock_flag = scr_entity.lock
             qt_item._item_model.set_locked(lock_flag)
+
+            if update_thumbnail is True:
+                thumbnail_path = self._page._scr_stage.get_node_parameter(scr_entity_path, 'thumbnail')
+                if thumbnail_path:
+                    source_type = self._page._scr_stage.get_node_parameter(scr_entity_path, 'source_type')
+                    qt_item._item_model.set_image(thumbnail_path, source_type=source_type, reload_cache=True)
 
             qt_item._item_model.refresh_force()
 
@@ -1237,11 +1241,11 @@ class AbsPrxPageForManager(
         self.gui_page_setup_fnc()
 
     def _show_node_register_window(self):
-        scr_stage_type = self._scr_stage.type
+        resource_type = self._scr_stage.type
         w = self._window.gui_generate_sub_panel_for('register')
-        w.gui_setup_pages_for([scr_stage_type])
+        w.gui_setup_pages_for([resource_type])
         w.show_window_auto()
-        register_page = w.gui_find_page(scr_stage_type)
+        register_page = w.gui_find_page(resource_type)
         if register_page is not None:
             register_page.set_scr_stage_key(self._scr_stage.key)
             register_page.set_post_fnc(self.gui_on_register_finished)

@@ -517,7 +517,7 @@ class RsvVedioComposite(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             i_f_opt_tgt = bsc_storage.StgFileOpt(i_f_tgt)
             i_v['image_resize'] = i_f_tgt
             i_f_opt_tgt.create_directory()
-            bsc_storage.ImgOiioMtd.fit_to(i_f_src, i_f_tgt, (2048, 2048))
+            bsc_storage.ImgOiio.fit_to(i_f_src, i_f_tgt, (2048, 2048))
             bsc_log.Log.trace_method_result(
                 'image resize',
                 u'file="{}"'.format(
@@ -533,7 +533,7 @@ class RsvVedioComposite(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             i_f_opt_tgt = bsc_storage.StgFileOpt(i_f_tgt)
             i_v['image_background'] = i_f_tgt
             i_f_opt_tgt.create_directory()
-            bsc_storage.ImgOiioMtd.create_as_flat_color(i_f_tgt, (2048, 2048), (.25, .25, .25, 1))
+            bsc_storage.ImgOiio.create_as_flat_color(i_f_tgt, (2048, 2048), (.25, .25, .25, 1))
             bsc_log.Log.trace_method_result(
                 'image background create',
                 u'file="{}"'.format(
@@ -550,7 +550,7 @@ class RsvVedioComposite(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             i_resize = i_v['image_resize']
             i_background = i_v['image_background']
             i_f_opt_tgt.create_directory()
-            bsc_storage.ImgOiioMtd.over_by(i_resize, i_background, i_f_tgt, (0, 0))
+            bsc_storage.ImgOiio.over_by(i_resize, i_background, i_f_tgt, (0, 0))
             bsc_log.Log.trace_method_result(
                 'image background add',
                 u'file="{}"'.format(
@@ -567,7 +567,7 @@ class RsvVedioComposite(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             i_base = i_v['image_base']
             i_foreground = i_v['image_foreground']
             i_f_opt_tgt.create_directory()
-            bsc_storage.ImgOiioMtd.over_by(i_foreground, i_base, i_f_tgt, (0, 0))
+            bsc_storage.ImgOiio.over_by(i_foreground, i_base, i_f_tgt, (0, 0))
             bsc_log.Log.trace_method_result(
                 'image foreground add',
                 u'file="{}"'.format(

@@ -113,6 +113,13 @@ class GuiUtil(object):
         )
 
     @classmethod
+    def get_user_history_file(cls, key):
+        application = bsc_core.BscApplication.get_current()
+        return '{}/history/{}/{}.yml'.format(
+            cls.get_user_directory(), application, key
+        )
+
+    @classmethod
     def get_user_thumbnail_cache_file(cls):
         return '{}/thumbnail.yml'.format(
             cls.get_user_directory()
@@ -371,85 +378,12 @@ class GuiDpiScale(object):
         return args[0]
 
 
-class GuiHistory(object):
-    LOG_KEY = 'gui history'
-    MAXIMUM = 20
-
-    FILE_PATH = GuiUtil.get_user_history_cache_file()
-    CONTENT_CACHE = bsc_content.ContentCache(FILE_PATH)
-
-    @classmethod
-    def __generate_content_cache(cls):
-        return cls.CONTENT_CACHE.generate()
-
-    @classmethod
-    def set_one(cls, key, value):
-        c = cls.__generate_content_cache()
-        c.set(key, value)
-        c.save()
-
-    @classmethod
-    def get_one(cls, key):
-        c = cls.__generate_content_cache()
-        return c.get(key)
-
-    @classmethod
-    def set_array(cls, key, array):
-        c = cls.__generate_content_cache()
-        c.set(key, array)
-        c.save()
-
-    @classmethod
-    def get_array(cls, key):
-        c = cls.__generate_content_cache()
-        return c.get(key) or []
-
-    @classmethod
-    def append(cls, key, value):
-        c = cls.__generate_content_cache()
-        values_exists = c.get(key) or []
-        # move end
-        if value in values_exists:
-            values_exists.remove(value)
-        values_exists.append(value)
-        #
-        values_exists = values_exists[-cls.MAXIMUM:]
-        c.set(key, values_exists)
-        c.save()
-        return True
-
-    @classmethod
-    def extend(cls, key, values):
-        c = cls.__generate_content_cache()
-        values_exists = c.get(key) or []
-        for i_value in values:
-            if i_value not in values_exists:
-                values_exists.append(i_value)
-        #
-        values_exists = values_exists[-cls.MAXIMUM:]
-        c.set(key, values_exists)
-        c.save()
-        return True
-
-    @classmethod
-    def get_all(cls, key):
-        c = cls.__generate_content_cache()
-        return copy.copy(c.get(key)) or []
-
-    @classmethod
-    def get_latest(cls, key):
-        c = cls.__generate_content_cache()
-        _ = c.get(key)
-        if _:
-            return _[-1]
-
-
 class GuiThumbnailCache(object):
     LOG_KEY = 'gui history'
     MAXIMUM = 20
 
-    FILE_PATH = GuiUtil.get_user_history_cache_file()
-    CONTENT_CACHE = bsc_content.ContentCache(FILE_PATH)
+    FILE = GuiUtil.get_user_history_cache_file()
+    CONTENT_CACHE = bsc_content.ContentCache(FILE)
 
     def __init__(self, file_path):
         self.__content_cache = bsc_content.ContentCache(file_path)

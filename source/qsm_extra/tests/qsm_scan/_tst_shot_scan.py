@@ -1,16 +1,18 @@
 # coding:utf-8
+from __future__ import print_function
+
 import lnx_scan as lnx_scan
 
 root = lnx_scan.Stage().get_root()
 
-print root
+print(root)
 
 project = root.find_project('QSM_TST')
 
-print project
+print(project)
 
 assets = project.find_assets()
-print assets
+print(assets)
 
 # episodes = project.find_episodes()
 # print episodes
@@ -20,9 +22,9 @@ print assets
 #     print i.find_shots()
 
 sequences = project.find_sequences()
-print sequences
+print(sequences)
 for i in sequences:
-    print i.find_shots()
+    print(i.find_shots())
 
 # shots = project.find_shots()
 # print shots

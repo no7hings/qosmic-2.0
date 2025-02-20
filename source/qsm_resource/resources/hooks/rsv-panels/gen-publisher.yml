@@ -101,7 +101,7 @@ build:
                 widget: medias
                 value: ''
                 tool_tip: 'choose many files or make many snapshot for review'
-                history_key: 'tool-panels.general-publisher.medias-open'
+                history_group: ['lynxi', 'gen_publisher']
                 ext_includes: ['.jpg', '.png', '.exr', '.tx', '.mov', '.mp4', '.avi']
                 enable: True
 
@@ -120,7 +120,7 @@ build:
                 widget: files
                 value: ''
                 tool_tip: 'choose many scene files'
-                history_key: 'tool-panels.general-publisher.scenes-open'
+                history_group: ['lynxi', 'gen_publisher']
                 ext_includes: ['.ma', '.katana']
                 enable: True
 
@@ -128,7 +128,7 @@ build:
                 widget: files
                 value: ''
                 tool_tip: 'choose many image files'
-                history_key: 'tool-panels.general-publisher.image-open'
+                history_group: ['lynxi', 'gen_publisher']
                 ext_includes: ['.jpg', '.png', '.exr', '.tx']
                 enable: True
             #

@@ -108,7 +108,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发相关/开发进度/优化-2025.md",
+                "file": "开发相关/开发进度/优化-2024.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -125,7 +125,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发相关/开发进度/优化-2025.md",
+                "file": "开发相关/开发进度/优化-2024.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -148,7 +148,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "开发相关/开发进度/优化-2025.md"
+                "file": "开发相关/开发进度/优化-2024.md"
               }
             }
           },
@@ -170,7 +170,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "开发相关/开发进度/优化-2025.md"
+                "file": "开发相关/开发进度/优化-2024.md"
               }
             }
           },
@@ -206,8 +206,7 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "mermaid-tools:Open Mermaid Toolbar": false,
-      "card-board:CardBoard": false
+      "mermaid-tools:Open Mermaid Toolbar": false
     }
   },
   "active": "15555a3b0fd2386a",

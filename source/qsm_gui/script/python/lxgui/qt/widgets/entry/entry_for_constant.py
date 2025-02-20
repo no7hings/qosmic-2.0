@@ -1,6 +1,8 @@
 # coding=utf-8
 import six
 
+import lxbasic.core as bsc_core
+
 import lxbasic.storage as bsc_storage
 # qt
 from ....qt.core.wrap import *
@@ -357,18 +359,14 @@ class QtEntryForConstant(
         return _
 
     def _set_value_(self, value):
-        pre_value = self.text()
+        value_pre = self.text()
         if value is not None:
-            if isinstance(value, six.text_type):
-                value = value.encode('utf-8')
-
-            if isinstance(pre_value, six.text_type):
-                pre_value = pre_value.encode('utf-8')
-
+            value = bsc_core.ensure_string(value)
+            value_pre = bsc_core.ensure_string(value_pre)
             if self._value_type is not None:
                 value = self._value_type(value)
             #
-            if value != pre_value:
+            if value != value_pre:
                 self.entry_value_change_accepted.emit(value)
                 self.setText(str(value))
                 # self._do_entry_change_()

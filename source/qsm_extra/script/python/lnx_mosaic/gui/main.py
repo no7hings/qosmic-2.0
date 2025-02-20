@@ -11,8 +11,6 @@ from .pages import compose as _compose
 class PrxPanelForMosaic(gui_prx_widgets.PrxBasePanel):
     CONFIGURE_KEY = 'mosaic/gui/main'
 
-    HST_TAB_KEY_CURRENT = 'mosaic.page_key_current'
-
     PAGE_CLASSES = [
         _compose.AbsPrxPageForCompose
     ]
@@ -21,7 +19,7 @@ class PrxPanelForMosaic(gui_prx_widgets.PrxBasePanel):
         super(PrxPanelForMosaic, self).__init__(window, session, *args, **kwargs)
 
     def gui_close_fnc(self):
-        self._page_prx_tab_tool_box.save_history()
+        pass
 
     def gui_setup_fnc(self):
         self._tab_widget_dict = {}
@@ -50,7 +48,9 @@ class PrxPanelForMosaic(gui_prx_widgets.PrxBasePanel):
             self._tab_widget_dict[i_page_key] = i_prx_page
             i_prx_sca.add_widget(i_prx_page)
 
-        self._page_prx_tab_tool_box.set_history_key(self.HST_TAB_KEY_CURRENT)
+        self._page_prx_tab_tool_box.set_history_key(
+            [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
+        )
         self._page_prx_tab_tool_box.load_history()
 
         self._window.connect_refresh_action_for(functools.partial(self.do_gui_refresh_all, True))

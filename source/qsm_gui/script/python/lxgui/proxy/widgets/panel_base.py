@@ -123,6 +123,8 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
                 for i_cls in self.SUB_PANEL_CLASSES:
                     self._sub_panel_class_dict[i_cls.GUI_KEY] = i_cls
 
+        self._gui_path = '/{}'.format(self.GUI_KEY)
+
         self._init_base_panel_def(window, session, *args, **kwargs)
 
     def _gui_debug_run(self, fnc, *args, **kwargs):
@@ -219,7 +221,7 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
     def gui_create_tab_tool_box(self):
         prx_tab_tool_box = _container_for_tab.PrxHTabToolBox()
         prx_tab_tool_box.set_history_key(
-            '{}.page'.format(self.GUI_KEY)
+            [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
         )
 
         prx_tab_tool_box.connect_current_changed_to(
@@ -288,7 +290,8 @@ class PrxBasePage(
         self._init_tool_(window)
         self._session = session
 
-        self._gui_key_path = self.GUI_KEY
+        self._gui_sub_key = self.GUI_KEY
+        self._gui_path = '{}/{}'.format(self._window._gui_path, self.GUI_KEY)
 
         self._tab_widget_dict = {}
 
@@ -302,7 +305,7 @@ class PrxBasePage(
         prx_tab_tool_box.set_tab_direction(prx_tab_tool_box.TabDirections.RightToLeft)
 
         prx_tab_tool_box.set_history_key(
-            '{}.{}.page'.format(self._window.GUI_KEY, self._gui_key_path)
+            [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
         )
 
         prx_tab_tool_box.connect_current_changed_to(
@@ -323,13 +326,13 @@ class PrxBasePage(
                     key=i_key,
                     name=gui_core.GuiUtil.choice_gui_name(
                         self._window._language, self._window._configure.get(
-                            'build.{}.{}'.format(self._gui_key_path, i_gui.GUI_KEY)
+                            'build.{}.{}'.format(self._gui_sub_key, i_gui.GUI_KEY)
                         )
                     ),
                     icon_name_text=i_key,
                     tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                         self._window._language, self._window._configure.get(
-                            'build.{}.{}'.format(self._gui_key_path, i_gui.GUI_KEY)
+                            'build.{}.{}'.format(self._gui_sub_key, i_gui.GUI_KEY)
                         )
                     )
                 )
@@ -343,8 +346,6 @@ class PrxBasePage(
         gui = self._tab_widget_dict.get(key)
         if gui:
             gui.do_gui_refresh_all()
-
-        prx_tab_tool_box.save_history()
 
     def gui_page_setup_fnc(self):
         """
@@ -414,9 +415,10 @@ class PrxBaseUnit(
 
         self._tab_widget_dict = {}
 
-        self._gui_key_path = '{}.{}'.format(
+        self._gui_sub_key = '{}.{}'.format(
             self._page.GUI_KEY, self.GUI_KEY
         )
+        self._gui_path = '{}/{}'.format(self._page._gui_path, self.GUI_KEY)
 
         self._qt_layout = _qt_wgt_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(*[0]*4)
@@ -428,7 +430,7 @@ class PrxBaseUnit(
         prx_tab_tool_box.set_tab_direction(prx_tab_tool_box.TabDirections.RightToLeft)
 
         prx_tab_tool_box.set_history_key(
-            '{}.{}.page'.format(self._window.GUI_KEY, self._gui_key_path)
+            [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
         )
 
         prx_tab_tool_box.connect_current_changed_to(
@@ -460,8 +462,11 @@ class PrxVirtualBaseUnit(_ToolBase):
         self._page = page
         self._session = session
 
-        self._gui_key_path = '{}.{}'.format(
+        self._gui_sub_key = '{}.{}'.format(
             self._page.GUI_KEY, self.GUI_KEY
+        )
+        self._gui_path = '{}/{}'.format(
+            self._page._gui_path, self.GUI_KEY
         )
 
     def do_gui_refresh_all(self):
@@ -477,8 +482,11 @@ class PrxVirtualBaseSubunit(_ToolBase):
         self._unit = unit
         self._session = session
 
-        self._gui_key_path = '{}.{}.{}'.format(
+        self._gui_sub_key = '{}.{}.{}'.format(
             self._page.GUI_KEY, self._unit.GUI_KEY, self.GUI_KEY
+        )
+        self._gui_path = '{}/{}'.format(
+            self._unit._gui_path, self.GUI_KEY
         )
 
     def do_gui_refresh_all(self):
@@ -569,6 +577,9 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
         if self._window is not None:
             self._qt_widget.setParent(window._qt_widget, gui_qt_core.QtCore.Qt.Tool)
             self._qt_widget.setWindowFlags(gui_qt_core.QtCore.Qt.Tool)
+            self._gui_path = '{}/{}'.format(self._window._gui_path, self.GUI_KEY)
+        else:
+            self._gui_path = '/{}'.format(self.GUI_KEY)
 
         self._session = session
 
@@ -631,8 +642,11 @@ class PrxBaseSubpage(
         super(PrxBaseSubpage, self).__init__(*args, **kwargs)
 
         self._init_tool_(window)
+
         self._session = session
         self._subwindow = subwindow
+
+        self._gui_path = '{}/{}'.format(self._subwindow._gui_path, self.GUI_KEY)
 
         self._qt_layout = _qt_wgt_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(*[0]*4)

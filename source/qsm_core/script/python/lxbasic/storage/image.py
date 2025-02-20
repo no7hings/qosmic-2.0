@@ -18,7 +18,7 @@ from . import base as _base
 from . import extend as _extend
 
 
-class ImgOiioMtd(object):
+class ImgOiio(object):
     TIME_MARK_PATTERN = '%Y:%m:%d %H:%M:%S'
 
     @classmethod
@@ -162,7 +162,7 @@ class ImgOiioMtd(object):
             '--ch R,G,B,A=1.0',
             '-o "{output}"',
         ]
-        bsc_cor_process.BscProcess.execute_with_result(
+        bsc_cor_process.BscProcess.execute_as_trace(
             ' '.join(cmd_args).format(**option)
         )
 
@@ -651,7 +651,7 @@ class ImgOiioOptForThumbnail(object):
         #
         if os.path.isfile(file_path) is False or force is True:
             r, g, b, a = background_rgba
-            ImgOiioMtd.create_png_as_fill(
+            ImgOiio.create_png_as_fill(
                 file_path, (width, width), (r/255.0, g/255.0, b/255.0, a/255.0)
             )
         return file_path

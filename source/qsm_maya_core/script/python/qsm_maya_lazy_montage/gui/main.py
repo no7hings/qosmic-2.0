@@ -1,5 +1,5 @@
 # coding:utf-8
-from qsm_lazy_montage.gui.abstracts import panel_for_montage as _panel_for_montage
+from qsm_lazy_montage.gui.abstracts import panel_for_main as _panel_for_montage
 
 from .pages import splicing as _page_splicing
 

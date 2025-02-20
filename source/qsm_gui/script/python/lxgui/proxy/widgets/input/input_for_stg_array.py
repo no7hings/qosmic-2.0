@@ -125,12 +125,12 @@ class PrxInputForStorageArray(_input_base.AbsPrxInput):
                 value = values[-1]
                 if value:
                     if self._value_validation_fnc_(value) is True:
-                        _gui_core.GuiHistory.append(
+                        _gui_core.GuiHistoryStage().append(
                             self._history_key,
                             value
                         )
             #
-            histories = _gui_core.GuiHistory.get_all(
+            histories = _gui_core.GuiHistoryStage().get_all(
                 self._history_key
             )
             if histories:
@@ -144,7 +144,7 @@ class PrxInputForStorageArray(_input_base.AbsPrxInput):
 
     def pull_history_latest(self):
         if self._history_key is not None:
-            _ = _gui_core.GuiHistory.get_latest(self._history_key)
+            _ = _gui_core.GuiHistoryStage().get_latest(self._history_key)
             if _:
                 self._qt_input_widget._append_value_(_)
 
@@ -170,7 +170,7 @@ class PrxInputForDirectoriesOpen(PrxInputForStorageArray):
         self._qt_input_widget._set_entry_item_icon_file_path_(
             _gui_core.GuiIcon.get('file/folder')
         )
-        self.set_history_key('gui.directories-open')
+        self.set_history_key(['storage', 'directories-open'])
 
     def set_locked(self, boolean):
         self._qt_input_widget._set_entry_enable_(not boolean)

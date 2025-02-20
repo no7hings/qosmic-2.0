@@ -13,8 +13,7 @@ class PrxLazyCfxTool(gui_prx_widgets.PrxBasePanel):
         super(PrxLazyCfxTool, self).__init__(*args, **kwargs)
 
     def gui_close_fnc(self):
-        self._page_prx_tab_tool_box.save_history()
-        self._gui_main_tool_prx_page._page_prx_tab_tool_box.save_history()
+        pass
 
     def gui_setup_fnc(self):
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()

@@ -25,7 +25,5 @@ class PrxWotrixTool(_abs_panel_for_workspace.AbsPrxWotrixTool):
         _subpanel_task_create.PrxSubPanelForTaskCreate
     ]
 
-    RESOURCE_TYPE = 'shot'
-
     def __init__(self, window, session, *args, **kwargs):
         super(PrxWotrixTool, self).__init__(window, session, *args, **kwargs)

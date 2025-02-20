@@ -23,7 +23,7 @@ if __name__ == '__main__':
         i_n = i_f_o_src.get_name().replace('mask', 'roughness')
         i_f_tgt = '{}/{}'.format(i_f_o_src.get_directory_path(), i_n)
         i_dtb_path = '/imperfection/{}/v0001/texture_roughness_file'.format(i['resource_name'])
-        bsc_storage.ImgOiioMtd.r_to_rgb(
+        bsc_storage.ImgOiio.r_to_rgb(
             i_f_src,
             i_f_tgt
         )

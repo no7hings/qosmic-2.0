@@ -1,5 +1,8 @@
 # coding:utf-8
 import functools
+
+import six
+
 # qt widgets
 from ....qt.widgets import base as _qt_wgt_base
 
@@ -97,6 +100,7 @@ class AbsPrxPortBaseDef(object):
         #
         self._category = category
         self._port_path = port_path
+        self._gui_sub_path = '/{}'.format(self._port_path.replace('.', '/'))
         self._name = self._port_path.split('.')[-1]
 
         self.__is_pseudo_root = False
@@ -471,6 +475,16 @@ class AbsPrxPort(AbsPrxPortBaseDef):
         self._prx_port_input.set_locked(*args, **kwargs)
 
     def set_history_key(self, key):
+        self._prx_port_input.set_history_key(key)
+
+    def set_history_group(self, arg):
+        if isinstance(arg, six.string_types):
+            key = [arg, self._gui_sub_path]
+        elif isinstance(arg, (tuple, list)):
+            key = list(arg)+[self._gui_sub_path]
+        else:
+            raise RuntimeError()
+
         self._prx_port_input.set_history_key(key)
 
     def pull_history_latest(self):

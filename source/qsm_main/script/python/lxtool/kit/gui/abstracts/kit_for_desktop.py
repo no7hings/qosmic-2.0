@@ -170,18 +170,18 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
 
     def __close_fnc(self):
         page_keys = self._prx_tab_view.get_all_page_keys()
-        gui_core.GuiHistory.set_one(self.KEY_TAB_KEYS, page_keys)
+        gui_core.GuiHistoryStage().set_one(self.KEY_TAB_KEYS, page_keys)
 
         page_key_current = self._prx_tab_view.get_current_key()
-        gui_core.GuiHistory.set_one(self.HST_TAB_KEY_CURRENT, page_key_current)
+        gui_core.GuiHistoryStage().set_one(self.HST_TAB_KEY_CURRENT, page_key_current)
 
-        tool_group_order_dict = gui_core.GuiHistory.get_one(self.KEY_TOOL_GROUP_ORDER) or {}
+        tool_group_order_dict = gui_core.GuiHistoryStage().get_one(self.KEY_TOOL_GROUP_ORDER) or {}
         for i_page_key in page_keys:
             i_tool_group_layout = self.__gui_query.get_tool_group_layout(i_page_key)
             i_tool_group_names = i_tool_group_layout._get_all_widget_name_texts_()
             tool_group_order_dict[i_page_key] = i_tool_group_names
 
-        gui_core.GuiHistory.set_one(self.KEY_TOOL_GROUP_ORDER, tool_group_order_dict)
+        gui_core.GuiHistoryStage().set_one(self.KEY_TOOL_GROUP_ORDER, tool_group_order_dict)
 
     def restore_variants(self):
         self._gui_page_query = _GuiPageQuery(self)
@@ -220,7 +220,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         self.do_gui_refresh_all()
 
         self._prx_tab_view.set_current_by_key(
-            gui_core.GuiHistory.get_one(self.HST_TAB_KEY_CURRENT)
+            gui_core.GuiHistoryStage().get_one(self.HST_TAB_KEY_CURRENT)
         )
 
         self.connect_refresh_action_for(
@@ -581,7 +581,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
             self.gui_sort_tool_group_order_at(i)
 
     def gui_sort_tool_group_order_at(self, page_name):
-        names = gui_core.GuiHistory.get_one(u'{}.{}'.format(self.KEY_TOOL_GROUP_ORDER, page_name)) or []
+        names = gui_core.GuiHistoryStage().get_one(u'{}.{}'.format(self.KEY_TOOL_GROUP_ORDER, page_name)) or []
         if names:
             tool_group_layout = self.__gui_query.get_tool_group_layout(page_name)
             tool_group_layout._sort_widgets_by_name_texts_(names)
@@ -593,7 +593,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
     def gui_build_all_for_customize(self):
         page_keys = self._gui_page_query.get_placeholder_keys()
 
-        history_tag_keys = gui_core.GuiHistory.get_one(self.KEY_TAB_KEYS)
+        history_tag_keys = gui_core.GuiHistoryStage().get_one(self.KEY_TAB_KEYS)
         if history_tag_keys:
             page_keys = [i for i in history_tag_keys if i in self._gui_page_query.get_all_keys()]
 

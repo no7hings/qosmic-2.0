@@ -18,7 +18,9 @@ class AbsPrxSubpanelForNewSplicing(gui_prx_widgets.PrxBaseSubpanel):
 
         self.gui_setup_pages_for(['general'])
 
-        self._sub_page_prx_tab_tool_box.set_history_key('lazy-montage.{}-page'.format(self.GUI_KEY))
+        self._sub_page_prx_tab_tool_box.set_history_key(
+            [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
+        )
         self._sub_page_prx_tab_tool_box.load_history()
         
         self._sub_page_prx_tab_tool_box.connect_current_changed_to(
@@ -51,4 +53,3 @@ class AbsPrxSubpanelForNewSplicing(gui_prx_widgets.PrxBaseSubpanel):
         page = self._tab_widget_dict.get(key)
         if page:
             page.do_gui_refresh_all()
-            self._sub_page_prx_tab_tool_box.save_history()

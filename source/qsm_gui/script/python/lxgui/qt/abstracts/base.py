@@ -1440,11 +1440,11 @@ class AbsQtHistoryBaseDef(object):
 
     def _get_history_value_(self):
         if self._history_key is not None:
-            return _gui_core.GuiHistory.get_one(self._history_key)
+            return _gui_core.GuiHistoryStage().get_one(self._history_key)
 
     def _set_history_value_(self, value):
         if self._history_key is not None:
-            _gui_core.GuiHistory.set_one(self._history_key, value)
+            _gui_core.GuiHistoryStage().set_one(self._history_key, value)
 
     def _load_history_(self):
         raise NotImplementedError()
@@ -1498,7 +1498,7 @@ class AbsQtValueHistoryExtraDef(object):
 
     def _get_history_latest_(self):
         if self._history_key is not None:
-            return _gui_core.GuiHistory.get_latest(self._history_key)
+            return _gui_core.GuiHistoryStage().get_latest(self._history_key)
 
     def _pull_history_(self, *args, **kwargs):
         raise NotImplementedError()
@@ -1507,7 +1507,7 @@ class AbsQtValueHistoryExtraDef(object):
         if self._history_key is not None:
             if value is not None:
                 if self._get_value_is_valid_(value) is True:
-                    _gui_core.GuiHistory.append(
+                    _gui_core.GuiHistoryStage().append(
                         self._history_key,
                         value
                     )
@@ -1516,7 +1516,7 @@ class AbsQtValueHistoryExtraDef(object):
 
     def _pull_history_latest_(self):
         if self._history_key is not None:
-            value = _gui_core.GuiHistory.get_latest(self._history_key)
+            value = _gui_core.GuiHistoryStage().get_latest(self._history_key)
             if value is not None:
                 self._pull_history_(value)
                 return True
@@ -1524,7 +1524,7 @@ class AbsQtValueHistoryExtraDef(object):
 
     def _refresh_history_(self):
         if self._history_key is not None:
-            values = _gui_core.GuiHistory.get_all(
+            values = _gui_core.GuiHistoryStage().get_all(
                 self._history_key
             )
             if values:
@@ -1825,7 +1825,7 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
     def _set_name_text_(self, text):
         self._name_flag = True
 
-        if not isinstance(text, six.text_type):
+        if isinstance(text, six.string_types) is False:
             # number
             text = str(text)
 

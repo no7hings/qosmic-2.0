@@ -78,13 +78,11 @@ class PrxInputForSchemeChoose(_input_base.AbsPrxInput):
 
     def __init__(self, *args, **kwargs):
         super(PrxInputForSchemeChoose, self).__init__(*args, **kwargs)
-        #
         self._qt_input_widget._set_entry_enable_(True)
-        #
+
         self._scheme_key = None
-        #
+
         self.update_history()
-        #
         self._qt_input_widget._connect_input_user_entry_value_finished_to_(self.update_history)
         self._qt_input_widget.user_input_choose_changed.connect(self.update_history)
 
@@ -93,7 +91,7 @@ class PrxInputForSchemeChoose(_input_base.AbsPrxInput):
 
     def set(self, raw=None, **kwargs):
         if isinstance(raw, (tuple, list)):
-            self.set_history_add(raw[0])
+            self.append_history(raw[0])
             self.update_history()
             self.pull_history_latest()
 
@@ -109,32 +107,30 @@ class PrxInputForSchemeChoose(_input_base.AbsPrxInput):
     def connect_input_changed_to(self, fnc):
         self._qt_input_widget._connect_input_entry_value_changed_to_(fnc)
 
-    #
     def get_histories(self):
         if self._scheme_key is not None:
-            return _gui_core.GuiHistory.get_all(
+            return _gui_core.GuiHistoryStage().get_all(
                 self._scheme_key
             )
         return []
 
-    def set_history_add(self, scheme):
+    def append_history(self, scheme):
         if self._scheme_key is not None:
-            _gui_core.GuiHistory.append(
+            _gui_core.GuiHistoryStage().append(
                 self._scheme_key,
                 scheme
             )
 
-    #
     def update_history(self):
         if self._scheme_key is not None:
             scheme = self._qt_input_widget._get_value_()
             if scheme:
-                _gui_core.GuiHistory.append(
+                _gui_core.GuiHistoryStage().append(
                     self._scheme_key,
                     scheme
                 )
-            #
-            histories = _gui_core.GuiHistory.get_all(
+
+            histories = _gui_core.GuiHistoryStage().get_all(
                 self._scheme_key
             )
             if histories:
@@ -147,6 +143,6 @@ class PrxInputForSchemeChoose(_input_base.AbsPrxInput):
 
     def pull_history_latest(self):
         if self._scheme_key is not None:
-            _ = _gui_core.GuiHistory.get_latest(self._scheme_key)
+            _ = _gui_core.GuiHistoryStage().get_latest(self._scheme_key)
             if _:
                 self._qt_input_widget._set_value_(_)

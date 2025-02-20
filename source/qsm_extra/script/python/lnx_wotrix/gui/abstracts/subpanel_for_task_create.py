@@ -42,7 +42,7 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
             self.gui_setup_sub_pages_for(resource_type, self.SHOT_TASKS)
 
         self._sub_page_prx_tab_tool_box.set_history_key(
-            'lazy-workspace.{}-{}-page'.format(self.GUI_KEY, resource_type)
+            [self._window.GUI_KEY, '{}_{}.page'.format(self._gui_path, resource_type)]
         )
         self._sub_page_prx_tab_tool_box.load_history()
 
@@ -73,4 +73,3 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
         page = self._tab_widget_dict.get(key)
         if page:
             page.do_gui_refresh_all()
-            self._sub_page_prx_tab_tool_box.save_history()

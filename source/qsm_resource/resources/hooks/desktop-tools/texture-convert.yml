@@ -28,7 +28,7 @@ build:
             directory:
                 widget: directory
                 open_or_save: open
-                history_key: 'tool-panels.texture-converter.directory-open'
+                history_group: ['lynxi', 'texture_converter']
 #                pull_history_latest: True
                 value: ''
                 tool_tip: '...'
@@ -53,7 +53,7 @@ build:
             by_format/directory:
                 widget: directory
                 open_or_save: save
-                history_key: 'tool-panels.texture-converter.target.directory-save'
+                history_group: ['lynxi', 'texture_converter']
 #                pull_history_latest: True
                 value: ''
                 tool_tip: 'choose a target directory for execute'
@@ -96,7 +96,7 @@ build:
             by_color_space/directory:
                 widget: directory
                 open_or_save: save
-                history_key: 'tool-panels.texture-converter.by_color_space.directory-save'
+                history_group: ['lynxi', 'texture_converter']
 #                pull_history_latest: True
                 value: ''
                 tool_tip: 'choose a target directory for execute'

@@ -25,7 +25,7 @@ class AbsPrxPanelForValidation(gui_prx_widgets.PrxBasePanel):
         )
 
     def gui_close_fnc(self):
-        self._page_prx_tab_tool_box.save_history()
+        pass
 
     def gui_setup_pages_for(self, page_keys):
         for i_page_key in page_keys:
@@ -51,4 +51,4 @@ class AbsPrxPanelForValidation(gui_prx_widgets.PrxBasePanel):
             i_prx_sca.add_widget(i_prx_page)
 
     def do_gui_refresh_all(self):
-        self._page_prx_tab_tool_box.save_history()
+        pass

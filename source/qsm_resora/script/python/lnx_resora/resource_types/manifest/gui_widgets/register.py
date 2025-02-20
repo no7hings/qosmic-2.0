@@ -8,16 +8,17 @@ import lnx_screw.scripts as lnx_scr_scripts
 from ....gui import abstracts as _abstracts
 
 
-class PrxSubpageForManifestRegister(_abstracts.AbsPrxSubpageForManifestRegister):
+class PrxSubpageForRegister(_abstracts.AbsPrxSubpageForRegister):
     def __init__(self, window, session, subwindow, *args, **kwargs):
-        super(PrxSubpageForManifestRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+        super(PrxSubpageForRegister, self).__init__(window, session, subwindow, *args, **kwargs)
 
     def _on_apply(self):
-        node = self._prx_options_node
-        resource_type = node.get('resource_type')
-        gui_name = node.get('gui_name')
-        gui_name_chs = node.get('gui_name_chs')
-        image = node.get('image')
+        prx_node = self._prx_options_node
+
+        resource_type = prx_node.get('resource_type')
+        gui_name = prx_node.get('gui_name')
+        gui_name_chs = prx_node.get('gui_name_chs')
+        image = prx_node.get('image')
 
         lnx_scr_scripts.ManifestStageOpt().new_page(
             resource_type, gui_name, gui_name_chs, image
@@ -53,6 +54,7 @@ class PrxSubpageForManifestRegister(_abstracts.AbsPrxSubpageForManifestRegister)
             self._configure.get('build.options.parameters'),
         )
 
+        # resource type
         values, option_names, option_names_chs = lnx_scr_scripts.ManifestStageOpt.get_resource_type_gui_args()
 
         p = self._prx_options_node.get_port('resource_type')
@@ -61,7 +63,7 @@ class PrxSubpageForManifestRegister(_abstracts.AbsPrxSubpageForManifestRegister)
         else:
             p.set_options(values, option_names)
 
-        p.set_history_key('tool-panels.lazy-resource.manifest-register.resource_type')
+        p.set_history_group(['resora', 'manifest_register'])
         p.pull_history_latest()
 
         bottom_tool_bar = gui_prx_widgets.PrxHToolBar()

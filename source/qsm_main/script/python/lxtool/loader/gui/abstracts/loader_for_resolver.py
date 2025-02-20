@@ -973,7 +973,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
         project = self._rsv_project_name_cur
         self._rsv_project = self._resolver.get_rsv_project(project=project)
         if self._rsv_project is not None:
-            gui_core.GuiHistory.append(
+            gui_core.GuiHistoryStage().append(
                 'gui.projects',
                 project
             )
@@ -1039,7 +1039,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             #
             self._rsv_project_names.append(current_project)
         #
-        gui_core.GuiHistory.extend(
+        gui_core.GuiHistoryStage().extend(
             'gui.projects',
             self._rsv_project_names
         )
@@ -1048,7 +1048,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             if self._project_name_from_filter in self._rsv_project_names:
                 self._rsv_project_name_cur = self._project_name_from_filter
         else:
-            project_name_from_history = gui_core.GuiHistory.get_latest(
+            project_name_from_history = gui_core.GuiHistoryStage().get_latest(
                 'gui.projects'
             )
             if project_name_from_history is not None:

@@ -17,7 +17,7 @@ constant:
         value: 1
         tool_tip: '...'
         enable: True
-        history_key: 'test.input-integer'
+        history_group: ['test', 'node']
         pull_history_latest: True
 
     float:
@@ -80,7 +80,7 @@ array:
         widget: values_choose
         value: ['A', 'B']
         tool_tip: '...'
-        history_key: 'test.values'
+        history_group: ['test', 'node']
         ext_filter: 'All Media File (*.jpg *.png *.exr)'
         enable: True
 
@@ -111,7 +111,7 @@ storage:
     directory/open:
         widget: directory
         open_or_save: open
-        history_key: 'test.directory-open'
+        history_group: ['test', 'node']
         pull_history_latest: True
         value: ''
         tool_tip: '...'
@@ -121,7 +121,7 @@ storage:
     directory/save:
         widget: directory
         open_or_save: save
-        history_key: 'test.directory-save'
+        history_group: ['test', 'node']
         pull_history_latest: True
         value: ''
         tool_tip: '...'
@@ -130,7 +130,7 @@ storage:
     file/open:
         widget: file
         open_or_save: open
-        history_key: 'test.file-open'
+        history_group: ['test', 'node']
         pull_history_latest: True
         ext_filter: 'All File (*.usd *.usda)'
         value: ''
@@ -140,7 +140,7 @@ storage:
     file/save:
         widget: file
         open_or_save: save
-        history_key: 'test.file-save'
+        history_group: ['test', 'node']
         pull_history_latest: True
         ext_filter: 'All File (*.json)'
         value: ''
@@ -166,7 +166,7 @@ storages:
         widget: medias
         value: ''
         tool_tip: '...'
-        history_key: 'test.medias-open'
+        history_group: ['test', 'node']
         ext_filter: 'All Media File (*.jpg *.png *.exr)'
         enable: True
 

@@ -322,6 +322,10 @@ class ListViewModel(_view_base.AbsViewModel):
         return False
 
     # media cache
+    def remove_image_cache(self, key):
+        if key in self._data.image_cache_dict:
+            self._data.image_cache_dict.pop(key)
+
     def pull_image_cache(self, key):
         return self._data.image_cache_dict.get(key)
 

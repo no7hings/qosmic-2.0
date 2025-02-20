@@ -42,14 +42,14 @@ build:
                 open_or_save: open
                 name: 'Folder'
                 name_chs: '文件夹'
-                history_key: 'tool-panels.lazy-resource.audio_register.directory-open'
+                history_group: ['resora', 'audio_register']
 
             formats:
                 widget: string
                 name: 'Formats'
                 name_chs: '格式'
                 value: 'wav, mp3, flac'
-                history_key: 'tool-panels.lazy-resource.audio_register.files'
+                lock: True
 
             files:
                 widget: files
@@ -58,6 +58,11 @@ build:
                 value: []
                 ext_includes: ['.wav', '.mp3', '.flac']
                 height: 240
+                
+            collect_source:
+                widget: boolean
+                name: 'Collect Source'
+                name_chs: '收集源文件'
 
             recursion_down_enable:
                 widget: boolean

@@ -133,7 +133,6 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         if rig_namespace != self._rig_namespace:
             self._rig_namespace = rig_namespace
             self._rig_namespace_qt_info_bubble._set_text_(self._rig_namespace)
-            # gui_core.GuiHistory.set_one(self._artist_history_key, self._artist)
 
             self.do_gui_refresh_all(force=True)
 

@@ -923,7 +923,7 @@ class QtFonts(object):
 
     Loading = QtFont.generate(size=10, weight=75, italic=True)
 
-    Label = QtFont.generate(size=8)
+    Label = QtFont.generate(size=9)
     Button = QtFont.generate(size=9)
     Chart = QtFont.generate(size=10, italic=True)
 

@@ -116,8 +116,6 @@ class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
         self._window.register_window_close_method(self.gui_close_fnc)
 
     def do_gui_refresh_all(self, force=False):
-        self._page_prx_tab_tool_box.save_history()
-
         self._gui_rig_picker_unit.do_gui_refresh_all()
         if self._page_prx_tab_tool_box.get_current_key() == 'keyframe':
             self._gui_motion_keyframe_prx_toolset.do_gui_refresh_all()

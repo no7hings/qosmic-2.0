@@ -2,6 +2,6 @@
 from ....gui import abstracts as _abstracts
 
 
-class PrxSubpageForAudioRegister(_abstracts.AbsPrxSubpageForAudioRegister):
+class PrxSubpageForRegister(_abstracts.AbsPrxSubpageForAudioRegister):
     def __init__(self, window, session, subwindow, *args, **kwargs):
-        super(PrxSubpageForAudioRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+        super(PrxSubpageForRegister, self).__init__(window, session, subwindow, *args, **kwargs)

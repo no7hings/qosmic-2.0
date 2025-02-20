@@ -20,10 +20,6 @@ from .pages import scenery as _page_scenery
 class PrxLazyAnimation(gui_prx_widgets.PrxBasePanel):
     SCRIPT_JOB_NAME = 'lazy_tool_for_animation'
 
-    # CONFIGURE_KEY = 'lazy-animation/gui/tool'
-
-    HST_TAB_KEY_CURRENT = 'lazy-animation-tool.page_key_current'
-
     def do_gui_refresh_scene_info(self):
         pass
 
@@ -91,7 +87,9 @@ class PrxLazyAnimation(gui_prx_widgets.PrxBasePanel):
         self._page_prx_tab_tool_box.connect_current_changed_to(
             self.do_gui_refresh_all
         )
-        self._page_prx_tab_tool_box.set_history_key('resource-manager.page_key_current')
+        self._page_prx_tab_tool_box.set_history_key(
+            [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
+        )
         self._page_prx_tab_tool_box.load_history()
 
         self.register_window_close_method(
@@ -115,6 +113,4 @@ class PrxLazyAnimation(gui_prx_widgets.PrxBasePanel):
             self._scenery_prx_page.do_gui_refresh_all(force)
 
     def gui_close_fnc(self):
-        self._page_prx_tab_tool_box.save_history()
-        self._chr_and_prp_prx_page._page_prx_tab_tool_box.save_history()
-        self._scenery_prx_page._page_prx_tab_tool_box.save_history()
+        pass

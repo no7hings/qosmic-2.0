@@ -20,6 +20,7 @@ class AbsPrxWotrixTool(gui_prx_widgets.PrxBasePanel):
 
     def gui_setup_fnc(self):
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
+
         self.add_widget(self._page_prx_tab_tool_box)
 
         self.gui_setup_pages_for(
@@ -29,7 +30,9 @@ class AbsPrxWotrixTool(gui_prx_widgets.PrxBasePanel):
             ]
         )
 
-        self._page_prx_tab_tool_box.set_history_key('lazy-workspace.{}-page'.format(self.RESOURCE_TYPE))
+        self._page_prx_tab_tool_box.set_history_key(
+            [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
+        )
         self._page_prx_tab_tool_box.load_history()
 
         self.register_window_close_method(
@@ -47,7 +50,7 @@ class AbsPrxWotrixTool(gui_prx_widgets.PrxBasePanel):
             v.gui_setup_post_fnc()
 
     def gui_close_fnc(self):
-        self._page_prx_tab_tool_box.save_history()
+        pass
 
     def gui_setup_pages_for(self, page_keys):
         self._tab_widget_dict = {}

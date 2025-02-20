@@ -684,10 +684,11 @@ class ListItemModel(_item_base.AbsItemModel):
         return False, percent
 
     # image
-    def set_image(self, file_path, source_type=None):
+    def set_image(self, file_path, source_type=None, reload_cache=False):
         if file_path is not None:
             self._data.image = _base._Data(
                 load_flag=False,
+                reload_flag=reload_cache,
 
                 file=None,
                 pixmap=None,
@@ -696,6 +697,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 source_type=source_type
             )
 
+            self._data.image_enable = False
             self._data.image.file = file_path
             self._data.image.load_flag = True
 
@@ -708,6 +710,10 @@ class ListItemModel(_item_base.AbsItemModel):
     def _load_image(self):
         def cache_fnc_():
             _file_path = self._data.image.file
+
+            if self._data.image.reload_flag is True:
+                self._view._view_model.remove_image_cache(_file_path)
+
             _ = self._view._view_model.pull_image_cache(_file_path)
             if _:
                 return _
@@ -775,7 +781,8 @@ class ListItemModel(_item_base.AbsItemModel):
             _file_paths = bsc_storage.StgFileTiles.get_tiles(_file_path)
             if _file_paths:
                 _image = QtGui.QImage()
-                _image.load(_file_paths[0])
+                _index = int(len(_file_paths)/2)
+                _image.load(_file_paths[_index])
                 if _image.isNull() is False:
                     _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
                     _cache = [_file_paths, _pixmap]

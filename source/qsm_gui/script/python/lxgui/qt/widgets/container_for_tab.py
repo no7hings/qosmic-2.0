@@ -535,6 +535,8 @@ class _AbsQtHTabToolBox(
             self._refresh_widget_all_()
             self._refresh_viewport_widget_(fix_size=True)
 
+            self._save_history_()
+
     def _get_current_index_(self):
         return self._current_index
     

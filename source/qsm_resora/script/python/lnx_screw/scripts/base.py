@@ -1,6 +1,8 @@
 # coding:utf-8
 from __future__ import print_function
 
+import tempfile
+
 import collections
 
 import lxbasic.core as bsc_core
@@ -78,12 +80,16 @@ class ManifestStageOpt(object):
             resource_type, database_name, gui_name, gui_name_chs, image
         )
 
+    @classmethod
+    def repair_page(cls, database_name):
+        _scr_core.Stage.build_fnc(database_name)
+
     def get_page_data(self, name):
         if name == 'resource_manifest':
             return dict(
                 resource_type='manifest',
-                gui_name='Manifest',
-                gui_name_chs='页面管理',
+                gui_name='Page Manifest',
+                gui_name_chs='页面总览',
             )
 
         scr_node_path = '/{}'.format(name)
@@ -110,13 +116,13 @@ class ManifestStageOpt(object):
         dict_['resource_manifest'] = dict(
             type=dict(
                 name='manifest',
-                gui_name='Manifest',
-                gui_name_chs='页面管理',
+                gui_name='Page Manifest',
+                gui_name_chs='页面总览',
             ),
             node=dict(
                 name='resource_manifest',
-                gui_name='Manifest',
-                gui_name_chs='页面管理',
+                gui_name='Page Manifest',
+                gui_name_chs='页面总览',
             )
         )
 
@@ -124,12 +130,11 @@ class ManifestStageOpt(object):
             self._scr_stage.EntityTypes.Node,
             [
                 ('type', 'is', 'node'),
+                ('lock', 'is', False),
+                ('trash', 'is', False),
             ]
         )
         for i_scr_node in scr_nodes:
-            if i_scr_node.trash is True:
-                continue
-
             i_scr_node_path = i_scr_node.path
             i_node_name = bsc_core.BscNodePathOpt(i_scr_node_path).get_name()
             i_node_gui_name = i_scr_node.gui_name
@@ -169,13 +174,66 @@ class ManifestStageOpt(object):
 
         values = main_configure.get_key_names_at('types')
 
+        resource_types = []
         option_names = []
         option_names_chs = []
         for i_value in values:
+            if i_value == 'manifest':
+                continue
+
+            resource_types.append(i_value)
             i_gui_name = main_configure.get('types.{}.gui_name'.format(i_value))
             i_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(i_value))
 
             option_names.append(i_gui_name)
             option_names_chs.append(i_gui_name_chs)
 
-        return values, option_names, option_names_chs
+        return resource_types, option_names, option_names_chs
+
+    def generate_cover_for(self, database_name):
+        scr_node_path = '/{}'.format(database_name)
+        scr_node = self._scr_stage.get_node(scr_node_path)
+        if scr_node:
+            scr_stage = _scr_core.Stage(database_name)
+
+            src_nodes = scr_stage.find_all(
+                entity_type=scr_stage.EntityTypes.Node,
+                filters=[
+                    ('type', 'is', 'node'),
+                    ('lock', 'is', False),
+                    ('trash', 'is', False),
+                ]
+            )
+
+            image_paths = []
+            c_max = 9
+            c = 0
+            if src_nodes:
+                src_nodes.reverse()
+
+                for i_scr_node in src_nodes:
+                    i_scr_entity_path = i_scr_node.path
+                    i_image_path = scr_stage.get_node_parameter(i_scr_entity_path, 'thumbnail')
+                    if i_image_path:
+                        image_paths.append(i_image_path)
+                        c += 1
+
+                    if c == c_max:
+                        break
+
+            if image_paths:
+                import lxbasic.cv.core as bsc_cv_core
+
+                image_path_tmp = tempfile.mktemp(suffix='.cover.jpg')
+
+                bsc_cv_core.ImageConcat(image_paths, image_path_tmp).execute()
+
+                self._scr_stage.upload_node_preview(
+                    scr_node_path, image_path_tmp
+                )
+                return True
+        return False
+
+
+
+

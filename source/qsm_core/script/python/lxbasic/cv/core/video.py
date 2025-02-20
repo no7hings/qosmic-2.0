@@ -147,7 +147,7 @@ class FrameExtractor(object):
             self.save_frame()
 
 
-class ImageConcat(object):
+class VideoConcat(object):
     def __init__(self, image_paths,  video_path, fps=24):
         self._image_paths = image_paths
         self._video_path = video_path

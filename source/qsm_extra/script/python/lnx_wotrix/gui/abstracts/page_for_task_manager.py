@@ -31,10 +31,10 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         self._studio = qsm_gnl_core.Sync().studio.get_current()
 
         # artist
-        self._artist_history_key = 'lazy-workspace.artist'
-        self._artist = gui_core.GuiHistory.get_one(self._artist_history_key) or 'shared'
+        self._artist_history_key = [self._window.GUI_KEY, 'artist']
+        self._artist = gui_core.GuiHistoryStage().get_one(self._artist_history_key) or 'shared'
 
-        self._resource_history_key = 'lazy-workspace.{resource_type}-path'
+        self._resource_history_key = 'wotrix.{resource_type}-path'
 
         self.gui_page_setup_fnc()
 
@@ -69,7 +69,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         if artist != self._artist:
             self._artist = artist
             self._user_qt_info_bubble._set_text_('{}:{}'.format(self._studio, self._artist))
-            gui_core.GuiHistory.set_one(self._artist_history_key, self._artist)
+            gui_core.GuiHistoryStage().set_one(self._artist_history_key, self._artist)
 
             self.do_gui_refresh_all()
             self._window.popup_message(

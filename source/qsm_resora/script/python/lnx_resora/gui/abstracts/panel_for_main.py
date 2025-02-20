@@ -12,11 +12,10 @@ import lnx_screw.core as lnx_scr_core
 import lnx_screw.scripts as lnx_scr_scripts
 
 
-class AbsPrxResoraTool(gui_prx_widgets.PrxBasePanel):
+class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
     CONFIGURE_KEY = 'resora/gui/main'
 
-    KEY_TAB_KEYS = 'lazy-resource-manager.page_keys'
-    HST_TAB_KEY_CURRENT = 'lazy-resource-manager.page_key_current'
+    KEY_TAB_KEYS = 'resora.page_keys'
 
     def _gui_tab_add_menu_content_generate_fnc(self):
         content = bsc_content.Dict()
@@ -72,6 +71,10 @@ class AbsPrxResoraTool(gui_prx_widgets.PrxBasePanel):
         return page.gui_close_fnc()
 
     def _gui_tab_add_page(self, key, switch_to=False):
+        if key in self._tab_tab_widget_dict:
+            self._prx_tab_view.set_current_by_key(key)
+            return
+
         prx_sca = gui_prx_widgets.PrxVScrollArea()
 
         page_data = lnx_scr_scripts.ManifestStageOpt().get_page_data(key)
@@ -98,14 +101,13 @@ class AbsPrxResoraTool(gui_prx_widgets.PrxBasePanel):
         prx_sca.add_widget(prx_page)
 
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxResoraTool, self).__init__(window, session, *args, **kwargs)
+        super(AbsPrxResoraPanel, self).__init__(window, session, *args, **kwargs)
 
     def gui_close_fnc(self):
         page_keys = self._prx_tab_view.get_all_page_keys()
-        gui_core.GuiHistory.set_one(self.KEY_TAB_KEYS, page_keys)
+        gui_core.GuiHistoryStage().set_one(self.KEY_TAB_KEYS, page_keys)
 
         page_key_current = self._prx_tab_view.get_current_key()
-        gui_core.GuiHistory.set_one(self.HST_TAB_KEY_CURRENT, page_key_current)
 
     def gui_setup_fnc(self):
         self.set_main_style_mode(1)
@@ -121,8 +123,11 @@ class AbsPrxResoraTool(gui_prx_widgets.PrxBasePanel):
         self._tab_tab_widget_dict = {}
 
         self._prx_tab_view.set_add_menu_content_generate_fnc(self._gui_tab_add_menu_content_generate_fnc)
+        self._prx_tab_view.set_history_key(
+            [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
+        )
 
-        history_tag_keys = gui_core.GuiHistory.get_one(self.KEY_TAB_KEYS)
+        history_tag_keys = gui_core.GuiHistoryStage().get_one(self.KEY_TAB_KEYS)
         page_keys = self._all_scr_stage_keys
         if history_tag_keys:
             _ = [x for x in history_tag_keys if x in self._all_scr_stage_keys]

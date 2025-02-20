@@ -83,7 +83,7 @@ build:
                     option_names_chs: ['默认', '自定义']
                     default: 'default'
                     enable: True
-                    history_key: 'easy_playblast.camera_display_scheme'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
                 camera_display/display_resolution:
@@ -94,7 +94,7 @@ build:
                     visible_condition: {
                        operator: 'is', port: 'camera_display/scheme', value: 'customize'
                     }
-                    history_key: 'easy_playblast.camera_display_resolution'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
                 camera_display/display_safe_action:
@@ -106,7 +106,7 @@ build:
                     visible_condition: {
                         operator: 'is', port: 'camera_display/scheme', value: 'customize'
                     }
-                    history_key: 'easy_playblast.camera_display_safe_action'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
                 camera_display/display_safe_title:
@@ -116,7 +116,7 @@ build:
                     visible_condition: {
                         operator: 'is', port: 'camera_display/scheme', value: 'customize'
                     }
-                    history_key: 'easy_playblast.camera_display_safe_title'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
                 camera_display/display_film_pivot:
@@ -126,7 +126,7 @@ build:
                     visible_condition: {
                         operator: 'is', port: 'camera_display/scheme', value: 'customize'
                     }
-                    history_key: 'easy_playblast.camera_display_film_pivot'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
                     join_to_next: True
 
@@ -137,7 +137,7 @@ build:
                     visible_condition: {
                         operator: 'is', port: 'camera_display/scheme', value: 'customize'
                     }
-                    history_key: 'easy_playblast.camera_display_film_origin'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
                 camera_display/overscan:
@@ -148,7 +148,7 @@ build:
                     visible_condition: {
                         operator: 'is', port: 'camera_display/scheme', value: 'customize'
                     }
-                    history_key: 'easy_playblast.camera_display_overscan'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
                 resolution:
@@ -171,7 +171,7 @@ build:
                     name_chs: '分辨率预设'
                     options: ['HD 1080P', 'HD 720P', 'HD 540P', '640x480', '320x240', '4k Square', '3k Square', '2k Square', '1k Square']
                     default: 'HD 720P'
-                    history_key: 'easy_playblast.resolution_preset'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
                     enable: True
                     tool_tip:
@@ -244,7 +244,7 @@ build:
                     name: 'Texture'
                     name_chs: '贴图'
                     value: True
-                    history_key: 'easy_playblast.texture_enable'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
                 render_setting/light_enable:
@@ -253,7 +253,7 @@ build:
                     name_chs: '灯光'
                     value: True
                     join_to_next: True
-                    history_key: 'easy_playblast.light_enable'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
                 render_setting/shadow_enable:
@@ -261,7 +261,7 @@ build:
                     name: 'Shadow'
                     name_chs: '影子'
                     value: True
-                    history_key: 'easy_playblast.shadow_enable'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
                 display_setting:
@@ -275,7 +275,7 @@ build:
                     name_chs: 'HUD'
                     value: True
                     enable: True
-                    history_key: 'easy_playblast.hud_enable'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
                 output:
@@ -291,7 +291,7 @@ build:
                     option_names_chs: ['自动', '指定目录', '指定文件']
                     default: 'auto'
                     enable: True
-                    history_key: 'easy_playblast.output_save_scheme'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
                 output/update_scheme:
@@ -305,7 +305,7 @@ build:
                     visible_condition: {
                         operator: 'match_one', port: 'output/save_scheme', value: ['auto', 'specific_directory']
                     }
-                    history_key: 'easy_playblast.output_update_scheme'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
                 output/directory:
@@ -314,7 +314,7 @@ build:
                     name_chs: '目录'
                     open_or_save: save
                     value: ''
-                    history_key: 'easy_playblast.output_directory'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
                     visible_condition: {
                        operator: 'is', port: 'output/save_scheme', value: 'specific_directory'
@@ -327,7 +327,7 @@ build:
                     open_or_save: save
                     ext_filter: 'All File (*.mov)'
                     value: ''
-                    history_key: 'easy_playblast.output_file'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
                     visible_condition: {
                         operator: 'is', port: 'output/save_scheme', value: 'specific_file'
@@ -339,7 +339,7 @@ build:
                     name_chs: '结束后播放'
                     value: True
                     enable: True
-                    history_key: 'easy_playblast.play_enable'
+                    history_group: ['playblast', 'main']
                     pull_history_latest: True
 
         buttons:

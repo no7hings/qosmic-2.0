@@ -28,7 +28,10 @@ class MocapResource(object):
                 'No valid location found.'
             )
 
-        self._sketch_set = _sketch_set.MocapSketchSet.generate_by_location(self._sketch_location)
+        # todo: sketch may be a transform
+        self._sketch_set = _sketch_set.MocapSketchSet.generate_by_location(
+            self._sketch_location, include_transform_type=True
+        )
 
     def find_root_location(self):
         return self._sketch_location

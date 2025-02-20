@@ -187,7 +187,7 @@ class ScanGlob(object):
         return list_
     
     @classmethod
-    def glob_file(cls, file_regex):
+    def glob_files(cls, file_regex):
         file_regex = cls.ensure_unicode(file_regex)
 
         if '//' in file_regex:

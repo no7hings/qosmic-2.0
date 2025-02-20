@@ -1,7 +1,11 @@
 # coding:utf-8
+import lxbasic.core as bsc_core
+
 import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
+
+import lnx_screw.core as lnx_scr_core
 
 
 class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubpanel):
@@ -10,24 +14,44 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubpanel):
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxSubPanelForRegister, self).__init__(window, session, *args, **kwargs)
 
+        self.update_valid_subpage_cls()
+
     def gui_setup_fnc(self):
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._page_prx_tab_tool_box)
+
+    def update_valid_subpage_cls(self):
+        main_configure = lnx_scr_core.Stage.get_main_configure()
+        all_resource_types = main_configure.get_key_names_at('types')
+        for i_resource_type in all_resource_types:
+            i_cls = self.find_register_subpage_cls(i_resource_type)
+            if i_cls:
+                self._sub_page_class_dict[i_resource_type] = i_cls
+
+    @staticmethod
+    def find_register_subpage_cls(resource_type):
+        module_path = 'lnx_resora.resource_types.{}.gui_widgets.register'.format(resource_type)
+        module = bsc_core.PyModule(module_path)
+        if module.get_is_exists():
+            cls = module.get_method('PrxSubpageForRegister')
+            if cls:
+                return cls
     
-    def gui_setup_pages_for(self, page_keys):
-        for i_page_key in page_keys:
-            if i_page_key not in self._sub_page_class_dict:
+    def gui_setup_pages_for(self, resource_types):
+        for i_resource_type in resource_types:
+
+            if i_resource_type not in self._sub_page_class_dict:
                 continue
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
-            i_prx_page = self._subwindow.gui_generate_sub_page_for(i_page_key)
+            i_prx_page = self._subwindow.gui_generate_sub_page_for(i_resource_type)
             i_prx_sca.add_widget(i_prx_page)
 
             self._page_prx_tab_tool_box.add_widget(
                 i_prx_sca,
-                key=i_page_key,
+                key=i_resource_type,
                 name=i_prx_page.get_gui_name(),
-                icon_name_text=i_page_key,
+                icon_name_text=i_resource_type,
                 tool_tip=i_prx_page.get_gui_tool_tip()
             )
-            self._tab_widget_dict[i_page_key] = i_prx_page
+            self._tab_widget_dict[i_resource_type] = i_prx_page

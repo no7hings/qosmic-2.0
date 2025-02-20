@@ -35,7 +35,7 @@ build:
                 option_names: ['ADV', 'MoCap']
                 option_names_chs: ['ADV', '动捕']
                 default: 'adv'
-                history_key: 'tool-panels.lazy-montage.new-splicing.rig-scheme'
+                history_group: ['montage', 'general']
                 pull_history_latest: True
 
             adv_rig_namespace:
@@ -55,7 +55,7 @@ build:
                 option_names: ['Alpha (male)', 'Beta (Female)']
                 option_names_chs: ['Alpha （男）', 'Beta （女）']
                 default: ['alpha']
-                history_key: 'tool-panels.lazy-montage.new-splicing.mocap-rig'
+                history_group: ['montage', 'general']
                 pull_history_latest: True
                 visible_condition: {
                     operator: 'is', port: 'rig_scheme', value: 'mocap'
@@ -78,5 +78,5 @@ build:
                 option_names: ['None', 'Walking', 'Jogging', 'Running', 'Running & Jumping', 'Dancing']
                 option_names_chs: ['无', '走', '慢跑', '跑', '跑跳', '跳舞']
                 default: 'none'
-                history_key: 'tool-panels.lazy-montage.new-splicing.template'
+                history_group: ['montage', 'general']
                 pull_history_latest: True

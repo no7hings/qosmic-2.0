@@ -41,5 +41,8 @@ class LRUCache:
             self._dict.popitem(last=False)
         self._dict[key] = value
 
+    def pop(self, key):
+        self._dict.pop(key)
+
 
 

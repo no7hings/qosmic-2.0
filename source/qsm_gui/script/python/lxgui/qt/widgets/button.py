@@ -63,28 +63,28 @@ class QtCheckButton(
         qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
         self.setFont(_qt_core.QtFonts.NameNormal)
-        #
+
         self.setMaximumHeight(20)
         self.setMinimumHeight(20)
-        #
+
         self.installEventFilter(self)
-        #
+
         self.setFocusPolicy(QtCore.Qt.NoFocus)
-        #
+
         self._init_frame_base_def_(self)
         self._init_icon_base_def_(self)
         self._init_name_base_def_(self)
-        #
+
         self._init_action_for_hover_def_(self)
         self._init_action_base_def_(self)
         self._init_action_for_check_def_(self)
         self._set_check_enable_(True)
-        #
+
         self._init_value_default_extra_def_(self)
         self._init_value_history_base_def_(self)
-        #
+
         self._refresh_check_()
-        #
+
         self._set_name_draw_font_(_qt_core.QtFonts.Button)
 
         self.user_check_toggled.connect(self._push_history_)

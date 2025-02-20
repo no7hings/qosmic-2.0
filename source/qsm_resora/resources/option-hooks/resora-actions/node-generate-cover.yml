@@ -1,0 +1,25 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'node'
+        #
+        name: 'Resource Generate Cover'
+        icon_name: 'file/image'
+        #
+        size: [720, 720]
+
+        window:
+            name: 'Generate Cover'
+            name_chs: '生成封面'
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        stage_name: ''
+        #
+        entity_type: ''
+        entity: ''

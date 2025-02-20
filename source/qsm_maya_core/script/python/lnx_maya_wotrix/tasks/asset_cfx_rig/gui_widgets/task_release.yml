@@ -43,7 +43,7 @@ build:
                     option_names: ['Image', 'Video']
                     option_names_chs: ['图片', '视频']
 
-                    history_key: 'tool-panels.lazy-workspace.task-release.preview_scheme'
+                    history_group: ['wotrix', 'asset_cfx_rig', 'task_release']
                     pull_history_latest: True
 
                 images:
@@ -51,7 +51,7 @@ build:
                     name: 'Image'
                     name_chs: '图片'
                     value: ''
-                    history_key: 'lazy-workspace.task_release_cfx_rig.images'
+                    history_group: ['wotrix', 'asset_cfx_rig', 'task_release']
                     ext_includes: ['.jpg', '.png', '.exr']
                     height: 120
                     tool_tip:
@@ -70,7 +70,7 @@ build:
                     name: 'Video'
                     name_chs: '视频'
                     value: ''
-                    history_key: 'lazy-workspace.task_release_cfx_dressing.videos'
+                    history_group: ['wotrix', 'asset_cfx_rig', 'task_release']
                     ext_includes: ['.mov']
                     height: 120
                     tool_tip:

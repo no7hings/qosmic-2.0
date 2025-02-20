@@ -340,6 +340,7 @@ class QtTabView(
         self._layer_stack.installEventFilter(self)
         # use layer stack signal
         self._layer_stack.current_changed.connect(self.current_changed.emit)
+        self._layer_stack.current_changed.connect(self._save_history_)
 
         self._delete_pre_fnc_dict = dict()
 

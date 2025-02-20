@@ -37,7 +37,7 @@ build:
                     open_or_save: open
                     name_chs: '导入版本目录'
                     value: ''
-                    history_key: 'tool-panels.lazy-cfx-tool.cache_directory-import-version-directory-open'
+                    history_group: ['wotrix', 'shot_cfx_dressing', 'task_tool']
                     tool_tip:
                         |-
                         To be supplemented.
