@@ -7,8 +7,6 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_screw.core as lnx_scr_core
-
 import lnx_screw.scripts as lnx_scr_scripts
 
 
@@ -118,7 +116,7 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
         self._prx_tab_view.set_add_enable(True)
 
         self._tag_page_key_opened = set()
-        self._all_scr_stage_keys = lnx_scr_core.Stage.get_all_keys()
+        self._all_scr_stage_keys = lnx_scr_scripts.ManifestStageOpt().get_valid_database_names()
 
         self._tab_tab_widget_dict = {}
 
@@ -133,8 +131,11 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
             _ = [x for x in history_tag_keys if x in self._all_scr_stage_keys]
             if _:
                 page_keys = _
+        else:
+            page_keys = ['resource_manifest']
 
-        self._gui_tab_add_page_fnc(page_keys[0], False)
+        for i_page_key in page_keys[:5]:
+            self._gui_tab_add_page_fnc(i_page_key, False)
 
         self.connect_refresh_action_for(self.do_gui_refresh_all)
         self.register_window_close_method(self.gui_close_fnc)

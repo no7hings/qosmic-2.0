@@ -37,16 +37,14 @@ build:
                 open_or_save: open
                 name: 'Folder'
                 name_chs: '文件夹'
-                history_group: ['resora', 'maya_scene_register']
+                history_group: ['resora', 'houdini_scene_register']
 
-            formats:
-                widget: string
-                name: 'Formats'
-                name_chs: '格式'
-                value: 'ma, mb'
-                lock: True
+            file:
+                widget: group
+                name: 'File'
+                name_chs: '文件'
 
-            file_pattern:
+            file/pattern:
                 widget: enumerate
                 name: 'File Pattern'
                 name_chs: '文件模版'
@@ -65,6 +63,19 @@ build:
                         如果只收集文件夹下的文件后面加“/*.{format}”；
                         如果需要收集文件夹下的所有文件（包含所有的子文件夹）加“//*.{format}”。
 
+            file/formats:
+                widget: string
+                name: 'Formats'
+                name_chs: '格式'
+                value: 'ma, Ma, mb, MB'
+                lock: True
+                tool_tip:
+                    |-
+                    To be supplemented.
+                tool_tip_chs:
+                    |-
+                    匹配文件的格式
+
             preview:
                 widget: group
                 name: 'Preview'
@@ -80,7 +91,26 @@ build:
                 widget: string
                 name: 'Preview Pattern'
                 name_chs: '预览模版'
-                value: '{file_directory}/{file_name}.png'
+                value: '{file_directory}/{file_name}.{format}'
+                tool_tip:
+                    |-
+                    To be supplemented.
+                tool_tip_chs:
+                    |-
+                    匹配预览的模版：
+                        例如，如果文件路径为“c:/test.ma”，则会自动收集“c:/test.png”作为预览图。
+
+            preview/formats:
+                widget: string
+                name: 'Preview Formats'
+                name_chs: '格式'
+                value: 'png, jpg'
+                tool_tip:
+                    |-
+                    To be supplemented.
+                tool_tip_chs:
+                    |-
+                    匹配预览的格式
 
             file_reference:
                 widget: group

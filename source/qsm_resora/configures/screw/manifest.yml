@@ -101,6 +101,14 @@ entities:
             gui_name: 'HOUDINI (.hip)'
             gui_name_chs: 'HOUDINI（.hip）'
 
+        /type/houdini_hda:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'HDA (.hda .otl)'
+            gui_name_chs: 'HDA（.hda .otl）'
+
         /type/fbx_cache:
             category: 'node'
             type: 'node'

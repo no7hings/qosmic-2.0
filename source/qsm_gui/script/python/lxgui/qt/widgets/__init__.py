@@ -34,6 +34,8 @@ from .entry.entry_for_bubble import *
 
 from .entry.entry_for_capsule import *
 
+from .entry.entry_for_tag import *
+
 from .entry.cmp_entry_for_guide import *
 
 from .entry.cmp_entry_for_path import *
@@ -48,6 +50,8 @@ from .input.input_for_content import *
 from .input.input_for_filter import *
 
 from .input.input_for_capsule import *
+
+from .input.input_for_tag import *
 
 from .input.input_for_storage import *
 

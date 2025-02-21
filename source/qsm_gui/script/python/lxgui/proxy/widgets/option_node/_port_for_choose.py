@@ -15,6 +15,11 @@ class PrxPortForConstantChoose(_port_base.AbsPrxPort):
     def __init__(self, *args, **kwargs):
         super(PrxPortForConstantChoose, self).__init__(*args, **kwargs)
 
+    def set_name(self, text):
+        super(PrxPortForConstantChoose, self).set_name(text)
+
+        self.get_input_widget()._set_name_text_(text)
+
     def get_enumerate_strings(self):
         return self._prx_port_input.get_enumerate_strings()
 

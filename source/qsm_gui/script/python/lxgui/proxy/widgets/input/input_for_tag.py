@@ -1,18 +1,20 @@
 # coding:utf-8
 from ....qt.widgets import utility as _qt_wgt_utility
 
-from ....qt.widgets.input import input_for_capsule as _qt_wgt_input_for_capsule
+from ....qt.widgets.input import input_for_tag as _qt_wgt_input_for_tag
 
 from . import _input_base
 
 
 #   capsule
-class PrxInputForCapsule(_input_base.AbsPrxInput):
+class PrxInputForTag(_input_base.AbsPrxInput):
     QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = _qt_wgt_input_for_capsule.QtInputForCapsule
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input_for_tag.QtInputForTag
+
+    QT_H = -1
 
     def __init__(self, *args, **kwargs):
-        super(PrxInputForCapsule, self).__init__(*args, **kwargs)
+        super(PrxInputForTag, self).__init__(*args, **kwargs)
 
     def get(self):
         return self._qt_input_widget._get_value_()

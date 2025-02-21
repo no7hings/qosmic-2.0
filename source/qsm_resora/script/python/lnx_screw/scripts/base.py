@@ -38,7 +38,10 @@ class ManifestStageOpt(object):
     def create(cls):
         scr_stage = _scr_core.Stage('resource_manifest')
         _scr_core.Stage.build_fnc('resource_manifest', configure_key='manifest')
+
         scr_stage.update_all_entity_types()
+        scr_stage.update_types(configure_key='manifest')
+        scr_stage.update_tags(configure_key='manifest')
 
     def __init__(self):
         self._scr_stage = _scr_core.Stage(
@@ -106,6 +109,62 @@ class ManifestStageOpt(object):
             gui_name_chs='未找到',
         )
 
+    @classmethod
+    def get_valid_type_names(cls):
+        list_ = []
+        main_configure = _scr_core.Stage.get_main_configure()
+
+        type_names = main_configure.get_key_names_at('types')
+        for i_type_name in type_names:
+            i_enable = main_configure.get('types.{}.enable'.format(i_type_name))
+            if i_enable is False:
+                continue
+
+            i_applications = main_configure.get('types.{}.applications'.format(i_type_name))
+
+            if bsc_core.BscApplication.get_is_maya():
+                if 'maya' not in i_applications:
+                    continue
+
+            list_.append(i_type_name)
+        return list_
+
+    def get_valid_database_names(self):
+        list_ = [
+            'resource_manifest'
+        ]
+
+        main_configure = self._scr_stage.get_main_configure()
+        type_names = main_configure.get_key_names_at('types')
+
+        scr_nodes = self._scr_stage.find_all(
+            entity_type=self._scr_stage.EntityTypes.Node,
+            filters=[
+                ('type', 'is', 'node'),
+                ('lock', 'is', False),
+                ('trash', 'is', False),
+            ]
+        )
+        for i_scr_node in scr_nodes:
+            i_scr_node_path = i_scr_node.path
+
+            i_type_name = self._scr_stage.get_node_parameter(i_scr_node_path, 'resource_type')
+            if i_type_name not in type_names:
+                continue
+
+            i_enable = main_configure.get('types.{}.enable'.format(i_type_name))
+            if i_enable is False:
+                continue
+
+            i_applications = main_configure.get('types.{}.applications'.format(i_type_name))
+
+            if bsc_core.BscApplication.get_is_maya():
+                if 'maya' not in i_applications:
+                    continue
+
+            list_.append(bsc_core.BscNodePathOpt(i_scr_node.path).get_name())
+        return list_
+
     def get_all_page_data(self):
         dict_ = collections.OrderedDict()
 
@@ -140,14 +199,18 @@ class ManifestStageOpt(object):
             i_node_gui_name = i_scr_node.gui_name
             i_node_gui_name_chs = i_scr_node.gui_name_chs
 
-            i_resource_type_name = self._scr_stage.get_node_parameter(i_scr_node_path, 'resource_type')
-            if i_resource_type_name not in type_names:
+            i_type_name = self._scr_stage.get_node_parameter(i_scr_node_path, 'resource_type')
+            if i_type_name not in type_names:
                 continue
 
-            i_type_gui_name = main_configure.get('types.{}.gui_name'.format(i_resource_type_name))
-            i_type_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(i_resource_type_name))
+            i_enable = main_configure.get('types.{}.enable'.format(i_type_name))
+            if i_enable is False:
+                continue
 
-            i_applications = main_configure.get('types.{}.applications'.format(i_resource_type_name))
+            i_type_gui_name = main_configure.get('types.{}.gui_name'.format(i_type_name))
+            i_type_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(i_type_name))
+
+            i_applications = main_configure.get('types.{}.applications'.format(i_type_name))
 
             if bsc_core.BscApplication.get_is_maya():
                 if 'maya' not in i_applications:
@@ -155,7 +218,7 @@ class ManifestStageOpt(object):
 
             dict_[i_node_name] = dict(
                 type=dict(
-                    name=i_resource_type_name,
+                    name=i_type_name,
                     gui_name=i_type_gui_name,
                     gui_name_chs=i_type_gui_name_chs
                 ),

@@ -19,6 +19,15 @@ from .. import log as _bsc_log
 
 
 class PyModule(object):
+    @staticmethod
+    def check_exists(module_name):
+        return
+
+    @staticmethod
+    def to_py_fnc(file_path_pyc):
+        _ = os.path.splitext(file_path_pyc)
+        return '{}.py'.format(_[0])
+
     def __init__(self, *args):
         _ = args[0]
         if isinstance(_, types.ModuleType):
@@ -55,11 +64,6 @@ class PyModule(object):
     @property
     def file(self):
         return self._file_path_pyc
-
-    @staticmethod
-    def to_py_fnc(file_path_pyc):
-        _ = os.path.splitext(file_path_pyc)
-        return '{}.py'.format(_[0])
 
     def get_pyc_timestamp(self):
         if os.path.isfile(self._file_path_pyc):

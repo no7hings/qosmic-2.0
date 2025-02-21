@@ -241,40 +241,8 @@ FLUSH PRIVILEGES;
 
     @classmethod
     def get_all_keys(cls):
-        manifest_scr_stage = Stage(
-            'resource_manifest'
-        )
-
-        list_ = [
-            'resource_manifest'
-        ]
-
-        main_configure = cls.get_main_configure()
-        type_names = main_configure.get_key_names_at('types')
-
-        scr_nodes = manifest_scr_stage.find_all(
-            entity_type=cls.EntityTypes.Node,
-            filters=[
-                ('type', 'is', 'node'),
-                ('lock', 'is', False),
-                ('trash', 'is', False),
-            ]
-        )
-        for i_scr_node in scr_nodes:
-            i_scr_node_path = i_scr_node.path
-
-            i_resource_type_name = manifest_scr_stage.get_node_parameter(i_scr_node_path, 'resource_type')
-            if i_resource_type_name not in type_names:
-                continue
-
-            i_applications = main_configure.get('types.{}.applications'.format(i_resource_type_name))
-
-            if bsc_core.BscApplication.get_is_maya():
-                if 'maya' not in i_applications:
-                    continue
-
-            list_.append(bsc_core.BscNodePathOpt(i_scr_node.path).get_name())
-        return list_
+        # todo: remove this method
+        return []
 
     @classmethod
     def get_mysql_configure(cls):
@@ -327,9 +295,9 @@ FLUSH PRIVILEGES;
         scr_node_path = '/{}'.format(database_name)
         scr_node = manifest_scr_stage.get_node(scr_node_path)
         if scr_node:
-            resource_type = manifest_scr_stage.get_node_parameter(scr_node_path, 'resource_type')
-            cls.RESOURCE_TYPE_CACHE[database_name] = resource_type
-            return resource_type
+            type_name = manifest_scr_stage.get_node_parameter(scr_node_path, 'resource_type')
+            cls.RESOURCE_TYPE_CACHE[database_name] = type_name
+            return type_name
 
     @classmethod
     def get_applications(cls, database_name):
@@ -339,10 +307,10 @@ FLUSH PRIVILEGES;
         if database_name in cls.APPLICATIONS_CACHE:
             return cls.APPLICATIONS_CACHE[database_name]
 
-        resource_type = cls.get_resource_type(database_name)
-        if resource_type:
+        type_name = cls.get_resource_type(database_name)
+        if type_name:
             main_configure = cls.get_main_configure()
-            applications = main_configure.get('types.{}.applications'.format(resource_type))
+            applications = main_configure.get('types.{}.applications'.format(type_name))
             cls.APPLICATIONS_CACHE[database_name] = applications
             return applications
 
@@ -357,13 +325,13 @@ FLUSH PRIVILEGES;
 
     @classmethod
     def get_resource_type_options(cls, database_name):
-        resource_type = cls.get_resource_type(database_name)
-        if resource_type in cls.RESOURCE_TYPE_OPTIONS_CACHE:
-            return cls.RESOURCE_TYPE_OPTIONS_CACHE[resource_type]
+        type_name = cls.get_resource_type(database_name)
+        if type_name in cls.RESOURCE_TYPE_OPTIONS_CACHE:
+            return cls.RESOURCE_TYPE_OPTIONS_CACHE[type_name]
 
         main_configure = cls.get_main_configure()
-        options = main_configure.get('types.{}'.format(resource_type))
-        cls.RESOURCE_TYPE_OPTIONS_CACHE[resource_type] = options
+        options = main_configure.get('types.{}'.format(type_name))
+        cls.RESOURCE_TYPE_OPTIONS_CACHE[type_name] = options
         return options
 
     @classmethod
@@ -584,8 +552,8 @@ FLUSH PRIVILEGES;
     def get_entity_type_property_keys_new(self, entity_type):
         return [x.name for x in self._to_dtb_entity_type(entity_type)._meta.sorted_fields]
 
-    def update_types(self):
-        configure = self.get_configure()
+    def update_types(self, configure_key=None):
+        configure = self.get_configure(configure_key)
         if configure is None:
             raise RuntimeError()
 
@@ -595,8 +563,8 @@ FLUSH PRIVILEGES;
                 self.EntityTypes.Type, k, **v
             )
 
-    def update_tags(self):
-        configure = self.get_configure()
+    def update_tags(self, configure_key=None):
+        configure = self.get_configure(configure_key)
         if configure is None:
             raise RuntimeError()
 

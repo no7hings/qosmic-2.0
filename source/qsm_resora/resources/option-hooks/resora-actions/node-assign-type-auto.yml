@@ -7,7 +7,7 @@ option:
     gui:
         group_name: 'nodes'
         #
-        name: 'Resource Assign Type'
+        name: 'Assign Type'
         icon_name: 'database/type'
         #
         size: [720, 720]

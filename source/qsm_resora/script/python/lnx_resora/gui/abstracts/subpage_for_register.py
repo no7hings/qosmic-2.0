@@ -13,6 +13,8 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import lnx_screw.core as lnx_scr_core
 
+from ... import core as _rsr_core
+
 
 class _AbsRegister(object):
     @classmethod
@@ -308,6 +310,46 @@ class AbsPrxPageForAnyRegister(
         )
 
 
+class AbsPrxPageForAnySceneRegister(AbsPrxPageForAnyRegister):
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxPageForAnySceneRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+
+    def _on_apply(self):
+        prx_node = self._prx_options_node
+
+        directory_path = prx_node.get('directory')
+        file_pattern = prx_node.get('file.pattern')
+        file_formats = prx_node.get('file.formats')
+        with_preview = prx_node.get('preview.enable')
+        preview_pattern = prx_node.get('preview.pattern')
+        preview_formats = prx_node.get('preview.formats')
+        with_file_reference = prx_node.get('file_reference.enable')
+        file_reference_pattern = prx_node.get('file_reference.pattern')
+
+        scr_type_paths = self.gui_get_scr_type_paths()
+        scr_tag_paths = self.gui_get_scr_tag_paths()
+
+        _rsr_core.AnySceneRegisterBatch.register_fnc(
+            self._scr_stage.key, directory_path,
+            file_pattern=file_pattern, file_formats=file_formats,
+            with_preview=with_preview, preview_pattern=preview_pattern, preview_formats=preview_formats,
+            with_file_reference=with_file_reference, file_reference_pattern=file_reference_pattern,
+            scr_type_paths=scr_type_paths, scr_tag_paths=scr_tag_paths
+        )
+
+        if self._post_fnc is not None:
+            scr_type_paths_addition = self._get_scr_type_or_tag_paths_addition(self._type_qt_tag_widget)
+            scr_tag_paths_addition = self._get_scr_type_or_tag_paths_addition(self._tag_qt_tag_widget)
+            if scr_type_paths_addition or scr_tag_paths_addition:
+                self._post_fnc(scr_type_paths_addition, scr_tag_paths_addition)
+
+        self._subwindow.popup_message(
+            self._subwindow.choice_gui_message(
+                self._configure.get('build.messages.register_successful')
+            )
+        )
+
+
 class AbsPrxSubpageForVideoRegister(AbsPrxPageForAnyRegister):
     GUI_KEY = 'video'
 
@@ -325,7 +367,7 @@ class AbsPrxSubpageForVideoRegister(AbsPrxPageForAnyRegister):
         collect_source = prx_node.get('collect_source')
 
         if file_paths:
-            import lnx_resora.resource_types.video.scripts as lzy_rsc_etr_vdo_scripts
+            import lnx_resora_extra.video.scripts as lzy_rsc_etr_vdo_scripts
 
             lzy_rsc_etr_vdo_scripts.VideoRegisterBatch(
                 self._scr_stage.key, file_paths, collect_source
@@ -368,7 +410,7 @@ class AbsPrxSubpageForAudioRegister(AbsPrxPageForAnyRegister):
         collect_source = prx_node.get('collect_source')
 
         if file_paths:
-            import lnx_resora.resource_types.audio.scripts as lzy_rsc_etd_ado_scripts
+            import lnx_resora_extra.audio.scripts as lzy_rsc_etd_ado_scripts
 
             lzy_rsc_etd_ado_scripts.AudioRegisterBatch(
                 self._scr_stage.key, file_paths, collect_source

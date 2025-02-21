@@ -3,7 +3,7 @@ import functools
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_resora.resource_types.motion.scripts as lzy_rsc_etr_mtn_scripts
+import lnx_resora_extra.motion.scripts as lzy_rsc_etr_mtn_scripts
 
 
 class Main(object):

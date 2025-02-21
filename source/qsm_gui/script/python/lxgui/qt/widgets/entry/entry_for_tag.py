@@ -9,7 +9,7 @@ from ....qt import abstracts as _qt_abstracts
 
 
 # base entry as capsule, can be select one and more
-class QtEntryForCapsule(
+class QtEntryForTag(
     QtWidgets.QWidget,
 
     _qt_abstracts.AbsQtNameBaseDef,
@@ -24,11 +24,13 @@ class QtEntryForCapsule(
     user_value_changed = qt_signal()
     user_value_accepted = qt_signal(object)
 
+    H = 20
+
     def __init__(self, *args, **kwargs):
-        super(QtEntryForCapsule, self).__init__(*args, **kwargs)
+        super(QtEntryForTag, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )
 
         self._font = _qt_core.QtFont.generate_2(size=12)
@@ -43,8 +45,6 @@ class QtEntryForCapsule(
         self._init_action_base_def_(self)
         self._init_action_for_hover_def_(self)
         self._init_action_for_press_def_(self)
-
-        self._capsule_per_width = 0
 
         self._check_use_exclusive = True
 
@@ -77,22 +77,26 @@ class QtEntryForCapsule(
         w, h = self.width(), self.height()
         if self._draw_texts:
             c = len(self._draw_texts)
-            w_maximum_1 = w/c
-            h_t = self._font_metrics.height()
-            s_t = (h-h_t)/2
-            w_t = int(max([self._font_metrics.width(i)+16 for i in self._draw_texts]))
-            c = len(self._draw_texts)
-            w_maximum_0 = w_t+(w_t%2)+s_t*2
-            # width use minimum of average or maximum each
-            self._capsule_per_width = min(w_maximum_1, w_maximum_0)
+            c_x, c_y = 0, 0
+            c_w = 0
             for i_index in range(c):
-                i_x, i_y = x+i_index*self._capsule_per_width, y
-                i_w, i_h = self._capsule_per_width, h
-                self._frame_rects[i_index].setRect(
-                    x+i_x, y+1, i_w, h-2
-                )
+                i_txt = self._draw_texts[i_index]
+                i_w = self._font_metrics.width(i_txt)+16
+                self._frame_rects[i_index].setRect(x+c_x, y+c_y+1, i_w, self.H-2)
 
-            _w_maximum = c*self._capsule_per_width
+                c_x += i_w
+                c_w += i_w
+
+                if i_index < c-1:
+                    if c_w > w-i_w:
+                        c_x = 0
+                        c_w = 0
+                        c_y += self.H
+
+            fixed_h = c_y+self.H
+            self.setFixedHeight(fixed_h)
+        else:
+            self.setFixedHeight(self.H)
 
     def eventFilter(self, *args):
         widget, event = args
@@ -120,8 +124,8 @@ class QtEntryForCapsule(
             elif event.type() == QtCore.QEvent.MouseMove:
                 if self._is_action_flag_match_(self.ActionFlag.Press):
                     self._do_press_move_(event)
-
-                self._do_hover_move_(event)
+                else:
+                    self._do_hover_move_(event)
             elif event.type() == QtCore.QEvent.ToolTip:
                 self._do_show_tool_tip_(event)
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
@@ -132,7 +136,7 @@ class QtEntryForCapsule(
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
         if self._draw_texts:
-            painter._draw_capsule_by_rects_(
+            painter._draw_tag_by_rects_(
                 rects=self._frame_rects,
                 texts=self._draw_texts,
                 value_options=self._value_options,
@@ -171,7 +175,7 @@ class QtEntryForCapsule(
             )
 
     def _set_value_options_(self, values, names=None):
-        if super(QtEntryForCapsule, self)._set_value_options_(values) is True:
+        if super(QtEntryForTag, self)._set_value_options_(values) is True:
             c = len(self._value_options)
             self._indices = range(c)
             self._draw_texts = []
@@ -246,32 +250,34 @@ class QtEntryForCapsule(
         return self._check_use_exclusive
 
     def _do_hover_move_(self, event):
-        # if self._action_is_enable is False:
-        #     return
-        if not self._capsule_per_width:
-            return
         p = event.pos()
-        x, y = p.x(), p.y()
-        self._hover_index = None
-        c = len(self._value_options)
-        if c:
-            index = int(x/self._capsule_per_width)
-            if index < c:
-                self._hover_index = index
-                self._refresh_widget_draw_()
 
-    def _do_press_start_(self, event):
+        idx = None
+
+        if self._frame_rects:
+            for i_idx in self._indices:
+                i_rect = self._frame_rects[i_idx]
+                if i_rect.contains(p):
+                    idx = i_idx
+                    break
+
+        if idx != self._hover_index:
+            self._hover_index = idx
+            self._refresh_widget_draw_()
+
+    def _do_press_start_(self, event, move_flag=False):
         if self._action_is_enable is False:
             return
-        if not self._capsule_per_width:
-            return
-        p = event.pos()
-        x, y = p.x(), p.y()
+
         index_pre = self._current_index
-        index = int(x/self._capsule_per_width)
-        if index in self._indices:
-            self._current_index = index
-            self._press_index = self._current_index
+        idx = self._hover_index
+
+        if idx is None:
+            return
+
+        if idx != self._current_index:
+            self._current_index = idx
+
             if self._check_use_exclusive is True:
                 if index_pre is not None:
                     self._checked_indices[index_pre] = False
@@ -280,26 +286,34 @@ class QtEntryForCapsule(
                 self._checked_indices[self._current_index] = not self._checked_indices[self._current_index]
 
             self._update_value_output_(user_flag=True)
+        else:
+            if move_flag is False:
+                if self._check_use_exclusive is False:
+                    self._checked_indices[self._current_index] = not self._checked_indices[self._current_index]
+
+        self._press_index = self._current_index
+
+        self._refresh_widget_draw_()
 
     def _do_press_move_(self, event):
         if self._action_is_enable is False:
             return
-        if not self._capsule_per_width:
-            return
-        p = event.pos()
-        x, y = p.x(), p.y()
-        index_pre = self._current_index
-        index = int(x/self._capsule_per_width)
-        if index in self._indices:
-            self._current_index = index
-            self._press_index = self._current_index
-            if index_pre != self._current_index:
-                if self._check_use_exclusive is True:
-                    if index_pre is not None:
-                        self._checked_indices[index_pre] = False
-                    self._checked_indices[self._current_index] = True
 
-                self._update_value_output_(user_flag=True)
+        p = event.pos()
+
+        idx = None
+
+        if self._frame_rects:
+            for i_idx in self._indices:
+                i_rect = self._frame_rects[i_idx]
+                if i_rect.contains(p):
+                    idx = i_idx
+                    break
+
+        if idx != self._hover_index:
+            self._hover_index = idx
+
+        self._do_press_start_(event, move_flag=True)
 
     def _do_press_end_(self, event):
         if self._action_is_enable is False:
@@ -309,7 +323,7 @@ class QtEntryForCapsule(
         event.accept()
 
     def _set_entry_enable_(self, boolean):
-        super(QtEntryForCapsule, self)._set_entry_enable_(boolean)
+        super(QtEntryForTag, self)._set_entry_enable_(boolean)
         self._set_action_enable_(boolean)
 
     def _set_tool_tip_(self, text, **kwargs):

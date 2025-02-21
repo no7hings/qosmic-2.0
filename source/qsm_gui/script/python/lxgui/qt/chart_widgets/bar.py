@@ -107,7 +107,7 @@ class QtBarChartWidget(
         main_lot.setContentsMargins(*[0]*4)
         main_lot.setSpacing(2)
 
-        self._key_entry = _entry_for_capsule.QtEntryAsCapsule()
+        self._key_entry = _entry_for_capsule.QtEntryForCapsule()
         main_lot.addWidget(self._key_entry)
         self._key_entry.setFixedHeight(20)
         self._key_entry._set_use_exclusive_(False)

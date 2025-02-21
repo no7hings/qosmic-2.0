@@ -30,19 +30,19 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
 
     def _test_(self):
         def open_folder_fnc_():
-            print 'button menu press'
+            print('button menu press')
 
         tab_view = gui_prx_widgets.PrxTabView()
         self.add_widget(tab_view)
         self.set_main_style_mode(1)
         for i in [
-            'button',
+            # 'button',
             'constant',
-            'tuple',
-            'array',
+            # 'tuple',
+            # 'array',
             # 'shotgun',
-            'storage',
-            'storages',
+            # 'storage',
+            # 'storages',
         ]:
             i_s = gui_prx_widgets.PrxVScrollArea()
             tab_view.add_widget(i_s, name=i)

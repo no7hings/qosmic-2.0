@@ -152,6 +152,84 @@ class QtPainter(QtGui.QPainter):
                 i_text_elided
             )
 
+    def _draw_tag_by_rects_(
+        self,
+        rects, texts, value_options,
+        checked_indices, index_hover, index_pressed, use_exclusive=False, is_enable=True
+    ):
+        c = len(texts)
+        self._set_antialiasing_(True)
+        for i_idx, i_text in enumerate(texts):
+            i_rect = rects[i_idx]
+            i_value_option = value_options[i_idx]
+            i_x, i_y = i_rect.x()+1, i_rect.y()
+            i_w, i_h = i_rect.width()-2, i_rect.height()
+            i_is_pressed = i_idx == index_pressed
+            if i_is_pressed:
+                i_x += 2
+                i_w -= 2
+                i_y += 2
+                i_h -= 2
+            #
+            i_new_rect = qt_rect(
+                i_x, i_y, i_w, i_h
+            )
+            if use_exclusive is True:
+                i_border_radius = 3
+            else:
+                i_border_radius = i_h/2
+
+            i_is_hovered = i_idx == index_hover
+            i_is_checked = checked_indices[i_idx]
+            if i_is_checked is True:
+                i_border_width = 1
+                self._set_border_color_(_style.QtRgba.BdrCapsuleCheck)
+                if use_exclusive is True:
+                    i_background_color, i_font_color = (
+                        _gui_core.GuiRgba.LightAzureBlue,
+                        _gui_core.GuiRgba.LightBlack
+                    )
+                else:
+                    i_background_color, i_font_color = _base.QtColor.generate_color_args_by_text(str(i_value_option))
+
+                self._set_background_color_(i_background_color)
+            else:
+                i_border_width = 1
+                i_font_color = _style.QtRgba.TextDark
+                self._set_border_color_(_style.QtRgba.BdrCapsuleUncheck)
+                if is_enable is True:
+                    self._set_background_color_(_style.QtRgba.BkgCapsule)
+                else:
+                    self._set_background_color_(_style.QtRgba.BkgCapsuleDisable)
+            #
+            if i_is_pressed is True:
+                i_border_width = 2
+                self._set_border_color_(_style.QtRgba.BdrCapsuleAction)
+            elif i_is_hovered:
+                i_border_width = 2
+                self._set_border_color_(_style.QtRgba.BdrCapsuleHover)
+
+            self._set_border_width_(i_border_width)
+
+            self.drawRect(
+                i_new_rect
+            )
+
+            self._set_font_(_base.QtFonts.Label)
+            self._set_text_color_(i_font_color)
+
+            i_text_elided = self.fontMetrics().elidedText(
+                i_text,
+                QtCore.Qt.ElideMiddle,
+                i_new_rect.width()-4,
+                QtCore.Qt.TextShowMnemonic
+            )
+            # noinspection PyArgumentEqualDefault
+            self.drawText(
+                i_new_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+                i_text_elided
+            )
+
     def _draw_tab_left_tool_box_by_rect_(self, rect):
         color = QtGui.QLinearGradient(
             rect.topLeft(), rect.topRight()

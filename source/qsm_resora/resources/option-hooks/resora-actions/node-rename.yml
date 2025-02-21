@@ -7,7 +7,7 @@ option:
     gui:
         group_name: 'node'
         #
-        name: 'Resource Rename'
+        name: 'Rename'
         icon_name: 'tool/rename'
         #
         size: [720, 720]

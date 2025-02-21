@@ -7,7 +7,7 @@ option:
     gui:
         group_name: 'nodes'
         #
-        name: 'Resource Lock Enable'
+        name: 'Lock Enable'
         icon_name: 'tool/lock'
         #
         size: [720, 720]

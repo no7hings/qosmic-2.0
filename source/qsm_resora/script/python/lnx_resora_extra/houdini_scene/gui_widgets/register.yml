@@ -1,6 +1,6 @@
 build:
-    name: 'Upload FBX (.fbx)'
-    name_chs: '上传FBX（.fbx）'
+    name: 'Upload Houdini (.hip)'
+    name_chs: '上传Houdini（.hip）'
 
     tool_tip:
         |-
@@ -67,7 +67,7 @@ build:
                 widget: string
                 name: 'Formats'
                 name_chs: '格式'
-                value: 'fbx, FBX'
+                value: 'hip, HIP'
                 lock: True
                 tool_tip:
                     |-

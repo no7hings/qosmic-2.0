@@ -16,11 +16,12 @@ from ....qt.widgets import utility as _qt_wgt_utility
 class AbsPrxInput(_abstracts.AbsPrxWidget):
     QT_INPUT_WIDGET_CLS = None
 
+    QT_H = _gui_core.GuiSize.InputHeight
+
     def __init__(self, *args, **kwargs):
         super(AbsPrxInput, self).__init__(*args, **kwargs)
-        self.widget.setFixedHeight(
-            _gui_core.GuiSize.InputHeight
-        )
+        if self.QT_H > 0:
+            self.widget.setFixedHeight(self.QT_H)
 
     def _gui_build_(self):
         self._qt_layout = _qt_wgt_base.QtHBoxLayout(self._qt_widget)

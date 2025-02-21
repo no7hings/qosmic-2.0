@@ -34,7 +34,7 @@ build:
 
         parameters:
             resource_type:
-                widget: capsule_string
+                widget: tag_string
                 name: 'Resource Type'
                 name_chs: '资源类型'
                 value: []

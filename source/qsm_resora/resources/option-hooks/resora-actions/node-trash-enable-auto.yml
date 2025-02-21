@@ -7,7 +7,7 @@ option:
     gui:
         group_name: 'nodes'
         #
-        name: 'Resource Trash On'
+        name: 'Trash On'
         icon_name: 'database/trash'
         #
         size: [720, 720]

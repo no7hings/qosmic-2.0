@@ -200,6 +200,8 @@ entity-type-actions:
                 }
     houdini_scene:
         $: '..basic'
+    houdini_hda:
+        $: '..basic'
     fbx_cache:
         $: '..basic'
     mocap_fbx:
@@ -284,7 +286,7 @@ entity-actions:
                     }
             node:
                 option-hooks:
-                    - 'resora-actions/node-rename': {
+                    - 'resora-actions/tag-rename': {
                         gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
                     }
 
@@ -312,12 +314,16 @@ entity-actions:
                 - 'resora-actions/node-rename': {
                     gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
                 }
-                # basic actions
+                # open
                 - 'resora-actions/node-open-directory': {
                     gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录'
                 }
                 - 'resora-actions/node-open-source-directory': {
                     gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录（源）'
+                }
+                # copy
+                - 'resora-actions/node-copy-source-path': {
+                    gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
                 }
 
     audio:
@@ -328,16 +334,20 @@ entity-actions:
                 - 'resora-actions/node-rename': {
                     gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
                 }
-                # basic actions
+                # open
                 - 'resora-actions/node-open-directory': {
                     gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录'
                 }
                 - 'resora-actions/node-open-source-directory': {
                     gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录（源）'
                 }
-                # lock
+                # copy
+                - 'resora-actions/node-copy-source-path': {
+                    gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
+                }
+                # history
                 - 'resora-actions/node-show-lock-history': {
-                    gui_parent: '/Lock', gui_name: 'Show History', gui_parent_chs: '/锁定', gui_name_chs: '显示历史'
+                    gui_parent: '/Show', gui_name: 'Lock History', gui_parent_chs: '/显示', gui_name_chs: '锁定历史'
                 }
 
     motion:
@@ -348,12 +358,16 @@ entity-actions:
                 - 'resora-actions/node-rename': {
                     gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
                 }
-                # basic actions
+                # open
                 - 'resora-actions/node-open-directory': {
                     gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录'
                 }
                 - 'resora-actions/node-open-source-directory': {
                     gui_parent: '/Open', gui_name: 'Folder (Source)', gui_parent_chs: '/打开', gui_name_chs: '目录（源）'
+                }
+                # copy
+                - 'resora-actions/node-copy-source-path': {
+                    gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
                 }
 
     asset:
@@ -372,12 +386,20 @@ entity-actions:
                 - 'resora-actions/node-rename': {
                     gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
                 }
-                # basic actions
+                # open
                 - 'resora-actions/node-open-directory': {
                     gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录'
                 }
                 - 'resora-actions/node-open-source-directory': {
                     gui_parent: '/Open', gui_name: 'Folder (Source)', gui_parent_chs: '/打开', gui_name_chs: '目录（源）'
+                }
+                # copy
+                - 'resora-actions/node-copy-source-path': {
+                    gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
+                }
+                # cover
+                - 'resora-actions/node-upload-cover': {
+                    gui_parent: '/Cover', gui_name: 'Upload', gui_parent_chs: '/封面', gui_name_chs: '上传'
                 }
 
     houdini_scene:
@@ -388,12 +410,44 @@ entity-actions:
                 - 'resora-actions/node-rename': {
                     gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
                 }
-                # basic actions
+                # open
                 - 'resora-actions/node-open-directory': {
                     gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录'
                 }
                 - 'resora-actions/node-open-source-directory': {
                     gui_parent: '/Open', gui_name: 'Folder (Source)', gui_parent_chs: '/打开', gui_name_chs: '目录（源）'
+                }
+                # copy
+                - 'resora-actions/node-copy-source-path': {
+                    gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
+                }
+                # cover
+                - 'resora-actions/node-upload-cover': {
+                    gui_parent: '/Cover', gui_name: 'Upload', gui_parent_chs: '/封面', gui_name_chs: '上传'
+                }
+
+    houdini_hda:
+        $: '..basic'
+        Node:
+            option-hooks:
+                -   'separator': {gui_name: 'one', gui_name_chs: '单个'}
+                -   'resora-actions/node-rename': {
+                    gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                }
+                # open
+                -   'resora-actions/node-open-directory': {
+                    gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录'
+                }
+                -   'resora-actions/node-open-source-directory': {
+                    gui_parent: '/Open', gui_name: 'Folder (Source)', gui_parent_chs: '/打开', gui_name_chs: '目录（源）'
+                }
+                # copy
+                - 'resora-actions/node-copy-source-path': {
+                    gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
+                }
+                # cover
+                -   'resora-actions/node-upload-cover': {
+                    gui_parent: '/Cover', gui_name: 'Upload', gui_parent_chs: '/封面', gui_name_chs: '上传'
                 }
 
     fbx_cache:
@@ -433,22 +487,36 @@ entity-actions:
 entity-press-dbl-click:
     basic:
         Node:
-            option-hooks: 'resora-actions/node-show-source'
+            option-hooks: 'resora-actions/node-open-directory'
 
     manifest:
         Node:
             option-hooks: 'resora-actions/node-add-page'
 
     video:
-        $: '..basic'
+        Node:
+            option-hooks: 'resora-actions/node-open-source'
 
     audio:
-        $: '..basic'
+        Node:
+            option-hooks: 'resora-actions/node-open-source'
 
     maya_scene:
         Node:
-            option-hooks: 'resora-actions/node-open-directory'
+            option-hooks: 'resora-actions/node-open-source-directory'
+
+    houdini_scene:
+        Node:
+            option-hooks: 'resora-actions/node-open-source-directory'
+
+    houdini_hda:
+        Node:
+            option-hooks: 'resora-actions/node-open-source-directory'
+
+    fbx_cache:
+        Node:
+            option-hooks: 'resora-actions/node-open-source-directory'
     
     mocap_fbx:
         Node:
-            option-hooks: 'resora-actions/node-open-directory'
+            option-hooks: 'resora-actions/node-open-source-directory'

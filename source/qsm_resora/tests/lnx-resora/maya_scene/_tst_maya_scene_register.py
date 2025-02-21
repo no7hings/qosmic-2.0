@@ -3,7 +3,7 @@ import lxbasic.storage as bsc_storage
 
 import lxbasic.scan as bsc_scan
 
-import lnx_resora.resource_types.maya_scene.scripts as s
+import lnx_resora_extra.maya_scene.scripts as s
 
 directory_path = 'Z:/temporaries/maya_scene_register_test'
 

@@ -250,34 +250,34 @@ class AbsPrxPort(AbsPrxPortBaseDef):
         node_widget=None
     ):
         self._init_prx_port_base_def('value', port_path, label)
-        #
+
         self._key = None
-        #
+
         if isinstance(enable, bool):
             self._use_enable = enable
         else:
             self._use_enable = False
-        #
+
         self._prx_port_enable = self.ENABLE_CLS(node_widget)
         self._prx_port_enable.set_hide()
         # gui
         self._prx_port_label = self.LABEL_CLS(node_widget)
         self._prx_port_label.set_hide()
         self._prx_port_label.set_name(self._label)
-        #
+
         self._prx_port_input = self.PRX_PORT_INPUT_CLS(node_widget)
-        #
+
         if default_value is not None:
             self._prx_port_input.set(default_value)
-        #
+
         self._layout = None
-        #
+
         self._join_to_next_flag = join_to_next
         self._join_layout = None
         self._key_widget = None
-        #
+
         self._custom_widget = None
-        #
+
         self.set_name(self.label)
 
         self.connect_input_changed_to(

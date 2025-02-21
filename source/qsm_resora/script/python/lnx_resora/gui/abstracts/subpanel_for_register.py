@@ -7,6 +7,8 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import lnx_screw.core as lnx_scr_core
 
+import lnx_screw.scripts as lnx_scr_scripts
+
 
 class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubpanel):
     # CONFIGURE_KEY = 'resora/gui/register'
@@ -21,21 +23,24 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubpanel):
         self.add_widget(self._page_prx_tab_tool_box)
 
     def update_valid_subpage_cls(self):
-        main_configure = lnx_scr_core.Stage.get_main_configure()
-        all_resource_types = main_configure.get_key_names_at('types')
-        for i_resource_type in all_resource_types:
+        type_names = lnx_scr_scripts.ManifestStageOpt.get_valid_type_names()
+        for i_resource_type in type_names:
             i_cls = self.find_register_subpage_cls(i_resource_type)
             if i_cls:
                 self._sub_page_class_dict[i_resource_type] = i_cls
 
     @staticmethod
     def find_register_subpage_cls(resource_type):
-        module_path = 'lnx_resora_extra.{}.gui_widgets.register'.format(resource_type)
-        module = bsc_core.PyModule(module_path)
-        if module.get_is_exists():
-            cls = module.get_method('PrxSubpageForRegister')
-            if cls:
-                return cls
+        # noinspection PyBroadException
+        try:
+            module_path = 'lnx_resora_extra.{}.gui_widgets.register'.format(resource_type)
+            module = bsc_core.PyModule(module_path)
+            if module.get_is_exists():
+                cls = module.get_method('PrxSubpageForRegister')
+                if cls:
+                    return cls
+        except Exception:
+            pass
     
     def gui_setup_pages_for(self, resource_types):
         for i_resource_type in resource_types:

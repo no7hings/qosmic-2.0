@@ -30,6 +30,8 @@ from. import _port_for_choose
 
 from. import _port_for_capsule
 
+from. import _port_for_tag
+
 from. import _port_for_script
 
 from. import _port_for_tuple
@@ -419,6 +421,7 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             if default_ is not None:
                 port.set(default_)
                 port.set_default(default_)
+
         # capsule
         elif widget_type in {'capsule_string'}:
             port = _port_for_capsule.PrxPortForCapsuleString(
@@ -458,6 +461,74 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
 
         elif widget_type in {'capsule_strings'}:
             port = _port_for_capsule.PrxPortForCapsuleStrings(
+                port_path,
+                node_widget=self.widget
+            )
+            value_options = create_options.get('options')
+            value_names = create_options.get('labels')
+            if gui_language == _gui_core.GuiLanguage.CHS:
+                if 'option_names_chs' in create_options:
+                    value_names = create_options['option_names_chs']
+
+            port.set_options(value_options, value_names)
+
+            value_default = create_options.get('default')
+            if value_default is not None:
+                port.set(value_default)
+                port.set_default(value_default)
+
+            lock = create_options.get('lock') or False
+            if lock is True:
+                port.set_locked(True)
+
+            if history_key_:
+                port.set_history_key(history_key_)
+            elif history_group_:
+                port.set_history_group(history_group_)
+
+            pull_history_latest = create_options.get('pull_history_latest')
+            if pull_history_latest is True:
+                port.pull_history_latest()
+
+        # tag
+        elif widget_type in {'tag_string'}:
+            port = _port_for_tag.PrxPortForTagString(
+                port_path,
+                node_widget=self.widget
+            )
+
+            value_options = create_options.get('options')
+            if value_options:
+                value_names = create_options.get('option_names')
+                if gui_language == _gui_core.GuiLanguage.CHS:
+                    if 'option_names_chs' in create_options:
+                        value_names = create_options['option_names_chs']
+
+                port.set_options(value_options, value_names)
+
+                value_default = create_options.get('default')
+                if value_default is not None:
+                    port.set(value_default)
+                    port.set_default(value_default)
+                else:
+                    port.set(value_options[-1])
+                    port.set_default(value_options[-1])
+
+            lock = create_options.get('lock') or False
+            if lock is True:
+                port.set_locked(True)
+
+            if history_key_:
+                port.set_history_key(history_key_)
+            elif history_group_:
+                port.set_history_group(history_group_)
+
+            pull_history_latest = create_options.get('pull_history_latest')
+            if pull_history_latest is True:
+                port.pull_history_latest()
+
+        elif widget_type in {'tag_strings'}:
+            port = _port_for_tag.PrxPortForTagStrings(
                 port_path,
                 node_widget=self.widget
             )

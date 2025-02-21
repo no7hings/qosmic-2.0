@@ -97,7 +97,7 @@ class QtLineChartWidget(
         top_lot.setContentsMargins(*[0]*4)
         top_lot.setSpacing(2)
 
-        self._key_entry = _entry_for_capsule.QtEntryAsCapsule()
+        self._key_entry = _entry_for_capsule.QtEntryForCapsule()
         top_lot.addWidget(self._key_entry)
         self._key_entry._set_use_exclusive_(False)
 

@@ -7,7 +7,7 @@ option:
     gui:
         group_name: 'nodes'
         #
-        name: 'Resource Disable/Remove Lock'
+        name: 'Disable/Remove Lock'
         icon_name: 'tool/unlock'
         #
         size: [720, 720]

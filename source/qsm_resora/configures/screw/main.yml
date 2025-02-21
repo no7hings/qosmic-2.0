@@ -2,6 +2,7 @@ options: {}
 
 types:
     manifest:
+        enable: True
         gui_name: 'Page Manifest'
         gui_name_chs: '页面总览'
         gui_item_frame_size: [222, 222]
@@ -9,6 +10,7 @@ types:
             - 'standalone'
 
     asset:
+        enable: True
         gui_name: 'Asset'
         gui_name_chs: '资产'
         gui_item_frame_size: [178, 178]
@@ -17,6 +19,7 @@ types:
             - 'maya'
 
     motion:
+        enable: True
         gui_name: 'Motion'
         gui_name_chs: '动作'
         gui_item_frame_size: [178, 178]
@@ -25,6 +28,7 @@ types:
             - 'maya'
 
     video:
+        enable: True
         gui_name: 'Video'
         gui_name_chs: '视频'
         gui_item_frame_size: [222, 128]
@@ -32,6 +36,7 @@ types:
             - 'standalone'
 
     audio:
+        enable: True
         gui_name: 'Audio'
         gui_name_chs: '音频'
         gui_item_frame_size: [222, 110]
@@ -39,14 +44,16 @@ types:
             - 'standalone'
 
     maya_scene:
-        gui_name: 'MAYA (.ma, .mb)'
-        gui_name_chs: 'MAYA（.ma, .mb）'
+        enable: True
+        gui_name: 'MAYA (.ma .mb)'
+        gui_name_chs: 'MAYA（.ma .mb）'
         gui_item_frame_size: [222, 128]
         applications:
             - 'standalone'
             - 'maya'
 
     houdini_scene:
+        enable: True
         gui_name: 'HOUDINI (.hip)'
         gui_name_chs: 'HOUDINI（.hip）'
         gui_item_frame_size: [222, 128]
@@ -54,7 +61,17 @@ types:
             - 'standalone'
             - 'houdini'
 
+    houdini_hda:
+        enable: True
+        gui_name: 'HDA (.hda .otl)'
+        gui_name_chs: 'HDA（.hda .otl）'
+        gui_item_frame_size: [222, 128]
+        applications:
+            - 'standalone'
+            - 'houdini'
+
     fbx_cache:
+        enable: True
         gui_name: 'FBX (.fbx)'
         gui_name_chs: 'FBX（.fbx）'
         gui_item_frame_size: [222, 128]
@@ -63,6 +80,7 @@ types:
             - 'maya'
 
     mocap_fbx:
+        enable: True
         gui_name: 'MoCap (.fbx)'
         gui_name_chs: '动捕（.fbx）'
         gui_item_frame_size: [178, 178]

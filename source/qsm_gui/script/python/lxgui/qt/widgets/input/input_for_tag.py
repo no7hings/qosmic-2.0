@@ -8,25 +8,24 @@ from ... import abstracts as _qt_abstracts
 # qt widgets
 from .. import base as _wgt_base
 
-from ..entry import entry_for_capsule as _entry_for_capsule
+from ..entry import entry_for_tag as _entry_for_tag
 
 
-class QtInputForCapsule(
+class QtInputForTag(
     QtWidgets.QWidget,
 
     _qt_abstracts.AbsQtInputBaseDef,
 ):
-    QT_ENTRY_CLS = _entry_for_capsule.QtEntryForCapsule
+    QT_ENTRY_CLS = _entry_for_tag.QtEntryForTag
 
     def _pull_history_(self, *args, **kwargs):
         self._entry_widget._set_value_(args[0])
 
     def __init__(self, *args, **kwargs):
-        super(QtInputForCapsule, self).__init__(*args, **kwargs)
+        super(QtInputForTag, self).__init__(*args, **kwargs)
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )
-        self.setFixedHeight(_gui_core.GuiSize.InputHeight)
 
         self._init_input_base_def_(self)
         self._build_input_entry_(str)
@@ -35,18 +34,18 @@ class QtInputForCapsule(
         self._entry_frame_widget = self
 
         self._value_type = value_type
-        #
+
         entry_layout = _wgt_base.QtHBoxLayout(self)
-        entry_layout.setContentsMargins(*[1] * 4)
+        entry_layout.setContentsMargins(*[1]*4)
         entry_layout.setSpacing(4)
-        #
+
         self._entry_widget = self.QT_ENTRY_CLS()
         entry_layout.addWidget(self._entry_widget)
 
         self.input_value_changed = self._entry_widget.value_changed
         self.user_input_value_changed = self._entry_widget.user_value_changed
         self.user_input_value_accepted = self._entry_widget.user_value_accepted
-        
+
         self.user_input_value_accepted.connect(
             self._push_history_
         )
@@ -67,7 +66,7 @@ class QtInputForCapsule(
             raise RuntimeError()
 
     def _set_entry_enable_(self, boolean):
-        super(QtInputForCapsule, self)._set_entry_enable_(boolean)
+        super(QtInputForTag, self)._set_entry_enable_(boolean)
         self._entry_widget._set_entry_enable_(boolean)
 
     def _set_tool_tip_(self, text, **kwargs):

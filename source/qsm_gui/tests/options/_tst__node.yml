@@ -43,10 +43,34 @@ constant:
 
     capsule_string:
         widget: capsule_string
-        options: ['project', 'sequence', 'asset', 'shot']
-        default: 'sequence'
+        options: ['test_a', 'test_b', 'test_c', 'test_d']
+        default: 'test_a'
         enable: True
     #    lock: True
+        tool_tip: '...'
+
+    capsule_strings:
+        widget: capsule_strings
+        options: ['test_a', 'test_b', 'test_c', 'test_d']
+        default: ['test_a']
+        enable: True
+        #    lock: True
+        tool_tip: '...'
+
+    tag_string:
+        widget: tag_string
+        options: ['test_a', 'test_b', 'test_c', 'test_d', 'test_e', 'test_f', 'test_g', 'test_h', 'test_i', 'test_g', 'test_k']
+        default: 'test_a'
+        enable: True
+
+        tool_tip: '...'
+
+    tag_strings:
+        widget: tag_strings
+        options: ['test_a', 'test_b', 'test_c', 'test_d', 'test_e', 'test_f', 'test_g', 'test_h', 'test_i', 'test_g', 'test_k']
+        default: ['test_a']
+        enable: True
+        #    lock: True
         tool_tip: '...'
 
 button:

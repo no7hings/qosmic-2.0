@@ -5,17 +5,13 @@ option:
         - '*-*'
     #
     gui:
-        group_name: 'nodes'
+        group_name: 'node'
         #
-        name: 'Assign Tag'
-        icon_name: 'database/tag'
+        name: 'Copy Source Directory'
+        icon_name: 'application/python'
         #
         size: [720, 720]
-
-        window:
-            name: 'Assign Tag'
-            name_chs: '指定标签'
-
+#
 hook_option:
     script:
         window_unique_id: ''

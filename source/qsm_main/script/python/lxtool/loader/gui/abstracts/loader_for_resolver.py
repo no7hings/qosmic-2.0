@@ -789,7 +789,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
         directory_layout.setContentsMargins(*[0]*4)
         directory_layout.setSpacing(2)
 
-        self._qt_workspace_capsule = qt_widgets.QtInputAsCapsule()
+        self._qt_workspace_capsule = qt_widgets.QtInputForCapsule()
         directory_layout.addWidget(self._qt_workspace_capsule)
         self._qt_workspace_capsule.input_value_changed.connect(
             self.__do_gui_refresh_for_directories
