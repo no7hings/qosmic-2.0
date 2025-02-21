@@ -106,8 +106,7 @@ class QtMaya(object):
             app_.desktop().winId()
         ).copy(rect).toImage()
 
-        # _base.QtUtil.save_qt_image(image, file_path)
-        image.save(file_path)
+        _base.QtUtil.save_qt_image(image, file_path)
 
     @classmethod
     def create_window_shortcut_action(cls, fnc, shortcut):
@@ -150,8 +149,7 @@ class QtHoudini(object):
             app_.desktop().winId()
         ).copy(rect).toImage()
 
-        # _base.QtUtil.save_qt_image(image, file_path)
-        image.save(file_path)
+        _base.QtUtil.save_qt_image(image, file_path)
 
 
 class QtKatana(object):
@@ -210,8 +208,7 @@ class QtKatana(object):
         pixmap = screen.grabWindow(main_window.winId())
         image = pixmap.copy(rect).toImage()
 
-        image.save(file_path)
-        # _base.QtUtil.save_qt_image(image, file_path)
+        _base.QtUtil.save_qt_image(image, file_path)
 
 
 class GuiQtClarisse(object):

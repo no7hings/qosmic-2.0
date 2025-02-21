@@ -313,24 +313,29 @@ class QtUtil(object):
     
     @classmethod
     def save_qt_image(cls, qt_image, file_path):
-        import numpy as np
+        import lxbasic.cv.core.wrap as w
 
-        import cv2
+        if w.CV2_FLAG is True:
+            qt_image.save(file_path)
+        else:
+            import numpy as np
 
-        ptr = qt_image.bits()
-        # PyQt
-        if QT_LOAD_INDEX == 0:
-            ptr.setsize(qt_image.byteCount())
+            import cv2
 
-        width = qt_image.width()
-        height = qt_image.height()
-        # noinspection PyArgumentList
-        img_arr = np.array(ptr).reshape(height, width, 4)
-        img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGRA2BGR)
+            ptr = qt_image.bits()
+            # PyQt
+            if QT_LOAD_INDEX == 0:
+                ptr.setsize(qt_image.byteCount())
 
-        file_path = bsc_core.ensure_unicode(file_path)
-        file_path = bsc_core.ensure_mbcs(file_path)
-        cv2.imwrite(file_path, img_arr)
+            width = qt_image.width()
+            height = qt_image.height()
+            # noinspection PyArgumentList
+            img_arr = np.array(ptr).reshape(height, width, 4)
+            img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGRA2BGR)
+
+            file_path = bsc_core.ensure_unicode(file_path)
+            file_path = bsc_core.ensure_mbcs(file_path)
+            cv2.imwrite(file_path, img_arr)
 
 
 class QtPixmapCache(object):

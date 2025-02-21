@@ -1,6 +1,4 @@
 # coding:utf-8
-import sys
-
 import six
 
 import functools
@@ -16,7 +14,6 @@ import lxbasic.resource as bsc_resource
 import lxbasic.storage as bsc_storage
 
 import lxbasic.extra.methods as bsc_etr_methods
-import os
 
 
 class AbsSsnConfigureBaseDef(object):

@@ -136,6 +136,8 @@ class Main(object):
         },
         'qsm_maya_lib': {
             'QSM_MAYA_LIB_BASE': '{root}',
+            'PYTHONPATH2': ['{root}/lib/python-2.7/site-packages', '{root}/lib/windows-python-2.7/site-packages'],
+            'PYTHONPATH3': ['{root}/lib/python-3.10/site-packages', '{root}/lib/windows-python-3.10/site-packages']
         },
         'qsm_maya_main': {
             'QSM_MAYA_MAIN_BASE': '{root}',
@@ -402,9 +404,9 @@ class Main(object):
         if version in {'2020'}:
             Main.build_maya_environ('2')
             Main.build_maya_shelf()
-        elif version in {'2022', '2023', '2024', '2025'}:
-            Main.build_maya_environ('3')
-            Main.build_maya_shelf()
+        # elif version in {'2022', '2023', '2024', '2025'}:
+        #     Main.build_maya_environ('3')
+        #     Main.build_maya_shelf()
 
 
 if __name__ == '__main__':

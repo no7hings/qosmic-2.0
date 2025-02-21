@@ -174,21 +174,21 @@ class ManifestStageOpt(object):
 
         values = main_configure.get_key_names_at('types')
 
-        resource_types = []
+        options = []
         option_names = []
         option_names_chs = []
         for i_value in values:
             if i_value == 'manifest':
                 continue
 
-            resource_types.append(i_value)
+            options.append(i_value)
             i_gui_name = main_configure.get('types.{}.gui_name'.format(i_value))
             i_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(i_value))
 
             option_names.append(i_gui_name)
             option_names_chs.append(i_gui_name_chs)
 
-        return resource_types, option_names, option_names_chs
+        return options, option_names, option_names_chs
 
     def generate_cover_for(self, database_name):
         scr_node_path = '/{}'.format(database_name)
