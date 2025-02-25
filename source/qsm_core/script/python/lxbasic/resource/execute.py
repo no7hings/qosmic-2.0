@@ -11,7 +11,7 @@ class RscExtendExe(object):
     @classmethod
     def get(cls, key):
         platform_key = platform.system().lower()
-        result = _base.ExtendResource.get(
+        result = _base.BscExtendResource.get(
             '{}/{}/{}'.format(cls.BRANCH, platform_key, key)
         )
         if result is not None:

@@ -289,11 +289,11 @@ class DtbOptForResource(DtbBaseOpt):
         if category_group in cls.CACHE:
             return cls.CACHE[category_group]
 
-        cfg = bsc_resource.RscExtendConfigure.get_yaml('database/library/resource-basic')
+        cfg = bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-basic')
         if cfg is None:
             raise RuntimeError()
 
-        cfg_extend = bsc_resource.RscExtendConfigure.get_yaml('database/library/resource-{}'.format(category_group))
+        cfg_extend = bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-{}'.format(category_group))
         if cfg_extend is None:
             raise RuntimeError()
 
@@ -906,7 +906,7 @@ class DtbNodeOptForRscVersion(object):
         if bsc_storage.StgPath.get_is_exists(path):
             return path
         if force is True:
-            return bsc_resource.ExtendResource.get('assets/library/geometry/sphere.usda')
+            return bsc_resource.BscExtendResource.get('assets/library/geometry/sphere.usda')
 
     def get_geometry_abc_file(self):
         p = self._dtb_opt.get_pattern(keyword='geometry-abc-file')
@@ -928,7 +928,7 @@ class DtbNodeOptForRscVersion(object):
         path = p_o.update_variants_to(**self._variants).get_value()
         if bsc_storage.StgPath.get_is_exists(path):
             return path
-        return bsc_resource.ExtendResource.get('assets/library/preview-material.usda')
+        return bsc_resource.BscExtendResource.get('assets/library/preview-material.usda')
 
     def get_hdri_file(self):
         p = self._dtb_opt.get_pattern(keyword='hdri-original-jpg-file')
@@ -936,7 +936,7 @@ class DtbNodeOptForRscVersion(object):
         path = p_o.update_variants_to(**self._variants).get_value()
         if bsc_storage.StgPath.get_is_exists(path):
             return path
-        return bsc_resource.ExtendResource.get('assets/library/hdri/srgb/StinsonBeach.png')
+        return bsc_resource.BscExtendResource.get('assets/library/hdri/srgb/StinsonBeach.png')
 
     @classmethod
     def _get_texture_args(cls, directory_path):

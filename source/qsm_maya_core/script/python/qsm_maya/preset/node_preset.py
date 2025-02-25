@@ -38,7 +38,7 @@ class NodePreset:
                     _mya_core.NodeAttribute.create_as_string(i_ncloth, 'qsm_node_preset', key_)
 
         ctt = bsc_content.Dict()
-        yaml_path = bsc_resource.ExtendResource.get('node_preset/maya/{}.yml'.format(node_type))
+        yaml_path = bsc_resource.BscExtendResource.get('node_preset/maya/{}.yml'.format(node_type))
         if yaml_path:
             data = bsc_storage.StgFileOpt(yaml_path).set_read()
             if data:

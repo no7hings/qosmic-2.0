@@ -66,7 +66,7 @@ class RezPackage:
     def load_configure(cls):
         import lxbasic.resource as bsc_resource
 
-        return bsc_resource.RscExtendConfigure.get_as_content(
+        return bsc_resource.BscExtendConfigure.get_as_content(
             'lazy/sync'
         )
 

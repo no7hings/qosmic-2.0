@@ -15,7 +15,7 @@ class StgBase(object):
     def _generate_content(cls):
         if cls.CONTENT is not None:
             return cls.CONTENT
-        cls.CONTENT = bsc_resource.RscExtendConfigure.get_as_content('shotgun/main')
+        cls.CONTENT = bsc_resource.BscExtendConfigure.get_as_content('shotgun/main')
         cls.CONTENT.do_flatten()
         return cls.CONTENT
 

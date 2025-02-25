@@ -134,7 +134,7 @@ class AnySceneRegisterBatch(object):
 
         file_formats = [str(x).strip() for x in file_formats.split(',')]
 
-        list_ = []
+        set_ = set()
 
         for i_format in file_formats:
             i_kwargs = dict(directory_kwargs)
@@ -147,8 +147,10 @@ class AnySceneRegisterBatch(object):
             i_file_paths = bsc_scan.ScanGlob.glob_files(i_regex)
 
             if i_file_paths:
-                list_.extend(i_file_paths)
+                set_.update(set(i_file_paths))
 
+        list_ = list(set_)
+        list_.sort()
         return list_
 
     @classmethod

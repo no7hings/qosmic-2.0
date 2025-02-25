@@ -20,30 +20,30 @@ class SsnHookFileMtd(object):
 
     @classmethod
     def get_python(cls, key, search_paths=None):
-        return bsc_resource.ExtendResource.get(
+        return bsc_resource.BscExtendResource.get(
             '{}/{}.py'.format(cls.BRANCH, key), search_paths
         )
 
     @classmethod
     def get_shell(cls, key, search_paths=None):
         if bsc_core.BscPlatform.get_is_linux():
-            return bsc_resource.ExtendResource.get(
+            return bsc_resource.BscExtendResource.get(
                 '{}/{}.sh'.format(cls.BRANCH, key), search_paths
             )
         elif bsc_core.BscPlatform.get_is_windows():
-            return bsc_resource.ExtendResource.get(
+            return bsc_resource.BscExtendResource.get(
                 '{}/{}.bat'.format(cls.BRANCH, key), search_paths
             )
 
     @classmethod
     def get_yaml(cls, key, search_paths=None):
-        return bsc_resource.ExtendResource.get(
+        return bsc_resource.BscExtendResource.get(
             '{}/{}.yml'.format(cls.BRANCH, key), search_paths
         )
 
     @classmethod
     def get_command(cls, key):
-        return bsc_resource.ExtendResource.get(
+        return bsc_resource.BscExtendResource.get(
             '{}/{}.yml'.format(cls.BRANCH, key)
         )
 

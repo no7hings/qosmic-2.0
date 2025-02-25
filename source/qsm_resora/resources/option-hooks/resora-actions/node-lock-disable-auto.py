@@ -1,15 +1,10 @@
 # coding:utf-8
-import lxbasic.core as bsc_core
+import lnx_screw.core as lzy_src_core
 
 import lxgui.core as gui_core
 
-import lxgui.qt.widgets as qt_widgets
 
-import lxbasic.storage as bsc_storage
-
-import lnx_screw.core as lzy_src_core
-
-
+@gui_core.Verify.execute('resora', 7)
 class Main(object):
     def __init__(self, session):
         self._session = session

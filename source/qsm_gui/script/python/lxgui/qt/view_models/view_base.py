@@ -494,6 +494,10 @@ class AbsViewModel(object):
         if item:
             self._remove_item_fnc(item)
             self._data.item_dict.pop(path)
+            p = '{}/'.format(path)
+            for i in self._data.item_dict.keys():
+                if i.startswith(p):
+                    self._data.item_dict.pop(i)
 
     def _remove_item_fnc(self, item):
         raise NotImplementedError()

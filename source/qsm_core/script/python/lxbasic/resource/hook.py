@@ -13,24 +13,24 @@ class RscHook(object):
 
     @classmethod
     def get_yaml(cls, key, search_paths=None):
-        return _base.ExtendResource.get(
+        return _base.BscExtendResource.get(
             '{}/{}.yml'.format(cls.BRANCH, key), search_paths
         )
 
     @classmethod
     def get_python(cls, key, search_paths=None):
-        return _base.ExtendResource.get(
+        return _base.BscExtendResource.get(
             '{}/{}.py'.format(cls.BRANCH, key), search_paths
         )
 
     @classmethod
     def get_shell(cls, key, search_paths=None):
         if platform.system() == 'Linux':
-            return _base.ExtendResource.get(
+            return _base.BscExtendResource.get(
                 '{}.sh'.format(key), search_paths
             )
         elif platform.system() == 'Windows':
-            return _base.ExtendResource.get(
+            return _base.BscExtendResource.get(
                 '{}.bat'.format(key)
             )
 

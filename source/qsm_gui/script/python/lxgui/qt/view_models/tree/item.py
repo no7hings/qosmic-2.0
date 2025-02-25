@@ -286,3 +286,8 @@ class TreeItemModel(_item_base.AbsItemModel):
         widget = self._item.treeWidget()
         widget.scrollToItem(self._item, widget.PositionAtTop)
         widget.setCurrentItem(self._item)
+
+    def do_delete(self):
+        widget = self._item.treeWidget()
+        widget._view_model._remove_item(self.get_path())
+

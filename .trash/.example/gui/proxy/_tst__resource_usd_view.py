@@ -87,8 +87,8 @@ class W(gui_prx_widgets.PrxBaseWindow):
         cs = path_opt.get_components()
         category_group = cs[-2].get_name()
         dtb_opt = bsc_database.DtbOptForResource(
-            bsc_resource.RscExtendConfigure.get_yaml('database/library/resource-basic'),
-            bsc_resource.RscExtendConfigure.get_yaml('database/library/resource-{}'.format(category_group))
+            bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-basic'),
+            bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-{}'.format(category_group))
         )
         dtb_version = dtb_opt.get_dtb_version(version_path)
 

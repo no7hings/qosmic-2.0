@@ -88,7 +88,7 @@ class Stage(abc_.AbsBase):
         self._scheme = scheme
         self._platform = bsc_core.BscPlatform.get_current()
 
-        self._configure = bsc_resource.RscExtendConfigure.get_as_content('wsp_task/parse/{}'.format(self._scheme))
+        self._configure = bsc_resource.BscExtendConfigure.get_as_content('wsp_task/parse/{}'.format(self._scheme))
         self._configure.do_flatten()
         self._variants = dict(
             scheme=self._scheme,

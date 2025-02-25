@@ -77,14 +77,6 @@ entities:
 
             gui_name_chs: '动作'
 
-        /type/scene:
-            category: 'node'
-            type: 'node'
-            kind: 'unavailable'
-
-            gui_name: 'SCENE (.*)'
-            gui_name_chs: 'SCENE（.*）'
-
         /type/maya_scene:
             category: 'node'
             type: 'node'
@@ -108,6 +100,38 @@ entities:
 
             gui_name: 'HDA (.hda .otl)'
             gui_name_chs: 'HDA（.hda .otl）'
+
+        /type/sp_scene:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'SP (.spp)'
+            gui_name_chs: 'SP（.spp）'
+
+        /type/sp_material:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'SP Asset(.spsm)'
+            gui_name_chs: 'SP资源（.spsm）'
+
+        /type/sd_scene:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'SD (.sbs)'
+            gui_name_chs: 'SD（.sbs）'
+
+        /type/sd_material:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'SD Asset(.sbsar)'
+            gui_name_chs: 'SD资源（.sbsar）'
 
         /type/fbx_cache:
             category: 'node'

@@ -7,5 +7,8 @@ from .dialog import *
 
 from .history import *
 
+from .verify import *
+
+
 
 

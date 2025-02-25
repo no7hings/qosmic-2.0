@@ -52,7 +52,7 @@ class HoudiniStartupCreate(object):
     def create_main_menu_xml(self):
         self._menu_bar = _menu.HouMenuXmlForMenuBar()
 
-        content = bsc_resource.RscExtendConfigure.get_as_content('houdini/menus/main')
+        content = bsc_resource.BscExtendConfigure.get_as_content('houdini/menus/main')
 
         self.generate_fnc(content)
         # create_menu_fnc_(content, 0)

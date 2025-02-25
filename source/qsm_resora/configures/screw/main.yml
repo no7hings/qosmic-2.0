@@ -1,6 +1,7 @@
 options: {}
 
 types:
+    # main resource
     manifest:
         enable: True
         gui_name: 'Page Manifest'
@@ -8,7 +9,9 @@ types:
         gui_item_frame_size: [222, 222]
         applications:
             - 'standalone'
+            - 'maya'
 
+    # to be removed
     asset:
         enable: True
         gui_name: 'Asset'
@@ -18,6 +21,7 @@ types:
             - 'standalone'
             - 'maya'
 
+    # data
     motion:
         enable: True
         gui_name: 'Motion'
@@ -27,6 +31,7 @@ types:
             - 'standalone'
             - 'maya'
 
+    # media
     video:
         enable: True
         gui_name: 'Video'
@@ -43,6 +48,7 @@ types:
         applications:
             - 'standalone'
 
+    # dcc
     maya_scene:
         enable: True
         gui_name: 'MAYA (.ma .mb)'
@@ -70,6 +76,43 @@ types:
             - 'standalone'
             - 'houdini'
 
+    sp_scene:
+        enable: True
+        gui_name: 'SP (.spp)'
+        gui_name_chs: 'SP（.spp）'
+        gui_item_frame_size: [178, 178]
+        applications:
+            - 'standalone'
+            - 'stbstance_painter'
+
+    sp_material:
+        enable: True
+        gui_name: 'SP Asset(.spsm)'
+        gui_name_chs: 'SP资源（.spsm）'
+        gui_item_frame_size: [178, 178]
+        applications:
+            - 'standalone'
+            - 'stbstance_painter'
+
+    sd_scene:
+        enable: True
+        gui_name: 'SD (.sbs)'
+        gui_name_chs: 'SD（.sbs）'
+        gui_item_frame_size: [178, 178]
+        applications:
+            - 'standalone'
+            - 'stbstance_designer'
+
+    sd_material:
+        enable: True
+        gui_name: 'SD Asset (.sbsar)'
+        gui_name_chs: 'SD资源（.sbsar）'
+        gui_item_frame_size: [178, 178]
+        applications:
+            - 'standalone'
+            - 'stbstance_designer'
+
+    # cache
     fbx_cache:
         enable: True
         gui_name: 'FBX (.fbx)'
@@ -78,6 +121,7 @@ types:
         applications:
             - 'standalone'
             - 'maya'
+            - 'houdini'
 
     mocap_fbx:
         enable: True
@@ -87,3 +131,4 @@ types:
         applications:
             - 'standalone'
             - 'maya'
+            - 'houdini'

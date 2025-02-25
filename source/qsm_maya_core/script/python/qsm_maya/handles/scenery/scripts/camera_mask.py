@@ -70,7 +70,7 @@ class CameraViewFrustum(object):
         container = self.create_container()
 
         qsm_mya_core.SceneFile.import_file_ignore_error(
-            bsc_resource.ExtendResource.get('rig/camera_frustum.ma')
+            bsc_resource.BscExtendResource.get('rig/camera_frustum.ma')
         )
         transform_path = qsm_mya_core.Shape.get_transform(self._camera_path)
         name = self._camera_path.split('|')[-1]

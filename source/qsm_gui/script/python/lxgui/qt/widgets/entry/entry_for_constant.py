@@ -262,6 +262,9 @@ class QtEntryForConstant(
     def _get_value_type_(self):
         return self._value_type
 
+    def _set_use_as_password_(self):
+        self.setEchoMode(self.Password)
+
     def _on_open_in_system_(self):
         _ = self.text()
         if _:

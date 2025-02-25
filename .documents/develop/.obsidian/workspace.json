@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "开发相关/开发进度/优化-2024.md",
+                "file": "开发相关/开发文档/解算流程工具.md",
                 "mode": "source",
                 "source": false
               }
@@ -39,8 +39,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -86,13 +85,11 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 324.5,
-    "collapsed": true
+    "width": 324.5
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -108,7 +105,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发相关/开发进度/优化-2024.md",
+                "file": "开发相关/开发文档/解算流程工具.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -125,7 +122,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发相关/开发进度/优化-2024.md",
+                "file": "开发相关/开发文档/解算流程工具.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -148,7 +145,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "开发相关/开发进度/优化-2024.md"
+                "file": "开发相关/开发文档/解算流程工具.md"
               }
             }
           },
@@ -170,7 +167,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "开发相关/开发进度/优化-2024.md"
+                "file": "开发相关/开发文档/解算流程工具.md"
               }
             }
           },
@@ -206,11 +203,18 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "mermaid-tools:Open Mermaid Toolbar": false
+      "mermaid-tools:Open Mermaid Toolbar": false,
+      "card-board:CardBoard": false
     }
   },
-  "active": "15555a3b0fd2386a",
+  "active": "e33357c3fe4e62b7",
   "lastOpenFiles": [
+    "Pasted image 20250225170819.png",
+    "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
+    "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
+    "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
+    "开发相关/开发文档/懒人动画（Lazy Animation）.md",
+    "开发相关/开发文档/解算流程工具.md",
     "开发相关/开发进度/优化-2024.md",
     "开发相关/开发进度/优化-2025.md",
     "随记/动作拼接.md",
@@ -218,19 +222,14 @@
     "开发相关/开发计划/2024-10~11.md",
     "开发相关/2025/计划.md",
     "开发相关/开发计划/2024-4~5.md",
-    "开发相关/开发文档/解算流程工具.md",
     "开发相关/2025",
-    "开发相关/开发文档/懒人动画（Lazy Animation）.md",
     "开发相关/开发进度/maya/10月-资产检查工具.md",
     "开发相关/制作相关/资产.md",
-    "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
     "images/Pasted image 20241120183518.png",
     "images/Pasted image 20241121123828.png",
     "images/Pasted image 20241121132300.png",
     "images/Pasted image 20241121133157.png",
     "images/Pasted image 20241121133029.png",
-    "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
-    "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
     "开发相关/开发任务/maya/绑定相关/动态GPU（Dynamic GPU）.md",
     "开发相关/开发任务/maya/绑定相关/简模代理（Skin Proxy）.md",
     "技术文档/工具安装说明（临时版）.md",
@@ -246,7 +245,6 @@
     "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
     "开发相关/开发任务/maya/动作相关/动作工具.md",
     "随记/利用标签进行分类.md",
-    "随记/gantt view.md",
     "未命名.canvas",
     "开发相关/开发文档/images/Pasted image 20241216112647.png",
     "images",

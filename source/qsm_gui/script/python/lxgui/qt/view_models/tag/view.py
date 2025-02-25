@@ -103,3 +103,6 @@ class TagViewModel(_view_base.AbsViewModel):
 
         self._data.item_dict[path] = item
         return True, item
+
+    def _remove_item_fnc(self, item):
+        item._do_delete_()

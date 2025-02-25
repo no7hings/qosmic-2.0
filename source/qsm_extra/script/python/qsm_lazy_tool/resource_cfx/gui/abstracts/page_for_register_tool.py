@@ -82,7 +82,8 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             self._scr_stage.EntityTypes.Type,
             filters=[
                 ('category', 'is', 'group'),
-                ('kind', 'is not', 'unavailable')
+                ('kind', 'is not', 'unavailable'),
+                ('trash', 'is', False),
             ]
         ):
             i_gui_name = i.gui_name
@@ -99,7 +100,8 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             self._scr_stage.EntityTypes.Type,
             filters=[
                 ('category', 'is', 'node'),
-                ('kind', 'is not', 'unavailable')
+                ('kind', 'is not', 'unavailable'),
+                ('trash', 'is', False),
             ]
         ):
             i_gui_name = i.gui_name
@@ -117,7 +119,8 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             self._scr_stage.EntityTypes.Tag,
             filters=[
                 ('category', 'is', 'group'),
-                ('kind', 'is not', 'unavailable')
+                ('kind', 'is not', 'unavailable'),
+                ('trash', 'is', False),
             ]
         ):
             i_gui_name = i.gui_name
@@ -134,7 +137,8 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             self._scr_stage.EntityTypes.Tag,
             filters=[
                 ('category', 'is', 'node'),
-                ('kind', 'is not', 'unavailable')
+                ('kind', 'is not', 'unavailable'),
+                ('trash', 'is', False),
             ]
         ):
             i_gui_name = i.gui_name

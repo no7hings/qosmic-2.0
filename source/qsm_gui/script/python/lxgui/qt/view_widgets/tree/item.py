@@ -13,6 +13,17 @@ class QtTreeItem(QtWidgets.QTreeWidgetItem):
         )
         self._item_model = _vew_mod_item.TreeItemModel(self)
 
+    def _do_delete_(self):
+        if self.parent():
+            index = self.parent().indexOfChild(self)
+            self.parent().takeChild(index)
+        else:
+            tree_widget = self.treeWidget()
+            if isinstance(tree_widget, QtWidgets.QTreeWidget):
+                if tree_widget:
+                    index = tree_widget.indexOfTopLevelItem(self)
+                    tree_widget.takeTopLevelItem(index)
+
     def __str__(self):
         return '{}(path={})'.format(
             self.__class__.__name__,

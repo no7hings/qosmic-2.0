@@ -74,6 +74,9 @@ class QtInputForConstant(
         self._update_background_color_by_locked_(boolean)
         self._refresh_widget_draw_()
 
+    def _set_use_as_password_(self):
+        self._entry_widget._set_use_as_password_()
+
 
 # input as any constant entry and choose, etc. enumerate, file open/save, directory open/save, ...
 class QtInputForConstantChoose(

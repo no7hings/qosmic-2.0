@@ -59,7 +59,7 @@ class ManifestStageOpt(object):
         if image:
             image_path = image
         else:
-            image_path = bsc_resource.ExtendResource.get('screw/cover/{}.png'.format(resource_type))
+            image_path = bsc_resource.BscExtendResource.get('screw/cover/{}.png'.format(resource_type))
 
         if image_path is not None:
             self._scr_stage.upload_node_preview(node_path, image_path)

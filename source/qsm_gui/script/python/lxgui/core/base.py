@@ -120,6 +120,12 @@ class GuiUtil(object):
         )
 
     @classmethod
+    def get_user_verify_file(cls, key):
+        return '{}/verify/{}.json'.format(
+            cls.get_user_directory(), key
+        )
+
+    @classmethod
     def get_user_thumbnail_cache_file(cls):
         return '{}/thumbnail.yml'.format(
             cls.get_user_directory()
@@ -299,7 +305,7 @@ class GuiIcon(object):
 
     @classmethod
     def get(cls, key):
-        return bsc_resource.ExtendResource.get(
+        return bsc_resource.BscExtendResource.get(
             '{}/{}.*'.format(cls.BRANCH, key)
         )
 
@@ -326,7 +332,7 @@ class GuiIcon(object):
 
     @classmethod
     def find_all_keys_at(cls, group_branch):
-        return bsc_resource.ExtendResource.find_all_file_keys_at(
+        return bsc_resource.BscExtendResource.find_all_file_keys_at(
             cls.BRANCH, group_branch, ext_includes={'.png', '.svg'}
         )
 
@@ -337,7 +343,7 @@ class GuiIconDirectory(object):
 
     @classmethod
     def get(cls, key):
-        return bsc_resource.ExtendResource.get(
+        return bsc_resource.BscExtendResource.get(
             '{}/{}'.format(cls.BRANCH, key)
         )
 
@@ -347,13 +353,13 @@ class GuiFont(object):
 
     @classmethod
     def get(cls, key):
-        return bsc_resource.ExtendResource.get(
+        return bsc_resource.BscExtendResource.get(
             '{}/{}.*'.format(cls.BRANCH, key)
         )
 
     @classmethod
     def get_all(cls, sub_key='*'):
-        return bsc_resource.ExtendResource.get_all(
+        return bsc_resource.BscExtendResource.get_all(
             '{}/{}.*'.format(cls.BRANCH, sub_key)
         )
 

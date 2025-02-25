@@ -5,7 +5,10 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import lnx_resora_extra.motion.scripts as lzy_rsc_etr_mtn_scripts
 
+import lxgui.core as gui_core
 
+
+@gui_core.Verify.execute('resora', 7)
 class Main(object):
     def __init__(self, session):
         self._session = session

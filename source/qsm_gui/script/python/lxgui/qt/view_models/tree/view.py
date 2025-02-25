@@ -363,3 +363,14 @@ class TreeViewModel(_view_base.AbsViewModel):
                 data[k] = v.isExpanded()
 
         super(TreeViewModel, self).restore()
+
+    def _remove_item_fnc(self, item):
+        if item.parent():
+            index = item.parent().indexOfChild(item)
+            item.parent().takeChild(index)
+        else:
+            tree_widget = self._widget
+            if isinstance(tree_widget, QtWidgets.QTreeWidget):
+                if tree_widget:
+                    index = tree_widget.indexOfTopLevelItem(item)
+                    tree_widget.takeTopLevelItem(index)

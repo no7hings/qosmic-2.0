@@ -181,11 +181,9 @@ class AbsPrxSubpageForTypeAssign(AbsPrxSubpageForAnyAssign):
 
                         g_p.do_update()
 
-        if includes:
-            if scr_entity_path_set:
-                self._update_type_or_tags()
-                if self._post_fnc:
-                    self._post_fnc(scr_entity_path_set)
+        self._update_type_or_tags()
+        if self._post_fnc:
+            self._post_fnc(scr_entity_path_set)
 
     def _load_type_or_tags(self):
         self._load_all_types()
@@ -194,7 +192,8 @@ class AbsPrxSubpageForTypeAssign(AbsPrxSubpageForAnyAssign):
         entities = self._scr_stage.find_all(
             self._scr_stage.EntityTypes.Type,
             filters=[
-                ('kind', 'is not', 'unavailable')
+                ('kind', 'is not', 'unavailable'),
+                ('trash', 'is', False),
             ]
         )
         entity_paths = [x.path for x in entities]
@@ -286,11 +285,9 @@ class AbsPrxSubpageForTagAssign(AbsPrxSubpageForAnyAssign):
 
                         g_p.do_update()
 
-        if includes:
-            if scr_entity_path_set:
-                self._update_type_or_tags()
-                if self._post_fnc:
-                    self._post_fnc(scr_entity_path_set)
+        self._update_type_or_tags()
+        if self._post_fnc:
+            self._post_fnc(scr_entity_path_set)
 
     def _load_type_or_tags(self):
         self._load_all_tags()
@@ -299,7 +296,8 @@ class AbsPrxSubpageForTagAssign(AbsPrxSubpageForAnyAssign):
         entities = self._scr_stage.find_all(
             self._scr_stage.EntityTypes.Tag,
             filters=[
-                ('kind', 'is not', 'unavailable')
+                ('kind', 'is not', 'unavailable'),
+                ('trash', 'is', False),
             ]
         )
         entity_paths = [x.path for x in entities]

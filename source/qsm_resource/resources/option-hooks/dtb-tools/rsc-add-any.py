@@ -366,8 +366,8 @@ class PnlRscTextureAddTool(gui_prx_widgets.PrxSessionWindow):
     @classmethod
     def get_dtb_opt(cls, category_group):
         return bsc_database.DtbOptForResource(
-            bsc_resource.RscExtendConfigure.get_yaml('database/library/resource-basic'),
-            bsc_resource.RscExtendConfigure.get_yaml('database/library/resource-{}'.format(category_group))
+            bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-basic'),
+            bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-{}'.format(category_group))
         )
 
     def gui_refresh_dtb_opt(self):

@@ -15,6 +15,8 @@ import lxbasic.pinyin as bsc_pinyin
 
 import lxbasic.session as bsc_session
 
+import lxgui.core as gui_core
+
 import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.view_widgets as gui_qt_vew_widgets
@@ -209,7 +211,10 @@ class _GuiTypeOpt(
 
         return [
             self._page._scr_stage.find_all(
-                self._page._scr_stage.EntityTypes.Type,
+                entity_type=self._page._scr_stage.EntityTypes.Type,
+                filters=[
+                    ('trash', 'is', False),
+                ]
             ),
             gui_thread_flag
         ]
@@ -403,7 +408,6 @@ class _GuiTypeOpt(
         self.gui_add_entity(scr_entity, None)
 
     def gui_update_entities_for(self, scr_entity_paths):
-
         for i_scr_entity_path in scr_entity_paths:
             i_qt_item = self._qt_tree_widget._view_model._get_item(i_scr_entity_path)
             self.gui_update_entity_for(i_qt_item)
@@ -529,6 +533,11 @@ class _GuiTypeOpt(
 
             qt_item._item_model.refresh_force()
 
+    def gui_remove_entity(self, scr_entity_path):
+        qt_item = self._qt_tree_widget._view_model._get_item(scr_entity_path)
+        if qt_item:
+            qt_item._item_model.do_delete()
+
 
 class _GuiTagOpt(
     _GuiBaseOpt
@@ -575,7 +584,10 @@ class _GuiTagOpt(
 
         return [
             self._page._scr_stage.find_all(
-                self._page._scr_stage.EntityTypes.Tag,
+                entity_type=self._page._scr_stage.EntityTypes.Tag,
+                filters=[
+                    ('trash', 'is', False),
+                ]
             ),
             gui_thread_flag
         ]
@@ -775,6 +787,11 @@ class _GuiTagOpt(
 
     def gui_do_close(self):
         pass
+
+    def gui_remove_entity(self, scr_entity_path):
+        qt_item = self._qt_tag_widget._view_model._get_item(scr_entity_path)
+        if qt_item:
+            qt_item._item_model.do_delete()
 
 
 class _GuiNodeOpt(_GuiBaseOpt):
@@ -1240,7 +1257,8 @@ class AbsPrxPageForManager(
 
         self.gui_page_setup_fnc()
 
-    def _show_node_register_window(self):
+    @gui_core.Verify.execute('resora', 7)
+    def _gui_show_register_subwindow(self):
         resource_type = self._scr_stage.type
         w = self._window.gui_generate_sub_panel_for('register')
         w.gui_setup_pages_for([resource_type])
@@ -1325,7 +1343,7 @@ class AbsPrxPageForManager(
 
     def _gui_add_main_tools(self):
         for i in [
-            ('add', 'file/add-file', '', self._show_node_register_window)
+            ('add', 'file/add-file', '', self._gui_show_register_subwindow)
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
             i_tool = gui_prx_widgets.PrxIconPressButton()

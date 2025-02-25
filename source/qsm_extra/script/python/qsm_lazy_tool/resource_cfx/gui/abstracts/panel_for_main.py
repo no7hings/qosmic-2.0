@@ -42,7 +42,7 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
 
         self._language = gui_core.GuiUtil.get_language()
 
-        self._configure = bsc_resource.RscExtendConfigure.get_as_content(
+        self._configure = bsc_resource.BscExtendConfigure.get_as_content(
             'resora/gui/tool'
         )
 

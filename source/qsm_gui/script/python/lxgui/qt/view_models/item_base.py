@@ -539,6 +539,11 @@ class AbsItemModel(object):
 
                 parent_item._item_model._update_assign_path_set(path_set_addition, path_set_deletion)
                 parent_item._item_model._update_assign_path_to_parent()
+    
+    def _update_assign_path_from_descendants(self):
+        descendants = self.get_descendants()
+        for i_item in descendants:
+            print(i_item)
 
     def set_assign_directory(self, directory_path):
         self._data.assign.directory = directory_path
@@ -954,3 +959,6 @@ class AbsItemModel(object):
 
     def get_drag_data(self):
         return self._data.drag.data
+
+    def do_delete(self):
+        raise NotImplementedError()

@@ -8,8 +8,8 @@ import glob
 
 class AbsResource(object):
     """
-print(ExtendResource.get('icons/file/file.svg'))
-print(ExtendResource.get('icons/file/folder.svg'))
+print(BscExtendResource.get('icons/file/file.svg'))
+print(BscExtendResource.get('icons/file/folder.svg'))
     """
     CACHE = {}
 
@@ -165,7 +165,7 @@ class Resource(AbsResource):
     ENVIRON_KEY = 'QSM_RESOURCES'
 
 
-class ExtendResource(AbsResource):
+class BscExtendResource(AbsResource):
     CACHE = {}
 
     ENVIRON_KEY = 'QSM_EXTEND_RESOURCES'

@@ -37,7 +37,7 @@ build:
                 open_or_save: open
                 name: 'Folder'
                 name_chs: '文件夹'
-                history_group: ['resora', 'houdini_scene_register']
+                history_group: ['resora', 'fbx_cache_register']
 
             file:
                 widget: group
@@ -67,7 +67,7 @@ build:
                 widget: string
                 name: 'Formats'
                 name_chs: '格式'
-                value: 'fbx, FBX'
+                value: 'fbx'
                 lock: True
                 tool_tip:
                     |-

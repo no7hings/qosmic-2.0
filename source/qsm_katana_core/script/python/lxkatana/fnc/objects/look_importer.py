@@ -151,7 +151,7 @@ class FncImporterForLookAssOld(gnl_fnc_abstracts.AbsFncOptionBase):
         self._material_root = self.get('material_root')
         #
         self._convert_configure = bsc_content.Content(
-            value=bsc_resource.RscExtendConfigure.get_yaml('arnold/convert')
+            value=bsc_resource.BscExtendConfigure.get_yaml('arnold/convert')
         )
         self._convert_configure.do_flatten()
         #

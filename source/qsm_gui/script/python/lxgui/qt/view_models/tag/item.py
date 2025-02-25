@@ -47,3 +47,7 @@ class TagItemModel(_item_base.AbsItemModel):
         else:
             self._item._set_expanded_(boolean)
 
+    def do_delete(self):
+        widget = self._item._view_widget
+        widget._view_model._remove_item(self.get_path())
+

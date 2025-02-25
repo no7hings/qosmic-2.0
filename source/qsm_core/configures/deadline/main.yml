@@ -1,9 +1,9 @@
-connection_default:
+connection_dev:
     host: '10.32.21.16'
     port: 8082
 
-#connection_default:
-#    host: '192.168.3.8'
+#connection_dev:
+#    host: '127.0.0.1'
 #    port: 8082
 
 connection_new:

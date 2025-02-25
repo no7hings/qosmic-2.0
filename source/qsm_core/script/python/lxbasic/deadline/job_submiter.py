@@ -114,7 +114,7 @@ class AbsDdlJobSubmiter(object):
 
 class DdlJobSubmiter(AbsDdlJobSubmiter):
     CON = _base.DdlBase.generate_connection()
-    CONFIGURE_FILE_PATH = bsc_resource.RscExtendConfigure.get_yaml('session/deadline/submiter')
+    CONFIGURE_FILE_PATH = bsc_resource.BscExtendConfigure.get_yaml('session/deadline/submiter')
 
     def __init__(self, *args, **kwargs):
         super(DdlJobSubmiter, self).__init__(*args, **kwargs)
@@ -122,7 +122,7 @@ class DdlJobSubmiter(AbsDdlJobSubmiter):
 
 class DdlJobSubmiterForRsvProject(AbsDdlJobSubmiter):
     CON = _base.DdlBase.generate_connection()
-    CONFIGURE_FILE_PATH = bsc_resource.RscExtendConfigure.get_yaml('session/deadline/rsv-project-submiter')
+    CONFIGURE_FILE_PATH = bsc_resource.BscExtendConfigure.get_yaml('session/deadline/rsv-project-submiter')
 
     def __init__(self, *args, **kwargs):
         super(DdlJobSubmiterForRsvProject, self).__init__(*args, **kwargs)
@@ -130,7 +130,7 @@ class DdlJobSubmiterForRsvProject(AbsDdlJobSubmiter):
 
 class DdlJobSubmiterForRsvTask(AbsDdlJobSubmiter):
     CON = _base.DdlBase.generate_connection()
-    CONFIGURE_FILE_PATH = bsc_resource.RscExtendConfigure.get_yaml('session/deadline/rsv-task-submiter')
+    CONFIGURE_FILE_PATH = bsc_resource.BscExtendConfigure.get_yaml('session/deadline/rsv-task-submiter')
 
     def __init__(self, *args, **kwargs):
         super(DdlJobSubmiterForRsvTask, self).__init__(*args, **kwargs)

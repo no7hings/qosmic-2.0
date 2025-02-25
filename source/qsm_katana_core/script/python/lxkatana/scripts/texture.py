@@ -118,7 +118,7 @@ class ScpTextureBuildCommand(object):
 
     def __init__(self, texture_name, texture_assign):
         self._cfg = bsc_content.Content(
-            value=bsc_resource.RscExtendConfigure.get_yaml('katana/node-graph/texture')
+            value=bsc_resource.BscExtendConfigure.get_yaml('katana/node-graph/texture')
         )
         self._cfg.set(
             'option.texture_name', texture_name

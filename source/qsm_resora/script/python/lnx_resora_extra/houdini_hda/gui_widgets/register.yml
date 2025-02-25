@@ -67,7 +67,7 @@ build:
                 widget: string
                 name: 'Formats'
                 name_chs: '格式'
-                value: 'hda, HDA, otl, OTL'
+                value: 'hda, otl'
                 lock: True
                 tool_tip:
                     |-

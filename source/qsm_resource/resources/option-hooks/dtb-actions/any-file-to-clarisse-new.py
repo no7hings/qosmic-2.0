@@ -10,7 +10,7 @@ def main(session):
     cmd = '''
 import lxbasic.resource as bsc_resource
 import lxbasic.process as bsc_core
-file_path = bsc_resource.ExtendResource.get('scripts/any-file-to-clarisse.py')
+file_path = bsc_resource.BscExtendResource.get('scripts/any-file-to-clarisse.py')
 bsc_core.BscScriptExecute.execute_python_file(
     file_path, options=dict(resource_location='{resource_location}', file='{file}')
 )

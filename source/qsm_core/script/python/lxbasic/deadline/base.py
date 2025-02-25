@@ -22,7 +22,7 @@ class DdlBase(object):
         if cls.CONTENT is not None:
             return cls.CONTENT
 
-        cls.CONTENT = bsc_resource.RscExtendConfigure.get_as_content('deadline/main')
+        cls.CONTENT = bsc_resource.BscExtendConfigure.get_as_content('deadline/main')
         cls.CONTENT.do_flatten()
         return cls.CONTENT
     
@@ -42,7 +42,7 @@ class DdlBase(object):
                 )
             else:
                 c = DeadlineConnect.DeadlineCon(
-                    cct.get('connection_default.host'), cct.get('connection_default.port')
+                    cct.get('connection_dev.host'), cct.get('connection_dev.port')
                 )
 
             cls.CONNECTION = c

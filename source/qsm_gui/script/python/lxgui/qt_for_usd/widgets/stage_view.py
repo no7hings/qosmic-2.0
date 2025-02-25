@@ -121,21 +121,21 @@ if QT_USD_VIEWPORT_FLAG is True:
             self._usd_stage.Reload()
             root_layer = self._usd_stage.GetRootLayer()
             root_layer.subLayerPaths.append(
-                bsc_resource.ExtendResource.get('assets/library/geometry/sphere.usda')
+                bsc_resource.BscExtendResource.get('assets/library/geometry/sphere.usda')
             )
             if use_acescg is True:
                 root_layer.subLayerPaths.append(
-                    bsc_resource.ExtendResource.get('assets/library/acescg-preview-material.usda')
+                    bsc_resource.BscExtendResource.get('assets/library/acescg-preview-material.usda')
                 )
                 root_layer.subLayerPaths.append(
-                    bsc_resource.ExtendResource.get('assets/library/acescg-preview-light.usda')
+                    bsc_resource.BscExtendResource.get('assets/library/acescg-preview-light.usda')
                 )
             else:
                 root_layer.subLayerPaths.append(
-                    bsc_resource.ExtendResource.get('assets/library/preview-material.usda')
+                    bsc_resource.BscExtendResource.get('assets/library/preview-material.usda')
                 )
                 root_layer.subLayerPaths.append(
-                    bsc_resource.ExtendResource.get('assets/library/preview-light.usda')
+                    bsc_resource.BscExtendResource.get('assets/library/preview-light.usda')
                 )
             #
             for i_usd_prim in usd_core.UsdStageOpt(self._usd_stage).get_all_mesh_objs():
@@ -168,21 +168,21 @@ if QT_USD_VIEWPORT_FLAG is True:
             self._usd_stage.Reload()
             root_layer = self._usd_stage.GetRootLayer()
             root_layer.subLayerPaths.append(
-                bsc_resource.ExtendResource.get('assets/library/geometry/sphere.usda')
+                bsc_resource.BscExtendResource.get('assets/library/geometry/sphere.usda')
             )
             if use_acescg is True:
                 root_layer.subLayerPaths.append(
-                    bsc_resource.ExtendResource.get('assets/library/acescg-arnold-material.usda')
+                    bsc_resource.BscExtendResource.get('assets/library/acescg-arnold-material.usda')
                 )
                 root_layer.subLayerPaths.append(
-                    bsc_resource.ExtendResource.get('assets/library/acescg-arnold-light.usda')
+                    bsc_resource.BscExtendResource.get('assets/library/acescg-arnold-light.usda')
                 )
             else:
                 root_layer.subLayerPaths.append(
-                    bsc_resource.ExtendResource.get('assets/library/arnold-material.usda')
+                    bsc_resource.BscExtendResource.get('assets/library/arnold-material.usda')
                 )
                 root_layer.subLayerPaths.append(
-                    bsc_resource.ExtendResource.get('assets/library/arnold-light.usda')
+                    bsc_resource.BscExtendResource.get('assets/library/arnold-light.usda')
                 )
             #
             for i_usd_prim in usd_core.UsdStageOpt(self._usd_stage).get_all_mesh_objs():
@@ -240,7 +240,7 @@ if QT_USD_VIEWPORT_FLAG is True:
             root_layer = self._usd_stage.GetRootLayer()
             root_layer.subLayerPaths.append(usd_file)
             root_layer.subLayerPaths.append(
-                bsc_resource.ExtendResource.get('assets/library/camera.usda')
+                bsc_resource.BscExtendResource.get('assets/library/camera.usda')
             )
             self._usd_update_camera_()
 
@@ -248,7 +248,7 @@ if QT_USD_VIEWPORT_FLAG is True:
                 root_layer.subLayerPaths.append(look_preview_usd_file)
             #
             root_layer.subLayerPaths.append(
-                bsc_resource.ExtendResource.get('assets/library/preview-light.usda')
+                bsc_resource.BscExtendResource.get('assets/library/preview-light.usda')
             )
             if hdri_file is not None:
                 usd_core.UsdLightOpt(
@@ -359,23 +359,23 @@ if QT_USD_VIEWPORT_FLAG is True:
             root_layer = self._usd_stage.GetRootLayer()
             root_layer.subLayerPaths.append(usd_file)
             root_layer.subLayerPaths.append(
-                bsc_resource.ExtendResource.get('assets/library/camera.usda')
+                bsc_resource.BscExtendResource.get('assets/library/camera.usda')
             )
             self._usd_update_camera_()
             #
             if use_acescg is True:
                 root_layer.subLayerPaths.append(
-                    bsc_resource.ExtendResource.get('assets/library/acescg-arnold-material.usda')
+                    bsc_resource.BscExtendResource.get('assets/library/acescg-arnold-material.usda')
                 )
                 root_layer.subLayerPaths.append(
-                    bsc_resource.ExtendResource.get('assets/library/acescg-arnold-light.usda')
+                    bsc_resource.BscExtendResource.get('assets/library/acescg-arnold-light.usda')
                 )
             else:
                 root_layer.subLayerPaths.append(
-                    bsc_resource.ExtendResource.get('assets/library/arnold-material.usda')
+                    bsc_resource.BscExtendResource.get('assets/library/arnold-material.usda')
                 )
                 root_layer.subLayerPaths.append(
-                    bsc_resource.ExtendResource.get('assets/library/arnold-light.usda')
+                    bsc_resource.BscExtendResource.get('assets/library/arnold-light.usda')
                 )
             #
             # (x, y, z), (c_x, c_y, c_z), (w, h, d) = usd_core.UsdStageOpt(self._usd_stage).compute_geometry_args('/')
@@ -443,7 +443,7 @@ if QT_USD_VIEWPORT_FLAG is True:
             root_layer = self._usd_stage.GetRootLayer()
             root_layer.subLayerPaths.append(usd_file)
             root_layer.subLayerPaths.append(
-                bsc_resource.ExtendResource.get('assets/library/camera.usda')
+                bsc_resource.BscExtendResource.get('assets/library/camera.usda')
             )
             self._usd_update_camera_()
 
@@ -958,7 +958,7 @@ if QT_USD_VIEWPORT_FLAG is True:
                 '/lights/lgt_render/lgt_env/lgt_env_shape'
             )
             usd_core.UsdLightOpt(prim).set_texture_file(
-                bsc_resource.ExtendResource.get('assets/library/light/acescg/tx/{}.tx'.format(key))
+                bsc_resource.BscExtendResource.get('assets/library/light/acescg/tx/{}.tx'.format(key))
             )
 
         def _usd_get_environment_current_is_(self, key):

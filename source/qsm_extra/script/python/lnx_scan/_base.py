@@ -30,7 +30,7 @@ class Configure(object):
         self = super(Configure, cls).__new__(cls)
         
         # init
-        cfg = bsc_resource.RscExtendConfigure.get_as_content('lazy/scan')
+        cfg = bsc_resource.BscExtendConfigure.get_as_content('lazy/scan')
         self._entity_resolve_pattern_dict = cfg.get('default.entity.resolve_patterns')
         self._entity_path_pattern_dict = cfg.get('default.entity.path_patterns')
         self._entity_task_dict = cfg.get('default.entity.tasks')

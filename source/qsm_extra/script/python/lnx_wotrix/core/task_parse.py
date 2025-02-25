@@ -62,10 +62,10 @@ class TaskParse(object):
             return cls.INSTANCE
 
         self = super(TaskParse, cls).__new__(cls)
-        self._parse_configure = bsc_resource.RscExtendConfigure.get_as_content('wsp_task/parse/default')
+        self._parse_configure = bsc_resource.BscExtendConfigure.get_as_content('wsp_task/parse/default')
         self._parse_configure.do_flatten()
 
-        self._dcc_configure = bsc_resource.RscExtendConfigure.get_as_content('wsp_task/dcc/default')
+        self._dcc_configure = bsc_resource.BscExtendConfigure.get_as_content('wsp_task/dcc/default')
         self._dcc_configure.do_flatten()
 
         self._parse_stage = lnx_srk_parse.Stage(scheme='default')

@@ -44,7 +44,7 @@ class TxrMethodForBuild(_AbsTxrBase):
     def _generate_content(cls):
         if cls.CONTENT is not None:
             return cls.CONTENT
-        cls.CONTENT = bsc_resource.RscExtendConfigure.get_as_content('texture/build')
+        cls.CONTENT = bsc_resource.BscExtendConfigure.get_as_content('texture/build')
         cls.CONTENT.do_flatten()
         return cls.CONTENT
 
@@ -129,7 +129,7 @@ class TxrMethodForColorSpaceAsAces(_AbsTxrBase):
     def _generate_content(cls):
         if cls.CONTENT is not None:
             return cls.CONTENT
-        cls.CONTENT = bsc_resource.RscExtendConfigure.get_as_content('texture/color-space/aces')
+        cls.CONTENT = bsc_resource.BscExtendConfigure.get_as_content('texture/color-space/aces')
         cls.CONTENT.do_flatten()
         return cls.CONTENT
 
@@ -171,7 +171,7 @@ class TxrMethodForColorSpaceAsTxConvert(_AbsTxrBase):
     def _generate_content(cls):
         if cls.CONTENT is not None:
             return cls.CONTENT
-        cls.CONTENT = bsc_resource.RscExtendConfigure.get_as_content('texture/color-space/convert')
+        cls.CONTENT = bsc_resource.BscExtendConfigure.get_as_content('texture/color-space/convert')
         cls.CONTENT.do_flatten()
         return cls.CONTENT
 

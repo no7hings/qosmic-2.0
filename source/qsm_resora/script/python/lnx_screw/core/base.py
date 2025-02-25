@@ -250,7 +250,7 @@ FLUSH PRIVILEGES;
             key = 'lazy/mysql_new'
         else:
             key = 'lazy/mysql'
-        return bsc_resource.RscExtendConfigure.get_as_content(key)
+        return bsc_resource.BscExtendConfigure.get_as_content(key)
 
     @classmethod
     def get_mysql_options(cls):
@@ -316,12 +316,12 @@ FLUSH PRIVILEGES;
 
     @classmethod
     def get_basic_configure(cls):
-        base_configure = bsc_resource.RscExtendConfigure.get_as_content('screw/basic')
+        base_configure = bsc_resource.BscExtendConfigure.get_as_content('screw/basic')
         return base_configure
 
     @classmethod
     def get_main_configure(cls):
-        return bsc_resource.RscExtendConfigure.get_as_content('screw/main')
+        return bsc_resource.BscExtendConfigure.get_as_content('screw/main')
 
     @classmethod
     def get_resource_type_options(cls, database_name):
@@ -336,7 +336,7 @@ FLUSH PRIVILEGES;
 
     @classmethod
     def get_override_configure(cls, configure_key):
-        return bsc_resource.RscExtendConfigure.get_as_content('screw/{}'.format(configure_key))
+        return bsc_resource.BscExtendConfigure.get_as_content('screw/{}'.format(configure_key))
 
     @classmethod
     def _to_expression_str(cls, entity_type, filters):
@@ -1023,8 +1023,8 @@ FLUSH PRIVILEGES;
         return True
 
     # trash
-    def set_node_trashed(self, node_path, boolean):
-        scr_entity = self.get_node(node_path)
+    def set_node_trashed(self, entity_path, boolean):
+        scr_entity = self.get_node(entity_path)
         if not scr_entity:
             return False
 
@@ -1032,11 +1032,11 @@ FLUSH PRIVILEGES;
         if boolean == scr_entity.trash:
             return False
 
-        self.update_node(node_path, trash=boolean)
+        self.update_node(entity_path, trash=boolean)
 
         tag = ['recover', 'trash'][boolean]
 
-        value = self.get_node_parameter(node_path, 'trash_history')
+        value = self.get_node_parameter(entity_path, 'trash_history')
         if value:
             _ = json.loads(value)
             # trim to 10
@@ -1049,9 +1049,51 @@ FLUSH PRIVILEGES;
                 [tag, bsc_core.BscSystem.get_user_name(), bsc_core.BscSystem.generate_timestamp()]
             ]
 
-        self.create_or_update_node_parameter(node_path, 'trash_history', json.dumps(history))
+        self.create_or_update_node_parameter(entity_path, 'trash_history', json.dumps(history))
 
-        self.set_node_assigns_trashed(node_path, boolean)
+        self.set_node_assigns_trashed(entity_path, boolean)
+        return True
+
+    def set_type_trashed(self, entity_path, boolean):
+        scr_entity = self.get_type(entity_path)
+        if not scr_entity:
+            return False
+
+        boolean = bool(boolean)
+        if boolean == scr_entity.trash:
+            return False
+
+        self.update_type(entity_path, trash=boolean)
+        descendants = self.find_all(
+            entity_type=self.EntityTypes.Type,
+            filters=[
+                ('path', 'startswith', '{}/'.format(entity_path))
+            ]
+        )
+        if descendants:
+            for i in descendants:
+                self.update_type(i.path, trash=boolean)
+        return True
+
+    def set_tag_trashed(self, entity_path, boolean):
+        scr_entity = self.get_tag(entity_path)
+        if not scr_entity:
+            return False
+
+        boolean = bool(boolean)
+        if boolean == scr_entity.trash:
+            return False
+
+        self.update_tag(entity_path, trash=boolean)
+        descendants = self.find_all(
+            entity_type=self.EntityTypes.Tag,
+            filters=[
+                ('path', 'startswith', '{}/'.format(entity_path))
+            ]
+        )
+        if descendants:
+            for i in descendants:
+                self.update_tag(i.path, trash=boolean)
         return True
 
     def get_node_type_assigns(self, node_path):

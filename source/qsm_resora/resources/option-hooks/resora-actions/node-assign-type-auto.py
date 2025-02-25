@@ -1,13 +1,5 @@
 # coding:utf-8
-import lxbasic.core as bsc_core
-
 import lxgui.core as gui_core
-
-import lxgui.qt.widgets as qt_widgets
-
-import lxbasic.storage as bsc_storage
-
-import lnx_screw.core as lzy_src_core
 
 
 class Main(object):
@@ -15,6 +7,7 @@ class Main(object):
         self._session = session
         self._option_opt = self._session.option_opt
 
+    @gui_core.Verify.execute('resora', 7)
     def execute(self):
         window = self._session.find_window()
         if window is not None:

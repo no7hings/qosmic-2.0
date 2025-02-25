@@ -1,11 +1,12 @@
 # coding:utf-8
+import lxgui.core as gui_core
 
+
+@gui_core.Verify.execute('resora', 7)
 def main(session):
     window = session.find_window()
     if not window:
         return
-
-    import lxgui.core as gui_core
 
     import lnx_screw.core as c
 
@@ -29,10 +30,11 @@ def main(session):
     )
     if name_new:
         if window._language == 'chs':
-            result = scr_stage.update_type(scr_entity_path, gui_name_chs=name_new)
+            action_result = scr_stage.update_type(scr_entity_path, gui_name_chs=name_new)
         else:
-            result = scr_stage.update_type(scr_entity_path, gui_name=name_new)
-        if result is True:
+            action_result = scr_stage.update_type(scr_entity_path, gui_name=name_new)
+
+        if action_result is True:
             page = window.gui_get_current_page()
             page._gui_type_opt.gui_reload_entity(scr_entity_path)
         else:

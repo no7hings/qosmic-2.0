@@ -14,7 +14,7 @@ class ShelfBuild(object):
         cls('maya/shelves/animation').execute()
 
     def __init__(self, configure_key):
-        self._c = bsc_resource.RscExtendConfigure.get_as_content(
+        self._c = bsc_resource.BscExtendConfigure.get_as_content(
             configure_key
         )
         self._language = gui_core.GuiUtil.get_language()

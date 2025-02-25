@@ -4,7 +4,7 @@ import lxbasic.content as bsc_content
 from . import base as _base
 
 
-class RscExtendConfigure(_base.AbsResource):
+class BscExtendConfigure(_base.AbsResource):
     """
 print(RscConfigure.get_yaml('database/library/resource-basic'))
     """
@@ -67,7 +67,7 @@ print(
 
     @classmethod
     def get_configure(cls, key):
-        f = RscExtendConfigure.get_yaml(
+        f = BscExtendConfigure.get_yaml(
             'jinja/{}'.format(key)
         )
         if f:
@@ -79,7 +79,7 @@ print(
     def get_template(cls, key):
         import jinja2
 
-        f = RscExtendConfigure.get_jinja(
+        f = BscExtendConfigure.get_jinja(
             'jinja/{}'.format(key)
         )
         if f:

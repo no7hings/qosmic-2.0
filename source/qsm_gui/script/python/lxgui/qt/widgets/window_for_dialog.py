@@ -440,11 +440,13 @@ class QtInputDialog(
         self.reject()
 
     def _build_input_(self, type_):
-        if type_ in {'string', 'integer', 'float'}:
+        if type_ in {'string', 'password', 'integer', 'float'}:
             self._input_widget = _ipt_for_constant.QtInputForConstant()
             self._sca._add_widget_(self._input_widget)
             self._input_widget._set_entry_enable_(True)
-            if type_ == 'integer':
+            if type_ == 'password':
+                self._input_widget._set_use_as_password_()
+            elif type_ == 'integer':
                 self._input_widget._set_value_type_(int)
             elif type_ == 'float':
                 self._input_widget._set_value_type_(float)

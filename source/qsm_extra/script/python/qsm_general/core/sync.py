@@ -17,7 +17,7 @@ class Sync(object):
             return cls.INSTANCE
 
         self = super(Sync, cls).__new__(cls)
-        self._configure = bsc_resource.RscExtendConfigure.get_as_content('lazy/sync')
+        self._configure = bsc_resource.BscExtendConfigure.get_as_content('lazy/sync')
         cls.INSTANCE = self
         return self
 

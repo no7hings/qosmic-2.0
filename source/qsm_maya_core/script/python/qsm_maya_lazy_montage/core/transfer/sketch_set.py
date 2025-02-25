@@ -23,7 +23,7 @@ class _SketchGraph(_bsc_graph._GraphBase):
 
     def create_all(self):
         qsm_mya_core.Namespace.create(self._namespace)
-        self._cfg = bsc_resource.RscExtendConfigure.get_as_content(self._cfg_key)
+        self._cfg = bsc_resource.BscExtendConfigure.get_as_content(self._cfg_key)
         self._cfg.set('options.namespace', self._namespace)
         self._cfg.do_flatten()
         dag_nodes = self._create_dag_nodes()

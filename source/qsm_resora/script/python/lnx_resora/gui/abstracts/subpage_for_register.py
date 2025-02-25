@@ -105,13 +105,13 @@ class AbsPrxSubpageForMotionRegister(
         )
 
 
-class AbsPrxPageForAnyRegister(
+class AbsPrxPageForAnyRegister0(
     gui_prx_widgets.PrxBaseSubpage,
     _AbsRegister
 ):
 
     def __init__(self, window, session, subwindow, *args, **kwargs):
-        super(AbsPrxPageForAnyRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+        super(AbsPrxPageForAnyRegister0, self).__init__(window, session, subwindow, *args, **kwargs)
         self._init_base()
 
         self._configure = self.generate_local_configure()
@@ -137,6 +137,291 @@ class AbsPrxPageForAnyRegister(
             self._scr_stage.EntityTypes.Type,
             filters=[
                 ('kind', 'is not', 'unavailable')
+            ]
+        )
+        entity_paths = [x.path for x in entities]
+        leaf_paths = bsc_core.BscNodePath.to_leaf_paths(entity_paths)
+
+        for i_scr_entity in entities:
+            if i_scr_entity.path in leaf_paths:
+                i_gui_name = i_scr_entity.gui_name
+                if self._subwindow._language == 'chs':
+                    i_gui_name = i_scr_entity.gui_name_chs
+
+                if i_scr_entity.category == 'group':
+                    i_flag, i_group = self._type_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
+
+                    i_group._set_expanded_(True)
+
+                    i_group._item_model.set_name(i_gui_name)
+                    i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
+                else:
+                    i_flag, i_node = self._type_qt_tag_widget._view_model.create_item(i_scr_entity.path)
+
+                    i_node._item_model.set_name(i_gui_name)
+                    i_node._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
+            else:
+                i_gui_name = i_scr_entity.gui_name
+                if self._subwindow._language == 'chs':
+                    i_gui_name = i_scr_entity.gui_name_chs
+
+                i_flag, i_group = self._type_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
+
+                i_group._set_expanded_(True)
+
+                i_group._item_model.set_name(i_gui_name)
+                i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
+
+    def _load_all_tags(self):
+        entities = self._scr_stage.find_all(
+            self._scr_stage.EntityTypes.Tag,
+            filters=[
+                ('kind', 'is not', 'unavailable'),
+                ('trash', 'is', False),
+            ]
+        )
+        entity_paths = [x.path for x in entities]
+        leaf_paths = bsc_core.BscNodePath.to_leaf_paths(entity_paths)
+
+        for i_scr_entity in entities:
+            if i_scr_entity.path in leaf_paths:
+                i_gui_name = i_scr_entity.gui_name
+                if self._subwindow._language == 'chs':
+                    i_gui_name = i_scr_entity.gui_name_chs
+                if i_scr_entity.category == 'group':
+                    i_flag, i_group = self._tag_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
+
+                    i_group._set_expanded_(True)
+                    i_group._item_model.set_name(i_gui_name)
+                    i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
+                else:
+                    i_flag, i_node = self._tag_qt_tag_widget._view_model.create_item(i_scr_entity.path)
+
+                    i_node._item_model.set_name(i_gui_name)
+                    i_node._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
+            # add as group
+            else:
+                i_gui_name = i_scr_entity.gui_name
+                if self._subwindow._language == 'chs':
+                    i_gui_name = i_scr_entity.gui_name_chs
+
+                i_flag, i_group = self._tag_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
+
+                i_group._set_expanded_(True)
+                i_group._item_model.set_name(i_gui_name)
+                i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
+
+    def _on_list_all_files(self):
+        directory_path = self._prx_options_node.get('directory')
+        if directory_path:
+            directory_opt = bsc_storage.StgDirectoryOpt(directory_path)
+            formats = self._prx_options_node.get('formats')
+            ext_includes = ['.{}'.format(str(x).strip()) for x in formats.split(',')]
+            if self._prx_options_node.get('recursion_down_enable') is True:
+                file_paths = directory_opt.get_all_file_paths(ext_includes=ext_includes)
+            else:
+                file_paths = directory_opt.get_file_paths(ext_includes=ext_includes)
+
+            p = self._prx_options_node.get_port('files')
+            for i_file_path in file_paths:
+                p.append(i_file_path)
+
+    def gui_get_scr_type_paths(self):
+        return self._type_qt_tag_widget._view_model.get_all_checked_node_paths()
+
+    def gui_get_scr_tag_paths(self):
+        return self._tag_qt_tag_widget._view_model.get_all_checked_node_paths()
+
+    def clear_type_and_tag_checked(self):
+        self._type_qt_tag_widget._view_model.uncheck_all_items()
+        self._tag_qt_tag_widget._view_model.uncheck_all_items()
+
+    def gui_page_setup_fnc(self):
+        prx_sca = gui_prx_widgets.PrxVScrollArea()
+        self._qt_layout.addWidget(prx_sca.widget)
+
+        self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
+            self._subwindow.choice_gui_name(
+                self._configure.get('build.options')
+            )
+        )
+        prx_sca.add_widget(self._prx_options_node)
+
+        self._prx_options_node.build_by_data(
+            self._configure.get('build.options.parameters'),
+        )
+
+        self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        prx_sca.add_widget(self._prx_tool_group)
+        self._prx_tool_group.set_expanded(True)
+        self._prx_tool_group.set_name(
+            gui_core.GuiUtil.choice_gui_name(
+                self._subwindow._language, self._configure.get('build.filter')
+            )
+        )
+        qt_widget_0 = gui_qt_widgets.QtTranslucentWidget()
+        self._prx_tool_group.add_widget(qt_widget_0)
+        h_qt_lot_0 = gui_qt_widgets.QtHBoxLayout(qt_widget_0)
+
+        self._type_qt_tag_widget = gui_qt_vew_widgets.QtTagWidget()
+        h_qt_lot_0.addWidget(
+            self._type_qt_tag_widget
+        )
+        self._type_qt_tag_widget._hide_all_tool_bar_()
+
+        self._tag_qt_tag_widget = gui_qt_vew_widgets.QtTagWidget()
+        h_qt_lot_0.addWidget(
+            self._tag_qt_tag_widget
+        )
+        self._tag_qt_tag_widget._hide_all_tool_bar_()
+
+        bottom_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._qt_layout.addWidget(bottom_tool_bar.widget)
+        bottom_tool_bar.set_expanded(True)
+
+        self._apply_button = gui_qt_widgets.QtPressButton()
+        bottom_tool_bar.add_widget(self._apply_button)
+        self._apply_button._set_name_text_(
+            self._subwindow.choice_gui_name(
+                self._configure.get('build.buttons.apply')
+            )
+        )
+        self._apply_button.press_clicked.connect(self._on_apply)
+
+        self._apply_and_close_button = gui_qt_widgets.QtPressButton()
+        bottom_tool_bar.add_widget(self._apply_and_close_button)
+        self._apply_and_close_button._set_name_text_(
+            self._subwindow.choice_gui_name(
+                self._configure.get('build.buttons.apply_and_close')
+            )
+        )
+        self._apply_and_close_button.press_clicked.connect(self._on_apply_and_close)
+
+        self._close_button = gui_qt_widgets.QtPressButton()
+        bottom_tool_bar.add_widget(self._close_button)
+        self._close_button._set_name_text_(
+            self._subwindow.choice_gui_name(
+                self._configure.get('build.buttons.close')
+            )
+        )
+        self._close_button.press_clicked.connect(self._on_close)
+
+        self._prx_options_node.set(
+            'list_all_files', self._on_list_all_files
+        )
+
+
+class AbsPrxSubpageForVideoRegister(AbsPrxPageForAnyRegister0):
+    GUI_KEY = 'video'
+
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxSubpageForVideoRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+
+    def _on_apply(self):
+        prx_node = self._prx_options_node
+
+        file_paths = prx_node.get('files')
+
+        scr_type_paths = self.gui_get_scr_type_paths()
+        scr_tag_paths = self.gui_get_scr_tag_paths()
+
+        collect_source = prx_node.get('collect_source')
+
+        if file_paths:
+            import lnx_resora_extra.video.scripts as lzy_rsc_etr_vdo_scripts
+
+            lzy_rsc_etr_vdo_scripts.VideoRegisterBatch(
+                self._scr_stage.key, file_paths, collect_source
+            ).execute(
+                scr_type_paths, scr_tag_paths
+            )
+
+            scr_type_paths_addition = self._get_scr_type_or_tag_paths_addition(self._type_qt_tag_widget)
+            scr_tag_paths_addition = self._get_scr_type_or_tag_paths_addition(self._tag_qt_tag_widget)
+
+            if self._post_fnc is not None:
+                # if scr_type_paths_addition or scr_tag_paths_addition:
+                # update always
+                self._post_fnc(scr_type_paths_addition, scr_tag_paths_addition)
+
+            self._subwindow.popup_message(
+                self._subwindow.choice_gui_message(
+                    self._configure.get('build.messages.register_successful')
+                )
+            )
+
+        prx_node.get_port('files').do_clear()
+
+        self.clear_type_and_tag_checked()
+
+
+class AbsPrxSubpageForAudioRegister(AbsPrxPageForAnyRegister0):
+    GUI_KEY = 'audio'
+
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxSubpageForAudioRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+
+    def _on_apply(self):
+        prx_node = self._prx_options_node
+
+        file_paths = prx_node.get('files')
+
+        scr_type_paths = self.gui_get_scr_type_paths()
+        scr_tag_paths = self.gui_get_scr_tag_paths()
+
+        collect_source = prx_node.get('collect_source')
+
+        if file_paths:
+            import lnx_resora_extra.audio.scripts as lzy_rsc_etd_ado_scripts
+
+            lzy_rsc_etd_ado_scripts.AudioRegisterBatch(
+                self._scr_stage.key, file_paths, collect_source
+            ).execute(scr_type_paths, scr_tag_paths)
+
+            self._subwindow.popup_message(
+                self._subwindow.choice_gui_message(
+                    self._configure.get('build.messages.register_successful')
+                )
+            )
+
+        prx_node.get_port('files').do_clear()
+
+        self.clear_type_and_tag_checked()
+
+
+class AbsPrxPageForAnyRegister1(
+    gui_prx_widgets.PrxBaseSubpage,
+    _AbsRegister
+):
+
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxPageForAnyRegister1, self).__init__(window, session, subwindow, *args, **kwargs)
+        self._init_base()
+
+        self._configure = self.generate_local_configure()
+
+        self.gui_page_setup_fnc()
+
+    def _on_apply(self):
+        pass
+
+    def _on_close(self):
+        self._subwindow.close_window()
+
+    def _on_apply_and_close(self):
+        self._on_apply()
+        self._on_close()
+
+    def _load_type_and_tags(self):
+        self._load_all_types()
+        self._load_all_tags()
+
+    def _load_all_types(self):
+        entities = self._scr_stage.find_all(
+            self._scr_stage.EntityTypes.Type,
+            filters=[
+                ('kind', 'is not', 'unavailable'),
+                ('trash', 'is', False),
             ]
         )
         entity_paths = [x.path for x in entities]
@@ -305,12 +590,8 @@ class AbsPrxPageForAnyRegister(
         )
         self._close_button.press_clicked.connect(self._on_close)
 
-        self._prx_options_node.set(
-            'list_all_files', self._on_list_all_files
-        )
 
-
-class AbsPrxPageForAnySceneRegister(AbsPrxPageForAnyRegister):
+class AbsPrxPageForAnySceneRegister(AbsPrxPageForAnyRegister1):
     def __init__(self, window, session, subwindow, *args, **kwargs):
         super(AbsPrxPageForAnySceneRegister, self).__init__(window, session, subwindow, *args, **kwargs)
 
@@ -348,83 +629,6 @@ class AbsPrxPageForAnySceneRegister(AbsPrxPageForAnyRegister):
                 self._configure.get('build.messages.register_successful')
             )
         )
-
-
-class AbsPrxSubpageForVideoRegister(AbsPrxPageForAnyRegister):
-    GUI_KEY = 'video'
-
-    def __init__(self, window, session, subwindow, *args, **kwargs):
-        super(AbsPrxSubpageForVideoRegister, self).__init__(window, session, subwindow, *args, **kwargs)
-
-    def _on_apply(self):
-        prx_node = self._prx_options_node
-
-        file_paths = prx_node.get('files')
-
-        scr_type_paths = self.gui_get_scr_type_paths()
-        scr_tag_paths = self.gui_get_scr_tag_paths()
-
-        collect_source = prx_node.get('collect_source')
-
-        if file_paths:
-            import lnx_resora_extra.video.scripts as lzy_rsc_etr_vdo_scripts
-
-            lzy_rsc_etr_vdo_scripts.VideoRegisterBatch(
-                self._scr_stage.key, file_paths, collect_source
-            ).execute(
-                scr_type_paths, scr_tag_paths
-            )
-
-            scr_type_paths_addition = self._get_scr_type_or_tag_paths_addition(self._type_qt_tag_widget)
-            scr_tag_paths_addition = self._get_scr_type_or_tag_paths_addition(self._tag_qt_tag_widget)
-
-            if self._post_fnc is not None:
-                if scr_type_paths_addition or scr_tag_paths_addition:
-                    self._post_fnc(scr_type_paths_addition, scr_tag_paths_addition)
-
-            self._subwindow.popup_message(
-                self._subwindow.choice_gui_message(
-                    self._configure.get('build.messages.register_successful')
-                )
-            )
-
-        prx_node.get_port('files').do_clear()
-
-        self.clear_type_and_tag_checked()
-
-
-class AbsPrxSubpageForAudioRegister(AbsPrxPageForAnyRegister):
-    GUI_KEY = 'audio'
-
-    def __init__(self, window, session, subwindow, *args, **kwargs):
-        super(AbsPrxSubpageForAudioRegister, self).__init__(window, session, subwindow, *args, **kwargs)
-
-    def _on_apply(self):
-        prx_node = self._prx_options_node
-
-        file_paths = prx_node.get('files')
-
-        scr_type_paths = self.gui_get_scr_type_paths()
-        scr_tag_paths = self.gui_get_scr_tag_paths()
-
-        collect_source = prx_node.get('collect_source')
-
-        if file_paths:
-            import lnx_resora_extra.audio.scripts as lzy_rsc_etd_ado_scripts
-
-            lzy_rsc_etd_ado_scripts.AudioRegisterBatch(
-                self._scr_stage.key, file_paths, collect_source
-            ).execute(scr_type_paths, scr_tag_paths)
-
-            self._subwindow.popup_message(
-                self._subwindow.choice_gui_message(
-                    self._configure.get('build.messages.register_successful')
-                )
-            )
-
-        prx_node.get_port('files').do_clear()
-
-        self.clear_type_and_tag_checked()
 
 
 class AbsPrxSubpageForAssetRegister(

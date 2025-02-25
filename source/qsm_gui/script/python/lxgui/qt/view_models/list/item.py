@@ -1187,6 +1187,10 @@ class ListItemModel(_item_base.AbsItemModel):
         widget.scrollToItem(self._item, widget.PositionAtTop)
         widget.setCurrentItem(self._item)
 
+    def do_delete(self):
+        widget = self._item.listWidget()
+        widget._view_model._remove_item(self.get_path())
+
 
 class ListGroupItemModel(_item_base.AbsItemModel):
 
@@ -1296,3 +1300,7 @@ class ListGroupItemModel(_item_base.AbsItemModel):
                     bsc_core.ensure_unicode(self._data.name.text)
                 )
             )
+
+    def do_delete(self):
+        widget = self._item.listWidget()
+        widget._view_model._remove_item(self.get_path())

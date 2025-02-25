@@ -86,7 +86,7 @@ class _AbsTagItem(object):
     def _is_checked_(self):
         raise NotImplementedError()
 
-    def _get_siblings_(self):
+    def _get_descendants_(self):
         if self._item_model.get_path() == self.PATHSEP:
             return [
                 self._view_widget._item_dict[x]
@@ -101,7 +101,7 @@ class _AbsTagItem(object):
         ]
 
     def _get_sibling_check_states_(self):
-        return [x._is_checked_() for x in self._get_siblings_()]
+        return [x._is_checked_() for x in self._get_descendants_()]
 
     def _get_all_(self, paths):
         return [self._view_widget._item_dict[x] for x in paths]
@@ -121,7 +121,7 @@ class _AbsTagItem(object):
             return self._get_one_(parent_path)
 
     def _update_check_state_for_siblings_(self):
-        widgets = self._get_siblings_()
+        widgets = self._get_descendants_()
         widgets.reverse()
         [x._set_checked_(self._is_checked_()) for x in widgets]
 
@@ -184,6 +184,9 @@ class _AbsTagItem(object):
         self._path_set.difference_update(path_set_deletion)
 
         self._item_model.set_number(len(self._path_set))
+
+    def _update_assign_path_from_descendants(self):
+        descendants = self._get_descendants_()
 
     def _update_assign_path_set_to_ancestors(self):
         self._update_assign_path_to_parent()
@@ -460,6 +463,10 @@ class _QtTagNodeItem(
     def _update_check_state_(self, boolean):
         self._set_checked_(boolean)
         self._update_check_state_for_ancestors_()
+
+    def _do_delete_(self):
+        self.close()
+        self.deleteLater()
 
 
 class _QtTagGroupItem(
@@ -852,7 +859,7 @@ class _QtTagGroupItem(
             self._parent_widget._refresh_widget_all_()
 
         if _qt_core.QtApplication.is_shift_modifier():
-            widgets = self._get_siblings_()
+            widgets = self._get_descendants_()
             for i in widgets:
                 if isinstance(i, self.__class__):
                     i._set_expanded_(self._is_expanded)
@@ -894,3 +901,7 @@ class _QtTagGroupItem(
 
     def _set_all_node_checked_(self, boolean):
         [x._set_checked_(boolean) for x in self._group_widgets or self._node_widgets]
+
+    def _do_delete_(self):
+        self.close()
+        self.deleteLater()

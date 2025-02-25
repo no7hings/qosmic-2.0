@@ -1,5 +1,5 @@
-connection_default:
-    host: '10.32.21.16'
+connection_dev:
+    host: '127.0.0.1'
 
 connection_new:
     host: '10.33.4.90'

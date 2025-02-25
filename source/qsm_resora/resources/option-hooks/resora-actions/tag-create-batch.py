@@ -1,6 +1,8 @@
 # coding:utf-8
+import lxgui.core as gui_core
 
 
+@gui_core.Verify.execute('resora', 7)
 def main(session):
     window = session.find_window()
     if not window:
@@ -9,8 +11,6 @@ def main(session):
     import six
 
     import re
-
-    import lxgui.core as gui_core
 
     import lnx_screw.core as c
 

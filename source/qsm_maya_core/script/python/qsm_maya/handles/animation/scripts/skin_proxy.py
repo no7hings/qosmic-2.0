@@ -637,7 +637,7 @@ class AdvSkinProxyGenerate(object):
 
     def create_resource_controls(self, location):
         if cmds.objExists(self.PROXY_CONTROL_PATH) is False:
-            qsm_mya_core.SceneFile.import_file_ignore_error(bsc_resource.ExtendResource.get('rig/skin_proxy_control.ma'))
+            qsm_mya_core.SceneFile.import_file_ignore_error(bsc_resource.BscExtendResource.get('rig/skin_proxy_control.ma'))
 
         parent_path = '|'.join(location.split('|')[:-1])
         name = location.split('|')[-1]
@@ -749,11 +749,11 @@ class AdvSkinProxyGenerate(object):
         if cmds.objExists(self.PROXY_GEOMETRY_GROUP_PATH) is False:
             if qsm_gnl_core.scheme_is_release():
                 qsm_mya_core.SceneFile.import_file_ignore_error(
-                    bsc_resource.ExtendResource.get('rig/skin_proxy_geometry_new.ma')
+                    bsc_resource.BscExtendResource.get('rig/skin_proxy_geometry_new.ma')
                 )
             else:
                 qsm_mya_core.SceneFile.import_file_ignore_error(
-                    bsc_resource.ExtendResource.get('rig/skin_proxy_geometry.ma')
+                    bsc_resource.BscExtendResource.get('rig/skin_proxy_geometry.ma')
                 )
 
         leaf_keys = self._adv_query.skeleton_query.get_all_leaf_keys()
@@ -793,11 +793,11 @@ class AdvSkinProxyGenerate(object):
             if cmds.objExists(location) is False:
                 if qsm_gnl_core.scheme_is_release():
                     qsm_mya_core.SceneFile.import_file_ignore_error(
-                        bsc_resource.ExtendResource.get('rig/skin_proxy_new.ma')
+                        bsc_resource.BscExtendResource.get('rig/skin_proxy_new.ma')
                     )
                 else:
                     qsm_mya_core.SceneFile.import_file_ignore_error(
-                        bsc_resource.ExtendResource.get('rig/skin_proxy.ma')
+                        bsc_resource.BscExtendResource.get('rig/skin_proxy.ma')
                     )
             # step 2
             self.match_cache_positions(location)

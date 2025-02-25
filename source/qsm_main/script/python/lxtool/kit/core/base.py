@@ -155,7 +155,7 @@ class KitDesktopHookAddOpt(object):
                 )
                 return
 
-        default_configue_file_path = bsc_resource.RscExtendConfigure.get(
+        default_configue_file_path = bsc_resource.BscExtendConfigure.get(
             'session/default-hook-configure.yml'
         )
         c = bsc_content.Content(value=default_configue_file_path)

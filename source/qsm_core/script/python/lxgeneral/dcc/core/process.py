@@ -47,7 +47,7 @@ class PythonProcess(object):
             (
                 r'-- qsm-python {process_file} "{option}"'
             ).format(
-                process_file=bsc_resource.ExtendResource.get('python-process/usd-script.py'), option=option
+                process_file=bsc_resource.BscExtendResource.get('python-process/usd-script.py'), option=option
             )
         ]
 
@@ -61,7 +61,7 @@ class PythonProcess(object):
         # ).get_command(
         #     args_execute=[
         #         r'-- qsm-python {process_file} "{option}"'.format(
-        #             process_file=bsc_resource.ExtendResource.get('python-process/usd-script.py'), option=option
+        #             process_file=bsc_resource.BscExtendResource.get('python-process/usd-script.py'), option=option
         #         )
         #     ],
         # )

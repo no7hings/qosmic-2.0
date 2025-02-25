@@ -10,8 +10,8 @@ import lxbasic.database as bsc_database
 if __name__ == '__main__':
 
     dtb_opt = bsc_database.DtbOptForResource(
-        bsc_resource.RscExtendConfigure.get_yaml('database/library/resource-basic'),
-        bsc_resource.RscExtendConfigure.get_yaml('database/library/resource-imperfection')
+        bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-basic'),
+        bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-imperfection')
     )
 
     p = '/production/library/resource/all/imperfection/{resource_name}/v0001/texture/original/src/{resource_name}.mask.jpg'

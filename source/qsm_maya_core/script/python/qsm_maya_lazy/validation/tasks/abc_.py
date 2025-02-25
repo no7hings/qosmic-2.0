@@ -43,7 +43,7 @@ class AbsValidationTask(object):
             self.execute_leaf_task_prc_for(branch, i_leaf, task_prc_cls)
 
     def execute_leaf_task_prc_for(self, branch, leaf, task_prc_cls):
-        python_script_path = bsc_resource.ExtendResource.get(
+        python_script_path = bsc_resource.BscExtendResource.get(
             'scripts/validation_prc/maya/{}/{}.py'.format(branch, leaf)
         )
         if python_script_path:

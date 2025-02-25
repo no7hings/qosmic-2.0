@@ -1060,7 +1060,7 @@ class ScpComponentLayout(AbsWsp):
 
 
 class ScpWspGeometry(AbsWsp):
-    CFG_YAML = bsc_resource.RscExtendConfigure.get_yaml(
+    CFG_YAML = bsc_resource.BscExtendConfigure.get_yaml(
         'katana/script/macro/geometry'
     )
 
@@ -1503,7 +1503,7 @@ class ScpWspAssetLightRig(AbsWsp):
 
 # noinspection PyUnusedLocal,PyMethodMayBeStatic
 class ScpWspWorkspace(AbsWsp):
-    CFG_YAML = bsc_resource.RscExtendConfigure.get_yaml(
+    CFG_YAML = bsc_resource.BscExtendConfigure.get_yaml(
         'katana/script/macro/workspace'
     )
 
