@@ -157,7 +157,7 @@ class AnySceneRegisterBatch(object):
     def register_fnc(
         cls,
         database_name, directory_path,
-        file_pattern='{directory}//*.{format}', file_formats='ma, mb',
+        file_pattern='{directory}//*.{format}', file_formats='ma',
         with_preview=True, preview_pattern='{file_directory}/{file_name}.{format}', preview_formats='png, jpg',
         with_file_reference=False, file_reference_pattern='{file_directory}//*',
         scr_type_paths=None, scr_tag_paths=None

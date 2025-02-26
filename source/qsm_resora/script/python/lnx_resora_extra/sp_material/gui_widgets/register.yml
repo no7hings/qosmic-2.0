@@ -37,7 +37,6 @@ build:
                 open_or_save: open
                 name: 'Folder'
                 name_chs: '文件夹'
-                history_group: ['resora', 'sp_material_register']
 
             file:
                 widget: group
@@ -52,7 +51,7 @@ build:
                     '{directory}//*.{format}',
                     '{directory}/*.{format}'
                 ]
-                value: '{directory}//*'
+                default_index: 0
                 tool_tip:
                     |-
                     To be supplemented.

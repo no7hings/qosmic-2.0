@@ -2,13 +2,18 @@
 from __future__ import print_function
 
 import os
+
 import sys
 
 import time
 
+import getpass
+
 import lxbasic.resource as bsc_resource
 
-import lxbasic.permission as bsc_permission
+import lxbasic.process as bsc_process
+
+import lxbasic.storage as bsc_storage
 
 from . import base as _base
 
@@ -26,24 +31,25 @@ class Verify:
         return True
 
     @classmethod
-    def __write_local_fnc(cls, key, json_path):
-        result = _base.GuiApplication.exec_input_dialog(
+    def __write_local_fnc(cls, key, local_json_path):
+        password = _base.GuiApplication.exec_input_dialog(
             type='password',
             info='Entry password...',
             title='Password'
         )
-        if result:
-            if cls.__match_server_fnc(key, result) is True:
+        if password:
+            if cls.__match_server_fnc(key, password) is True:
                 data_dict = dict(
-                    password=result,
-                    timestamp=time.time()
+                    password=password,
+                    user=getpass.getuser(),
+                    timestamp=time.time(),
                 )
-                iv, encrypted_data = bsc_permission.Encrypt.encrypt(
-                    bsc_permission.Encrypt.generate_key_from_string('QOSMIC'),
-                    data_dict
+                encrypted_dict = bsc_process.Crypto.encrypt_to_dict(
+                    'QOSMIC', data_dict
                 )
-                bsc_permission.Encrypt.save_encrypted_data_to_json(json_path, iv, encrypted_data)
-                return True
+                if encrypted_dict:
+                    bsc_storage.StgFileOpt(local_json_path).set_write(encrypted_dict)
+                    return True
 
             _base.GuiApplication.exec_message_dialog(
                 'Password error.',
@@ -55,45 +61,43 @@ class Verify:
 
     @classmethod
     def __match_fnc(cls, key, expiration_days):
-        json_path = _base.GuiUtil.get_user_verify_file(key)
-        if os.path.isfile(json_path) is False:
-            return cls.__write_local_fnc(key, json_path)
-        return cls.__read_local_fnc(key, json_path, expiration_days)
+        local_json_path = _base.GuiUtil.get_user_verify_file(key)
+        if os.path.isfile(local_json_path) is False:
+            return cls.__write_local_fnc(key, local_json_path)
+        return cls.__read_local_fnc(key, local_json_path, expiration_days)
 
     @classmethod
-    def __read_local_fnc(cls, key, json_path, expiration_days):
-        iv, encrypted_data = bsc_permission.Encrypt.load_encrypted_data_from_json(
-            json_path
-        )
-        data_dict = bsc_permission.Encrypt.decrypt(
-            bsc_permission.Encrypt.generate_key_from_string('QOSMIC'),
-            iv,
-            encrypted_data
-        )
+    def __read_local_fnc(cls, key, local_json_path, expiration_days):
+        encrypted_dict = bsc_storage.StgFileOpt(local_json_path).set_read()
 
-        password = data_dict.get('password')
-        if cls.__match_server_fnc(key, password):
-            timestamp = data_dict.get('timestamp')
-            if timestamp:
-                d = 24*3600.0
-                s_less = int(expiration_days*d)-(int(time.time()) - int(timestamp))
-                sys.stderr.write('verify less: {} days.\n'.format(round(s_less/d, 3)))
-                if s_less > 0:
-                    return True
-
-        return cls.__write_local_fnc(key, json_path)
+        data_dict = bsc_process.Crypto.decrypt_to_dict(
+            'QOSMIC', encrypted_dict
+        )
+        if data_dict:
+            password = data_dict.get('password')
+            if cls.__match_server_fnc(key, password):
+                user = data_dict.get('user')
+                if user == getpass.getuser():
+                    timestamp = data_dict.get('timestamp')
+                    if timestamp:
+                        d = 24*3600.0
+                        s_less = int(expiration_days*d)-(int(time.time()) - int(timestamp))
+                        sys.stderr.write('verify less: {} days.\n'.format(round(s_less/d, 3)))
+                        if s_less > 0:
+                            return True
+                return cls.__write_local_fnc(key, local_json_path)
+        return False
 
     @classmethod
     def __match_server_fnc(cls, key, password):
-        json_path = bsc_resource.BscExtendResource.get('verify/{}.json'.format(key))
-
-        iv, encrypted_data = bsc_permission.Encrypt.load_encrypted_data_from_json(json_path)
-        data_dict = bsc_permission.Encrypt.decrypt(
-            bsc_permission.Encrypt.generate_key_from_string('QOSMIC'),
-            iv,
-            encrypted_data
+        serve_json_path = bsc_resource.BscExtendResource.get('verify/{}.json'.format(key))
+        encrypted_dict = bsc_storage.StgFileOpt(serve_json_path).set_read()
+        data_dict = bsc_process.Crypto.decrypt_to_dict(
+            'QOSMIC', encrypted_dict
         )
-        return password == data_dict['password']
+        if data_dict:
+            return password == data_dict.get('password')
+        return False
 
     @classmethod
     def execute(cls, key='default', expiration_days=1.0/24/60):

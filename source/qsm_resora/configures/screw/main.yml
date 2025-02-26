@@ -40,6 +40,14 @@ types:
         applications:
             - 'standalone'
 
+    episode:
+        enable: True
+        gui_name: 'Episode'
+        gui_name_chs: '剧集'
+        gui_item_frame_size: [222, 128]
+        applications:
+            - 'standalone'
+
     audio:
         enable: True
         gui_name: 'Audio'

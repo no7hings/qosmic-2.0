@@ -258,6 +258,9 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
             if '|Low_Grp|' in path_:
                 return False
 
+            if '|Low|' in path_:
+                return False
+
             return True
 
         meshes = self._group_opt.find_all_shapes_by_type('mesh')

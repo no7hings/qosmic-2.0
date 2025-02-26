@@ -696,22 +696,6 @@ class BscFfmpegVideo(object):
         return cache_f
 
     @classmethod
-    def auto_unicode(cls, path):
-        if not isinstance(path, six.text_type):
-            return path.decode('utf-8')
-        return path
-
-    @staticmethod
-    def ensure_string(s):
-        if isinstance(s, six.text_type):
-            if six.PY2:
-                return s.encode('utf-8')
-        elif isinstance(s, six.binary_type):
-            if six.PY3:
-                return s.decode('utf-8')
-        return s
-
-    @classmethod
     def get_frame_args(cls, video_path):
         cmd_args = [
             cls.get_ffprobe_source(),

@@ -37,7 +37,6 @@ build:
                 open_or_save: open
                 name: 'Folder'
                 name_chs: '文件夹'
-                history_group: ['resora', 'mocap_fbx_register']
 
             formats:
                 widget: string
@@ -53,7 +52,6 @@ build:
                 value: []
                 ext_includes: ['.fbx']
                 height: 240
-                history_group: ['resora', 'mocap_fbx_register']
 
             recursion_down_enable:
                 widget: boolean

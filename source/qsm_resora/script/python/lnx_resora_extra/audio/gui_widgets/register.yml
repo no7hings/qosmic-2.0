@@ -42,7 +42,6 @@ build:
                 open_or_save: open
                 name: 'Folder'
                 name_chs: '文件夹'
-                history_group: ['resora', 'audio_register']
 
             formats:
                 widget: string

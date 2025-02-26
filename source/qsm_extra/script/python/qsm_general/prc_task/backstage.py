@@ -51,14 +51,14 @@ class BackstageTaskSubmit:
         else:
             if gui_core.GuiUtil.get_language() == 'chs':
                 gui_core.GuiApplication.exec_message_dialog(
-                    '后台任务服务器未启动，启动“Y:/desktop-tools/懒人任务管理”以继续。',
+                    '后台任务服务器未启动，启动“Y:/DESKTOP/懒人任务管理”以继续。',
                     status='warning'
                 )
             else:
                 gui_core.GuiApplication.exec_message_dialog(
                     (
                         'The backstage task server is not started. '
-                        'Start "Y:/desktop-tools/Lazy Task Management" to continue.'
+                        'Start "Y:/DESKTOP/lazy-backstage" to continue.'
                     ),
                     status='warning'
                 )

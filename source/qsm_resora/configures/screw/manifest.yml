@@ -48,6 +48,7 @@ entities:
             kind: 'unavailable'
 
             gui_name_chs: '类型'
+            gui_icon_name: 'database/group'
 
         /type/video:
             category: 'node'
@@ -55,6 +56,13 @@ entities:
             kind: 'unavailable'
 
             gui_name_chs: '视频'
+
+        /type/episode:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name_chs: '剧集'
 
         /type/audio:
             category: 'node'
@@ -148,6 +156,14 @@ entities:
 
             gui_name: 'MoCap (.fbx)'
             gui_name_chs: '动捕（.fbx）'
+
+        /type/sequence:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'FBX (.fbx)'
+            gui_name_chs: 'FBX（.fbx）'
 
     tags:
         /:

@@ -92,6 +92,7 @@ class Main(object):
             'QSM_EXTEND_CONFIGURES': ['{root}/configures'],
             'QSM_EXTEND_RESOURCES': ['{root}/resources'],
         },
+        # new
         'qsm_resora': {
             'QSM_RESORA_BASE': '{root}',
             'PYTHONPATH': ['{root}/script/python'],

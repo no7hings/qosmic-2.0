@@ -169,6 +169,9 @@ class AdvOpt(_base.AdvNamespaceExtra):
         _ = cmds.ls('{}:Low_Grp'.format(self._namespace), long=1)
         if _:
             return _[0]
+        _1 = cmds.ls('{}:Low'.format(self._namespace), long=1)
+        if _1:
+            return _1[0]
 
     def find_all_lower_meshes(self):
         """

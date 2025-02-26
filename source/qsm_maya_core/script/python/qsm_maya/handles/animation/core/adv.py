@@ -44,9 +44,12 @@ class AdvRigAsset(qsm_mya_rsc_core.Asset):
         """
         Low_Grp：ADV没有这个设置，这是个临时设置，后面会使用配置控制
         """
-        _ = cmds.ls('{}:Low_Grp'.format(self._namespace), long=1)
-        if _:
-            return _[0]
+        _0 = cmds.ls('{}:Low_Grp'.format(self._namespace), long=1)
+        if _0:
+            return _0[0]
+        _1 = cmds.ls('{}:Low'.format(self._namespace), long=1)
+        if _1:
+            return _1[0]
 
     def find_motion_location(self):
         _ = cmds.ls('{}:MotionSystem'.format(self.namespace), long=1)

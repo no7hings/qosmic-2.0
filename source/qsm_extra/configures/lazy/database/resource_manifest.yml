@@ -30,6 +30,7 @@ entities:
             kind: 'unavailable'
 
             gui_name_chs: '类型'
+            gui_icon_name: 'database/group'
 
         /type/video:
             category: 'node'

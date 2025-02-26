@@ -291,7 +291,7 @@ variants:
         role: '[a-zA-Z]*'
         asset: '[a-zA-Z]*'
 
-        episode: '[a-zA-Z]*'
+        episode: '[a-zA-Z]*[0-9]*'
         sequence: '[a-zA-Z]*'
         shot: '[a-zA-Z]*[0-9]'
 

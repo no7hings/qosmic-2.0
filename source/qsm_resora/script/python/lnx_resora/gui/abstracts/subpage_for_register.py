@@ -34,8 +34,12 @@ class _AbsRegister(object):
         self._scr_stage = lnx_scr_core.Stage(scr_stage_name)
 
         self._load_type_and_tags()
+        self._update_history_options()
 
     def _load_type_and_tags(self):
+        pass
+
+    def _update_history_options(self):
         pass
 
     def set_post_fnc(self, fnc):
@@ -495,20 +499,14 @@ class AbsPrxPageForAnyRegister1(
                 i_group._item_model.set_name(i_gui_name)
                 i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
 
-    def _on_list_all_files(self):
-        directory_path = self._prx_options_node.get('directory')
-        if directory_path:
-            directory_opt = bsc_storage.StgDirectoryOpt(directory_path)
-            formats = self._prx_options_node.get('formats')
-            ext_includes = ['.{}'.format(str(x).strip()) for x in formats.split(',')]
-            if self._prx_options_node.get('recursion_down_enable') is True:
-                file_paths = directory_opt.get_all_file_paths(ext_includes=ext_includes)
-            else:
-                file_paths = directory_opt.get_file_paths(ext_includes=ext_includes)
-
-            p = self._prx_options_node.get_port('files')
-            for i_file_path in file_paths:
-                p.append(i_file_path)
+    def _update_history_options(self):
+        for i in [
+            'directory',
+            'file.pattern'
+        ]:
+            i_p = self._prx_options_node.get_port(i)
+            i_p.set_history_group(['resora', self._scr_stage.key])
+            i_p.pull_history_latest()
 
     def gui_get_scr_type_paths(self):
         return self._type_qt_tag_widget._view_model.get_all_checked_node_paths()

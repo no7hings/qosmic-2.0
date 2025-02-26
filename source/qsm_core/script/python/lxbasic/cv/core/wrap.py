@@ -5,10 +5,9 @@ import lxbasic.log as _log_core
 
 CV2_FLAG = False
 
+_module = _pkgutil.find_loader('cv2')
 
-_cv2 = _pkgutil.find_loader('cv2')
-
-if _cv2:
+if _module:
     CV2_FLAG = True
 
     _log_core.Log.trace_method_result(

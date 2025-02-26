@@ -5,19 +5,23 @@ import json
 
 import base64
 
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-
-from cryptography.hazmat.backends import default_backend
-
-from cryptography.hazmat.primitives import padding, hashes
+from .wrap import *
 
 
-class Encrypt:
+class Crypto:
     @classmethod
-    def generate_key_from_string(cls, secret_string):
+    def generate_key(cls, secret_string):
         digest = hashes.Hash(hashes.SHA256(), backend=default_backend())
         digest.update(secret_string.encode())
         return digest.finalize()
+
+    @classmethod
+    def encode(cls, string):
+        return base64.b64decode(string)
+
+    @classmethod
+    def decode(cls, data):
+        return base64.b64encode(data).decode('utf-8')
 
     @classmethod
     def encrypt(cls, key, data_dict):
@@ -34,9 +38,13 @@ class Encrypt:
         encrypted_data = encryptor.update(padded_data)+encryptor.finalize()
         return iv, encrypted_data
 
-    @staticmethod
-    def encrypt_():
-        pass
+    @classmethod
+    def encrypt_to_dict(cls, key_str, data_dict):
+        iv, encrypted_data = cls.encrypt(cls.generate_key(key_str), data_dict)
+        return dict(
+            iv=cls.decode(iv),
+            data=cls.decode(encrypted_data)
+        )
 
     @classmethod
     def decrypt(cls, key, iv, encrypted_data):
@@ -50,25 +58,31 @@ class Encrypt:
 
         data_string = unpadded_data.decode()
         return json.loads(data_string)
+    
+    @classmethod
+    def decrypt_to_dict(cls, key_str, encrypted_dict):
+        iv = cls.encode(encrypted_dict['iv'])
+        encrypted_data = cls.encode(encrypted_dict['data'])
+        return cls.decrypt(cls.generate_key(key_str), iv, encrypted_data)
 
     @classmethod
-    def save_encrypted_data_to_json(cls, json_path, iv, encrypted_data):
+    def write_encrypted_data_to_json(cls, json_path, iv, encrypted_data):
         directory_path = os.path.dirname(json_path)
         if os.path.exists(directory_path) is False:
             os.makedirs(directory_path)
 
         data_to_save = {
-            'iv': base64.b64encode(iv).decode('utf-8'),
-            'data': base64.b64encode(encrypted_data).decode('utf-8')
+            'iv': cls.decode(iv),
+            'data': cls.decode(encrypted_data)
         }
         with open(json_path, 'w') as json_file:
             json.dump(data_to_save, json_file)
 
     @classmethod
-    def load_encrypted_data_from_json(cls, json_path):
+    def read_encrypted_data_from_json(cls, json_path):
         with open(json_path, 'r') as json_file:
             data = json.load(json_file)
-            iv = base64.b64decode(data['iv'])
-            encrypted_data = base64.b64decode(data['data'])
+            iv = cls.encode(data['iv'])
+            encrypted_data = cls.encode(data['data'])
             return iv, encrypted_data
 

@@ -102,6 +102,29 @@ entity-type-actions:
                     gui_parent: '/Fix', gui_name: 'Generate Preview', gui_parent_chs: '/修复', gui_name_chs: '生成预览'
                 }
 
+    episode:
+        Node:
+            option-hooks:
+                - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
+                # assign
+                - 'resora-actions/node-assign-type-auto': {
+                    gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
+                }
+                - 'resora-actions/node-assign-tag-auto': {
+                    gui_parent: '/Assign', gui_name: 'Tag', gui_parent_chs: '/指定', gui_name_chs: '标签'
+                }
+                # lock
+                - 'resora-actions/node-lock-enable-auto': {
+                    gui_parent: '/Lock', gui_name: 'Enable', gui_parent_chs: '/锁定', gui_name_chs: '开启'
+                }
+                - 'resora-actions/node-lock-disable-auto': {
+                    gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '关闭'
+                }
+                # preview
+                - 'resora-actions/node-generate-preview-auto': {
+                    gui_parent: '/Fix', gui_name: 'Generate Preview', gui_parent_chs: '/修复', gui_name_chs: '生成预览'
+                }
+
     audio:
         Node:
             option-hooks:
@@ -383,6 +406,26 @@ entity-actions:
                     gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
                 }
 
+    episode:
+        $: '..basic'
+        Node:
+            option-hooks:
+                - 'separator': {gui_name: 'one', gui_name_chs: '单个'}
+                - 'resora-actions/node-rename': {
+                    gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                }
+                # open
+                - 'resora-actions/node-open-directory': {
+                    gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录'
+                }
+                - 'resora-actions/node-open-source-directory': {
+                    gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录（源）'
+                }
+                # copy
+                - 'resora-actions/node-copy-source-path': {
+                    gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
+                }
+
     audio:
         $: '..basic'
         Node:
@@ -476,6 +519,10 @@ entity-press-dbl-click:
         Node:
             option-hooks: 'resora-actions/node-open-source'
 
+    episode:
+        Node:
+            option-hooks: 'resora-actions/node-open-source'
+
     audio:
         Node:
             option-hooks: 'resora-actions/node-open-source'
@@ -497,6 +544,14 @@ entity-press-dbl-click:
             option-hooks: 'resora-actions/node-open-source-directory'
 
     sp_material:
+        Node:
+            option-hooks: 'resora-actions/node-open-source-directory'
+
+    sd_scene:
+        Node:
+            option-hooks: 'resora-actions/node-open-source-directory'
+
+    sd_material:
         Node:
             option-hooks: 'resora-actions/node-open-source-directory'
 

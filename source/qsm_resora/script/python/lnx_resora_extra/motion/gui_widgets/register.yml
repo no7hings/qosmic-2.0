@@ -63,7 +63,6 @@ build:
                 name: 'Preview'
                 name_chs: '预览'
                 ext_includes: ['.jpg', '.png', '.mov', '.mp4', '.avi']
-                history_group: ['resora', 'motion_register']
                 height: 120
 
             playblast:

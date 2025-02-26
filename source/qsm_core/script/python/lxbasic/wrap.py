@@ -1,6 +1,10 @@
 # coding:utf-8
 import six as _six
 
+import platform as _platform
+
+import getpass as _getpass
+
 
 def ensure_string(s):
     if isinstance(s, _six.text_type):
@@ -26,3 +30,15 @@ def ensure_mbcs(s):
         if _six.PY2:
             return s.encode('mbcs')
     return s
+
+
+def is_linux():
+    return _platform.system() == 'Linux'
+
+
+def is_windows():
+    return _platform.system() == 'Windows'
+
+
+def get_user_name():
+    return _getpass.getuser()
