@@ -30,18 +30,35 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
                     i_type_gui_name = v['type']['gui_name']
                     i_node_gui_name = v['node']['gui_name']
 
-                i_group_path = u'/{}'.format(i_type_name)
+                if 'type_group' in v:
+                    i_type_group_name = v['type_group']['name']
+                    if self._window._language == 'chs':
+                        i_type_group_gui_name = v['type_group']['gui_name_chs']
+                    else:
+                        i_type_group_gui_name = v['type_group']['gui_name']
+                    i_type_group_path = u'/{}'.format(i_type_group_name)
+                    content.set(
+                        u'{}.properties.type'.format(i_type_group_path), 'group'
+                    )
+                    content.set(
+                        u'{}.properties.name'.format(i_type_group_path), i_type_group_gui_name
+                    )
+                    content.set(
+                        u'{}.properties.icon_name'.format(i_type_group_path), 'database/group'
+                    )
+
+                i_type_path = u'/{}'.format(i_type_name)
                 content.set(
-                    u'{}.properties.type'.format(i_group_path), 'group'
+                    u'{}.properties.type'.format(i_type_path), 'group'
                 )
                 content.set(
-                    u'{}.properties.name'.format(i_group_path), i_type_gui_name
+                    u'{}.properties.name'.format(i_type_path), i_type_gui_name
                 )
                 content.set(
-                    u'{}.properties.icon_name'.format(i_group_path), 'database/group'
+                    u'{}.properties.icon_name'.format(i_type_path), 'database/group'
                 )
 
-                i_path = u'{}/{}'.format(i_group_path, i_node_name)
+                i_path = u'{}/{}'.format(i_type_path, i_node_name)
                 content.set(
                     u'{}.properties.type'.format(i_path), 'action'
                 )
@@ -105,13 +122,12 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
         page_keys = self._prx_tab_view.get_all_page_keys()
         gui_core.GuiHistoryStage().set_one(self.KEY_TAB_KEYS, page_keys)
 
-        page_key_current = self._prx_tab_view.get_current_key()
-
     def gui_setup_fnc(self):
         self.set_main_style_mode(1)
 
         self._prx_tab_view = gui_prx_widgets.PrxTabView()
         self.add_widget(self._prx_tab_view)
+
         self._prx_tab_view.set_drag_enable(True)
         self._prx_tab_view.set_add_enable(True)
 

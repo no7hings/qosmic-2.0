@@ -42,6 +42,8 @@ class RezPackage:
         ('qsm_resource', True),
         ('qsm_extra', True),
         #
+        ('qsm_resora', True),
+        #
         ('qsm_dcc_main', True),
         ('qsm_dcc_core', True),
         ('qsm_dcc_gui', True),
@@ -51,15 +53,16 @@ class RezPackage:
         # maya
         ('qsm_maya_core', True),
         ('qsm_maya_lib', False),
+        ('qsm_maya_resora', True),
         ('qsm_maya_main', True),
         # houdini
         ('qsm_houdini_core', True),
         ('qsm_houdini_lib', False),
         ('qsm_houdini_main', True),
         # katana
-        ('qsm_katana_core', True),
+        ('qsm_katana_core', False),
         ('qsm_katana_lib', False),
-        ('qsm_katana_main', True),
+        ('qsm_katana_main', False),
     ]
 
     @classmethod

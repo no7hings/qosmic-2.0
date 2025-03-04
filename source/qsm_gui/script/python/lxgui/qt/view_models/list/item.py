@@ -13,8 +13,6 @@ from ....qt.core.wrap import *
 
 from ....qt import core as _qt_core
 
-from .. import base as _base
-
 from .. import item_base as _item_base
 
 
@@ -156,7 +154,7 @@ class ListItemModel(_item_base.AbsItemModel):
     def __init__(self, item):
         super(ListItemModel, self).__init__(
             item,
-            _base._Data(
+            _gui_core.BaseData(
                 # group
                 group_enable=False,
                 # image
@@ -187,7 +185,7 @@ class ListItemModel(_item_base.AbsItemModel):
 
     def _init_play(self):
         self._data.play_enable = True
-        self._data.play = _base._Data(
+        self._data.play = _gui_core.BaseData(
             flag=False,
 
             point=QtCore.QPoint(),
@@ -215,7 +213,7 @@ class ListItemModel(_item_base.AbsItemModel):
         wait_timer = QtCore.QTimer(self._view)
         wait_timer.timeout.connect(self._start_autoplay)
 
-        self._data.autoplay = _base._Data(
+        self._data.autoplay = _gui_core.BaseData(
             flag=False,
             play_thread=play_thread,
             wait_timer=wait_timer,
@@ -354,7 +352,7 @@ class ListItemModel(_item_base.AbsItemModel):
 
         self._update_show_auto()
 
-        self.draw_background(painter, option, index)
+        self.draw_base(painter, option, index)
 
         self._load_image_auto()
         self._load_image_sequence_auto()
@@ -372,7 +370,7 @@ class ListItemModel(_item_base.AbsItemModel):
 
         painter.restore()
 
-    def draw_background(self, painter, option, index):
+    def draw_base(self, painter, option, index):
 
         condition = (self._data.hover.flag, self._data.select.flag)
         # hover
@@ -686,7 +684,7 @@ class ListItemModel(_item_base.AbsItemModel):
     # image
     def set_image(self, file_path, source_type=None, reload_cache=False):
         if file_path is not None:
-            self._data.image = _base._Data(
+            self._data.image = _gui_core.BaseData(
                 load_flag=False,
                 reload_flag=reload_cache,
 
@@ -746,7 +744,7 @@ class ListItemModel(_item_base.AbsItemModel):
     # image sequence
     def set_image_sequence(self, file_path, fps=24):
         if file_path is not None:
-            self._data.image_sequence = _base._Data(
+            self._data.image_sequence = _gui_core.BaseData(
                 load_flag=False,
                 file=None,
                 files=[],
@@ -859,7 +857,7 @@ class ListItemModel(_item_base.AbsItemModel):
     # video
     def set_video(self, file_path):
         if file_path is not None:
-            self._data.video = _base._Data(
+            self._data.video = _gui_core.BaseData(
                 load_flag=False,
                 file=None,
                 capture_opt=None,
@@ -971,7 +969,7 @@ class ListItemModel(_item_base.AbsItemModel):
     # audio
     def set_audio(self, file_path, thumbnail_path=None):
         if file_path is not None:
-            self._data.audio = _base._Data(
+            self._data.audio = _gui_core.BaseData(
                 load_flag=False,
                 file=None,
                 thumbnail=thumbnail_path,
@@ -1152,7 +1150,7 @@ class ListItemModel(_item_base.AbsItemModel):
     def set_group_enable(self, boolean):
         self._data.group_enable = boolean
         if boolean is True:
-            self._data.group = _base._Data(
+            self._data.group = _gui_core.BaseData(
                 dict=dict(),
                 key=None,
             )
@@ -1197,12 +1195,12 @@ class ListGroupItemModel(_item_base.AbsItemModel):
     def __init__(self, item):
         super(ListGroupItemModel, self).__init__(
             item,
-            _base._Data(
-                line=_base._Data(
+            _gui_core.BaseData(
+                line=_gui_core.BaseData(
                     color=_qt_core.QtRgba.Basic
                 ),
                 expand_enable=True,
-                expand=_base._Data(
+                expand=_gui_core.BaseData(
                     rect=qt_rect(),
                     file=_gui_core.GuiIcon.get('expand-open')
                 )
@@ -1257,7 +1255,7 @@ class ListGroupItemModel(_item_base.AbsItemModel):
     def draw(self, painter, option, index):
         self.update(option.rect)
 
-        self.draw_background(painter, option, index)
+        self.draw_base(painter, option, index)
 
         self.draw_texts(painter, option, index)
 
@@ -1275,7 +1273,7 @@ class ListGroupItemModel(_item_base.AbsItemModel):
                 text_color
             )
 
-    def draw_background(self, painter, option, index):
+    def draw_base(self, painter, option, index):
         line = QtCore.QLine(
             self._data.basic.rect.bottomLeft(), self._data.basic.rect.bottomRight()
         )

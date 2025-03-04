@@ -160,6 +160,8 @@ class ScanGlob(object):
         list_ = []
 
         path_regex = cls.ensure_unicode(path_regex)
+        if cls._exists_fnc(path_regex) is True:
+            return [path_regex]
 
         filter_names = path_regex.split('/')
         depth_maximum = len(filter_names)-1
@@ -171,8 +173,12 @@ class ScanGlob(object):
         elif platform.system() == 'Windows':
             # etc. //shared
             if path_regex.startswith('//'):
-                location = '//' + filter_names[2]
-                start_index = 2
+                # //shared os.isdir check is False, use //share/folder instance
+                if len(filter_names) < 4:
+                    return []
+
+                location = u'//{}/{}'.format(filter_names[2], filter_names[3])
+                start_index = 3
                 flag = True
             # etc. Z:/
             else:
@@ -189,9 +195,17 @@ class ScanGlob(object):
     @classmethod
     def glob_files(cls, file_regex):
         file_regex = cls.ensure_unicode(file_regex)
+        if cls._file_exists_fnc(file_regex) is True:
+            return [file_regex]
 
         if '//' in file_regex:
-            _s = file_regex.split('//')
+            if file_regex.startswith('//'):
+                _s = file_regex.split('//')
+                _s = _s[1:]
+                _s[0] = u'//{}'.format(_s[0])
+            else:
+                _s = file_regex.split('//')
+
             if len(_s) > 2:
                 raise RuntimeError(u'more then 2 "//" in "{}", please check item'.format(file_regex))
 
@@ -318,7 +332,13 @@ class ScanGlob(object):
         file_regex = cls.ensure_unicode(file_regex)
 
         if '//' in file_regex:
-            _s = file_regex.split('//')
+            if file_regex.startswith('//'):
+                _s = file_regex.split('//')
+                _s = _s[1:]
+                _s[0] = u'//{}'.format(_s[0])
+            else:
+                _s = file_regex.split('//')
+
             if len(_s) > 2:
                 raise RuntimeError(u'more then 2 "//" in "{}", please check it.'.format(file_regex))
 

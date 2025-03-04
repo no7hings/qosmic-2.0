@@ -9,8 +9,6 @@ from ....qt.core.wrap import *
 
 from ....qt import core as _qt_core
 
-from .. import base as _base
-
 from .. import view_base as _view_base
 
 
@@ -190,9 +188,9 @@ class ListViewModel(_view_base.AbsViewModel):
     def __init__(self, widget):
         super(ListViewModel, self).__init__(
             widget,
-            _base._Data(
+            _gui_core.BaseData(
                 # about item
-                item=_base._Data(
+                item=_gui_core.BaseData(
                     cls=None,
                     group_cls=None,
                     # frame
@@ -365,7 +363,7 @@ class ListViewModel(_view_base.AbsViewModel):
     def set_item_group_enable(self, boolean):
         self._data.item_group_enable = boolean
         if boolean is True:
-            self._data.item_group = _base._Data(
+            self._data.item_group = _gui_core.BaseData(
                 keys=[],
                 key_current=self.ItemGroupKey.Null,
             )

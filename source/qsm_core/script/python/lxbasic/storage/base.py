@@ -988,25 +988,9 @@ class StgFileTiles(object):
 class StgPathOpt(object):
     PATHSEP = '/'
 
-    @classmethod
-    def auto_unicode(cls, path):
-        if not isinstance(path, six.text_type):
-            return path.decode('utf-8')
-        return path
-
-    @classmethod
-    def ensure_string(cls, s):
-        if isinstance(s, six.text_type):
-            if six.PY2:
-                return s.encode('utf-8')
-        elif isinstance(s, six.binary_type):
-            if six.PY3:
-                return s.decode('utf-8')
-        return s
-
     def __init__(self, path, cleanup=True):
         # auto convert to unicode
-        path = self.auto_unicode(path)
+        path = _cor_base.ensure_unicode(path)
 
         if cleanup is True:
             self._path = _cor_base.BscStorage.clear_pathsep_to(path)
@@ -1281,7 +1265,7 @@ class StgDirectoryOpt(StgPathOpt):
         super(StgDirectoryOpt, self).__init__(path)
 
     def __str__(self):
-        return 'directory(path="{}")'.format(self.ensure_string(self._path))
+        return 'directory(path="{}")'.format(_cor_base.ensure_string(self._path))
 
     def __repr__(self):
         return self.__str__()
@@ -1408,7 +1392,7 @@ class StgFileOpt(StgPathOpt):
         self._file_type = file_type
 
     def __str__(self):
-        return 'file(path="{}")'.format(self.ensure_string(self._path))
+        return 'file(path="{}")'.format(_cor_base.ensure_string(self._path))
 
     def __repr__(self):
         return self.__str__()

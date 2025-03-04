@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-from .. import base as _base
+from .... import core as _gui_core
 
 from .. import view_base as _view_base
 
@@ -10,8 +10,8 @@ class TagViewModel(_view_base.AbsViewModel):
     def __init__(self, widget):
         super(TagViewModel, self).__init__(
             widget,
-            _base._Data(
-                item=_base._Data(
+            _gui_core.BaseData(
+                item=_gui_core.BaseData(
                     cls=None,
                     group_cls=None,
                 ),

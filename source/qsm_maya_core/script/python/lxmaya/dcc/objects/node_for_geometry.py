@@ -193,7 +193,7 @@ class Mesh(_node_for_dag.Shape):
         index_list = []
         dag_path = om2.MGlobal.getSelectionListByName(self.path).getDagPath(0)
         m2_mesh = om2.MFnMesh(dag_path)
-        for vertexId in xrange(m2_mesh.numVertices):
+        for vertexId in range(m2_mesh.numVertices):
             if m2_mesh.isNormalLocked(vertexId):
                 index_list.append(vertexId)
         return self._get_vertex_comp_names_(index_list)

@@ -3,6 +3,7 @@ options: {}
 types:
     # main resource
     manifest:
+        type: node
         enable: True
         gui_name: 'Page Manifest'
         gui_name_chs: '页面总览'
@@ -10,19 +11,15 @@ types:
         applications:
             - 'standalone'
             - 'maya'
+    
+    # animation
+    data:
+        type:  group
+        gui_name: 'Data'
+        gui_name_chs: '数据'
 
-    # to be removed
-    asset:
-        enable: True
-        gui_name: 'Asset'
-        gui_name_chs: '资产'
-        gui_item_frame_size: [178, 178]
-        applications:
-            - 'standalone'
-            - 'maya'
-
-    # data
-    motion:
+    data/motion:
+        type: node
         enable: True
         gui_name: 'Motion'
         gui_name_chs: '动作'
@@ -32,7 +29,13 @@ types:
             - 'maya'
 
     # media
-    video:
+    media:
+        type:  group
+        gui_name: 'Media'
+        gui_name_chs: '媒体'
+    
+    media/video:
+        type: node
         enable: True
         gui_name: 'Video'
         gui_name_chs: '视频'
@@ -40,7 +43,8 @@ types:
         applications:
             - 'standalone'
 
-    episode:
+    media/episode:
+        type: node
         enable: True
         gui_name: 'Episode'
         gui_name_chs: '剧集'
@@ -48,7 +52,8 @@ types:
         applications:
             - 'standalone'
 
-    audio:
+    media/audio:
+        type: node
         enable: True
         gui_name: 'Audio'
         gui_name_chs: '音频'
@@ -57,7 +62,13 @@ types:
             - 'standalone'
 
     # dcc
-    maya_scene:
+    dcc:
+        type: group
+        gui_name: 'DCC'
+        gui_name_chs: 'DCC'
+
+    dcc/maya_scene:
+        type: node
         enable: True
         gui_name: 'MAYA (.ma .mb)'
         gui_name_chs: 'MAYA（.ma .mb）'
@@ -66,7 +77,8 @@ types:
             - 'standalone'
             - 'maya'
 
-    houdini_scene:
+    dcc/houdini_scene:
+        type: node
         enable: True
         gui_name: 'HOUDINI (.hip)'
         gui_name_chs: 'HOUDINI（.hip）'
@@ -75,7 +87,8 @@ types:
             - 'standalone'
             - 'houdini'
 
-    houdini_hda:
+    dcc/houdini_hda:
+        type: node
         enable: True
         gui_name: 'HDA (.hda .otl)'
         gui_name_chs: 'HDA（.hda .otl）'
@@ -84,7 +97,14 @@ types:
             - 'standalone'
             - 'houdini'
 
-    sp_scene:
+    # substance
+    substance:
+        type: group
+        gui_name: 'Substance'
+        gui_name_chs: 'Substance'
+
+    substance/sp_scene:
+        type: node
         enable: True
         gui_name: 'SP (.spp)'
         gui_name_chs: 'SP（.spp）'
@@ -93,7 +113,8 @@ types:
             - 'standalone'
             - 'stbstance_painter'
 
-    sp_material:
+    substance/sp_material:
+        type: node
         enable: True
         gui_name: 'SP Asset(.spsm)'
         gui_name_chs: 'SP资源（.spsm）'
@@ -102,7 +123,8 @@ types:
             - 'standalone'
             - 'stbstance_painter'
 
-    sd_scene:
+    substance/sd_scene:
+        type: node
         enable: True
         gui_name: 'SD (.sbs)'
         gui_name_chs: 'SD（.sbs）'
@@ -111,7 +133,8 @@ types:
             - 'standalone'
             - 'stbstance_designer'
 
-    sd_material:
+    substance/sd_material:
+        type: node
         enable: True
         gui_name: 'SD Asset (.sbsar)'
         gui_name_chs: 'SD资源（.sbsar）'
@@ -121,7 +144,13 @@ types:
             - 'stbstance_designer'
 
     # cache
-    fbx_cache:
+    cache:
+        type: group
+        gui_name: 'Cache'
+        gui_name_chs: '缓存'
+
+    cache/fbx:
+        type: node
         enable: True
         gui_name: 'FBX (.fbx)'
         gui_name_chs: 'FBX（.fbx）'
@@ -131,7 +160,8 @@ types:
             - 'maya'
             - 'houdini'
 
-    mocap_fbx:
+    cache/mocap_fbx:
+        type: node
         enable: True
         gui_name: 'MoCap (.fbx)'
         gui_name_chs: '动捕（.fbx）'
@@ -140,3 +170,60 @@ types:
             - 'standalone'
             - 'maya'
             - 'houdini'
+
+    quixel:
+        type: group
+        gui_name: 'Quixel'
+        gui_name_chs: 'Quixel'
+
+    quixel/asset:
+        type: node
+        enable: True
+        gui_name: '3D Asset'
+        gui_name_chs: '3D资产'
+        gui_item_frame_size: [222, 128]
+        applications:
+            - 'standalone'
+
+    quixel/plant:
+        type: node
+        enable: True
+        gui_name: '3D Plant'
+        gui_name_chs: '3D植被'
+        gui_item_frame_size: [222, 128]
+        applications:
+            - 'standalone'
+
+    quixel/atlas:
+        type: node
+        enable: True
+        gui_name: 'Atlas'
+        gui_name_chs: '3D植被'
+        gui_item_frame_size: [222, 128]
+        applications:
+            - 'standalone'
+
+    quixel/surface:
+        type: node
+        enable: True
+        gui_name: 'Surface'
+        gui_name_chs: '材质'
+        gui_item_frame_size: [222, 128]
+        applications:
+            - 'standalone'
+
+    # other
+    other:
+        type: group
+        gui_name: 'Other'
+        gui_name_chs: '其他'
+
+    other/asset:
+        type: node
+        enable: True
+        gui_name: 'Asset'
+        gui_name_chs: '资产'
+        gui_item_frame_size: [178, 178]
+        applications:
+            - 'standalone'
+            - 'maya'

@@ -1,5 +1,5 @@
 # coding:utf-8
-import lnx_resora_extra.motion.scripts as s
+import lnx_resora_extra.animation.motion.scripts as s
 
 s.STDotAnimRegisterBatch(
     'X:/studio_library',

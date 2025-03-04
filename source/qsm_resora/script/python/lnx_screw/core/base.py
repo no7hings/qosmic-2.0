@@ -192,6 +192,7 @@ FLUSH PRIVILEGES;
 
         PreviewDir = '{root}/lazy-resource/all/{key}/{node}/preview'
         PreviewImage = PreviewDir+'/image.{format}'
+        PreviewJpg = PreviewDir+'/image.jpg'
         PreviewImageDir = PreviewDir+'/images'
         PreviewImageSequence = PreviewDir+'/images/image.%04d.{format}'
         PreviewVideo = PreviewDir+'/video.{format}'
@@ -1188,42 +1189,41 @@ FLUSH PRIVILEGES;
         options = copy.copy(self._options)
         options['node'] = node_name
         # use jpg default
-        thumbnail_path = self.NodePathPattens.ThumbnailJpg.format(**options)
+        thumbnail_jpg_path = self.NodePathPattens.ThumbnailJpg.format(**options)
         options['format'] = file_opt.format
         # image
         if file_opt.ext in {'.png', '.jpg', '.tga', '.exr'}:
-            image_path = self.NodePathPattens.PreviewImage.format(**options)
-            file_opt.copy_to_file(image_path, replace=True)
+            jpg_path = self.NodePathPattens.PreviewJpg.format(**options)
+            bsc_storage.ImgOiioOpt(file_path).create_compress(jpg_path, replace=True)
             # noinspection PyBroadException
             try:
                 # fixme: convert png to jpg?
-                bsc_storage.ImgOiioOpt(image_path).convert_to(
-                    thumbnail_path
+                bsc_storage.ImgOiioOpt(jpg_path).create_compress(thumbnail_jpg_path, replace=True)
+                self.create_or_update_node_parameter(
+                    node_path, 'image', jpg_path
                 )
                 self.create_or_update_node_parameter(
-                    node_path, 'image', image_path
-                )
-                self.create_or_update_node_parameter(
-                    node_path, 'thumbnail', thumbnail_path
+                    node_path, 'thumbnail', thumbnail_jpg_path
                 )
                 return True
             except Exception:
+                bsc_core.BscException.print_stack()
                 return False
         # video
         elif file_opt.ext in {'.mov', '.avi', '.mp4'}:
-            video_path = self.NodePathPattens.PreviewVideo.format(**options)
-            file_opt.copy_to_file(video_path, replace=True)
+            mov_path = self.NodePathPattens.PreviewMov.format(**options)
+            bsc_core.BscFfmpegVideo.create_compress(file_path, mov_path, replace=True)
             # noinspection PyBroadException
             try:
                 self.create_or_update_node_parameter(
-                    node_path, 'video', video_path
+                    node_path, 'video', mov_path
                 )
-                bsc_core.BscFfmpegVideo.extract_frame(video_path, thumbnail_path, 0)
+                bsc_core.BscFfmpegVideo.extract_frame(mov_path, thumbnail_jpg_path, 0)
                 self.create_or_update_node_parameter(
-                    node_path, 'thumbnail', thumbnail_path
+                    node_path, 'thumbnail', thumbnail_jpg_path
                 )
                 thumbnail_sequence_path = bsc_core.BscFfmpegVideo.extract_all_frames(
-                    video_path,
+                    mov_path,
                     image_format=self.DEFAULT_THUMBNAIL_FORMAT,
                     width_maximum=self.DEFAULT_THUMBNAIL_WIDTH_MAXIMUM
                 )
@@ -1254,7 +1254,7 @@ FLUSH PRIVILEGES;
         options['format'] = file_opt.format
 
         image_sequence_path = self.NodePathPattens.PreviewImageSequence.format(**options)
-        thumbnail_path = self.NodePathPattens.ThumbnailJpg.format(**options)
+        thumbnail_jpg_path = self.NodePathPattens.ThumbnailJpg.format(**options)
 
         file_paths = bsc_storage.StgFileTiles.get_tiles(file_path)
         file_paths.sort()
@@ -1263,13 +1263,13 @@ FLUSH PRIVILEGES;
             bsc_storage.StgFileOpt(i_file_path).copy_to_file(i_file_path_dst)
 
         # copy first frame as thumbnail
-        bsc_storage.StgFileOpt(file_paths[0]).copy_to_file(thumbnail_path)
+        bsc_storage.StgFileOpt(file_paths[0]).copy_to_file(thumbnail_jpg_path)
 
         self.create_or_update_node_parameter(
             node_path, 'image_sequence', image_sequence_path
         )
         self.create_or_update_node_parameter(
-            node_path, 'thumbnail', thumbnail_path
+            node_path, 'thumbnail', thumbnail_jpg_path
         )
 
     def upload_node_audio(self, node_path, file_path, collect_source=False):
@@ -1281,18 +1281,18 @@ FLUSH PRIVILEGES;
         options = copy.copy(self._options)
         options['node'] = node_name
 
-        thumbnail_path = self.NodePathPattens.ThumbnailJpg.format(**options)
+        thumbnail_jpg_path = self.NodePathPattens.ThumbnailJpg.format(**options)
 
         import lxbasic.cv.core as bsc_cv_core
 
         capture_opt = bsc_cv_core.AudioCaptureOpt(file_path)
-        capture_opt.create_thumbnail(thumbnail_path, replace=False)
+        capture_opt.create_thumbnail(thumbnail_jpg_path, replace=False)
 
         preview_audio_mp3_path = self.NodePathPattens.PreviewMp3.format(**options)
         capture_opt.create_compress(preview_audio_mp3_path, replace=False)
 
         self.create_or_update_node_parameter(
-            node_path, 'thumbnail', thumbnail_path
+            node_path, 'thumbnail', thumbnail_jpg_path
         )
 
         self.create_or_update_node_parameter(
@@ -1320,17 +1320,17 @@ FLUSH PRIVILEGES;
         options = copy.copy(self._options)
         options['node'] = node_name
 
-        thumbnail_path = self.NodePathPattens.ThumbnailJpg.format(**options)
+        thumbnail_jpg_path = self.NodePathPattens.ThumbnailJpg.format(**options)
 
         import lxbasic.cv.core as bsc_cv_core
-        bsc_cv_core.VideoCaptureOpt(file_path).create_thumbnail(thumbnail_path, replace=True)
+        bsc_cv_core.VideoCaptureOpt(file_path).create_thumbnail(thumbnail_jpg_path, replace=True)
 
         preview_video_path = self.NodePathPattens.PreviewMov.format(**options)
 
         bsc_core.BscFfmpegVideo.create_compress(file_path, preview_video_path, replace=False)
 
         self.create_or_update_node_parameter(
-            node_path, 'thumbnail', thumbnail_path
+            node_path, 'thumbnail', thumbnail_jpg_path
         )
 
         self.create_or_update_node_parameter(

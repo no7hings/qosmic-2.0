@@ -1,5 +1,6 @@
 # coding:utf-8
-from .. import base as _base
+# gui
+from .... import core as _gui_core
 
 from .. import item_base as _item_base
 
@@ -12,7 +13,7 @@ class TagItemModel(_item_base.AbsItemModel):
     def __init__(self, item):
         super(TagItemModel, self).__init__(
             item,
-            _base._Data()
+            _gui_core.BaseData()
         )
 
     def refresh_force(self):

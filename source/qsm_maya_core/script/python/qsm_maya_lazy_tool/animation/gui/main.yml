@@ -339,7 +339,7 @@ build:
                                 点击选中所有可用的元素组装。
                             join_to_next: True
 
-            motion:
+            data/motion:
                 name: 'Motion'
                 name_chs: '动作'
 

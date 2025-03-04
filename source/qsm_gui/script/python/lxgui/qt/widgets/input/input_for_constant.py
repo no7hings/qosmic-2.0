@@ -32,7 +32,8 @@ class QtInputForConstant(
     entry_value_changed = qt_signal()
 
     def _pull_history_(self, value):
-        self._entry_widget._set_value_(value)
+        if value is not None:
+            self._entry_widget._set_value_(value)
 
     def __init__(self, *args, **kwargs):
         super(QtInputForConstant, self).__init__(*args, **kwargs)
@@ -88,7 +89,8 @@ class QtInputForConstantChoose(
     _qt_abstracts.AbsQtInputCompletionExtraDef,
 ):
     def _pull_history_(self, value):
-        self._set_value_(value)
+        if value is not None:
+            self._set_value_(value)
 
     QT_ENTRY_CLS = _entry_for_constant.QtEntryForConstant
 

@@ -19,6 +19,8 @@ import getpass
 
 import datetime
 
+from ..wrap import *
+
 from . import bridge as _bridge
 
 
@@ -176,32 +178,32 @@ class Log(object):
 
     @classmethod
     def get(cls, text):
-        text = LogBase.ensure_string(text)
+        text = ensure_string(text)
         return '{} {}'.format(cls.get_time(), text)
 
     @classmethod
     def get_result(cls, text):
-        text = LogBase.ensure_string(text)
+        text = ensure_string(text)
         return cls.get('''        | {}'''.format(text))
 
     @classmethod
     def get_warning(cls, text):
-        text = LogBase.ensure_string(text)
+        text = ensure_string(text)
         return cls.get('''warning | {}'''.format(text))
 
     @classmethod
     def get_error(cls, text):
-        text = LogBase.ensure_string(text)
+        text = ensure_string(text)
         return cls.get('''  error | {}'''.format(text))
 
     @classmethod
     def get_debug(cls, text):
-        text = LogBase.ensure_string(text)
+        text = ensure_string(text)
         return cls.get('''  debug | {}'''.format(text))
 
     @classmethod
     def get_test(cls, text):
-        text = LogBase.ensure_string(text)
+        text = ensure_string(text)
         return cls.get('''   test | {}'''.format(text))
 
     @classmethod
@@ -221,7 +223,7 @@ class Log(object):
     @classmethod
     def trace_result(cls, *args):
         if cls.ENABLE is True and cls.RESULT_ENABLE is True:
-            text = ''.join(LogBase.ensure_string(i) for i in args)
+            text = ''.join(ensure_string(i) for i in args)
             log = cls.get_result(text)
             sys.stdout.write(
                 log+'\n'
@@ -233,7 +235,7 @@ class Log(object):
     @classmethod
     def trace_warning(cls, *args):
         if cls.ENABLE is True and cls.WARNING_ENABLE is True:
-            text = ''.join(LogBase.ensure_string(i) for i in args)
+            text = ''.join(ensure_string(i) for i in args)
             log = cls.get_warning(text)
             sys.stdout.write(
                 log+'\n'
@@ -245,7 +247,7 @@ class Log(object):
     @classmethod
     def trace_error(cls, *args):
         if cls.ENABLE is True and cls.ERROR_ENABLE is True:
-            text = ''.join(LogBase.ensure_string(i) for i in args)
+            text = ''.join(ensure_string(i) for i in args)
             log = cls.get_error(text)
             sys.stderr.write(
                 log+'\n'
@@ -256,16 +258,16 @@ class Log(object):
 
     @classmethod
     def get_method_result(cls, name, *args):
-        name = LogBase.ensure_string(name)
-        text = ''.join(LogBase.ensure_string(i) for i in args)
+        name = ensure_string(name)
+        text = ''.join(ensure_string(i) for i in args)
         return cls.get_result(
             '<{}> {}'.format(name, text)
         )
 
     @classmethod
     def get_method_warning(cls, name, *args):
-        name = LogBase.ensure_string(name)
-        text = ''.join(LogBase.ensure_string(i) for i in args)
+        name = ensure_string(name)
+        text = ''.join(ensure_string(i) for i in args)
         return cls.get_warning(
             '<{}> {}'.format(name, text)
         )
@@ -277,8 +279,8 @@ class Log(object):
         :param args: str/unicode, ...
         :return:
         """
-        name = LogBase.ensure_string(name)
-        text = ''.join(LogBase.ensure_string(i) for i in args)
+        name = ensure_string(name)
+        text = ''.join(ensure_string(i) for i in args)
         return cls.get_error(
             '<{}> {}'.format(name, text)
         )
@@ -290,24 +292,24 @@ class Log(object):
         :param args: str/unicode, ...
         :return:
         """
-        name = LogBase.ensure_string(name)
-        text = ''.join(LogBase.ensure_string(i) for i in args)
+        name = ensure_string(name)
+        text = ''.join(ensure_string(i) for i in args)
         return cls.trace_result(
             '<{}> {}'.format(name, text)
         )
 
     @classmethod
     def trace_method_warning(cls, name, *args):
-        name = LogBase.ensure_string(name)
-        text = ''.join(LogBase.ensure_string(i) for i in args)
+        name = ensure_string(name)
+        text = ''.join(ensure_string(i) for i in args)
         return cls.trace_warning(
             '<{}> {}'.format(name, text)
         )
 
     @classmethod
     def trace_method_error(cls, name, *args):
-        name = LogBase.ensure_string(name)
-        text = ''.join(LogBase.ensure_string(i) for i in args)
+        name = ensure_string(name)
+        text = ''.join(ensure_string(i) for i in args)
         return cls.trace_error(
             '<{}> {}'.format(name, text)
         )
@@ -323,8 +325,8 @@ class Log(object):
     @classmethod
     def debug_method(cls, name, *args):
         if cls.DEBUG is True:
-            name = LogBase.ensure_string(name)
-            text = ''.join(LogBase.ensure_string(i) for i in args)
+            name = ensure_string(name)
+            text = ''.join(ensure_string(i) for i in args)
             return cls.debug(
                 '<{}> {}'.format(name, text)
             )

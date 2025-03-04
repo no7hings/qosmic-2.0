@@ -282,7 +282,7 @@ class Stage(abc_.AbsBase):
 
         for i_key in keys_unpack:
             i_value = variants[i_key]
-            i_s = u'"{}": "{}"'.format(i_key, self.ensure_unicode(i_value))
+            i_s = u'"{}": "{}"'.format(i_key, bsc_core.ensure_unicode(i_value))
             ss.append(i_s)
 
         return u'{{{}}}'.format(
@@ -291,7 +291,7 @@ class Stage(abc_.AbsBase):
 
     def _to_entity_path(self, entity_type, variants):
         pattern = self._get_entity_path_pattern(entity_type)
-        pattern = self.ensure_unicode(pattern)
+        pattern = bsc_core.ensure_unicode(pattern)
         if pattern is None:
             raise RuntimeError(
                 self.stderr(

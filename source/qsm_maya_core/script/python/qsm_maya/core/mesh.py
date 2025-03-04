@@ -154,7 +154,7 @@ class MeshShapeOpt(_shape.ShapeOpt):
         face_vertex_counts = []
         face_vertex_indices = []
         om2_fnc = self._om2_obj_fnc
-        for i_face_index in xrange(om2_fnc.numPolygons):
+        for i_face_index in range(om2_fnc.numPolygons):
             i_count = om2_fnc.polygonVertexCount(i_face_index)
             face_vertex_counts.append(i_count)
             om2_indices = om2_fnc.getPolygonVertices(i_face_index)
@@ -246,7 +246,7 @@ class MeshShapeOpt(_shape.ShapeOpt):
         idx = 0
         colors = om2.MColorArray()
         face_indices = []
-        for i_face_index in xrange(self._om2_obj_fnc.numPolygons):
+        for i_face_index in range(self._om2_obj_fnc.numPolygons):
             face_indices.append(i_face_index)
             i_count = self._om2_obj_fnc.polygonVertexCount(i_face_index)
             j_om2_color = om2.MColor()
@@ -282,7 +282,7 @@ class MeshShapeOpt(_shape.ShapeOpt):
         idx = 0
         colors = om2.MColorArray()
         face_indices = []
-        for i_face_index in xrange(self._om2_obj_fnc.numPolygons):
+        for i_face_index in range(self._om2_obj_fnc.numPolygons):
             face_indices.append(i_face_index)
             i_count = self._om2_obj_fnc.polygonVertexCount(i_face_index)
             j_om2_color = om2.MColor()
@@ -345,3 +345,19 @@ class MeshShapeOpt(_shape.ShapeOpt):
         return bsc_core.BscHash.to_hash_key(
             self.get_material_assign_map(), as_unique_id=True
         )
+
+    def get_unused_vertex_indices(self):
+        list_ = []
+        om2_obj_fnc = self.to_om2_mesh_fnc(self._path)
+        om2_vertex_itr = om2.MItMeshVertex(om2_obj_fnc.object())
+        for i_vertex_index in range(om2_obj_fnc.numVertices):
+            om2_vertex_itr.setIndex(i_vertex_index)
+            if not om2_vertex_itr.numConnectedFaces():
+                list_.append(i_vertex_index)
+        return list_
+
+    def delete_unused_vertices(self):
+        indices = self.get_unused_vertex_indices()
+        for i_idx in indices:
+            p = '{}.vtx[{}]'.format(self._path, i_idx)
+            cmds.delete(p)

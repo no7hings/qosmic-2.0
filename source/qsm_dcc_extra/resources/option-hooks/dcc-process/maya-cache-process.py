@@ -236,11 +236,13 @@ def test_progress(option_opt):
         label='test-1',
     ) as g_p:
         for i in range(5):
-            time.sleep(1)
-            g_p.do_update()
 
-    if tag == 'error':
-        raise RuntimeError()
+            if i == 3:
+                if tag == 'error':
+                    raise RuntimeError()
+
+            time.sleep(2)
+            g_p.do_update()
 
     with bsc_log.LogProcessContext.create(
         maximum=5,

@@ -5,8 +5,6 @@ from ....qt.core.wrap import *
 
 from .... import core as _gui_core
 
-from .. import base as _base
-
 from .. import item_base as _item_base
 
 
@@ -16,7 +14,7 @@ class TreeItemModel(_item_base.AbsItemModel):
     def __init__(self, item):
         super(TreeItemModel, self).__init__(
             item,
-            _base._Data(
+            _gui_core.BaseData(
             )
         )
 
@@ -150,7 +148,7 @@ class TreeItemModel(_item_base.AbsItemModel):
 
         self._update_show_auto()
 
-        self.draw_background(painter, option, index)
+        self.draw_base(painter, option, index)
         self.draw_texts(painter, option, index)
         # number
         if column == 0:
@@ -171,7 +169,7 @@ class TreeItemModel(_item_base.AbsItemModel):
                 )
         painter.restore()
 
-    def draw_background(self, painter, option, index):
+    def draw_base(self, painter, option, index):
         x, y, w, h = option.rect.x(), option.rect.y(), option.rect.width(), option.rect.height()
         column = index.column()
         rect = qt_rect(x+1, y+1, w-1, h-2)

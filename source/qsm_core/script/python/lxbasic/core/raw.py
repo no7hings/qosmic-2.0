@@ -19,30 +19,7 @@ import collections
 
 import itertools
 
-
-def ensure_string(s):
-    if isinstance(s, six.text_type):
-        if six.PY2:
-            return s.encode('utf-8')
-    elif isinstance(s, six.binary_type):
-        if six.PY3:
-            return s.decode('utf-8')
-    return s
-
-
-def auto_unicode(text):
-    if not isinstance(text, six.text_type):
-        return text.decode('utf-8')
-    return text
-
-
-def ensure_unicode(s):
-    if isinstance(s, six.text_type):
-        return s
-    elif isinstance(s, bytes):
-        return s.decode('utf-8')
-    else:
-        return s
+from ..wrap import *
 
 
 class BscColor:

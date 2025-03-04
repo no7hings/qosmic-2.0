@@ -1,2 +1,4 @@
 # coding:utf-8
-from .scene_register import *
+from .any_scene_register import *
+
+from .quixel_register import *

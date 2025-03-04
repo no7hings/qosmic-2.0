@@ -50,7 +50,7 @@ class QtChartForSprcTask(
         self._refresh_widget_all_()
 
     @qt_slot(float)
-    def _on_progress_update_(self, percent):
+    def _on_update_progress_(self, percent):
         result = self._data_model.update()
         self._percent_pre = self._percent
         self._percent = self._data_model.get_percent()
@@ -171,10 +171,10 @@ class QtChartForSprcTask(
         percent_txt_w = QtGui.QFontMetrics(self._text_font).width(self._percent_text)+8
 
         self._main_text = self._generate_main_text_()
-        main_txt_w = QtGui.QFontMetrics(self._text_font).width(self._main_text)+8
-        main_txt_w = min(main_txt_w, w-percent_txt_w-8)
+        txt_w = QtGui.QFontMetrics(self._text_font).width(self._main_text)+8
+        txt_w = min(txt_w, w-percent_txt_w-8)
         self._main_text_draw_rect.setRect(
-            x+2, y+3, main_txt_w, h-6
+            x+2, y+3, txt_w, h-6
         )
 
         self._percent_text_draw_rect.setRect(
@@ -266,7 +266,7 @@ class QtChartForSprcTask(
         self._sprc_memory_sizes = []
 
         self.progress_started.connect(self._on_progress_started_)
-        self.progress_update.connect(self._on_progress_update_)
+        self.progress_update.connect(self._on_update_progress_)
         self.status_update.connect(self._on_status_update_)
 
         self.installEventFilter(self)
@@ -329,7 +329,7 @@ class QtChartForSprcTask(
     def _generate_thread_(self, widget):
         self._profile = bsc_storage.Profile.generate()
 
-        self._trd = _qt_core.QtThreadForSprcTask.generate(
+        self._trd = _qt_core.QtThreadForSpcTask.generate(
             widget, self
         )
         # update per 0.1 sec

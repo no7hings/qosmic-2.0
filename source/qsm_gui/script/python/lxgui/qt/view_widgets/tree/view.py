@@ -90,9 +90,6 @@ class _QtTreeView(
 
         self.setItemDelegate(_QtListItemDelegate(self))
 
-        self._svg_folder_open = _gui_core.GuiIcon.get('tree/folder-open')
-        self._svg_folder_close = _gui_core.GuiIcon.get('tree/folder-close')
-
         # noinspection PyUnresolvedReferences
         self.expanded.connect(self._view_model.on_item_expand_at)
         # noinspection PyUnresolvedReferences

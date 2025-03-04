@@ -445,7 +445,7 @@ class AbsPrxProgressingDef(object):
             if self._current_progress is None:
                 self._current_progress = g_p
             else:
-                if self._current_progress.get_is_stop() is True:
+                if self._current_progress.is_stopped() is True:
                     self._current_progress = g_p
                 else:
                     self._current_progress.add_child(g_p)

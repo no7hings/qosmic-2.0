@@ -1,5 +1,5 @@
 # coding:utf-8
-import lnx_resora_extra.episode.scripts as s
+import lnx_resora_extra.media.episode.scripts as s
 
 # coding:utf-8
 import lnx_resora.core as c

@@ -4,6 +4,8 @@ import sys
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.core as bsc_core
+
 from . import node as _node
 
 from . import attribute as _attribute
@@ -92,9 +94,13 @@ class MaterialOpt(_node.NodeOpt):
         super(MaterialOpt, self).__init__(*args, **kwargs)
 
     def assign_to(self, path):
-        Material.assign_to(
-            self._name_or_path, path
-        )
+        # noinspection PyBroadException
+        try:
+            Material.assign_to(
+                self._name_or_path, path
+            )
+        except Exception:
+            bsc_core.BscException.set_print()
 
 
 class MaterialLightLink(object):

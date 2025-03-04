@@ -7,8 +7,6 @@ from ... import core as _gui_core
 # qt
 from ...qt.core.wrap import *
 
-from . import base as _base
-
 
 class AbsViewModel(object):
     ItemMode = _gui_core.GuiItemMode
@@ -59,19 +57,19 @@ class AbsViewModel(object):
         # item expand record
         self._data.item_expand_record_enable = False
         # menu
-        self._data.menu = _base._Data(
+        self._data.menu = _gui_core.BaseData(
             content=None,
             data=None,
             data_generate_fnc=None,
             name_dict=dict()
         )
         # keyword filter
-        self._data.keyword_filter = _base._Data(
+        self._data.keyword_filter = _gui_core.BaseData(
             key_src_set=set(),
             cache=None
         )
         # occurrence
-        self._data.occurrence = _base._Data(
+        self._data.occurrence = _gui_core.BaseData(
             index=None
         )
         # item query
@@ -156,7 +154,7 @@ class AbsViewModel(object):
     def set_item_sort_enable(self, boolean):
         self._data.item_sort_enable = boolean
         if boolean is True:
-            self._data.item_sort = _base._Data(
+            self._data.item_sort = _gui_core.BaseData(
                 keys=[],
                 key_current=self.ItemSortKey.Name,
                 order=0,
@@ -426,7 +424,7 @@ class AbsViewModel(object):
     def set_item_expand_record_enable(self, boolean):
         if boolean is True:
             self._data.item_expand_record_enable = True
-            self._data.item_expand_record = _base._Data(
+            self._data.item_expand_record = _gui_core.BaseData(
                 data={}
             )
 

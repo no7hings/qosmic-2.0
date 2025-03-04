@@ -14,7 +14,7 @@ from .wrap import *
 
 class VideoCaptureOpt(object):
     def __init__(self, video_path, height_maximum=256, fps=24):
-        self._video_path = bsc_core.auto_unicode(video_path)
+        self._video_path = bsc_core.ensure_unicode(video_path)
         # noinspection PyUnresolvedReferences
         self._cpt = cv2.VideoCapture(self._video_path)
         if self._cpt.isOpened():

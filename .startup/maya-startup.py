@@ -379,7 +379,7 @@ class Main(object):
     @classmethod
     def build_maya_shelf_fnc(cls):
         import qsm_maya.gui as qsm_mya_gui
-        qsm_mya_gui.MayaShelf().create()
+        qsm_mya_gui.MainShelf().create()
 
     @classmethod
     def build_maya_shelf(cls):

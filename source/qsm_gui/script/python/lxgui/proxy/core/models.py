@@ -107,7 +107,7 @@ class GuiPrxModForProgress(object):
             self._is_stop = True
             self._qt_progress.hide()
 
-    def get_is_stop(self):
+    def is_stopped(self):
         return self._is_stop
 
     def set_raise(self):

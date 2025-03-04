@@ -306,7 +306,7 @@ class _GuiVersionOpt(_unit_base._GuiBaseOpt):
         self.gui_update_thread_flag()
 
         ett_versions = self._unit._gui_task_opt.gui_get_ett_versions()
-        for i in ett_versions[-10:]:
+        for i in ett_versions:
             self.gui_add_version(i, self._gui_thread_flag)
 
     def gui_add_version(self, ett_version, gui_thread_flag):

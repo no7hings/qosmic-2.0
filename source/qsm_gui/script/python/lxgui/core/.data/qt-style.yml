@@ -419,3 +419,12 @@ widget:
             color: rgba(<option.rgba.Text>);
             border: 1px rgba(<option.rgba.Border>); border-radius: 0px; border-style: solid;
         }
+
+    QGraphicsView:
+        |-
+        QGraphicsView{
+            show-decoration-selected: 1;
+            background: rgba(<option.rgba.Transparent>);
+            color: rgba(<option.rgba.Text>); 
+            border: 1px rgba(<option.rgba.Transparent>); border-radius: 0px; border-style: solid;
+        }

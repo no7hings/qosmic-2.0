@@ -17,6 +17,8 @@ class AbsQtThreadWorkerExtraDef(object):
 
         self._thread_workers = []
 
+        self._thread_terminate_flag = False
+
     def _do_kill_all_thread_worker_(self):
         for seq, i_thread in enumerate(self._thread_workers):
             i_thread.do_quit()

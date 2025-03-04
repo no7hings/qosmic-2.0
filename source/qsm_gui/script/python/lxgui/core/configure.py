@@ -3,6 +3,8 @@ import os
 
 import enum
 
+import lxbasic.core as bsc_core
+
 
 class GuiBase(object):
     ROOT = os.path.dirname(__file__.replace('\\', '/'))
@@ -445,6 +447,7 @@ class GuiRgba(object):
 
 
 class GuiProcessStatus(enum.IntEnum):
+    All = -1
     Unknown = 0
     Started = 1
     Running = 2
@@ -460,6 +463,7 @@ class GuiProcessStatus(enum.IntEnum):
 
 class GuiProcessStatusMapper(object):
     MAPPER = {
+        GuiProcessStatus.All: 'All',
         GuiProcessStatus.Unknown: 'Unknown',
         GuiProcessStatus.Started: 'Started',
         GuiProcessStatus.Running: 'Running',
@@ -473,7 +477,25 @@ class GuiProcessStatusMapper(object):
         GuiProcessStatus.Finished: 'Finished',
     }
     MAPPER_CHS = {
+        GuiProcessStatus.All: '所有',
+        GuiProcessStatus.Unknown: '未知',
+        GuiProcessStatus.Started: '开始',
+        GuiProcessStatus.Running: '运行',
+        GuiProcessStatus.Waiting: '等待',
+        GuiProcessStatus.Completed: '成功',
+        GuiProcessStatus.Suspended: '暂停',
+        GuiProcessStatus.Failed: '失败',
+        GuiProcessStatus.Stopped: '停止',
+        GuiProcessStatus.Error: '错误',
+        GuiProcessStatus.Killed: '强制结束',
+        GuiProcessStatus.Finished: '结束',
     }
+
+    @classmethod
+    def get_name(cls, status):
+        if bsc_core.BscEnviron.get_gui_language() == 'chs':
+            return cls.MAPPER_CHS[status]
+        return cls.MAPPER[status]
 
 
 class GuiShowStatus(enum.IntEnum):

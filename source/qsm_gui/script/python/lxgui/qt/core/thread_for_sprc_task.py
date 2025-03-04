@@ -157,7 +157,7 @@ class _Sprc(object):
         )
 
 
-class QtThreadForSprcTask(QtCore.QThread):
+class QtThreadForSpcTask(QtCore.QThread):
     started = qt_signal()
     running = qt_signal()
     finished = qt_signal()
@@ -229,7 +229,7 @@ class QtThreadForSprcTask(QtCore.QThread):
         if self._kill_flag is True:
             return
 
-        descendant_args = self._sprc.get_prc_descendant_args()
+        descendant_args = self._spc.get_prc_descendant_args()
         for i_args in descendant_args:
             i_name, i_pid = i_args
             if i_name == self._check_memory_prc_name:
@@ -240,7 +240,7 @@ class QtThreadForSprcTask(QtCore.QThread):
                     )
                 )
 
-    def _do_status_update(self, status):
+    def _do_update_status(self, status):
         if self._kill_flag is True:
             return
 
@@ -250,7 +250,7 @@ class QtThreadForSprcTask(QtCore.QThread):
 
     def __init__(self, *args, **kwargs):
         self._progress_bar = kwargs.pop('progress_bar')
-        super(QtThreadForSprcTask, self).__init__(*args, **kwargs)
+        super(QtThreadForSpcTask, self).__init__(*args, **kwargs)
 
         self.parent()._thread_workers.append(self)
 
@@ -266,9 +266,9 @@ class QtThreadForSprcTask(QtCore.QThread):
         self._args = ()
         self._kwargs = ()
 
-        self._sprc = None
+        self._spc = None
 
-        self._do_status_update(self.Status.Waiting)
+        self._do_update_status(self.Status.Waiting)
 
     @property
     def status(self):
@@ -292,7 +292,7 @@ class QtThreadForSprcTask(QtCore.QThread):
 
         if self._kill_flag is False:
             # send emit first
-            self._do_status_update(self.Status.Killed)
+            self._do_update_status(self.Status.Killed)
             # set flag later
             self._kill_flag = True
 
@@ -304,8 +304,8 @@ class QtThreadForSprcTask(QtCore.QThread):
 
     def do_quit(self):
         if self._finish_flag is False:
-            if self._sprc is not None:
-                self._sprc.do_kill()
+            if self._spc is not None:
+                self._spc.do_kill()
 
             self.quit()
             self.wait()
@@ -320,9 +320,9 @@ class QtThreadForSprcTask(QtCore.QThread):
 
     @staticmethod
     def generate(window, progress_bar):
-        t = QtThreadForSprcTask(window, progress_bar=progress_bar)
-        QtThreadForSprcTask.INDEX += 1
-        t.set_entity(QtThreadForSprcTask.INDEX)
+        t = QtThreadForSpcTask(window, progress_bar=progress_bar)
+        QtThreadForSpcTask.INDEX += 1
+        t.set_entity(QtThreadForSpcTask.INDEX)
         return t
 
     def check_memory_for(self, prc_name):
@@ -351,7 +351,7 @@ class QtThreadForSprcTask(QtCore.QThread):
 
             st = time.time()
 
-            self._do_status_update(self.Status.Started)
+            self._do_update_status(self.Status.Started)
             self.started.emit()
             # noinspection PyBroadException
             try:
@@ -363,21 +363,21 @@ class QtThreadForSprcTask(QtCore.QThread):
                         **self._kwargs
                     )
                 elif isinstance(self._fnc, six.string_types):
-                    self._sprc = _Sprc(self, self._fnc, clear_environ='auto')
-                    self._do_status_update(self.Status.Running)
+                    self._spc = _Sprc(self, self._fnc, clear_environ='auto')
+                    self._do_update_status(self.Status.Running)
                     self.running.emit()
-                    self._sprc.run()
+                    self._spc.run()
                 else:
                     raise RuntimeError()
 
                 if self._kill_flag is False:
-                    self._do_status_update(self.Status.Completed)
+                    self._do_update_status(self.Status.Completed)
                     self.completed.emit()
             except Exception:
                 self._stderr('thread is failed at : {}\n'.format(self._entity))
-                self._do_status_update(self.Status.Failed)
-                if self._sprc is not None:
-                    self.failed.emit(self._sprc.get_results())
+                self._do_update_status(self.Status.Failed)
+                if self._spc is not None:
+                    self.failed.emit(self._spc.get_results())
                 else:
                     self.failed.emit([])
                 bsc_core.BscException.print_stack()

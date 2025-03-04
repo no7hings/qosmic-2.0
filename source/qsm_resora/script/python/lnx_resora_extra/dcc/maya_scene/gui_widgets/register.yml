@@ -1,0 +1,142 @@
+build:
+    name: 'Upload MAYA (.ma, .mb)'
+    name_chs: '上传MAYA（.ma, .mb）'
+
+    tool_tip:
+        |-
+        To be supplemented.
+
+    tool_tip_chs:
+        |-
+        待补充。
+
+    buttons:
+        apply_and_close:
+            name: 'Apply and Close'
+            name_chs: '应用并关闭'
+
+        apply:
+            name: 'Apply'
+            name_chs: '应用'
+
+        close:
+            name: 'Close'
+            name_chs: '关闭'
+
+    filter:
+        name: 'Type & Tag'
+        name_chs: '分类 & 标签'
+
+    options:
+        name: 'Options'
+        name_chs: '选项'
+
+        parameters:
+            directory:
+                widget: directory
+                open_or_save: open
+                name: 'Folder'
+                name_chs: '文件夹'
+
+            file:
+                widget: group
+                name: 'File'
+                name_chs: '文件'
+
+            file/pattern:
+                widget: enumerate
+                name: 'File Pattern'
+                name_chs: '文件模版'
+                options: [
+                    '{directory}//*.{format}',
+                    '{directory}/*.{format}'
+                ]
+                default_index: 0
+                tool_tip:
+                    |-
+                    To be supplemented.
+                tool_tip_chs:
+                    |-
+                    匹配文件的模版：
+                        “{directory}”为文件夹路径；
+                        如果只收集文件夹下的文件后面加“/*.{format}”；
+                        如果需要收集文件夹下的所有文件（包含所有的子文件夹）加“//*.{format}”。
+
+            file/formats:
+                widget: string
+                name: 'Formats'
+                name_chs: '格式'
+                value: 'ma, mb'
+                lock: True
+                tool_tip:
+                    |-
+                    To be supplemented.
+                tool_tip_chs:
+                    |-
+                    匹配文件的格式
+
+            preview:
+                widget: group
+                name: 'Preview'
+                name_chs: '预览'
+
+            preview/enable:
+                widget: boolean
+                name: 'Include Preview'
+                name_chs: '包含预览'
+                value: True
+
+            preview/pattern:
+                widget: string
+                name: 'Preview Pattern'
+                name_chs: '预览模版'
+                value: '{file_directory}/{file_name}.{format}'
+                tool_tip:
+                    |-
+                    To be supplemented.
+                tool_tip_chs:
+                    |-
+                    匹配预览的模版：
+                        例如，如果文件路径为“c:/test.ma”，则会自动收集“c:/test.png”作为预览图。
+
+            preview/formats:
+                widget: string
+                name: 'Preview Formats'
+                name_chs: '格式'
+                value: 'png, jpg, mov, avi, mp4'
+                tool_tip:
+                    |-
+                    To be supplemented.
+                tool_tip_chs:
+                    |-
+                    匹配预览的格式
+
+            file_reference:
+                widget: group
+                name: 'File_Reference'
+                name_chs: '引用'
+
+            file_reference/enable:
+                widget: boolean
+                name: 'Include File References'
+                name_chs: '包含文件引用'
+                value: False
+
+            file_reference/pattern:
+                widget: enumerate
+                name: 'File Reference Pattern'
+                name_chs: '文件引用模版'
+                options: [
+                    '{file_directory}//*',
+                    '{file_directory}/*'
+                ]
+                value: '{file_directory}//*'
+                tool_tip:
+                    |-
+                    To be supplemented.
+                tool_tip_chs:
+                    |-
+                    匹配文件引用的模版：
+                        “{file_directory}”为源文件的文件夹路径；
+                        如果只收集文件夹下的文件后面加“/*”；
+                        如果需要收集文件夹下的所有文件（包含所有的子文件夹）加“//*”。

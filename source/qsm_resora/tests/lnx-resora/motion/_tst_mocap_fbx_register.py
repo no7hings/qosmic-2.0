@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-import lnx_resora_extra.motion.scripts as s
+import lnx_resora_extra.animation.motion.scripts as s
 
 s.MoCapDotFbxMotionRegisterBatch(
     'Z:/resources/mixamo',

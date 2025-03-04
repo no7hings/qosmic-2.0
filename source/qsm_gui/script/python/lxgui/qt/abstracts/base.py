@@ -225,7 +225,7 @@ class AbsQtStatusBaseDef(object):
     Rgba = _gui_core.GuiRgba
 
     @classmethod
-    def _get_rgb_args_(cls, r, g, b, a):
+    def _get_rgba_args_(cls, r, g, b, a):
         h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
         r_, g_, b_ = bsc_core.BscColor.hsv2rgb(h, s*1.25, v*1.25)
         return (r, g, b, a), (r_, g_, b_, a)
@@ -234,82 +234,82 @@ class AbsQtStatusBaseDef(object):
     def _generate_background_rgba_args_by_status_(cls, status):
         # process
         if status in {cls.Status.Started}:
-            return cls._get_rgb_args_(*cls.Rgba.DarkAzureBlue)
+            return cls._get_rgba_args_(*cls.Rgba.DarkAzureBlue)
         elif status in {cls.Status.Running}:
-            return cls._get_rgb_args_(*cls.Rgba.LightAzureBlue)
+            return cls._get_rgba_args_(*cls.Rgba.LightAzureBlue)
         elif status in {cls.Status.Waiting}:
-            return cls._get_rgb_args_(*cls.Rgba.Orange)
+            return cls._get_rgba_args_(*cls.Rgba.Orange)
         elif status in {cls.Status.Suspended}:
-            return cls._get_rgb_args_(*cls.Rgba.LemonYellow)
+            return cls._get_rgba_args_(*cls.Rgba.LemonYellow)
         elif status in {cls.Status.Failed, cls.Status.Error}:
-            return cls._get_rgb_args_(*cls.Rgba.LightRed)
+            return cls._get_rgba_args_(*cls.Rgba.LightRed)
         elif status in {cls.Status.Killed}:
-            return cls._get_rgb_args_(*cls.Rgba.Pink)
+            return cls._get_rgba_args_(*cls.Rgba.Pink)
         elif status in {cls.Status.Completed}:
-            return cls._get_rgb_args_(*cls.Rgba.LightNeonGreen)
+            return cls._get_rgba_args_(*cls.Rgba.LightNeonGreen)
         # validation
         elif status in {cls.ValidationStatus.Enable}:
-            return cls._get_rgb_args_(*cls.Rgba.BkgButton)
+            return cls._get_rgba_args_(*cls.Rgba.BkgButton)
         elif status in {cls.ValidationStatus.Disable}:
-            return cls._get_rgb_args_(*cls.Rgba.BkgButtonDisable)
+            return cls._get_rgba_args_(*cls.Rgba.BkgButtonDisable)
         if status in [cls.ValidationStatus.Warning]:
-            return cls._get_rgb_args_(*cls.Rgba.LemonYellow)
+            return cls._get_rgba_args_(*cls.Rgba.LemonYellow)
         elif status in {cls.ValidationStatus.Error}:
-            return cls._get_rgb_args_(*cls.Rgba.TorchRed)
+            return cls._get_rgba_args_(*cls.Rgba.TorchRed)
 
         elif status in {cls.ValidationStatus.Error}:
-            return cls._get_rgb_args_(*cls.Rgba.DarkTorchRed)
-        return cls._get_rgb_args_(*cls.Rgba.Transparent)
+            return cls._get_rgba_args_(*cls.Rgba.DarkTorchRed)
+        return cls._get_rgba_args_(*cls.Rgba.Transparent)
 
     @classmethod
     def _get_rgba_args_by_status_(cls, status):
         if status in {cls.Status.Started}:
-            return cls._get_rgb_args_(*cls.Rgba.DarkAzureBlue)
+            return cls._get_rgba_args_(*cls.Rgba.DarkAzureBlue)
         elif status in {cls.Status.Running}:
-            return cls._get_rgb_args_(*cls.Rgba.LightAzureBlue)
+            return cls._get_rgba_args_(*cls.Rgba.LightAzureBlue)
         elif status in {cls.Status.Waiting}:
-            return cls._get_rgb_args_(*cls.Rgba.Orange)
+            return cls._get_rgba_args_(*cls.Rgba.Orange)
         elif status in {cls.Status.Suspended}:
-            return cls._get_rgb_args_(*cls.Rgba.LemonYellow)
+            return cls._get_rgba_args_(*cls.Rgba.LemonYellow)
         elif status in {cls.Status.Failed, cls.Status.Error}:
-            return cls._get_rgb_args_(*cls.Rgba.LightRed)
+            return cls._get_rgba_args_(*cls.Rgba.LightRed)
         elif status in {cls.Status.Killed}:
-            return cls._get_rgb_args_(*cls.Rgba.Pink)
+            return cls._get_rgba_args_(*cls.Rgba.Pink)
         elif status in {cls.Status.Completed}:
-            return cls._get_rgb_args_(*cls.Rgba.LightNeonGreen)
-        return cls._get_rgb_args_(*cls.Rgba.Transparent)
+            return cls._get_rgba_args_(*cls.Rgba.LightNeonGreen)
+        return cls._get_rgba_args_(*cls.Rgba.Transparent)
 
     @classmethod
     def _get_text_rgba_args_by_validator_status_(cls, status):
         if status in {cls.ValidationStatus.Warning}:
-            return cls._get_rgb_args_(*cls.Rgba.LemonYellow)
+            return cls._get_rgba_args_(*cls.Rgba.LemonYellow)
         elif status in {cls.ValidationStatus.Disable, cls.ValidationStatus.Lost}:
-            return cls._get_rgb_args_(*cls.Rgba.DarkGray)
+            return cls._get_rgba_args_(*cls.Rgba.DarkGray)
         elif status in {cls.ValidationStatus.Error, cls.ValidationStatus.Unreadable}:
-            return cls._get_rgb_args_(*cls.Rgba.TorchRed)
+            return cls._get_rgba_args_(*cls.Rgba.TorchRed)
         elif status in {cls.ValidationStatus.Locked, cls.ValidationStatus.Unwritable}:
-            return cls._get_rgb_args_(*cls.Rgba.Purple)
+            return cls._get_rgba_args_(*cls.Rgba.Purple)
         elif status in {cls.ValidationStatus.Active}:
-            return cls._get_rgb_args_(*cls.Rgba.AzureBlue)
+            return cls._get_rgba_args_(*cls.Rgba.AzureBlue)
         elif status in {cls.ValidationStatus.Correct, cls.ValidationStatus.New}:
-            return cls._get_rgb_args_(*cls.Rgba.Green)
-        return cls._get_rgb_args_(*cls.Rgba.White)
+            return cls._get_rgba_args_(*cls.Rgba.Green)
+        return cls._get_rgba_args_(*cls.Rgba.White)
 
     @classmethod
     def _get_rgba_args_by_validator_status_(cls, status):
         if status in [cls.ValidationStatus.Warning]:
-            return cls._get_rgb_args_(*cls.Rgba.LemonYellow)
+            return cls._get_rgba_args_(*cls.Rgba.LemonYellow)
         elif status in {cls.ValidationStatus.Disable, cls.ValidationStatus.Lost}:
-            return cls._get_rgb_args_(*cls.Rgba.DarkGray)
+            return cls._get_rgba_args_(*cls.Rgba.DarkGray)
         elif status in {cls.ValidationStatus.Error, cls.ValidationStatus.Unreadable}:
-            return cls._get_rgb_args_(*cls.Rgba.TorchRed)
+            return cls._get_rgba_args_(*cls.Rgba.TorchRed)
         elif status in {cls.ValidationStatus.Locked, cls.ValidationStatus.Unwritable}:
-            return cls._get_rgb_args_(*cls.Rgba.Purple)
+            return cls._get_rgba_args_(*cls.Rgba.Purple)
         elif status in {cls.ValidationStatus.Active}:
-            return cls._get_rgb_args_(*cls.Rgba.AzureBlue)
+            return cls._get_rgba_args_(*cls.Rgba.AzureBlue)
         elif status in {cls.ValidationStatus.Correct, cls.ValidationStatus.New}:
-            return cls._get_rgb_args_(*cls.Rgba.Green)
-        return cls._get_rgb_args_(*cls.Rgba.Transparent)
+            return cls._get_rgba_args_(*cls.Rgba.Green)
+        return cls._get_rgba_args_(*cls.Rgba.Transparent)
 
     def _init_status_base_def_(self, widget):
         self._widget = widget
@@ -2684,7 +2684,7 @@ class AbsQtItemFilterDef(object):
     def _clean_up_keyword_filter_keys_tgt_(cls, keys):
         def to_string_fnc_(x_):
             if isinstance(x_, six.string_types):
-                return bsc_core.auto_unicode(x_)
+                return bsc_core.ensure_unicode(x_)
             return str(x_)
 
         return set(map(lambda x: to_string_fnc_(x), filter(None, set(keys))))
@@ -2744,7 +2744,7 @@ class AbsQtItemFilterDef(object):
                     if not fnmatch.filter([context], i_filter_key):
                         return True, True
                 else:
-                    context = bsc_core.auto_unicode(context)
+                    context = bsc_core.ensure_unicode(context)
                     if i_text not in context:
                         return True, True
             return True, False

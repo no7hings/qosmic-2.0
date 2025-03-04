@@ -16,9 +16,7 @@ def main(session):
     if bsc_storage.StgFileOpt(
         image_file_path
     ).get_is_file() is True:
-        bsc_storage.ImgOiioOptForThumbnail(image_file_path).convert_to(
-            output_image_path
-        )
+        bsc_storage.ImgOiioOpt(image_file_path).convert_to(output_image_path)
     else:
         raise RuntimeError(
             bsc_log.Log.trace_method_error(

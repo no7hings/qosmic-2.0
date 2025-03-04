@@ -281,7 +281,7 @@ class AndPortOpt(object):
             mtx = raw
             if isinstance(mtx, ai.ai_matrix.AtMatrix) is False:
                 mtx = raw[0]
-            _raw = tuple([tuple([mtx[i][j] for j in xrange(4)]) for i in xrange(4)])
+            _raw = tuple([tuple([mtx[i][j] for j in range(4)]) for i in range(4)])
         # node
         elif and_type is ai.AI_TYPE_NODE:
             node = raw

@@ -14,6 +14,8 @@ else:
 
 import socket
 
+from ..wrap import *
+
 
 class UrlOptions(object):
     @classmethod
@@ -29,35 +31,10 @@ class UrlOptions(object):
 
 
 class UrlValue(object):
-    @staticmethod
-    def auto_unicode(path):
-        if not isinstance(path, six.text_type):
-            return path.decode('utf-8')
-        return path
-
-    @staticmethod
-    def ensure_unicode(s):
-        if isinstance(s, six.text_type):
-            return s
-        elif isinstance(s, bytes):
-            return s.decode('utf-8')
-        else:
-            return s
-
-    @staticmethod
-    def ensure_string(s):
-        if isinstance(s, six.text_type):
-            if six.PY2:
-                return s.encode('utf-8')
-        elif isinstance(s, six.binary_type):
-            if six.PY3:
-                return s.decode('utf-8')
-        return s
-
     @classmethod
     def quote(cls, text):
         return urllib.quote_plus(
-            cls.ensure_string(text)
+            ensure_string(text)
         )
 
     @classmethod

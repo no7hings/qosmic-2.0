@@ -4,7 +4,7 @@ import lxbasic.log as bsc_log
 from . import shelf_build as _shelf_build
 
 
-class MayaShelf(object):
+class MainShelf(object):
     LOG_KEY = 'qosmic shelf'
 
     def __init__(self):

@@ -370,7 +370,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 cmd_script=cmd_script,
                 icon_name='application/maya',
                 file=file_path,
-                output_file=bsc_core.auto_unicode(movie_file_path),
+                output_file=bsc_core.ensure_unicode(movie_file_path),
                 # must use string
                 completed_notice=bsc_web.UrlOptions.to_string(
                     dict(

@@ -258,7 +258,7 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
             if '|Low_Grp|' in path_:
                 return False
 
-            if '|Low|' in path_:
+            if '|Group|' in path_:
                 return False
 
             return True

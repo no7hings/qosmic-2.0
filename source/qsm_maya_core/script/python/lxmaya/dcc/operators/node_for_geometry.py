@@ -148,13 +148,13 @@ class MeshOpt(
                 int(count)
                 )
         """
-        return [self.om2_obj.polygonVertexCount(i) for i in xrange(self.om2_obj.numPolygons)]
+        return [self.om2_obj.polygonVertexCount(i) for i in range(self.om2_obj.numPolygons)]
 
     def get_face_vertex_indices(self, reverse=False):
         om2_obj = self.om2_obj
         if reverse is True:
             face_vertex_indices = []
-            for i_face_index in xrange(om2_obj.numPolygons):
+            for i_face_index in range(om2_obj.numPolygons):
                 i_om2_indices = self.om2_obj.getPolygonVertices(i_face_index)
                 i_indices = list(i_om2_indices)
                 if reverse is True:
@@ -183,7 +183,7 @@ class MeshOpt(
         if reverse is True:
             face_vertex_counts = []
             face_vertex_indices = []
-            for i_face_index in xrange(om2_obj.numPolygons):
+            for i_face_index in range(om2_obj.numPolygons):
                 i_count = om2_obj.polygonVertexCount(i_face_index)
                 face_vertex_counts.append(i_count)
                 i_om2_indices = om2_obj.getPolygonVertices(i_face_index)
@@ -453,7 +453,7 @@ class MeshOpt(
         )
         """
         lis = []
-        for vertex_id in xrange(self.om2_obj.numVertices):
+        for vertex_id in range(self.om2_obj.numVertices):
             om2_float_vector = self.om2_obj.getVertexNormal(vertex_id, True)
             lis.append(
                 mya_core.Om2Base._get_float_vector_(om2_float_vector)
@@ -502,7 +502,7 @@ class MeshOpt(
         face_vertex_counts = []
         face_vertex_indices = []
         om2_obj = self.om2_obj
-        for i_face_index in xrange(om2_obj.numPolygons):
+        for i_face_index in range(om2_obj.numPolygons):
             i_count = om2_obj.polygonVertexCount(i_face_index)
             face_vertex_counts.append(i_count)
             color_range = [i/100.0 for i in range(0, 100)]
@@ -601,7 +601,7 @@ class MeshOpt(
 
     def get_override_face_vertices(self):
         dic = {}
-        for i_face_index in xrange(self.om2_obj.numPolygons):
+        for i_face_index in range(self.om2_obj.numPolygons):
             i_om2_indices = self.om2_obj.getPolygonVertices(i_face_index)
             _ = list(i_om2_indices)
             _.sort()
@@ -652,9 +652,9 @@ class MeshChecker(
                 lis.append(i_vertex_index)
         return mya_core.Om2Base._get_mesh_vertex_comp_names_(lis)
 
-    def set_unused_vertices_delete(self):
+    def delete_unused_vertices(self):
         cs = self.get_unused_vertex_comp_names()
-        for i_c in mya_core.Om2Base._get_mesh_vertex_comp_names_(cs):
+        for i_c in cs:
             p = '{}.{}'.format(self.obj.path, i_c)
             cmds.delete(p)
 

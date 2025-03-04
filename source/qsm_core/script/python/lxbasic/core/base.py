@@ -46,12 +46,6 @@ from . import configure as _configure
 from . import cache as _cache
 
 
-def auto_unicode(text):
-    if not isinstance(text, six.text_type):
-        return text.decode('utf-8')
-    return text
-
-
 class BscPlatform(object):
     @staticmethod
     def get_is_linux():

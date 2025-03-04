@@ -127,6 +127,12 @@ class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
             gui_qt_core.QtWidgets.QSizePolicy.Minimum
         )
 
+    def set_height_match_to_maximum(self):
+        self._qt_view.setSizePolicy(
+            gui_qt_core.QtWidgets.QSizePolicy.Expanding,
+            gui_qt_core.QtWidgets.QSizePolicy.Maximum
+        )
+
     def connect_expand_changed_to(self, fnc):
         self._qt_head.expand_clicked.connect(fnc)
 

@@ -4,12 +4,12 @@ import lnx_screw.core as lzy_src_core
 import lxgui.core as gui_core
 
 
-@gui_core.Verify.execute('resora', 7)
 class Main(object):
     def __init__(self, session):
         self._session = session
         self._option_opt = self._session.option_opt
 
+    @gui_core.Verify.execute('resora', 7)
     def execute(self):
         window = self._session.find_window()
         if window is not None:

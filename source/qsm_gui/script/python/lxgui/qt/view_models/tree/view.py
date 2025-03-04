@@ -9,8 +9,6 @@ from ....qt.core.wrap import *
 
 from ....qt import core as _qt_core
 
-from .. import base as _base
-
 from .. import view_base as _view_base
 
 
@@ -110,8 +108,8 @@ class TreeViewModel(_view_base.AbsViewModel):
     def __init__(self, widget):
         super(TreeViewModel, self).__init__(
             widget,
-            _base._Data(
-                item=_base._Data(
+            _gui_core.BaseData(
+                item=_gui_core.BaseData(
                     cls=None,
                     grid_size=QtCore.QSize(128, 20),
                 ),

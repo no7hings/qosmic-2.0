@@ -707,11 +707,13 @@ class BscFfmpegVideo(object):
             '-of',
             'default=nokey=1:noprint_wrappers=1',
         ]
-
+        cmd_args = [_base.ensure_mbcs(x) for x in cmd_args]
         cmd_script = '{} "{}"'.format(' '.join(cmd_args), video_path)
 
         result = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         stdout, stderr = result.communicate()
+
+        stdout = _base.ensure_unicode(stdout)
 
         if result.returncode != 0:
             sys.stderr.write(stderr+'\n')
@@ -750,8 +752,7 @@ Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffmpeg.exe -i Z:
                 '"{}"'.format(image_path)
             ]
 
-            cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
-
+            cmd_args = [_base.ensure_mbcs(x) for x in cmd_args]
             cmd_script = ' '.join(cmd_args)
             s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             s_p.communicate()
@@ -791,7 +792,7 @@ Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffmpeg.exe -i Z:
                     )
                 ]
             )
-            cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
+            cmd_args = [_base.ensure_mbcs(x) for x in cmd_args]
             cmd_script = ' '.join(cmd_args)
             s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             s_p.communicate()
@@ -823,7 +824,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
             '-r 24', '-vcodec libx264', '-crf 28', '-preset ultrafast', '-y',
             six.u('"{}"').format(video_path_dst)
         ]
-        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
+        cmd_args = [_base.ensure_mbcs(x) for x in cmd_args]
         cmd_script = ' '.join(cmd_args)
         subprocess.check_call(cmd_script)
 
@@ -877,8 +878,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
             video_path,
         ]
 
-        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
-
+        cmd_args = [_base.ensure_mbcs(x) for x in cmd_args]
         cmd_script = ' '.join(cmd_args)
         s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         s_p.communicate()
@@ -918,8 +918,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
             output_video
         ]
 
-        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
-
+        cmd_args = [_base.ensure_mbcs(x) for x in cmd_args]
         cmd_script = ' '.join(cmd_args)
         s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         s_p.communicate()
@@ -1000,8 +999,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
             video_path
         ]
 
-        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
-
+        cmd_args = [_base.ensure_mbcs(x) for x in cmd_args]
         result = subprocess.Popen(cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         stdout, stderr = result.communicate()
 
@@ -1021,8 +1019,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
             '-i', file_path_0, file_path1
         ]
 
-        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
-
+        cmd_args = [_base.ensure_mbcs(x) for x in cmd_args]
         cmd_script = ' '.join(cmd_args)
         s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         s_p.communicate()

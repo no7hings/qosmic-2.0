@@ -1,5 +1,5 @@
 # coding:utf-8
-import lnx_resora_extra.asset.scripts as s
+import lnx_resora_extra.other.asset.scripts as s
 
 s.AssetBatchRegisterOpt(
     'QSM_TST', '测试'

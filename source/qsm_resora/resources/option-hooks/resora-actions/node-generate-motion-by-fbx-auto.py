@@ -3,12 +3,11 @@ import functools
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_resora_extra.motion.scripts as lzy_rsc_etr_mtn_scripts
+import lnx_resora_extra.animation.motion.scripts as lzy_rsc_etr_mtn_scripts
 
 import lxgui.core as gui_core
 
 
-@gui_core.Verify.execute('resora', 7)
 class Main(object):
     def __init__(self, session):
         self._session = session
@@ -44,10 +43,12 @@ class Main(object):
                     i_task_name,
                     i_cmd_script,
                     completed_fnc=functools.partial(i_opt.register),
+                    application='maya'
                 )
         else:
             task_window.close_window()
 
+    @gui_core.Verify.execute('resora', 7)
     def execute(self):
         window = self._session.find_window()
         if window is not None:
@@ -57,7 +58,7 @@ class Main(object):
 
             scr_entities = node_opt.gui_get_checked_or_selected_scr_entities()
             if scr_entities:
-                task_window = gui_prx_widgets.PrxSprcTaskWindow()
+                task_window = gui_prx_widgets.PrxSpcTaskWindow()
                 task_window.set_thread_maximum(4)
                 if task_window._language == 'chs':
                     task_window.set_window_title('生成动作（MoCap fbx）')

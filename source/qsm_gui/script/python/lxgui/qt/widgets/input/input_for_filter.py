@@ -50,7 +50,8 @@ class QtInputForFilter(
         pass
 
     def _pull_history_(self, value):
-        self._accept_element_(value)
+        if value is not None:
+            self._accept_element_(value)
 
     def _refresh_history_extend_(self):
         self._history_button.show()

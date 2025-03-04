@@ -263,7 +263,7 @@ class QtLayerStack(QtWidgets.QWidget):
             if self.__swap_mode in {'add', 'new'}:
                 painter._draw_alternating_colors_by_rect_(
                     rect=self.__swap_rect_0,
-                    colors=((0, 0, 0, 63), (0, 0, 0, 0)),
+                    colors=((0, 0, 0, 63), (0, 0, 0, 31)),
                     running=True,
                     border_radius=5
                 )

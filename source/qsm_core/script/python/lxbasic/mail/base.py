@@ -5,6 +5,12 @@ import os
 
 import smtplib
 
+import sys
+
+import threading
+
+import functools
+
 from email.mime.text import MIMEText
 
 from email.mime.multipart import MIMEMultipart
@@ -38,16 +44,13 @@ class MyMail(object):
         smtp_server = self._smtp_server
         smtp_port = self._smtp_port
 
-        # 创建邮件对象
         msg = MIMEMultipart()
         msg['From'] = sender_email
         msg['To'] = receiver_email
         msg['Subject'] = subject
 
-        # 邮件正文
         msg.attach(MIMEText(body, 'plain'))
 
-        # 添加多个附件
         for i_file_path in files:
             try:
                 with open(i_file_path, "rb") as attachment:
@@ -58,16 +61,15 @@ class MyMail(object):
                     part.add_header('Content-Disposition', 'attachment; filename="%s"' % i_file_name)
                     msg.attach(part)
             except Exception as e:
-                print("无法添加附件 %s: %s" % (i_file_path, str(e)))
+                print("Add file failed: %s, %s." % (i_file_path, str(e)))
 
-        # 发送邮件
         server = smtplib.SMTP_SSL(smtp_server, smtp_port)
         try:
             server.login(sender_email, sender_password)
             server.sendmail(sender_email, receiver_email, msg.as_string())
-            print("邮件发送成功")
+            print("Send successful: {}.".format(subject))
         except Exception as e:
-            print("邮件发送失败:", str(e))
+            print("Send failed: {}, ".format(subject), str(e))
         finally:
             server.quit()
 
@@ -89,24 +91,34 @@ class MyMail(object):
     def send_files_to_xj(cls, directory_path):
         import os
 
-        directory_path = ensure_string()
+        directory_path = ensure_string(directory_path)
 
         file_names = os.listdir(directory_path)
 
         name = os.path.basename(directory_path)
 
+        ts = []
+
+        opt = cls(
+            smtp_server=MySmtp.SERVER,
+            smtp_port=MySmtp.PORT,
+            sender_email=MySmtp.SENDER_EMAIL,
+            sender_password=MySmtp.SENDER_PASSWORD,
+        )
         for i_file_name in file_names:
             i_file_path = u'{}/{}'.format(directory_path, i_file_name)
             i_subject = u'{}/{}'.format(name, i_file_name)
             i_body = i_file_path
-            cls(
-                smtp_server=MySmtp.SERVER,
-                smtp_port=MySmtp.PORT,
-                sender_email=MySmtp.SENDER_EMAIL,
-                sender_password=MySmtp.SENDER_PASSWORD,
-            ).send(
-                receiver_email='dong.changbao@qinsmoon.cn',
-                subject=i_subject,
-                body=i_body,
-                files=[i_file_path]
+            it = threading.Thread(
+                target=functools.partial(
+                    opt.send,
+                    receiver_email='dong.changbao@qinsmoon.cn',
+                    subject=i_subject,
+                    body=i_body,
+                    files=[i_file_path]
+                )
             )
+            ts.append(it)
+
+        [x.start() for x in ts]
+        [x.join() for x in ts]

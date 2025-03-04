@@ -473,7 +473,7 @@ class Om2MeshOpt(object):
         face_vertex_counts = []
         face_vertex_indices = []
         om2_fnc = self._om2_obj_fnc
-        for i_face_index in xrange(om2_fnc.numPolygons):
+        for i_face_index in range(om2_fnc.numPolygons):
             i_count = om2_fnc.polygonVertexCount(i_face_index)
             face_vertex_counts.append(i_count)
             om2_indices = om2_fnc.getPolygonVertices(i_face_index)
@@ -491,9 +491,9 @@ class Om2MeshOpt(object):
                 lis.append(i_vertex_index)
         return lis
 
-    def set_unused_vertices_delete(self):
-        c = self.get_unused_vertices()
-        for i in Om2Base._get_mesh_vertex_comp_names_(c):
+    def delete_unused_vertices(self):
+        cs = self.get_unused_vertices()
+        for i in cs:
             p = '{}.{}'.format(self.path, i)
             cmds.delete(p)
 
@@ -724,7 +724,7 @@ class Om2MeshOpt(object):
         idx = 0
         colors = om2.MColorArray()
         face_indices = []
-        for i_face_index in xrange(self._om2_obj_fnc.numPolygons):
+        for i_face_index in range(self._om2_obj_fnc.numPolygons):
             face_indices.append(i_face_index)
             i_count = self._om2_obj_fnc.polygonVertexCount(i_face_index)
             j_om2_color = om2.MColor()
@@ -917,9 +917,9 @@ class Om2MeshChecker(object):
                 list_.append(i_vertex_index)
         return Om2Base._get_mesh_vertex_comp_names_(list_)
 
-    def set_unused_vertices_delete(self):
+    def delete_unused_vertices(self):
         cs = self.get_unused_vertex_comp_names()
-        for i_c in Om2Base._get_mesh_vertex_comp_names_(cs):
+        for i_c in cs:
             p = '{}.{}'.format(self._om2_mesh_opt.path, i_c)
             cmds.delete(p)
 

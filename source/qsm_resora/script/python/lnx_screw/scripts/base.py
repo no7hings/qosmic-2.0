@@ -64,10 +64,10 @@ class ManifestStageOpt(object):
         if image_path is not None:
             self._scr_stage.upload_node_preview(node_path, image_path)
 
-        type_path = '/type/{}'.format(resource_type)
+        scr_type_path = self.create_type_auto(resource_type)
         
         # create type assign
-        self._scr_stage.create_node_type_assign(node_path, type_path)
+        self._scr_stage.create_node_type_assign(node_path, scr_type_path)
         
         # set resource_type
         self._scr_stage.create_or_update_node_parameter(
@@ -76,9 +76,29 @@ class ManifestStageOpt(object):
         
         _scr_core.Stage.build_fnc(database_name)
 
+    def create_type_auto(self, type_name):
+        scr_type_path = '/type/{}'.format(type_name)
+        main_configure = self._scr_stage.get_main_configure()
+        type_args = type_name.split('/')
+        if type_args > 1:
+            type_group_name = type_args[0]
+            type_group_gui_name = main_configure.get('types.{}.gui_name'.format(type_group_name))
+            type_group_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(type_group_name))
+            scr_type_group_path = '/type/{}'.format(type_group_name)
+            self._scr_stage.create_type(
+                scr_type_group_path, gui_name=type_group_gui_name, gui_name_chs=type_group_gui_name_chs
+            )
+
+        type_gui_name = main_configure.get('types.{}.gui_name'.format(type_name))
+        type_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(type_name))
+        self._scr_stage.create_type(
+            scr_type_path, gui_name=type_gui_name, gui_name_chs=type_gui_name_chs
+        )
+        return scr_type_path
+
     def new_page(self, resource_type, gui_name, gui_name_chs, image=None):
         index_maximum = self._scr_stage.get_entity_index_maximum(self._scr_stage.EntityTypes.Node)
-        database_name = 'resource_{}_{}'.format(resource_type, index_maximum+1)
+        database_name = 'resource_{}_{}'.format(resource_type.replace('/', '_'), index_maximum+1)
         self.create_or_update_page(
             resource_type, database_name, gui_name, gui_name_chs, image
         )
@@ -114,19 +134,23 @@ class ManifestStageOpt(object):
         list_ = []
         main_configure = _scr_core.Stage.get_main_configure()
 
-        type_names = main_configure.get_key_names_at('types')
-        for i_type_name in type_names:
-            i_enable = main_configure.get('types.{}.enable'.format(i_type_name))
+        keys = main_configure.get_key_names_at('types')
+        for i_key in keys:
+            i_type = main_configure.get('types.{}.type'.format(i_key))
+            if i_type != 'node':
+                continue
+
+            i_enable = main_configure.get('types.{}.enable'.format(i_key))
             if i_enable is False:
                 continue
 
-            i_applications = main_configure.get('types.{}.applications'.format(i_type_name))
+            i_applications = main_configure.get('types.{}.applications'.format(i_key))
 
             if bsc_core.BscApplication.get_is_maya():
                 if 'maya' not in i_applications:
                     continue
 
-            list_.append(i_type_name)
+            list_.append(i_key)
         return list_
 
     def get_valid_database_names(self):
@@ -135,7 +159,7 @@ class ManifestStageOpt(object):
         ]
 
         main_configure = self._scr_stage.get_main_configure()
-        type_names = main_configure.get_key_names_at('types')
+        keys = main_configure.get_key_names_at('types')
 
         scr_nodes = self._scr_stage.find_all(
             entity_type=self._scr_stage.EntityTypes.Node,
@@ -149,7 +173,7 @@ class ManifestStageOpt(object):
             i_scr_node_path = i_scr_node.path
 
             i_type_name = self._scr_stage.get_node_parameter(i_scr_node_path, 'resource_type')
-            if i_type_name not in type_names:
+            if i_type_name not in keys:
                 continue
 
             i_enable = main_configure.get('types.{}.enable'.format(i_type_name))
@@ -170,7 +194,7 @@ class ManifestStageOpt(object):
 
         main_configure = self._scr_stage.get_main_configure()
 
-        type_names = main_configure.get_key_names_at('types')
+        keys = main_configure.get_key_names_at('types')
 
         dict_['resource_manifest'] = dict(
             type=dict(
@@ -200,12 +224,25 @@ class ManifestStageOpt(object):
             i_node_gui_name_chs = i_scr_node.gui_name_chs
 
             i_type_name = self._scr_stage.get_node_parameter(i_scr_node_path, 'resource_type')
-            if i_type_name not in type_names:
+            if i_type_name not in keys:
                 continue
 
             i_enable = main_configure.get('types.{}.enable'.format(i_type_name))
             if i_enable is False:
                 continue
+
+            i_type_args = i_type_name.split('/')
+            if i_type_args > 1:
+                i_type_group_name = i_type_args[0]
+                i_type_group_gui_name = main_configure.get('types.{}.gui_name'.format(i_type_group_name))
+                i_type_group_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(i_type_group_name))
+                i_type_group_dict = dict(
+                    name=i_type_group_name,
+                    gui_name=i_type_group_gui_name,
+                    gui_name_chs=i_type_group_gui_name_chs
+                )
+            else:
+                i_type_group_dict = dict()
 
             i_type_gui_name = main_configure.get('types.{}.gui_name'.format(i_type_name))
             i_type_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(i_type_name))
@@ -222,6 +259,7 @@ class ManifestStageOpt(object):
                     gui_name=i_type_gui_name,
                     gui_name_chs=i_type_gui_name_chs
                 ),
+                type_group=i_type_group_dict,
                 node=dict(
                     name=i_node_name,
                     gui_name=i_node_gui_name,
@@ -235,18 +273,26 @@ class ManifestStageOpt(object):
     def get_resource_type_gui_args(cls):
         main_configure = _scr_core.Stage.get_main_configure()
 
-        values = main_configure.get_key_names_at('types')
+        keys = main_configure.get_key_names_at('types')
 
         options = []
         option_names = []
         option_names_chs = []
-        for i_value in values:
-            if i_value == 'manifest':
+        for i_key in keys:
+            if i_key == 'manifest':
                 continue
 
-            options.append(i_value)
-            i_gui_name = main_configure.get('types.{}.gui_name'.format(i_value))
-            i_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(i_value))
+            i_type = main_configure.get('types.{}.type'.format(i_key))
+            if i_type == 'group':
+                continue
+
+            i_enable = main_configure.get('types.{}.enable'.format(i_key))
+            if i_enable is False:
+                continue
+
+            options.append(i_key)
+            i_gui_name = main_configure.get('types.{}.gui_name'.format(i_key))
+            i_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(i_key))
 
             option_names.append(i_gui_name)
             option_names_chs.append(i_gui_name_chs)

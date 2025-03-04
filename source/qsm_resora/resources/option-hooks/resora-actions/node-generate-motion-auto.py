@@ -3,12 +3,11 @@ import functools
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_resora_extra.motion.scripts as lzy_rsc_etr_mtn_scripts
+import lnx_resora_extra.animation.motion.scripts as lzy_rsc_etr_mtn_scripts
 
 import lxgui.core as gui_core
 
 
-@gui_core.Verify.execute('resora', 7)
 class Main(object):
     def __init__(self, session):
         self._session = session
@@ -48,6 +47,7 @@ class Main(object):
         else:
             task_window.close_window()
 
+    @gui_core.Verify.execute('resora', 7)
     def execute(self):
         window = self._session.find_window()
         if window is not None:

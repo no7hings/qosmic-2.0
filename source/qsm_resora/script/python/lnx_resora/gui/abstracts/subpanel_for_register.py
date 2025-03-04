@@ -33,7 +33,7 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubpanel):
     def find_register_subpage_cls(resource_type):
         # noinspection PyBroadException
         try:
-            module_path = 'lnx_resora_extra.{}.gui_widgets.register'.format(resource_type)
+            module_path = 'lnx_resora_extra.{}.gui_widgets.register'.format(resource_type.replace('/', '.'))
             module = bsc_core.PyModule(module_path)
             if module.get_is_exists():
                 cls = module.get_method('PrxSubpageForRegister')

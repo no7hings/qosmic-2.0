@@ -13,8 +13,6 @@ from ...qt.core.wrap import *
 
 from ...qt import core as _qt_core
 
-from . import base as _base
-
 
 class AbsItemModel(object):
     Status = _gui_core.GuiItemStatus
@@ -123,15 +121,15 @@ class AbsItemModel(object):
     def __init__(self, item, data):
         self._item = item
         self._data = data
-
+        # main
         self._data.rect = qt_rect()
         # basic
-        self._data.basic = _base._Data(
+        self._data.basic = _gui_core.BaseData(
             rect=qt_rect(),
             size=QtCore.QSize(),
         )
         # text option for draw
-        self._data.text = _base._Data(
+        self._data.text = _gui_core.BaseData(
             font=_qt_core.QtFont.generate(size=8),
             color=QtGui.QColor(223, 223, 223),
             action_color=QtGui.QColor(31, 31, 31),
@@ -139,7 +137,7 @@ class AbsItemModel(object):
             height=20
         )
         # frame for draw
-        self._data.frame = _base._Data(
+        self._data.frame = _gui_core.BaseData(
             rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.Dark),
             brush=QtGui.QBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
@@ -148,28 +146,28 @@ class AbsItemModel(object):
         self._data.index_enable = True
         self._data.index = 0
         # path
-        self._data.path = _base._Data(
+        self._data.path = _gui_core.BaseData(
             text=None
         )
         # category
         self._data.category_enable = False
-        self._data.category = _base._Data(
+        self._data.category = _gui_core.BaseData(
             text=None
         )
         # type
         self._data.type_enable = False
-        self._data.type = _base._Data(
+        self._data.type = _gui_core.BaseData(
             text=None
         )
         # name
         self._data.name_enable = True
-        self._data.name = _base._Data(
+        self._data.name = _gui_core.BaseData(
             text=None,
             rect=qt_rect(),
         )
         # sub name
         self._data.subname_enable = False
-        self._data.subname = _base._Data(
+        self._data.subname = _gui_core.BaseData(
             text=None,
             rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.TxtTemporary)
@@ -179,7 +177,7 @@ class AbsItemModel(object):
         self._data.user_enable = False
         # number
         self._data.number_enable = False
-        self._data.number = _base._Data(
+        self._data.number = _gui_core.BaseData(
             flag=False,
             value=0,
             text=None,
@@ -191,7 +189,7 @@ class AbsItemModel(object):
         self._data.lock_enable = False
         # icon
         self._data.icon_enable = False
-        self._data.icon = _base._Data(
+        self._data.icon = _gui_core.BaseData(
             file_flag=False,
             file=None,
 
@@ -201,44 +199,44 @@ class AbsItemModel(object):
         )
         # color
         self._data.color_enable = False
-        # action for select
-        self._data.select = _base._Data(
-            enable=True,
-            flag=False,
-            rect=qt_rect(),
-            color=QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue),
-        )
-        # action for hover
-        self._data.hover = _base._Data(
+        # hover
+        self._data.hover = _gui_core.BaseData(
             enable=True,
             flag=False,
             rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.LightOrange),
         )
-        # action for check
+        # select
+        self._data.select = _gui_core.BaseData(
+            enable=True,
+            flag=False,
+            rect=qt_rect(),
+            color=QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue),
+        )
+        # check
         self._data.check_enable = False
         self._data.check = None
         # drag
-        self._data.drag = _base._Data(
+        self._data.drag = _gui_core.BaseData(
             enable=False,
             data=None
         )
         # tool tip
-        self._data.tool_tip = _base._Data(
+        self._data.tool_tip = _gui_core.BaseData(
             enable=False,
             flag=False,
             text=None,
             css=None
         )
         # show
-        self._data.show = _base._Data(
+        self._data.show = _gui_core.BaseData(
             load_flag=False,
 
             cache_fnc=None,
             build_fnc=None,
         )
         # menu
-        self._data.menu = _base._Data(
+        self._data.menu = _gui_core.BaseData(
             content=None,
             content_generate_fnc=None,
             data=None,
@@ -249,12 +247,12 @@ class AbsItemModel(object):
         self._data.force_hidden_flag = False
         self._data.force_refresh_flag = True
         # keyword filter
-        self._data.keyword_filter = _base._Data(
+        self._data.keyword_filter = _gui_core.BaseData(
             key_tgt_set=set()
         )
         # assign
         self._data.assign_enable = True
-        self._data.assign = _base._Data(
+        self._data.assign = _gui_core.BaseData(
             path_set=set(),
             path_set_pre=set(),
             file=None,
@@ -267,7 +265,7 @@ class AbsItemModel(object):
         self._data.property_dict = dict()
         # press
         self._data.press_enable = True
-        self._data.press = _base._Data(
+        self._data.press = _gui_core.BaseData(
             dbl_click_fncs=[]
         )
 
@@ -371,7 +369,7 @@ class AbsItemModel(object):
     def set_mtime_enable(self, boolean):
         self._data.mtime_enable = boolean
         if boolean is True:
-            self._data.mtime = _base._Data(
+            self._data.mtime = _gui_core.BaseData(
                 timestamp=0,
                 text='',
                 text_color=_qt_core.QtRgba.TxtMtime,
@@ -392,7 +390,7 @@ class AbsItemModel(object):
     def set_user_enable(self, boolean):
         self._data.user_enable = boolean
         if boolean is True:
-            self._data.user = _base._Data(
+            self._data.user = _gui_core.BaseData(
                 text='',
                 text_color=_qt_core.QtRgba.TxtUser,
                 text_alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter,
@@ -457,7 +455,7 @@ class AbsItemModel(object):
     def set_color_enable(self, boolean):
         self._data.color_enable = boolean
         if boolean is True:
-            self._data.color = _base._Data(
+            self._data.color = _gui_core.BaseData(
                 rgb=(255, 255, 255),
                 hex='FFFFFF',
                 rect=qt_rect()
@@ -573,7 +571,7 @@ class AbsItemModel(object):
     def set_status_enable(self, boolean):
         self._data.status_enable = boolean
         if boolean is True:
-            self._data.status = _base._Data(
+            self._data.status = _gui_core.BaseData(
                 file=_gui_core.GuiIcon.get('star'),
                 value=self.Status.Normal,
                 rect=qt_rect()
@@ -649,7 +647,7 @@ class AbsItemModel(object):
     def set_sort_enable(self, boolean):
         self._data.sort_enable = boolean
         if boolean is True:
-            self._data.sort = _base._Data(
+            self._data.sort = _gui_core.BaseData(
                 key=self.SortKey.Name,
                 order=self.SortOrder.Ascending,
                 dict=dict()
@@ -729,7 +727,7 @@ class AbsItemModel(object):
                     if not bsc_core.BscFnmatch.filter([context], i_filter_key):
                         return True, True
                 else:
-                    context = bsc_core.auto_unicode(context)
+                    context = bsc_core.ensure_unicode(context)
                     if i_text not in context:
                         return True, True
             return True, False
@@ -880,7 +878,7 @@ class AbsItemModel(object):
     def set_lock_enable(self, boolean):
         self._data.lock_enable = boolean
         if boolean is True:
-            self._data.lock = _base._Data(
+            self._data.lock = _gui_core.BaseData(
                 flag=False,
                 rect=qt_rect(),
                 file=_gui_core.GuiIcon.get('lock-watermark'),
@@ -900,7 +898,7 @@ class AbsItemModel(object):
     def set_check_enable(self, boolean):
         self._data.check_enable = boolean
         if boolean is True:
-            self._data.check = _base._Data(
+            self._data.check = _gui_core.BaseData(
                 flag=False,
                 rect=qt_rect(),
                 color=QtGui.QColor(*_gui_core.GuiRgba.LightPurple),

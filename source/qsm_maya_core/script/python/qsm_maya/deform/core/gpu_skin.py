@@ -130,11 +130,11 @@ def move_skin(source, target):
     mat_inputs = [(x.inputs(plugs=True)[0] if x.isConnected() else None) for x in source_skin.matrix]
     mat_values = [x.get() for x in source_skin.matrix]
 
-    for index, bind_value, mat_value in zip(xrange(influence_count), bind_values, mat_values):
+    for index, bind_value, mat_value in zip(range(influence_count), bind_values, mat_values):
         target_skin.bindPreMatrix[index].set(bind_value)
         target_skin.matrix[index].set(mat_value)
 
-    for index, bind_input, mat_input in zip(xrange(influence_count), bind_inputs, mat_inputs):
+    for index, bind_input, mat_input in zip(range(influence_count), bind_inputs, mat_inputs):
         if bind_input:
             bind_input >> target_skin.bindPreMatrix[index]
         if mat_input:

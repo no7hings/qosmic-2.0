@@ -387,22 +387,22 @@ class PlayblastOpt(object):
                 ptn = six.u(
                     '{}/{}.v{{version}}.mov'
                 ).format(
-                    bsc_core.auto_unicode(directory_path), bsc_core.auto_unicode(file_opt.name_base)
+                    bsc_core.ensure_unicode(directory_path), bsc_core.ensure_unicode(file_opt.name_base)
                 )
                 return bsc_core.BscVersion.generate_as_new_version(ptn)
             else:
                 return six.u('{}/{}.mov').format(
-                    bsc_core.auto_unicode(directory_path), bsc_core.auto_unicode(file_opt.name_base)
+                    bsc_core.ensure_unicode(directory_path), bsc_core.ensure_unicode(file_opt.name_base)
                 )
         else:
             if update_scheme == 'new_version':
                 ptn = six.u(
                     '{}.v{{version}}.mov'
-                ).format(bsc_core.auto_unicode(file_opt.path_base))
+                ).format(bsc_core.ensure_unicode(file_opt.path_base))
                 return bsc_core.BscVersion.generate_as_new_version(ptn)
             else:
                 return six.u('{}.mov').format(
-                    bsc_core.auto_unicode(file_opt.path_base)
+                    bsc_core.ensure_unicode(file_opt.path_base)
                 )
 
 
@@ -448,7 +448,7 @@ class PlayblastProcess(object):
         )
         start_frame, end_frame = frame
         width, height = resolution
-        movie_file_path = six.u('{}.mov').format(bsc_core.auto_unicode(file_opt.path_base))
+        movie_file_path = six.u('{}.mov').format(bsc_core.ensure_unicode(file_opt.path_base))
         cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script_by_option_dict(
             'playblast',
             dict(

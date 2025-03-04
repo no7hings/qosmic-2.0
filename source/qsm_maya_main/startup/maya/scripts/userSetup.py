@@ -108,7 +108,7 @@ class Setup(object):
             import qsm_maya.gui as qsm_mya_gui
 
             with bsc_log.LogContext.create(cls.LOG_KEY, 'shelf'):
-                qsm_mya_gui.MayaShelf().create()
+                qsm_mya_gui.MainShelf().create()
 
         # noinspection PyUnresolvedReferences
         from maya import cmds

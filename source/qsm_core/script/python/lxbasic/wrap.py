@@ -7,6 +7,7 @@ import getpass as _getpass
 
 
 def ensure_string(s):
+    # make any type(byte/unicode) to str type
     if isinstance(s, _six.text_type):
         if _six.PY2:
             return s.encode('utf-8')
@@ -17,6 +18,7 @@ def ensure_string(s):
 
 
 def ensure_unicode(s):
+    # make any type(byte/str) to unicode type
     if isinstance(s, _six.text_type):
         return s
     elif isinstance(s, _six.binary_type):
@@ -26,6 +28,7 @@ def ensure_unicode(s):
 
 
 def ensure_mbcs(s):
+    # encode to 'mbcs' for command line execute
     if isinstance(s, _six.text_type):
         if _six.PY2:
             return s.encode('mbcs')

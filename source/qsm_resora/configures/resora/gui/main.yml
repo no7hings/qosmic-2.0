@@ -79,7 +79,7 @@ entity-type-actions:
                     gui_parent: '/Trash', gui_name: 'Recover', gui_parent_chs: '/回收', gui_name_chs: '恢复'
                 }
 
-    video:
+    media/video:
         Node:
             option-hooks:
                 - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
@@ -102,7 +102,7 @@ entity-type-actions:
                     gui_parent: '/Fix', gui_name: 'Generate Preview', gui_parent_chs: '/修复', gui_name_chs: '生成预览'
                 }
 
-    episode:
+    media/episode:
         Node:
             option-hooks:
                 - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
@@ -125,7 +125,7 @@ entity-type-actions:
                     gui_parent: '/Fix', gui_name: 'Generate Preview', gui_parent_chs: '/修复', gui_name_chs: '生成预览'
                 }
 
-    audio:
+    media/audio:
         Node:
             option-hooks:
                 - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
@@ -144,7 +144,7 @@ entity-type-actions:
                     gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '关闭'
                 }
 
-    motion:
+    data/motion:
         Node:
             option-hooks:
                 - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
@@ -172,7 +172,7 @@ entity-type-actions:
                     gui_parent: '/Load', gui_name: 'Motion to Montage', gui_parent_chs: '/加载', gui_name_chs: '动作到剪辑'
                 }
 
-    asset:
+    other/asset:
         Node:
             option-hooks:
                 - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
@@ -205,7 +205,7 @@ entity-type-actions:
                     gui_parent: '/Load', gui_name: 'Unit Assembly', gui_parent_chs: '/加载', gui_name_chs: '元素组装'
                 }
 
-    maya_scene:
+    dcc/maya_scene:
         Node:
             option-hooks:
                 - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
@@ -235,28 +235,28 @@ entity-type-actions:
                     gui_parent: '/Load', gui_name: 'Reference Source', gui_parent_chs: '/加载', gui_name_chs: '引用源文件'
                 }
 
-    houdini_scene:
+    dcc/houdini_scene:
         $: '..basic'
 
-    houdini_hda:
+    dcc/houdini_hda:
         $: '..basic'
 
-    sp_scene:
+    substance/sp_scene:
         $: '..basic'
 
-    sp_material:
+    substance/sp_material:
         $: '..basic'
 
-    sd_scene:
+    substance/sd_scene:
         $: '..basic'
 
-    sd_material:
+    substance/sd_material:
         $: '..basic'
 
-    fbx_cache:
+    cache/fbx:
         $: '..basic'
 
-    mocap_fbx:
+    cache/mocap_fbx:
         $: '..basic'
         Node:
             option-hooks:
@@ -386,7 +386,7 @@ entity-actions:
                     gui_parent: '/Cover', gui_name: 'Generate', gui_parent_chs: '/封面', gui_name_chs: '生成'
                 }
 
-    video:
+    media/video:
         $: '..basic'
         Node:
             option-hooks:
@@ -406,7 +406,7 @@ entity-actions:
                     gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
                 }
 
-    episode:
+    media/episode:
         $: '..basic'
         Node:
             option-hooks:
@@ -426,7 +426,7 @@ entity-actions:
                     gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
                 }
 
-    audio:
+    media/audio:
         $: '..basic'
         Node:
             option-hooks:
@@ -450,7 +450,7 @@ entity-actions:
                     gui_parent: '/Show', gui_name: 'Lock History', gui_parent_chs: '/显示', gui_name_chs: '锁定历史'
                 }
 
-    motion:
+    data/motion:
         $: '..basic'
         Node:
             option-hooks:
@@ -470,7 +470,7 @@ entity-actions:
                     gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
                 }
 
-    asset:
+    other/asset:
         Node:
             option-hooks:
                 - 'separator': {gui_name: 'one', gui_name_chs: '单个'}
@@ -478,31 +478,31 @@ entity-actions:
                     gui_parent: '/Open', gui_name: 'Folder (Model, Rig)', gui_parent_chs: '/打开', gui_name_chs: '目录(模型，绑定)'
                 }
 
-    maya_scene:
+    dcc/maya_scene:
         $: '..basic'
 
-    houdini_scene:
+    dcc/houdini_scene:
         $: '..basic'
 
-    houdini_hda:
+    dcc/houdini_hda:
         $: '..basic'
 
-    sp_scene:
+    substance/sp_scene:
         $: '..basic'
 
-    sp_material:
+    substance/sp_material:
         $: '..basic'
 
-    sd_scene:
+    substance/sd_scene:
         $: '..basic'
 
-    sd_material:
+    substance/sd_material:
         $: '..basic'
 
-    fbx_cache:
+    cache/fbx:
         $: '..basic'
 
-    mocap_fbx:
+    cache/mocap_fbx:
         $: '..basic'
 
 
@@ -515,50 +515,50 @@ entity-press-dbl-click:
         Node:
             option-hooks: 'resora-actions/node-add-page'
 
-    video:
+    media/video:
         Node:
             option-hooks: 'resora-actions/node-open-source'
 
-    episode:
+    media/episode:
         Node:
             option-hooks: 'resora-actions/node-open-source'
 
-    audio:
+    media/audio:
         Node:
             option-hooks: 'resora-actions/node-open-source'
 
-    maya_scene:
+    dcc/maya_scene:
         Node:
             option-hooks: 'resora-actions/node-open-source-directory'
 
-    houdini_scene:
+    dcc/houdini_scene:
         Node:
             option-hooks: 'resora-actions/node-open-source-directory'
 
-    houdini_hda:
+    dcc/houdini_hda:
         Node:
             option-hooks: 'resora-actions/node-open-source-directory'
 
-    sp_scene:
+    substance/sp_scene:
         Node:
             option-hooks: 'resora-actions/node-open-source-directory'
 
-    sp_material:
+    substance/sp_material:
         Node:
             option-hooks: 'resora-actions/node-open-source-directory'
 
-    sd_scene:
+    substance/sd_scene:
         Node:
             option-hooks: 'resora-actions/node-open-source-directory'
 
-    sd_material:
+    substance/sd_material:
         Node:
             option-hooks: 'resora-actions/node-open-source-directory'
 
-    fbx_cache:
+    cache/fbx:
         Node:
             option-hooks: 'resora-actions/node-open-source-directory'
     
-    mocap_fbx:
+    cache/mocap_fbx:
         Node:
             option-hooks: 'resora-actions/node-open-source-directory'

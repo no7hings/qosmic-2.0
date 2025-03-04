@@ -403,7 +403,7 @@ class QtItemForHistoryEntity(
         self._open_associate_fnc_ = fnc
 
     def _set_storage_path_(self, path):
-        self._storage_path = bsc_core.auto_unicode(path)
+        self._storage_path = bsc_core.ensure_unicode(path)
         if os.path.isfile(self._storage_path):
             self._storage_icon = _qt_core.GuiQtDcc.generate_qt_file_icon(self._storage_path)
         elif os.path.isdir(self._storage_path):

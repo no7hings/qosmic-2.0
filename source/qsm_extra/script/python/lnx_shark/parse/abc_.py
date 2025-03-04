@@ -7,6 +7,8 @@ import six
 
 import sys
 
+import lxbasic.core as bsc_core
+
 from . import _base
 
 
@@ -25,29 +27,10 @@ class AbsBase(object):
 
     TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
-    @staticmethod
-    def ensure_string(s):
-        if isinstance(s, six.text_type):
-            if six.PY2:
-                return s.encode('utf-8')
-        elif isinstance(s, six.binary_type):
-            if six.PY3:
-                return s.decode('utf-8')
-        return s
-
-    @staticmethod
-    def ensure_unicode(s):
-        if isinstance(s, six.text_type):
-            return s
-        elif isinstance(s, bytes):
-            return s.decode('utf-8')
-        else:
-            return s
-
     @classmethod
     def stdout(cls, text):
         if cls.VERBOSE_LEVEL < 1:
-            text = cls.ensure_string(text)
+            text = bsc_core.ensure_string(text)
             sys.stdout.write(
                 '{}         | {}\n'.format(time.strftime(
                     cls.TIME_FORMAT, time.localtime(time.time())),
@@ -58,7 +41,7 @@ class AbsBase(object):
     @classmethod
     def stderr(cls, text):
         if cls.VERBOSE_LEVEL <= 1:
-            text = cls.ensure_string(text)
+            text = bsc_core.ensure_string(text)
             sys.stderr.write(
                 '{}         | {}\n'.format(time.strftime(
                     cls.TIME_FORMAT, time.localtime(time.time())),
@@ -105,7 +88,7 @@ class AbsEntity(AbsBase):
     def __str__(self):
         return self.shorten_text(
             '{}({})'.format(
-                self._entity_type, self.ensure_string(self._entity_key)
+                self._entity_type, bsc_core.ensure_string(self._entity_key)
             )
         )
 
