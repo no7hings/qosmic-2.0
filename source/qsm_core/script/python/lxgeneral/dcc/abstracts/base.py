@@ -96,7 +96,7 @@ class AbsDccBaseDef(object):
         return False
 
     def __ne__(self, other):
-        return self.path != self.path
+        return self._path != other._path
 
     def __hash__(self):
         return hash(self._path)

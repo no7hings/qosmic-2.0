@@ -13,7 +13,7 @@ class TagItemModel(_item_base.AbsItemModel):
     def __init__(self, item):
         super(TagItemModel, self).__init__(
             item,
-            _gui_core.BaseData()
+            _gui_core.DictOpt()
         )
 
     def refresh_force(self):

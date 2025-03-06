@@ -154,7 +154,7 @@ class ListItemModel(_item_base.AbsItemModel):
     def __init__(self, item):
         super(ListItemModel, self).__init__(
             item,
-            _gui_core.BaseData(
+            _gui_core.DictOpt(
                 # group
                 group_enable=False,
                 # image
@@ -185,7 +185,7 @@ class ListItemModel(_item_base.AbsItemModel):
 
     def _init_play(self):
         self._data.play_enable = True
-        self._data.play = _gui_core.BaseData(
+        self._data.play = _gui_core.DictOpt(
             flag=False,
 
             point=QtCore.QPoint(),
@@ -213,7 +213,7 @@ class ListItemModel(_item_base.AbsItemModel):
         wait_timer = QtCore.QTimer(self._view)
         wait_timer.timeout.connect(self._start_autoplay)
 
-        self._data.autoplay = _gui_core.BaseData(
+        self._data.autoplay = _gui_core.DictOpt(
             flag=False,
             play_thread=play_thread,
             wait_timer=wait_timer,
@@ -684,7 +684,7 @@ class ListItemModel(_item_base.AbsItemModel):
     # image
     def set_image(self, file_path, source_type=None, reload_cache=False):
         if file_path is not None:
-            self._data.image = _gui_core.BaseData(
+            self._data.image = _gui_core.DictOpt(
                 load_flag=False,
                 reload_flag=reload_cache,
 
@@ -744,7 +744,7 @@ class ListItemModel(_item_base.AbsItemModel):
     # image sequence
     def set_image_sequence(self, file_path, fps=24):
         if file_path is not None:
-            self._data.image_sequence = _gui_core.BaseData(
+            self._data.image_sequence = _gui_core.DictOpt(
                 load_flag=False,
                 file=None,
                 files=[],
@@ -857,7 +857,7 @@ class ListItemModel(_item_base.AbsItemModel):
     # video
     def set_video(self, file_path):
         if file_path is not None:
-            self._data.video = _gui_core.BaseData(
+            self._data.video = _gui_core.DictOpt(
                 load_flag=False,
                 file=None,
                 capture_opt=None,
@@ -969,7 +969,7 @@ class ListItemModel(_item_base.AbsItemModel):
     # audio
     def set_audio(self, file_path, thumbnail_path=None):
         if file_path is not None:
-            self._data.audio = _gui_core.BaseData(
+            self._data.audio = _gui_core.DictOpt(
                 load_flag=False,
                 file=None,
                 thumbnail=thumbnail_path,
@@ -1150,7 +1150,7 @@ class ListItemModel(_item_base.AbsItemModel):
     def set_group_enable(self, boolean):
         self._data.group_enable = boolean
         if boolean is True:
-            self._data.group = _gui_core.BaseData(
+            self._data.group = _gui_core.DictOpt(
                 dict=dict(),
                 key=None,
             )
@@ -1195,12 +1195,12 @@ class ListGroupItemModel(_item_base.AbsItemModel):
     def __init__(self, item):
         super(ListGroupItemModel, self).__init__(
             item,
-            _gui_core.BaseData(
-                line=_gui_core.BaseData(
+            _gui_core.DictOpt(
+                line=_gui_core.DictOpt(
                     color=_qt_core.QtRgba.Basic
                 ),
                 expand_enable=True,
-                expand=_gui_core.BaseData(
+                expand=_gui_core.DictOpt(
                     rect=qt_rect(),
                     file=_gui_core.GuiIcon.get('expand-open')
                 )

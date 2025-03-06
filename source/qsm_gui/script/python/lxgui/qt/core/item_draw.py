@@ -64,7 +64,7 @@ class QtItemDrawBase:
             cls._draw_image(painter, rect, file_path)
 
     @classmethod
-    def _draw_name_text(cls, painter, rect, text, color, option):
+    def _draw_name_text(cls, painter, rect, text, color, option, font=None):
         text = painter.fontMetrics().elidedText(
             text,
             QtCore.Qt.ElideMiddle,
@@ -72,18 +72,25 @@ class QtItemDrawBase:
             QtCore.Qt.TextShowMnemonic
         )
         painter.setPen(color)
+        if font:
+            painter.setFont(font)
         painter.drawText(rect, option, text)
 
     @classmethod
-    def _draw_frame(cls, painter, rect, border_color, background_colr, border_radius=0):
-        painter.setPen(border_color)
-        painter.setBrush(background_colr)
+    def _draw_frame(cls, painter, rect, border_color, background_color, border_width=1, border_radius=0):
+        painter.setPen(QtGui.QPen(border_color, border_width))
+        painter.setBrush(background_color)
         if border_radius > 0:
             painter.drawRoundedRect(
                 rect, border_radius, border_radius, QtCore.Qt.AbsoluteSize
             )
         else:
             painter.drawRect(rect)
+
+    @classmethod
+    def _draw_line(cls, painter, point_0, point_1, border_color, border_width=1):
+        painter.setPen(QtGui.QPen(border_color, border_width))
+        painter.drawLine(point_0, point_1)
 
     @classmethod
     def _gen_alternating_color(cls, rect, colors, width, time_offset=0, running=False, x_offset=0, y_offset=0):
@@ -143,3 +150,20 @@ class QtItemDrawBase:
             painter.drawRect(rect)
 
         painter.setRenderHint(painter.Antialiasing, True)
+
+    @classmethod
+    def _draw_color_frame(cls, painter, rect, border_color, background_color):
+        painter.setPen(
+            QtGui.QColor(*_gui_core.GuiRgba.Gray)
+        )
+        painter.setBrush(background_color)
+        painter.drawRect(
+            rect
+        )
+
+    @classmethod
+    def _draw_icon_by_pixmap(cls, painter, rect, pixmap):
+        pxm_scaled = pixmap.scaled(
+            rect.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation
+        )
+        painter.drawPixmap(rect, pxm_scaled)

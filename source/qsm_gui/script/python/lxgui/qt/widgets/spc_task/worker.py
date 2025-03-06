@@ -194,20 +194,20 @@ class _QtSpcTaskThreadWorker(QtCore.QThread):
         if self._kill_flag is True:
             return
 
-        self._item_model._update_maximum(value)
+        self._model._update_maximum(value)
 
     def _do_progress_update(self, percent):
         if self._kill_flag is True:
             return
 
-        self._item_model._update_percent(percent)
+        self._model._update_percent(percent)
 
     def _do_log_update(self, text):
         if self._kill_flag is True:
             return
 
         # noinspection PyUnresolvedReferences
-        self._item_model._update_log(text)
+        self._model._update_log(text)
 
     def _do_log_filter(self, text):
         if self._kill_flag is True:
@@ -246,10 +246,10 @@ class _QtSpcTaskThreadWorker(QtCore.QThread):
 
     def _do_update_status(self, status):
         self._status = status
-        self._item_model._update_status(status)
+        self._model._update_status(status)
 
     def __init__(self, *args, **kwargs):
-        self._item_model = kwargs.pop('item_model')
+        self._model = kwargs.pop('item_model')
 
         super(_QtSpcTaskThreadWorker, self).__init__(*args, **kwargs)
 

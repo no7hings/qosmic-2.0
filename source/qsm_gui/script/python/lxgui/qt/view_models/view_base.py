@@ -57,19 +57,19 @@ class AbsViewModel(object):
         # item expand record
         self._data.item_expand_record_enable = False
         # menu
-        self._data.menu = _gui_core.BaseData(
+        self._data.menu = _gui_core.DictOpt(
             content=None,
             data=None,
             data_generate_fnc=None,
             name_dict=dict()
         )
         # keyword filter
-        self._data.keyword_filter = _gui_core.BaseData(
+        self._data.keyword_filter = _gui_core.DictOpt(
             key_src_set=set(),
             cache=None
         )
         # occurrence
-        self._data.occurrence = _gui_core.BaseData(
+        self._data.occurrence = _gui_core.DictOpt(
             index=None
         )
         # item query
@@ -154,7 +154,7 @@ class AbsViewModel(object):
     def set_item_sort_enable(self, boolean):
         self._data.item_sort_enable = boolean
         if boolean is True:
-            self._data.item_sort = _gui_core.BaseData(
+            self._data.item_sort = _gui_core.DictOpt(
                 keys=[],
                 key_current=self.ItemSortKey.Name,
                 order=0,
@@ -424,7 +424,7 @@ class AbsViewModel(object):
     def set_item_expand_record_enable(self, boolean):
         if boolean is True:
             self._data.item_expand_record_enable = True
-            self._data.item_expand_record = _gui_core.BaseData(
+            self._data.item_expand_record = _gui_core.DictOpt(
                 data={}
             )
 

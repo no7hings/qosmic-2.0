@@ -28,17 +28,17 @@ class _SpcTaskItemModel(object):
 
     def __init__(self, item):
         self._item = item
-        self._data = _gui_core.BaseData()
+        self._data = _gui_core.DictOpt()
         self._data.force_refresh_flag = True
         # main
         self._data.rect = qt_rect()
         # basic
-        self._data.basic = _gui_core.BaseData(
+        self._data.basic = _gui_core.DictOpt(
             rect=qt_rect(),
             size=QtCore.QSize(),
         )
         # text option for draw
-        self._data.text = _gui_core.BaseData(
+        self._data.text = _gui_core.DictOpt(
             font=_qt_core.QtFont.generate(size=8),
             color=QtGui.QColor(223, 223, 223),
             action_color=QtGui.QColor(255, 255, 255),
@@ -46,43 +46,43 @@ class _SpcTaskItemModel(object):
             height=20
         )
         # path
-        self._data.path = _gui_core.BaseData(
+        self._data.path = _gui_core.DictOpt(
             text=None
         )
         # index
         self._data.index = 0
         self._data.icon_enable = False
         # icon
-        self._data.icon = _gui_core.BaseData(
+        self._data.icon = _gui_core.DictOpt(
             file_flag=False,
             file=None,
             rect=qt_rect(),
         )
         # type
-        self._data.type = _gui_core.BaseData(
+        self._data.type = _gui_core.DictOpt(
             text=None
         )
         # name
-        self._data.name = _gui_core.BaseData(
+        self._data.name = _gui_core.DictOpt(
             text=None,
             rect=qt_rect(),
         )
         # hover
-        self._data.hover = _gui_core.BaseData(
+        self._data.hover = _gui_core.DictOpt(
             enable=True,
             flag=False,
             rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.LightOrange),
         )
         # select
-        self._data.select = _gui_core.BaseData(
+        self._data.select = _gui_core.DictOpt(
             enable=True,
             flag=False,
             rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue),
         )
         # menu
-        self._data.menu = _gui_core.BaseData(
+        self._data.menu = _gui_core.DictOpt(
             content=None,
             content_generate_fnc=None,
             data=None,
@@ -96,8 +96,8 @@ class _SpcTaskItemModel(object):
         self._percent_mark = 0
         # progress
 
-        self._data.progress = _gui_core.BaseData(
-            base=_gui_core.BaseData(
+        self._data.progress = _gui_core.DictOpt(
+            base=_gui_core.DictOpt(
                 rect=QtCore.QRect(),
                 border_color=QtGui.QColor(*_gui_core.GuiRgba.Gray),
                 backgroup_color=QtGui.QColor(*_gui_core.GuiRgba.Dim),
@@ -406,6 +406,15 @@ class _SpcTaskItemModel(object):
             return time.time()-self._data.progress.start_timestamp
         return self._data.progress.finish_timestamp-self._data.progress.start_timestamp
 
+    def _update_hover(self, flag):
+        if flag != self._data.hover.flag:
+            self._data.hover.flag = flag
+
+    # select
+    def _update_select(self, flag):
+        if flag != self._data.select.flag:
+            self._data.select.flag = flag
+
     def update(self, rect):
         self._data.progress.index += 1
 
@@ -472,15 +481,6 @@ class _SpcTaskItemModel(object):
             return True
         return False
 
-    def _update_hover(self, flag):
-        if flag != self._data.hover.flag:
-            self._data.hover.flag = flag
-
-    # select
-    def _update_select(self, flag):
-        if flag != self._data.select.flag:
-            self._data.select.flag = flag
-
     def draw(self, painter, option, index):
         painter.save()
 
@@ -509,7 +509,7 @@ class _SpcTaskItemModel(object):
             painter,
             rect=self._data.progress.base.rect,
             border_color=self._data.progress.base.border_color,
-            background_colr=self._data.progress.base.backgroup_color,
+            background_color=self._data.progress.base.backgroup_color,
             border_radius=2
         )
 
@@ -518,7 +518,7 @@ class _SpcTaskItemModel(object):
                 painter,
                 rect=self._data.progress.rect,
                 border_color=self._data.progress.color,
-                background_colr=self._data.progress.color,
+                background_color=self._data.progress.color,
                 border_radius=2
             )
         else:
@@ -552,17 +552,17 @@ class _SpcTaskItemModel(object):
 class _SpcTaskGroupItemModel(object):
     def __init__(self, item):
         self._item = item
-        self._data = _gui_core.BaseData()
+        self._data = _gui_core.DictOpt()
         self._data.force_refresh_flag = True
         # main
         self._data.rect = qt_rect()
         # basic
-        self._data.basic = _gui_core.BaseData(
+        self._data.basic = _gui_core.DictOpt(
             rect=qt_rect(),
             size=QtCore.QSize(),
         )
         # text option for draw
-        self._data.text = _gui_core.BaseData(
+        self._data.text = _gui_core.DictOpt(
             font=_qt_core.QtFont.generate(size=8),
             color=QtGui.QColor(223, 223, 223),
             action_color=QtGui.QColor(255, 255, 255),
@@ -570,43 +570,43 @@ class _SpcTaskGroupItemModel(object):
             height=20
         )
         # path
-        self._data.path = _gui_core.BaseData(
+        self._data.path = _gui_core.DictOpt(
             text=None
         )
         # index
         self._data.index = 0
         self._data.icon_enable = False
         # icon
-        self._data.icon = _gui_core.BaseData(
+        self._data.icon = _gui_core.DictOpt(
             file_flag=False,
             file=None,
             rect=qt_rect(),
         )
         # type
-        self._data.type = _gui_core.BaseData(
+        self._data.type = _gui_core.DictOpt(
             text=None
         )
         # name
-        self._data.name = _gui_core.BaseData(
+        self._data.name = _gui_core.DictOpt(
             text=None,
             rect=qt_rect(),
         )
         # hover
-        self._data.hover = _gui_core.BaseData(
+        self._data.hover = _gui_core.DictOpt(
             enable=True,
             flag=False,
             rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.LightOrange),
         )
         # select
-        self._data.select = _gui_core.BaseData(
+        self._data.select = _gui_core.DictOpt(
             enable=True,
             flag=False,
             rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue),
         )
         # menu
-        self._data.menu = _gui_core.BaseData(
+        self._data.menu = _gui_core.DictOpt(
             content=None,
             content_generate_fnc=None,
             data=None,
@@ -764,17 +764,17 @@ class _SpcTaskGroupItemModel(object):
 class _SpcTaskViewModel(object):
     def __init__(self, widget):
         self._widget = widget
-        self._data = _gui_core.BaseData()
+        self._data = _gui_core.DictOpt()
         # item query
         self._data.item_dict = collections.OrderedDict()
-        self._data.item = _gui_core.BaseData(
+        self._data.item = _gui_core.DictOpt(
             cls=None,
             group_cls=None,
             grid_size=QtCore.QSize(128, 30),
             group_grid_size=QtCore.QSize(128, 20),
         )
         # menu
-        self._data.menu = _gui_core.BaseData(
+        self._data.menu = _gui_core.DictOpt(
             content=None,
             data=None,
             data_generate_fnc=None,
@@ -783,7 +783,7 @@ class _SpcTaskViewModel(object):
 
         self._overview_widget = None
 
-        self._data.overview = _gui_core.BaseData(
+        self._data.overview = _gui_core.DictOpt(
             base_rect=QtCore.QRect(),
             text_font=_qt_core.QtFont.generate(size=10),
             text_color=QtGui.QColor(31, 31, 31),
@@ -832,7 +832,7 @@ class _SpcTaskViewModel(object):
 
         item.setText(0, str(index_cur).zfill(4))
 
-        item_model = item._item_model
+        item_model = item._model
         item_model.set_path(path)
         item_model.set_index(index_cur)
         item_model.set_name(kwargs.get('name', path_opt.get_name()))
@@ -866,7 +866,7 @@ class _SpcTaskViewModel(object):
 
         item.setText(0, str(index_cur).zfill(4))
 
-        item_model = item._item_model
+        item_model = item._model
         item_model.set_path(path)
         item_model.set_index(index_cur)
         item_model.set_name(kwargs.get('name', path_opt.get_name()))
@@ -903,7 +903,7 @@ class _SpcTaskViewModel(object):
         return list_
 
     def draw_item(self, painter, option, index):
-        self._widget.itemFromIndex(index)._item_model.draw(painter, option, index)
+        self._widget.itemFromIndex(index)._model.draw(painter, option, index)
 
     # menu
     def set_menu_content(self, content):
@@ -939,9 +939,9 @@ class _SpcTaskViewModel(object):
     ):
         flag, item = self.create_item('/{}'.format(name))
         # task name
-        item._item_model.set_icon_name('application/{}'.format(application))
-        item._item_model.set_type(type_name)
-        trd = item._item_model._generate_thread(self._widget)
+        item._model.set_icon_name('application/{}'.format(application))
+        item._model.set_type(type_name)
+        trd = item._model._generate_thread(self._widget)
         trd.set_fnc(cmd_script)
         if completed_fnc is not None:
             if isinstance(completed_fnc, (tuple, list)):
@@ -959,9 +959,9 @@ class _SpcTaskViewModel(object):
     ):
         flag, item = self.create_item('/{}'.format(name))
         # task name
-        item._item_model.set_icon_name('application/python')
-        item._item_model.set_type(type_name)
-        trd = item._item_model._generate_thread(self._widget)
+        item._model.set_icon_name('application/python')
+        item._model.set_type(type_name)
+        trd = item._model._generate_thread(self._widget)
         trd.set_fnc(fnc, *args or (), **kwargs or {})
         if completed_fnc is not None:
             if isinstance(completed_fnc, (tuple, list)):
@@ -976,7 +976,7 @@ class _SpcTaskViewModel(object):
 
         for i in self.get_all_items():
             if i.GROUP_FLAG is False:
-                i._item_model._do_quit()
+                i._model._do_quit()
 
     def set_overview_widget(self, widget):
         self._overview_widget = widget
@@ -989,7 +989,7 @@ class _SpcTaskViewModel(object):
             paths = []
             for i in self.get_all_items():
                 if i.GROUP_FLAG is False:
-                    i_item_model = i._item_model
+                    i_item_model = i._model
                     i_path = i_item_model.get_path()
                     i_status_all = int(i_item_model.Status.All)
                     i_status_all_text = _gui_core.GuiProcessStatusMapper.get_name(i_item_model.Status.All)

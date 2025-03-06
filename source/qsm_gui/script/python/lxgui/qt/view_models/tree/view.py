@@ -108,8 +108,8 @@ class TreeViewModel(_view_base.AbsViewModel):
     def __init__(self, widget):
         super(TreeViewModel, self).__init__(
             widget,
-            _gui_core.BaseData(
-                item=_gui_core.BaseData(
+            _gui_core.DictOpt(
+                item=_gui_core.DictOpt(
                     cls=None,
                     grid_size=QtCore.QSize(128, 20),
                 ),

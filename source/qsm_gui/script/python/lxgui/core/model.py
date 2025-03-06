@@ -1,7 +1,7 @@
 # coding:utf-8
 
 
-class BaseData(object):
+class DictOpt(object):
     def __init__(self, **kwargs):
         self._dict = dict(**kwargs)
 
@@ -28,3 +28,6 @@ class BaseData(object):
 
     def get(self, *args, **kwargs):
         return self._dict.get(*args, **kwargs)
+
+    def items(self):
+        return self._dict.items()

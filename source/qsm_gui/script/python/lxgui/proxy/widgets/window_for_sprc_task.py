@@ -13,7 +13,7 @@ from ...qt.widgets import chart as _qt_wgt_chart
 
 from ...qt.widgets import chart_for_sprc_task as _qt_chart_for_sprc_task
 
-from ...qt.widgets import spc_task as _qt_wgt_for_sprc_task
+from ...qt.widgets.spc_task import main as _qt_wgt_for_sprc_task
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
 # proxy widgets
@@ -192,7 +192,7 @@ class PrxSpcTaskWindow(
             self._stop_and_close_prx_button.set_name('Close')
 
     def _do_gui_stop(self):
-        self._spc_task_widget._view_model.do_quit()
+        self._spc_task_widget._model.do_quit()
 
     def _do_stop_and_close(self):
         self._do_gui_stop()
@@ -208,7 +208,7 @@ class PrxSpcTaskWindow(
         check_memory_prc_name=None,
         application='python'
     ):
-        return self._spc_task_widget._view_model.submit_cmd_script(
+        return self._spc_task_widget._model.submit_cmd_script(
             type_name=type_name, name=name, cmd_script=cmd_script,
             completed_fnc=completed_fnc, failed_fnc=failed_fnc,
             check_memory_prc_name=check_memory_prc_name,

@@ -10,8 +10,8 @@ class TagViewModel(_view_base.AbsViewModel):
     def __init__(self, widget):
         super(TagViewModel, self).__init__(
             widget,
-            _gui_core.BaseData(
-                item=_gui_core.BaseData(
+            _gui_core.DictOpt(
+                item=_gui_core.DictOpt(
                     cls=None,
                     group_cls=None,
                 ),

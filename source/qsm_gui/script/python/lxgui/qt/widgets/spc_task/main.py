@@ -19,7 +19,7 @@ class _QtItemDelegate(QtWidgets.QStyledItemDelegate):
         QtWidgets.QStyledItemDelegate.__init__(self, *args, **kwargs)
 
     def paint(self, painter, option, index):
-        self.parent()._view_model.draw_item(painter, option, index)
+        self.parent()._model.draw_item(painter, option, index)
 
 
 class _QtSpcTaskItem(QtWidgets.QTreeWidgetItem):
@@ -30,12 +30,12 @@ class _QtSpcTaskItem(QtWidgets.QTreeWidgetItem):
         self.setFlags(
             QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled
         )
-        self._item_model = _model._SpcTaskItemModel(self)
+        self._model = _model._SpcTaskItemModel(self)
 
     def __str__(self):
         return '{}(path={})'.format(
             self.__class__.__name__,
-            self._item_model.get_path()
+            self._model.get_path()
         )
 
     def __repr__(self):
@@ -50,12 +50,12 @@ class _QtSpcTaskGroupItem(QtWidgets.QTreeWidgetItem):
         self.setFlags(
             QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled
         )
-        self._item_model = _model._SpcTaskGroupItemModel(self)
+        self._model = _model._SpcTaskGroupItemModel(self)
 
     def __str__(self):
         return '{}(path={})'.format(
             self.__class__.__name__,
-            self._item_model.get_path()
+            self._model.get_path()
         )
 
     def __repr__(self):
@@ -125,10 +125,10 @@ class _QtSpcTaskView(
 
         self.setHeaderHidden(True)
 
-        self._view_model = _model._SpcTaskViewModel(self)
+        self._model = _model._SpcTaskViewModel(self)
 
-        self._view_model.data.item.cls = _QtSpcTaskItem
-        self._view_model.data.item.group_cls = _QtSpcTaskGroupItem
+        self._model.data.item.cls = _QtSpcTaskItem
+        self._model.data.item.group_cls = _QtSpcTaskGroupItem
 
         self.setItemDelegate(_QtItemDelegate(self))
 
@@ -278,10 +278,10 @@ class _QtSpcTaskView(
     def contextMenuEvent(self, event):
         menu = None
 
-        menu_data = self._view_model.get_menu_data()
-        menu_content = self._view_model.get_menu_content()
-        menu_data_generate_fnc = self._view_model.get_menu_data_generate_fnc()
-        menu_name_dict = self._view_model.get_menu_name_dict()
+        menu_data = self._model.get_menu_data()
+        menu_content = self._model.get_menu_content()
+        menu_data_generate_fnc = self._model.get_menu_data_generate_fnc()
+        menu_name_dict = self._model.get_menu_name_dict()
 
         if menu_content:
             if menu is None:
@@ -301,10 +301,10 @@ class _QtSpcTaskView(
         # data from item
         item = self.itemAt(event.pos())
         if item:
-            item_menu_data = item._item_model.get_menu_data()
-            item_menu_content = item._item_model.get_menu_content()
-            item_menu_data_generate_fnc = item._item_model.get_menu_data_generate_fnc()
-            item_menu_name_dict = item._item_model.get_menu_name_dict()
+            item_menu_data = item._model.get_menu_data()
+            item_menu_content = item._model.get_menu_content()
+            item_menu_data_generate_fnc = item._model.get_menu_data_generate_fnc()
+            item_menu_name_dict = item._model.get_menu_name_dict()
             menu_name_dict.update(item_menu_name_dict)
 
             if item_menu_content:
@@ -342,11 +342,11 @@ class _QtSpcTaskOverview(QtWidgets.QWidget):
         self.update()
 
     def _refresh_widget_draw_geometry_(self):
-        if self._view_model is not None:
+        if self._model is not None:
             x, y = 0, 0
             w, h = self.width(), self.height()
 
-            overview_data = self._view_model.data.overview
+            overview_data = self._model.data.overview
             overview_data.base_rect.setRect(
                 x, y, w, h
             )
@@ -382,13 +382,13 @@ class _QtSpcTaskOverview(QtWidgets.QWidget):
 
         self.setFixedHeight(20)
 
-        self._view_model = None
+        self._model = None
 
         self.installEventFilter(self)
 
     def _set_view_model_(self, model):
-        self._view_model = model
-        self._view_model.set_overview_widget(self)
+        self._model = model
+        self._model.set_overview_widget(self)
 
     def eventFilter(self, *args):
         widget, event = args
@@ -398,17 +398,17 @@ class _QtSpcTaskOverview(QtWidgets.QWidget):
         return False
 
     def paintEvent(self, event):
-        if self._view_model is not None:
+        if self._model is not None:
             painter = QtGui.QPainter(self)
 
             painter.setPen(QtGui.QColor(*_gui_core.GuiRgba.Basic))
             painter.setBrush(QtGui.QColor(*_gui_core.GuiRgba.Basic))
 
             painter.drawRect(
-                self._view_model.data.overview.base_rect
+                self._model.data.overview.base_rect
             )
 
-            overview_data = self._view_model.data.overview
+            overview_data = self._model.data.overview
 
             font = overview_data.text_font
             text_color = overview_data.text_color
@@ -442,9 +442,9 @@ class QtSpcTaskWidget(QtWidgets.QWidget):
         self._view = _QtSpcTaskView()
         self._grid_lot.addWidget(self._view, 1, 0, 1, 1)
         self._view.setFocusProxy(self)
-        self._view_model = self._view._view_model
+        self._model = self._view._model
 
-        self._overview._set_view_model_(self._view_model)
+        self._overview._set_view_model_(self._model)
 
     def paintEvent(self, event):
         painter = QtGui.QPainter(self)

@@ -188,9 +188,9 @@ class ListViewModel(_view_base.AbsViewModel):
     def __init__(self, widget):
         super(ListViewModel, self).__init__(
             widget,
-            _gui_core.BaseData(
+            _gui_core.DictOpt(
                 # about item
-                item=_gui_core.BaseData(
+                item=_gui_core.DictOpt(
                     cls=None,
                     group_cls=None,
                     # frame
@@ -363,7 +363,7 @@ class ListViewModel(_view_base.AbsViewModel):
     def set_item_group_enable(self, boolean):
         self._data.item_group_enable = boolean
         if boolean is True:
-            self._data.item_group = _gui_core.BaseData(
+            self._data.item_group = _gui_core.DictOpt(
                 keys=[],
                 key_current=self.ItemGroupKey.Null,
             )

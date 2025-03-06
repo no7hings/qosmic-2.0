@@ -14,7 +14,7 @@ class TreeItemModel(_item_base.AbsItemModel):
     def __init__(self, item):
         super(TreeItemModel, self).__init__(
             item,
-            _gui_core.BaseData(
+            _gui_core.DictOpt(
             )
         )
 

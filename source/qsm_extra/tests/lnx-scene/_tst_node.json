@@ -1,0 +1,33 @@
+{
+    "name": "node_2",
+    "input_ports": {
+        "input": {
+            "path": "/node_2.input",
+            "connection": null,
+            "type": "closure",
+            "name": "input"
+        }
+    },
+    "path": "/node_2",
+    "type": "default",
+    "options": {
+        "color": {
+            "r": 83,
+            "b": 140,
+            "g": 55
+        },
+        "color_enable": true,
+        "position": {
+            "y": 192.0,
+            "x": 255.0
+        }
+    },
+    "output_ports": {
+        "output": {
+            "connections": [],
+            "path": "/node_2.output",
+            "type": "closure",
+            "name": "output"
+        }
+    }
+}

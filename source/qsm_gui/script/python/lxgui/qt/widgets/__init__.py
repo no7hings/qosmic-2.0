@@ -110,5 +110,3 @@ from .view_for_tab import *
 from .view_for_history import *
 
 from .spc_task.main import *
-
-from .scene.main import *

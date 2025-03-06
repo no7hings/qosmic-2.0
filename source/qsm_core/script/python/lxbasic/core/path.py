@@ -432,7 +432,7 @@ class BscNodePathOpt(object):
     def get_rgb(self, maximum=255):
         return _raw.BscTextOpt(
             self.get_name()
-        ).to_rgb__(maximum=maximum, s_p=50, v_p=100)
+        ).to_hash_rgb(maximum=maximum, s_p=(35, 50), v_p=(65, 85))
 
     def get_plant_rgb(self, maximum=255):
         for k, v in self.PLANT_HSV_MAPPER.items():

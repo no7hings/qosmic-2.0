@@ -26,7 +26,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         random.seed(1)
 
-        self._d._view_model.create_root_item()
+        self._d._model.create_root_item()
 
         for i in range(10):
             self._d._view_model.submit_fnc(
