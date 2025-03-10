@@ -272,8 +272,67 @@ class _Dict(object):
     def items(self):
         return self._dict.items()
 
-    def to_json(self):
-        return _ToJson(self._dict).generate()
+
+class _ActionFlags(enum.IntEnum):
+    GraphTrackClick = 0x00
+    GraphTrackMove = 0x01
+
+    NodePressClick = 0x10
+    NodePressMove = 0x11
+    NodeViewedClick = 0x12
+    NodeEditedClick = 0x13
+
+    PortSourcePressClick = 0x20
+    PortSourcePressMove = 0x21
+    PortSourceHoverMove = 0x22
+    PortTargetPressClick = 0x23
+    PortTargetPressMove = 0x24
+    PortTargetHoverMove = 0x25
+
+    ConnectionSourcePressClick = 0x30
+    ConnectionSourcePressMove = 0x31
+    ConnectionSourceHoverMove = 0x32
+    ConnectionTargetPressClick = 0x33
+    ConnectionTargetPressMove = 0x34
+    ConnectionTargetHoverMove = 0x35
+
+    GroupPressClick = 0x40
+    GroupPressMove = 0x41
+    GroupResizePressClick = 0x42
+    GroupResizePressMove = 0x43
+
+    RectSelectPressClick = 0x50
+    RectSelectPressMove = 0x51
+
+
+class _QtSbjTypes(enum.IntEnum):
+    Node = 0x00
+    InputPort = 0x02
+    OutputPort = 0x01
+    Connection = 0x04
+    Backdrop = 0x05
+    Aux = 0x06
+
+
+class _QtSbjBase:
+    SBJ_TYPE = None
+
+
+class _QtColors:
+    NodeBorder = QtGui.QColor(191, 191, 191, 255)
+    NodeBackground = QtGui.QColor(95, 95, 95, 255)
+    NodeBackgroundBypass = QtGui.QColor(71, 71, 71, 255)
+
+    BackdropBorder = QtGui.QColor(95, 95, 95, 255)
+    BackdropBackground = QtGui.QColor(63, 63, 127, 31)
+    BackdropName = QtGui.QColor(95, 95, 95, 255)
+
+    PortBorder = QtGui.QColor(71, 71, 71, 255)
+    PortBackground = QtGui.QColor(71, 71, 71, 255)
+
+    TypeText = QtGui.QColor(191, 191, 191, 255)
+    Text = QtGui.QColor(223, 223, 223)
+    TextHover = QtGui.QColor(255, 255, 255)
 
 
 class _SbjBase(object):
@@ -283,10 +342,14 @@ class _SbjBase(object):
         self._data = _Dict()
         self._gui_data = _Dict()
 
+        self._data.category = ''
+
         # type
         self._data.type = ''
+
         # path
         self._data.path = ''
+
         # name
         self._data.name = ''
 
@@ -305,6 +368,9 @@ class _SbjBase(object):
     @property
     def scene_model(self):
         return self._item.scene()._model
+
+    def get_category(self):
+        return self._data.category
 
     # type
     def set_type(self, text):
@@ -332,56 +398,3 @@ class _SbjBase(object):
 
     def get_name(self):
         return self._data.name
-
-
-class _ActionFlags(enum.IntEnum):
-    GraphTrackClick = 0x00
-    GraphTrackMove = 0x01
-
-    PortSourcePressClick = 0x10
-    PortSourcePressMove = 0x11
-    PortSourceHoverMove = 0x12
-    PortTargetPressClick = 0x13
-    PortTargetPressMove = 0x14
-    PortTargetHoverMove = 0x15
-
-    ConnectionSourcePressClick = 0x20
-    ConnectionSourcePressMove = 0x21
-    ConnectionSourceHoverMove = 0x22
-    ConnectionTargetPressClick = 0x23
-    ConnectionTargetPressMove = 0x24
-    ConnectionTargetHoverMove = 0x25
-
-    GroupPressClick = 0x30
-    GroupPressMove = 0x31
-    GroupResizePressClick = 0x32
-    GroupResizePressMove = 0x33
-
-
-class _QtSbjTypes(enum.IntEnum):
-    Node = 0x00
-    InputPort = 0x02
-    OutputPort = 0x01
-    Connection = 0x04
-    Backdrop = 0x05
-    Aux = 0x06
-
-
-class _QtSbjBase:
-    SBJ_TYPE = None
-
-
-class _QtColors:
-    NodeBorder = QtGui.QColor(191, 191, 191, 255)
-    NodeBackground = QtGui.QColor(95, 95, 95, 255)
-
-    BackdropBorder = QtGui.QColor(95, 95, 95, 255)
-    BackdropBackground = QtGui.QColor(63, 63, 63, 31)
-    BackdropName = QtGui.QColor(95, 95, 95, 255)
-
-    PortBorder = QtGui.QColor(71, 71, 71, 255)
-    PortBackground = QtGui.QColor(71, 71, 71, 255)
-
-    TypeText = QtGui.QColor(191, 191, 191, 255)
-    Text = QtGui.QColor(223, 223, 223)
-    TextHover = QtGui.QColor(255, 255, 255)

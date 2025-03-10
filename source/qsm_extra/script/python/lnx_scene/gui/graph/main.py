@@ -1,4 +1,6 @@
 # coding:utf-8
+import functools
+
 import enum
 
 import math
@@ -8,6 +10,8 @@ import lxgui.core as gui_core
 from lxgui.qt.core.wrap import *
 
 import lxgui.qt.core as gui_qt_core
+
+import lxgui.qt.widgets as gui_qt_widgets
 
 from . import base as _base
 
@@ -264,6 +268,9 @@ class _QtPort(
         self._hover_flag = False
         self._w, self._h = w, h
 
+        self._name_aux = _QtTextAux('', self)
+        self._name_aux.hide()
+
     def itemChange(self, change, value):
         if change == QtWidgets.QGraphicsItem.ItemScenePositionHasChanged:
             connections = self._model.get_connections()
@@ -282,32 +289,15 @@ class _QtPort(
         pen.setJoinStyle(QtCore.Qt.MiterJoin)
         return pen
 
-    def _update_output(self):
-        path = QtGui.QPainterPath()
-        polygon = QtGui.QPolygonF(
-            [
-                QtCore.QPointF(0, 0),
-                QtCore.QPointF(self._w, 0),
-                QtCore.QPointF(self._w/2, self._h),
-                QtCore.QPointF(0, 0),
-            ]
-        )
-        path.addPolygon(polygon)
-        self.setPath(path)
-
-    def _update_input(self):
-        rect = QtCore.QRectF(0, 0, self._w, self._h)
-        path = QtGui.QPainterPath()
-        path.addRect(rect)
-        self.setPath(path)
-
     def hoverEnterEvent(self, event):
         self._hover_flag = True
+        self._name_aux.show()
         self.update()
         super(_QtPort, self).hoverEnterEvent(event)
 
     def hoverLeaveEvent(self, event):
         self._hover_flag = False
+        self._name_aux.hide()
         self.update()
         super(_QtPort, self).hoverLeaveEvent(event)
 
@@ -334,6 +324,20 @@ class _QtInputPort(_QtPort):
     def __init__(self, *args, **kwargs):
         super(_QtInputPort, self).__init__(*args, **kwargs)
 
+    def _update(self):
+        rect = QtCore.QRectF(0, 0, self._w, self._h)
+        path = QtGui.QPainterPath()
+        path.addRect(rect)
+        self.setPath(path)
+
+        text_rect = self._name_aux.boundingRect()
+        w, h = text_rect.width(), text_rect.height()
+
+        self._name_aux.setPos(
+            0, -h/2
+        )
+        self._name_aux.setRotation(-45)
+
 
 class _QtOutputPort(_QtPort):
     MODEL_CLS = _model._OutputPortModel
@@ -342,20 +346,64 @@ class _QtOutputPort(_QtPort):
 
     def __init__(self, *args, **kwargs):
         super(_QtOutputPort, self).__init__(*args, **kwargs)
+    
+    def _update(self):
+        path = QtGui.QPainterPath()
+        polygon = QtGui.QPolygonF(
+            [
+                QtCore.QPointF(0, 0),
+                QtCore.QPointF(self._w, 0),
+                QtCore.QPointF(self._w/2, self._h),
+                QtCore.QPointF(0, 0),
+            ]
+        )
+        path.addPolygon(polygon)
+        self.setPath(path)
+
+        text_rect = self._name_aux.boundingRect()
+        w, h = text_rect.width(), text_rect.height()
+
+        self._name_aux.setPos(
+            (self._w-w)/2, self._h
+        )
 
 
-class _QtNameEntry(
+class _QtTextAux(
     QtWidgets.QGraphicsTextItem,
     _base._QtSbjBase,
 ):
     SBJ_TYPE = _base._QtSbjTypes.Aux
 
     def __init__(self, *args):
-        super(_QtNameEntry, self).__init__(*args)
+        super(_QtTextAux, self).__init__(*args)
         self.setDefaultTextColor(QtGui.QColor(223, 223, 223))
         self._font = gui_qt_core.QtFont.generate(size=8)
         self.setFont(self._font)
         self._frame_h = 20
+        self.setAcceptHoverEvents(False)
+
+
+class _QtImageAux(
+    QtWidgets.QGraphicsRectItem,
+    _base._QtSbjBase,
+):
+    SBJ_TYPE = _base._QtSbjTypes.Aux
+
+    def __init__(self, *args):
+        super(_QtImageAux, self).__init__(*args)
+        self.setAcceptHoverEvents(False)
+        self.setOpacity(.5)
+
+    def paint(self, painter, option, widget=None):
+        painter.save()
+
+        rect = self.rect()
+
+        gui_qt_core.QtItemDrawBase._draw_icon_by_file(
+            painter, rect, gui_core.GuiIcon.get('bypass')
+        )
+
+        painter.restore()
 
 
 # node
@@ -363,6 +411,8 @@ class _QtNode(
     QtWidgets.QGraphicsRectItem,
     _base._QtSbjBase,
 ):
+    ActionFlags = _base._ActionFlags
+
     SBJ_TYPE = _base._QtSbjTypes.Node
 
     def __init__(self, *args):
@@ -370,14 +420,17 @@ class _QtNode(
         self.setZValue(1)
 
         self.setFlags(
-            self.ItemIsMovable
-            | self.ItemIsSelectable
-            | self.ItemSendsScenePositionChanges
+            self.ItemIsMovable |
+            self.ItemIsSelectable |
+            self.ItemSendsScenePositionChanges
         )
 
-        # self.setAcceptHoverEvents(True)
+        self.setAcceptHoverEvents(True)
 
-        self._name_entry = _QtNameEntry('', self)
+        self._name_aux = _QtTextAux('', self)
+        self._bypass_aux = _QtImageAux(self)
+        self._bypass_aux.hide()
+        self._bypass_aux.setZValue(12)
 
         self._model = _model._NodeModel(self)
         self._model._gui_data.port.input.cls = _QtInputPort
@@ -407,6 +460,25 @@ class _QtNode(
         self.update()
         super(_QtNode, self).hoverLeaveEvent(event)
 
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            point = event.pos()
+            if self._model._check_viewed(point) is True:
+                self._model.set_action_flag(self.ActionFlags.NodeViewedClick)
+            elif self._model._check_edited(point) is True:
+                self._model.set_action_flag(self.ActionFlags.NodeEditedClick)
+        super(_QtNode, self).mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            if self._model.is_action_flag_matching(self.ActionFlags.NodeViewedClick):
+                self._model._on_swap_viewed()
+            elif self._model.is_action_flag_matching(self.ActionFlags.NodeEditedClick):
+                self._model._on_swap_edited()
+
+        self._model.clear_action_flag()
+        super(_QtNode, self).mouseReleaseEvent(event)
+
     def paint(self, painter, option, widget=None):
         self._model.draw(painter, option)
 
@@ -425,7 +497,7 @@ class _QtBackdrop(
 
         self.setFlags(
             # do not add movable
-            # self.ItemIsMovable
+            # self.ItemIsMovable |
             self.ItemIsSelectable
         )
 
@@ -478,17 +550,60 @@ class _QtBackdrop(
         super(_QtBackdrop, self).mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            if self._model.is_action_flag_matching(
+                self.ActionFlags.GroupPressClick, self.ActionFlags.GroupPressMove,
+            ):
+                self._model.do_move_end()
+            elif self._model.is_action_flag_matching(
+                self.ActionFlags.GroupResizePressClick, self.ActionFlags.GroupResizePressMove,
+            ):
+                self._model.do_resize_end()
+            else:
+                event.ignore()
         self._model.clear_action_flag()
 
     def paint(self, painter, option, widget=None):
         self._model.draw(painter, option)
 
 
+class _QtScene(QtWidgets.QGraphicsScene):
+    def __init__(self, *args):
+        super(_QtScene, self).__init__(*args)
+
+        self._model = None
+
+    def _set_model(self, model):
+        self._model = model
+
+    def _get_items_by_rect(self, x, y, w, h):
+        return self.items(QtCore.QRectF(x, y, w, h), QtCore.Qt.IntersectsItemBoundingRect)
+
+
+class _QtQRubberBand(QtWidgets.QRubberBand):
+    def __init__(self, *args, **kwargs):
+        super(_QtQRubberBand, self).__init__(*args, **kwargs)
+
+    def paintEvent(self, event):
+        painter = QtGui.QPainter(self)
+        x, y, w, h = 0, 0, self.rect().width(), self.rect().height()
+        r, g, b, a = gui_core.GuiRgba.LightAzureBlue
+        painter.setPen(QtGui.QColor(r, g, b))
+        painter.setBrush(QtGui.QColor(r, g, b, 31))
+        painter.drawRect(QtCore.QRect(x, y, w-1, h-1))
+
+
 # graph
 class _QtSceneGraph(QtWidgets.QGraphicsView):
     ActionFlags = _base._ActionFlags
 
-    def get_scaled_offset(self, x, y):
+    QT_MENU_CLS = gui_qt_widgets.QtMenu
+
+    def _map_from_global(self, point):
+        point = self.mapFromGlobal(point)
+        return self._get_scaled_point(point.x(), point.y())
+
+    def _get_scaled_point(self, x, y):
         transform = self.transform()
         inverted, success = transform.inverted()
         if success:
@@ -510,6 +625,9 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
         self.setTransformationAnchor(self.NoAnchor)
         self.setResizeAnchor(self.NoAnchor)
         self.setInteractive(True)
+        self.setDragMode(self.NoDrag)
+
+        self._rubber_band = _QtQRubberBand(QtWidgets.QRubberBand.Rectangle, self)
 
         self._model = _model._SceneModel(self)
         self._model._gui_data.node.cls = _QtNode
@@ -551,6 +669,8 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
             (self._model._on_cut_action, 'Ctrl+X'),
             # paste
             (self._model._on_paste_action, 'Ctrl+V'),
+            # bypass
+            (self._model._on_bypass_action, 'D'),
         ]
         for i_fnc, i_shortcut in actions:
             i_action = QtWidgets.QAction(self)
@@ -571,7 +691,13 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
         if isinstance(item, _QtInputPort):
             source_port = self._drag_port
             target_port = item._model
-            self._model._push_connect_cmd(source_port, target_port)
+            if target_port.has_source():
+                source_port_old = target_port.get_source()
+                self._model._push_reconnect_source_cmd(
+                    source_port_old, target_port, source_port
+                )
+            else:
+                self._model._push_connect_cmd(source_port, target_port)
 
         self.scene().removeItem(self._drag_connection._item)
 
@@ -582,7 +708,13 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
         if isinstance(item, _QtOutputPort):
             source_port = item._model
             target_port = self._drag_port
-            self._model._push_connect_cmd(source_port, target_port)
+            if target_port.has_source():
+                source_port_old = target_port.get_source()
+                self._model._push_reconnect_source_cmd(
+                    source_port_old, target_port, source_port
+                )
+            else:
+                self._model._push_connect_cmd(source_port, target_port)
 
         self.scene().removeItem(self._drag_connection._item)
         self._drag_connection = None
@@ -638,17 +770,38 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
         self._drag_connection = None
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if (
+            event.button() == QtCore.Qt.LeftButton
+            and event.modifiers() in (QtCore.Qt.ShiftModifier, QtCore.Qt.ControlModifier)
+        ):
+            scene_pos = self.mapToScene(event.pos())
+            selection_area = QtGui.QPainterPath()
+            selection_area.addRect(QtCore.QRectF(scene_pos.x() - 1, scene_pos.y() - 1, 2, 2))
+            items_under_cursor = self.scene().items(selection_area, QtCore.Qt.IntersectsItemShape)
+            if items_under_cursor:
+                for item in items_under_cursor:
+                    if isinstance(item, _QtNode):
+                        if event.modifiers() == QtCore.Qt.ShiftModifier:
+                            item.setSelected(True)
+                        elif event.modifiers() == QtCore.Qt.ControlModifier:
+                            item.setSelected(False)
+            else:
+                self._model.set_action_flag(self.ActionFlags.RectSelectPressClick)
+                self._model._do_rect_selection_start(event)
+
+        elif event.button() == QtCore.Qt.LeftButton:
             point = event.pos()
             item = self.itemAt(point)
-            p = self.get_scaled_offset(point.x(), point.y())
+            p = self._get_scaled_point(point.x(), point.y())
             self._drag_start_point = point
+            # port
             if self._model.is_action_sub_flag_matching(self.ActionFlags.PortSourceHoverMove):
                 self._model.clear_action_sub_flag()
                 self._accept_source_connect(item)
             elif self._model.is_action_sub_flag_matching(self.ActionFlags.PortTargetHoverMove):
                 self._model.clear_action_sub_flag()
                 self._accept_target_connect(item)
+            # connection
             elif self._model.is_action_sub_flag_matching(self.ActionFlags.ConnectionSourceHoverMove):
                 self._model.clear_action_sub_flag()
                 self._accept_source_reconnect(item)
@@ -656,8 +809,13 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
                 self._model.clear_action_sub_flag()
                 self._accept_target_reconnect(item)
             else:
-                # connect
-                if isinstance(item, _QtOutputPort):
+                # node
+                if isinstance(item, _QtNode):
+                    super(_QtSceneGraph, self).mousePressEvent(event)
+                    self._model.set_action_flag(self.ActionFlags.NodePressClick)
+                    self._model._do_node_move_start(event)
+                # port
+                elif isinstance(item, _QtOutputPort):
                     self._model.set_action_flag(self.ActionFlags.PortSourcePressClick)
                     self._model.set_action_sub_flag(self.ActionFlags.PortSourcePressClick)
                     self._drag_port = item._model
@@ -673,7 +831,7 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
                     self._drag_connection = connection_item._model
                     self.scene().addItem(connection_item)
                     self._drag_connection.update_v(start_point=p)
-                # reconnect
+                # connection
                 elif isinstance(item, _QtConnection):
                     self._drag_connection = item._model
                     region = item._get_region(p)
@@ -685,24 +843,37 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
                         self._model.set_action_flag(self.ActionFlags.ConnectionTargetPressClick)
                         self._model.set_action_sub_flag(self.ActionFlags.ConnectionTargetPressClick)
                         self._drag_connection.update_v(end_point=p)
+                elif isinstance(item, _QtBackdrop):
+                    if item._model._check_scene_move(p):
+                        super(_QtSceneGraph, self).mousePressEvent(event)
+                    elif item._model._check_scene_resize(p):
+                        super(_QtSceneGraph, self).mousePressEvent(event)
+                    else:
+                        self._model.set_action_flag(self.ActionFlags.RectSelectPressClick)
+                        self._model._do_rect_selection_start(event)
+                        super(_QtSceneGraph, self).mousePressEvent(event)
+                elif isinstance(item, _QtImageAux):
+                    super(_QtSceneGraph, self).mousePressEvent(event)
                 else:
+                    self._model.set_action_flag(self.ActionFlags.RectSelectPressClick)
+                    self._model._do_rect_selection_start(event)
                     super(_QtSceneGraph, self).mousePressEvent(event)
         elif event.button() == QtCore.Qt.MidButton:
             self._model.set_action_flag(self.ActionFlags.GraphTrackClick)
-            self._model.on_track_start(event)
+            self._model._do_track_start(event)
         else:
             super(_QtSceneGraph, self).mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
         if event.buttons() == QtCore.Qt.NoButton:
-            # connect
+            # port
             if self._model.is_action_sub_flag_matching(
                 self.ActionFlags.PortSourcePressClick, self.ActionFlags.PortSourceHoverMove
             ):
                 if self._drag_connection is not None:
                     point = event.pos()
                     item = self.itemAt(point)
-                    p = self.get_scaled_offset(point.x(), point.y())
+                    p = self._get_scaled_point(point.x(), point.y())
 
                     if isinstance(item, _QtInputPort):
                         self._drag_connection.to_correct_status()
@@ -717,7 +888,7 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
                 if self._drag_connection is not None:
                     point = event.pos()
                     item = self.itemAt(point)
-                    p = self.get_scaled_offset(point.x(), point.y())
+                    p = self._get_scaled_point(point.x(), point.y())
                     if isinstance(item, _QtOutputPort):
                         self._drag_connection.to_correct_status()
                     else:
@@ -725,14 +896,14 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
 
                     self._drag_connection.update_v(start_point=p)
                     self._model.set_action_sub_flag(self.ActionFlags.PortTargetHoverMove)
-            # reconnect
+            # connections
             elif self._model.is_action_sub_flag_matching(
                 self.ActionFlags.ConnectionSourcePressClick, self.ActionFlags.ConnectionSourceHoverMove
             ):
                 if self._drag_connection is not None:
                     point = event.pos()
                     item = self.itemAt(point)
-                    p = self.get_scaled_offset(point.x(), point.y())
+                    p = self._get_scaled_point(point.x(), point.y())
 
                     if isinstance(item, _QtOutputPort):
                         self._drag_connection.to_correct_status()
@@ -747,7 +918,7 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
                 if self._drag_connection is not None:
                     point = event.pos()
                     item = self.itemAt(point)
-                    p = self.get_scaled_offset(point.x(), point.y())
+                    p = self._get_scaled_point(point.x(), point.y())
                     if isinstance(item, _QtInputPort):
                         self._drag_connection.to_correct_status()
                     else:
@@ -759,9 +930,15 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
         elif event.buttons() == QtCore.Qt.LeftButton:
             point = event.pos()
             item = self.itemAt(point)
-            p = self.get_scaled_offset(point.x(), point.y())
-            # connect
+            p = self._get_scaled_point(point.x(), point.y())
+            # node
             if self._model.is_action_flag_matching(
+                self.ActionFlags.NodePressClick, self.ActionFlags.NodePressMove
+            ):
+                super(_QtSceneGraph, self).mouseMoveEvent(event)
+                self._model._do_node_move(event)
+            # port
+            elif self._model.is_action_flag_matching(
                 self.ActionFlags.PortSourcePressClick, self.ActionFlags.PortSourcePressMove
             ):
                 if isinstance(item, _QtInputPort):
@@ -781,7 +958,7 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
 
                 self._drag_connection.update_v(start_point=p)
                 self._model.set_action_flag(self.ActionFlags.PortTargetPressMove)
-            # reconnect
+            # connection
             elif self._model.is_action_flag_matching(
                 self.ActionFlags.ConnectionSourcePressClick, self.ActionFlags.ConnectionSourcePressMove
             ):
@@ -802,6 +979,12 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
 
                 self._drag_connection.update_v(end_point=p)
                 self._model.set_action_flag(self.ActionFlags.ConnectionTargetPressMove)
+            # rect selection
+            elif self._model.is_action_flag_matching(
+                self.ActionFlags.RectSelectPressClick, self.ActionFlags.RectSelectPressMove
+            ):
+                self._model.set_action_flag(self.ActionFlags.RectSelectPressMove)
+                self._model._do_rect_selection_move(event)
             else:
                 super(_QtSceneGraph, self).mouseMoveEvent(event)
         elif event.buttons() == QtCore.Qt.MidButton:
@@ -810,15 +993,21 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
                 self.ActionFlags.GraphTrackMove
             ):
                 self._model.set_action_flag(self.ActionFlags.GraphTrackMove)
-                self._model.do_track_move(event)
+                self._model._do_track_move(event)
         else:
             super(_QtSceneGraph, self).mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
             item = self.itemAt(event.pos())
+            # node
+            if self._model.is_action_flag_matching(
+                self.ActionFlags.NodePressClick, self.ActionFlags.NodePressMove
+            ):
+                super(_QtSceneGraph, self).mouseReleaseEvent(event)
+                self._model._do_node_move_end()
             # connect
-            if self._model.is_action_flag_matching(self.ActionFlags.PortSourcePressMove):
+            elif self._model.is_action_flag_matching(self.ActionFlags.PortSourcePressMove):
                 self._model.clear_action_sub_flag()
                 self._accept_source_connect(item)
             elif self._model.is_action_flag_matching(self.ActionFlags.PortTargetPressMove):
@@ -831,22 +1020,26 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
             elif self._model.is_action_flag_matching(self.ActionFlags.ConnectionTargetPressMove):
                 self._model.clear_action_sub_flag()
                 self._accept_target_reconnect(item)
+            # rect selection
+            elif self._model.is_action_flag_matching(self.ActionFlags.RectSelectPressMove):
+                self._model._do_rect_selection_end(event)
             else:
                 super(_QtSceneGraph, self).mouseReleaseEvent(event)
-            
+        # track
         elif event.button() == QtCore.Qt.MidButton:
             if self._model.is_action_flag_matching(
                 self.ActionFlags.GraphTrackClick,
                 self.ActionFlags.GraphTrackMove
             ):
-                self._model.do_tack_end()
+                self._model._do_tack_end()
         else:
             super(_QtSceneGraph, self).mouseReleaseEvent(event)
 
+        self._rubber_band.hide()
         self._model.clear_action_flag()
 
     def wheelEvent(self, event):
-        self._model.do_zoom(event)
+        self._model._do_zoom(event)
 
     def eventFilter(self, *args):
         widget, event = args
@@ -854,18 +1047,59 @@ class _QtSceneGraph(QtWidgets.QGraphicsView):
             pass
         return False
 
+    def contextMenuEvent(self, event):
+        menu = None
 
-class _QtScene(QtWidgets.QGraphicsScene):
-    def __init__(self, *args):
-        super(_QtScene, self).__init__(*args)
+        menu_data = self._model.get_menu_data()
+        menu_content = self._model.get_menu_content()
+        menu_data_generate_fnc = self._model.get_menu_data_generate_fnc()
+        menu_name_dict = self._model.get_menu_name_dict()
 
-        self._model = None
+        if menu_content:
+            if menu is None:
+                menu = self.QT_MENU_CLS(self, name_dict=menu_name_dict)
+            menu._set_menu_content_(menu_content, append=True)
 
-    def _set_model(self, model):
-        self._model = model
+        if menu_data:
+            if menu is None:
+                menu = self.QT_MENU_CLS(self, name_dict=menu_name_dict)
+            menu._set_menu_data_(menu_data)
 
-    def _get_items_by_rect(self, x, y, w, h):
-        return self.items(QtCore.QRectF(x, y, w, h), QtCore.Qt.IntersectsItemBoundingRect)
+        if menu_data_generate_fnc:
+            if menu is None:
+                menu = self.QT_MENU_CLS(self, name_dict=menu_name_dict)
+            menu._set_menu_data_(menu_data_generate_fnc())
+
+        # data from item
+        item = self.itemAt(event.pos())
+        if item:
+            if item.SBJ_TYPE in {_base._QtSbjTypes.Node, _base._QtSbjTypes.Backdrop}:
+                item_menu_data = item._model.get_menu_data()
+                item_menu_content = item._model.get_menu_content()
+                item_menu_data_generate_fnc = item._model.get_menu_data_generate_fnc()
+                item_menu_name_dict = item._model.get_menu_name_dict()
+                menu_name_dict.update(item_menu_name_dict)
+
+                if item_menu_content:
+                    if menu is None:
+                        menu = self.QT_MENU_CLS(self, name_dict=menu_name_dict)
+                    menu._set_menu_content_(item_menu_content, append=True)
+
+                if item_menu_data:
+                    if menu is None:
+                        menu = self.QT_MENU_CLS(self, name_dict=menu_name_dict)
+                    menu._set_menu_data_(item_menu_data)
+
+                if item_menu_data_generate_fnc:
+                    if menu is None:
+                        menu = self.QT_MENU_CLS(self, name_dict=menu_name_dict)
+                    menu._set_menu_data_(item_menu_data_generate_fnc())
+
+                if menu is not None:
+                    menu._update_menu_name_dict_(item_menu_name_dict)
+
+        if menu is not None:
+            menu._popup_start_()
 
 
 class QtSceneGraphWidget(QtWidgets.QWidget):

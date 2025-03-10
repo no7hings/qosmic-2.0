@@ -1,0 +1,175 @@
+{
+    "nodes": {
+        "/node": {
+            "category": "node",
+            "name": "node",
+            "input_ports": {
+                "input": {
+                    "category": "port",
+                    "path": "/node.input",
+                    "type": "input",
+                    "name": "input",
+                    "source": null
+                }
+            },
+            "path": "/node",
+            "type": "node",
+            "options": {
+                "color": {
+                    "r": 71,
+                    "b": 102,
+                    "g": 128
+                },
+                "color_enable": true,
+                "position": {
+                    "y": 64.0,
+                    "x": 64.0
+                },
+                "bypass": false,
+                "size": {
+                    "width": 160,
+                    "height": 24
+                }
+            },
+            "output_ports": {
+                "output": {
+                    "category": "port",
+                    "path": "/node.output",
+                    "type": "output",
+                    "name": "output"
+                }
+            }
+        },
+        "/node1": {
+            "category": "node",
+            "name": "node1",
+            "input_ports": {
+                "input": {
+                    "category": "port",
+                    "path": "/node1.input",
+                    "type": "input",
+                    "name": "input",
+                    "source": null
+                },
+                "input1": {
+                    "category": "port",
+                    "path": "/node1.input1",
+                    "type": "input",
+                    "name": "input1",
+                    "source": null
+                },
+                "input2": {
+                    "category": "port",
+                    "path": "/node1.input2",
+                    "type": "input",
+                    "name": "input2",
+                    "source": null
+                },
+                "input3": {
+                    "category": "port",
+                    "path": "/node1.input3",
+                    "type": "input",
+                    "name": "input3",
+                    "source": null
+                },
+                "input4": {
+                    "category": "port",
+                    "path": "/node1.input4",
+                    "type": "input",
+                    "name": "input4",
+                    "source": "/node.output"
+                }
+            },
+            "path": "/node1",
+            "type": "node",
+            "options": {
+                "color": {
+                    "r": 133,
+                    "b": 130,
+                    "g": 65
+                },
+                "color_enable": true,
+                "position": {
+                    "y": 160.0,
+                    "x": 64.0
+                },
+                "bypass": false,
+                "size": {
+                    "width": 160,
+                    "height": 24
+                }
+            },
+            "output_ports": {
+                "output": {
+                    "category": "port",
+                    "path": "/node1.output",
+                    "type": "output",
+                    "name": "output"
+                }
+            }
+        },
+        "/node2": {
+            "category": "node",
+            "name": "node2",
+            "input_ports": {
+                "input": {
+                    "category": "port",
+                    "path": "/node2.input",
+                    "type": "input",
+                    "name": "input",
+                    "source": "/node1.output"
+                }
+            },
+            "path": "/node2",
+            "type": "node",
+            "options": {
+                "color": {
+                    "r": 119,
+                    "b": 163,
+                    "g": 93
+                },
+                "color_enable": true,
+                "position": {
+                    "y": 256.0,
+                    "x": 64.0
+                },
+                "bypass": false,
+                "size": {
+                    "width": 160,
+                    "height": 24
+                }
+            },
+            "output_ports": {
+                "output": {
+                    "category": "port",
+                    "path": "/node2.output",
+                    "type": "output",
+                    "name": "output"
+                }
+            }
+        },
+        "/backdrop": {
+            "category": "backdrop",
+            "path": "/backdrop",
+            "type": "backdrop",
+            "name": "backdrop",
+            "options": {
+                "color": {
+                    "r": 0,
+                    "b": 0,
+                    "g": 255
+                },
+                "color_enable": true,
+                "position": {
+                    "y": 0.0,
+                    "x": 0.0
+                },
+                "bypass": false,
+                "size": {
+                    "width": 320,
+                    "height": 240
+                }
+            }
+        }
+    }
+}

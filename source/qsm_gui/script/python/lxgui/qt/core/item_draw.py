@@ -77,6 +77,21 @@ class QtItemDrawBase:
         painter.drawText(rect, option, text)
 
     @classmethod
+    def _draw_description_text(cls, painter, rect, text, color, font=None):
+        option = QtGui.QTextOption()
+        painter.setPen(color)
+        if font:
+            painter.setFont(font)
+
+        option.setWrapMode(
+            option.WrapAnywhere
+        )
+        rect = QtCore.QRectF(
+            rect
+        )
+        painter.drawText(rect, text, option)
+
+    @classmethod
     def _draw_frame(cls, painter, rect, border_color, background_color, border_width=1, border_radius=0):
         painter.setPen(QtGui.QPen(border_color, border_width))
         painter.setBrush(background_color)
