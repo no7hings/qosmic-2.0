@@ -55,6 +55,15 @@ class QtItemDrawBase:
             painter.drawPixmap(rect, pxm_scaled)
 
     @classmethod
+    def _draw_pixmap(cls, painter, rect, pixmap):
+        pxm_scaled = pixmap.scaled(
+            rect.size(),
+            QtCore.Qt.IgnoreAspectRatio,
+            QtCore.Qt.SmoothTransformation
+        )
+        painter.drawPixmap(rect, pxm_scaled)
+
+    @classmethod
     def _draw_icon_by_file(cls, painter, rect, file_path):
         if file_path is None:
             return

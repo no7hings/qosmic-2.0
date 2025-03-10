@@ -727,6 +727,9 @@ class ListItemModel(_item_base.AbsItemModel):
             return []
 
         def build_fnc_(data_):
+            if self._view._view_model._close_flag is True:
+                return
+
             if data_:
                 _pixmap = data_[0]
                 self._data.image_enable = True

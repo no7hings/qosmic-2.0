@@ -9,7 +9,11 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_scene.gui.graph.main as m
+import lnx_scene.node_graph.core.model as _model
+
+import lnx_scene.node_graph.core.gui as _gui
+
+import lnx_scene.node_graph.main as m
 
 import os
 
@@ -22,35 +26,26 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         self.add_widget(self._d)
 
-        output_port_cur = None
-        for i in range(3):
-            _, i_node = self._d._model.create_node('node')
-            if i % 2:
-                for j in range(5):
-                    _, j_input_port = i_node.add_input_port('input')
-            else:
-                _, j_input_port = i_node.add_input_port('input')
+        # _, backdrop = self._d._model.add_node('backdrop')
+        #
+        # backdrop.set_color((0, 255, 0))
+        # backdrop.set_description('TEST for Scene Graph')
+        # backdrop.set_size((320, 480))
 
-            _, i_output_port = i_node.add_output_port('output')
+        _, load_maya_scene = self._d._model.add_node('load_maya_scene')
+        load_maya_scene.set_image('E:/myworkspace/qosmic-2.0/source/qsm_resource/resources/icons/file/ma.png')
+        # load_maya_scene.set_video('X:/videos/2024-0925/houdini_20_beach_demo_+_rnd (1080p).mp4')
+        x, y = load_maya_scene.move_by(64, 64)
+        w, h = load_maya_scene.get_size()
 
-            i_node.set_color(bsc_core.BscTextOpt(i_node.get_name()).to_hash_rgb())
+        _, replace_maya_scene_reference = self._d._model.add_node('replace_maya_scene_reference')
+        x, y = replace_maya_scene_reference.move_by(64, y+h+32*4)
+        w, h = replace_maya_scene_reference.get_size()
 
-            i_node.move_by(64, 64+96*i)
+        _, output_maya_scene = self._d._model.add_node('output_maya_scene')
+        x, y = output_maya_scene.move_by(64, y+h+32*4)
 
-            if output_port_cur is not None:
-                output_port_cur.connect(j_input_port)
-
-            output_port_cur = i_output_port
-
-        _, backdrop = self._d._model.create_backdrop()
-
-        backdrop.set_color((0, 255, 0))
-        backdrop.set_description('TEST for Scene Graph')
-
-        button = qt_widgets.QtPressButton()
-        button._set_name_text_('Add Node')
-
-        print(self._d._model.to_json())
+        # print(self._d._model.to_json())
 
 
 if __name__ == '__main__':
@@ -58,12 +53,10 @@ if __name__ == '__main__':
 
     from lxgui.qt.core import wrap
 
-    os.environ['QSM_UI_LANGUAGE'] = 'chs'
-    #
     app = wrap.QtWidgets.QApplication(sys.argv)
-    #
-    w = W()
-    w.set_definition_window_size((640, 480))
-    w.show_window_auto()
-    #
+
+    window = W()
+    window.set_definition_window_size((640, 480))
+    window.show_window_auto()
+
     sys.exit(app.exec_())

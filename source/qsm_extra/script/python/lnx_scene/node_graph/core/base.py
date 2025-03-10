@@ -69,7 +69,7 @@ class _ToJson(object):
             return self._dict_prc(value, depth, key, is_itr_end)
         elif isinstance(value, _Dict):
             return self._dict_prc(value._dict, depth, key, is_itr_end)
-        elif isinstance(value, _SbjBase):
+        elif isinstance(value, _ObjBase):
             return self._dict_prc(value._data._dict, depth, key, is_itr_end)
         else:
             return self._error_value_prc(value, depth, key, is_itr_end)
@@ -279,8 +279,6 @@ class _ActionFlags(enum.IntEnum):
 
     NodePressClick = 0x10
     NodePressMove = 0x11
-    NodeViewedClick = 0x12
-    NodeEditedClick = 0x13
 
     PortSourcePressClick = 0x20
     PortSourcePressMove = 0x21
@@ -296,17 +294,18 @@ class _ActionFlags(enum.IntEnum):
     ConnectionTargetPressMove = 0x34
     ConnectionTargetHoverMove = 0x35
 
-    GroupPressClick = 0x40
-    GroupPressMove = 0x41
-    GroupResizePressClick = 0x42
-    GroupResizePressMove = 0x43
+    GroupPressClick = 0x50
+    GroupPressMove = 0x51
+    GroupResizePressClick = 0x52
+    GroupResizePressMove = 0x53
 
-    RectSelectPressClick = 0x50
-    RectSelectPressMove = 0x51
+    RectSelectPressClick = 0x60
+    RectSelectPressMove = 0x61
 
 
 class _QtSbjTypes(enum.IntEnum):
     Node = 0x00
+
     InputPort = 0x02
     OutputPort = 0x01
     Connection = 0x04
@@ -316,6 +315,8 @@ class _QtSbjTypes(enum.IntEnum):
 
 class _QtSbjBase:
     SBJ_TYPE = None
+
+    MODEL_CLS = None
 
 
 class _QtColors:
@@ -327,19 +328,20 @@ class _QtColors:
     BackdropBackground = QtGui.QColor(63, 63, 127, 31)
     BackdropName = QtGui.QColor(95, 95, 95, 255)
 
-    PortBorder = QtGui.QColor(71, 71, 71, 255)
-    PortBackground = QtGui.QColor(71, 71, 71, 255)
+    Port = QtGui.QColor(71, 71, 71, 255)
+    AddInput = QtGui.QColor(111, 111, 111, 255)
 
     TypeText = QtGui.QColor(191, 191, 191, 255)
     Text = QtGui.QColor(223, 223, 223)
     TextHover = QtGui.QColor(255, 255, 255)
 
 
-class _SbjBase(object):
-    def __init__(self, item):
-        self._item = item
+class _ObjBase(object):
+    def __init__(self, gui_widget):
+        self._gui = gui_widget
 
         self._data = _Dict()
+        self._builtin_data = _Dict()
         self._gui_data = _Dict()
 
         self._data.category = ''
@@ -363,11 +365,14 @@ class _SbjBase(object):
 
     @property
     def scene(self):
-        return self._item.scene()
+        return self._gui.scene()
 
     @property
-    def scene_model(self):
-        return self._item.scene()._model
+    def root_model(self):
+        return self._gui.scene()._model
+
+    def update_root_gui(self):
+        self.root_model._gui.update()
 
     def get_category(self):
         return self._data.category

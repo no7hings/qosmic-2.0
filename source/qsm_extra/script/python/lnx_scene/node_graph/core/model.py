@@ -1,4 +1,5 @@
 # coding:utf-8
+import os.path
 import re
 
 import sys
@@ -40,6 +41,9 @@ class _QtUndoCommand(QtWidgets.QUndoCommand):
         NodeMove = 0x20
         NodeResize = 0x21
 
+        NodeAddInput = 0x22
+        NodeAutoConnectInput = 0x23
+
     ACTION_NAME_MAP = {
         Actions.Connect: 'Connect',
         Actions.Disconnect: 'Disconnect',
@@ -54,88 +58,100 @@ class _QtUndoCommand(QtWidgets.QUndoCommand):
     def trace_error(cls, text):
         return sys.stderr.write(text+'\n')
 
-    def __init__(self, scene_model, data):
+    def __init__(self, root_model, data):
         super(_QtUndoCommand, self).__init__()
-        self._scene_model = scene_model
+        self._root_model = root_model
         self._data = data
 
     def undo(self):
         for i_flag, i_args in self._data:
             if i_flag == self.Actions.Connect:
-                self._scene_model._disconnect_path(i_args)
+                self._root_model._disconnect_path(i_args)
                 self.trace('{}: {}'.format(self.ACTION_NAME_MAP[i_flag], i_args))
             elif i_flag == self.Actions.Disconnect:
-                self._scene_model._connect_path(i_args)
+                self._root_model._connect_path(i_args)
                 self.trace('{}: {}'.format(self.ACTION_NAME_MAP[i_flag], i_args))
             elif i_flag == self.Actions.Reconnect:
                 i_path_0, i_path_1 = i_args
-                self._scene_model._reconnect_path(i_path_1, i_path_0)
+                self._root_model._reconnect_path(i_path_1, i_path_0)
                 self.trace('{}: {}'.format(self.ACTION_NAME_MAP[i_flag], i_args))
             elif i_flag == self.Actions.Delete:
                 i_node_args, i_connection_args = i_args
                 for j_args in i_node_args:
-                    self._scene_model.create_node_by_data(j_args)
+                    self._root_model.create_node_by_data(j_args)
                 for j_args in i_connection_args:
-                    self._scene_model._connect_path(j_args)
+                    self._root_model._connect_path(j_args)
             elif i_flag == self.Actions.Cut:
                 i_node_args, i_connection_args = i_args
                 for j_args in i_node_args:
-                    self._scene_model.create_node_by_data(j_args)
+                    self._root_model.create_node_by_data(j_args)
                 for j_args in i_connection_args:
-                    self._scene_model._connect_path(j_args)
+                    self._root_model._connect_path(j_args)
             elif i_flag == self.Actions.NodeMove:
                 i_node_path, i_position_0, i_position_1 = i_args
-                self._scene_model.set_node_position(i_node_path, i_position_0)
+                self._root_model.set_node_position(i_node_path, i_position_0)
             elif i_flag == self.Actions.NodeResize:
                 i_node_path, i_size_0, i_size_1 = i_args
-                self._scene_model.set_node_size(i_node_path, i_size_0)
+                self._root_model.set_node_size(i_node_path, i_size_0)
+            elif i_flag == self.Actions.NodeAddInput:
+                i_node_path, i_port_path_new = i_args
+                self._root_model.remove_node_input(i_node_path, i_port_path_new)
+            elif i_flag == self.Actions.NodeAutoConnectInput:
+                i_node_path, i_port_flag, i_port_path, i_source_path = i_args
+                self._root_model.node_auto_disconnect_input(i_node_path, i_port_flag, i_port_path, i_source_path)
             elif i_flag == self.Actions.Paste:
                 i_node_args, i_connection_args = i_args
                 for j_args in i_connection_args:
-                    self._scene_model._disconnect_path(j_args)
+                    self._root_model._disconnect_path(j_args)
                 for j_args in i_node_args:
-                    self._scene_model._remove_node_by_data(j_args)
+                    self._root_model._remove_node_by_data(j_args)
 
     def redo(self):
         for i_flag, i_args in self._data:
             if i_flag == self.Actions.Connect:
-                self._scene_model._connect_path(i_args)
+                self._root_model._connect_path(i_args)
                 self.trace('{}: {}'.format(self.ACTION_NAME_MAP[i_flag], i_args))
             elif i_flag == self.Actions.Disconnect:
-                self._scene_model._disconnect_path(i_args)
+                self._root_model._disconnect_path(i_args)
                 self.trace('{}: {}'.format(self.ACTION_NAME_MAP[i_flag], i_args))
             elif i_flag == self.Actions.Reconnect:
                 i_path_0, i_path_1 = i_args
-                self._scene_model._reconnect_path(i_path_0, i_path_1)
+                self._root_model._reconnect_path(i_path_0, i_path_1)
                 self.trace('{}: {}'.format(self.ACTION_NAME_MAP[i_flag], i_args))
             elif i_flag == self.Actions.Delete:
                 i_node_args, i_connection_args = i_args
                 for j_args in i_connection_args:
-                    self._scene_model._disconnect_path(j_args)
+                    self._root_model._disconnect_path(j_args)
                 for j_args in i_node_args:
-                    self._scene_model._remove_node_by_data(j_args)
+                    self._root_model._remove_node_by_data(j_args)
             elif i_flag == self.Actions.Cut:
                 i_node_args, i_connection_args = i_args
                 for j_args in i_connection_args:
-                    self._scene_model._disconnect_path(j_args)
+                    self._root_model._disconnect_path(j_args)
                 for j_args in i_node_args:
-                    self._scene_model._remove_node_by_data(j_args)
+                    self._root_model._remove_node_by_data(j_args)
             elif i_flag == self.Actions.NodeMove:
                 i_node_path, i_position_0, i_position_1 = i_args
-                self._scene_model.set_node_position(i_node_path, i_position_1)
+                self._root_model.set_node_position(i_node_path, i_position_1)
             elif i_flag == self.Actions.NodeResize:
                 i_node_path, i_size_0, i_size_1 = i_args
-                self._scene_model.set_node_size(i_node_path, i_size_1)
+                self._root_model.set_node_size(i_node_path, i_size_1)
+            elif i_flag == self.Actions.NodeAddInput:
+                i_node_path, i_port_path_new = i_args
+                self._root_model.add_node_input(i_node_path, i_port_path_new)
+            elif i_flag == self.Actions.NodeAutoConnectInput:
+                i_node_path, i_port_flag, i_port_path, i_source_path = i_args
+                self._root_model.node_auto_connect_input(i_node_path, i_port_flag, i_port_path, i_source_path)
             elif i_flag == self.Actions.Paste:
                 i_node_args, i_connection_args = i_args
                 for j_args in i_node_args:
-                    self._scene_model.create_node_by_data(j_args)
+                    self._root_model.create_node_by_data(j_args)
                 for j_args in i_connection_args:
-                    self._scene_model._connect_path(j_args)
+                    self._root_model._connect_path(j_args)
 
 
 # connection model
-class _ConnectionModel(_base._SbjBase):
+class _ConnectionModel(_base._ObjBase):
     SEP = '->'
 
     def __init__(self, item):
@@ -151,51 +167,52 @@ class _ConnectionModel(_base._SbjBase):
         return path.split(cls.SEP)
 
     @classmethod
-    def _get_source(cls, scene_model, path):
+    def _get_source(cls, root_model, path):
         source_path, _ = path.split(cls.SEP)
         node_path, port_path = bsc_core.BscAttributePath.split_by(source_path)
-        return scene_model.get_node(node_path).get_output_port(port_path)
+        return root_model.get_node(node_path).get_output_port(port_path)
 
     @classmethod
-    def _get_target(cls, scene_model, path):
+    def _get_target(cls, root_model, path):
         _, target_path = path.split(cls.SEP)
         node_path, port_path = bsc_core.BscAttributePath.split_by(target_path)
-        return scene_model.get_node(node_path).get_input_port(port_path)
+        return root_model.get_node(node_path).get_input_port(port_path)
 
     def get_source(self):
-        return self._get_source(self.scene_model, self.get_path())
+        return self._get_source(self.root_model, self.get_path())
 
     def get_target(self):
-        return self._get_target(self.scene_model, self.get_path())
+        return self._get_target(self.root_model, self.get_path())
 
     def do_delete(self):
-        self.scene_model.remove_connection_path(self.get_path())
+        self.root_model.remove_connection_path(self.get_path())
 
     # update
     def update_v(self, *args, **kwargs):
-        self._item._update_v(*args, **kwargs)
+        self._gui._update_v(*args, **kwargs)
 
     def update_h(self, *args, **kwargs):
-        self._item._update_h(*args, **kwargs)
+        self._gui._update_h(*args, **kwargs)
 
     def reset_status(self):
-        self._item._set_color(
+        self._gui._set_color(
             QtGui.QColor(255, 255, 0, 255)
         )
 
     def to_correct_status(self):
-        self._item._set_color(
+        self._gui._set_color(
             QtGui.QColor(0, 255, 0, 255)
         )
 
 
 # port model
-class _PortModel(_base._SbjBase):
+class _PortModel(_base._ObjBase):
 
     def __init__(self, *args, **kwargs):
         super(_PortModel, self).__init__(*args, **kwargs)
 
         self._data.category = 'port'
+        self._data.port_path = ''
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -209,8 +226,14 @@ class _PortModel(_base._SbjBase):
 
     def set_name(self, text):
         if super(_PortModel, self).set_name(text) is True:
-            self._item._name_aux.setPlainText(text)
-            self._item._update()
+            self._gui._name_aux.setPlainText(text)
+            self._gui._update()
+
+    def set_port_path(self, port_path):
+        self._data.port_path = port_path
+
+    def get_port_path(self):
+        return self._data.port_path
 
 
 class _InputPortModel(_PortModel):
@@ -242,7 +265,7 @@ class _InputPortModel(_PortModel):
     def get_source(self):
         if self._data.source:
             node_path, port_path = bsc_core.BscAttributePath.split_by(self._data.source)
-            return self.scene_model.get_node(node_path).get_output_port(port_path)
+            return self.root_model.get_node(node_path).get_output_port(port_path)
 
     def get_connection_path_set(self):
         if self._gui_data.connection_path:
@@ -251,7 +274,7 @@ class _InputPortModel(_PortModel):
 
     def get_connections_itr(self):
         if self._gui_data.connection_path:
-            connection = self.scene_model.get_connection(self._gui_data.connection_path)
+            connection = self.root_model.get_connection(self._gui_data.connection_path)
             if connection:
                 yield connection
 
@@ -262,7 +285,7 @@ class _InputPortModel(_PortModel):
         if not isinstance(source_port, _OutputPortModel):
             raise RuntimeError()
 
-        self.scene_model._connect_ports(source_port, self)
+        self.root_model._connect_ports(source_port, self)
 
 
 class _OutputPortModel(_PortModel):
@@ -291,7 +314,7 @@ class _OutputPortModel(_PortModel):
 
     def get_target_itr(self):
         for i in self._gui_data.connection_path_set:
-            yield _ConnectionModel._get_target(self.scene_model, i)
+            yield _ConnectionModel._get_target(self.root_model, i)
 
     def get_targets(self):
         return list(self.get_target_itr())
@@ -301,7 +324,7 @@ class _OutputPortModel(_PortModel):
 
     def get_connections_itr(self):
         for i in set(self._gui_data.connection_path_set):
-            i_connection = self.scene_model.get_connection(i)
+            i_connection = self.root_model.get_connection(i)
             if i_connection:
                 yield i_connection
 
@@ -312,9 +335,16 @@ class _OutputPortModel(_PortModel):
         if not isinstance(target_port, _InputPortModel):
             raise RuntimeError()
 
-        self.scene_model._connect_ports(self, target_port)
+        self.root_model._connect_ports(self, target_port)
 
 
+# parameters
+class _Parameter(_base._ObjBase):
+    def __init__(self, *args, **kwargs):
+        super(_Parameter, self).__init__(*args, **kwargs)
+
+
+# action
 class _AbsAction(object):
     ActionFlags = _base._ActionFlags
 
@@ -347,10 +377,11 @@ class _AbsAction(object):
         self.gui_data.action.sub_flag = None
 
 
-class _AbsNodeModel(
-    _base._SbjBase,
+class _AbsSbjModel(
+    _base._ObjBase,
     _AbsAction
 ):
+    NODE_TYPE = None
 
     # hover
     def _update_hover(self, flag):
@@ -363,7 +394,7 @@ class _AbsNodeModel(
             self._gui_data.select.flag = flag
 
     def __init__(self, *args, **kwargs):
-        super(_AbsNodeModel, self).__init__(*args, **kwargs)
+        super(_AbsSbjModel, self).__init__(*args, **kwargs)
 
         self._data.options = _base._Dict(
             position=_base._Dict(
@@ -389,13 +420,13 @@ class _AbsNodeModel(
 
         # basic
         self._gui_data.basic = _base._Dict(
-            rect=qt_rect(),
+            rect=QtCore.QRectF(),
             size=QtCore.QSize(),
         )
 
         # color
         self._gui_data.color = _base._Dict(
-            rect=qt_rect(),
+            rect=QtCore.QRectF(),
             border=_base._QtColors.NodeBorder,
             background=_base._QtColors.NodeBackground,
             alpha=255,
@@ -411,23 +442,12 @@ class _AbsNodeModel(
         self._gui_data.edited = _base._Dict(
             rect=QtCore.QRectF(),
             value=False,
-            value_rect=QtCore.QRectF(),
         )
 
         # viewed
         self._gui_data.viewed = _base._Dict(
             rect=QtCore.QRectF(),
             value=False,
-            value_rect=QtCore.QRectF(),
-        )
-
-        # text option for draw
-        self._gui_data.text = _base._Dict(
-            font=gui_qt_core.QtFont.generate(size=10),
-            color=_base._QtColors.Text,
-            action_color=_base._QtColors.TextHover,
-            # all text height
-            height=24
         )
 
         # type
@@ -484,31 +504,35 @@ class _AbsNodeModel(
         x, y = position
         self._data.options.position.x = x
         self._data.options.position.y = y
-        self._item.setPos(*position)
+        self._gui.setPos(*position)
 
     def get_position(self):
-        return self._item.x(), self._item.y()
+        return self._gui.x(), self._gui.y()
 
-    def _update_position(self):
-        self._data.options.position.x = self._item.x()
-        self._data.options.position.y = self._item.y()
+    def _update_position_option(self):
+        self._data.options.position.x = self._gui.x()
+        self._data.options.position.y = self._gui.y()
 
     def set_size(self, size):
         w, h = size
         self._data.options.size.width = w
         self._data.options.size.height = h
-        self._item.setRect(0, 0, w, h)
+        self._gui.setRect(0, 0, w, h)
+
         self._update_attaches()
 
-    def _update_size(self):
-        self._data.options.size.width = self._item.rect().width()
-        self._data.options.size.height = self._item.rect().height()
+    def _auto_resize(self):
+        pass
+
+    def _update_size_option(self):
+        self._data.options.size.width = self._gui.rect().width()
+        self._data.options.size.height = self._gui.rect().height()
 
     def get_size(self):
-        return self._item.rect().width(), self._item.rect().height()
+        return self._gui.rect().width(), self._gui.rect().height()
 
     def set_selected(self, boolean):
-        self._item.setSelected(boolean)
+        self._gui.setSelected(boolean)
 
     # color
     def set_color_enable(self, boolean):
@@ -540,12 +564,13 @@ class _AbsNodeModel(
     def set_cut_flag(self, flag):
         self._data.cut_flag = flag
         if flag is True:
-            self._item.hide()
+            self._gui.hide()
         else:
-            self._item.show()
+            self._gui.show()
 
     def move_by(self, x, y):
-        self._item.moveBy(x, y)
+        self._gui.moveBy(x, y)
+        return self.get_position()
 
     # menu
     def set_menu_content(self, content):
@@ -574,19 +599,25 @@ class _AbsNodeModel(
         return self._gui_data.menu.name_dict
 
     def to_json(self):
-        self._update_position()
-        self._update_size()
+        self._update_position_option()
+        self._update_size_option()
         return _base._ToJson(self._data._dict).generate()
 
     def to_data(self):
-        return _SceneModel._json_str_to_data(self.to_json())
+        return _RootNodeModel._json_str_to_data(self.to_json())
+
+    def initializer(self):
+        pass
+
+    @classmethod
+    def create(cls, root, *args, **kwargs):
+        raise NotImplementedError()
 
 
 # node model
-class _NodeModel(_AbsNodeModel):
-
+class _NodeModel(_AbsSbjModel):
     @classmethod
-    def find_next_port_path(cls, paths, name, parent_path=None):
+    def _find_next_port_path(cls, paths, name, parent_path=None):
         if parent_path is None:
             port_path = name
         else:
@@ -612,7 +643,11 @@ class _NodeModel(_AbsNodeModel):
         super(_NodeModel, self).__init__(*args, **kwargs)
         self._data.category = 'node'
         self._data.options.bypass = False
-        # basic
+        self._data.options.add_input_enable = False
+        # basic and head
+        self._gui_data.basic.size = QtCore.QSize(160, 24)
+        self._gui_data.head.size = QtCore.QSize(160, 24)
+        #
         self._gui_data.color.border=_base._QtColors.NodeBorder
         self._gui_data.color.background = _base._QtColors.NodeBackground
         # port
@@ -624,35 +659,28 @@ class _NodeModel(_AbsNodeModel):
                 cls=None
             ),
             size=QtCore.QSize(16, 8),
-            spacing=4
+            spacing=4,
+            margin=4
+        )
+        self._gui_data.add_input = _base._Dict(
+            size=QtCore.QSize(32, 16)
         )
         # input port
         self._data.input_ports = collections.OrderedDict()
         # output port
         self._data.output_ports = collections.OrderedDict()
+        self._data.parameters = collections.OrderedDict()
 
-        self.set_menu_data(
-            [
-                [
-                    'Node', 'file/folder',
-                    [
-                        ('Add Input Port', 'file/file', self._add_input_port_action)
-                    ]
-                ]
-            ]
-        )
-
-    def _add_input_port_action(self):
-        self.add_input_port('input')
-
-    def add_input_port(self, type_name, name=None, parent_path=None, *args, **kwargs):
-        if name is None:
-            port_path = self.find_next_port_path(self._data.input_ports, type_name, parent_path)
-        else:
-            if parent_path is None:
-                port_path = name
+    def add_input_port(self, name=None, parent_path=None, port_path=None, *args, **kwargs):
+        type_name = 'input'
+        if port_path is None:
+            if name is None:
+                port_path = self._find_next_port_path(self._data.input_ports, type_name, parent_path)
             else:
-                port_path = '{}.{}'.format(parent_path, name)
+                if parent_path is None:
+                    port_path = name
+                else:
+                    port_path = '{}.{}'.format(parent_path, name)
 
         if port_path in self._data.input_ports:
             return False, self._data.input_ports[port_path]
@@ -660,37 +688,64 @@ class _NodeModel(_AbsNodeModel):
         prt_size = self._gui_data.port.size
         prt_w, prt_h = prt_size.width(), prt_size.height()
 
-        port = self._gui_data.port.input.cls(self._item, prt_w, prt_h)
+        port = self._gui_data.port.input.cls(self._gui, prt_w, prt_h)
         atr_path = bsc_core.BscAttributePath.join_by(self.get_path(), port_path)
 
         model = port._model
         self._data.input_ports[port_path] = model
+        self._auto_resize()
         self._update_input_ports()
         port._update()
 
+        port_path_opt = bsc_core.BscPortPathOpt(port_path)
+
         model.set_type(type_name)
         model.set_path(atr_path)
-        model.set_name(port_path)
+        model.set_port_path(port_path)
+        model.set_name(port_path_opt.get_name())
 
         return True, model
 
+    def remove_input_port(self, port_path):
+        input_port = self.get_input_port(port_path)
+        if input_port:
+            gui = input_port._gui
+            gui.setParentItem(None)
+            gui.scene().removeItem(gui)
+            self._data.input_ports.pop(port_path)
+
+        self._update_input_ports()
+
+    def _generate_next_input_port_args(self):
+        for i in self.get_input_ports():
+            if i.has_source() is False:
+                return False, i
+        return self.add_input_port()
+
+    def _generate_next_input_port_path(self):
+        type_name = 'input'
+        return self._find_next_port_path(self._data.input_ports, type_name)
+
     def _add_input_port_by_data(self, data):
-        type_name = data['type']
-        name = data['name']
-        flag, node = self.add_input_port(type_name, name)
+        port_path = data['path']
+        flag, node = self.add_input_port(port_path=port_path)
         return node
 
     def get_input_ports(self):
         return list(self._data.input_ports.values())
 
-    def get_input_port(self, name):
-        return self._data.input_ports.get(name)
+    def number_of_input_ports(self):
+        return len(self._data.input_ports)
+
+    def get_input_port(self, port_path):
+        return self._data.input_ports.get(port_path)
 
     def _update_input_ports(self):
-        rect = self._item.boundingRect()
+        rect = self._gui.boundingRect()
         x, y = 0, 0
         w, h = rect.width(), rect.height()
 
+        mrg = self._gui_data.port.margin
         spc = self._gui_data.port.spacing
 
         ports = self.get_input_ports()
@@ -700,22 +755,25 @@ class _NodeModel(_AbsNodeModel):
 
         prt_size = self._gui_data.port.size
         prt_w, prt_h = prt_size.width(), prt_size.height()
-        prt_ws = prt_c*prt_w+spc*(prt_c-1)
-        prt_x, prt_y = x+(w-prt_ws)/2, y-prt_h-1
+        prt_ws = prt_c*prt_w+spc*(prt_c-1)+mrg*2
+        prt_x, prt_y = x+(w-prt_ws)/2+mrg, y-prt_h-1
 
         x_c = prt_x
         for i in ports:
-            i._item.setPos(x_c, prt_y)
+            i._gui.setPos(x_c, prt_y)
             x_c += prt_w+spc
 
-    def add_output_port(self, type_name, name=None, parent_path=None, *args, **kwargs):
-        if name is None:
-            port_path = self.find_next_port_path(self._data.input_ports, type_name, parent_path)
-        else:
-            if parent_path is None:
-                port_path = name
+    # output
+    def add_output_port(self, name=None, parent_path=None, port_path=None, *args, **kwargs):
+        type_name = 'output'
+        if port_path is None:
+            if name is None:
+                port_path = self._find_next_port_path(self._data.input_ports, type_name, parent_path)
             else:
-                port_path = '{}.{}'.format(parent_path, name)
+                if parent_path is None:
+                    port_path = name
+                else:
+                    port_path = '{}.{}'.format(parent_path, name)
 
         if port_path in self._data.output_ports:
             return False, self._data.output_ports[port_path]
@@ -723,31 +781,37 @@ class _NodeModel(_AbsNodeModel):
         prt_size = self._gui_data.port.size
         prt_w, prt_h = prt_size.width(), prt_size.height()
 
-        port = self._gui_data.port.output.cls(self._item, prt_w, prt_h)
+        port = self._gui_data.port.output.cls(self._gui, prt_w, prt_h)
         atr_path = bsc_core.BscAttributePath.join_by(self.get_path(), port_path)
 
         model = port._model
         self._data.output_ports[port_path] = model
+        self._auto_resize()
         self._update_output_ports()
         port._update()
 
+        port_path_opt = bsc_core.BscPortPathOpt(port_path)
+
         model.set_type(type_name)
         model.set_path(atr_path)
-        model.set_name(port_path)
+        model.set_port_path(port_path)
+        model.set_name(port_path_opt.get_name())
 
         return True, model
 
+    def number_of_output_ports(self):
+        return len(self._data.output_ports)
+
     def _add_output_port_by_data(self, data):
-        type_name = data['type']
         name = data['name']
-        flag, node = self.add_output_port(type_name, name)
+        flag, node = self.add_output_port(name)
         return node
 
     def get_output_ports(self):
         return list(self._data.output_ports.values())
 
-    def get_output_port(self, name):
-        return self._data.output_ports.get(name)
+    def get_output_port(self, port_path):
+        return self._data.output_ports.get(port_path)
 
     # connection, source
     def has_source_connections(self):
@@ -792,10 +856,11 @@ class _NodeModel(_AbsNodeModel):
         return set_
 
     def _update_output_ports(self):
-        rect = self._item.boundingRect()
+        rect = self._gui.boundingRect()
         x, y = 0, 0
         w, h = rect.width(), rect.height()
 
+        mrg = self._gui_data.port.margin
         spc = self._gui_data.port.spacing
 
         ports = self.get_output_ports()
@@ -805,12 +870,12 @@ class _NodeModel(_AbsNodeModel):
 
         prt_size = self._gui_data.port.size
         prt_w, prt_h = prt_size.width(), prt_size.height()
-        prt_ws = prt_c*prt_w+spc*(prt_c-1)
-        prt_x, prt_y = x+(w-prt_ws)/2, y+h+2
+        prt_ws = prt_c*prt_w+spc*(prt_c-1)+mrg*2
+        prt_x, prt_y = x+(w-prt_ws)/2+mrg, y+h+2
 
         x_c = prt_x
         for i in ports:
-            i._item.setPos(x_c, prt_y)
+            i._gui.setPos(x_c, prt_y)
             x_c += prt_w+spc
 
     def update(self, rect):
@@ -820,10 +885,6 @@ class _NodeModel(_AbsNodeModel):
 
             x, y, w, h = rect.x()+1, rect.y()+1, rect.width()-2, rect.height()-2
 
-            mrg = 2
-
-            spc = 2
-
             self._gui_data.basic.rect.setRect(
                 x, y, w, h
             )
@@ -831,29 +892,33 @@ class _NodeModel(_AbsNodeModel):
             hed_size = self._gui_data.head.size
             hed_w, hed_h = hed_size.width(), hed_size.height()
 
-            frm_w, frm_h = 16, 16
+            if self._data.options.add_input_enable is True:
+                add_h = hed_h
+            else:
+                add_h = 0
+
+            head_y = y+add_h
+
+            frm_w, frm_h = 14, 14
 
             self._gui_data.viewed.rect.setRect(
-                x+(hed_h-frm_w)/2, y+(hed_h-frm_h)/2, frm_w, frm_h
+                x+(hed_h-frm_w)/2, head_y+(hed_h-frm_h)/2, frm_w, frm_h
             )
             self._gui_data.edited.rect.setRect(
-                x+(w-hed_h)+(hed_h-frm_w)/2, y+(hed_h-frm_h)/2, frm_w, frm_h
-            )
-
-            frm_vlu_w, frm_vlu_h = 14, 14
-            self._gui_data.viewed.value_rect.setRect(
-                x+(hed_h-frm_vlu_w)/2, y+(hed_h-frm_vlu_h)/2, frm_vlu_w, frm_vlu_h
-            )
-            self._gui_data.edited.value_rect.setRect(
-                x+(w-hed_h)+(hed_h-frm_vlu_w)/2, y+(hed_h-frm_vlu_h)/2, frm_vlu_w, frm_vlu_h
+                x+(w-hed_h)+(hed_h-frm_w)/2, head_y+(hed_h-frm_h)/2, frm_w, frm_h
             )
 
             self._gui_data.type.rect.setRect(
-                x+hed_h, y, w-hed_h*2, hed_h
+                x+hed_h, head_y, w-hed_h*2, hed_h
             )
+
+            self.update_prc(rect)
 
             return True
         return False
+
+    def update_prc(self, rect):
+        pass
 
     def draw(self, painter, option):
         painter.save()
@@ -862,9 +927,14 @@ class _NodeModel(_AbsNodeModel):
 
         self._update_select(bool(option.state & QtWidgets.QStyle.State_Selected))
 
+        self.draw_prc(painter, option)
+
         self.draw_base(painter, option)
 
         painter.restore()
+
+    def draw_prc(self, painter, option):
+        pass
 
     def draw_base(self, painter, option):
         if self._gui_data.select.flag is True:
@@ -893,53 +963,64 @@ class _NodeModel(_AbsNodeModel):
 
         # draw type
         gui_qt_core.QtItemDrawBase._draw_name_text(
-            painter, self._gui_data.type.rect, self._data.type,
-            self._gui_data.type.color, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+            painter,
+            rect=self._gui_data.type.rect,
+            text=self._data.type,
+            color=self._gui_data.type.color,
+            option=QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
             font=self._gui_data.type.font
         )
 
         # draw viewed
-        gui_qt_core.QtItemDrawBase._draw_frame(
-            painter,
-            rect=self._gui_data.viewed.rect,
-            border_color=border_color,
-            background_color=QtGui.QColor(47, 47, 47, 255),
-            border_width=1,
-            border_radius=2
-        )
         if self._gui_data.viewed.value is True:
             gui_qt_core.QtItemDrawBase._draw_frame(
                 painter,
-                rect=self._gui_data.viewed.value_rect,
-                border_color=QtGui.QColor(47, 47, 47, 255),
+                rect=self._gui_data.viewed.rect,
+                border_color=QtGui.QColor(*gui_core.GuiRgba.Purple),
                 background_color=QtGui.QColor(*gui_core.GuiRgba.Purple),
                 border_width=1,
-                border_radius=2
+                border_radius=0
+            )
+        else:
+            gui_qt_core.QtItemDrawBase._draw_frame(
+                painter,
+                rect=self._gui_data.viewed.rect,
+                border_color=QtGui.QColor(47, 47, 47, 255),
+                background_color=QtGui.QColor(47, 47, 47, 255),
+                border_width=1,
+                border_radius=0
             )
 
         # draw edited
-        gui_qt_core.QtItemDrawBase._draw_frame(
-            painter,
-            rect=self._gui_data.edited.rect,
-            border_color=border_color,
-            background_color=QtGui.QColor(47, 47, 47, 255),
-            border_width=1,
-            border_radius=2
-        )
         if self._gui_data.edited.value is True:
             gui_qt_core.QtItemDrawBase._draw_frame(
                 painter,
-                rect=self._gui_data.edited.value_rect,
-                border_color=QtGui.QColor(47, 47, 47, 255),
+                rect=self._gui_data.edited.rect,
+                border_color=QtGui.QColor(*gui_core.GuiRgba.NeonGreen),
                 background_color=QtGui.QColor(*gui_core.GuiRgba.NeonGreen),
                 border_width=1,
-                border_radius=2
+                border_radius=0
             )
+        else:
+            gui_qt_core.QtItemDrawBase._draw_frame(
+                painter,
+                rect=self._gui_data.edited.rect,
+                border_color=QtGui.QColor(47, 47, 47, 255),
+                background_color=QtGui.QColor(47, 47, 47, 255),
+                border_width=1,
+                border_radius=0
+            )
+
+        self.draw_base_prc(painter, option)
+
+    def draw_base_prc(self, painter, option):
+        pass
 
     # name
     def set_name(self, text):
         if super(_NodeModel, self).set_name(text) is True:
-            self._item._name_aux.setPlainText(text)
+            self._gui._name_aux.setPlainText(text)
+            self._auto_resize()
 
     # hover
     def _update_hover(self, flag):
@@ -951,34 +1032,73 @@ class _NodeModel(_AbsNodeModel):
         if flag != self._gui_data.select.flag:
             self._gui_data.select.flag = flag
 
+    def _auto_resize(self):
+        bsc_size = self._gui_data.basic.size
+        bsc_w, bsc_h = bsc_size.width(), bsc_size.height()
+
+        # port
+        mrg = self._gui_data.port.margin
+        spc = self._gui_data.port.spacing
+
+        prt_size = self._gui_data.port.size
+        prt_w, prt_h = prt_size.width(), prt_size.height()
+
+        ipt_c = self.number_of_input_ports()
+        opt_c = self.number_of_output_ports()
+
+        prt_w_max = max(ipt_c*prt_w+spc*(ipt_c-1)+mrg*2, opt_c*prt_w+spc*(opt_c-1)+mrg*2)
+
+        # frm
+        hed_size = self._gui_data.head.size
+        hed_w, hed_h = hed_size.width(), hed_size.height()
+        nme_w = QtGui.QFontMetrics(self._gui_data.type.font).width(self._data.type)+16
+        frm_w = nme_w+hed_h*2
+
+        # add port
+        if self._data.options.add_input_enable is True:
+            add_h = hed_h
+        else:
+            add_h = 0
+
+        w, h = max(bsc_w, prt_w_max, frm_w), bsc_h+add_h
+        if w:
+            self.set_size((w, h))
+
     def _update_attaches(self):
         self._update_name()
         self._update_bypass()
+        self._update_add_input()
         self._update_input_ports()
         self._update_output_ports()
 
     def _update_name(self):
-        rect = self._item.boundingRect()
+        rect = self._gui.boundingRect()
         x, y = 0, 0
         w, h = rect.width(), rect.height()
-        self._item._name_aux.setPos(x+w, y)
+        self._gui._name_aux.setPos(x+w, y)
+
+    def set_options(self, options):
+        super(_NodeModel, self).set_options(options)
+
+        self.set_bypass(options['bypass'])
+        self.set_add_port_enable(options['add_input_enable'])
 
     # bypass
     def _update_bypass(self):
-        rect = self._item.boundingRect()
+        rect = self._gui.boundingRect()
         x, y = 0, 0
         w, h = rect.width(), rect.height()
 
         w_0, h_0 = 96, 96
 
-        self._item._bypass_aux.setRect(
+        self._gui._bypass_aux.setRect(
             x+(w-w_0)/2, y+(h-h_0)/2, w_0, h_0
         )
 
     def set_bypass(self, boolean):
         self._data.options.bypass = boolean
-        self._item._bypass_aux.setVisible(boolean)
-        self.scene_model._graph.update()
+        self._gui._bypass_aux.setVisible(boolean)
+        self.update_root_gui()
 
     def is_bypass(self):
         return self._data.options.bypass
@@ -986,29 +1106,50 @@ class _NodeModel(_AbsNodeModel):
     def _on_swap_bypass(self):
         self.set_bypass(not self.is_bypass())
 
+    # add input
+    def set_add_port_enable(self, boolean):
+        self._data.options.add_input_enable = boolean
+        self._gui._add_input_aux.setVisible(boolean)
+
+    def _update_add_input(self):
+        if self._data.options.add_input_enable is True:
+            rect = self._gui.boundingRect()
+            x, y = 0, 0
+            w, h = rect.width(), rect.height()
+
+            hed_size = self._gui_data.head.size
+            hed_w, hed_h = hed_size.width(), hed_size.height()
+
+            size_0 = self._gui_data.add_input.size
+            w_0, h_0 = size_0.width(), size_0.height()
+
+            self._gui._add_input_aux.setRect(
+                x+(w-w_0)/2, y+(hed_h-h_0)/2, w_0, h_0
+            )
+
     # viewed
     def set_viewed(self, boolean):
         if boolean is True:
             self._gui_data.viewed.value = boolean
-            self.scene_model._clear_viewed_node()
-            self.scene_model._register_viewed_node(self)
+            self.root_model._clear_viewed_node()
+            self.root_model._register_viewed_node(self)
         else:
-            if self.scene_model.has_viewed_nodes():
-                if self.scene_model._check_node_viewed(self) is False:
+            if self.root_model.has_viewed_nodes():
+                if self.root_model._check_node_viewed(self) is False:
                     self._gui_data.viewed.value = boolean
 
-        self.scene_model._graph.update()
+        self.update_root_gui()
 
     def _update_viewed(self, boolean):
         self._gui_data.viewed.value = boolean
-        self.scene_model._graph.update()
+        self.update_root_gui()
 
     def is_viewed(self):
         return self._gui_data.viewed.value
 
     def _on_swap_viewed(self):
         self.set_viewed(not self.is_viewed())
-        
+
     def _check_viewed(self, point):
         if self._gui_data.viewed.rect.contains(point):
             return True
@@ -1017,17 +1158,18 @@ class _NodeModel(_AbsNodeModel):
     # edited
     def set_edited(self, boolean):
         if boolean is True:
-            self._gui_data.edited.value = boolean
-            self.scene_model._clear_edited_node()
-            self.scene_model._register_edited_node(self)
+            self._update_edited(boolean)
+            self.root_model._clear_edited_node()
+            self.root_model._register_edited_node(self)
         else:
-            if self.scene_model.has_edited_nodes():
-                if self.scene_model._check_node_edited(self) is False:
-                    self._gui_data.edited.value = boolean
+            if self.root_model.has_edited_nodes():
+                if self.root_model._check_node_edited(self) is False:
+                    self._update_edited(boolean)
 
     def _update_edited(self, boolean):
         self._gui_data.edited.value = boolean
-        self.scene_model._graph.update()
+
+        self.update_root_gui()
 
     def is_edited(self):
         return self._gui_data.edited.value
@@ -1047,14 +1189,236 @@ class _NodeModel(_AbsNodeModel):
         for i in self.get_target_connections_itr():
             i.do_delete()
 
-        self.scene_model._unregister_node(self)
+        self.root_model._unregister_node(self)
 
 
-class _BackdropModel(_AbsNodeModel):
+class _MediaNodeModel(_NodeModel):
+    def __init__(self, *args, **kwargs):
+        super(_MediaNodeModel, self).__init__(*args, **kwargs)
+        self._data.options.image = None
+
+        self._data.options.video = None
+
+        self._gui_data.image_enable = False
+        self._gui_data.video_enable = False
+        self._gui_data.basic.size = QtCore.QSize(160, 160)
+
+    def set_options(self, options):
+        super(_MediaNodeModel, self).set_options(options)
+
+        self.set_image(options['image'])
+
+    def set_image(self, file_path):
+        if file_path is not None:
+            self._gui_data.image = _base._Dict(
+                load_flag=False,
+                pixmap=None,
+                size=None,
+
+                reload_flag=False,
+
+                rect=QtCore.QRect(),
+                image_rect=QtCore.QRect(),
+                margin=4
+            )
+
+            self._gui_data.image_enable = False
+            self._gui_data.image.load_flag = True
+            self._data.options.image = file_path
+
+    def _load_image_auto(self):
+        if self._data.options.image is not None:
+            if self._gui_data.image.load_flag is True:
+                self._gui_data.image.load_flag = False
+                self._load_image()
+
+    def _load_image(self):
+        def cache_fnc_():
+            _file_path = self._data.options.image
+
+            if self._gui_data.image.reload_flag is True:
+                self.root_model.remove_image_cache(_file_path)
+
+            _ = self.root_model.pull_image_cache(_file_path)
+            if _:
+                return _
+
+            _image = QtGui.QImage()
+            _image.load(_file_path)
+            if _image.isNull() is False:
+                _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
+                _cache = [_pixmap]
+                self.root_model.push_image_cache(_file_path, _cache)
+                return _cache
+            return []
+
+        def build_fnc_(data_):
+            if self.root_model._close_flag is True:
+                return
+
+            if data_:
+                _pixmap = data_[0]
+                self._gui_data.image_enable = True
+                self._gui_data.image.pixmap = _pixmap
+                self._gui_data.image.size = _pixmap.size()
+                self.update_root_gui()
+
+        trd = self.root_model._gui._generate_thread_(
+            cache_fnc_, build_fnc_
+        )
+        trd.start()
+
+    def set_video(self, file_path):
+        if file_path is not None:
+            self._gui_data.video = _base._Dict(
+                load_flag=False,
+                capture_opt=None,
+                size=None,
+                index=0,
+                # in play is disable show image at default index
+                index_default=0,
+                index_maximum=1,
+                fps=24,
+
+                pixmap_cache_dict={},
+
+                rect=QtCore.QRect(),
+                image_rect=QtCore.QRect(),
+                margin=4
+            )
+            self._data.options.video = file_path
+            self._gui_data.video.load_flag = True
+
+    def _load_video_auto(self):
+        if self._data.options.video is not None:
+            if self._gui_data.video.load_flag is True:
+                self._gui_data.video.load_flag = False
+                self._load_video()
+
+    def _load_video(self):
+        def cache_fnc_():
+            _file_path = self._data.options.video
+            _ = self.root_model.pull_video_cache(_file_path)
+            if _:
+                return _
+
+            import lxbasic.cv.core as bsc_cv_core
+
+            _capture_opt = bsc_cv_core.VideoCaptureOpt(_file_path)
+            # catch first frame
+            if _capture_opt.is_valid():
+                _image = _capture_opt.generate_qt_image(QtGui.QImage, frame_index=_capture_opt.get_middle_frame_index())
+                _frame_count = _capture_opt.get_frame_count()
+                _fps = _capture_opt.get_frame_rate()
+                _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
+                _cache = [_capture_opt, _pixmap, _frame_count, _fps]
+                self.root_model.push_video_cache(_file_path, _cache)
+                return _cache
+            return []
+
+        def build_fnc_(data_):
+            if self.root_model._close_flag is True:
+                return
+
+            if data_:
+                _capture_opt, _pixmap, _frame_count, _fps = data_
+                self._gui_data.video_enable = True
+                self._gui_data.video.capture_opt = _capture_opt
+                self._gui_data.video.pixmap = _pixmap
+                self._gui_data.video.size = _pixmap.size()
+                self._gui_data.video.index_default = int(_frame_count/2)
+                self._gui_data.video.index_maximum = _frame_count-1
+                self._gui_data.video.fps = _fps
+
+                self.update_root_gui()
+
+        trd = self.root_model._gui._generate_thread_(
+            cache_fnc_, build_fnc_
+        )
+        trd.start()
+
+    def update_prc(self, rect):
+        x, y, w, h = rect.x()+1, rect.y()+1, rect.width()-2, rect.height()-2
+
+        hed_size = self._gui_data.head.size
+        hed_w, hed_h = hed_size.width(), hed_size.height()
+
+        if self._gui_data.image_enable is True:
+            mrg = self._gui_data.image.margin
+
+            frm_x, frm_y = x+mrg, y+hed_h+mrg
+            frm_w, frm_h = w-mrg*2, h-hed_h-mrg*2
+            self._gui_data.image.rect.setRect(
+                x+mrg, y+hed_h+mrg, frm_w, frm_h
+            )
+
+            img_w, img_h = self._gui_data.image.size.width(), self._gui_data.image.size.height()
+            img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
+                (img_w, img_h), (frm_w, frm_h)
+            )
+            self._gui_data.image.image_rect.setRect(
+                frm_x+img_x_, frm_y+img_y_, img_w_, img_h_
+            )
+        elif self._gui_data.video_enable is True:
+            mrg = self._gui_data.video.margin
+
+            frm_x, frm_y = x+mrg, y+hed_h+mrg
+            frm_w, frm_h = w-mrg*2, h-hed_h-mrg*2
+            self._gui_data.video.rect.setRect(
+                x+mrg, y+hed_h+mrg, frm_w, frm_h
+            )
+
+            img_w, img_h = self._gui_data.video.size.width(), self._gui_data.video.size.height()
+            img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
+                (img_w, img_h), (frm_w, frm_h)
+            )
+            self._gui_data.video.image_rect.setRect(
+                frm_x+img_x_, frm_y+img_y_, img_w_, img_h_
+            )
+
+    def draw_prc(self, painter, option):
+        self._load_image_auto()
+        self._load_video_auto()
+
+    def draw_base_prc(self, painter, options):
+        if self._gui_data.image_enable is True:
+            gui_qt_core.QtItemDrawBase._draw_frame(
+                painter,
+                rect=self._gui_data.image.rect,
+                border_color=QtGui.QColor(31, 31, 31, 255),
+                background_color=QtGui.QColor(31, 31, 31, 255),
+                border_width=1,
+                border_radius=0
+            )
+            gui_qt_core.QtItemDrawBase._draw_pixmap(
+                painter,
+                rect=self._gui_data.image.image_rect,
+                pixmap=self._gui_data.image.pixmap
+            )
+        elif self._gui_data.video_enable is True:
+            gui_qt_core.QtItemDrawBase._draw_frame(
+                painter,
+                rect=self._gui_data.video.rect,
+                border_color=QtGui.QColor(31, 31, 31, 255),
+                background_color=QtGui.QColor(31, 31, 31, 255),
+                border_width=1,
+                border_radius=0
+            )
+            gui_qt_core.QtItemDrawBase._draw_pixmap(
+                painter,
+                rect=self._gui_data.video.image_rect,
+                pixmap=self._gui_data.video.pixmap
+            )
+
+
+class _BackdropModel(_AbsSbjModel):
     def __init__(self, *args, **kwargs):
         super(_BackdropModel, self).__init__(*args, **kwargs)
         self._data.category = 'backdrop'
-        # basic
+        # basic and head
+        self._gui_data.basic.size = QtCore.QSize(320, 240)
+        self._gui_data.head.size = QtCore.QSize(320, 24)
+        #
         self._gui_data.color.border = _base._QtColors.BackdropBorder
         self._gui_data.color.background = _base._QtColors.BackdropBackground
         self._gui_data.color.alpha = 31
@@ -1139,7 +1503,7 @@ class _BackdropModel(_AbsNodeModel):
                 x+w-icn_w-mrg*2, y+h-icn_h-mrg*2, icn_w, icn_h
             )
 
-            self._gui_data.name.rect.setRect(
+            self._gui_data.type.rect.setRect(
                 x, y, w, hed_h
             )
 
@@ -1177,12 +1541,12 @@ class _BackdropModel(_AbsNodeModel):
             border_radius=0
         )
 
-        # name
+        # type
         gui_qt_core.QtItemDrawBase._draw_name_text(
-            painter, self._gui_data.name.rect, self._data.name,
-            color=self._gui_data.name.color,
+            painter, self._gui_data.type.rect, self._data.type,
+            color=self._gui_data.type.color,
             option=QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
-            font=self._gui_data.name.font
+            font=self._gui_data.type.font
         )
 
         # headline
@@ -1222,20 +1586,20 @@ class _BackdropModel(_AbsNodeModel):
         return False
 
     def _check_scene_move(self, point):
-        return self._check_move(point-self._item.pos())
+        return self._check_move(point-self._gui.pos())
 
     def do_move_start(self, event):
         self._gui_data.move.start_point = event.pos()
         self._gui_data.move.start_position = self.get_position()
-        x, y = self._item.x(), self._item.y()
-        rect = self._item.boundingRect()
+        x, y = self._gui.x(), self._gui.y()
+        rect = self._gui.boundingRect()
         w, h = rect.width(), rect.height()
 
         node_position_data = []
 
-        self.scene_model.clear_selection()
+        self.root_model.clear_selection()
 
-        self._item.setSelected(True)
+        self._gui.setSelected(True)
         all_items = self.scene._get_items_by_rect(x, y, w, h)
         for i in all_items:
             if i.SBJ_TYPE == _base._QtSbjTypes.Node:
@@ -1251,10 +1615,10 @@ class _BackdropModel(_AbsNodeModel):
         delta = event.pos()-self._gui_data.move.start_point
         x, y = delta.x(), delta.y()
 
-        self._item.moveBy(x, y)
+        self._gui.moveBy(x, y)
 
         for i in self._gui_data.move.node_position_data:
-            i[0]._item.moveBy(x, y)
+            i[0]._gui.moveBy(x, y)
 
     def _push_move_cmd(self):
         data = [
@@ -1271,13 +1635,13 @@ class _BackdropModel(_AbsNodeModel):
                     (i_node.get_path(), i[1], i_node.get_position())
                 )
             )
-        self.scene_model._graph._undo_stack.push(_QtUndoCommand(self.scene_model, data))
+        self.root_model._gui._undo_stack.push(_QtUndoCommand(self.root_model, data))
 
     def do_move_end(self):
         self._push_move_cmd()
-    
+
     def _check_scene_resize(self, point):
-        return self._check_resize(point-self._item.pos())
+        return self._check_resize(point-self._gui.pos())
 
     def _check_resize(self, point):
         if self._gui_data.resize.rect.contains(point):
@@ -1286,7 +1650,7 @@ class _BackdropModel(_AbsNodeModel):
 
     def do_resize_start(self, event):
         self._gui_data.resize.start_point = event.pos()
-        self._gui_data.resize.start_rect = self._item.rect()
+        self._gui_data.resize.start_rect = self._gui.rect()
 
     def do_resize_move(self, event):
         delta = event.pos()-self._gui_data.resize.start_point
@@ -1300,15 +1664,29 @@ class _BackdropModel(_AbsNodeModel):
         data = [
             (_QtUndoCommand.Actions.NodeResize, (self.get_path(), (rect.width(), rect.height()), self.get_size()))
         ]
-        self.scene_model._graph._undo_stack.push(_QtUndoCommand(self.scene_model, data))
+        self.root_model._gui._undo_stack.push(_QtUndoCommand(self.root_model, data))
 
     def do_resize_end(self):
         self._push_resize_cmd()
 
+    def _auto_resize(self):
+        bsc_size = self._gui_data.basic.size
+        bsc_w, bsc_h = bsc_size.width(), bsc_size.height()
+
+        # frm
+        hed_size = self._gui_data.head.size
+        hed_w, hed_h = hed_size.width(), hed_size.height()
+        nme_w = QtGui.QFontMetrics(self._gui_data.type.font).width(self._data.type)+16
+        frm_w = nme_w+hed_h*2
+
+        w, h = max(bsc_w, frm_w), bsc_h
+        if w:
+            self.set_size((w, h))
+
 
 class _NodeDataGrop(object):
-    def __init__(self, scene_model, data):
-        self._scene_model = scene_model
+    def __init__(self, root_model, data):
+        self._root_model = root_model
         self._data = data
 
     def generate_create_data(self):
@@ -1326,10 +1704,10 @@ class _NodeDataGrop(object):
             y_min = min(ys)
 
             point = QtGui.QCursor().pos()
-            p = self._scene_model._graph._map_from_global(point)
+            p = self._root_model._gui._map_from_global(point)
             p_x, p_y = p.x(), p.y()
 
-            path_set = self._scene_model.get_node_path_set()
+            path_set = self._root_model.get_node_path_set()
             for i in self._data:
                 i_x = i['options']['position']['x']
                 i_y = i['options']['position']['y']
@@ -1337,7 +1715,7 @@ class _NodeDataGrop(object):
                 i['options']['position']['y'] = p_y+(i_y-y_min)
 
                 i_name = i['name']
-                i_new_path = _SceneModel._find_next_node_path(
+                i_new_path = _RootNodeModel._find_next_node_path(
                     path_set, i_name
                 )
                 path_set.add(i_new_path)
@@ -1350,8 +1728,13 @@ class _NodeDataGrop(object):
 
 
 # scene model
-class _SceneModel(_AbsAction):
+class _RootNodeModel(
+    _base._ObjBase,
+    _AbsAction
+):
     ActionFlags = _base._ActionFlags
+
+    NODE_GUI_CLS_DICT = dict()
     
     @classmethod
     def _to_name_args(cls, name):
@@ -1363,7 +1746,7 @@ class _SceneModel(_AbsAction):
     @classmethod
     def _find_next_node_path(cls, path_set, name, parent_path=None):
         parent_path = parent_path or ''
-        path = u'{}/{}'.format(parent_path, name)
+        path = '{}/{}'.format(parent_path, name)
         if path not in path_set:
             return path
         else:
@@ -1375,7 +1758,7 @@ class _SceneModel(_AbsAction):
 
             new_path = path
             while new_path in path_set:
-                new_path = u'{}/{}{}'.format(parent_path, name_str, count)
+                new_path = '{}/{}{}'.format(parent_path, name_str, count)
                 count += 1
 
             if new_path not in path_set:
@@ -1385,35 +1768,30 @@ class _SceneModel(_AbsAction):
     def _json_str_to_data(cls, json_str):
         return json.loads(json_str, object_pairs_hook=collections.OrderedDict)
 
-    def __init__(self, widget):
-        self._graph = widget
+    def __init__(self, _gui_widget):
+        super(_RootNodeModel, self).__init__(_gui_widget)
 
-        self._data = _base._Dict()
-        self._gui_data = _base._Dict()
+        self._close_flag = False
+
+        self._data.category = 'root'
+        self._data.type = 'root'
+        self._data.path = '/'
+        self._data.name = ''
 
         self._data.nodes = collections.OrderedDict()
         self._gui_data.connection_dict = collections.OrderedDict()
 
-        self._gui_data.node = _base._Dict(
+        self._builtin_data.node = _base._Dict(
             cls=None,
-            group_cls=None,
-            size=QtCore.QSize(160, 24),
-            head=_base._Dict(
-                size=QtCore.QSize(160, 24),
-            )
         )
 
         # backdrop
         self._gui_data.backdrop = _base._Dict(
             cls=None,
-            size=QtCore.QSize(320, 240),
-            head=_base._Dict(
-                size=QtCore.QSize(320, 24),
-            )
         )
 
         # connection
-        self._gui_data.connection = _base._Dict(
+        self._builtin_data.connection = _base._Dict(
             cls=None,
         )
 
@@ -1453,35 +1831,58 @@ class _SceneModel(_AbsAction):
             node_path_set=set()
         )
 
-        self.set_menu_data(
-            [
-                [
-                    'Graph', 'file/folder',
-                    [
-                        ('Add Node', 'file/file', functools.partial(self._add_node_action, 'node')),
-                        ('Add Backdrop', 'file/file', functools.partial(self._add_backdrop_action, 'backdrop'))
-                    ]
-                ]
-            ]
+        self._gui_data.image_cache_dict = bsc_core.LRUCache(maximum=1024)
+        self._gui_data.video_cache_dict = bsc_core.LRUCache(maximum=1024)
+
+        self.set_menu_data_generate_fnc(
+            self._add_node_menu_data_generate_fnc
         )
 
+    # image cache
+    def remove_image_cache(self, key):
+        if key in self._gui_data.image_cache_dict:
+            self._gui_data.image_cache_dict.pop(key)
+
+    def pull_image_cache(self, key):
+        return self._gui_data.image_cache_dict.get(key)
+
+    def push_image_cache(self, key, data):
+        self._gui_data.image_cache_dict[key] = data
+
+    # video cache
+    def pull_video_cache(self, key):
+        return self._gui_data.video_cache_dict.get(key)
+
+    def push_video_cache(self, key, data):
+        self._gui_data.video_cache_dict[key] = data
+
+    def _add_node_menu_data_generate_fnc(self):
+        sub_menu_data = []
+        for k, v in self.NODE_GUI_CLS_DICT.items():
+            sub_menu_data.append(
+                (k, 'file/file', functools.partial(self._add_node_action, k))
+            )
+
+        return [
+                [
+                    'Add Node', 'file/folder',
+                    sub_menu_data
+                ]
+            ]
+
     def _add_node_action(self, type_name):
+        model_cls, gui_cls = self.NODE_GUI_CLS_DICT[type_name]
         point = QtGui.QCursor().pos()
-        p = self._graph._map_from_global(point)
+        p = self._gui._map_from_global(point)
 
-        _, node = self.create_node(type_name)
+        flag, node = model_cls.create(self)
         w, h = node.get_size()
         node.set_position((p.x()-w/2, p.y()-h/2))
-        node.add_input_port('input')
-        node.add_output_port('output')
+        return flag, node
 
-    def _add_backdrop_action(self, type_name):
-        point = QtGui.QCursor().pos()
-        p = self._graph._map_from_global(point)
-
-        _, node = self.create_backdrop(type_name)
-        w, h = node.get_size()
-        node.set_position((p.x()-w/2, p.y()-h/2))
+    def add_node(self, type_name):
+        model_cls, gui_cls = self.NODE_GUI_CLS_DICT[type_name]
+        return model_cls.create(self)
 
     # viewed
     def has_viewed_nodes(self):
@@ -1520,28 +1921,37 @@ class _SceneModel(_AbsAction):
     def crate_by_data(self, data):
         pass
 
+    # node
     def get_node_path_set(self):
         return set(self._data.nodes.keys())
 
-    def create_node(self, type_name, name=None, parent_path=None, *args, **kwargs):
+    @classmethod
+    def register_node_type(cls, model_cls, gui_cls):
+        gui_cls.MODEL_CLS = model_cls
+        cls.NODE_GUI_CLS_DICT[model_cls.NODE_TYPE] = model_cls, gui_cls
+
+    def generate_node(self, type_name, name=None, parent_path=None, *args, **kwargs):
+        if type_name not in self.NODE_GUI_CLS_DICT:
+            raise RuntimeError()
+
         if name is None:
             path = self._find_next_node_path(self._data.nodes, type_name, parent_path)
         else:
-            path = u'{}/{}'.format(parent_path or '', name)
+            path = '{}/{}'.format(parent_path or '', name)
 
         if path in self._data.nodes:
             return False, self._data.nodes[path]
 
         path_opt = bsc_core.BscNodePathOpt(path)
-        item = self._gui_data.node.cls()
-        self._graph.scene().addItem(item)
+        model_cls, gui_cls = self.NODE_GUI_CLS_DICT[type_name]
+        gui = gui_cls()
+        self._gui.scene().addItem(gui)
 
-        model = item._model
+        model = gui._model
         model.set_type(type_name)
         model.set_path(path)
         model.set_name(kwargs.get('name', path_opt.get_name()))
-        model.set_basic_size(self._gui_data.node.size)
-        model.set_basic_head_size(self._gui_data.node.head.size)
+        model._auto_resize()
 
         self._data.nodes[path] = model
         return True, model
@@ -1551,7 +1961,7 @@ class _SceneModel(_AbsAction):
         if category == 'node':
             type_name = data['type']
             name = data['name']
-            flag, node = self.create_node(type_name, name)
+            flag, node = self.generate_node(type_name, name)
             node.set_options(data['options'])
             for k, v in data['input_ports'].items():
                 node._add_input_port_by_data(v)
@@ -1561,7 +1971,7 @@ class _SceneModel(_AbsAction):
         elif category == 'backdrop':
             type_name = data['type']
             name = data['name']
-            flag, node = self.create_backdrop(type_name, name)
+            flag, node = self.generate_node(type_name, name)
             node.set_options(data['options'])
 
     def _remove_node_by_data(self, data):
@@ -1572,42 +1982,42 @@ class _SceneModel(_AbsAction):
     def _unregister_node(self, node):
         path = node.get_path()
         self._data.nodes.pop(path)
-        item = node._item
-        self._graph.scene().removeItem(item)
+        item = node._gui
+        self._gui.scene().removeItem(item)
         del item
 
-    def get_node(self, path):
-        return self._data.nodes.get(path)
+    def get_node(self, node_path):
+        return self._data.nodes.get(node_path)
 
-    def create_backdrop(self, type_name=None, name=None, parent_path=None, *args, **kwargs):
-        type_name = type_name or 'backdrop'
-        if name is None:
-            path = self._find_next_node_path(self._data.nodes, type_name, parent_path)
-        else:
-            path = u'{}/{}'.format(parent_path or '', name)
+    def set_node_position(self, node_path, position):
+        self.get_node(node_path).set_position(position)
 
-        if path in self._data.nodes:
-            return False, self._data.nodes[path]
+    def set_node_size(self, node_path, size):
+        self.get_node(node_path).set_size(size)
 
-        path_opt = bsc_core.BscNodePathOpt(path)
-        item = self._gui_data.backdrop.cls()
-        self._graph.scene().addItem(item)
+    def add_node_input(self, node_path, port_path):
+        self.get_node(node_path).add_input_port(port_path=port_path)
 
-        model = item._model
-        model.set_type(type_name)
-        model.set_path(path)
-        model.set_name(kwargs.get('name', path_opt.get_name()))
-        model.set_basic_size(self._gui_data.backdrop.size)
-        model.set_basic_head_size(self._gui_data.backdrop.head.size)
+    def remove_node_input(self, node_path, port_path):
+        self.get_node(node_path).remove_input_port(port_path)
 
-        self._data.nodes[path] = model
-        return True, model
+    def node_auto_connect_input(self, node_path, port_flag, port_path, source_path):
+        node = self.get_node(node_path)
+        if port_flag is True:
+            node.add_input_port(port_path)
 
-    def set_node_position(self, path, position):
-        self.get_node(path).set_position(position)
+        target_path = bsc_core.BscAttributePath.join_by(node.get_path(), port_path)
+        self._connect_port_paths(source_path, target_path)
 
-    def set_node_size(self, path, size):
-        self.get_node(path).set_size(size)
+    def node_auto_disconnect_input(self, node_path, port_flag, port_path, source_path):
+        node = self.get_node(node_path)
+
+        # disconnect first
+        target_path = bsc_core.BscAttributePath.join_by(node.get_path(), port_path)
+        self._disconnect_port_paths(source_path, target_path)
+
+        if port_flag is True:
+            node.remove_input_port(port_path)
 
     # connection
     def create_connection(self, source_arg, target_args):
@@ -1666,7 +2076,7 @@ class _SceneModel(_AbsAction):
             if self._disconnect_ports(source_port_old, target_port) is False:
                 return False, None
 
-        item = self._gui_data.connection.cls(source_port, target_port)
+        item = self._builtin_data.connection.cls(source_port, target_port)
         item._set_hover_enable(True)
         model = item._model
         model.set_path(path)
@@ -1674,7 +2084,7 @@ class _SceneModel(_AbsAction):
 
         source_port._register_connection(path)
         target_port._register_connection(path)
-        self._graph.scene().addItem(item)
+        self._gui.scene().addItem(item)
 
         self._gui_data.connection_dict[path] = model
         return True, model
@@ -1687,7 +2097,17 @@ class _SceneModel(_AbsAction):
         data = [
             (_QtUndoCommand.Actions.Connect, _ConnectionModel._to_path(source_port.get_path(), target_port.get_path()))
         ]
-        self._graph._undo_stack.push(_QtUndoCommand(self, data))
+        self._gui._undo_stack.push(_QtUndoCommand(self, data))
+    
+    def _push_auto_connect_input_cmd(self, source_port, target_node):
+        flag, input_port = target_node._generate_next_input_port_args()
+        data = [
+            (
+                _QtUndoCommand.Actions.NodeAutoConnectInput,
+                (target_node.get_path(), flag, input_port.get_port_path(), source_port.get_path())
+            )
+        ]
+        self._gui._undo_stack.push(_QtUndoCommand(self, data))
 
     # disconnect
     def _disconnect_path(self, path):
@@ -1708,7 +2128,7 @@ class _SceneModel(_AbsAction):
             self._gui_data.connection_dict.pop(path)
             source_port._unregister_connection(path)
             target_port._unregister_connection(path)
-            self._graph.scene().removeItem(connection._item)
+            self._gui.scene().removeItem(connection._gui)
             return True
         return False
 
@@ -1716,7 +2136,7 @@ class _SceneModel(_AbsAction):
         data = [
             (_QtUndoCommand.Actions.Disconnect, _ConnectionModel._to_path(source_port.get_path(), target_port.get_path()))
         ]
-        self._graph._undo_stack.push(_QtUndoCommand(self, data))
+        self._gui._undo_stack.push(_QtUndoCommand(self, data))
 
     def _reconnect_path(self, path_0, path_1):
         self._disconnect_path(path_0)
@@ -1733,7 +2153,7 @@ class _SceneModel(_AbsAction):
         data = [
             (_QtUndoCommand.Actions.Reconnect, (path_0, path_1))
         ]
-        self._graph._undo_stack.push(_QtUndoCommand(self, data))
+        self._gui._undo_stack.push(_QtUndoCommand(self, data))
 
     def _reconnect_target(self, source_port, target_port, target_port_new):
         path = _ConnectionModel._to_path(source_port.get_path(), target_port.get_path())
@@ -1746,7 +2166,7 @@ class _SceneModel(_AbsAction):
         data = [
             (_QtUndoCommand.Actions.Reconnect, (path_0, path_1))
         ]
-        self._graph._undo_stack.push(_QtUndoCommand(self, data))
+        self._gui._undo_stack.push(_QtUndoCommand(self, data))
 
     def get_connection(self, path):
         return self._gui_data.connection_dict.get(path)
@@ -1765,7 +2185,7 @@ class _SceneModel(_AbsAction):
         source_port._unregister_connection(path)
         target_port._unregister_connection(path)
         self._gui_data.connection_dict.pop(path)
-        self._graph.scene().removeItem(connection._item)
+        self._gui.scene().removeItem(connection._gui)
 
     def has_connection(self, path):
         return path in self._gui_data.connection_dict
@@ -1785,35 +2205,35 @@ class _SceneModel(_AbsAction):
         f = self._gui_data.zoom.factor
         factor = f if zoom_in else 1/f
 
-        mouse_scene_pos = self._graph.mapToScene(event.pos())
+        mouse_scene_pos = self._gui.mapToScene(event.pos())
 
-        self._graph.scale(factor, factor)
+        self._gui.scale(factor, factor)
 
-        new_mouse_scene_pos = self._graph.mapToScene(event.pos())
+        new_mouse_scene_pos = self._gui.mapToScene(event.pos())
         delta = new_mouse_scene_pos-mouse_scene_pos
 
-        self._graph.translate(delta.x(), delta.y())
+        self._gui.translate(delta.x(), delta.y())
 
     # track
     def _do_track_start(self, event):
         self._gui_data.track.start_point = event.pos()
-        self._graph.setCursor(QtCore.Qt.ClosedHandCursor)
+        self._gui.setCursor(QtCore.Qt.ClosedHandCursor)
 
     def _do_track_move(self, event):
         delta = event.pos()-self._gui_data.track.start_point
         self._gui_data.track.start_point = event.pos()
-        scale_factor = self._graph.transform().m11()
+        scale_factor = self._gui.transform().m11()
 
-        self._graph.translate(delta.x()/scale_factor, delta.y()/scale_factor)
+        self._gui.translate(delta.x()/scale_factor, delta.y()/scale_factor)
 
     def _do_tack_end(self):
-        self._graph.unsetCursor()
+        self._gui.unsetCursor()
 
     # node move
     def _do_node_move_start(self, event):
         node_position_data = []
 
-        items = self._graph.scene().selectedItems()
+        items = self._gui.scene().selectedItems()
         for i in items:
             if i.SBJ_TYPE in {_base._QtSbjTypes.Node}:
                 i_node = i._model
@@ -1837,30 +2257,38 @@ class _SceneModel(_AbsAction):
                 )
             )
 
-        self._graph._undo_stack.push(_QtUndoCommand(self, data))
+        self._gui._undo_stack.push(_QtUndoCommand(self, data))
 
     def _do_node_move_end(self):
         self._push_node_move_cmd()
+
+    # node add input
+    def _push_add_node_input_cmd(self, node):
+        port_path_new = node._generate_next_input_port_path()
+        data = [
+            (_QtUndoCommand.Actions.NodeAddInput, (node.get_path(), port_path_new))
+        ]
+        self._gui._undo_stack.push(_QtUndoCommand(self, data))
 
     # rect selection
     def _do_rect_selection_start(self, event):
         p = event.pos()
         self._gui_data.rect_selection.origin = p
-        self._graph._rubber_band.setGeometry(QtCore.QRect(p, p))
-        self._graph._rubber_band.show()
+        self._gui._rubber_band.setGeometry(QtCore.QRect(p, p))
+        self._gui._rubber_band.show()
 
     def _do_rect_selection_move(self, event):
         p_0 = self._gui_data.rect_selection.origin
         rect = QtCore.QRect(p_0, event.pos()).normalized()
-        self._graph._rubber_band.setGeometry(rect)
+        self._gui._rubber_band.setGeometry(rect)
 
     def _do_rect_selection_end(self, event):
-        self._graph._rubber_band.hide()
+        self._gui._rubber_band.hide()
 
-        rect = self._graph._rubber_band.geometry()
-        scene_rect = self._graph.mapToScene(rect).boundingRect()
+        rect = self._gui._rubber_band.geometry()
+        scene_rect = self._gui.mapToScene(rect).boundingRect()
 
-        selected_items = self._graph.scene().items(scene_rect, QtCore.Qt.IntersectsItemShape)
+        selected_items = self._gui.scene().items(scene_rect, QtCore.Qt.IntersectsItemShape)
 
         if event.modifiers() == QtCore.Qt.ShiftModifier:
             for i_item in selected_items:
@@ -1871,7 +2299,7 @@ class _SceneModel(_AbsAction):
                 if i_item.SBJ_TYPE in {_base._QtSbjTypes.Node}:
                     i_item.setSelected(False)
         else:
-            self._graph.scene().clearSelection()
+            self._gui.scene().clearSelection()
             for i_item in selected_items:
                 if i_item.SBJ_TYPE in {_base._QtSbjTypes.Node}:
                     i_item.setSelected(True)
@@ -1880,19 +2308,19 @@ class _SceneModel(_AbsAction):
         data = [
             (_QtUndoCommand.Actions.Delete, (node_args, connection_args))
         ]
-        self._graph._undo_stack.push(_QtUndoCommand(self, data))
+        self._gui._undo_stack.push(_QtUndoCommand(self, data))
 
     def _push_cut_cmd(self, node_args, connection_args):
         data = [
             (_QtUndoCommand.Actions.Cut, (node_args, connection_args))
         ]
-        self._graph._undo_stack.push(_QtUndoCommand(self, data))
+        self._gui._undo_stack.push(_QtUndoCommand(self, data))
 
     def _push_paste_cmd(self, node_args, connection_args):
         data = [
             (_QtUndoCommand.Actions.Paste, (node_args, connection_args))
         ]
-        self._graph._undo_stack.push(_QtUndoCommand(self, data))
+        self._gui._undo_stack.push(_QtUndoCommand(self, data))
 
     def _do_paste(self, node_args):
         nodes_data = _NodeDataGrop(self, node_args)
@@ -1904,7 +2332,7 @@ class _SceneModel(_AbsAction):
     def _on_delete_action(self):
         node_args = []
         connection_args = []
-        items = self._graph.scene().selectedItems()
+        items = self._gui.scene().selectedItems()
         for i in items:
             if i.SBJ_TYPE in {_base._QtSbjTypes.Node}:
                 i_node = i._model
@@ -1921,7 +2349,7 @@ class _SceneModel(_AbsAction):
 
     def _on_copy_action(self):
         node_args = []
-        items = self._graph.scene().selectedItems()
+        items = self._gui.scene().selectedItems()
         for i in items:
             if i.SBJ_TYPE in {_base._QtSbjTypes.Node}:
                 node_args.append(i._model.to_data())
@@ -1938,10 +2366,22 @@ class _SceneModel(_AbsAction):
             )
             gui_qt_core.QtUtil.write_clipboard(data_string)
 
+    def _on_duplicate_action(self):
+        node_args = []
+        items = self._gui.scene().selectedItems()
+        for i in items:
+            if i.SBJ_TYPE in {_base._QtSbjTypes.Node}:
+                node_args.append(i._model.to_data())
+
+        nodes_data = _NodeDataGrop(self, node_args)
+        node_args, connection_args = nodes_data.generate_create_data()
+
+        self._push_paste_cmd(node_args, connection_args)
+
     def _on_cut_action(self):
         node_args = []
         connection_args = []
-        items = self._graph.scene().selectedItems()
+        items = self._gui.scene().selectedItems()
         for i in items:
             if i.SBJ_TYPE in {_base._QtSbjTypes.Node}:
                 i_node = i._model
@@ -1980,16 +2420,16 @@ class _SceneModel(_AbsAction):
 
     def _on_bypass_action(self):
         point = QtGui.QCursor().pos()
-        p = self._graph._map_from_global(point)
+        p = self._gui._map_from_global(point)
         selection_area = QtGui.QPainterPath()
         selection_area.addRect(QtCore.QRectF(p.x()-1, p.y()-1, 2, 2))
-        items = self._graph.scene().items(selection_area, QtCore.Qt.IntersectsItemShape)
+        items = self._gui.scene().items(selection_area, QtCore.Qt.IntersectsItemShape)
         for i in items:
             if i.SBJ_TYPE in {_base._QtSbjTypes.Node}:
                 i._model._on_swap_bypass()
 
     def clear_selection(self):
-        self._graph.scene().clearSelection()
+        self._gui.scene().clearSelection()
 
     # menu
     def set_menu_content(self, content):
@@ -2021,4 +2461,4 @@ class _SceneModel(_AbsAction):
         return _base._ToJson(self._data._dict).generate()
 
     def to_data(self):
-        return _SceneModel._json_str_to_data(self.to_json())
+        return _RootNodeModel._json_str_to_data(self.to_json())
