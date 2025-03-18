@@ -43,7 +43,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         _, node = self._a._model.add_node('LoadPremiereXml')
 
         node.set('input.file', 'Z:/temporaries/premiere_xml_test/test_scene.xml')
-        node.execute('analysis_and_build')
+        # node.execute('analysis_and_build')
 
         x, y = node.get_position()
         w, h = node.get_size()

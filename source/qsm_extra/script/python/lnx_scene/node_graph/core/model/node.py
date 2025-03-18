@@ -661,7 +661,14 @@ class StandardNode(_AbsNode):
             for j in i.get_connections_itr():
                 yield j
 
-    # target
+    def get_source_nodes(self):
+        list_ = []
+        for i in self.get_inputs():
+            if i.has_source():
+                list_.append(i.get_source().get_node())
+        return list_
+
+    # connection, target
     def has_target_connections(self):
         for i in self.get_outputs():
             if i.has_targets():

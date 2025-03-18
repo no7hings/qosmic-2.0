@@ -31,11 +31,19 @@ class Node(_cor_model.StandardNode):
                 widget='path', gui_name='Selection', gui_name_chs='选择'
             )
 
+            # info
+            node.parameters.add_group(param_path='info').set_options(
+                gui_name='Info', gui_name_chs='信息'
+            )
+            node.parameters.add_string_array(param_path='info.reference_json').set_options(
+                widget='json', lock=True, gui_name='References', gui_name_chs='引用'
+            )
+
             # button
-            node.parameters.add_string(param_path='analysis_or_update').set_options(
+            node.parameters.add_string(param_path='info.update_info').set_options(
                 widget='button',
-                script=r'import lnx_scene.node_graph.node_handle as h; h.ReplaceMayaReference(node).analysis_or_update()',
-                gui_name='Analysis/Update', gui_name_chs='解析/更新',
+                script=r'import lnx_scene.node_graph.node_handle as h; h.ReplaceMayaReference(node).update_info()',
+                gui_name='Update Info', gui_name_chs='更新信息',
             )
 
         return flag, node

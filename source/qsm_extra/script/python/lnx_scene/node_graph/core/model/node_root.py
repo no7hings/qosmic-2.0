@@ -1,5 +1,6 @@
 # coding:utf-8
 import collections
+import contextlib
 
 import functools
 
@@ -841,3 +842,12 @@ class RootNode(
     # parameter
     def _set_param_root_stack_gui(self, widget):
         self._param_root_stack_gui = widget
+
+    # undo
+
+    @contextlib.contextmanager
+    def undo_group(self, name=''):
+        self._gui._undo_group_index += 1
+        self._gui._undo_stack.beginMacro('{}{}'.format(name, self._gui._undo_group_index))
+        yield
+        self._gui._undo_stack.endMacro()

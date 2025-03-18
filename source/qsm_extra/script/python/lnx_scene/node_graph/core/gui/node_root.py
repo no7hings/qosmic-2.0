@@ -101,6 +101,7 @@ class RootNodeGui(
         self._drag_connection = None
 
         # undo
+        self._undo_group_index = 0
         self._undo_stack = QtWidgets.QUndoStack()
         self._undo_stack.setUndoLimit(100)
         self._undo_button = None

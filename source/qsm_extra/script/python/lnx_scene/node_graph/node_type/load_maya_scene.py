@@ -23,10 +23,6 @@ class Node(_cor_model.ImagingNode):
 
             node.set_image(gui_core.GuiIcon.get('file/ma'))
 
-            node.parameters.add_string(param_path='preview').set_options(
-                widget='file', open=True, gui_name='Preview', gui_name_chs='预览', ext_includes=['.mov']
-            )
-
             # input
             node.parameters.add_group(param_path='input').set_options(
                 gui_name='Input', gui_name_chs='输入'
@@ -58,10 +54,10 @@ class Node(_cor_model.ImagingNode):
             )
 
             # button
-            node.parameters.add_string(param_path='analysis_or_update').set_options(
+            node.parameters.add_string(param_path='info.update_info').set_options(
                 widget='button',
-                script=r'import lnx_scene.node_graph.node_handle as h; h.LoadMayaScene(node).analysis_or_update()',
-                gui_name='Analysis/Update', gui_name_chs='解析/更新',
+                script=r'import lnx_scene.node_graph.node_handle as h; h.LoadMayaScene(node).update_info()',
+                gui_name='Update Info', gui_name_chs='更新信息',
             )
         return flag, node
 
