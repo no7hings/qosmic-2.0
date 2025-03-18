@@ -216,7 +216,7 @@ class ImgOiio(object):
     @classmethod
     def generate_create_cmd_as_ext_tgt(cls, file_path, ext, directory_path=None, width=None):
         file_path_opt_src = _base.StgFileOpt(file_path)
-        file_path_tgt_opt = file_path_opt_src.set_ext_repath_to(ext)
+        file_path_tgt_opt = file_path_opt_src.replace_ext_to(ext)
         if file_path_opt_src.get_is_file() is True:
             file_path_tgt_opt.create_directory()
         #

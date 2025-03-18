@@ -71,6 +71,14 @@ class _AbsTyped(_AbsParam):
     def get_default(self):
         return self._data.default
 
+    def _exec_script(self):
+        script = self.options.get('script')
+        if script:
+            # noinspection PyUnusedLocal
+            node = self.node
+            # noinspection PyRedundantParentheses
+            exec (script)
+
 
 class _String(_AbsTyped):
     def __init__(self, *args, **kwargs):

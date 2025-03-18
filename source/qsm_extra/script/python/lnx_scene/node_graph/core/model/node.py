@@ -13,10 +13,10 @@ from .. import base as _base
 
 from .. import undo as _undo
 
-from . import parameter as _param
+from . import param as _param
 
 
-class _AbsNodeModel(
+class _AbsNode(
     _base._SbjBase,
     _base._AbsAction
 ):
@@ -35,7 +35,7 @@ class _AbsNodeModel(
             self._gui_data.select.flag = flag
 
     def __init__(self, *args, **kwargs):
-        super(_AbsNodeModel, self).__init__(*args, **kwargs)
+        super(_AbsNode, self).__init__(*args, **kwargs)
 
         self._data.options = _base._Dict(
             position=_base._Dict(
@@ -265,7 +265,7 @@ class _AbsNodeModel(
         raise NotImplementedError()
 
     def _set_type(self, text, *args, **kwargs):
-        if super(_AbsNodeModel, self)._set_type(text) is True:
+        if super(_AbsNode, self)._set_type(text) is True:
             self._gui_data.type.gui_name = kwargs.get('gui_name')
             self._gui_data.type.gui_name_chs = kwargs.get('gui_name_chs')
 
@@ -276,10 +276,10 @@ class _AbsNodeModel(
 
 
 # node model
-class StandardNodeModel(_AbsNodeModel):
+class StandardNode(_AbsNode):
 
     def __init__(self, *args, **kwargs):
-        super(StandardNodeModel, self).__init__(*args, **kwargs)
+        super(StandardNode, self).__init__(*args, **kwargs)
         self._data.category = 'node'
 
         self._data.options.bypass = False
@@ -531,8 +531,7 @@ class StandardNodeModel(_AbsNodeModel):
         return self._find_next_port_path(self._data.inputs, prefix)
 
     def _add_input_by_data(self, data):
-        port_path = data['path']
-        flag, port = self.add_input(port_path=port_path)
+        flag, port = self.add_input(port_path=data['port_path'])
         return port
 
     def get_inputs(self):
@@ -612,8 +611,7 @@ class StandardNodeModel(_AbsNodeModel):
         return len(self._data.outputs)
 
     def _add_output_by_data(self, data):
-        name = data['name']
-        flag, port = self.add_output(name)
+        flag, port = self.add_output(port_path=data['port_path'])
         return port
 
     def get_outputs(self):
@@ -638,7 +636,7 @@ class StandardNodeModel(_AbsNodeModel):
         prt_size = self._gui_data.port.size
         prt_w, prt_h = prt_size.width(), prt_size.height()
         prt_ws = prt_c*prt_w+spc*(prt_c-1)+mrg*2
-        prt_x, prt_y = x+(w-prt_ws)/2+mrg, y+h+2
+        prt_x, prt_y = x+(w-prt_ws)/2+mrg, y+h+1
 
         x_c = prt_x
         for i in ports:
@@ -694,13 +692,18 @@ class StandardNodeModel(_AbsNodeModel):
                 list_.append(j.get_node())
         return list_
 
+    def connect(self, node):
+        outputs = self.get_outputs()
+        if outputs:
+            outputs[0].connect_node(node)
+
     # parameter
     def add_parameter(self, type_name, name=None, parent_path=None, port_path=None, *args, **kwargs):
         pass
 
     # name
     def set_name(self, text):
-        if super(StandardNodeModel, self).set_name(text) is True:
+        if super(StandardNode, self).set_name(text) is True:
             self._gui._name_aux.setPlainText(text)
             self._auto_resize()
 
@@ -764,7 +767,7 @@ class StandardNodeModel(_AbsNodeModel):
         self._gui._name_aux.setPos(x+w, y)
 
     def set_options(self, options):
-        super(StandardNodeModel, self).set_options(options)
+        super(StandardNode, self).set_options(options)
 
         self.set_bypass(options['bypass'])
         self.set_add_port_enable(options['add_input_enable'])
@@ -886,21 +889,31 @@ class StandardNodeModel(_AbsNodeModel):
     def get(self, key):
         return self._param_root.get_parameter(key).get_value()
 
+    def execute(self, key):
+        p = self._param_root.get_parameter(key)
+        p._exec_script()
 
-# media
-class MediaNodeModel(StandardNodeModel):
+
+# imaging
+class ImagingNode(StandardNode):
+    class DrawFlags:
+        Image = 0
+        Video = 1
+
     def __init__(self, *args, **kwargs):
-        super(MediaNodeModel, self).__init__(*args, **kwargs)
+        super(ImagingNode, self).__init__(*args, **kwargs)
         self._data.options.image = None
 
         self._data.options.video = None
 
+        self._gui_data.draw_flag = None
         self._gui_data.image_enable = False
         self._gui_data.video_enable = False
+
         self._gui_data.basic.size = QtCore.QSize(160, 160)
 
     def set_options(self, options):
-        super(MediaNodeModel, self).set_options(options)
+        super(ImagingNode, self).set_options(options)
 
         self.set_image(options['image'])
 
@@ -954,6 +967,7 @@ class MediaNodeModel(StandardNodeModel):
 
             if data_:
                 _pixmap = data_[0]
+                self._gui_data.draw_flag = self.DrawFlags.Image
                 self._gui_data.image_enable = True
                 self._gui_data.image.pixmap = _pixmap
                 self._gui_data.image.size = _pixmap.size()
@@ -1018,6 +1032,7 @@ class MediaNodeModel(StandardNodeModel):
 
             if data_:
                 _capture_opt, _pixmap, _frame_count, _fps = data_
+                self._gui_data.draw_flag = self.DrawFlags.Video
                 self._gui_data.video_enable = True
                 self._gui_data.video.capture_opt = _capture_opt
                 self._gui_data.video.pixmap = _pixmap
@@ -1039,7 +1054,7 @@ class MediaNodeModel(StandardNodeModel):
         hed_size = self._gui_data.head.size
         hed_w, hed_h = hed_size.width(), hed_size.height()
 
-        if self._gui_data.image_enable is True:
+        if self._gui_data.draw_flag == self.DrawFlags.Image:
             mrg = self._gui_data.image.margin
 
             frm_x, frm_y = x+mrg, y+hed_h+mrg
@@ -1056,7 +1071,7 @@ class MediaNodeModel(StandardNodeModel):
             self._gui_data.image.image_rect.setRect(
                 frm_x+img_x_, frm_y+img_y_, img_w_, img_h_
             )
-        elif self._gui_data.video_enable is True:
+        elif self._gui_data.draw_flag == self.DrawFlags.Video:
             mrg = self._gui_data.video.margin
 
             frm_x, frm_y = x+mrg, y+hed_h+mrg
@@ -1079,29 +1094,29 @@ class MediaNodeModel(StandardNodeModel):
         self._load_video_auto()
 
     def draw_base_prc(self, painter, options):
-        if self._gui_data.image_enable is True:
-            gui_qt_core.QtItemDrawBase._draw_frame(
-                painter,
-                rect=self._gui_data.image.rect,
-                border_color=QtGui.QColor(31, 31, 31, 255),
-                background_color=QtGui.QColor(31, 31, 31, 255),
-                border_width=1,
-                border_radius=0
-            )
+        if self._gui_data.draw_flag == self.DrawFlags.Image:
+            # gui_qt_core.QtItemDrawBase._draw_frame(
+            #     painter,
+            #     rect=self._gui_data.image.rect,
+            #     border_color=_base._QtColors.NodeImagingBorder,
+            #     background_color=_base._QtColors.NodeImagingBackground,
+            #     border_width=1,
+            #     border_radius=0
+            # )
             gui_qt_core.QtItemDrawBase._draw_pixmap(
                 painter,
                 rect=self._gui_data.image.image_rect,
                 pixmap=self._gui_data.image.pixmap
             )
-        elif self._gui_data.video_enable is True:
-            gui_qt_core.QtItemDrawBase._draw_frame(
-                painter,
-                rect=self._gui_data.video.rect,
-                border_color=QtGui.QColor(31, 31, 31, 255),
-                background_color=QtGui.QColor(31, 31, 31, 255),
-                border_width=1,
-                border_radius=0
-            )
+        if self._gui_data.draw_flag == self.DrawFlags.Video:
+            # gui_qt_core.QtItemDrawBase._draw_frame(
+            #     painter,
+            #     rect=self._gui_data.video.rect,
+            #     border_color=_base._QtColors.NodeImagingBorder,
+            #     background_color=_base._QtColors.NodeImagingBackground,
+            #     border_width=1,
+            #     border_radius=0
+            # )
             gui_qt_core.QtItemDrawBase._draw_pixmap(
                 painter,
                 rect=self._gui_data.video.image_rect,
@@ -1110,9 +1125,9 @@ class MediaNodeModel(StandardNodeModel):
 
 
 # backdrop
-class BackdropModel(_AbsNodeModel):
+class Backdrop(_AbsNode):
     def __init__(self, *args, **kwargs):
-        super(BackdropModel, self).__init__(*args, **kwargs)
+        super(Backdrop, self).__init__(*args, **kwargs)
         self._data.category = 'backdrop'
         # basic and head
         self._gui_data.basic.size = QtCore.QSize(320, 240)
@@ -1319,22 +1334,18 @@ class BackdropModel(_AbsNodeModel):
         for i in self._gui_data.move.node_position_data:
             i[0]._gui.moveBy(x, y)
 
+    @_undo.GuiUndoFactory.push(_undo.UndoActions.NodeMove)
     def _push_move_cmd(self):
-        data = [
-            (
-                _undo.QtUndoCommand.Actions.NodeMove,
-                (self.get_path(), self._gui_data.move.start_position, self.get_position())
-            )
-        ]
-        for i in self._gui_data.move.node_position_data:
-            i_node = i[0]
-            data.append(
-                (
-                    _undo.QtUndoCommand.Actions.NodeMove,
-                    (i_node.get_path(), i[1], i_node.get_position())
-                )
-            )
-        self.root_model._gui._undo_stack.push(_undo.QtUndoCommand(self.root_model, data))
+        def redo_fnc_():
+            self.root_model.set_node_position(node_path, position_1)
+
+        def undo_fnc_():
+            self.root_model.set_node_position(node_path, position_0)
+
+        node_path, position_0, position_1 = (
+            self.get_path(), self._gui_data.move.start_position, self.get_position()
+        )
+        return self.root_model, redo_fnc_, undo_fnc_
 
     def do_move_end(self):
         self._push_move_cmd()
@@ -1358,12 +1369,17 @@ class BackdropModel(_AbsNodeModel):
         w, h = max(min(w, 4096), 128), max(min(h, 4096), 64)
         self.set_size((w, h))
 
+    @_undo.GuiUndoFactory.push(_undo.UndoActions.NodeResize)
     def _push_resize_cmd(self):
+        def redo_fnc_():
+            self.root_model.set_node_size(node_path, size_1)
+
+        def undo_fnc_():
+            self.root_model.set_node_size(node_path, size_0)
+
         rect = self._gui_data.resize.start_rect
-        data = [
-            (_undo.QtUndoCommand.Actions.NodeResize, (self.get_path(), (rect.width(), rect.height()), self.get_size()))
-        ]
-        self.root_model._gui._undo_stack.push(_undo.QtUndoCommand(self.root_model, data))
+        node_path, size_0, size_1 = self.get_path(), (rect.width(), rect.height()), self.get_size()
+        return self.root_model, redo_fnc_, undo_fnc_
 
     def do_resize_end(self):
         self._push_resize_cmd()

@@ -3,8 +3,8 @@ from .connection import *
 
 from .port import *
 
-from .parameter import *
+from .param import *
 
 from .node import *
 
-from .root import *
+from .node_root import *

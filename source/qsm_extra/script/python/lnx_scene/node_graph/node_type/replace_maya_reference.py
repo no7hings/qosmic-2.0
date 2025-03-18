@@ -6,7 +6,7 @@ from ..core import model as _cor_model
 from ..core import gui as _core_gui
 
 
-class Node(_cor_model.StandardNodeModel):
+class Node(_cor_model.StandardNode):
     NODE_TYPE = 'ReplaceMayaReference'
 
     def __init__(self, *args, **kwargs):
@@ -20,16 +20,34 @@ class Node(_cor_model.StandardNodeModel):
             node.set_input_prefix('i0')
             node.add_input('i0')
             node.add_output('out')
+
+            # setting
+            node.parameters.add_group(param_path='setting').set_options(
+                gui_name='Setting', gui_name_chs='设置'
+            )
+            node.parameters.add_string(
+                param_path='setting.selection', value='/root/maya/scene//*{{attr("type")=="maya_scene"}}'
+            ).set_options(
+                widget='path', gui_name='Selection', gui_name_chs='选择'
+            )
+
+            # button
+            node.parameters.add_string(param_path='analysis_or_update').set_options(
+                widget='button',
+                script=r'import lnx_scene.node_graph.node_handle as h; h.ReplaceMayaReference(node).analysis_or_update()',
+                gui_name='Analysis/Update', gui_name_chs='解析/更新',
+            )
+
         return flag, node
 
 
-class NodeGui(_core_gui.QtStandardNode):
+class NodeGui(_core_gui.StandardNodeGui):
     def __init__(self, *args, **kwargs):
         super(NodeGui, self).__init__(*args, **kwargs)
 
 
 def register():
     sys.stdout.write('Register node: {}.\n'.format(Node.NODE_TYPE))
-    _cor_model.RootNodeModel.register_node_type(
+    _cor_model.RootNode.register_node_type(
         Node.NODE_TYPE, Node, NodeGui, 'Replace Maya Reference', '替换MAYA引用'
     )

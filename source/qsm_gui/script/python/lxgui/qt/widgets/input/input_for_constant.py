@@ -66,7 +66,10 @@ class QtInputForConstant(
         self._entry_widget.entry_value_accepted.connect(self._push_history_)
 
     def _set_value_entry_validator_use_as_name_(self):
-        self._entry_widget._set_validator_use_as_name_()
+        self._entry_widget._set_value_validator_use_as_name_()
+
+    def _set_value_entry_validator_use_as_path_(self):
+        self._entry_widget._set_value_validator_use_as_path_()
 
     def _set_entry_enable_(self, boolean):
         super(QtInputForConstant, self)._set_entry_enable_(boolean)

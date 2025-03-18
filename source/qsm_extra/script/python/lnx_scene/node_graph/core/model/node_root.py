@@ -19,7 +19,7 @@ from .. import undo as _undo
 
 
 # scene model
-class RootNodeModel(
+class RootNode(
     _base._SbjBase,
     _base._AbsAction
 ):
@@ -27,8 +27,8 @@ class RootNodeModel(
 
     NODE_GUI_CLS_DICT = dict()
 
-    def __init__(self, _gui_widget):
-        super(RootNodeModel, self).__init__(_gui_widget)
+    def __init__(self, gui_widget):
+        super(RootNode, self).__init__(gui_widget)
 
         self._close_flag = False
 
@@ -87,6 +87,9 @@ class RootNodeModel(
             self._add_node_menu_data_generate_fnc
         )
 
+        # node parameters
+        self._param_root_stack_gui = None
+
     # image cache
     def remove_image_cache(self, key):
         if key in self._gui_data.image_cache_dict:
@@ -116,7 +119,7 @@ class RootNodeModel(
             i_name = i_gui_type_name or k
 
             sub_menu_data.append(
-                (i_name, 'file/file', functools.partial(self._add_node_action, k))
+                (i_name, 'file/file', functools.partial(self._push_add_node_cmd, k))
             )
 
         if self._gui_language == 'chs':
@@ -134,27 +137,39 @@ class RootNodeModel(
                 ]
             ]
 
-    def _add_node_action(self, type_name):
-        if type_name not in self.NODE_GUI_CLS_DICT:
-            raise RuntimeError()
+    @_undo.GuiUndoFactory.push(_undo.UndoActions.NodeAdd)
+    def _push_add_node_cmd(self, type_name, *args, **kwargs):
+        def redo_fnc_():
+            if type_name not in self.NODE_GUI_CLS_DICT:
+                raise RuntimeError()
 
-        node_data = self.NODE_GUI_CLS_DICT[type_name]
-        model_cls = node_data['model_cls']
+            node_data = self.NODE_GUI_CLS_DICT[type_name]
+            model_cls = node_data['model_cls']
+
+            flag, node = model_cls.create(self, path=new_node_path)
+            w, h = node.get_size()
+            node.set_position((p.x()-w/2, p.y()-h/2))
+            return new_node_path
+
+        def undo_fnc_():
+            node = self.get_node(new_node_path)
+            if node:
+                self._unregister_node(node)
+            return new_node_path
+
+        new_node_path = self._find_next_node_path(self._data.nodes, type_name)
         point = QtGui.QCursor().pos()
         p = self._gui._map_from_global(point)
 
-        flag, node = model_cls.create(self)
-        w, h = node.get_size()
-        node.set_position((p.x()-w/2, p.y()-h/2))
-        return flag, node
+        return self, redo_fnc_, undo_fnc_
 
-    def add_node(self, type_name):
+    def add_node(self, type_name, *args, **kwargs):
         if type_name not in self.NODE_GUI_CLS_DICT:
             raise RuntimeError()
 
         node_data = self.NODE_GUI_CLS_DICT[type_name]
         model_cls = node_data['model_cls']
-        return model_cls.create(self)
+        return model_cls.create(self, *args, **kwargs)
 
     # viewed
     def has_viewed_nodes(self):
@@ -213,14 +228,15 @@ class RootNodeModel(
             type_gui_name_chs=type_gui_name_chs,
         )
 
-    def generate_node(self, type_name, name=None, parent_path=None, *args, **kwargs):
+    def generate_node(self, type_name, name=None, parent_path=None, path=None, *args, **kwargs):
         if type_name not in self.NODE_GUI_CLS_DICT:
             raise RuntimeError()
 
-        if name is None:
-            path = self._find_next_node_path(self._data.nodes, type_name, parent_path)
-        else:
-            path = '{}/{}'.format(parent_path or '', name)
+        if path is None:
+            if name is None:
+                path = self._find_next_node_path(self._data.nodes, type_name, parent_path)
+            else:
+                path = '{}/{}'.format(parent_path or '', name)
 
         if path in self._data.nodes:
             return False, self._data.nodes[path]
@@ -242,7 +258,7 @@ class RootNodeModel(
         self._data.nodes[path] = model
         return True, model
 
-    def create_node_by_data(self, data):
+    def _create_node_by_data(self, data):
         type_name = data['type']
         name = data['name']
         flag, node = self.generate_node(type_name, name)
@@ -261,6 +277,9 @@ class RootNodeModel(
             self._unregister_node(node)
 
     def _unregister_node(self, node):
+        if self._param_root_stack_gui is not None:
+            self._param_root_stack_gui._unregister_node(node)
+
         path = node.get_path()
         self._data.nodes.pop(path)
         gui = node._gui
@@ -326,23 +345,33 @@ class RootNodeModel(
         source_node_path = source_path_opt.obj_path
         source_node = self.get_node(source_node_path)
         if not source_node:
-            return False, None
+            raise RuntimeError(
+                'source node is not found: {}'.format(source_node_path)
+            )
         source_port_path = source_path_opt.port_path
         source_port = source_node.get_output(source_port_path)
         if not source_port:
-            return False, None
+            raise RuntimeError(
+                'source port is not found: {}'.format(source_path)
+            )
         target_path_opt = bsc_core.BscAttributePathOpt(target_path)
         target_node_path = target_path_opt.obj_path
         target_node = self.get_node(target_node_path)
         if not target_node:
-            return False, None
+            raise RuntimeError(
+                'target node is not found: {}'.format(target_node_path)
+            )
         target_port_path = target_path_opt.port_path
         target_port = target_node.get_input(target_port_path)
         if not target_port:
-            return False, None
+            raise RuntimeError(
+                'target port is not found: {}'.format(target_path)
+            )
 
         if source_node_path == target_node_path:
-            return False, None
+            raise RuntimeError(
+                'can not connect same port.'
+            )
 
         return self._connect_ports(source_port, target_port)
 
@@ -370,28 +399,37 @@ class RootNodeModel(
         self._gui_data.connection_dict[path] = model
         return True, model
 
+    @_undo.GuiUndoFactory.push(_undo.UndoActions.PortConnect)
     def _push_connect_cmd(self, source_port, target_port):
+        def redo_fnc_():
+            self._connect_path(path)
+            return path
+
+        def undo_fnc_():
+            self._disconnect_path(path)
+            return path
+
         path = self._join_to_connection_path(source_port.get_path(), target_port.get_path())
         if self.has_connection(path) is True:
             return
-
-        data = [
-            (
-                _undo.QtUndoCommand.Actions.PortConnect,
-                self._join_to_connection_path(source_port.get_path(), target_port.get_path())
-            )
-        ]
-        self._gui._undo_stack.push(_undo.QtUndoCommand(self, data))
+        return self, redo_fnc_, undo_fnc_
     
+    @_undo.GuiUndoFactory.push(_undo.UndoActions.NodeInputConnectAuto)
     def _push_auto_connect_input_cmd(self, source_port, target_node):
+        def redo_fnc_():
+            self.node_auto_connect_input(node_path, port_flag, port_path, source_path)
+            return node_path, port_path
+
+        def undo_fnc_():
+            self.node_auto_disconnect_input(node_path, port_flag, port_path, source_path)
+            return node_path, port_path
+
         flag, port = target_node._generate_next_input_args()
-        data = [
-            (
-                _undo.QtUndoCommand.Actions.NodeAutoConnectInput,
-                (target_node.get_path(), flag, port.get_port_path(), source_port.get_path())
-            )
-        ]
-        self._gui._undo_stack.push(_undo.QtUndoCommand(self, data))
+
+        node_path, port_flag, port_path, source_path = (
+            target_node.get_path(), flag, port.get_port_path(), source_port.get_path()
+        )
+        return self, redo_fnc_, undo_fnc_
 
     # disconnect
     def _disconnect_path(self, path):
@@ -416,44 +454,50 @@ class RootNodeModel(
             return True
         return False
 
+    @_undo.GuiUndoFactory.push(_undo.UndoActions.PortDisconnect)
     def _push_disconnect_cmd(self, source_port, target_port):
-        data = [
-            (
-                _undo.QtUndoCommand.Actions.PortDisconnect, 
-                self._join_to_connection_path(source_port.get_path(), target_port.get_path())
-            )
-        ]
-        self._gui._undo_stack.push(_undo.QtUndoCommand(self, data))
+        def redo_fnc_():
+            self._disconnect_path(path)
+            return path
+
+        def undo_fnc_():
+            self._connect_path(path)
+            return path
+
+        path = self._join_to_connection_path(source_port.get_path(), target_port.get_path())
+        return self, redo_fnc_, undo_fnc_
 
     def _reconnect_path(self, path_0, path_1):
         self._disconnect_path(path_0)
         self._connect_path(path_1)
+
+    def _reconnect_paths(self, disconnect_paths, connect_paths):
+        [self._disconnect_path(x) for x in disconnect_paths]
+        [self._connect_path(x) for x in connect_paths]
 
     def _reconnect_source(self, source_port, target_port, source_port_new):
         path = self._join_to_connection_path(source_port.get_path(), target_port.get_path())
         self.remove_connection_path(path)
         self._connect_ports(source_port_new, target_port)
 
-    def _push_reconnect_source_cmd(self, source_port, target_port, source_port_new):
-        path_0 = self._join_to_connection_path(source_port.get_path(), target_port.get_path())
-        path_1 = self._join_to_connection_path(source_port_new.get_path(), target_port.get_path())
-        data = [
-            (_undo.QtUndoCommand.Actions.PortReconnect, (path_0, path_1))
-        ]
-        self._gui._undo_stack.push(_undo.QtUndoCommand(self, data))
-
     def _reconnect_target(self, source_port, target_port, target_port_new):
         path = self._join_to_connection_path(source_port.get_path(), target_port.get_path())
         self.remove_connection_path(path)
         self._connect_ports(source_port, target_port_new)
 
-    def _push_reconnect_target_cmd(self, source_port, target_port, target_port_new):
-        path_0 = self._join_to_connection_path(source_port.get_path(), target_port.get_path())
-        path_1 = self._join_to_connection_path(source_port.get_path(), target_port_new.get_path())
-        data = [
-            (_undo.QtUndoCommand.Actions.PortReconnect, (path_0, path_1))
-        ]
-        self._gui._undo_stack.push(_undo.QtUndoCommand(self, data))
+    @_undo.GuiUndoFactory.push(_undo.UndoActions.PortReconnect)
+    def _push_reconnect_cmd(self, disconnect_args, connect_args):
+        def redo_fnc_():
+            self._reconnect_paths(disconnect_paths, connect_paths)
+            return '...'
+
+        def undo_fnc():
+            self._reconnect_paths(connect_paths, disconnect_paths)
+            return '...'
+
+        disconnect_paths = [self._join_to_connection_path(x[0].get_path(), x[1].get_path()) for x in disconnect_args]
+        connect_paths = [self._join_to_connection_path(x[0].get_path(), x[1].get_path()) for x in connect_args]
+        return self, redo_fnc_, undo_fnc
 
     def get_connection(self, path):
         return self._gui_data.connection_dict.get(path)
@@ -525,7 +569,7 @@ class RootNodeModel(
             if i.ENTITY_TYPE in {_base.EntityTypes.Node}:
                 i_node = i._model
                 node_position_data.append(
-                    (i_node, i_node.get_position())
+                    (i_node.get_path(), i_node.get_position())
                 )
 
         self._gui_data.node_move.node_position_data = node_position_data
@@ -533,29 +577,46 @@ class RootNodeModel(
     def _do_node_move(self, event):
         pass
 
+    @_undo.GuiUndoFactory.push(_undo.UndoActions.NodeMove)
     def _push_node_move_cmd(self):
-        data = []
-        for i in self._gui_data.node_move.node_position_data:
-            i_node = i[0]
-            data.append(
-                (
-                    _undo.QtUndoCommand.Actions.NodeMove,
-                    (i_node.get_path(), i[1], i_node.get_position())
-                )
-            )
+        def redo_fnc_():
+            [self.set_node_position(*x) for x in redo_data]
+            return '...'
 
-        self._gui._undo_stack.push(_undo.QtUndoCommand(self, data))
+        def undo_fnc_():
+            [self.set_node_position(*x) for x in undo_data]
+            return '...'
+
+        redo_data = []
+        undo_data = []
+
+        for i in self._gui_data.node_move.node_position_data:
+            i_node_path, i_node_position = i
+
+            i_node = self.get_node(i_node_path)
+            i_node_position_new = i_node.get_position()
+
+            redo_data.append((i_node_path, i_node_position_new))
+            undo_data.append((i_node_path, i_node_position))
+        return self, redo_fnc_, undo_fnc_
 
     def _do_node_move_end(self):
         self._push_node_move_cmd()
 
     # node add input
+    @_undo.GuiUndoFactory.push(_undo.UndoActions.NodeAddInput)
     def _push_add_node_input_cmd(self, node):
+        def redo_fnc_():
+            self.add_node_input(node_path, port_path_new)
+            return node_path, port_path_new
+        
+        def undo_fnc_():
+            self.remove_node_input(node_path, port_path_new)
+            return node_path, port_path_new
+
+        node_path = node.get_path()
         port_path_new = node._generate_next_input_path()
-        data = [
-            (_undo.QtUndoCommand.Actions.NodeAddInput, (node.get_path(), port_path_new))
-        ]
-        self._gui._undo_stack.push(_undo.QtUndoCommand(self, data))
+        return self, redo_fnc_, undo_fnc_
 
     # rect selection
     def _do_rect_selection_start(self, event):
@@ -590,24 +651,48 @@ class RootNodeModel(
             for i_item in selected_items:
                 if i_item.ENTITY_TYPE in {_base.EntityTypes.Node}:
                     i_item.setSelected(True)
-
+    
+    @_undo.GuiUndoFactory.push(_undo.UndoActions.Delete)
     def _push_delete_cmd(self, node_args, connection_args):
-        data = [
-            (_undo.QtUndoCommand.Actions.Delete, (node_args, connection_args))
-        ]
-        self._gui._undo_stack.push(_undo.QtUndoCommand(self, data))
+        def redo_fnc_():
+            [self._disconnect_path(x) for x in connection_args]
+            [self._remove_node_by_data(x) for x in node_args]
+            return '...'
+        
+        def undo_fnc_():
+            [self._create_node_by_data(x) for x in node_args]
+            [self._connect_path(x) for x in connection_args]
+            return '...'
 
+        return self, redo_fnc_, undo_fnc_
+
+    @_undo.GuiUndoFactory.push(_undo.UndoActions.Cut)
     def _push_cut_cmd(self, node_args, connection_args):
-        data = [
-            (_undo.QtUndoCommand.Actions.Cut, (node_args, connection_args))
-        ]
-        self._gui._undo_stack.push(_undo.QtUndoCommand(self, data))
+        def redo_fnc_():
+            [self._disconnect_path(x) for x in connection_args]
+            [self._remove_node_by_data(x) for x in node_args]
+            return '...'
 
+        def undo_fnc_():
+            [self._create_node_by_data(x) for x in node_args]
+            [self._connect_path(x) for x in connection_args]
+            return '...'
+
+        return self, redo_fnc_, undo_fnc_
+
+    @_undo.GuiUndoFactory.push(_undo.UndoActions.Paste)
     def _push_paste_cmd(self, node_args, connection_args):
-        data = [
-            (_undo.QtUndoCommand.Actions.Paste, (node_args, connection_args))
-        ]
-        self._gui._undo_stack.push(_undo.QtUndoCommand(self, data))
+        def redo_fnc_():
+            [self._create_node_by_data(x) for x in node_args]
+            [self._connect_path(x) for x in connection_args]
+            return '...'
+
+        def undo_fnc_():
+            [self._disconnect_path(x) for x in connection_args]
+            [self._remove_node_by_data(x) for x in node_args]
+            return '...'
+
+        return self, redo_fnc_, undo_fnc_
 
     def _do_paste(self, node_args):
         node_group = _base._NodeGroup(self, node_args)
@@ -752,3 +837,7 @@ class RootNodeModel(
 
     def _event_sent(self, data):
         self._gui.event_sent.emit(data)
+
+    # parameter
+    def _set_param_root_stack_gui(self, widget):
+        self._param_root_stack_gui = widget

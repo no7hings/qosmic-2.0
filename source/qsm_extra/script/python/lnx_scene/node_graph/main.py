@@ -49,7 +49,7 @@ class QtNodeGraphWidget(QtWidgets.QWidget):
         self._grid_lot.setContentsMargins(*[self._mrg]*4)
         self._grid_lot.setSpacing(2)
 
-        self._root_node_gui = _gui.QtRootNode()
+        self._root_node_gui = _gui.RootNodeGui()
         self._grid_lot.addWidget(self._root_node_gui, 0, 0, 1, 1)
         self._root_node_gui.setFocusProxy(self)
         self._model = self._root_node_gui._model
@@ -79,9 +79,9 @@ class QtNodeGraphWidget(QtWidgets.QWidget):
         painter.drawRect(f_x, f_y, f_w, f_h)
 
 
-class QtParametersWidget(QtWidgets.QWidget):
+class QtNodeParamWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
-        super(QtParametersWidget, self).__init__(*args, **kwargs)
+        super(QtNodeParamWidget, self).__init__(*args, **kwargs)
 
         self._mrg = 4
 
@@ -90,8 +90,8 @@ class QtParametersWidget(QtWidgets.QWidget):
         self._layout.setContentsMargins(*[self._mrg]*4)
         self._layout.setSpacing(2)
 
-        self._param_root_gui_stack = _gui.ParamRootStackGui()
-        self._layout.addWidget(self._param_root_gui_stack)
+        self._param_root_stack_gui = _gui.ParamRootStackGui()
+        self._layout.addWidget(self._param_root_stack_gui)
 
         self._root_node_gui = None
         self._model = None
@@ -99,6 +99,8 @@ class QtParametersWidget(QtWidgets.QWidget):
     def _set_root_node_gui(self, root_node):
         self._root_node_gui = root_node
         self._model = self._root_node_gui._model
+        
+        self._model._set_param_root_stack_gui(self._param_root_stack_gui)
         self._root_node_gui.node_edited_changed.connect(self._load_node_path)
         self._root_node_gui.event_sent.connect(self._event_filter)
 
@@ -109,10 +111,10 @@ class QtParametersWidget(QtWidgets.QWidget):
         event_type = data['event_type']
         if event_type == _base.EventTypes.ParamSetValue:
             node_path = data['node']
-            param_root_gui = self._param_root_gui_stack._get_one(node_path)
+            param_root_gui = self._param_root_stack_gui._get_one(node_path)
             if param_root_gui:
                 param_path = data['param']
                 param_root_gui._get_parameter(param_path)._refresh()
 
     def _load_node(self, node):
-        self._param_root_gui_stack._load_node(node)
+        self._param_root_stack_gui._load_node(node)

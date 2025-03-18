@@ -1548,9 +1548,9 @@ class StgFileOpt(StgPathOpt):
             )
         )
 
-    def set_ext_repath_to(self, ext_tgt):
+    def replace_ext_to(self, ext_tgt):
         return self.__class__(
-            '{}{}'.format(
+            u'{}{}'.format(
                 self.get_path_base(), ext_tgt
             )
         )

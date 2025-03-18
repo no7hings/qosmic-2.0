@@ -29,6 +29,9 @@ class InputModel(_base._PortBase):
         self._gui_data.connection_path = None
         self._data.source = None
 
+    def is_connected(self):
+        return self.has_source()
+
     def has_source(self):
         return bool(self._data.source)
 
@@ -81,6 +84,9 @@ class OutputModel(_base._PortBase):
     def _unregister_connection(self, path):
         if path in self._builtin_data.connection_path_set:
             self._builtin_data.connection_path_set.remove(path)
+
+    def is_connected(self):
+        return self.has_targets()
 
     def has_targets(self):
         return bool(self._builtin_data.connection_path_set)

@@ -254,11 +254,11 @@ class QtEntryForConstant(
             pass
         elif self._value_type is str:
             pass
-            # self._set_validator_use_as_name_()
+            # self._set_value_validator_use_as_name_()
         elif self._value_type is int:
-            self._set_validator_use_as_integer_()
+            self._set_value_validator_use_as_integer_()
         elif self._value_type is float:
-            self._set_validator_use_as_float_()
+            self._set_value_validator_use_as_float_()
 
     def _get_value_type_(self):
         return self._value_type
@@ -302,16 +302,21 @@ class QtEntryForConstant(
         validator = QtGui.QRegExpValidator(reg, self)
         self.setValidator(validator)
 
-    def _set_validator_use_as_name_(self):
+    def _set_value_validator_use_as_name_(self):
         reg = QtCore.QRegExp(r'^[a-zA-Z][a-zA-Z0-9_]+$')
         validator = QtGui.QRegExpValidator(reg, self)
         self.setValidator(validator)
 
-    def _set_validator_use_as_integer_(self):
+    def _set_value_validator_use_as_path_(self):
+        reg = QtCore.QRegExp(r'^/([a-zA-Z][a-zA-Z0-9_]*)*(/[a-zA-Z][a-zA-Z0-9_]*)*$ ')
+        validator = QtGui.QRegExpValidator(reg, self)
+        self.setValidator(validator)
+
+    def _set_value_validator_use_as_integer_(self):
         self.setValidator(QtGui.QIntValidator())
         self._completion_value_auto_()
 
-    def _set_validator_use_as_float_(self):
+    def _set_value_validator_use_as_float_(self):
         self.setValidator(QtGui.QDoubleValidator())
         self._completion_value_auto_()
 

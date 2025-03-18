@@ -376,6 +376,9 @@ class _QtColors:
     NodeBackground = QtGui.QColor(95, 95, 95, 255)
     NodeBackgroundBypass = QtGui.QColor(71, 71, 71, 255)
 
+    NodeImagingBorder = QtGui.QColor(71, 71, 71, 255)
+    NodeImagingBackground = QtGui.QColor(63, 63, 63, 255)
+
     BackdropBorder = QtGui.QColor(95, 95, 95, 255)
     BackdropBackground = QtGui.QColor(63, 63, 127, 31)
     BackdropName = QtGui.QColor(95, 95, 95, 255)
@@ -383,9 +386,14 @@ class _QtColors:
     Port = QtGui.QColor(71, 71, 71, 255)
     AddInput = QtGui.QColor(111, 111, 111, 255)
 
+    Connection = QtGui.QColor(95, 95, 95, 255)
+    ConnectionNew = QtGui.QColor(255, 255, 0, 255)
+
     TypeText = QtGui.QColor(191, 191, 191, 255)
     Text = QtGui.QColor(223, 223, 223)
     TextHover = QtGui.QColor(255, 255, 255)
+
+    Transparent = QtGui.QColor(0, 0, 0, 0)
 
 
 class _Base(object):

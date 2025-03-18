@@ -34,7 +34,7 @@ class _AbsPortGui(
         self._hover_flag = False
         self._w, self._h = w, h
 
-        self._name_aux = _aux.QtTextAux('', self)
+        self._name_aux = _aux.TextAuxGui('', self)
         self._name_aux.hide()
 
     def itemChange(self, change, value):

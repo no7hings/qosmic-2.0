@@ -1,12 +1,14 @@
 # coding:utf-8
 import sys
 
+import lxgui.core as gui_core
+
 from ..core import model as _cor_model
 
 from ..core import gui as _core_gui
 
 
-class Node(_cor_model.StandardNodeModel):
+class Node(_cor_model.ImagingNode):
     NODE_TYPE = 'LoadPremiereXml'
 
     def __init__(self, *args, **kwargs):
@@ -17,6 +19,8 @@ class Node(_cor_model.StandardNodeModel):
         flag, node = root.generate_node(cls.NODE_TYPE, *args, **kwargs)
         if flag is True:
             node.add_output('out')
+
+            node.set_image(gui_core.GuiIcon.get('file/prproj'))
 
             node.parameters.add_group(param_path='input').set_options(
                 gui_name='Input', gui_name_chs='输入'
@@ -46,13 +50,13 @@ class Node(_cor_model.StandardNodeModel):
         return flag, node
 
 
-class NodeGui(_core_gui.QtStandardNode):
+class NodeGui(_core_gui.StandardNodeGui):
     def __init__(self, *args, **kwargs):
         super(NodeGui, self).__init__(*args, **kwargs)
 
 
 def register():
     sys.stdout.write('Register node: {}.\n'.format(Node.NODE_TYPE))
-    _cor_model.RootNodeModel.register_node_type(
+    _cor_model.RootNode.register_node_type(
         Node.NODE_TYPE, Node, NodeGui, 'Load Premiere XML', '加载Premiere XML'
     )

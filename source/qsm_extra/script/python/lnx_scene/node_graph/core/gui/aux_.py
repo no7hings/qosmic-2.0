@@ -10,14 +10,14 @@ from .. import base as _base
 
 
 # aux
-class QtTextAux(
+class TextAuxGui(
     QtWidgets.QGraphicsTextItem,
     _base._QtSbjBase,
 ):
     ENTITY_TYPE = _base.EntityTypes.Aux
 
     def __init__(self, *args):
-        super(QtTextAux, self).__init__(*args)
+        super(TextAuxGui, self).__init__(*args)
         self.setDefaultTextColor(QtGui.QColor(223, 223, 223))
         self._font = gui_qt_core.QtFont.generate(size=10)
         self.setFont(self._font)
@@ -25,14 +25,14 @@ class QtTextAux(
         self.setAcceptHoverEvents(False)
 
 
-class QtIconAux(
+class IconAuxGui(
     QtWidgets.QGraphicsRectItem,
     _base._QtSbjBase,
 ):
     ENTITY_TYPE = _base.EntityTypes.Aux
 
     def __init__(self, *args):
-        super(QtIconAux, self).__init__(*args)
+        super(IconAuxGui, self).__init__(*args)
         self.setAcceptHoverEvents(False)
         self.setOpacity(.5)
 
@@ -48,14 +48,14 @@ class QtIconAux(
         painter.restore()
 
 
-class QtAddInputAux(
+class AddInputAuxGui(
     QtWidgets.QGraphicsRectItem,
     _base._QtSbjBase
 ):
     ENTITY_TYPE = _base.EntityTypes.Aux
 
     def __init__(self, *args):
-        super(QtAddInputAux, self).__init__(*args)
+        super(AddInputAuxGui, self).__init__(*args)
 
         self.setAcceptHoverEvents(True)
 
@@ -77,12 +77,12 @@ class QtAddInputAux(
     def hoverEnterEvent(self, event):
         self._hover_flag = True
         self.update()
-        super(QtAddInputAux, self).hoverEnterEvent(event)
+        super(AddInputAuxGui, self).hoverEnterEvent(event)
 
     def hoverLeaveEvent(self, event):
         self._hover_flag = False
         self.update()
-        super(QtAddInputAux, self).hoverLeaveEvent(event)
+        super(AddInputAuxGui, self).hoverLeaveEvent(event)
 
     def paint(self, painter, option, widget=None):
         painter.save()

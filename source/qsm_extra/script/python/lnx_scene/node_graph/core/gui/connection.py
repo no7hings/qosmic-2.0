@@ -49,7 +49,10 @@ class ConnectionGui(
         self._mid_p = QtCore.QPointF()
         self._tangent_angle = 0
         self._pen_w = 2
-        self._set_color(QtGui.QColor(255, 255, 0, 255))
+
+        self._default_color = _base._QtColors.Connection
+
+        self._set_color(self._default_color)
 
         self._model = _model.ConnectionModel(self)
 
@@ -66,6 +69,10 @@ class ConnectionGui(
 
     def _set_color(self, color):
         self.setPen(self._to_pen(color))
+
+    def _set_default_color(self, color):
+        self._default_color = color
+        self._set_color(self._default_color)
 
     def _to_pen(self, color):
         pen = QtGui.QPen(color, self._pen_w)

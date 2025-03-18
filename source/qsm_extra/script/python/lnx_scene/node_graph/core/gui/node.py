@@ -8,16 +8,17 @@ from . import aux_ as _aux
 from . import port as _port
 
 
-class _AbsQtNode(
+# node
+class _AbsNodeGui(
     QtWidgets.QGraphicsRectItem,
     _base._QtSbjBase
 ):
     def __init__(self, *args, **kwargs):
-        super(_AbsQtNode, self).__init__(*args)
+        super(_AbsNodeGui, self).__init__(*args)
 
 
-# node
-class QtStandardNode(_AbsQtNode):
+# standard
+class StandardNodeGui(_AbsNodeGui):
     ActionFlags = _base._ActionFlags
 
     ENTITY_TYPE = _base.EntityTypes.Node
@@ -25,7 +26,7 @@ class QtStandardNode(_AbsQtNode):
     MODEL_CLS = None
 
     def __init__(self, *args, **kwargs):
-        super(QtStandardNode, self).__init__(*args)
+        super(StandardNodeGui, self).__init__(*args)
         self.setZValue(1)
 
         self.setFlags(
@@ -36,13 +37,13 @@ class QtStandardNode(_AbsQtNode):
 
         self.setAcceptHoverEvents(True)
 
-        self._name_aux = _aux.QtTextAux('', self)
+        self._name_aux = _aux.TextAuxGui('', self)
 
-        self._add_input_aux = _aux.QtAddInputAux(self)
+        self._add_input_aux = _aux.AddInputAuxGui(self)
         self._add_input_aux.hide()
         self._add_input_aux.setZValue(2)
 
-        self._bypass_aux = _aux.QtIconAux(self)
+        self._bypass_aux = _aux.IconAuxGui(self)
         self._bypass_aux.hide()
         self._bypass_aux.setZValue(3)
 
@@ -63,17 +64,17 @@ class QtStandardNode(_AbsQtNode):
             # update position option
             self._model._data.options.position.x = self.x()
             self._model._data.options.position.y = self.y()
-        return super(QtStandardNode, self).itemChange(change, value)
+        return super(StandardNodeGui, self).itemChange(change, value)
 
     def hoverEnterEvent(self, event):
         self._model._update_hover(True)
         self.update()
-        super(QtStandardNode, self).hoverEnterEvent(event)
+        super(StandardNodeGui, self).hoverEnterEvent(event)
 
     def hoverLeaveEvent(self, event):
         self._model._update_hover(False)
         self.update()
-        super(QtStandardNode, self).hoverLeaveEvent(event)
+        super(StandardNodeGui, self).hoverLeaveEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -82,30 +83,32 @@ class QtStandardNode(_AbsQtNode):
                 self._model._on_swap_viewed()
             elif self._model._check_edited(point) is True:
                 self._model._on_swap_edited()
-        super(QtStandardNode, self).mousePressEvent(event)
+        super(StandardNodeGui, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
         self._model.clear_action_flag()
-        super(QtStandardNode, self).mouseReleaseEvent(event)
+        super(StandardNodeGui, self).mouseReleaseEvent(event)
 
     def paint(self, painter, option, widget=None):
         self._model.draw(painter, option)
 
 
-class QtMediaNode(
-    QtStandardNode
+# imaging
+class ImagingNodeGui(
+    StandardNodeGui
 ):
     def __init__(self, *args, **kwargs):
-        super(QtMediaNode, self).__init__(*args, **kwargs)
+        super(ImagingNodeGui, self).__init__(*args, **kwargs)
 
 
-class QtBackdrop(_AbsQtNode):
+# backdrop
+class BackdropGui(_AbsNodeGui):
     ActionFlags = _base._ActionFlags
 
     ENTITY_TYPE = _base.EntityTypes.Backdrop
 
     def __init__(self, *args, **kwargs):
-        super(QtBackdrop, self).__init__(*args)
+        super(BackdropGui, self).__init__(*args)
         self.setZValue(-1)
 
         self.setFlags(
@@ -127,12 +130,12 @@ class QtBackdrop(_AbsQtNode):
     def hoverEnterEvent(self, event):
         self._model._update_hover(True)
         self.update()
-        super(QtBackdrop, self).hoverEnterEvent(event)
+        super(BackdropGui, self).hoverEnterEvent(event)
 
     def hoverLeaveEvent(self, event):
         self._model._update_hover(False)
         self.update()
-        super(QtBackdrop, self).hoverLeaveEvent(event)
+        super(BackdropGui, self).hoverLeaveEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -160,7 +163,7 @@ class QtBackdrop(_AbsQtNode):
                 self._model.do_resize_move(event)
             else:
                 event.ignore()
-        super(QtBackdrop, self).mouseMoveEvent(event)
+        super(BackdropGui, self).mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:

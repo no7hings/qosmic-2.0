@@ -31,11 +31,7 @@ class ConnectionModel(_base._SbjBase):
         self._gui._update_h(*args, **kwargs)
 
     def reset_status(self):
-        self._gui._set_color(
-            QtGui.QColor(255, 255, 0, 255)
-        )
+        self._gui._set_color(self._gui._default_color)
 
     def to_correct_status(self):
-        self._gui._set_color(
-            QtGui.QColor(0, 255, 0, 255)
-        )
+        self._gui._set_color(QtGui.QColor(0, 255, 0, 255))

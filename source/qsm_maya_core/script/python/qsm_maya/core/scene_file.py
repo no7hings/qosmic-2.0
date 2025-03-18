@@ -97,12 +97,18 @@ class SceneFile:
         if os.path.isfile(file_path) is False:
             raise RuntimeError()
 
+        file_type = cls.get_file_type(file_path)
+
+        # auto load dependent plugin
+        if file_type == cls.FILE_TYPE_ALEMBIC:
+            cmds.loadPlugin('AbcImport', quiet=1)
+
         return cmds.file(
             file_path,
             i=1,
             force=1,
             options='v=0;',
-            type=cls.get_file_type(file_path),
+            type=file_type,
             ignoreVersion=1,
             ra=1,
             mergeNamespacesOnClash=1,

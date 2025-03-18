@@ -43,7 +43,6 @@ class _AbsTypedGui(QtWidgets.QWidget):
         pass
 
     def _accept_value(self, value):
-        print(value)
         self._param._set_value(value)
 
     def _set_label(self, text):
@@ -108,6 +107,8 @@ class PathGui(_AbsTypedGui):
 
     def __init__(self, *args, **kwargs):
         super(PathGui, self).__init__(*args, **kwargs)
+
+        self._input_wgt._set_value_entry_validator_use_as_path_()
 
 
 class TupleGui(_AbsTypedGui):
@@ -287,7 +288,8 @@ class _AbsGroupGui(QtWidgets.QWidget):
                 ),
                 text=_base._Dict(
                     rect=QtCore.QRect(),
-                    color=QtGui.QColor(223, 223, 223, 255),
+                    color_0=QtGui.QColor(223, 223, 223, 255),
+                    color_1=QtGui.QColor(127, 127, 127, 255),
                     font=gui_qt_core.QtFont.generate(10)
                 )
             ),
@@ -330,13 +332,7 @@ class _AbsGroupGui(QtWidgets.QWidget):
                 x, y, w, h
             )
 
-            # min_h = self._wgt._lot.minimumSize().height()
-            # print(self, min_h)
-
-            # print(self._wgt.height(), self._wgt_lot.minimumSize(), self)
-
             min_h = h-hed_h
-            # min_h = self._wgt.height()
 
             if self._gui_data.expand_flag is True:
                 self._gui_data.main.rect.setRect(
@@ -354,6 +350,7 @@ class _AbsGroupGui(QtWidgets.QWidget):
             self._gui_data.head.icon.rect.setRect(
                 x+(hed_h-icn_w)/2, y+(hed_h-icn_h)/2, icn_w, icn_h
             )
+
             self._gui_data.head.text.rect.setRect(
                 x+hed_h, y, w-hed_h, hed_h
             )
@@ -384,7 +381,7 @@ class _AbsGroupGui(QtWidgets.QWidget):
                 painter,
                 rect=self._gui_data.head.text.rect,
                 text=self._param.get_label(),
-                color=self._gui_data.head.text.color,
+                color=self._gui_data.head.text.color_0,
                 option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
                 font=self._gui_data.head.text.font
             )
@@ -546,12 +543,31 @@ class ParamRootGui(_AbsGroupGui):
             )
 
             type_text = bsc_core.ensure_string(self._node.get_type_label())
+            path_text = bsc_core.ensure_string(self._node.get_path())
+
+            txt_rect = self._gui_data.head.text.rect
+            txt_w_0 = QtGui.QFontMetrics(self._gui_data.head.text.font).width(path_text)+16
+
+            txt_x, txt_y, txt_w, txt_h = txt_rect.x(), txt_rect.y(), txt_rect.width(), txt_rect.height()
+            txt_rect_0 = QtCore.QRect(txt_x, txt_y, txt_w_0, txt_h)
 
             gui_qt_core.QtItemDrawBase._draw_name_text(
                 painter,
-                rect=self._gui_data.head.text.rect,
-                text='{}( {} )'.format(type_text, self._node.get_path()),
-                color=self._gui_data.head.text.color,
+                rect=txt_rect_0,
+                text=path_text,
+                color=self._gui_data.head.text.color_0,
+                option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
+                font=self._gui_data.head.text.font
+            )
+
+            txt_w_1 = QtGui.QFontMetrics(self._gui_data.head.text.font).width(type_text)+16
+            txt_rect_1 = QtCore.QRect(txt_x+txt_w_0, txt_y, txt_w_1, txt_h)
+
+            gui_qt_core.QtItemDrawBase._draw_name_text(
+                painter,
+                rect=txt_rect_1,
+                text=type_text,
+                color=self._gui_data.head.text.color_1,
                 option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
                 font=self._gui_data.head.text.font
             )
@@ -594,6 +610,11 @@ class ParamRootGui(_AbsGroupGui):
             gui._set_value_type(int)
         elif param.get_type() == 'float':
             gui._set_value_type(float)
+        return gui
+
+    @ParamRootGuiFactory.add_one()
+    def _add_path(self, param):
+        gui = PathGui()
         return gui
 
     @ParamRootGuiFactory.add_one()
@@ -664,8 +685,11 @@ class ParamRootGui(_AbsGroupGui):
             i_widget = i_options.widget
             if i_widget == 'group':
                 self._add_group(i)
+            # constant
             elif i_widget in {'string', 'integer', 'float'}:
                 self._add_constant(i)
+            elif i_widget in {'path'}:
+                self._add_path(i)
             elif i_widget == 'checkbox':
                 self._add_boolean(i)
             elif i_widget == 'button':
@@ -718,6 +742,15 @@ class ParamRootStackGui(QtWidgets.QWidget):
             self._dict[node_path] = param_root_gui
             sys.stdout.write('load parameters: {}\n'.format(node_path))
             self._stack.setCurrentWidget(param_root_gui)
+
+    def _unregister_node(self, node):
+        path = node.get_path()
+        if path in self._dict:
+            param_root_gui = self._dict[path]
+            self._stack.removeWidget(param_root_gui)
+            param_root_gui.close()
+            param_root_gui.deleteLater()
+            self._dict.pop(path)
 
     def _get_current(self):
         return self._stack.currentWidget()
