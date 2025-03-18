@@ -61,9 +61,9 @@ class QtInputForConstant(
         self._entry_widget._set_value_type_(self._value_type)
         self._entry_widget._set_entry_frame_(self)
 
-        self.input_value_accepted = self._entry_widget.entry_value_change_accepted
+        self.input_value_accepted = self._entry_widget.entry_value_accepted
 
-        self._entry_widget.entry_value_change_accepted.connect(self._push_history_)
+        self._entry_widget.entry_value_accepted.connect(self._push_history_)
 
     def _set_value_entry_validator_use_as_name_(self):
         self._entry_widget._set_validator_use_as_name_()

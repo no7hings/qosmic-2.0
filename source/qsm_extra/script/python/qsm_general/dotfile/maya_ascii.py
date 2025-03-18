@@ -5,6 +5,8 @@ import re
 
 from datetime import datetime
 
+import six
+
 import lxbasic.core as bsc_core
 
 from ..core import dcc_base as _dcc_base
@@ -15,9 +17,16 @@ from . import abc_
 class MayaAscii(abc_.AbsDotfile):
     SEP = ';\n'
 
+    @staticmethod
+    def ensure_unicode(s):
+        if six.PY2:
+            return s.decode("gbk")
+        return s.encode("latin1").decode("gbk")
+
     def __init__(self, *args, **kwargs):
         super(MayaAscii, self).__init__(*args, **kwargs)
-
+    
+    @abc_.DotfileCache.get()
     def get_node_dict(self):
         # todo: add a check pattern
         dict_ = collections.OrderedDict()
@@ -64,6 +73,7 @@ class MayaAscii(abc_.AbsDotfile):
 
         return dict_
 
+    @abc_.DotfileCache.get()
     def get_nodes(self):
         list_ = []
         for k, v in self.get_node_dict().items():
@@ -72,6 +82,7 @@ class MayaAscii(abc_.AbsDotfile):
             list_.append(i_obj)
         return list_
 
+    @abc_.DotfileCache.get()
     def get_reference_dict(self):
         query_dict = {}
 
@@ -124,6 +135,8 @@ class MayaAscii(abc_.AbsDotfile):
 
                     query_dict[i_namespace] = i_path
 
+                    i_file = self.ensure_unicode(i_file)
+
                     dict_[i_path] = dict(
                         namespace=i_namespace,
                         node=i_node,
@@ -134,6 +147,7 @@ class MayaAscii(abc_.AbsDotfile):
                     )
         return dict_
 
+    @abc_.DotfileCache.get()
     def get_references(self):
         list_ = []
         for k, v in self.get_reference_dict().items():
@@ -142,6 +156,14 @@ class MayaAscii(abc_.AbsDotfile):
             list_.append(i_obj)
         return list_
 
+    @abc_.DotfileCache.get()
+    def get_reference_files(self):
+        set_ = set()
+        for k, v in self.get_reference_dict().items():
+            set_.add(v['file'])
+        return list(set_)
+
+    @abc_.DotfileCache.get()
     def get_fps(self):
         p_0 = r'currentUnit.*'
 
@@ -154,6 +176,7 @@ class MayaAscii(abc_.AbsDotfile):
                     return _dcc_base.MayaTimeunit.timeunit_to_fps(time_unit)
         return 24
 
+    @abc_.DotfileCache.get()
     def get_frame_range(self):
         p_0 = '.*playbackOptions.*'
 
@@ -166,6 +189,7 @@ class MayaAscii(abc_.AbsDotfile):
                     return int(start_frame), int(end_frame)
         return 1, 24
 
+    @abc_.DotfileCache.get()
     def get_modify_time(self):
         line = self._lines[0]
         p_0 = '.*//Last modified: (.*?)\n.*'

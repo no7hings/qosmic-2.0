@@ -182,7 +182,7 @@ class QtEntryFrame(
 
     def _update_background_color_by_locked_(self, boolean):
         self._frame_background_color = [
-            _qt_core.QtRgba.Dark, _qt_core.QtRgba.Dim
+            _qt_core.QtRgba.Basic, _qt_core.QtRgba.Dim
         ][boolean]
 
     def _set_focused_(self, boolean):

@@ -283,12 +283,15 @@ class QtInputForStorage(
         self._entry_widget.user_key_tab_pressed.connect(
             self.user_key_tab_pressed.emit
         )
-        #
+
+        # override value accept to input widget
+        self.input_value_accepted = self._entry_widget.entry_value_accepted
+
         self._input_info_bubble = _bubble.QtInfoBubble()
         self._input_info_bubble.hide()
         entry_layout.addWidget(self._input_info_bubble)
-        self._input_info_bubble._set_size_mode_(self._input_info_bubble.SizeMode.Fixed)
-        self._input_info_bubble.setFixedWidth(64)
+        self._input_info_bubble._set_size_mode_(self._input_info_bubble.SizeMode.Auto)
+        # self._input_info_bubble.setFixedWidth(64)
         #
         self._input_button_widget = _utility.QtLineWidget()
         self._input_button_widget._set_line_styles_(

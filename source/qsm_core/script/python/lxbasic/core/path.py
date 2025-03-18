@@ -17,6 +17,15 @@ class BscNodeName:
             )
         )
 
+    @staticmethod
+    def to_prettify(text, capitalize=True):
+        _ = re.sub(
+            r'[^\u4e00-\u9fa5a-zA-Z0-9]', '_', text
+        )
+        if capitalize is True:
+            return ' '.join([i if i.isupper() else i.capitalize() for i in _.split('_')])
+        return ' '.join([i if i.isupper() else i.lower() for i in _.split('_')])
+
 
 class BscNodePath:
     @classmethod

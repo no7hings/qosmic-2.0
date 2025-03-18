@@ -4,43 +4,25 @@
     "type": "split",
     "children": [
       {
-        "id": "6f98153375e4a57a",
+        "id": "098df820a7a3800f",
         "type": "tabs",
         "children": [
           {
-            "id": "e33357c3fe4e62b7",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "开发相关/开发文档/解算流程工具.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "159cdc048157b980",
+            "id": "27076d9d959e7d8a",
             "type": "leaf",
             "state": {
               "type": "card-board-view",
               "state": {}
             }
-          },
+          }
+        ]
+      },
+      {
+        "id": "58325e0731ed40ad",
+        "type": "tabs",
+        "children": [
           {
-            "id": "3a5911e81aa83ad0",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "开发相关/开发进度/开发-2025.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "c19965fb8ad32e3b",
+            "id": "cd01c28b19e047e9",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -51,8 +33,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -102,7 +83,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 324.5
+    "width": 324.5,
+    "collapsed": true
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -118,7 +100,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发相关/开发文档/解算流程工具.md",
+                "file": "开发相关/开发进度/优化-2025.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -135,7 +117,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发相关/开发文档/解算流程工具.md",
+                "file": "开发相关/开发进度/优化-2025.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -158,7 +140,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "开发相关/开发文档/解算流程工具.md"
+                "file": "开发相关/开发进度/优化-2025.md"
               }
             }
           },
@@ -180,7 +162,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "开发相关/开发文档/解算流程工具.md"
+                "file": "开发相关/开发进度/优化-2025.md"
               }
             }
           },
@@ -220,13 +202,13 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "159cdc048157b980",
+  "active": "cd01c28b19e047e9",
   "lastOpenFiles": [
-    "开发相关/开发进度/优化-2025.md",
     "开发相关/开发进度/开发-2025.md",
-    "开发相关/开发进度/优化-2024.md",
-    "开发相关/开发进度/BUG-2024.md",
+    "开发相关/开发进度/优化-2025.md",
     "开发相关/开发文档/解算流程工具.md",
+    "开发相关/开发进度/BUG-2024.md",
+    "开发相关/开发进度/优化-2024.md",
     "Pasted image 20250225170819.png",
     "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
     "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",

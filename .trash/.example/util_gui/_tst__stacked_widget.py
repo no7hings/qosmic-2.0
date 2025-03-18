@@ -1,6 +1,6 @@
 import sys
 
-from PySide2.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QStackedWidget, QLabel, QHBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QStackedWidget, QLabel, QHBoxLayout
 
 
 class StackedWidgetExample(QWidget):

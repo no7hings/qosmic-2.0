@@ -6,8 +6,8 @@ from ..core import model as _cor_model
 from ..core import gui as _core_gui
 
 
-class Node(_cor_model._NodeModel):
-    NODE_TYPE = 'replace_maya_scene_reference'
+class Node(_cor_model.StandardNodeModel):
+    NODE_TYPE = 'ReplaceMayaReference'
 
     def __init__(self, *args, **kwargs):
         super(Node, self).__init__(*args, **kwargs)
@@ -17,16 +17,19 @@ class Node(_cor_model._NodeModel):
         flag, node = root.generate_node(cls.NODE_TYPE, *args, **kwargs)
         if flag is True:
             node.set_add_port_enable(True)
-            node.add_input_port('in')
-            node.add_output_port('out')
+            node.set_input_prefix('i0')
+            node.add_input('i0')
+            node.add_output('out')
         return flag, node
 
 
-class NodeGui(_core_gui._QtNode):
+class NodeGui(_core_gui.QtStandardNode):
     def __init__(self, *args, **kwargs):
         super(NodeGui, self).__init__(*args, **kwargs)
 
 
 def register():
     sys.stdout.write('Register node: {}.\n'.format(Node.NODE_TYPE))
-    _cor_model._RootNodeModel.register_node_type(Node, NodeGui)
+    _cor_model.RootNodeModel.register_node_type(
+        Node.NODE_TYPE, Node, NodeGui, 'Replace Maya Reference', '替换MAYA引用'
+    )

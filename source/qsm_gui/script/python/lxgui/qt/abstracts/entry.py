@@ -14,7 +14,7 @@ class AbsQtEntryBaseDef(
     entry_value_changed = qt_signal()
     entry_value_cleared = qt_signal()
 
-    entry_value_change_accepted = qt_signal(object)
+    entry_value_accepted = qt_signal(object)
 
     entry_value_added = qt_signal()
     entry_value_removed = qt_signal()

@@ -212,7 +212,7 @@ class QtInfoBubble(
             w_c = txt_w+s_t*2
 
             if self._size_mode == self.SizeMode.Auto:
-                self.setFixedWidth(int(w_c))
+                self.setFixedWidth(int(txt_w))
                 self._frame_draw_rect.setRect(
                     x+1, y+1, w_c-1, h-1
                 )

@@ -119,11 +119,11 @@ class QtInputForPath(
         )
         # history
         self._build_input_history_(self._history_button)
-        self._cmp_entry_widget.entry_value_change_accepted.connect(self._push_history_)
+        self._cmp_entry_widget.entry_value_accepted.connect(self._push_history_)
 
         self.input_value_changed = self._cmp_entry_widget.entry_value_changed
-        self.input_value_accepted = self._cmp_entry_widget.entry_value_change_accepted
-        self.user_input_value_accepted = self._cmp_entry_widget.user_entry_value_change_accepted
+        self.input_value_accepted = self._cmp_entry_widget.entry_value_accepted
+        self.user_input_value_accepted = self._cmp_entry_widget.user_entry_value_accepted
 
     def _set_next_buffer_fnc_(self, fnc):
         self._next_buffer_fnc = fnc

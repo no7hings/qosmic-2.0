@@ -181,7 +181,7 @@ class QtEntryForTextBubble(
         if super(QtEntryForTextBubble, self)._set_value_(value) is True:
 
             self.entry_value_changed.emit()
-            self.entry_value_change_accepted.emit(value)
+            self.entry_value_accepted.emit(value)
 
         self._refresh_widget_all_()
 
@@ -189,7 +189,7 @@ class QtEntryForTextBubble(
         value = super(QtEntryForTextBubble, self)._set_value_by_index_(index)
         if value:
             self.entry_value_changed.emit()
-            self.entry_value_change_accepted.emit(value)
+            self.entry_value_accepted.emit(value)
 
         self._refresh_widget_all_()
 

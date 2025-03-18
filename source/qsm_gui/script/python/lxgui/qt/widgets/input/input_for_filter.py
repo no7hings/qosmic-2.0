@@ -189,8 +189,8 @@ class QtInputForFilter(
         self.user_input_completion_value_accepted.connect(self._push_history_)
         #
         self._build_input_history_(self._history_button)
-        self._entry_widget.entry_value_change_accepted.connect(self._push_history_)
-        self._entry_widget.entry_value_change_accepted.connect(self._text_bubbles._create_one_)
+        self._entry_widget.entry_value_accepted.connect(self._push_history_)
+        self._entry_widget.entry_value_accepted.connect(self._text_bubbles._create_one_)
         #
         self._text_bubbles._set_entry_widget_(self._entry_widget)
         # noinspection PyUnresolvedReferences

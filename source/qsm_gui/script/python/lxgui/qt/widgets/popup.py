@@ -940,6 +940,7 @@ class QtPopupForCompletion(
     def _do_popup_start_(self, *args, **kwargs):
         if self._entry_widget._get_choose_popup_is_activated_() is True:
             return
+
         input_widget = self.parent()
         self._popup_view._do_clear_()
         _ = input_widget._generate_completion_texts_()
@@ -1005,7 +1006,6 @@ class QtPopupForCompletion(
         selected_item_widget = self._popup_view._get_selected_item_widget_()
         if selected_item_widget:
             text = selected_item_widget._get_name_text_()
-
             self.user_popup_value_accepted.emit(text)
 
         self.user_popup_finished.emit()

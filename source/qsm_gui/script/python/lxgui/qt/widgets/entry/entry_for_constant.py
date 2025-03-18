@@ -82,10 +82,8 @@ class QtEntryForConstant(
         # self.setFocusPolicy(QtCore.Qt.StrongFocus)
 
     def _execute_text_change_accepted_(self):
-        self.user_entry_text_accepted.emit(self.text())
-        self.entry_value_change_accepted.emit(
-            self._get_value_()
-        )
+        self.user_entry_text_accepted.emit(self._get_value_())
+        self.entry_value_accepted.emit(self._get_value_())
 
     def _set_entry_tip_(self, text):
         self.setPlaceholderText(text)
@@ -240,6 +238,9 @@ class QtEntryForConstant(
         if not text:
             self.user_entry_value_cleared.emit()
 
+        # send emit for paste
+        self.entry_value_accepted.emit(self._get_value_())
+
     def _completion_value_auto_(self):
         if self._value_type in {int, float}:
             if not self.text():
@@ -368,9 +369,9 @@ class QtEntryForConstant(
             value_pre = bsc_core.ensure_string(value_pre)
             if self._value_type is not None:
                 value = self._value_type(value)
-            #
+
             if value != value_pre:
-                self.entry_value_change_accepted.emit(value)
+                self.entry_value_accepted.emit(value)
                 self.setText(str(value))
                 # self._do_entry_change_()
         else:

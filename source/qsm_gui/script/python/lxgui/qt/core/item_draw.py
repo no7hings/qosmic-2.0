@@ -105,9 +105,11 @@ class QtItemDrawBase:
         painter.setPen(QtGui.QPen(border_color, border_width))
         painter.setBrush(background_color)
         if border_radius > 0:
+            painter.setRenderHint(painter.Antialiasing, True)
             painter.drawRoundedRect(
                 rect, border_radius, border_radius, QtCore.Qt.AbsoluteSize
             )
+            painter.setRenderHint(painter.Antialiasing, False)
         else:
             painter.drawRect(rect)
 

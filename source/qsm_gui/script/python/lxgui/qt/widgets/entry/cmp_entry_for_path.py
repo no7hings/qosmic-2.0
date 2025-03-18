@@ -34,8 +34,8 @@ class _PathAcceptCmd(QtWidgets.QUndoCommand):
 class QtCmpEntryForPath(QtWidgets.QWidget):
     entry_value_changed = qt_signal()
 
-    entry_value_change_accepted = qt_signal(str)
-    user_entry_value_change_accepted = qt_signal(str)
+    entry_value_accepted = qt_signal(str)
+    user_entry_value_accepted = qt_signal(str)
 
     next_press_clicked = qt_signal()
     next_path_accepted = qt_signal(object)
@@ -202,11 +202,11 @@ class QtCmpEntryForPath(QtWidgets.QWidget):
         c_0, c_1 = path_0.get_depth(), path_1.get_depth()
         # send emit
         self.entry_value_changed.emit()
-        self.entry_value_change_accepted.emit(path_text_0)
+        self.entry_value_accepted.emit(path_text_0)
         # update bubble
         self._entry_bubble_widget._set_path_text_(path_text_0)
         # send user emit
-        self.user_entry_value_change_accepted.emit(path_text_0)
+        self.user_entry_value_accepted.emit(path_text_0)
         # update entry
         #   when backward
         if c_0 < c_1:
@@ -237,7 +237,7 @@ class QtCmpEntryForPath(QtWidgets.QWidget):
         if path_text:
             if path_text != self._get_path_text_():
                 self.entry_value_changed.emit()
-                self.entry_value_change_accepted.emit(path_text)
+                self.entry_value_accepted.emit(path_text)
                 # update bubble
                 self._entry_bubble_widget._set_path_text_(path_text)
                 # update entry

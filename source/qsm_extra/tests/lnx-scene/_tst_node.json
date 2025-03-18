@@ -1,33 +1,82 @@
 {
-    "name": "node_2",
-    "input_ports": {
+    "category": "",
+    "inputs": {},
+    "name": "LoadPremiereXml",
+    "parameters": {
         "input": {
-            "path": "/node_2.input",
-            "connection": null,
-            "type": "closure",
-            "name": "input"
+            "category": "",
+            "name": "input",
+            "param_path": "input",
+            "path": "/LoadPremiereXml.input",
+            "type": "group",
+            "options": {
+                "widget": "group",
+                "gui_name_chs": "输入",
+                "gui_name": "Input"
+            }
+        },
+        "input.file": {
+            "category": "",
+            "name": "file",
+            "default": "",
+            "value": "",
+            "param_path": "input.file",
+            "path": "/LoadPremiereXml.input.file",
+            "type": "string",
+            "options": {
+                "widget": "file",
+                "gui_name_chs": "文件",
+                "gui_name": "Scene",
+                "ext_includes": [
+                    ".xml"
+                ],
+                "open": true
+            }
+        },
+        "analysis_and_build": {
+            "category": "",
+            "name": "analysis_and_build",
+            "default": "",
+            "value": "",
+            "param_path": "analysis_and_build",
+            "path": "/LoadPremiereXml.analysis_and_build",
+            "type": "string",
+            "options": {
+                "widget": "button",
+                "gui_name_chs": "解析并构建",
+                "gui_name": "Analysis and Build",
+                "script": "print("A")",
+                "scripts": ""
+            }
         }
     },
-    "path": "/node_2",
-    "type": "default",
+    "outputs": {
+        "out": {
+            "category": "",
+            "path": "/LoadPremiereXml.out",
+            "type": "output",
+            "name": "out",
+            "port_path": "out"
+        }
+    },
+    "path": "/LoadPremiereXml",
+    "type": "LoadPremiereXml",
     "options": {
         "color": {
-            "r": 83,
-            "b": 140,
-            "g": 55
+            "r": 95,
+            "b": 95,
+            "g": 95
         },
-        "color_enable": true,
+        "add_input_enable": false,
+        "color_enable": false,
+        "bypass": false,
         "position": {
-            "y": 192.0,
-            "x": 255.0
-        }
-    },
-    "output_ports": {
-        "output": {
-            "connections": [],
-            "path": "/node_2.output",
-            "type": "closure",
-            "name": "output"
+            "y": 0.0,
+            "x": 1.0
+        },
+        "size": {
+            "width": 209.0,
+            "height": 24.0
         }
     }
 }
