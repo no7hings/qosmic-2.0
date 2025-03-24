@@ -10,9 +10,13 @@ import lxgui.qt.abstracts as gui_qt_abstracts
 
 import lxgui.qt.widgets as gui_qt_widgets
 
-from .. import base as _base
+from ...core import base as _scn_cor_base
 
-from .. import model as _model
+from ..core import base as _cor_base
+
+from ..core import action as _cor_action
+
+from ..model import node_root as _mdl_node_root
 
 from . import aux_ as _aux
 
@@ -56,9 +60,9 @@ class RootNodeGui(
 ):
     node_edited_changed = qt_signal(str)
 
-    event_sent = qt_signal(dict)
+    event_sent = qt_signal(int, int, dict)
 
-    ActionFlags = _base._ActionFlags
+    ActionFlags = _cor_action.ActionFlags
 
     QT_MENU_CLS = gui_qt_widgets.QtMenu
 
@@ -93,7 +97,7 @@ class RootNodeGui(
 
         self._rubber_band = QtQRubberBand(QtWidgets.QRubberBand.Rectangle, self)
 
-        self._model = _model.RootNode(self)
+        self._model = _mdl_node_root.RootNode(self)
         self._model._builtin_data.connection.gui_cls = _connection.ConnectionGui
 
         self._drag_start_point = None
@@ -165,7 +169,7 @@ class RootNodeGui(
                     disconnect_args, connect_args
                 )
             else:
-                self._model._push_connect_cmd(source_port, target_port)
+                self._model.connect_ports(source_port, target_port)
 
         self.scene().removeItem(self._drag_connection._gui)
 
@@ -194,7 +198,7 @@ class RootNodeGui(
                     disconnect_args, connect_args
                 )
             else:
-                self._model._push_connect_cmd(source_port, target_port)
+                self._model.connect_ports(source_port, target_port)
 
         self.scene().removeItem(self._drag_connection._gui)
         self._drag_connection = None
@@ -226,7 +230,7 @@ class RootNodeGui(
         else:
             source_port = self._drag_connection.get_source()
             target_port = self._drag_connection.get_target()
-            self._model._push_disconnect_cmd(source_port, target_port)
+            self._model.disconnect_ports(source_port, target_port)
 
         self._drag_connection = None
 
@@ -252,7 +256,7 @@ class RootNodeGui(
         else:
             source_port = self._drag_connection.get_source()
             target_port = self._drag_connection.get_target()
-            self._model._push_disconnect_cmd(source_port, target_port)
+            self._model.disconnect_ports(source_port, target_port)
 
         self._drag_connection = None
 
@@ -266,15 +270,18 @@ class RootNodeGui(
                 return i
         return None
 
+    def _get_items_under_cursor(self, pos):
+        scene_pos = self.mapToScene(pos)
+        selection_area = QtGui.QPainterPath()
+        selection_area.addRect(QtCore.QRectF(scene_pos.x()-1, scene_pos.y()-1, 2, 2))
+        return self.scene().items(selection_area, QtCore.Qt.IntersectsItemShape)
+
     def mousePressEvent(self, event):
         if (
             event.button() == QtCore.Qt.LeftButton
             and event.modifiers() in (QtCore.Qt.ShiftModifier, QtCore.Qt.ControlModifier)
         ):
-            scene_pos = self.mapToScene(event.pos())
-            selection_area = QtGui.QPainterPath()
-            selection_area.addRect(QtCore.QRectF(scene_pos.x()-1, scene_pos.y()-1, 2, 2))
-            items_under_cursor = self.scene().items(selection_area, QtCore.Qt.IntersectsItemShape)
+            items_under_cursor = self._get_items_under_cursor(event.pos())
             if items_under_cursor:
                 for i_item in items_under_cursor:
                     if isinstance(i_item, _node.StandardNodeGui):
@@ -287,12 +294,8 @@ class RootNodeGui(
                 self._model._do_rect_selection_start(event)
 
         elif event.button() == QtCore.Qt.LeftButton:
-            scene_pos = self.mapToScene(event.pos())
-            selection_area = QtGui.QPainterPath()
-            selection_area.addRect(QtCore.QRectF(scene_pos.x()-1, scene_pos.y()-1, 2, 2))
-            items_under_cursor = self.scene().items(selection_area, QtCore.Qt.IntersectsItemShape)
+            items_under_cursor = self._get_items_under_cursor(event.pos())
             point = event.pos()
-            item = self.itemAt(point)
             p = self._get_scaled_point(point.x(), point.y())
             self._drag_start_point = point
             # port
@@ -307,41 +310,53 @@ class RootNodeGui(
                     self._accept_source_connect(item)
             elif self._model.is_action_sub_flag_matching(self.ActionFlags.PortTargetHoverMove):
                 self._model.clear_action_sub_flag()
+                item = self._find_item(items_under_cursor, _port.OutputGui)
                 self._accept_target_connect(item)
             # connection
             elif self._model.is_action_sub_flag_matching(self.ActionFlags.ConnectionSourceHoverMove):
                 self._model.clear_action_sub_flag()
+                item = self._find_item(items_under_cursor, _port.OutputGui)
                 self._accept_source_reconnect(item)
             elif self._model.is_action_sub_flag_matching(self.ActionFlags.ConnectionTargetHoverMove):
                 self._model.clear_action_sub_flag()
+                item = self._find_item(items_under_cursor, _port.InputGui)
                 self._accept_target_reconnect(item)
             else:
-                # node
-                if isinstance(item, _node.StandardNodeGui):
+                # do not change if elif order
+                # node add input
+                if self._find_item(items_under_cursor, _aux.AddInputAuxGui):
+                    item = self._find_item(items_under_cursor, _aux.AddInputAuxGui)
+                    node = item.parentItem()._model
+                    self._model._push_add_node_input_cmd(node)
+                # node move
+                elif self._find_item(items_under_cursor, _node.StandardNodeGui):
                     super(RootNodeGui, self).mousePressEvent(event)
                     self._model.set_action_flag(self.ActionFlags.NodePressClick)
                     self._model._do_node_move_start(event)
                 # port
-                elif isinstance(item, _port.OutputGui):
+                elif self._find_item(items_under_cursor, _port.OutputGui):
+                    item = self._find_item(items_under_cursor, _port.OutputGui)
                     self._model.set_action_flag(self.ActionFlags.PortSourcePressClick)
                     self._model.set_action_sub_flag(self.ActionFlags.PortSourcePressClick)
                     self._drag_port = item._model
                     connection_gui = _connection.ConnectionGui(source_port=self._drag_port)
-                    connection_gui._set_default_color(_base._QtColors.ConnectionNew)
+                    connection_gui._set_default_color(_cor_base._QtColors.ConnectionNew)
                     self._drag_connection = connection_gui._model
                     self.scene().addItem(connection_gui)
                     self._drag_connection.update_v(end_point=p)
-                elif isinstance(item, _port.InputGui):
+                elif self._find_item(items_under_cursor, _port.InputGui):
+                    item = self._find_item(items_under_cursor, _port.InputGui)
                     self._model.set_action_flag(self.ActionFlags.PortTargetPressClick)
                     self._model.set_action_sub_flag(self.ActionFlags.PortTargetPressClick)
                     self._drag_port = item._model
                     connection_gui = _connection.ConnectionGui(target_port=self._drag_port)
-                    connection_gui._set_default_color(_base._QtColors.ConnectionNew)
+                    connection_gui._set_default_color(_cor_base._QtColors.ConnectionNew)
                     self._drag_connection = connection_gui._model
                     self.scene().addItem(connection_gui)
                     self._drag_connection.update_v(start_point=p)
                 # connection
-                elif isinstance(item, _connection.ConnectionGui):
+                elif self._find_item(items_under_cursor, _connection.ConnectionGui):
+                    item = self._find_item(items_under_cursor, _connection.ConnectionGui)
                     self._drag_connection = item._model
                     region = item._get_region(p)
                     if region == _connection.ConnectionGui.Regions.Source:
@@ -352,7 +367,8 @@ class RootNodeGui(
                         self._model.set_action_flag(self.ActionFlags.ConnectionTargetPressClick)
                         self._model.set_action_sub_flag(self.ActionFlags.ConnectionTargetPressClick)
                         self._drag_connection.update_v(end_point=p)
-                elif isinstance(item, _node.BackdropGui):
+                elif self._find_item(items_under_cursor, _node.BackdropGui):
+                    item = self._find_item(items_under_cursor, _node.BackdropGui)
                     if item._model._check_scene_move(p):
                         super(RootNodeGui, self).mousePressEvent(event)
                     elif item._model._check_scene_resize(p):
@@ -361,11 +377,6 @@ class RootNodeGui(
                         self._model.set_action_flag(self.ActionFlags.RectSelectPressClick)
                         self._model._do_rect_selection_start(event)
                         super(RootNodeGui, self).mousePressEvent(event)
-                # node add input
-                elif self._find_item(items_under_cursor, _aux.AddInputAuxGui):
-                    item = self._find_item(items_under_cursor, _aux.AddInputAuxGui)
-                    node = item.parentItem()._model
-                    self._model._push_add_node_input_cmd(node)
                 # node bypass
                 elif self._find_item(items_under_cursor, _aux.IconAuxGui):
                     super(RootNodeGui, self).mousePressEvent(event)
@@ -381,13 +392,14 @@ class RootNodeGui(
 
     def mouseMoveEvent(self, event):
         if event.buttons() == QtCore.Qt.NoButton:
+            items_under_cursor = self._get_items_under_cursor(event.pos())
             # port
             if self._model.is_action_sub_flag_matching(
                 self.ActionFlags.PortSourcePressClick, self.ActionFlags.PortSourceHoverMove
             ):
                 if self._drag_connection is not None:
                     point = event.pos()
-                    item = self.itemAt(point)
+                    item = self._find_item(items_under_cursor, _port.InputGui)
                     p = self._get_scaled_point(point.x(), point.y())
 
                     if isinstance(item, _port.InputGui):
@@ -402,7 +414,7 @@ class RootNodeGui(
             ):
                 if self._drag_connection is not None:
                     point = event.pos()
-                    item = self.itemAt(point)
+                    item = self._find_item(items_under_cursor, _port.OutputGui)
                     p = self._get_scaled_point(point.x(), point.y())
                     if isinstance(item, _port.OutputGui):
                         self._drag_connection.to_correct_status()
@@ -417,7 +429,7 @@ class RootNodeGui(
             ):
                 if self._drag_connection is not None:
                     point = event.pos()
-                    item = self.itemAt(point)
+                    item = self._find_item(items_under_cursor, _port.OutputGui)
                     p = self._get_scaled_point(point.x(), point.y())
 
                     if isinstance(item, _port.OutputGui):
@@ -432,7 +444,7 @@ class RootNodeGui(
             ):
                 if self._drag_connection is not None:
                     point = event.pos()
-                    item = self.itemAt(point)
+                    item = self._find_item(items_under_cursor, _port.InputGui)
                     p = self._get_scaled_point(point.x(), point.y())
                     if isinstance(item, _port.InputGui):
                         self._drag_connection.to_correct_status()
@@ -444,7 +456,7 @@ class RootNodeGui(
             super(RootNodeGui, self).mouseMoveEvent(event)
         elif event.buttons() == QtCore.Qt.LeftButton:
             point = event.pos()
-            item = self.itemAt(point)
+            items_under_cursor = self._get_items_under_cursor(event.pos())
             p = self._get_scaled_point(point.x(), point.y())
             # node
             if self._model.is_action_flag_matching(
@@ -456,6 +468,7 @@ class RootNodeGui(
             elif self._model.is_action_flag_matching(
                 self.ActionFlags.PortSourcePressClick, self.ActionFlags.PortSourcePressMove
             ):
+                item = self._find_item(items_under_cursor, _port.InputGui)
                 if isinstance(item, _port.InputGui):
                     self._drag_connection.to_correct_status()
                 else:
@@ -466,6 +479,7 @@ class RootNodeGui(
             elif self._model.is_action_flag_matching(
                 self.ActionFlags.PortTargetPressClick, self.ActionFlags.PortTargetPressMove
             ):
+                item = self._find_item(items_under_cursor, _port.OutputGui)
                 if isinstance(item, _port.OutputGui):
                     self._drag_connection.to_correct_status()
                 else:
@@ -477,6 +491,7 @@ class RootNodeGui(
             elif self._model.is_action_flag_matching(
                 self.ActionFlags.ConnectionSourcePressClick, self.ActionFlags.ConnectionSourcePressMove
             ):
+                item = self._find_item(items_under_cursor, _port.OutputGui)
                 if isinstance(item, _port.OutputGui):
                     self._drag_connection.to_correct_status()
                 else:
@@ -487,6 +502,7 @@ class RootNodeGui(
             elif self._model.is_action_flag_matching(
                 self.ActionFlags.ConnectionTargetPressClick, self.ActionFlags.ConnectionTargetPressMove
             ):
+                item = self._find_item(items_under_cursor, _port.InputGui)
                 if isinstance(item, _port.InputGui):
                     self._drag_connection.to_correct_status()
                 else:
@@ -514,7 +530,7 @@ class RootNodeGui(
 
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
-            item = self.itemAt(event.pos())
+            items_under_cursor = self._get_items_under_cursor(event.pos())
             # node
             if self._model.is_action_flag_matching(
                 self.ActionFlags.NodePressClick, self.ActionFlags.NodePressMove
@@ -524,16 +540,20 @@ class RootNodeGui(
             # connect
             elif self._model.is_action_flag_matching(self.ActionFlags.PortSourcePressMove):
                 self._model.clear_action_sub_flag()
+                item = self._find_item(items_under_cursor, _port.InputGui)
                 self._accept_source_connect(item)
             elif self._model.is_action_flag_matching(self.ActionFlags.PortTargetPressMove):
                 self._model.clear_action_sub_flag()
+                item = self._find_item(items_under_cursor, _port.OutputGui)
                 self._accept_target_connect(item)
             # reconnect
             elif self._model.is_action_flag_matching(self.ActionFlags.ConnectionSourcePressMove):
                 self._model.clear_action_sub_flag()
+                item = self._find_item(items_under_cursor, _port.OutputGui)
                 self._accept_source_reconnect(item)
             elif self._model.is_action_flag_matching(self.ActionFlags.ConnectionTargetPressMove):
                 self._model.clear_action_sub_flag()
+                item = self._find_item(items_under_cursor, _port.InputGui)
                 self._accept_target_reconnect(item)
             # rect selection
             elif self._model.is_action_flag_matching(self.ActionFlags.RectSelectPressMove):
@@ -587,9 +607,13 @@ class RootNodeGui(
 
         # data from item
         item = self.itemAt(event.pos())
-        if item:
+        items_under_cursor = self._get_items_under_cursor(event.pos())
+        if items_under_cursor:
             menu = None
-            if item.ENTITY_TYPE in {_base.EntityTypes.Node, _base.EntityTypes.Backdrop}:
+            item = self._find_item(
+                items_under_cursor, _node._AbsNodeGui
+            )
+            if item.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Node, _scn_cor_base.EntityTypes.Backdrop}:
                 item_menu_data = item._model.get_menu_data()
                 item_menu_content = item._model.get_menu_content()
                 item_menu_data_generate_fnc = item._model.get_menu_data_generate_fnc()

@@ -1,15 +1,12 @@
 # coding:utf-8
-
-import lxbasic.core as bsc_core
-
 from lxgui.qt.core.wrap import *
 
-from .. import base as _base
+from ...core import base as _scn_cor_base
 
 
 # connection model
-class ConnectionModel(_base._SbjBase):
-    ENTITY_TYPE = _base.EntityTypes.Connection
+class ConnectionModel(_scn_cor_base._SbjBase):
+    ENTITY_TYPE = _scn_cor_base.EntityTypes.Connection
 
     def __init__(self, gui):
         super(ConnectionModel, self).__init__(gui)

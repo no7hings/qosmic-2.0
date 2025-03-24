@@ -25,6 +25,10 @@ class UndoActions(enum.IntEnum):
     NodeAddInput = 0x22
     NodeInputConnectAuto = 0x23
 
+    NodeBypass = 0x25
+
+    ParamSetValue = 0x30
+
 
 class GuiUndoCmd(QtWidgets.QUndoCommand):
     @classmethod
@@ -38,14 +42,15 @@ class GuiUndoCmd(QtWidgets.QUndoCommand):
         self._action = action
         self._redo_fnc = redo_fnc
         self._undo_fnc = undo_fnc
+        self._result = None
 
     def redo(self):
-        result = self._redo_fnc() or ''
-        self.trace('Redo', self._action, result)
+        self._result = self._redo_fnc() or ''
+        self.trace('Execute', self._action, '...')
 
     def undo(self):
-        result = self._undo_fnc() or ''
-        self.trace('Undo', self._action, result)
+        self._result = self._undo_fnc() or ''
+        self.trace('Undo', self._action, '...')
 
 
 class GuiUndoFactory:
@@ -55,8 +60,10 @@ class GuiUndoFactory:
             def wrapper(*args, **kwargs):
                 args = fnc(*args, **kwargs)
                 if args:
-                    root_model, redo_fnc, undo_fnc = args
-                    root_model._gui._undo_stack.push(GuiUndoCmd(action, redo_fnc, undo_fnc))
-                return args
+                    undo_stack, redo_fnc, undo_fnc = args
+                    undo_cmd = GuiUndoCmd(action, redo_fnc, undo_fnc)
+                    undo_stack.push(undo_cmd)
+                    return undo_cmd._result
+                return None
             return wrapper
         return decorator

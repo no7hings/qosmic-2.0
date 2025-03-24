@@ -12,9 +12,9 @@ symlink_kwargs = qsm_gnl_core.Sync().generate_sync_kwargs(
     studio, version_path
 )
 
-print symlink_kwargs
+print (symlink_kwargs)
 
-# if symlink_kwargs:
-#     qsm_lzy_sync.TaskClient.new_task(
-#         'sync', **symlink_kwargs
-#     )
+if symlink_kwargs:
+    qsm_lzy_sync.TaskClient.new_task(
+        'sync', **symlink_kwargs
+    )

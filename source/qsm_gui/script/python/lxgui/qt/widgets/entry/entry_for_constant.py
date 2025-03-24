@@ -53,7 +53,8 @@ class QtEntryForConstant(
         self._minimum = 0
 
         # noinspection PyUnresolvedReferences
-        self.returnPressed.connect(self.user_entry_finished.emit)
+        # fixme, emit sent in event filter?
+        # self.returnPressed.connect(self.user_entry_finished.emit)
         # noinspection PyUnresolvedReferences
         self.returnPressed.connect(self._execute_text_change_accepted_)
         # emit send by setText

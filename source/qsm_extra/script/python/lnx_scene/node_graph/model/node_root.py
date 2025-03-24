@@ -1,5 +1,6 @@
 # coding:utf-8
 import collections
+
 import contextlib
 
 import functools
@@ -14,17 +15,23 @@ from lxgui.qt.core.wrap import *
 
 import lxgui.qt.core as gui_qt_core
 
-from .. import base as _base
+from ...core import base as _scn_cor_base
 
-from .. import undo as _undo
+from ..core import base as _cor_base
+
+from ..core import action as _cor_action
+
+from ..core import undo as _cor_undo
+
+from ...stage import model as _stg_model
 
 
 # scene model
 class RootNode(
-    _base._SbjBase,
-    _base._AbsAction
+    _scn_cor_base._SbjBase,
+    _cor_action._AbsAction
 ):
-    ActionFlags = _base._ActionFlags
+    ActionFlags = _cor_action.ActionFlags
 
     NODE_GUI_CLS_DICT = dict()
 
@@ -41,32 +48,32 @@ class RootNode(
         self._gui_data.connection_dict = collections.OrderedDict()
 
         # connection
-        self._builtin_data.connection = _base._Dict(
+        self._builtin_data.connection = _scn_cor_base._Dict(
             gui_cls=None,
         )
 
         self._init_action()
         self._pan_start = QtCore.QPoint()
 
-        self._gui_data.zoom = _base._Dict(
+        self._gui_data.zoom = _scn_cor_base._Dict(
             factor=1.2
         )
-        self._gui_data.track = _base._Dict(
+        self._gui_data.track = _scn_cor_base._Dict(
             start_point=QtCore.QPointF()
         )
 
         # node move
-        self._gui_data.node_move = _base._Dict(
+        self._gui_data.node_move = _scn_cor_base._Dict(
             node_position_data=[]
         )
 
         # rect selection
-        self._gui_data.rect_selection = _base._Dict(
+        self._gui_data.rect_selection = _scn_cor_base._Dict(
             origin=QtCore.QPoint()
         )
 
         # menu
-        self._gui_data.menu = _base._Dict(
+        self._gui_data.menu = _scn_cor_base._Dict(
             content=None,
             content_generate_fnc=None,
             data=None,
@@ -74,10 +81,10 @@ class RootNode(
             name_dict=dict()
         )
 
-        self._gui_data.viewed = _base._Dict(
+        self._gui_data.viewed = _scn_cor_base._Dict(
             node_path_set=set()
         )
-        self._gui_data.edited = _base._Dict(
+        self._gui_data.edited = _scn_cor_base._Dict(
             node_path_set=set()
         )
 
@@ -90,6 +97,11 @@ class RootNode(
 
         # node parameters
         self._param_root_stack_gui = None
+
+        self._stage_model = None
+
+    def get_gui_scene(self):
+        return self._gui.scene()
 
     # image cache
     def remove_image_cache(self, key):
@@ -138,39 +150,63 @@ class RootNode(
                 ]
             ]
 
-    @_undo.GuiUndoFactory.push(_undo.UndoActions.NodeAdd)
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeAdd)
     def _push_add_node_cmd(self, type_name, *args, **kwargs):
-        def redo_fnc_():
+        def _redo_fnc():
             if type_name not in self.NODE_GUI_CLS_DICT:
                 raise RuntimeError()
 
             node_data = self.NODE_GUI_CLS_DICT[type_name]
             model_cls = node_data['model_cls']
 
-            flag, node = model_cls.create(self, path=new_node_path)
+            flag, node = self._generate_node(type_name, **kwargs)
+            model_cls.create(node)
             w, h = node.get_size()
-            node.set_position((p.x()-w/2, p.y()-h/2))
-            return new_node_path
+            node._set_position((p.x()-w/2, p.y()-h/2))
+            return flag, node
 
-        def undo_fnc_():
-            node = self.get_node(new_node_path)
+        def _undo_fnc():
+            node = self.get_node(node_path_new)
             if node:
                 self._unregister_node(node)
-            return new_node_path
+            return node_path_new
 
-        new_node_path = self._find_next_node_path(self._data.nodes, type_name)
+        if 'path' in kwargs:
+            node_path_new = kwargs['path']
+        else:
+            node_path_new = self._find_next_node_path(self._data.nodes, type_name, **kwargs)
+
         point = QtGui.QCursor().pos()
         p = self._gui._map_from_global(point)
 
-        return self, redo_fnc_, undo_fnc_
+        return self.undo_stack, _redo_fnc, _undo_fnc
 
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeAdd)
     def add_node(self, type_name, *args, **kwargs):
-        if type_name not in self.NODE_GUI_CLS_DICT:
-            raise RuntimeError()
+        # do not remove *args
+        def _redo_fnc():
+            if type_name not in self.NODE_GUI_CLS_DICT:
+                raise RuntimeError()
 
-        node_data = self.NODE_GUI_CLS_DICT[type_name]
-        model_cls = node_data['model_cls']
-        return model_cls.create(self, *args, **kwargs)
+            node_data = self.NODE_GUI_CLS_DICT[type_name]
+            model_cls = node_data['model_cls']
+
+            flag, node = self._generate_node(type_name, **kwargs)
+            model_cls.create(node)
+            return flag, node
+
+        def _undo_fnc():
+            node = self.get_node(node_path_new)
+            if node:
+                self._unregister_node(node)
+            return node_path_new
+
+        if 'path' in kwargs:
+            node_path_new = kwargs['path']
+        else:
+            node_path_new = self._find_next_node_path(self._data.nodes, type_name, **kwargs)
+
+        return self.undo_stack, _redo_fnc, _undo_fnc
 
     # viewed
     def has_viewed_nodes(self):
@@ -187,9 +223,24 @@ class RootNode(
         self._gui_data.viewed.node_path_set.clear()
 
     def set_viewed_node(self, node):
-        self._clear_viewed_node()
-        node._update_viewed(True)
-        self._gui_data.viewed.node_path_set.add(node.get_path())
+        node_path = node.get_path()
+        if node_path not in self._gui_data.viewed.node_path_set:
+            self._clear_viewed_node()
+
+            node._update_viewed(True)
+            self._gui_data.viewed.node_path_set.add(node.get_path())
+
+            self._update_stage_for(node)
+            return True
+        return False
+
+    def _update_stage_for(self, node):
+        self._stage_model = _stg_model.StageRoot()
+        node_queue = node.get_node_queue()
+        for i_node in node_queue:
+            i_node.compute(i_node, self._stage_model)
+
+        print(self._stage_model)
 
     # edited
     def has_edited_nodes(self):
@@ -206,11 +257,14 @@ class RootNode(
         self._gui_data.edited.node_path_set.clear()
 
     def set_edited_node(self, node):
-        self._clear_edited_node()
-        node._update_edited(True)
-        self._gui_data.edited.node_path_set.add(node.get_path())
-
-        self._gui.node_edited_changed.emit(node.get_path())
+        node_path = node.get_path()
+        if node_path not in self._gui_data.edited.node_path_set:
+            self._clear_edited_node()
+            node._update_edited(True)
+            self._gui_data.edited.node_path_set.add(node_path)
+            self._gui.node_edited_changed.emit(node_path)
+            return True
+        return False
 
     def crate_by_data(self, data):
         pass
@@ -229,15 +283,13 @@ class RootNode(
             type_gui_name_chs=type_gui_name_chs,
         )
 
-    def generate_node(self, type_name, name=None, parent_path=None, path=None, *args, **kwargs):
+    def _generate_node(self, type_name, name=None, parent_path=None, path=None, *args, **kwargs):
         if type_name not in self.NODE_GUI_CLS_DICT:
             raise RuntimeError()
 
         if path is None:
-            if name is None:
-                path = self._find_next_node_path(self._data.nodes, type_name, parent_path)
-            else:
-                path = '{}/{}'.format(parent_path or '', name)
+            prefix = name or type_name
+            path = self._find_next_node_path(self._data.nodes, prefix, parent_path)
 
         if path in self._data.nodes:
             return False, self._data.nodes[path]
@@ -249,6 +301,7 @@ class RootNode(
         self._gui.scene().addItem(gui)
 
         model = gui._model
+        model._set_root_model(self)
         model._set_type(
             type_name, gui_name=node_data['type_gui_name'], gui_name_chs=node_data['type_gui_name_chs']
         )
@@ -262,7 +315,7 @@ class RootNode(
     def _create_node_by_data(self, data):
         type_name = data['type']
         name = data['name']
-        flag, node = self.generate_node(type_name, name)
+        flag, node = self._generate_node(type_name, name)
         node.set_options(data['options'])
         for k, v in data.get('inputs', {}).items():
             node._add_input_by_data(v)
@@ -278,11 +331,22 @@ class RootNode(
             self._unregister_node(node)
 
     def _unregister_node(self, node):
+        # remove in param root
         if self._param_root_stack_gui is not None:
             self._param_root_stack_gui._unregister_node(node)
 
-        path = node.get_path()
-        self._data.nodes.pop(path)
+        node_path = node.get_path()
+
+        # remove view
+        if node_path in self._gui_data.viewed.node_path_set:
+            self._gui_data.viewed.node_path_set.remove(node_path)
+
+        # remove edit
+        if node_path in self._gui_data.edited.node_path_set:
+            self._gui_data.edited.node_path_set.remove(node_path)
+
+        # remove from scene
+        self._data.nodes.pop(node_path)
         gui = node._gui
         self._gui.scene().removeItem(gui)
         del gui
@@ -293,19 +357,22 @@ class RootNode(
     def set_node_position(self, node_path, position):
         self.get_node(node_path).set_position(position)
 
+    def _set_node_position(self, node_path, position):
+        self.get_node(node_path)._set_position(position)
+
     def set_node_size(self, node_path, size):
         self.get_node(node_path).set_size(size)
 
     def add_node_input(self, node_path, port_path):
-        self.get_node(node_path).add_input(port_path=port_path)
+        self.get_node(node_path)._generate_input(port_path=port_path)
 
     def remove_node_input(self, node_path, port_path):
-        self.get_node(node_path).remove_input(port_path)
+        self.get_node(node_path)._remove_input(port_path)
 
     def node_auto_connect_input(self, node_path, port_flag, port_path, source_path):
         node = self.get_node(node_path)
         if port_flag is True:
-            node.add_input(port_path)
+            node._generate_input(port_path=port_path)
 
         target_path = bsc_core.BscAttributePath.join_by(node.get_path(), port_path)
         self._connect_port_paths(source_path, target_path)
@@ -318,7 +385,7 @@ class RootNode(
         self._disconnect_port_paths(source_path, target_path)
 
         if port_flag is True:
-            node.remove_input(port_path)
+            node._remove_input(port_path)
 
     # connection
     def create_connection(self, source_arg, target_args):
@@ -400,28 +467,29 @@ class RootNode(
         self._gui_data.connection_dict[path] = model
         return True, model
 
-    @_undo.GuiUndoFactory.push(_undo.UndoActions.PortConnect)
-    def _push_connect_cmd(self, source_port, target_port):
-        def redo_fnc_():
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.PortConnect)
+    def connect_ports(self, source_port, target_port):
+        def _redo_fnc():
             self._connect_path(path)
             return path
 
-        def undo_fnc_():
+        def _undo_fnc():
             self._disconnect_path(path)
             return path
 
         path = self._join_to_connection_path(source_port.get_path(), target_port.get_path())
         if self.has_connection(path) is True:
             return
-        return self, redo_fnc_, undo_fnc_
+
+        return self.undo_stack, _redo_fnc, _undo_fnc
     
-    @_undo.GuiUndoFactory.push(_undo.UndoActions.NodeInputConnectAuto)
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeInputConnectAuto)
     def _push_auto_connect_input_cmd(self, source_port, target_node):
-        def redo_fnc_():
+        def _redo_fnc():
             self.node_auto_connect_input(node_path, port_flag, port_path, source_path)
             return node_path, port_path
 
-        def undo_fnc_():
+        def _undo_fnc():
             self.node_auto_disconnect_input(node_path, port_flag, port_path, source_path)
             return node_path, port_path
 
@@ -430,7 +498,8 @@ class RootNode(
         node_path, port_flag, port_path, source_path = (
             target_node.get_path(), flag, port.get_port_path(), source_port.get_path()
         )
-        return self, redo_fnc_, undo_fnc_
+
+        return self.undo_stack, _redo_fnc, _undo_fnc
 
     # disconnect
     def _disconnect_path(self, path):
@@ -455,18 +524,19 @@ class RootNode(
             return True
         return False
 
-    @_undo.GuiUndoFactory.push(_undo.UndoActions.PortDisconnect)
-    def _push_disconnect_cmd(self, source_port, target_port):
-        def redo_fnc_():
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.PortDisconnect)
+    def disconnect_ports(self, source_port, target_port):
+        def _redo_fnc():
             self._disconnect_path(path)
             return path
 
-        def undo_fnc_():
+        def _undo_fnc():
             self._connect_path(path)
             return path
 
         path = self._join_to_connection_path(source_port.get_path(), target_port.get_path())
-        return self, redo_fnc_, undo_fnc_
+
+        return self.undo_stack, _redo_fnc, _undo_fnc
 
     def _reconnect_path(self, path_0, path_1):
         self._disconnect_path(path_0)
@@ -486,19 +556,20 @@ class RootNode(
         self.remove_connection_path(path)
         self._connect_ports(source_port, target_port_new)
 
-    @_undo.GuiUndoFactory.push(_undo.UndoActions.PortReconnect)
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.PortReconnect)
     def _push_reconnect_cmd(self, disconnect_args, connect_args):
-        def redo_fnc_():
+        def _redo_fnc():
             self._reconnect_paths(disconnect_paths, connect_paths)
             return '...'
 
-        def undo_fnc():
+        def _undo_fnc():
             self._reconnect_paths(connect_paths, disconnect_paths)
             return '...'
 
         disconnect_paths = [self._join_to_connection_path(x[0].get_path(), x[1].get_path()) for x in disconnect_args]
         connect_paths = [self._join_to_connection_path(x[0].get_path(), x[1].get_path()) for x in connect_args]
-        return self, redo_fnc_, undo_fnc
+
+        return self.undo_stack, _redo_fnc, _undo_fnc
 
     def get_connection(self, path):
         return self._gui_data.connection_dict.get(path)
@@ -567,7 +638,7 @@ class RootNode(
 
         items = self._gui.scene().selectedItems()
         for i in items:
-            if i.ENTITY_TYPE in {_base.EntityTypes.Node}:
+            if i.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Node}:
                 i_node = i._model
                 node_position_data.append(
                     (i_node.get_path(), i_node.get_position())
@@ -578,14 +649,14 @@ class RootNode(
     def _do_node_move(self, event):
         pass
 
-    @_undo.GuiUndoFactory.push(_undo.UndoActions.NodeMove)
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeMove)
     def _push_node_move_cmd(self):
-        def redo_fnc_():
-            [self.set_node_position(*x) for x in redo_data]
+        def _redo_fnc():
+            [self._set_node_position(*x) for x in redo_data]
             return '...'
 
-        def undo_fnc_():
-            [self.set_node_position(*x) for x in undo_data]
+        def _undo_fnc():
+            [self._set_node_position(*x) for x in undo_data]
             return '...'
 
         redo_data = []
@@ -597,27 +668,31 @@ class RootNode(
             i_node = self.get_node(i_node_path)
             i_node_position_new = i_node.get_position()
 
-            redo_data.append((i_node_path, i_node_position_new))
-            undo_data.append((i_node_path, i_node_position))
-        return self, redo_fnc_, undo_fnc_
+            if i_node_position_new != i_node_position:
+                redo_data.append((i_node_path, i_node_position_new))
+                undo_data.append((i_node_path, i_node_position))
+
+        if redo_data or undo_data:
+            return self.undo_stack, _redo_fnc, _undo_fnc
 
     def _do_node_move_end(self):
         self._push_node_move_cmd()
 
     # node add input
-    @_undo.GuiUndoFactory.push(_undo.UndoActions.NodeAddInput)
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeAddInput)
     def _push_add_node_input_cmd(self, node):
-        def redo_fnc_():
+        def _redo_fnc():
             self.add_node_input(node_path, port_path_new)
             return node_path, port_path_new
         
-        def undo_fnc_():
+        def _undo_fnc():
             self.remove_node_input(node_path, port_path_new)
             return node_path, port_path_new
 
         node_path = node.get_path()
         port_path_new = node._generate_next_input_path()
-        return self, redo_fnc_, undo_fnc_
+
+        return self.undo_stack, _redo_fnc, _undo_fnc
 
     # rect selection
     def _do_rect_selection_start(self, event):
@@ -641,62 +716,62 @@ class RootNode(
 
         if event.modifiers() == QtCore.Qt.ShiftModifier:
             for i_item in selected_items:
-                if i_item.ENTITY_TYPE in {_base.EntityTypes.Node}:
+                if i_item.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Node}:
                     i_item.setSelected(True)
         elif event.modifiers() == QtCore.Qt.ControlModifier:
             for i_item in selected_items:
-                if i_item.ENTITY_TYPE in {_base.EntityTypes.Node}:
+                if i_item.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Node}:
                     i_item.setSelected(False)
         else:
             self._gui.scene().clearSelection()
             for i_item in selected_items:
-                if i_item.ENTITY_TYPE in {_base.EntityTypes.Node}:
+                if i_item.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Node}:
                     i_item.setSelected(True)
     
-    @_undo.GuiUndoFactory.push(_undo.UndoActions.Delete)
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.Delete)
     def _push_delete_cmd(self, node_args, connection_args):
-        def redo_fnc_():
+        def _redo_fnc():
             [self._disconnect_path(x) for x in connection_args]
             [self._remove_node_by_data(x) for x in node_args]
             return '...'
         
-        def undo_fnc_():
+        def _undo_fnc():
             [self._create_node_by_data(x) for x in node_args]
             [self._connect_path(x) for x in connection_args]
             return '...'
 
-        return self, redo_fnc_, undo_fnc_
+        return self.undo_stack, _redo_fnc, _undo_fnc
 
-    @_undo.GuiUndoFactory.push(_undo.UndoActions.Cut)
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.Cut)
     def _push_cut_cmd(self, node_args, connection_args):
-        def redo_fnc_():
+        def _redo_fnc():
             [self._disconnect_path(x) for x in connection_args]
             [self._remove_node_by_data(x) for x in node_args]
             return '...'
 
-        def undo_fnc_():
+        def _undo_fnc():
             [self._create_node_by_data(x) for x in node_args]
             [self._connect_path(x) for x in connection_args]
             return '...'
 
-        return self, redo_fnc_, undo_fnc_
+        return self.undo_stack, _redo_fnc, _undo_fnc
 
-    @_undo.GuiUndoFactory.push(_undo.UndoActions.Paste)
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.Paste)
     def _push_paste_cmd(self, node_args, connection_args):
-        def redo_fnc_():
+        def _redo_fnc():
             [self._create_node_by_data(x) for x in node_args]
             [self._connect_path(x) for x in connection_args]
             return '...'
 
-        def undo_fnc_():
+        def _undo_fnc():
             [self._disconnect_path(x) for x in connection_args]
             [self._remove_node_by_data(x) for x in node_args]
             return '...'
 
-        return self, redo_fnc_, undo_fnc_
+        return self.undo_stack, _redo_fnc, _undo_fnc
 
     def _do_paste(self, node_args):
-        node_group = _base._NodeGroup(self, node_args)
+        node_group = _cor_base._NodeGroup(self, node_args)
         node_args, connection_args = node_group.generate_create_data()
 
         self._push_paste_cmd(node_args, connection_args)
@@ -707,14 +782,14 @@ class RootNode(
         connection_args = []
         items = self._gui.scene().selectedItems()
         for i in items:
-            if i.ENTITY_TYPE in {_base.EntityTypes.Node}:
+            if i.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Node}:
                 i_node = i._model
                 i_connection_path_set = i_node.get_connection_path_set()
                 connection_args.extend(list(i_connection_path_set))
                 node_args.append(i_node.to_data())
-            elif i.ENTITY_TYPE in {_base.EntityTypes.Backdrop}:
+            elif i.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Backdrop}:
                 node_args.append(i._model.to_data())
-            elif i.ENTITY_TYPE in {_base.EntityTypes.Connection}:
+            elif i.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Connection}:
                 connection_args.append(i._model.get_path())
 
         if node_args or connection_args:
@@ -724,7 +799,7 @@ class RootNode(
         node_args = []
         items = self._gui.scene().selectedItems()
         for i in items:
-            if i.ENTITY_TYPE in {_base.EntityTypes.Node, _base.EntityTypes.Backdrop}:
+            if i.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Node, _scn_cor_base.EntityTypes.Backdrop}:
                 node_args.append(i._model.to_data())
 
         if node_args:
@@ -743,10 +818,10 @@ class RootNode(
         node_args = []
         items = self._gui.scene().selectedItems()
         for i in items:
-            if i.ENTITY_TYPE in {_base.EntityTypes.Node, _base.EntityTypes.Backdrop}:
+            if i.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Node, _scn_cor_base.EntityTypes.Backdrop}:
                 node_args.append(i._model.to_data())
 
-        node_group = _base._NodeGroup(self, node_args)
+        node_group = _cor_base._NodeGroup(self, node_args)
         node_args, connection_args = node_group.generate_create_data()
 
         self._push_paste_cmd(node_args, connection_args)
@@ -756,12 +831,12 @@ class RootNode(
         connection_args = []
         items = self._gui.scene().selectedItems()
         for i in items:
-            if i.ENTITY_TYPE in {_base.EntityTypes.Node}:
+            if i.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Node}:
                 i_node = i._model
                 i_connection_path_set = i_node.get_connection_path_set()
                 connection_args.extend(list(i_connection_path_set))
                 node_args.append(i_node.to_data())
-            elif i.ENTITY_TYPE in {_base.EntityTypes.Connection}:
+            elif i.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Connection}:
                 connection_args.append(i._model.get_path())
 
         if node_args or connection_args:
@@ -781,7 +856,8 @@ class RootNode(
     def _on_paste_action(self):
         text = gui_qt_core.QtUtil.read_clipboard()
         if text.startswith('{"QSMMineData": '):
-            dict_ = json.loads(text)
+            # keep order
+            dict_ = json.loads(text, object_pairs_hook=collections.OrderedDict)
             mine_data = dict_['QSMMineData']
             type_ = mine_data['type']
             if type_ == 'scene':
@@ -798,7 +874,7 @@ class RootNode(
         selection_area.addRect(QtCore.QRectF(p.x()-1, p.y()-1, 2, 2))
         items = self._gui.scene().items(selection_area, QtCore.Qt.IntersectsItemShape)
         for i in items:
-            if i.ENTITY_TYPE in {_base.EntityTypes.Node}:
+            if i.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Node}:
                 i._model._on_swap_bypass()
 
     def clear_selection(self):
@@ -831,23 +907,32 @@ class RootNode(
         return self._gui_data.menu.name_dict
 
     def to_json(self):
-        return _base._ToJson(self._data._dict).generate()
+        return _scn_cor_base._ToJson(self._data._dict).generate()
 
     def to_data(self):
         return self._json_str_to_data(self.to_json())
 
-    def _event_sent(self, data):
-        self._gui.event_sent.emit(data)
+    def _event_sent(self, event_type, event_id, data):
+        self._gui.event_sent.emit(event_type, event_id, data)
 
     # parameter
     def _set_param_root_stack_gui(self, widget):
         self._param_root_stack_gui = widget
 
     # undo
+    @contextlib.contextmanager
+    def undo_group(self, name=None):
+        self._gui._undo_group_index += 1
+        self.undo_stack.beginMacro('{}{}'.format(name or '', self._gui._undo_group_index))
+        yield
+        self.undo_stack.endMacro()
 
     @contextlib.contextmanager
-    def undo_group(self, name=''):
-        self._gui._undo_group_index += 1
-        self._gui._undo_stack.beginMacro('{}{}'.format(name, self._gui._undo_group_index))
+    def disable_undo(self):
+        self.undo_stack.setActive(False)
         yield
-        self._gui._undo_stack.endMacro()
+        self.undo_stack.setActive(True)
+
+    @property
+    def undo_stack(self):
+        return self._gui._undo_stack

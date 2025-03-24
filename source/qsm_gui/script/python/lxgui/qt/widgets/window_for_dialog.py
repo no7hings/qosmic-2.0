@@ -13,6 +13,8 @@ from .. import abstracts as _qt_abstracts
 
 from .input import input_for_constant as _ipt_for_constant
 
+from .input import input_for_array as _ipt_for_array
+
 from .input import input_for_content as _qt_wgt_ipt_for_content
 
 from . import base as _base
@@ -423,6 +425,9 @@ class QtInputDialog(
 
     def _set_info_text_(self, text):
         self._info_label._set_info_text_(text)
+
+    def _set_ok_label_(self, text):
+        self._ok_button._set_name_text_(text)
 
     def _do_ok_(self):
         if self._verbose is True:

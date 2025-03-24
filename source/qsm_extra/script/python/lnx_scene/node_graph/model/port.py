@@ -1,10 +1,10 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-from .. import base as _base
+from ...core import base as _scn_cor_base
 
 
-class InputModel(_base._PortBase):
+class InputModel(_scn_cor_base._PortBase):
     def __init__(self, *args, **kwargs):
         super(InputModel, self).__init__(*args, **kwargs)
         self._gui_data.connection_path = None
@@ -61,7 +61,7 @@ class InputModel(_base._PortBase):
         self.root_model._connect_ports(source_port, self)
 
 
-class OutputModel(_base._PortBase):
+class OutputModel(_scn_cor_base._PortBase):
     def __init__(self, *args, **kwargs):
         super(OutputModel, self).__init__(*args, **kwargs)
         
@@ -114,10 +114,11 @@ class OutputModel(_base._PortBase):
         if not isinstance(target_port, InputModel):
             raise RuntimeError()
 
-        self.root_model._connect_ports(self, target_port)
+        self.root_model.connect_ports(self, target_port)
     
     def connect_node(self, target_node):
         target_port = target_node.get_connectable_input()
         if target_port is None:
             raise RuntimeError()
-        self.root_model._connect_ports(self, target_port)
+
+        self.root_model.connect_ports(self, target_port)

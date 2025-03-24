@@ -137,7 +137,7 @@ class AbsDtbSqlBaseOpt(object):
     def _execute_cmd_as_new_connection(self, cmd, args=None):
         if self.DEBUGGER_ENABLE is True:
             self._print_execute_cmd(cmd)
-        #
+
         cnt = self.create_connection_from_db(self._dtb)
         cnt.row_factory = AbsDtbSqlBaseOpt.dict_factory
         csr = cnt.cursor()

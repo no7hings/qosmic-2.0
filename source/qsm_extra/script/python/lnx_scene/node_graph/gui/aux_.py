@@ -6,15 +6,17 @@ from lxgui.qt.core.wrap import *
 
 import lxgui.qt.core as gui_qt_core
 
-from .. import base as _base
+from ...core import base as _scn_cor_base
+
+from ..core import base as _cor_base
 
 
 # aux
 class TextAuxGui(
     QtWidgets.QGraphicsTextItem,
-    _base._QtSbjBase,
+    _cor_base._SbjGuiBase,
 ):
-    ENTITY_TYPE = _base.EntityTypes.Aux
+    ENTITY_TYPE = _scn_cor_base.EntityTypes.Aux
 
     def __init__(self, *args):
         super(TextAuxGui, self).__init__(*args)
@@ -27,14 +29,13 @@ class TextAuxGui(
 
 class IconAuxGui(
     QtWidgets.QGraphicsRectItem,
-    _base._QtSbjBase,
+    _cor_base._SbjGuiBase,
 ):
-    ENTITY_TYPE = _base.EntityTypes.Aux
+    ENTITY_TYPE = _scn_cor_base.EntityTypes.Aux
 
     def __init__(self, *args):
         super(IconAuxGui, self).__init__(*args)
         self.setAcceptHoverEvents(False)
-        self.setOpacity(.5)
 
     def paint(self, painter, option, widget=None):
         painter.save()
@@ -50,16 +51,16 @@ class IconAuxGui(
 
 class AddInputAuxGui(
     QtWidgets.QGraphicsRectItem,
-    _base._QtSbjBase
+    _cor_base._SbjGuiBase
 ):
-    ENTITY_TYPE = _base.EntityTypes.Aux
+    ENTITY_TYPE = _scn_cor_base.EntityTypes.Aux
 
     def __init__(self, *args):
         super(AddInputAuxGui, self).__init__(*args)
 
         self.setAcceptHoverEvents(True)
 
-        self._set_color(_base._QtColors.AddInput)
+        self._set_color(_cor_base._QtColors.AddInput)
 
         self._hover_flag = False
 
@@ -111,3 +112,14 @@ class AddInputAuxGui(
         )
 
         painter.restore()
+
+
+class ActionAuxGui(
+    QtWidgets.QGraphicsRectItem,
+    _cor_base._SbjGuiBase
+):
+    ENTITY_TYPE = _scn_cor_base.EntityTypes.Aux
+
+    def __init__(self, *args):
+        super(ActionAuxGui, self).__init__(*args)
+        self.setAcceptHoverEvents(False)

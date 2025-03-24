@@ -22,18 +22,10 @@ class TaskClient(object):
             host=_configure.SyncServer.HOST, port=_configure.SyncServer.PORT
         )
 
-        options = dict(
+        data = dict(
             fnc=fnc,
             args=args,
             kwargs=kwargs
-        )
-
-        task_id = _base.SyncBase._generate_task_id()
-        json_path = _base.SyncBase._generate_task_json_path(task_id)
-        _base.SyncBase._write_json(json_path, options)
-
-        data = dict(
-            json=json_path
         )
 
         headers = {'Content-Type': 'application/json'}

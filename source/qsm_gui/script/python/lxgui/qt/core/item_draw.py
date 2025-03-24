@@ -102,15 +102,20 @@ class QtItemDrawBase:
 
     @classmethod
     def _draw_frame(cls, painter, rect, border_color, background_color, border_width=1, border_radius=0):
-        painter.setPen(QtGui.QPen(border_color, border_width))
-        painter.setBrush(background_color)
         if border_radius > 0:
+            painter.setPen(QtGui.QPen(border_color, border_width))
+            painter.setBrush(background_color)
             painter.setRenderHint(painter.Antialiasing, True)
             painter.drawRoundedRect(
                 rect, border_radius, border_radius, QtCore.Qt.AbsoluteSize
             )
             painter.setRenderHint(painter.Antialiasing, False)
         else:
+            pen = QtGui.QPen(border_color, border_width)
+            pen.setCapStyle(QtCore.Qt.SquareCap)
+            pen.setJoinStyle(QtCore.Qt.MiterJoin)
+            painter.setPen(pen)
+            painter.setBrush(background_color)
             painter.drawRect(rect)
 
     @classmethod

@@ -7,21 +7,23 @@ import lxgui.core as gui_core
 
 from lxgui.qt.core.wrap import *
 
-from .. import base as _base
+from ...core import base as _scn_cor_base
 
-from .. import model as _model
+from ..core import base as _cor_base
+
+from ..model import connection as _mdl_connection
 
 
 # connection
 class ConnectionGui(
     QtWidgets.QGraphicsPathItem,
-    _base._QtSbjBase,
+    _cor_base._SbjGuiBase,
 ):
     class Regions(enum.IntEnum):
         Source = 0
         Target = 1
 
-    ENTITY_TYPE = _base.EntityTypes.Connection
+    ENTITY_TYPE = _scn_cor_base.EntityTypes.Connection
 
     @classmethod
     def _calculate_midpoint_and_angle(cls, p0, p1, p2, p3):
@@ -50,11 +52,11 @@ class ConnectionGui(
         self._tangent_angle = 0
         self._pen_w = 2
 
-        self._default_color = _base._QtColors.Connection
+        self._default_color = _cor_base._QtColors.Connection
 
         self._set_color(self._default_color)
 
-        self._model = _model.ConnectionModel(self)
+        self._model = _mdl_connection.ConnectionModel(self)
 
         self._start_p = QtCore.QPointF()
         self._end_p = QtCore.QPointF()

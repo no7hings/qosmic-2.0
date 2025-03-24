@@ -47,7 +47,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
                 i_cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script(
                     'method=test-process'
                 )
-            self._d._view_model.submit_cmd_script(
+            self._d._model.submit_cmd_script(
                 'TEST',
                 '测试-{}'.format(i),
                 i_cmd_script,
@@ -56,7 +56,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
                 ),
                 application='maya'
             )
-            # _, i_item = self._d._view_model.create_item(
+            # _, i_item = self._d._model.create_item(
             #     '/test-{}'.format(i)
             # )
             # i_item._item_model._update_percent(random.choice(percents))
@@ -68,7 +68,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         button = qt_widgets.QtPressButton()
         self.add_widget(button)
         button._set_name_text_('Stop')
-        button.press_clicked.connect(self._d._view_model.do_quit)
+        button.press_clicked.connect(self._d._model.do_quit)
 
     def completed_fnc(self, index):
         print(index)

@@ -487,6 +487,9 @@ class PrxPressButton(gui_prx_abstracts.AbsPrxWidget):
     def set_action_enable(self, boolean):
         self._qt_widget._set_action_enable_(boolean)
 
+    def set_auto_width(self):
+        self._qt_widget._set_auto_width_()
+
 
 class PrxCheckItem(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = _qt_wgt_button.QtCheckButton

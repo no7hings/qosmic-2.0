@@ -1,7 +1,11 @@
 # coding:utf-8
 from lxgui.qt.core.wrap import *
 
-from .. import base as _base
+from ...core import base as _scn_cor_base
+
+from ..core import base as _cor_base
+
+from ..core import action as _cor_action
 
 from . import aux_ as _aux
 
@@ -11,7 +15,7 @@ from . import port as _port
 # node
 class _AbsNodeGui(
     QtWidgets.QGraphicsRectItem,
-    _base._QtSbjBase
+    _cor_base._SbjGuiBase
 ):
     def __init__(self, *args, **kwargs):
         super(_AbsNodeGui, self).__init__(*args)
@@ -19,9 +23,9 @@ class _AbsNodeGui(
 
 # standard
 class StandardNodeGui(_AbsNodeGui):
-    ActionFlags = _base._ActionFlags
+    ActionFlags = _cor_action.ActionFlags
 
-    ENTITY_TYPE = _base.EntityTypes.Node
+    ENTITY_TYPE = _scn_cor_base.EntityTypes.Node
 
     MODEL_CLS = None
 
@@ -46,10 +50,18 @@ class StandardNodeGui(_AbsNodeGui):
         self._bypass_aux = _aux.IconAuxGui(self)
         self._bypass_aux.hide()
         self._bypass_aux.setZValue(3)
+        self._bypass_aux.setOpacity(.5)
 
         self._model = self.MODEL_CLS(self)
         self._model._builtin_data.port.input.gui_cls = _port.InputGui
         self._model._builtin_data.port.output.gui_cls = _port.OutputGui
+
+        # glow_effect = QtWidgets.QGraphicsDropShadowEffect()
+        # glow_effect.setBlurRadius(20)
+        # glow_effect.setOffset(0, 0)
+        # glow_effect.setColor(QtGui.QColor(255, 255, 0, 255))
+        #
+        # self.setGraphicsEffect(glow_effect)
 
     def __str__(self):
         return 'Node(path={})'.format(
@@ -103,9 +115,9 @@ class ImagingNodeGui(
 
 # backdrop
 class BackdropGui(_AbsNodeGui):
-    ActionFlags = _base._ActionFlags
+    ActionFlags = _cor_action.ActionFlags
 
-    ENTITY_TYPE = _base.EntityTypes.Backdrop
+    ENTITY_TYPE = _scn_cor_base.EntityTypes.Backdrop
 
     def __init__(self, *args, **kwargs):
         super(BackdropGui, self).__init__(*args)

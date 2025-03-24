@@ -3,14 +3,14 @@ import qsm_lazy_sync.client as c
 
 c.TaskClient.requeue_tasks()
 
-# # symlink
-# for i in range(10):
-#     c.TaskClient.new_task(
-#         'symlink',
-#         source='X:/QSM_TST/QSM/release/assets/chr/lily/cfx.cfx_rig/lily.cfx.cfx_rig.v005',
-#         target='Z:/temporaries/copy_test/symlink/lily.cfx.cfx_rig.v{}'.format(str(i).zfill(3)),
-#         replace=True
-#     )
+# symlink
+for i in range(10):
+    c.TaskClient.new_task(
+        'symlink',
+        source='X:/QSM_TST/QSM/release/assets/chr/lily/cfx.cfx_rig/lily.cfx.cfx_rig.v005',
+        target='Z:/temporaries/copy_test/symlink/lily.cfx.cfx_rig.v{}'.format(str(i).zfill(3)),
+        replace=True
+    )
 #
 # copytree
 # for i in range(50):

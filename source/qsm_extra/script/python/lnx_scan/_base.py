@@ -11,6 +11,10 @@ import lxbasic.resource as bsc_resource
 
 import lxbasic.storage as bsc_storage
 
+__all__ = [
+    'EntityTypes'
+]
+
 
 class GlobalVar:
     SYNC_CACHE_FLAG = True

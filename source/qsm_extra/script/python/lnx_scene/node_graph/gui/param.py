@@ -1,6 +1,9 @@
 # coding:utf-8
-import json
 import sys
+
+import functools
+
+import json
 
 import lxbasic.core as bsc_core
 
@@ -12,7 +15,105 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
-from .. import base as _base
+from ...core import base as _scn_cor_base
+
+
+class _AbsCustomGui(QtWidgets.QWidget):
+    QT_INPUT_WGT_CLS = None
+
+    def __init__(self, *args, **kwargs):
+        super(_AbsCustomGui, self).__init__(*args, **kwargs)
+
+        self._param = None
+
+        self._wgt_lot = QtWidgets.QHBoxLayout(self)
+        self._wgt_lot.setContentsMargins(*[0]*4)
+        self._wgt_lot.setSpacing(2)
+
+    def _build_input_wgt(self):
+        pass
+
+    def _set_param(self, param):
+        self._param = param
+        self._set_label(param.get_label())
+        self._build_input_wgt()
+
+    def _accept_value(self, value):
+        pass
+
+    def _set_label(self, text):
+        pass
+
+    def _set_value(self, value):
+        pass
+
+    def _set_lock_mode(self):
+        pass
+
+    def _set_label_width(self, w):
+        pass
+
+    def _get_label_minimum_width(self):
+        return -1
+
+    def _refresh(self):
+        pass
+
+    def _exec_script_fnc(self, script):
+        if script:
+            node = self._param.node
+            exec (script)
+
+
+# button
+class ButtonGui(_AbsCustomGui):
+    QT_INPUT_WGT_CLS = gui_qt_widgets.QtPressButton
+
+    def __init__(self, *args, **kwargs):
+        super(ButtonGui, self).__init__(*args, **kwargs)
+
+        self.setFixedHeight(24)
+
+        self._input_wgt = self.QT_INPUT_WGT_CLS()
+        self._wgt_lot.addWidget(self._input_wgt)
+
+        self._input_wgt.press_clicked.connect(self._exec_script)
+
+    def _exec_script(self):
+        self._exec_script_fnc(self._param.options.get('script'))
+
+    def _set_label(self, text):
+        self._input_wgt._set_name_text_(text)
+
+
+class ButtonsGui(_AbsCustomGui):
+    QT_INPUT_WGT_CLS = gui_qt_widgets.QtPressButton
+
+    def __init__(self, *args, **kwargs):
+        super(ButtonsGui, self).__init__(*args, **kwargs)
+
+        self.setFixedHeight(24)
+
+    def _build_input_wgt(self):
+        ui_language = bsc_core.BscEnviron.get_gui_language()
+        options = self._param.get_options()
+        data = options.get('data')
+        if data:
+            for i in data:
+                i_input_wgt = self.QT_INPUT_WGT_CLS()
+                self._wgt_lot.addWidget(i_input_wgt)
+
+                i_gui_name = i.get('gui_name')
+                if ui_language == 'chs':
+                    i_label = i.get('gui_name_chs')
+                else:
+                    i_label = i_gui_name
+                i_label = i_label or 'N/a'
+                i_input_wgt._set_name_text_(i_label)
+
+                i_script = i.get('script')
+                if i_script:
+                    i_input_wgt.press_clicked.connect(functools.partial(self._exec_script_fnc, i_script))
 
 
 class _AbsTypedGui(QtWidgets.QWidget):
@@ -72,8 +173,6 @@ class JsonGui(_AbsTypedGui):
 
         self.setFixedHeight(96)
 
-        self._input_wgt._set_entry_enable_(False)
-
         self._input_wgt._get_resize_handle_()._set_resize_target_(self)
         self._input_wgt._set_resize_enable_(True)
         self._input_wgt._set_input_entry_drop_enable_(True)
@@ -81,7 +180,9 @@ class JsonGui(_AbsTypedGui):
         self._input_wgt._set_size_policy_height_fixed_mode_()
 
     def _set_value(self, value):
-        self._input_wgt._set_value_(json.dumps(value, indent=4))
+        self._input_wgt._set_value_(
+            json.dumps(value, indent=4)
+        )
 
 
 # constant
@@ -148,32 +249,6 @@ class CheckboxGui(_AbsTypedGui):
 
     def _set_value(self, value):
         self._input_wgt._set_checked_(value)
-
-
-# button
-class ButtonGui(_AbsTypedGui):
-    QT_INPUT_WGT_CLS = gui_qt_widgets.QtPressButton
-
-    def __init__(self, *args, **kwargs):
-        super(ButtonGui, self).__init__(*args, **kwargs)
-
-        self.setFixedHeight(24)
-
-        self._label_wgt.hide()
-
-        self._input_wgt.press_clicked.connect(self._exec_script)
-
-    def _set_label(self, text):
-        self._input_wgt._set_name_text_(text)
-
-    def _set_value(self, value):
-        pass
-
-    def _exec_script(self):
-        script = self._param.options.get('script')
-        if script:
-            node = self._param.node
-            exec (script)
 
 
 # storage
@@ -264,21 +339,21 @@ class _AbsGroupGui(QtWidgets.QWidget):
 
         self._group_wgt = None
 
-        self._gui_data = _base._Dict(
+        self._gui_data = _scn_cor_base._Dict(
             indent=8,
             force_refresh_flag=True,
             rect=QtCore.QRect(),
             expand_flag=True,
 
-            main=_base._Dict(
+            main=_scn_cor_base._Dict(
                 rect=QtCore.QRect(),
                 border_color=QtGui.QColor(79, 79, 79, 255),
                 background_color=QtGui.QColor(71, 71, 71, 255),
             ),
-            head=_base._Dict(
+            head=_scn_cor_base._Dict(
                 size=(-1, self.GROUP_HEAD_H),
                 rect=QtCore.QRect(),
-                icon=_base._Dict(
+                icon=_scn_cor_base._Dict(
                     rect=QtCore.QRect(),
                     frame_size=(20, 20),
                     size=(12, 12),
@@ -286,14 +361,14 @@ class _AbsGroupGui(QtWidgets.QWidget):
                     file_0=gui_core.GuiIcon.get('expand-open'),
                     file_1=gui_core.GuiIcon.get('expand-close'),
                 ),
-                text=_base._Dict(
+                text=_scn_cor_base._Dict(
                     rect=QtCore.QRect(),
                     color_0=QtGui.QColor(223, 223, 223, 255),
                     color_1=QtGui.QColor(127, 127, 127, 255),
                     font=gui_qt_core.QtFont.generate(10)
                 )
             ),
-            body=_base._Dict(
+            body=_scn_cor_base._Dict(
                 rect=QtCore.QRect(),
                 border_color=QtGui.QColor(63, 63, 63, 255),
                 background_color=QtGui.QColor(63, 63, 63, 255),
@@ -482,7 +557,7 @@ class GroupGui(_AbsGroupGui):
 
 class ParamRootGuiFactory:
     @staticmethod
-    def add_one(scheme='value'):
+    def add(scheme='typed'):
         def decorator(fnc):
             def wrapper(self, param, *args, **kwargs):
                 param_path = param.get_param_path()
@@ -498,7 +573,7 @@ class ParamRootGuiFactory:
                 group_wgt._add_wgt(gui)
                 if scheme == 'group':
                     gui._set_group_wgt(group_wgt)
-                elif scheme == 'value':
+                elif scheme == 'typed':
                     options = param.get_options()
                     if options.get('lock'):
                         gui._set_lock_mode()
@@ -591,17 +666,17 @@ class ParamRootGui(_AbsGroupGui):
             return self._dict[parent_path]
         return self
 
-    @ParamRootGuiFactory.add_one('group')
+    @ParamRootGuiFactory.add('group')
     def _add_group(self, param):
         gui = GroupGui()
         return gui
 
-    @ParamRootGuiFactory.add_one()
+    @ParamRootGuiFactory.add()
     def _add_json(self, param):
         gui = JsonGui()
         return gui
 
-    @ParamRootGuiFactory.add_one()
+    @ParamRootGuiFactory.add()
     def _add_constant(self, param):
         gui = ConstantGui()
         if param.get_type() == 'string':
@@ -612,22 +687,27 @@ class ParamRootGui(_AbsGroupGui):
             gui._set_value_type(float)
         return gui
 
-    @ParamRootGuiFactory.add_one()
+    @ParamRootGuiFactory.add()
     def _add_path(self, param):
         gui = PathGui()
         return gui
 
-    @ParamRootGuiFactory.add_one()
+    @ParamRootGuiFactory.add()
     def _add_boolean(self, param):
         gui = CheckboxGui()
         return gui
 
-    @ParamRootGuiFactory.add_one()
+    @ParamRootGuiFactory.add()
     def _add_button(self, param):
         gui = ButtonGui()
         return gui
 
-    @ParamRootGuiFactory.add_one()
+    @ParamRootGuiFactory.add()
+    def _add_buttons(self, param):
+        gui = ButtonsGui()
+        return gui
+
+    @ParamRootGuiFactory.add()
     def _add_file(self, param):
         options = param.get_options()
         gui = FileGui()
@@ -639,7 +719,7 @@ class ParamRootGui(_AbsGroupGui):
             raise RuntimeError()
         return gui
 
-    @ParamRootGuiFactory.add_one()
+    @ParamRootGuiFactory.add()
     def _add_directory(self, param):
         options = param.get_options()
         gui = DirectoryGui()
@@ -651,7 +731,7 @@ class ParamRootGui(_AbsGroupGui):
             raise RuntimeError()
         return gui
 
-    @ParamRootGuiFactory.add_one()
+    @ParamRootGuiFactory.add()
     def _add_tuple(self, param):
 
         options = param.get_options()
@@ -671,7 +751,7 @@ class ParamRootGui(_AbsGroupGui):
 
         return gui
 
-    @ParamRootGuiFactory.add_one()
+    @ParamRootGuiFactory.add()
     def _add_array(self, param):
         options = param.get_options()
         gui = ArrayGui()
@@ -694,6 +774,8 @@ class ParamRootGui(_AbsGroupGui):
                 self._add_boolean(i)
             elif i_widget == 'button':
                 self._add_button(i)
+            elif i_widget == 'buttons':
+                self._add_buttons(i)
             elif i_widget == 'file':
                 self._add_file(i)
             elif i_widget == 'directory':

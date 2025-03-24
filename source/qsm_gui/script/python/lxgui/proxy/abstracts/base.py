@@ -297,7 +297,7 @@ class AbsPrxWindow(AbsPrx):
                             )
                         )
                         i.close_window()
-        #
+
         gui_qt_core.QtUtil.show_qt_window(self._qt_widget, pos, size)
 
     def run_fnc_delay(self, fnc, delay_time):

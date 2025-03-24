@@ -11,9 +11,9 @@ from lxgui.qt.core.wrap import *
 
 import lxgui.qt.core as gui_qt_core
 
-from .core import base as _base
+from .node_graph.core import event as _cor_event
 
-from .core import gui as _gui
+from .node_graph import gui as _ng_cor_gui
 
 from . import node_type as _node_type
 
@@ -49,12 +49,12 @@ class QtNodeGraphWidget(QtWidgets.QWidget):
         self._grid_lot.setContentsMargins(*[self._mrg]*4)
         self._grid_lot.setSpacing(2)
 
-        self._root_node_gui = _gui.RootNodeGui()
+        self._root_node_gui = _ng_cor_gui.RootNodeGui()
         self._grid_lot.addWidget(self._root_node_gui, 0, 0, 1, 1)
         self._root_node_gui.setFocusProxy(self)
         self._model = self._root_node_gui._model
 
-        self._scene = _gui.QtScene()
+        self._scene = _ng_cor_gui.QtScene()
         self._root_node_gui.setScene(self._scene)
         self._scene._set_model(self._model)
         self._scene.setSceneRect(-5000, -5000, 10000, 10000)
@@ -90,7 +90,7 @@ class QtNodeParamWidget(QtWidgets.QWidget):
         self._layout.setContentsMargins(*[self._mrg]*4)
         self._layout.setSpacing(2)
 
-        self._param_root_stack_gui = _gui.ParamRootStackGui()
+        self._param_root_stack_gui = _ng_cor_gui.ParamRootStackGui()
         self._layout.addWidget(self._param_root_stack_gui)
 
         self._root_node_gui = None
@@ -99,7 +99,7 @@ class QtNodeParamWidget(QtWidgets.QWidget):
     def _set_root_node_gui(self, root_node):
         self._root_node_gui = root_node
         self._model = self._root_node_gui._model
-        
+
         self._model._set_param_root_stack_gui(self._param_root_stack_gui)
         self._root_node_gui.node_edited_changed.connect(self._load_node_path)
         self._root_node_gui.event_sent.connect(self._event_filter)
@@ -107,9 +107,8 @@ class QtNodeParamWidget(QtWidgets.QWidget):
     def _load_node_path(self, path):
         self._load_node(self._model.get_node(path))
 
-    def _event_filter(self, data):
-        event_type = data['event_type']
-        if event_type == _base.EventTypes.ParamSetValue:
+    def _event_filter(self, event_type, event_id, data):
+        if event_type == _cor_event.EventTypes.ParamSetValue:
             node_path = data['node']
             param_root_gui = self._param_root_stack_gui._get_one(node_path)
             if param_root_gui:
@@ -118,3 +117,34 @@ class QtNodeParamWidget(QtWidgets.QWidget):
 
     def _load_node(self, node):
         self._param_root_stack_gui._load_node(node)
+
+
+class QtStageWidget(QtWidgets.QWidget):
+    def __init__(self, *args, **kwargs):
+        super(QtStageWidget, self).__init__(*args, **kwargs)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setFocusPolicy(QtCore.Qt.ClickFocus)
+        self.setPalette(gui_qt_core.GuiQtDcc.generate_qt_palette())
+
+        self._mrg = 4
+
+        self._grid_lot = QtWidgets.QGridLayout(self)
+        self._grid_lot.setContentsMargins(*[self._mrg]*4)
+        self._grid_lot.setSpacing(2)
+
+    def paintEvent(self, event):
+        painter = QtGui.QPainter(self)
+
+        mrg = self._mrg
+        x, y, w, h = 0, 0, self.width(), self.height()
+
+        f_x, f_y, f_w, f_h = x+1, y+1, w-2, h-2
+        is_focus = self.hasFocus()
+
+        pen = QtGui.QPen(QtGui.QColor(*[(71, 71, 71, 255), (95, 95, 95, 255)][is_focus]))
+        pen_width = [1, 2][is_focus]
+
+        pen.setWidth(pen_width)
+        painter.setPen(pen)
+        painter.setBrush(QtGui.QColor(*gui_core.GuiRgba.Dim))
+        painter.drawRect(f_x, f_y, f_w, f_h)

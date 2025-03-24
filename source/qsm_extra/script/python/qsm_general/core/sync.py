@@ -36,7 +36,7 @@ class Sync(object):
     def generate_sync_kwargs(self, studio, path):
         target_studios = self._configure.get('studio_targets_map.{}'.format(studio))
         kwargs = dict(
-            source=path,
+            source=self.driver_map.convert_path(studio, path),
             targets=[],
             replace=False,
         )

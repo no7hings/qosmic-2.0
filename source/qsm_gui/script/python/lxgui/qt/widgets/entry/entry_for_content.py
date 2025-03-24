@@ -31,7 +31,7 @@ class QtEntryForContent(
 
     def __init__(self, *args, **kwargs):
         super(QtEntryForContent, self).__init__(*args, **kwargs)
-        self.setWordWrapMode(QtGui.QTextOption.WrapAnywhere)
+        self.setWordWrapMode(QtGui.QTextOption.WrapAtWordBoundaryOrAnywhere)
         self.installEventFilter(self)
         # self.setAcceptRichText(False)
         # self.setWordWrapMode(QtGui.QTextOption.NoWrap)
@@ -41,7 +41,7 @@ class QtEntryForContent(
         self.setPalette(qt_palette)
         self.setAutoFillBackground(True)
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
-        #
+
         self._print_signals = _qt_core.QtPrintSignals(self)
         #
         self._print_signals.print_add_accepted.connect(self._append_value_)

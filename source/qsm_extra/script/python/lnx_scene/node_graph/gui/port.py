@@ -4,9 +4,11 @@ import lxgui.core as gui_core
 
 from lxgui.qt.core.wrap import *
 
-from .. import base as _base
+from ...core import base as _scn_cor_base
 
-from .. import model as _model
+from ..core import base as _cor_base
+
+from ..model import port as _mdl_port
 
 from . import aux_ as _aux
 
@@ -14,7 +16,7 @@ from . import aux_ as _aux
 # port
 class _AbsPortGui(
     QtWidgets.QGraphicsPathItem,
-    _base._QtSbjBase,
+    _cor_base._SbjGuiBase,
 ):
     MODEL_CLS = None
 
@@ -25,7 +27,7 @@ class _AbsPortGui(
 
         self.setAcceptHoverEvents(True)
 
-        self._set_color(_base._QtColors.Port)
+        self._set_color(_cor_base._QtColors.Port)
 
         self.edges = []
 
@@ -83,9 +85,9 @@ class _AbsPortGui(
 
 
 class InputGui(_AbsPortGui):
-    MODEL_CLS = _model.InputModel
+    MODEL_CLS = _mdl_port.InputModel
 
-    ENTITY_TYPE = _base.EntityTypes.InputPort
+    ENTITY_TYPE = _scn_cor_base.EntityTypes.InputPort
 
     def __init__(self, *args, **kwargs):
         super(InputGui, self).__init__(*args, **kwargs)
@@ -106,9 +108,9 @@ class InputGui(_AbsPortGui):
 
 
 class OutputGui(_AbsPortGui):
-    MODEL_CLS = _model.OutputModel
+    MODEL_CLS = _mdl_port.OutputModel
 
-    ENTITY_TYPE = _base.EntityTypes.OutputPort
+    ENTITY_TYPE = _scn_cor_base.EntityTypes.OutputPort
 
     def __init__(self, *args, **kwargs):
         super(OutputGui, self).__init__(*args, **kwargs)

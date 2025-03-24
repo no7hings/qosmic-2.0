@@ -1,6 +1,8 @@
 # coding:utf-8
 from __future__ import print_function
 
+import uuid
+
 import shutil
 
 import sys
@@ -28,6 +30,19 @@ class TaskBase(object):
     VERBOSE_LEVEL = 0
 
     TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+
+    LOCATION = 'Z:/caches/database/sync-task/tasks'
+
+    @classmethod
+    def generate_task_id(cls):
+        return str(uuid.uuid1()).upper()
+    
+    @classmethod
+    def generate_task_json_path(cls, task_id):
+        return '{}/{}.json'.format(
+            cls.LOCATION,
+            task_id
+        )
     
     @classmethod
     def read_json(cls, json_path):
@@ -179,10 +194,13 @@ class TaskServer(object):
     def task_new_fnc():
         try:
             data = flask.request.get_json()
-            if not data or 'json' not in data:
+            if not data:
                 return flask.jsonify({'error': 'invalid input.'}), 400
+            
+            task_id = TaskBase.generate_task_id()
+            json_path = TaskBase.generate_task_json_path(task_id)
 
-            json_path = data['json']
+            TaskBase.write_json(json_path, data)
 
             task = Task(json_path)
 

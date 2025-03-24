@@ -246,7 +246,7 @@ class Stage(abc_.AbsBase):
     def _variant_cleanup_fnc(self, variants):
         for k, v in variants.items():
             if k in self._cleanup_variant_keys:
-                variants[k] = bsc_pinyin.Text.cleanup(v)
+                variants[k] = bsc_pinyin.Text.cleanup(v, stop_on_chs=True)
         return variants
 
     def _to_space(self, space_key):

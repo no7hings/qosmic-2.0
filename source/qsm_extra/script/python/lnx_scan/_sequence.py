@@ -22,7 +22,7 @@ class Sequence(_base.AbsEntity):
     def _variant_cleanup_fnc(cls, variants):
         # todo: cleanup name?
         name = variants[cls.VariantKey]
-        variants[cls.VariantKey] = bsc_pinyin.Text.cleanup(name)
+        variants[cls.VariantKey] = bsc_pinyin.Text.cleanup(name, stop_on_chs=True)
         return variants
 
     @classmethod

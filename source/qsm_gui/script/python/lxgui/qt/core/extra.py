@@ -534,6 +534,9 @@ class QtApplication(object):
         if 'value' in kwargs:
             w._set_value_(kwargs['value'])
 
+        if 'ok_label' in kwargs:
+            w._set_ok_label_(kwargs['ok_label'])
+
         w._do_window_exec_(
             size=kwargs.get('size')
         )

@@ -244,11 +244,12 @@ class PlayblastOpt(object):
                     camera_display_options=None
                 )
             except Exception:
-                pass
+                bsc_log.LogException.trace()
 
             finally:
                 for i in q.get_all():
                     i.switch_to_cache()
+
         elif scheme == 'subprocess':
             def open_fnc_(movie_file_path_):
                 bsc_storage.StgFileOpt(movie_file_path_).start_in_system()

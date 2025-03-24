@@ -125,9 +125,9 @@ class QtTreeWidgetItem(
             checked = [False, True][check_state_cur == QtCore.Qt.Checked]
             # send emit when value changed
             if check_state_pre != check_state_cur:
-                tree_widget._send_check_changed_emit_(self, column)
+                tree_widget._send_check_changed_emit(self, column)
             #
-            tree_widget._send_check_toggled_emit_(self, column, checked)
+            tree_widget._send_check_toggled_emit(self, column, checked)
             # update draw
             tree_widget.update()
 

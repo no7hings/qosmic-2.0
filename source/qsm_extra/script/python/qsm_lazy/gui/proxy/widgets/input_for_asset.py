@@ -9,14 +9,16 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
-import lxgui.proxy.abstracts as prx_abstracts
+import lxgui.proxy.abstracts as gui_prx_abstracts
+
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lnx_scan as lnx_scan
 
 import qsm_general.core as qsm_gnl_core
 
 
-class PrxInputForAssetCharacterAndProp(prx_abstracts.AbsPrxWidget):
+class PrxInputForAssetCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
     HISTORY_KEY = 'gui.input-entity-path-asset'
@@ -249,7 +251,7 @@ class PrxInputForAssetScenery(PrxInputForAssetCharacterAndProp):
         super(PrxInputForAssetScenery, self).__init__(*args, **kwargs)
 
 
-class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
+class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
     HISTORY_KEY = 'gui.input-entity-path-asset_new'
@@ -433,6 +435,9 @@ class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
     def connect_input_change_accepted_to(self, fnc):
         self._qt_path_input.input_value_accepted.connect(fnc)
 
+    def connect_input_finish_to(self, fnc):
+        self._qt_path_input.user_input_entry_finished.connect(fnc)
+
     def _cache_entities(self):
         path = self._qt_path_input._get_value_()
         path_opt = bsc_core.BscNodePathOpt(path)
@@ -473,3 +478,26 @@ class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
         self._qt_path_input._set_value_(path)
         # cache when path is applied
         self._cache_entities()
+
+    def set_focus_in(self):
+        self._qt_path_input._set_input_entry_focus_in_()
+
+
+class PrxWindowForAssetInput(gui_prx_widgets.PrxDialogWindow1):
+    def __init__(self, *args, **kwargs):
+        super(PrxWindowForAssetInput, self).__init__(*args, **kwargs)
+        self.set_tip_visible(False)
+        self._asset_prx_input = PrxInputForAsset(history_key='lazy.input.asset-path')
+        self.add_customize_widget(self._asset_prx_input)
+        self._asset_prx_input.set_focus_in()
+
+        self._asset_prx_input.connect_input_finish_to(self._accept_fnc)
+
+    def _accept_fnc(self):
+        self._result = True
+        self.close_window()
+
+    def get_entity(self):
+        return self._asset_prx_input.get_entity(
+            self._asset_prx_input.get_path()
+        )

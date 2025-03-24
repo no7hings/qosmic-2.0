@@ -156,7 +156,7 @@ class QtTreeWidget(
         tmp_pen = painter.pen()
 
         # Draw the branch indicator on the right most
-        if self._get_item_has_visible_children_by_index_(index):
+        if self._get_item_has_visible_children_by_index(index):
             # Branch icon properties
             r_rect = _gui_core.GuiDpiScale.get(4)
             cross_margin = _gui_core.GuiDpiScale.get(1)
@@ -227,7 +227,7 @@ class QtTreeWidget(
             # Move cell window to the left
             x -= cell_w
             cx -= cell_w
-            _below_is_visible = self._get_item_below_is_visible_by_index_(index)
+            _below_is_visible = self._get_item_below_is_visible_by_index(index)
             if _below_is_visible is True:
                 # The row has more siblings. i.e. |
                 #                                 |--
@@ -246,7 +246,7 @@ class QtTreeWidget(
                 x -= cell_w
                 cx -= cell_w
                 # Draw vertical line if the row has siblings at this level
-                _below_is_visible = self._get_item_below_is_visible_by_index_(tmp_index)
+                _below_is_visible = self._get_item_below_is_visible_by_index(tmp_index)
                 if _below_is_visible is True:
                     painter.drawLine(cx, y, cx, y+h)
                 tmp_index = tmp_index.parent()
@@ -442,7 +442,7 @@ class QtTreeWidget(
             [rcs_fnc_(i) for i in indices]
         return list_
 
-    def _get_item_has_visible_children_by_index_(self, index):
+    def _get_item_has_visible_children_by_index(self, index):
         row_count = self.model().rowCount(index)
         for i_row in range(row_count):
             i_index = index.child(i_row, index.column())
@@ -456,7 +456,7 @@ class QtTreeWidget(
             return not self.itemFromIndex(index).isHidden()
         return False
 
-    def _get_item_below_is_visible_by_index_(self, index):
+    def _get_item_below_is_visible_by_index(self, index):
         def _rcs_fnc(_index):
             _nxt_index = index.sibling(_index.row()+1, _index.column())
             if _nxt_index.isValid():
@@ -609,13 +609,13 @@ class QtTreeWidget(
         self._item_expand_method_dic[item] = method, time
 
     # noinspection PyUnusedLocal
-    def _send_check_changed_emit_(self, item, column):
+    def _send_check_changed_emit(self, item, column):
         if item._get_emit_send_enable_() is True:
             # noinspection PyUnresolvedReferences
             self.item_check_changed.emit()
 
     # noinspection PyUnusedLocal
-    def _send_check_toggled_emit_(self, item, column, boolean):
+    def _send_check_toggled_emit(self, item, column, boolean):
         if item._get_emit_send_enable_() is True:
             # noinspection PyUnresolvedReferences
             self.item_toggled.emit(boolean)

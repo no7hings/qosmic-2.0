@@ -9,18 +9,26 @@ from lxgui.qt.core.wrap import *
 
 import lxgui.qt.core as gui_qt_core
 
-from .. import base as _base
+from ...core import base as _scn_cor_base
 
-from .. import undo as _undo
+from ...stage import model as _stg_model
+
+from ..core import base as _cor_base
+
+from ..core import action as _cor_action
+
+from ..core import event as _cor_event
+
+from ..core import undo as _cor_undo
 
 from . import param as _param
 
 
 class _AbsNode(
-    _base._SbjBase,
-    _base._AbsAction
+    _scn_cor_base._SbjBase,
+    _cor_action._AbsAction
 ):
-    ENTITY_TYPE = _base.EntityTypes.Node
+    ENTITY_TYPE = _scn_cor_base.EntityTypes.Node
 
     NODE_TYPE = None
 
@@ -37,15 +45,15 @@ class _AbsNode(
     def __init__(self, *args, **kwargs):
         super(_AbsNode, self).__init__(*args, **kwargs)
 
-        self._data.options = _base._Dict(
-            position=_base._Dict(
+        self._data.options = _scn_cor_base._Dict(
+            position=_scn_cor_base._Dict(
                 x=0.0, y=0.0
             ),
-            size=_base._Dict(
+            size=_scn_cor_base._Dict(
                 width=160, height=24
             ),
             color_enable=False,
-            color=_base._Dict(
+            color=_scn_cor_base._Dict(
                 r=95, g=95, b=95
             )
         )
@@ -60,54 +68,54 @@ class _AbsNode(
         self._gui_data.rect = qt_rect()
 
         # basic
-        self._gui_data.basic = _base._Dict(
+        self._gui_data.basic = _scn_cor_base._Dict(
             rect=QtCore.QRectF(),
             size=QtCore.QSize(),
         )
 
         # color
-        self._gui_data.color = _base._Dict(
+        self._gui_data.color = _scn_cor_base._Dict(
             rect=QtCore.QRectF(),
-            border=_base._QtColors.NodeBorder,
-            background=_base._QtColors.NodeBackground,
+            border=_cor_base._QtColors.NodeBorder,
+            background=_cor_base._QtColors.NodeBackground,
             alpha=255,
         )
 
         # head
-        self._gui_data.head = _base._Dict(
+        self._gui_data.head = _scn_cor_base._Dict(
             rect=QtCore.QRectF(),
             size=QtCore.QSize(),
         )
 
         # edit
-        self._gui_data.edited = _base._Dict(
+        self._gui_data.edited = _scn_cor_base._Dict(
             rect=QtCore.QRectF(),
             value=False,
         )
 
         # viewed
-        self._gui_data.viewed = _base._Dict(
+        self._gui_data.viewed = _scn_cor_base._Dict(
             rect=QtCore.QRectF(),
             value=False,
         )
 
         # type
-        self._gui_data.type = _base._Dict(
+        self._gui_data.type = _scn_cor_base._Dict(
             rect=qt_rect(),
             font=gui_qt_core.QtFont.generate(size=12, weight=75),
-            color=_base._QtColors.TypeText,
+            color=_cor_base._QtColors.TypeText,
             gui_name=None,
             gui_name_chs=None
         )
 
-        self._gui_data.name = _base._Dict(
+        self._gui_data.name = _scn_cor_base._Dict(
             rect=qt_rect(),
             font=gui_qt_core.QtFont.generate(size=12, weight=75),
-            color=_base._QtColors.TypeText,
+            color=_cor_base._QtColors.TypeText,
         )
 
         # hover
-        self._gui_data.hover = _base._Dict(
+        self._gui_data.hover = _scn_cor_base._Dict(
             enable=True,
             flag=False,
             rect=qt_rect(),
@@ -115,7 +123,7 @@ class _AbsNode(
         )
 
         # select
-        self._gui_data.select = _base._Dict(
+        self._gui_data.select = _scn_cor_base._Dict(
             enable=True,
             flag=False,
             rect=qt_rect(),
@@ -123,7 +131,7 @@ class _AbsNode(
         )
 
         # menu
-        self._gui_data.menu = _base._Dict(
+        self._gui_data.menu = _scn_cor_base._Dict(
             content=None,
             content_generate_fnc=None,
             data=None,
@@ -141,7 +149,7 @@ class _AbsNode(
 
     def set_options(self, options):
         position = options['position']
-        self.set_position((position['x'], position['y']))
+        self._set_position((position['x'], position['y']))
 
         size = options['size']
         self.set_size((size['width'], size['height']))
@@ -151,11 +159,26 @@ class _AbsNode(
             color = options['color']
             self.set_color((color['r'], color['g'], color['b']))
 
-    def set_position(self, position):
-        x, y = position
-        self._data.options.position.x = x
-        self._data.options.position.y = y
-        self._gui.setPos(*position)
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeMove)
+    def set_position(self, coord):
+        def _redo_fnc():
+            return self._set_position(coord)
+
+        def _undo_fnc():
+            return self._set_position(coord_old)
+
+        coord_old = self.get_position()
+
+        return self.root_model.undo_stack, _redo_fnc, _undo_fnc
+
+    def _set_position(self, coord):
+        if coord != self.get_position():
+            x, y = coord
+            self._data.options.position.x = x
+            self._data.options.position.y = y
+            self._gui.setPos(*coord)
+            return True
+        return False
 
     def get_position(self):
         return self._gui.x(), self._gui.y()
@@ -252,7 +275,7 @@ class _AbsNode(
     def to_json(self):
         self._update_position_option()
         self._update_size_option()
-        return _base._ToJson(self._data._dict).generate()
+        return _scn_cor_base._ToJson(self._data._dict).generate()
 
     def to_data(self):
         return self._json_str_to_data(self.to_json())
@@ -261,7 +284,11 @@ class _AbsNode(
         pass
 
     @classmethod
-    def create(cls, root, *args, **kwargs):
+    def compute(cls, node, stage):
+        pass
+
+    @classmethod
+    def create(cls, node):
         raise NotImplementedError()
 
     def _set_type(self, text, *args, **kwargs):
@@ -288,34 +315,36 @@ class StandardNode(_AbsNode):
         self._gui_data.basic.size = QtCore.QSize(160, 24)
         self._gui_data.head.size = QtCore.QSize(160, 24)
         #
-        self._gui_data.color.border=_base._QtColors.NodeBorder
-        self._gui_data.color.background = _base._QtColors.NodeBackground
+        self._gui_data.color.border=_cor_base._QtColors.NodeBorder
+        self._gui_data.color.background = _cor_base._QtColors.NodeBackground
         # input port
         self._data.inputs = collections.OrderedDict()
         # output port
         self._data.outputs = collections.OrderedDict()
         # port
-        self._builtin_data.port = _base._Dict(
-            input=_base._Dict(
+        self._builtin_data.port = _scn_cor_base._Dict(
+            input=_scn_cor_base._Dict(
                 gui_cls=None,
                 prefix='in'
             ),
-            output=_base._Dict(
+            output=_scn_cor_base._Dict(
                 gui_cls=None,
                 prefix='out'
             )
         )
-        self._gui_data.port = _base._Dict(
+        self._gui_data.port = _scn_cor_base._Dict(
             size=QtCore.QSize(16, 8),
             spacing=4,
             margin=4
         )
-        self._gui_data.add_input = _base._Dict(
+        self._gui_data._add_input = _scn_cor_base._Dict(
             size=QtCore.QSize(32, 16)
         )
         # parameter
         self._data.parameters = collections.OrderedDict()
-        self._param_root = _param.ParamRoot(self, self._data.parameters)
+        self._param_root = _param.ParamRoot(
+            self, self._data.parameters
+        )
 
     # main
     def update(self, rect):
@@ -393,7 +422,7 @@ class StandardNode(_AbsNode):
             border_width = 1
 
         if self.is_bypass():
-            background_color = _base._QtColors.NodeBackgroundBypass
+            background_color = _cor_base._QtColors.NodeBackgroundBypass
         else:
             background_color = self._gui_data.color.background
 
@@ -466,17 +495,33 @@ class StandardNode(_AbsNode):
     # input
     def set_input_prefix(self, text):
         self._builtin_data.port.input.prefix = text
+        
+    def _find_next_input_path(self, parent_path):
+        prefix = self._builtin_data.port.input.prefix
+        return self._find_next_port_path(self._data.inputs, prefix, parent_path)
 
-    def add_input(self, name=None, parent_path=None, port_path=None, prefix=None, *args, **kwargs):
-        prefix = prefix or self._builtin_data.port.input.prefix
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeAddInput)
+    def add_input(self, name=None, parent_path=None, port_path=None, *args, **kwargs):
+        def _redo_fnc():
+            return self._generate_input(
+                port_path=port_path_new, *args, **kwargs
+            )
+        
+        def _undo_fnc():
+            return self._remove_input(port_path=port_path_new)
+        
+        if port_path:
+            port_path_new = port_path
+        else:
+            prefix = name or self._builtin_data.port.input.prefix
+            self._find_next_port_path(self._data.inputs, prefix, parent_path)
+        
+        return self.root_model.undo_stack, _redo_fnc, _undo_fnc 
+
+    def _generate_input(self, name=None, parent_path=None, port_path=None, *args, **kwargs):
+        prefix = name or self._builtin_data.port.input.prefix
         if port_path is None:
-            if name is None:
-                port_path = self._find_next_port_path(self._data.inputs, prefix, parent_path)
-            else:
-                if parent_path is None:
-                    port_path = name
-                else:
-                    port_path = '{}.{}'.format(parent_path, name)
+            port_path = self._find_next_port_path(self._data.inputs, prefix, parent_path)
 
         if port_path in self._data.inputs:
             return False, self._data.inputs[port_path]
@@ -501,12 +546,12 @@ class StandardNode(_AbsNode):
         model._set_path(atr_path)
         model._set_port_path(port_path)
         model.set_name(port_path_opt.get_name())
-
         return True, model
 
-    def remove_input(self, port_path):
+    def _remove_input(self, port_path):
         port = self.get_input(port_path)
         if port:
+            # gui_scene = self.root_model.get_gui_scene()
             gui = port._gui
             gui.setParentItem(None)
             gui.scene().removeItem(gui)
@@ -518,8 +563,9 @@ class StandardNode(_AbsNode):
         for i in self.get_inputs():
             if i.has_source() is False:
                 return False, i
+
         if self._data.options.add_input_enable is True:
-            return self.add_input()
+            return self._generate_input()
         return False, None
     
     def get_connectable_input(self):
@@ -531,7 +577,7 @@ class StandardNode(_AbsNode):
         return self._find_next_port_path(self._data.inputs, prefix)
 
     def _add_input_by_data(self, data):
-        flag, port = self.add_input(port_path=data['port_path'])
+        flag, port = self._generate_input(port_path=data['port_path'])
         return port
 
     def get_inputs(self):
@@ -570,16 +616,10 @@ class StandardNode(_AbsNode):
     def set_output_prefix(self, text):
         self._builtin_data.port.output.prefix = text
 
-    def add_output(self, name=None, parent_path=None, port_path=None, prefix=None, *args, **kwargs):
+    def _generate_output(self, name=None, parent_path=None, port_path=None, *args, **kwargs):
         if port_path is None:
-            if name is None:
-                prefix = prefix or self._builtin_data.port.output.prefix
-                port_path = self._find_next_port_path(self._data.inputs, prefix, parent_path)
-            else:
-                if parent_path is None:
-                    port_path = name
-                else:
-                    port_path = '{}.{}'.format(parent_path, name)
+            prefix = name or self._builtin_data.port.output.prefix
+            port_path = self._find_next_port_path(self._data.inputs, prefix, parent_path)
 
         if port_path in self._data.outputs:
             return False, self._data.outputs[port_path]
@@ -611,7 +651,7 @@ class StandardNode(_AbsNode):
         return len(self._data.outputs)
 
     def _add_output_by_data(self, data):
-        flag, port = self.add_output(port_path=data['port_path'])
+        flag, port = self._generate_output(port_path=data['port_path'])
         return port
 
     def get_outputs(self):
@@ -666,6 +706,47 @@ class StandardNode(_AbsNode):
         for i in self.get_inputs():
             if i.has_source():
                 list_.append(i.get_source().get_node())
+        return list_
+
+    def get_node_queue(self):
+        def _rcs_fnc(node_, depth_):
+            _nodes = node_.get_source_nodes()
+            for _i_index, _i_node in enumerate(_nodes):
+                _i_key = (depth_, _i_index, _i_node.get_path())
+                if _i_key not in dict_:
+                    if _i_node.is_bypass() is False:
+                        dict_[_i_key] = _i_node
+                    _rcs_fnc(_i_node, depth_+1)
+
+        dict_ = {}
+        _rcs_fnc(self, 0)
+        keys = list(dict_.keys())
+        keys.sort()
+        keys.reverse()
+
+        for i in keys:
+            yield dict_[i]
+        yield self
+
+    def get_all_source_nodes(self, type_includes=None):
+        def _rcs_fnc(node_):
+            _nodes = node_.get_source_nodes()
+            for _i_node in _nodes:
+                _i_node_path = _i_node.get_path()
+                if _i_node_path not in keys:
+                    keys.add(_i_node_path)
+                    list_.append(_i_node)
+                    _rcs_fnc(_i_node)
+
+        keys = set()
+        list_ = []
+        _rcs_fnc(self)
+        if type_includes:
+            return [
+                x for x in
+                list_
+                if x.get_type() in type_includes
+            ]
         return list_
 
     # connection, target
@@ -776,7 +857,7 @@ class StandardNode(_AbsNode):
     def set_options(self, options):
         super(StandardNode, self).set_options(options)
 
-        self.set_bypass(options['bypass'])
+        self._set_bypass(options['bypass'])
         self.set_add_port_enable(options['add_input_enable'])
 
     # bypass
@@ -785,16 +866,30 @@ class StandardNode(_AbsNode):
         x, y = 0, 0
         w, h = rect.width(), rect.height()
 
-        w_0, h_0 = 96, 96
+        s = max(w, h)
+        w_0, h_0 = s, s
 
         self._gui._bypass_aux.setRect(
             x+(w-w_0)/2, y+(h-h_0)/2, w_0, h_0
         )
 
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeBypass)
     def set_bypass(self, boolean):
-        self._data.options.bypass = boolean
-        self._gui._bypass_aux.setVisible(boolean)
-        self.update_root_gui()
+        def _redo_fnc():
+            self._set_bypass(boolean)
+
+        def _undo_fnc():
+            self._set_bypass(not boolean)
+
+        return self.root_model.undo_stack, _redo_fnc, _undo_fnc
+
+    def _set_bypass(self, boolean):
+        if boolean != self._data.options.bypass:
+            self._data.options.bypass = boolean
+            self._gui._bypass_aux.setVisible(boolean)
+            self.update_root_gui()
+            return True
+        return False
 
     def is_bypass(self):
         return self._data.options.bypass
@@ -816,7 +911,7 @@ class StandardNode(_AbsNode):
             hed_size = self._gui_data.head.size
             hed_w, hed_h = hed_size.width(), hed_size.height()
 
-            size_0 = self._gui_data.add_input.size
+            size_0 = self._gui_data._add_input.size
             w_0, h_0 = size_0.width(), size_0.height()
 
             self._gui._add_input_aux.setRect(
@@ -824,15 +919,8 @@ class StandardNode(_AbsNode):
             )
 
     # viewed
-    def set_viewed(self, boolean):
-        if boolean is True:
-            self.root_model.set_viewed_node(self)
-        else:
-            if self.root_model.has_viewed_nodes():
-                if self.root_model._check_node_viewed(self) is False:
-                    self._update_viewed(boolean)
-
-        self.update_root_gui()
+    def set_viewed(self):
+        self.root_model.set_viewed_node(self)
 
     def _update_viewed(self, boolean):
         self._gui_data.viewed.value = boolean
@@ -843,7 +931,7 @@ class StandardNode(_AbsNode):
         return self._gui_data.viewed.value
 
     def _on_swap_viewed(self):
-        self.set_viewed(not self.is_viewed())
+        self.set_viewed()
 
     def _check_viewed(self, point):
         if self._gui_data.viewed.rect.contains(point):
@@ -851,25 +939,22 @@ class StandardNode(_AbsNode):
         return False
 
     # edited
-    @_base.EventFactory.send(_base.EventTypes.NodeSetEdited)
-    def set_edited(self, boolean):
-        if boolean is True:
-            self.root_model.set_edited_node(self)
-        else:
-            if self.root_model.has_edited_nodes():
-                if self.root_model._check_node_edited(self) is False:
-                    self._update_edited(boolean)
+    @_cor_event.EventFactory.send(_cor_event.EventTypes.NodeSetEdited)
+    def set_edited(self):
+        return self.root_model.set_edited_node(self)
 
     def _update_edited(self, boolean):
-        self._gui_data.edited.value = boolean
-
-        self.update_root_gui()
+        if boolean != self._gui_data.edited.value:
+            self._gui_data.edited.value = boolean
+            self.update_root_gui()
+            return True
+        return False
 
     def is_edited(self):
         return self._gui_data.edited.value
 
     def _on_swap_edited(self):
-        self.set_edited(not self.is_edited())
+        self.set_edited()
 
     def _check_edited(self, point):
         if self._gui_data.edited.rect.contains(point):
@@ -891,7 +976,7 @@ class StandardNode(_AbsNode):
         return self._param_root
     
     def set(self, key, value):
-        self._param_root.get_parameter(key).set_value(value)
+        return self._param_root.get_parameter(key).set_value(value)
     
     def get(self, key):
         return self._param_root.get_parameter(key).get_value()
@@ -899,6 +984,15 @@ class StandardNode(_AbsNode):
     def execute(self, key):
         p = self._param_root.get_parameter(key)
         p._exec_script()
+
+    # stage
+
+    def generate_stage(self):
+        stage = _stg_model.StageRoot()
+        node_queue = self.get_node_queue()
+        for i_node in node_queue:
+            i_node.compute(i_node, stage)
+        return stage
 
 
 # imaging
@@ -923,13 +1017,14 @@ class ImagingNode(StandardNode):
         super(ImagingNode, self).set_options(options)
 
         self.set_image(options['image'])
+        self.set_video(options['video'])
 
     def set_image(self, file_path):
         if file_path is not None:
-            self._gui_data.image = _base._Dict(
+            self._gui_data.image = _scn_cor_base._Dict(
                 load_flag=False,
                 pixmap=None,
-                size=None,
+                size=QtCore.QSize(),
 
                 reload_flag=False,
 
@@ -987,7 +1082,7 @@ class ImagingNode(StandardNode):
 
     def set_video(self, file_path):
         if file_path is not None:
-            self._gui_data.video = _base._Dict(
+            self._gui_data.video = _scn_cor_base._Dict(
                 load_flag=False,
                 capture_opt=None,
                 size=None,
@@ -1102,28 +1197,12 @@ class ImagingNode(StandardNode):
 
     def draw_base_prc(self, painter, options):
         if self._gui_data.draw_flag == self.DrawFlags.Image:
-            # gui_qt_core.QtItemDrawBase._draw_frame(
-            #     painter,
-            #     rect=self._gui_data.image.rect,
-            #     border_color=_base._QtColors.NodeImagingBorder,
-            #     background_color=_base._QtColors.NodeImagingBackground,
-            #     border_width=1,
-            #     border_radius=0
-            # )
             gui_qt_core.QtItemDrawBase._draw_pixmap(
                 painter,
                 rect=self._gui_data.image.image_rect,
                 pixmap=self._gui_data.image.pixmap
             )
         if self._gui_data.draw_flag == self.DrawFlags.Video:
-            # gui_qt_core.QtItemDrawBase._draw_frame(
-            #     painter,
-            #     rect=self._gui_data.video.rect,
-            #     border_color=_base._QtColors.NodeImagingBorder,
-            #     background_color=_base._QtColors.NodeImagingBackground,
-            #     border_width=1,
-            #     border_radius=0
-            # )
             gui_qt_core.QtItemDrawBase._draw_pixmap(
                 painter,
                 rect=self._gui_data.video.image_rect,
@@ -1140,30 +1219,30 @@ class Backdrop(_AbsNode):
         self._gui_data.basic.size = QtCore.QSize(320, 240)
         self._gui_data.head.size = QtCore.QSize(320, 24)
         #
-        self._gui_data.color.border = _base._QtColors.BackdropBorder
-        self._gui_data.color.background = _base._QtColors.BackdropBackground
+        self._gui_data.color.border = _cor_base._QtColors.BackdropBorder
+        self._gui_data.color.background = _cor_base._QtColors.BackdropBackground
         self._gui_data.color.alpha = 31
 
-        self._gui_data.name.color = _base._QtColors.BackdropName
+        self._gui_data.name.color = _cor_base._QtColors.BackdropName
 
-        self._gui_data.move = _base._Dict(
+        self._gui_data.move = _scn_cor_base._Dict(
             start_position=QtCore.QPointF(),
             start_point=QtCore.QPointF(),
             node_position_data=[],
             node_set=set(),
         )
 
-        self._gui_data.resize = _base._Dict(
+        self._gui_data.resize = _scn_cor_base._Dict(
             start_point=QtCore.QPointF(),
             start_rect=QtCore.QRect(),
             rect=QtCore.QRectF(),
             icon_rect=QtCore.QRectF(),
-            icon=_base._Dict(
+            icon=_scn_cor_base._Dict(
                 file=gui_core.GuiIcon.get('resize'),
             )
         )
 
-        self._gui_data.description = _base._Dict(
+        self._gui_data.description = _scn_cor_base._Dict(
             rect=QtCore.QRect(),
             text_rect=QtCore.QRect(),
             text='',
@@ -1253,6 +1332,7 @@ class Backdrop(_AbsNode):
             border_color = self._gui_data.color.border
             border_width = 1
 
+        # frame
         gui_qt_core.QtItemDrawBase._draw_frame(
             painter,
             rect=self._gui_data.basic.rect,
@@ -1323,7 +1403,7 @@ class Backdrop(_AbsNode):
         self._gui.setSelected(True)
         all_items = self.scene._get_items_by_rect(x, y, w, h)
         for i in all_items:
-            if i.ENTITY_TYPE == _base.EntityTypes.Node:
+            if i.ENTITY_TYPE == _scn_cor_base.EntityTypes.Node:
                 i_node = i._model
                 node_position_data.append(
                     (i_node, i_node.get_position())
@@ -1341,18 +1421,20 @@ class Backdrop(_AbsNode):
         for i in self._gui_data.move.node_position_data:
             i[0]._gui.moveBy(x, y)
 
-    @_undo.GuiUndoFactory.push(_undo.UndoActions.NodeMove)
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeMove)
     def _push_move_cmd(self):
-        def redo_fnc_():
-            self.root_model.set_node_position(node_path, position_1)
+        def _redo_fnc():
+            self._set_position(position_1)
 
-        def undo_fnc_():
-            self.root_model.set_node_position(node_path, position_0)
+        def _undo_fnc():
+            self._set_position(position_0)
 
-        node_path, position_0, position_1 = (
-            self.get_path(), self._gui_data.move.start_position, self.get_position()
+        position_0, position_1 = (
+            self._gui_data.move.start_position, self.get_position()
         )
-        return self.root_model, redo_fnc_, undo_fnc_
+
+        if position_1 != position_0:
+            return self.root_model.undo_stack, _redo_fnc, _undo_fnc
 
     def do_move_end(self):
         self._push_move_cmd()
@@ -1376,17 +1458,18 @@ class Backdrop(_AbsNode):
         w, h = max(min(w, 4096), 128), max(min(h, 4096), 64)
         self.set_size((w, h))
 
-    @_undo.GuiUndoFactory.push(_undo.UndoActions.NodeResize)
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeResize)
     def _push_resize_cmd(self):
-        def redo_fnc_():
+        def _redo_fnc():
             self.root_model.set_node_size(node_path, size_1)
 
-        def undo_fnc_():
+        def _undo_fnc():
             self.root_model.set_node_size(node_path, size_0)
 
         rect = self._gui_data.resize.start_rect
         node_path, size_0, size_1 = self.get_path(), (rect.width(), rect.height()), self.get_size()
-        return self.root_model, redo_fnc_, undo_fnc_
+
+        return self.root_model.undo_stack, _redo_fnc, _undo_fnc
 
     def do_resize_end(self):
         self._push_resize_cmd()
