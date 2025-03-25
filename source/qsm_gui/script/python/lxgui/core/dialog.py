@@ -118,6 +118,8 @@ class GuiStorageDialog(object):
     def open_file(cls, ext_filter='All File (*.*)', default='', parent=None):
         from ..qt import core as gui_qt_core
 
+        default = default or bsc_core.BscSystem.get_home_directory()
+
         dlg = gui_qt_core.QtWidgets.QFileDialog()
         options = dlg.Options()
         # options |= dlg.DontUseNativeDialog
@@ -138,6 +140,8 @@ class GuiStorageDialog(object):
     def save_file(cls, ext_filter='All File (*.*)', default='', parent=None):
         from ..qt import core as gui_qt_core
 
+        default = default or bsc_core.BscSystem.get_home_directory()
+
         dlg = gui_qt_core.QtWidgets.QFileDialog()
         options = dlg.Options()
         # options |= dlg.DontUseNativeDialog
@@ -155,8 +159,10 @@ class GuiStorageDialog(object):
         return None
 
     @classmethod
-    def open_directory(cls, parent=None):
+    def open_directory(cls, default='', parent=None):
         from ..qt import core as gui_qt_core
+
+        default = default or bsc_core.BscSystem.get_home_directory()
 
         dlg = gui_qt_core.QtWidgets.QFileDialog()
         options = dlg.Options()
@@ -164,7 +170,7 @@ class GuiStorageDialog(object):
         r = dlg.getExistingDirectory(
             parent,
             'Open Folder',
-            '',
+            default,
             options=options,
         )
         if r:
@@ -172,8 +178,10 @@ class GuiStorageDialog(object):
         return None
 
     @classmethod
-    def save_directory(cls, parent=None):
+    def save_directory(cls, default='', parent=None):
         from ..qt import core as gui_qt_core
+
+        default = default or bsc_core.BscSystem.get_home_directory()
 
         dlg = gui_qt_core.QtWidgets.QFileDialog()
         options = dlg.Options()
@@ -181,7 +189,7 @@ class GuiStorageDialog(object):
         r = dlg.getExistingDirectory(
             parent,
             'Save Folder',
-            '',
+            default,
             options=options,
         )
         if r:

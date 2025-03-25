@@ -17,6 +17,10 @@ class DccCache(object):
         return bsc_core.BscUuid.generate_by_file(file_path, version)
 
     @classmethod
+    def get_data_key(cls, file_path, data, version=None):
+        return bsc_core.BscUuid.generate_by_file_and_data(file_path, data, version)
+
+    @classmethod
     def generate_skin_proxy_scene_file(cls, file_path):
         root = bsc_core.BscEnviron.get_cache_temporary_root()
         key = cls.get_key(file_path)
@@ -181,4 +185,13 @@ class DccCache(object):
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.asset-cache/snapshot/{}/{}.jpg'.format(
             root, region, key
+        )
+
+    @classmethod
+    def generate_shot_replace_reference_file(cls, file_path, reference_replace_map, version=None):
+        root = bsc_core.BscEnviron.get_cache_temporary_root()
+        key = cls.get_data_key(file_path, reference_replace_map, version)
+        region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
+        return '{}/.shot-cache/replace-reference/{}/{}/{}.ma'.format(
+            root, region, key, bsc_storage.StgFileOpt(file_path).name_base
         )

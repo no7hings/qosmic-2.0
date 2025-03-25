@@ -68,6 +68,8 @@ class QtInputForContent(
         self._entry_widget._set_entry_frame_(self)
         # self._entry_widget.setReadOnly(False)
         entry_layout.addWidget(self._entry_widget)
+
+        self.input_value_accepted = self._entry_widget.entry_value_accepted
         #
         self._input_button_widget = _wgt_utility.QtLineWidget()
         self._input_button_widget.hide()

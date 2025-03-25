@@ -167,7 +167,7 @@ class QtBarChartWidget(
         self._bar_chart._chart_model.export(directory_path)
 
     def _do_export_(self):
-        directory_path = _gui_core.GuiStorageDialog.save_directory(self)
+        directory_path = _gui_core.GuiStorageDialog.save_directory(parent=self)
         if directory_path:
             self._export_all_to_(directory_path)
             bsc_storage.StgDirectoryOpt(directory_path).show_in_system()

@@ -18,11 +18,20 @@ class Node(_ng_model.ImagingNode):
 
     @classmethod
     def compute(cls, node, stage):
-        file_path = node.get('input.file')
-        if file_path:
+        scene_path = node.get('input.file')
+        if scene_path:
             location = node.get('setting.location')
             stg_node = stage.add_node('MaysScene', location)
-            stg_node.add_attr('references').create_string_array(
+            stg_node.add_attr('file').add_string(
+                scene_path
+            )
+            stg_node.add_attr('frame_range').add_integer_array(
+                node.get('data.frame_range')
+            )
+            stg_node.add_attr('fps').add_integer(
+                node.get('data.fps')
+            )
+            stg_node.add_attr('references').add_string_array(
                 node.get('data.references')
             )
 
@@ -37,7 +46,7 @@ class Node(_ng_model.ImagingNode):
         node.parameters.add_group(param_path='input').set_options(
             gui_name='Input', gui_name_chs='输入'
         )
-        node.parameters.create_string(param_path='input.file').set_options(
+        node.parameters.add_string(param_path='input.file').set_options(
             widget='file', open=True, gui_name='Scene', gui_name_chs='文件', ext_includes=['.ma']
         )
 
@@ -45,28 +54,31 @@ class Node(_ng_model.ImagingNode):
         node.parameters.add_group(param_path='setting').set_options(
             gui_name='Setting', gui_name_chs='设置'
         )
-        node.parameters.create_string(param_path='setting.location', value='/root/maya/scene').set_options(
+        node.parameters.add_string(param_path='setting.location', value='/root/maya/scene').set_options(
             widget='path', gui_name='Location', gui_name_chs='位置'
+        )
+        node.parameters.add_boolean(param_path='setting.ignore_unloaded', value=True).set_options(
+            gui_name='Ignore Unloaded (Reference)', gui_name_chs='忽略未加载（引用）'
         )
 
         # data
         node.parameters.add_group(param_path='data').set_options(
             gui_name='Data', gui_name_chs='数据'
         )
-        node.parameters.create_integer_array(param_path='data.frame_range').set_options(
+        node.parameters.add_integer_array(param_path='data.frame_range').set_options(
             widget='integer2', lock=True, gui_name='Frame Range', gui_name_chs='帧范围'
         )
-        node.parameters.create_integer(param_path='data.fps').set_options(
+        node.parameters.add_integer(param_path='data.fps').set_options(
             lock=True, gui_name='FPS', gui_name_chs='帧率'
         )
-        node.parameters.create_string_array(param_path='data.references').set_options(
+        node.parameters.add_string_array(param_path='data.references').set_options(
             widget='json', lock=True, gui_name='References', gui_name_chs='引用'
         )
 
         # button
-        node.parameters.add_custom(param_path='data.update_info').set_options(
+        node.parameters.add_custom(param_path='data.update_data').set_options(
             widget='button',
-            script=r'import lnx_scene.node_handle as h; h.LoadMayaScene(node).update_info()',
+            script=r'import lnx_scene.node_handle as h; h.LoadMayaScene(node).update_data()',
             gui_name='Update Data', gui_name_chs='更新数据',
         )
 

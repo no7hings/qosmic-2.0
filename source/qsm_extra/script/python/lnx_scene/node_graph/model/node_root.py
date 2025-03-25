@@ -74,6 +74,7 @@ class SceneFile(object):
             self._set_current_data(data)
 
     def new(self):
+        self._current_path = self._default_path
         return self._root_model.restore()
 
     def new_with_dialog(self):
@@ -528,21 +529,24 @@ class RootNode(
     def remove_node_input(self, node_path, port_path):
         self.get_node(node_path)._remove_input(port_path)
 
-    def node_auto_connect_input(self, node_path, port_flag, port_path, source_path):
+    def node_auto_connect_input(self, node_path, port_path, port_flag, source_path):
         node = self.get_node(node_path)
+
+        # add input first
         if port_flag is True:
             node._generate_input(port_path=port_path)
 
         target_path = bsc_core.BscAttributePath.join_by(node.get_path(), port_path)
         self._connect_port_paths(source_path, target_path)
 
-    def node_auto_disconnect_input(self, node_path, port_flag, port_path, source_path):
+    def node_auto_disconnect_input(self, node_path, port_path, port_flag, source_path):
         node = self.get_node(node_path)
 
         # disconnect first
         target_path = bsc_core.BscAttributePath.join_by(node.get_path(), port_path)
         self._disconnect_port_paths(source_path, target_path)
 
+        # remove added input later
         if port_flag is True:
             node._remove_input(port_path)
 
@@ -643,21 +647,40 @@ class RootNode(
         return self.undo_stack, _redo_fnc, _undo_fnc
     
     @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeInputConnectAuto)
-    def _push_auto_connect_input_cmd(self, source_port, target_node):
+    def _push_connect_input_auto_cmd(self, source_port, target_node):
         def _redo_fnc():
-            self.node_auto_connect_input(node_path, port_flag, port_path, source_path)
-            return node_path, port_path
+            self.node_auto_connect_input(node_path, port_path, port_flag, source_path)
 
         def _undo_fnc():
-            self.node_auto_disconnect_input(node_path, port_flag, port_path, source_path)
-            return node_path, port_path
+            self.node_auto_disconnect_input(node_path, port_path, port_flag, source_path)
 
-        flag, port = target_node._generate_next_input_args()
+        flag, target_port = target_node._generate_next_input_args()
 
-        node_path, port_flag, port_path, source_path = (
-            target_node.get_path(), flag, port.get_port_path(), source_port.get_path()
+        source_path = source_port.get_path()
+
+        node_path, port_path, port_flag = (
+            target_node.get_path(), target_port.get_port_path(), flag
         )
 
+        return self.undo_stack, _redo_fnc, _undo_fnc
+
+    @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeInputReconnectAuto)
+    def _push_reconnect_input_auto_cmd(self, source_port, target_port, target_node):
+        def _redo_fnc():
+            self._disconnect_port_paths(source_path_0, target_path_0)
+            self.node_auto_connect_input(node_path, port_path, port_flag, source_path_0)
+
+        def _undo_fnc():
+            self.node_auto_disconnect_input(node_path, port_path, port_flag, source_path_0)
+            self._connect_port_paths(source_path_0, target_path_0)
+
+        source_path_0, target_path_0 = source_port.get_path(), target_port.get_path()
+
+        flag, target_port_1 = target_node._generate_next_input_args()
+
+        node_path, port_path, port_flag = (
+            target_node.get_path(), target_port_1.get_port_path(), flag
+        )
         return self.undo_stack, _redo_fnc, _undo_fnc
 
     # disconnect

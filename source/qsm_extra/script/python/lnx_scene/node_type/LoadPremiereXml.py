@@ -20,7 +20,7 @@ class Node(_ng_model.ImagingNode):
     def compute(cls, node, stage):
         location = node.get('setting.location')
         stg_node = stage.add_node('PremiereXml', location)
-        stg_node.add_attr('videos').create_string_array(
+        stg_node.add_attr('videos').add_string_array(
             node.get('data.videos')
         )
 
@@ -34,7 +34,7 @@ class Node(_ng_model.ImagingNode):
         node.parameters.add_group(param_path='input').set_options(
             gui_name='Input', gui_name_chs='输入'
         )
-        node.parameters.create_string(param_path='input.file').set_options(
+        node.parameters.add_string(param_path='input.file').set_options(
             widget='file', open=True, gui_name='Scene', gui_name_chs='文件', ext_includes=['.xml']
         )
 
@@ -42,7 +42,7 @@ class Node(_ng_model.ImagingNode):
         node.parameters.add_group(param_path='setting').set_options(
             gui_name='Setting', gui_name_chs='设置'
         )
-        node.parameters.create_string(param_path='setting.location', value='/root/premiere/xml/main').set_options(
+        node.parameters.add_string(param_path='setting.location', value='/root/premiere/xml/main').set_options(
             widget='path', gui_name='Location', gui_name_chs='位置'
         )
 
@@ -50,16 +50,17 @@ class Node(_ng_model.ImagingNode):
         node.parameters.add_group(param_path='data').set_options(
             gui_name='Data', gui_name_chs='数据'
         )
-        node.parameters.create_integer_array(param_path='data.frame_range').set_options(
+        node.parameters.add_integer_array(param_path='data.frame_range').set_options(
             widget='integer2', lock=True, gui_name='Frame Range', gui_name_chs='帧范围'
         )
-        node.parameters.create_integer(param_path='data.fps').set_options(
+        node.parameters.add_integer(param_path='data.fps').set_options(
             lock=True, gui_name='FPS', gui_name_chs='帧率'
         )
-        node.parameters.create_string_array(param_path='data.videos').set_options(
+        node.parameters.add_string_array(param_path='data.videos').set_options(
             widget='json', lock=True, gui_name='Videos', gui_name_chs='视频'
         )
 
+        # button
         node.parameters.add_custom(param_path='analysis_and_build').set_options(
             widget='button',
             script=r'import lnx_scene.node_handle as h; h.LoadPremiereXml(node).analysis_and_build()',

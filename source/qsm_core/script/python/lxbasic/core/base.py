@@ -911,6 +911,17 @@ class BscUuid(object):
         ).upper()
 
     @classmethod
+    def generate_by_file_and_data(cls, file_path, data, version=None):
+        file_str = cls._to_file_str(file_path, version)
+        data_str = json.dumps(data)
+        return str(
+            uuid.uuid3(
+                uuid.UUID(cls.BASIC),
+                '{}&data={}'.format(file_str, data_str)
+            )
+        ).upper()
+
+    @classmethod
     def generate_by_files(cls, file_paths, extra=None):
         file_strs = map(cls._to_file_str, file_paths)
         file_strs.sort()

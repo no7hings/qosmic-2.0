@@ -188,7 +188,7 @@ class RootNodeGui(
 
     def _accept_source_connect_auto(self, target_node):
         source_port = self._drag_port
-        self._model._push_auto_connect_input_cmd(source_port, target_node)
+        self._model._push_connect_input_auto_cmd(source_port, target_node)
 
         self.scene().removeItem(self._drag_connection._gui)
 
@@ -270,6 +270,14 @@ class RootNodeGui(
 
         self._drag_connection = None
 
+    def _accept_target_reconnect_auto(self, target_node):
+        source_port_0 = self._drag_connection.get_source()
+        target_port_0 = self._drag_connection.get_target()
+        
+        self._model._push_reconnect_input_auto_cmd(source_port_0, target_port_0, target_node)
+
+        self._drag_connection = None
+
     def _cancel_reconnect(self):
         self._drag_connection = None
 
@@ -312,31 +320,36 @@ class RootNodeGui(
             if self._model.is_action_sub_flag_matching(self.ActionFlags.PortSourceHoverMove):
                 self._model.clear_action_sub_flag()
                 if self._find_item(items_under_cursor, _aux.AddInputAuxGui):
-                    item = self._find_item(items_under_cursor, _aux.AddInputAuxGui)
-                    node = item.parentItem()._model
+                    aux_gui = self._find_item(items_under_cursor, _aux.AddInputAuxGui)
+                    node = aux_gui.parentItem()._model
                     self._accept_source_connect_auto(node)
                 else:
-                    item = self._find_item(items_under_cursor, _port.InputGui)
-                    self._accept_source_connect(item)
+                    port_gui = self._find_item(items_under_cursor, _port.InputGui)
+                    self._accept_source_connect(port_gui)
             elif self._model.is_action_sub_flag_matching(self.ActionFlags.PortTargetHoverMove):
                 self._model.clear_action_sub_flag()
-                item = self._find_item(items_under_cursor, _port.OutputGui)
-                self._accept_target_connect(item)
+                port_gui = self._find_item(items_under_cursor, _port.OutputGui)
+                self._accept_target_connect(port_gui)
             # connection
             elif self._model.is_action_sub_flag_matching(self.ActionFlags.ConnectionSourceHoverMove):
                 self._model.clear_action_sub_flag()
-                item = self._find_item(items_under_cursor, _port.OutputGui)
-                self._accept_source_reconnect(item)
+                port_gui = self._find_item(items_under_cursor, _port.OutputGui)
+                self._accept_source_reconnect(port_gui)
             elif self._model.is_action_sub_flag_matching(self.ActionFlags.ConnectionTargetHoverMove):
                 self._model.clear_action_sub_flag()
-                item = self._find_item(items_under_cursor, _port.InputGui)
-                self._accept_target_reconnect(item)
+                if self._find_item(items_under_cursor, _aux.AddInputAuxGui):
+                    aux_gui = self._find_item(items_under_cursor, _aux.AddInputAuxGui)
+                    node = aux_gui.parentItem()._model
+                    self._accept_target_reconnect_auto(node)
+                else:
+                    port_gui = self._find_item(items_under_cursor, _port.InputGui)
+                    self._accept_target_reconnect(port_gui)
             else:
                 # do not change if elif order
                 # node add input
                 if self._find_item(items_under_cursor, _aux.AddInputAuxGui):
-                    item = self._find_item(items_under_cursor, _aux.AddInputAuxGui)
-                    node = item.parentItem()._model
+                    aux_gui = self._find_item(items_under_cursor, _aux.AddInputAuxGui)
+                    node = aux_gui.parentItem()._model
                     self._model._push_add_node_input_cmd(node)
                 # node move
                 elif self._find_item(items_under_cursor, _node.StandardNodeGui):

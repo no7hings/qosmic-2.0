@@ -3,6 +3,8 @@ import collections
 
 import json
 
+import six
+
 from ...core import base as _scn_cor_base
 
 from ...core import path as _scn_cor_path
@@ -11,7 +13,36 @@ from ..core import cel as _cor_cel
 
 
 class _TypedValue(_scn_cor_base._StageBase):
+    DataTypes = _scn_cor_base.DataTypes
+
+    @classmethod
+    def _valid_fnc(cls, data_type, data):
+        if data_type == cls.DataTypes.String:
+            if isinstance(data, six.string_types) is True:
+                return True, data
+            return False, data
+        elif data_type == cls.DataTypes.Integer:
+            if isinstance(data, int) is True:
+                return True, data
+            return False, data
+        elif data_type == cls.DataTypes.StringArray:
+            if isinstance(data, list) is True:
+                if data:
+                    if isinstance(data[0], six.string_types) is False:
+                        return False, data
+                return True, data
+            elif isinstance(data, (list, tuple)) is True:
+                return True, list(data)
+            return False, data
+        return True, data
+
     def __init__(self, data_type, data):
+        result, data = self._valid_fnc(data_type, data)
+        if result is False:
+            raise TypeError(
+                'data type error: {}, {}'.format(data_type, json.dumps(data))
+            )
+
         self._data = _scn_cor_base._Dict(
             type=data_type,
             data=data,
@@ -78,37 +109,37 @@ class _Attr(_scn_cor_base._StageBase):
     def get_data(self):
         return self._data.value.get()
 
-    def create_auto(self, data_type, data):
+    def add_auto(self, data_type, data):
         self.set_value(
             _TypedValue(data_type, data)
         )
 
     @AttrFactory.add(_scn_cor_base.DataTypes.String)
-    def create_string(self, data):
+    def add_string(self, data):
         pass
 
     @AttrFactory.add(_scn_cor_base.DataTypes.Integer)
-    def create_integer(self, data):
+    def add_integer(self, data):
         pass
 
     @AttrFactory.add(_scn_cor_base.DataTypes.Float)
-    def create_float(self, data):
+    def add_float(self, data):
         pass
 
     @AttrFactory.add(_scn_cor_base.DataTypes.StringArray)
-    def create_string_array(self, data):
-        pass
-
-    @AttrFactory.add(_scn_cor_base.DataTypes.Dict)
-    def create_dict(self, data):
+    def add_string_array(self, data):
         pass
 
     @AttrFactory.add(_scn_cor_base.DataTypes.IntegerArray)
-    def create_integer_array(self, data):
+    def add_integer_array(self, data):
         pass
 
     @AttrFactory.add(_scn_cor_base.DataTypes.FloatArray)
-    def create_float_array(self, data):
+    def add_float_array(self, data):
+        pass
+
+    @AttrFactory.add(_scn_cor_base.DataTypes.Dict)
+    def add_dict(self, data):
         pass
 
 
@@ -167,7 +198,7 @@ class _Node(_scn_cor_base._StageBase):
         for k, v in attrs.items():
             i_attr = node.add_attr(k)
             i_value = v['value']
-            i_attr.create_auto(i_value['type'], i_value['data'])
+            i_attr.add_auto(i_value['type'], i_value['data'])
         return node
 
     def get(self, key):
@@ -221,6 +252,7 @@ class StageRoot(_scn_cor_base._StageBase):
         self._data.nodes[path] = node
 
     def add_node(self, node_type, path):
+        # create when not exists
         if path in self._data.nodes:
             return self._data.nodes[path]
 

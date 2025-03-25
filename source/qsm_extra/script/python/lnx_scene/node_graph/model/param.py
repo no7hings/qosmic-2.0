@@ -1,4 +1,6 @@
 # coding:utf-8
+import json
+
 import lxbasic.core as bsc_core
 
 from ...core import base as _scn_cor_base
@@ -108,7 +110,8 @@ class _AbsTypedParam(_AbsParam):
 
     # for gui
     def _set_value(self, value):
-        if value != self._data.value:
+        # use json for unicode and str compare
+        if json.dumps(value) != json.dumps(self._data.value):
             self._data.value = value
             return True
         return False
@@ -238,7 +241,7 @@ class DictParam(_AbsTypedParam):
         self._data.options.widget = 'default'
 
 
-class ParamRootFactory:
+class ParamFactory:
     @staticmethod
     def add(scheme='typed'):
         def decorator(fnc):
@@ -365,53 +368,48 @@ class ParamRoot(_scn_cor_base._Base):
                     param_path = '{}.{}'.format(parent_path, name)
         return param_path
 
-    @ParamRootFactory.add('auto')
-    def create_auto(self, type_name, name=None, parent_path=None, param_path=None, *args, **kwargs):
+    @ParamFactory.add('auto')
+    def add_auto(self, type_name, name=None, parent_path=None, param_path=None, *args, **kwargs):
         param_cls = self.PARAM_CLS_MAP[type_name]
         model = param_cls(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamRootFactory.add('group')
+    @ParamFactory.add('group')
     def add_group(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = GroupParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamRootFactory.add('typed')
+    @ParamFactory.add('typed')
     def add_custom(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = CustomParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamRootFactory.add('typed')
-    def create_string(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
+    @ParamFactory.add('typed')
+    def add_string(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = StringParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamRootFactory.add('typed')
-    def create_integer(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
+    @ParamFactory.add('typed')
+    def add_integer(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = IntegerParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamRootFactory.add('typed')
+    @ParamFactory.add('typed')
     def add_boolean(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = BooleanParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamRootFactory.add('typed')
-    def create_integer_array(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
+    @ParamFactory.add('typed')
+    def add_integer_array(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = IntegerArrayParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamRootFactory.add('typed')
-    def create_integer_array(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
-        model = IntegerArrayParam(self.get_root_model(), self.get_node_path())
-        return model
-
-    @ParamRootFactory.add('typed')
-    def create_string_array(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
+    @ParamFactory.add('typed')
+    def add_string_array(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = StringArrayParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamRootFactory.add('typed')
+    @ParamFactory.add('typed')
     def add_dict(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = DictParam(self.get_root_model(), self.get_node_path())
         return model
@@ -432,5 +430,5 @@ class ParamRoot(_scn_cor_base._Base):
         if 'value' in data:
             kwargs['value'] = data['value']
 
-        self.create_auto(**kwargs).set_options(**data['options'])
+        self.add_auto(**kwargs).set_options(**data['options'])
 

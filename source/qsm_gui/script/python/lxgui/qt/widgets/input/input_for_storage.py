@@ -150,77 +150,35 @@ class QtInputForStorage(
             raise RuntimeError()
 
     def _do_open_file_(self):
-        dlg = QtWidgets.QFileDialog()
-        options = dlg.Options()
-        # options |= dlg.DontUseNativeDialog
-        # noinspection PyArgumentList
-        r = dlg.getOpenFileName(
-            self,
-            'Open File',
-            self._get_value_() or '',
-            filter=self._ext_filter,
-            options=options,
+        value = gui_core.GuiStorageDialog.open_file(
+            self._ext_filter, default=self._get_value_() or '', parent=self
         )
-        if r:
-            _ = r[0]
-            if _:
-                value = r[0]
-                self._set_value_(value)
-                self._push_history_(value)
+        if value:
+            self._set_value_(value)
+            self._push_history_(value)
 
     def _do_save_file_(self):
-        dlg = QtWidgets.QFileDialog()
-        options = dlg.Options()
-        # options |= dlg.DontUseNativeDialog
-        # noinspection PyArgumentList
-        r = dlg.getSaveFileName(
-            self,
-            'Save File',
-            self._get_value_() or '',
-            filter=self._ext_filter,
-            options=options,
+        value = gui_core.GuiStorageDialog.save_file(
+            self._ext_filter, default=self._get_value_() or '', parent=self
         )
-        if r:
-            _ = r[0]
-            if _:
-                value = r[0]
-                self._set_value_(value)
-                self._push_history_(value)
+        if value:
+            self._set_value_(value)
+            self._push_history_(value)
 
     def _do_open_directory_(self):
-        dlg = QtWidgets.QFileDialog()
-        options = dlg.Options()
-        # options |= dlg.DontUseNativeDialog
-        # noinspection PyArgumentList
-        r = dlg.getExistingDirectory(
-            self,
-            'Open Folder',
-            self._get_value_() or '',
-            options=options,
+        value = gui_core.GuiStorageDialog.open_directory(
+            default=self._get_value_() or '', parent=self
         )
-        if r:
-            value = r
-            self._set_value_(
-                value
-            )
+        if value:
+            self._set_value_(value)
             self._push_history_(value)
 
     def _do_save_directory_(self):
-        dlg = QtWidgets.QFileDialog()
-        options = dlg.Options()
-        # options |= dlg.DontUseNativeDialog
-        # noinspection PyArgumentList
-        r = dlg.getExistingDirectory(
-            self,
-            'Save Folder',
-            self._get_value_() or '',
-            options=options,
+        value = gui_core.GuiStorageDialog.save_directory(
+            default=self._get_value_() or '', parent=self
         )
-        if r:
-            value = r
-            self._set_value_(
-                value
-            )
+        if value:
+            self._set_value_(value)
             self._push_history_(value)
 
     def _do_any_(self):

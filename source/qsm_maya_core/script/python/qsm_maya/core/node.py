@@ -79,6 +79,7 @@ class Node(object):
 
     @classmethod
     def unlock(cls, name):
+        # unlock for assign error
         cmds.lockNode(name, lock=False, lockUnpublished=False)
 
 

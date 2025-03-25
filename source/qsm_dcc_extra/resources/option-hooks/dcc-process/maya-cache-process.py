@@ -61,9 +61,7 @@ def playblast_fnc(option_opt):
         option_opt.to_string()
     )
 
-    qsm_mya_hdl_gnl_scripts.PlayblastProcess(
-        **kwargs
-    ).execute()
+    qsm_mya_hdl_gnl_scripts.PlayblastProcess(**kwargs).execute()
 
 
 def cfx_cloth_cache_generate_fnc(option_opt):
@@ -75,9 +73,7 @@ def cfx_cloth_cache_generate_fnc(option_opt):
         option_opt.to_string()
     )
 
-    qsm_mya_hdl_cfx_scripts.CfxNClothCacheProcess(
-        **kwargs
-    ).execute()
+    qsm_mya_hdl_cfx_scripts.CfxNClothCacheProcess(**kwargs).execute()
 
 
 def shot_animation_cache_export_fnc(option_opt):
@@ -89,9 +85,7 @@ def shot_animation_cache_export_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.ShotAnimationCacheProcess(
-        **kwargs
-    ).execute()
+    s.ShotAnimationCacheProcess(**kwargs).execute()
 
 
 def shot_cfx_cloth_cache_export_fnc(option_opt):
@@ -103,9 +97,7 @@ def shot_cfx_cloth_cache_export_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.ShotCfxClothCacheExportProcess(
-        **kwargs
-    ).execute()
+    s.ShotCfxClothCacheExportProcess(**kwargs).execute()
 
 
 def rig_validation_fnc(option_opt):
@@ -117,9 +109,7 @@ def rig_validation_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.RigValidationTaskSubprocess(
-        **kwargs
-    ).execute()
+    s.RigValidationTaskSubprocess(**kwargs).execute()
 
 
 def scenery_validation_fnc(option_opt):
@@ -131,9 +121,7 @@ def scenery_validation_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.SceneryValidationTaskSubprocess(
-        **kwargs
-    ).execute()
+    s.SceneryValidationTaskSubprocess(**kwargs).execute()
 
 
 def mesh_count_generate_fnc(option_opt):
@@ -145,9 +133,7 @@ def mesh_count_generate_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.AssetMeshCountProcess(
-        **kwargs
-    ).execute()
+    s.AssetMeshCountProcess(**kwargs).execute()
 
 
 def snapshot_generate_fnc(option_opt):
@@ -159,9 +145,7 @@ def snapshot_generate_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.AssetSnapshotProcess(
-        **kwargs
-    ).execute()
+    s.AssetSnapshotProcess(**kwargs).execute()
 
 
 def unit_assembly_generate_fnc(option_opt):
@@ -173,9 +157,19 @@ def unit_assembly_generate_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.AssetUnitAssemblyProcess(
-        **kwargs
-    ).execute()
+    s.AssetUnitAssemblyProcess(**kwargs).execute()
+
+
+def shot_replace_reference_fnc(option_opt):
+    import qsm_general.process as qsm_gnl_process
+
+    import qsm_maya_lazy.shot_prc.scripts as s
+
+    kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
+        option_opt.to_string()
+    )
+
+    s.ShotReferenceReplace(**kwargs).execute()
 
 
 def motion_generate_fnc(option_opt):
@@ -187,9 +181,7 @@ def motion_generate_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.StlConvertionProcess(
-        **kwargs
-    ).execute()
+    s.StlConvertionProcess(**kwargs).execute()
 
 
 def mocap_fbx_motion_generate_fnc(option_opt):
@@ -201,9 +193,7 @@ def mocap_fbx_motion_generate_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.MoCapDotFbxMotionGenerateProcess(
-        **kwargs
-    ).execute()
+    s.MoCapDotFbxMotionGenerateProcess(**kwargs).execute()
     
 
 def mocap_fbx_motion_generate_auto_fnc(option_opt):
@@ -215,9 +205,7 @@ def mocap_fbx_motion_generate_auto_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.MoCapDotFbxMotionGenerateAutoProcess(
-        **kwargs
-    ).execute()
+    s.MoCapDotFbxMotionGenerateAutoProcess(**kwargs).execute()
 
 
 def test_unicode(method, option_opt):
@@ -291,6 +279,9 @@ def main(session):
     # new method for unit assembly generate
     elif method == 'unit_assembly_generate':
         unit_assembly_generate_fnc(option_opt)
+    #
+    elif method == 'shot_replace_reference':
+        shot_replace_reference_fnc(option_opt)
     # test
     elif method == 'test-unicode':
         test_unicode(method, option_opt)

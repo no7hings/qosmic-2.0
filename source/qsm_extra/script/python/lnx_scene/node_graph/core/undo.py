@@ -24,6 +24,7 @@ class UndoActions(enum.IntEnum):
 
     NodeAddInput = 0x22
     NodeInputConnectAuto = 0x23
+    NodeInputReconnectAuto = 0x24
 
     NodeBypass = 0x25
 

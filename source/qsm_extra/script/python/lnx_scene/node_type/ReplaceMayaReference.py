@@ -20,7 +20,7 @@ class Node(_ng_model.StandardNode):
 
         stg_nodes = stage.find_nodes(cel_str)
         for i in stg_nodes:
-            i.add_attr('reference_replace_map').create_dict(
+            i.add_attr('reference_replace_map').add_dict(
                 node.get('replace.replace_map')
             )
 
@@ -35,34 +35,34 @@ class Node(_ng_model.StandardNode):
         node.parameters.add_group(param_path='setting').set_options(
             gui_name='Setting', gui_name_chs='设置'
         )
-        node.parameters.create_string(
+        node.parameters.add_string(
             param_path='setting.selection',
             value='/root/maya/scene//*{attr("type")=="MaysScene"}'
         ).set_options(
             widget='path', gui_name='Selection', gui_name_chs='选择'
         )
 
-        node.parameters.create_string(
+        node.parameters.add_string(
             param_path='setting.reference_pattern',
             value='X:/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
         ).set_options(
             widget='path', gui_name='Reference Pattern', gui_name_chs='引用模版'
         )
 
-        # data
-        node.parameters.add_group(param_path='data').set_options(
-            gui_name='Data', gui_name_chs='数据'
-        )
-        node.parameters.create_string_array(param_path='data.references').set_options(
-            widget='json', lock=True, gui_name='References', gui_name_chs='引用'
-        )
-
-        # data button
-        node.parameters.add_custom(param_path='data.update_info').set_options(
-            widget='button',
-            script=r'import lnx_scene.node_handle as h; h.ReplaceMayaReference(node).update_info()',
-            gui_name='Update Data', gui_name_chs='更新数据',
-        )
+        # # data
+        # node.parameters.add_group(param_path='data').set_options(
+        #     gui_name='Data', gui_name_chs='数据'
+        # )
+        # node.parameters.add_string_array(param_path='data.references').set_options(
+        #     widget='json', lock=True, gui_name='References', gui_name_chs='引用'
+        # )
+        #
+        # # data button
+        # node.parameters.add_custom(param_path='data.update_data').set_options(
+        #     widget='button',
+        #     script=r'import lnx_scene.node_handle as h; h.ReplaceMayaReference(node).update_data()',
+        #     gui_name='Update Data', gui_name_chs='更新数据',
+        # )
 
         # replace
         node.parameters.add_group(param_path='replace').set_options(
@@ -81,6 +81,10 @@ class Node(_ng_model.StandardNode):
                 dict(
                     script=r'import lnx_scene.node_handle as h; h.ReplaceMayaReference(node).create_replace()',
                     gui_name='Create Replace', gui_name_chs='创建替换'
+                ),
+                dict(
+                    script=r'import lnx_scene.node_handle as h; h.ReplaceMayaReference(node).modify_replace()',
+                    gui_name='Modify Replace', gui_name_chs='修改替换',
                 ),
                 dict(
                     script=r'import lnx_scene.node_handle as h; h.ReplaceMayaReference(node).remove_replace()',

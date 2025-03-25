@@ -117,7 +117,7 @@ class MayaAscii(abc_.AbsDotfile):
                         i_args = i_namespace_local, i_node, i_file, False
 
                 if i_args:
-                    i_namespace_local, i_node, i_file, is_loaded = i_args
+                    i_namespace_local, i_node, i_file, i_is_loaded = i_args
                     i_node_args = i_node.split(':')
                     i_namespace_parent = ':'.join(i_node_args[:-1])
                     i_node_name = i_node
@@ -142,7 +142,7 @@ class MayaAscii(abc_.AbsDotfile):
                         node=i_node,
                         type='reference',
                         file=i_file,
-                        is_loaded=is_loaded,
+                        is_loaded=i_is_loaded,
                         icon_name='node/maya/reference'
                     )
         return dict_
@@ -157,9 +157,14 @@ class MayaAscii(abc_.AbsDotfile):
         return list_
 
     @abc_.DotfileCache.get()
-    def get_reference_files(self):
+    def get_reference_files(self, ignore_unloaded=False):
         set_ = set()
         for k, v in self.get_reference_dict().items():
+            if ignore_unloaded is True:
+                i_is_loaded = v['is_loaded']
+                if i_is_loaded is False:
+                    continue
+
             set_.add(v['file'])
         return list(set_)
 

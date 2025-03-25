@@ -139,7 +139,7 @@ class QtLineChartWidget(
         self._line_chart._export_all_to_(directory_path)
 
     def _do_export_all_(self):
-        directory_path = _gui_core.GuiStorageDialog.save_directory(self)
+        directory_path = _gui_core.GuiStorageDialog.save_directory(parent=self)
         if directory_path:
             self._export_all_to_(directory_path)
             bsc_storage.StgDirectoryOpt(directory_path).show_in_system()

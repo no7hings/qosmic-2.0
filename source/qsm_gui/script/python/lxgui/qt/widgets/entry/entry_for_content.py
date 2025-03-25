@@ -42,6 +42,8 @@ class QtEntryForContent(
         self.setAutoFillBackground(True)
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
 
+        # self.returnPressed.connect(self._execute_text_change_accepted_)
+
         self._print_signals = _qt_core.QtPrintSignals(self)
         #
         self._print_signals.print_add_accepted.connect(self._append_value_)
@@ -83,10 +85,15 @@ class QtEntryForContent(
                 #
                 self.focus_out.emit()
                 self.focus_changed.emit()
+                #
+                self._execute_text_change_accepted_()
             elif event.type() == QtCore.QEvent.Wheel:
                 if event.modifiers() == QtCore.Qt.ControlModifier:
                     self._execute_font_scale_(event)
                     return True
+            elif event.type() == QtCore.QEvent.KeyPress:
+                if event.key() in {QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter}:
+                    self._execute_text_change_accepted_()
         return False
 
     def paintEvent(self, event):
@@ -130,6 +137,9 @@ class QtEntryForContent(
             self._qt_menu._set_menu_data_(menu_raw)
             self._qt_menu._set_show_()
 
+    def _execute_text_change_accepted_(self):
+        self.entry_value_accepted.emit(self._get_value_())
+
     def _execute_font_scale_(self, event):
         delta = event.angleDelta().y()
         font = self.font()
@@ -172,11 +182,14 @@ class QtEntryForContent(
         return self.toPlainText()
 
     def _set_value_(self, value):
+        value_pre = self.toPlainText()
+
         if value is not None:
             value = bsc_core.ensure_string(value)
-            self.setText(
-                value
-            )
+            value_pre = bsc_core.ensure_string(value_pre)
+            if value != value_pre:
+                self.entry_value_accepted.emit(value)
+                self.setText(value)
         else:
             self.setText('')
 

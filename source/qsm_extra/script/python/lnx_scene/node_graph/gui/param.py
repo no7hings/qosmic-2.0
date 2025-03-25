@@ -1,6 +1,8 @@
 # coding:utf-8
 import sys
 
+import collections
+
 import functools
 
 import json
@@ -53,7 +55,7 @@ class _AbsCustomGui(QtWidgets.QWidget):
     def _set_label_width(self, w):
         pass
 
-    def _get_label_minimum_width(self):
+    def _get_label_width(self):
         return -1
 
     def _refresh(self):
@@ -145,6 +147,9 @@ class _AbsTypedGui(QtWidgets.QWidget):
 
     def _accept_value(self, value):
         self._param._set_value(value)
+        # sys.stdout.write(
+        #     'set value: {}.\n'.format(self._param.get_path())
+        # )
 
     def _set_label(self, text):
         self._label_wgt._set_name_text_(text)
@@ -158,7 +163,7 @@ class _AbsTypedGui(QtWidgets.QWidget):
     def _set_label_width(self, w):
         self._label_wgt.setFixedWidth(w)
 
-    def _get_label_minimum_width(self):
+    def _get_label_width(self):
         return self._label_wgt._get_name_text_draw_width_()+16
 
     def _refresh(self):
@@ -179,9 +184,24 @@ class JsonGui(_AbsTypedGui):
         self._input_wgt._set_item_value_entry_enable_(True)
         self._input_wgt._set_size_policy_height_fixed_mode_()
 
+        self._input_wgt._set_entry_enable_(True)
+
     def _set_value(self, value):
         self._input_wgt._set_value_(
             json.dumps(value, indent=4)
+        )
+
+    def _accept_value(self, value):
+        self._param._set_value(
+            json.loads(value, object_pairs_hook=collections.OrderedDict)
+        )
+        sys.stdout.write(
+            'set value: {}.\n'.format(self._param.get_path())
+        )
+
+    def _connect_value_change(self):
+        self._input_wgt.input_value_accepted.connect(
+            self._accept_value
         )
 
 
@@ -239,13 +259,19 @@ class ArrayGui(_AbsTypedGui):
 
 
 # boolean
-class CheckboxGui(_AbsTypedGui):
+class BooleanGui(_AbsTypedGui):
     QT_INPUT_WGT_CLS = gui_qt_widgets.QtCheckButton
 
     def __init__(self, *args, **kwargs):
-        super(CheckboxGui, self).__init__(*args, **kwargs)
+        super(BooleanGui, self).__init__(*args, **kwargs)
 
         self.setFixedHeight(24)
+
+    def _set_label(self, text):
+        self._input_wgt._set_name_text_(text)
+
+    def _get_label_width(self):
+        return 0
 
     def _set_value(self, value):
         self._input_wgt._set_checked_(value)
@@ -317,7 +343,7 @@ class _AbsGroupGui(QtWidgets.QWidget):
                 if i_item:
                     i_wgt = i_item.widget()
                     if isinstance(i_wgt, _AbsTypedGui):
-                        i_w = i_wgt._get_label_minimum_width()
+                        i_w = i_wgt._get_label_width()
                         widths.append(i_w)
 
             if widths:
@@ -694,7 +720,7 @@ class ParamRootGui(_AbsGroupGui):
 
     @ParamRootGuiFactory.add()
     def _add_boolean(self, param):
-        gui = CheckboxGui()
+        gui = BooleanGui()
         return gui
 
     @ParamRootGuiFactory.add()

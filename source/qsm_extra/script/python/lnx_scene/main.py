@@ -100,7 +100,7 @@ class QtNodeGraphWidget(gui_qt_vew_wgt_base._BaseViewWidget):
     def _build_file_tool_box(self):
         self._file_new_button = gui_qt_widgets.QtIconPressButton()
         self._file_tool_box._add_widget_(self._file_new_button)
-        self._file_new_button._set_icon_name_('file/add-file')
+        self._file_new_button._set_icon_name_('file/file')
         self._file_new_button.press_clicked.connect(self._model._on_new_file_action)
         self._file_new_button._set_name_text_('New file')
         self._file_new_button._set_tool_tip_('Ctrl+N')

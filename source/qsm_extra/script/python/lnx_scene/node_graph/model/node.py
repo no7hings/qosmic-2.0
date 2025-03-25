@@ -1442,9 +1442,6 @@ class Backdrop(_AbsNode):
             return True
         return False
 
-    def _check_scene_move(self, point):
-        return self._check_move(point-self._gui.pos())
-
     # move
     def do_move_start(self, event):
         self._gui_data.action.move_flag = True
@@ -1519,9 +1516,6 @@ class Backdrop(_AbsNode):
         self._push_node_move_cmd()
 
     # resize
-    def _check_scene_resize(self, point):
-        return self._check_resize(point-self._gui.pos())
-
     def _check_resize(self, point):
         if self._gui_data.resize.rect.contains(point):
             return True

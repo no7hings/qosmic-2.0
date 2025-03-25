@@ -28,7 +28,7 @@ class Node(_ng_model.StandardNode):
         node.parameters.add_group(param_path='setting').set_options(
             gui_name='Setting', gui_name_chs='设置'
         )
-        node.parameters.create_string(
+        node.parameters.add_string(
             param_path='setting.selection',
             value='/root/maya/scene//*{attr("type")=="MaysScene"}'
         ).set_options(
@@ -39,7 +39,7 @@ class Node(_ng_model.StandardNode):
         node.parameters.add_group(param_path='output').set_options(
             gui_name='Output', gui_name_chs='输出'
         )
-        node.parameters.create_string(param_path='output.directory').set_options(
+        node.parameters.add_string(param_path='output.directory').set_options(
             widget='directory', save=True, gui_name='Directory', gui_name_chs='目录'
         )
         node.parameters.add_boolean(param_path='output.with_playblast').set_options(
