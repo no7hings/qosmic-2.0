@@ -92,17 +92,16 @@ class PrxBaseWindow(
         else:
             self.__debug_menu.set_name('Debugger')
         self._qt_menu_bar_0.addMenu(self.__debug_menu.widget)
-        #
-        self._qt_central_widget = _qt_wgt_utility.QtTranslucentWidget()
-        self._qt_widget.setCentralWidget(self._qt_central_widget)
-        #
+
+        self._create_central_widget()
+
         self._init_progressing_def_()
-        #
+
         self._qt_central_layout = _qt_wgt_base.QtVBoxLayout(self._qt_central_widget)
         self._qt_central_layout.setContentsMargins(0, 0, 0, 0)
-        #
+
         self._init_layer_base_def_(self._qt_central_layout)
-        #
+
         self.__build_main_layer()
         self.__build_log_layer()
         self.__build_help_layer()
@@ -110,9 +109,9 @@ class PrxBaseWindow(
         self.__build_loading_layer()
         self.__build_expression_layer()
         self.__build_message_layer()
-        #
+
         self._set_waiting_def_init_()
-        #
+
         self.set_current_layer('window_main_0')
         if self._language == 'chs':
             show_menu_data = [
@@ -230,6 +229,10 @@ class PrxBaseWindow(
 
     def get_main_widget(self):
         return self._qt_main_widget
+
+    def _create_central_widget(self):
+        self._qt_central_widget = _qt_wgt_utility.QtTranslucentWidget()
+        self._qt_widget.setCentralWidget(self._qt_central_widget)
 
     def get_central_widget(self):
         return self._qt_central_widget
@@ -611,3 +614,24 @@ class PrxSessionToolWindow(PrxSessionWindow):
 
     def gui_setup_fnc(self):
         raise NotImplementedError()
+
+
+class PrxBaseDockerWindow(PrxBaseWindow):
+    QT_WIDGET_CLS = _qt_window_base.QtDockerWindow
+
+    def __init__(self, *args, **kwargs):
+        super(PrxBaseDockerWindow, self).__init__(*args, **kwargs)
+
+    def _create_central_widget(self):
+        self._qt_central_widget = _qt_wgt_utility.QtTranslucentWidget()
+        self._qt_widget._create_center_docker_('Main', self._qt_central_widget)
+        self._qt_widget.setCentralWidget(None)
+
+    def create_left_docker(self, name, widget):
+        return self._qt_widget._create_left_docker_(name, widget)
+
+    def create_right_docker(self, name, widget):
+        return self._qt_widget._create_right_docker_(name, widget)
+
+    def accept_corner(self):
+        self._qt_widget._accept_corner_()

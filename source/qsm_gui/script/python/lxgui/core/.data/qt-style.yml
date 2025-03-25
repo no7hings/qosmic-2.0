@@ -423,7 +423,20 @@ widget:
     QGraphicsView:
         |-
         QGraphicsView{
-            show-decoration-selected: 1;
+            background: rgba(<option.rgba.Transparent>);
+            color: rgba(<option.rgba.Text>); 
+            border: 1px rgba(<option.rgba.Transparent>); border-radius: 0px; border-style: solid;
+        }
+
+    QDockWidget:
+        |-
+        QDockWidget{
+            background: rgba(<option.rgba.Transparent>);
+            color: rgba(<option.rgba.Text>); 
+            border: 1px rgba(<option.rgba.Transparent>); border-radius: 0px; border-style: solid;
+            titlebar-close-icon: url(<option.icon-dir>/close.svg);
+        }
+        QDockWidget::title{
             background: rgba(<option.rgba.Transparent>);
             color: rgba(<option.rgba.Text>); 
             border: 1px rgba(<option.rgba.Transparent>); border-radius: 0px; border-style: solid;

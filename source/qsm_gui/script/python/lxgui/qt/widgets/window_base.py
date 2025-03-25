@@ -299,3 +299,42 @@ class QtMainWindow(
 
     def _connect_size_changed_to_(self, fnc):
         self.size_changed.connect(fnc)
+
+
+class QtDockerWidget(QtWidgets.QDockWidget):
+    def __init__(self, *args, **kwargs):
+        super(QtDockerWidget, self).__init__(*args)
+
+        self.setStyleSheet(
+            _qt_core.QtStyle.get('QDockWidget')
+        )
+
+
+class QtDockerWindow(QtMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(QtDockerWindow, self).__init__(*args, **kwargs)
+
+    def _create_center_docker_(self, name, widget):
+        dock = QtDockerWidget(name, self)
+        dock.setWidget(widget)
+        dock.setFeatures(QtWidgets.QDockWidget.AllDockWidgetFeatures)
+        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+        return dock
+
+    def _create_left_docker_(self, name, widget):
+        dock = QtDockerWidget(name, self)
+        dock.setWidget(widget)
+        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+        return dock
+
+    def _create_right_docker_(self, name, widget):
+        dock = QtDockerWidget(name, self)
+        dock.setWidget(widget)
+        self.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+        return dock
+
+    def _accept_corner_(self):
+        self.setCorner(QtCore.Qt.TopLeftCorner, QtCore.Qt.LeftDockWidgetArea)
+        self.setCorner(QtCore.Qt.TopRightCorner, QtCore.Qt.RightDockWidgetArea)
+        self.setCorner(QtCore.Qt.BottomLeftCorner, QtCore.Qt.LeftDockWidgetArea)
+        self.setCorner(QtCore.Qt.BottomRightCorner, QtCore.Qt.RightDockWidgetArea)

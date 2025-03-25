@@ -115,7 +115,7 @@ class GuiDialogForChooseAsBubble(object):
 # noinspection PyArgumentList
 class GuiStorageDialog(object):
     @classmethod
-    def open_file(cls, ext_filter='All File (*.*)', parent=None):
+    def open_file(cls, ext_filter='All File (*.*)', default='', parent=None):
         from ..qt import core as gui_qt_core
 
         dlg = gui_qt_core.QtWidgets.QFileDialog()
@@ -124,6 +124,7 @@ class GuiStorageDialog(object):
         r = dlg.getOpenFileName(
             parent,
             'Open File',
+            default,
             filter=ext_filter,
             options=options,
         )
@@ -134,7 +135,7 @@ class GuiStorageDialog(object):
         return None
 
     @classmethod
-    def save_file(cls, ext_filter='All File (*.*)', parent=None):
+    def save_file(cls, ext_filter='All File (*.*)', default='', parent=None):
         from ..qt import core as gui_qt_core
 
         dlg = gui_qt_core.QtWidgets.QFileDialog()
@@ -143,7 +144,7 @@ class GuiStorageDialog(object):
         r = dlg.getSaveFileName(
             parent,
             'Save File',
-            '',
+            default,
             filter=ext_filter,
             options=options,
         )

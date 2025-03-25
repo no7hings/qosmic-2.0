@@ -20,15 +20,15 @@ class Node(_ng_model.StandardNode):
 
         stg_nodes = stage.find_nodes(cel_str)
         for i in stg_nodes:
-            i.add_attr('reference_replace_dict').create_dict(
-                node.get('replace.replace_dict')
+            i.add_attr('reference_replace_map').create_dict(
+                node.get('replace.replace_map')
             )
 
     @classmethod
     def create(cls, node):
         node.set_add_port_enable(True)
         node.set_input_prefix('i0')
-        node._generate_input(port_path='i0')
+        # node._generate_input(port_path='i0')
         node._generate_output(port_path='out')
 
         # setting
@@ -43,10 +43,10 @@ class Node(_ng_model.StandardNode):
         )
 
         node.parameters.create_string(
-            param_path='setting.file_pattern',
+            param_path='setting.reference_pattern',
             value='X:/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
         ).set_options(
-            widget='path', gui_name='File Pattern', gui_name_chs='文件模版'
+            widget='path', gui_name='Reference Pattern', gui_name_chs='引用模版'
         )
 
         # data
@@ -69,7 +69,7 @@ class Node(_ng_model.StandardNode):
             gui_name='Replace', gui_name_chs='替换'
         )
 
-        node.parameters.add_dict(param_path='replace.replace_dict').set_options(
+        node.parameters.add_dict(param_path='replace.replace_map').set_options(
             widget='json',
             gui_name='Replace Map', gui_name_chs='替换对照',
         )

@@ -21,7 +21,7 @@ class NodeGraphScene(QGraphicsScene):
     def mouseMoveEvent(self, event):
         super(NodeGraphScene, self).mouseMoveEvent(event)
         for item in self.selectedItems():
-            print item
+            print(item)
             if isinstance(item, Node):
                 colliding_items = item.collidingItems()
                 for colliding_item in colliding_items:

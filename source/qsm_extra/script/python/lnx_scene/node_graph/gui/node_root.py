@@ -27,9 +27,9 @@ from . import port as _port
 from . import node as _node
 
 
-class QtScene(QtWidgets.QGraphicsScene):
+class SceneGui(QtWidgets.QGraphicsScene):
     def __init__(self, *args):
-        super(QtScene, self).__init__(*args)
+        super(SceneGui, self).__init__(*args)
 
         self._model = None
 
@@ -139,6 +139,16 @@ class RootNodeGui(
             (self._model._on_paste_action, 'Ctrl+V'),
             # bypass
             (self._model._on_bypass_action, 'D'),
+            # frame select
+            (self._model._on_frame_select_action, 'F'),
+            # new file
+            (self._model._on_new_file_action, 'Ctrl+N'),
+            # open file
+            (self._model._on_open_file_action, 'Ctrl+O'),
+            # save file
+            (self._model._on_save_file_action, 'Ctrl+S'),
+            # save file to
+            (self._model._on_save_file_to_action, 'Ctrl+Shift+S')
         ]
         for i_fnc, i_shortcut in actions:
             i_action = QtWidgets.QAction(self)
@@ -369,14 +379,11 @@ class RootNodeGui(
                         self._drag_connection.update_v(end_point=p)
                 elif self._find_item(items_under_cursor, _node.BackdropGui):
                     item = self._find_item(items_under_cursor, _node.BackdropGui)
-                    if item._model._check_scene_move(p):
-                        super(RootNodeGui, self).mousePressEvent(event)
-                    elif item._model._check_scene_resize(p):
-                        super(RootNodeGui, self).mousePressEvent(event)
-                    else:
+                    # pass event first
+                    super(RootNodeGui, self).mousePressEvent(event)
+                    if item._model.get_move_flag() is False and item._model.get_resize_flag() is False:
                         self._model.set_action_flag(self.ActionFlags.RectSelectPressClick)
                         self._model._do_rect_selection_start(event)
-                        super(RootNodeGui, self).mousePressEvent(event)
                 # node bypass
                 elif self._find_item(items_under_cursor, _aux.IconAuxGui):
                     super(RootNodeGui, self).mousePressEvent(event)
@@ -606,7 +613,6 @@ class RootNodeGui(
             menu._set_menu_data_(menu_data_generate_fnc())
 
         # data from item
-        item = self.itemAt(event.pos())
         items_under_cursor = self._get_items_under_cursor(event.pos())
         if items_under_cursor:
             menu = None
@@ -640,3 +646,14 @@ class RootNodeGui(
 
         if menu is not None:
             menu._popup_start_()
+
+    def _get_gui_translate(self):
+        transform = self.transform()
+        return transform.dx(), transform.dy()
+
+    def _get_gui_scale(self):
+        transform = self.transform()
+        return round(transform.m11(), 3), round(transform.m22(), 3)
+
+    def drawBackground(self, painter, rect):
+        super(RootNodeGui, self).drawBackground(painter, rect)

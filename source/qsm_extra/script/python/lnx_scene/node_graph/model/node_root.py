@@ -1,6 +1,8 @@
 # coding:utf-8
 import collections
 
+import os
+
 import contextlib
 
 import functools
@@ -10,6 +12,10 @@ import json
 import six
 
 import lxbasic.core as bsc_core
+
+import lxbasic.storage as bsc_storage
+
+import lxgui.core as gui_core
 
 from lxgui.qt.core.wrap import *
 
@@ -24,6 +30,152 @@ from ..core import action as _cor_action
 from ..core import undo as _cor_undo
 
 from ...stage import model as _stg_model
+
+
+class SceneFile(object):
+    def __init__(self, root_model):
+        self._root_model = root_model
+
+        self._default_path = '{}/QSM/scenes/untitled.jsz'.format(bsc_core.BscSystem.get_home_directory())
+        self._current_path = self._default_path
+
+        self._current_data = self._root_model.to_data()
+
+    def is_dirty(self):
+        return self._root_model.to_data() != self._current_data
+
+    def get_current(self):
+        return self._current_path
+
+    def is_default(self):
+        return self.get_current() == self._default_path
+
+    def _set_current_path(self, file_path):
+        self._current_path = file_path
+
+    def _set_current_data(self, data):
+        self._current_data = data
+
+    def save_to(self, file_path):
+        data = self._root_model.to_data()
+        if data:
+            bsc_storage.StgFileOpt(file_path).set_write(data)
+            self._set_current_path(file_path)
+            self._set_current_data(data)
+
+    def save(self):
+        self.save_to(self.get_current())
+
+    def open(self, file_path):
+        data = bsc_storage.StgFileOpt(file_path).set_read()
+        if data:
+            self._root_model.load_from_data(data)
+            self._set_current_path(file_path)
+            self._set_current_data(data)
+
+    def new(self):
+        return self._root_model.restore()
+
+    def new_with_dialog(self):
+        if self.is_dirty() is True:
+            if gui_core.GuiUtil.language_is_chs():
+                result = gui_core.GuiApplication.exec_message_dialog(
+                    u'保存修改到: {}?'.format(
+                        self.get_current()
+                    ),
+                    title='保存文件？',
+                    show_no=True,
+                    show_cancel=True,
+                    size=(320, 120),
+                    status='warning',
+                )
+            else:
+                result = gui_core.GuiApplication.exec_message_dialog(
+                    u'Save changes to: {}?'.format(
+                        self.get_current()
+                    ),
+                    title='Save Scene?',
+                    show_no=True,
+                    show_cancel=True,
+                    size=(320, 120),
+                    status='warning',
+                )
+            if result is True:
+                self.save_to(self.get_current())
+                self.new()
+                return True
+            elif result is False:
+                self.new()
+                return True
+        else:
+            self.new()
+            return True
+        return False
+
+    def open_with_dialog(self, file_path):
+        if self.is_dirty() is True:
+            if gui_core.GuiUtil.language_is_chs():
+                result = gui_core.GuiApplication.exec_message_dialog(
+                    u'保存修改到: {}?'.format(
+                        self.get_current()
+                    ),
+                    title='保存文件？',
+                    show_no=True,
+                    show_cancel=True,
+                    size=(320, 120),
+                    status='warning'
+                )
+            else:
+                result = gui_core.GuiApplication.exec_message_dialog(
+                    u'Save changes to: {}?'.format(
+                        self.get_current()
+                    ),
+                    title='Save Scene?',
+                    show_no=True,
+                    show_cancel=True,
+                    size=(320, 120),
+                    status='warning'
+                )
+
+            if result is True:
+                self.save_to(self.get_current())
+                self.open(file_path)
+                return True
+            elif result is False:
+                self.open(file_path)
+                return True
+        else:
+            self.open(file_path)
+            return True
+        return False
+    
+    def save_to_with_dialog(self, file_path):
+        # check file directory is changed, when changed save to.
+        if os.path.abspath(file_path) == os.path.abspath(self.get_current()):
+            if self.is_dirty() is True:
+                self.save_to(file_path)
+                return True
+
+            if gui_core.GuiUtil.language_is_chs():
+                gui_core.GuiApplication.exec_message_dialog(
+                    '沒有需要保存的更改。',
+                    title='保存文件',
+                    size=(320, 120),
+                    status='warning',
+                )
+            else:
+                gui_core.GuiApplication.exec_message_dialog(
+                    'No changes to save.',
+                    title='Save Scene',
+                    size=(320, 120),
+                    status='warning',
+                )
+            return False
+        self.save_to(file_path)
+        return True
+
+    def save_with_dialog(self):
+        self.save_to_with_dialog(self.get_current())
 
 
 # scene model
@@ -45,7 +197,16 @@ class RootNode(
         self._data.name = ''
 
         self._data.nodes = collections.OrderedDict()
-        self._gui_data.connection_dict = collections.OrderedDict()
+        self._builtin_data.connection_dict = collections.OrderedDict()
+
+        self._data.options = _scn_cor_base._Dict(
+            translate=_scn_cor_base._Dict(
+                x=0, y=0,
+            ),
+            scale=_scn_cor_base._Dict(
+                x=1, y=1,
+            ),
+        )
 
         # connection
         self._builtin_data.connection = _scn_cor_base._Dict(
@@ -99,6 +260,8 @@ class RootNode(
         self._param_root_stack_gui = None
 
         self._stage_model = None
+
+        self._scene_file = SceneFile(self)
 
     def get_gui_scene(self):
         return self._gui.scene()
@@ -235,11 +398,7 @@ class RootNode(
         return False
 
     def _update_stage_for(self, node):
-        self._stage_model = _stg_model.StageRoot()
-        node_queue = node.get_node_queue()
-        for i_node in node_queue:
-            i_node.compute(i_node, self._stage_model)
-
+        self._stage_model = node.compute_chain_to_stage()
         print(self._stage_model)
 
     # edited
@@ -265,9 +424,6 @@ class RootNode(
             self._gui.node_edited_changed.emit(node_path)
             return True
         return False
-
-    def crate_by_data(self, data):
-        pass
 
     # node
     def get_node_path_set(self):
@@ -350,6 +506,9 @@ class RootNode(
         gui = node._gui
         self._gui.scene().removeItem(gui)
         del gui
+
+    def get_all_nodes(self):
+        return list(self._data.nodes.values())
 
     def get_node(self, node_path):
         return self._data.nodes.get(node_path)
@@ -445,8 +604,8 @@ class RootNode(
 
     def _connect_ports(self, source_port, target_port):
         path = self._join_to_connection_path(source_port.get_path(), target_port.get_path())
-        if path in self._gui_data.connection_dict:
-            return False, self._gui_data.connection_dict[path]
+        if path in self._builtin_data.connection_dict:
+            return False, self._builtin_data.connection_dict[path]
 
         if target_port.has_source():
             # when target port has source, break connection first
@@ -464,7 +623,7 @@ class RootNode(
         target_port._register_connection(path)
         self._gui.scene().addItem(gui)
 
-        self._gui_data.connection_dict[path] = model
+        self._builtin_data.connection_dict[path] = model
         return True, model
 
     @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.PortConnect)
@@ -515,9 +674,9 @@ class RootNode(
 
     def _disconnect_ports(self, source_port, target_port):
         path = self._join_to_connection_path(source_port.get_path(), target_port.get_path())
-        if path in self._gui_data.connection_dict:
-            connection = self._gui_data.connection_dict[path]
-            self._gui_data.connection_dict.pop(path)
+        if path in self._builtin_data.connection_dict:
+            connection = self._builtin_data.connection_dict[path]
+            self._builtin_data.connection_dict.pop(path)
             source_port._unregister_connection(path)
             target_port._unregister_connection(path)
             self._gui.scene().removeItem(connection._gui)
@@ -571,27 +730,30 @@ class RootNode(
 
         return self.undo_stack, _redo_fnc, _undo_fnc
 
+    def get_all_connections(self):
+        return list(self._builtin_data.connection_dict.values())
+
     def get_connection(self, path):
-        return self._gui_data.connection_dict.get(path)
+        return self._builtin_data.connection_dict.get(path)
 
     def remove_connection_path(self, path):
-        if path in self._gui_data.connection_dict:
-            connection = self._gui_data.connection_dict[path]
-            self._remove_connection(connection)
+        if path in self._builtin_data.connection_dict:
+            connection = self._builtin_data.connection_dict[path]
+            self._unregister_connection(connection)
             return True
         return False
 
-    def _remove_connection(self, connection):
+    def _unregister_connection(self, connection):
         path = connection.get_path()
         source_port = connection.get_source()
         target_port = connection.get_target()
         source_port._unregister_connection(path)
         target_port._unregister_connection(path)
-        self._gui_data.connection_dict.pop(path)
+        self._builtin_data.connection_dict.pop(path)
         self._gui.scene().removeItem(connection._gui)
 
     def has_connection(self, path):
-        return path in self._gui_data.connection_dict
+        return path in self._builtin_data.connection_dict
 
     @property
     def data(self):
@@ -600,6 +762,45 @@ class RootNode(
     @property
     def gui_data(self):
         return self._gui_data
+
+    # translate and scale
+    def _save_translate(self, translate):
+        x, y = translate
+        self._data.options.translate.x = x
+        self._data.options.translate.y = y
+
+    def _set_translate(self, translate):
+        self._save_translate(translate)
+
+        tx, ty = translate
+        sx, sy = self._get_gui_scale()
+        self._set_gui_transformation(tx, ty, sx, sy)
+
+    def _get_translate(self):
+        return self._data.options.translate.x, self._data.options.translate.y
+
+    def _save_scale(self, scale):
+        x, y = scale
+        self._data.options.scale.x = x
+        self._data.options.scale.y = y
+
+    def _get_scale_(self):
+        return self._data.option.scale.x, self._data.option.scale.y
+
+    def _set_scale(self, scale):
+        sx, sy = scale
+        transform = self._gui.transform()
+        transform.reset()
+        transform.scale(sx, sy)
+
+    # options
+    def _set_options(self, options):
+        tx, ty = options['translate']['x'], options['translate']['y']
+        self._save_translate((tx, ty))
+        sx, sy = options['scale']['x'], options['scale']['y']
+        self._save_scale((sx, sy))
+
+        self._set_gui_transformation(tx, ty, sx, sy)
 
     # zoom
     def _do_zoom(self, event):
@@ -617,6 +818,8 @@ class RootNode(
 
         self._gui.translate(delta.x(), delta.y())
 
+        self._update_transformation()
+
     # track
     def _do_track_start(self, event):
         self._gui_data.track.start_point = event.pos()
@@ -630,7 +833,33 @@ class RootNode(
         self._gui.translate(delta.x()/scale_factor, delta.y()/scale_factor)
 
     def _do_tack_end(self):
+        self._update_transformation()
+
         self._gui.unsetCursor()
+
+    def _update_transformation(self):
+        tx, ty, sx, sy = self._get_gui_transformation_args()
+        self._save_translate((tx, ty))
+        self._save_scale((sx, sy))
+
+    def _get_gui_translate(self):
+        transform = self._gui.transform()
+        return transform.dx(), transform.dy()
+
+    def _get_gui_scale(self):
+        transform = self._gui.transform()
+        return transform.m11(), transform.m22()
+
+    def _get_gui_transformation_args(self):
+        transform = self._gui.transform()
+        return transform.dx(), transform.dy(), transform.m11(), transform.m22()
+
+    def _set_gui_transformation(self, tx, ty, sx, sy):
+        transform = self._gui.transform()
+        transform.reset()
+        transform.scale(sx, sy)
+        transform.translate(tx/sx, ty/sy)
+        self._gui.setTransform(transform)
 
     # node move
     def _do_node_move_start(self, event):
@@ -641,7 +870,7 @@ class RootNode(
             if i.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Node}:
                 i_node = i._model
                 node_position_data.append(
-                    (i_node.get_path(), i_node.get_position())
+                    (i_node.get_path(), i_node._get_gui_position())
                 )
 
         self._gui_data.node_move.node_position_data = node_position_data
@@ -666,7 +895,7 @@ class RootNode(
             i_node_path, i_node_position = i
 
             i_node = self.get_node(i_node_path)
-            i_node_position_new = i_node.get_position()
+            i_node_position_new = i_node._get_gui_position()
 
             if i_node_position_new != i_node_position:
                 redo_data.append((i_node_path, i_node_position_new))
@@ -915,6 +1144,45 @@ class RootNode(
     def _event_sent(self, event_type, event_id, data):
         self._gui.event_sent.emit(event_type, event_id, data)
 
+    def _get_selected_node_guis(self):
+        list_ = []
+        items = self._gui.scene().selectedItems()
+
+        for i in items:
+            if i.ENTITY_TYPE in {_scn_cor_base.EntityTypes.Node, _scn_cor_base.EntityTypes.Backdrop}:
+                list_.append(i)
+
+        return list_
+
+    def _get_all_node_guis(self):
+        return [i._gui for i in self.get_all_nodes()]
+
+    # frame select
+    def _on_frame_select_action(self):
+        items = self._get_selected_node_guis()
+        if not items:
+            items = self._get_all_node_guis()
+
+        if not items:
+            return
+
+        bounding_rect = self._compute_items_rect(items)
+
+        if bounding_rect.isEmpty() is False:
+            padding = 20
+            self._gui.fitInView(
+                bounding_rect.adjusted(-padding, -padding, padding, padding), QtCore.Qt.KeepAspectRatio
+            )
+
+            self._update_transformation()
+
+    @classmethod
+    def _compute_items_rect(cls, items):
+        bounding_rect = items[0].sceneBoundingRect()
+        for item in items[1:]:
+            bounding_rect = bounding_rect.united(item.sceneBoundingRect())
+        return bounding_rect
+
     # parameter
     def _set_param_root_stack_gui(self, widget):
         self._param_root_stack_gui = widget
@@ -936,3 +1204,63 @@ class RootNode(
     @property
     def undo_stack(self):
         return self._gui._undo_stack
+
+    def restore(self):
+        for i in self.get_all_connections():
+            self._unregister_connection(i)
+
+        for i in self.get_all_nodes():
+            self._unregister_node(i)
+
+        self.undo_stack.clear()
+
+    def load_from_data(self, data):
+        self.restore()
+
+        # node
+        for i_k, i_v in data['nodes'].items():
+            self._create_node_by_data(i_v)
+
+        # connections
+        for i_node_path, i_v in data['nodes'].items():
+            for j_port_path, j_v in i_v.get('inputs', {}).items():
+                j_source_path = j_v['source']
+                if j_source_path:
+                    j_target_path = self._join_to_attr_path(i_node_path, j_port_path)
+                    self._connect_port_paths(j_source_path, j_target_path)
+
+        self._set_options(data['options'])
+
+    # file
+    def _on_new_file_action(self):
+        self._scene_file.new_with_dialog()
+
+    def _on_open_file_action(self):
+        file_path = gui_core.GuiStorageDialog.open_file(
+            ext_filter='All File (*.jsz *.json)',
+            parent=self._gui,
+            default=self._scene_file.get_current()
+        )
+        if file_path:
+            self._scene_file.open_with_dialog(file_path)
+
+    def _on_save_file_action(self):
+        if self._scene_file.is_default():
+            file_path = gui_core.GuiStorageDialog.save_file(
+                ext_filter='All File (*.jsz *.json)',
+                parent=self._gui,
+                default=self._scene_file.get_current()
+            )
+            if file_path:
+                self._scene_file.save_to_with_dialog(file_path)
+        else:
+            self._scene_file.save_with_dialog()
+
+    def _on_save_file_to_action(self):
+        file_path = gui_core.GuiStorageDialog.save_file(
+            ext_filter='All File (*.jsz *.json)',
+            parent=self._gui,
+            default=self._scene_file.get_current()
+        )
+        if file_path:
+            self._scene_file.save_to_with_dialog(file_path)

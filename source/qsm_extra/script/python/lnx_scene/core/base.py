@@ -307,7 +307,8 @@ class _SbjGuiBase:
 
 class _Base(object):
     ENTITY_TYPE = None
-
+    
+    ATTR_SEP = '.'
     CONNECT_SEP = '->'
 
     @classmethod
@@ -414,6 +415,11 @@ class _Base(object):
         _, target_path = path.split(cls.CONNECT_SEP)
         node_path, port_path = bsc_core.BscAttributePath.split_by(target_path)
         return root_model.get_node(node_path).get_input(port_path)
+
+    # attribute
+    @classmethod
+    def _join_to_attr_path(cls, node_path, port_path):
+        return cls.ATTR_SEP.join([node_path, port_path])
 
     @classmethod
     def _to_name_args(cls, name):

@@ -292,7 +292,7 @@ class QtListWidget(
         self._check_tool_box = self._add_left_tool_box_('check')
         self._check_tool_box.hide()
         self._sort_and_group_tool_box = self._add_left_tool_box_('sort and group')
-        self._keyword_filter_tool_box = self._add_top_tool_box_('keyword filter', size_mode=1)
+        self._keyword_filter_tool_box = self._add_top_tool_box('keyword filter', size_mode=1)
 
         self._view = _QtListView()
         self._grid_lot.addWidget(self._view, 1, 1, 1, 1)
@@ -308,7 +308,7 @@ class QtListWidget(
 
         self._build_check_tool_box_()
         self._build_sort_and_group_tool_box_()
-        self._build_keyword_filter_tool_box_()
+        self._build_keyword_filter_tool_box()
 
         actions = [
             (self._view.selectAll, 'Ctrl+A'),
@@ -341,7 +341,7 @@ class QtListWidget(
         self._item_group_button.setVisible(boolean)
         self._view_model.set_item_group_enable(boolean)
 
-    def _add_top_tool_box_(self, name, size_mode=0):
+    def _add_top_tool_box(self, name, size_mode=0):
         tool_box = _wgt_container.QtHToolBox()
         self._top_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)
@@ -421,7 +421,7 @@ class QtListWidget(
         self._item_mode_button._set_icon_name_('tool/icon-mode')
         self._item_mode_button.press_clicked.connect(self._on_item_mode_swap_)
 
-    def _build_keyword_filter_tool_box_(self):
+    def _build_keyword_filter_tool_box(self):
         self._keyword_filter_input = _wgt_input_for_filter.QtInputForFilter()
         self._keyword_filter_tool_box._add_widget_(self._keyword_filter_input)
 

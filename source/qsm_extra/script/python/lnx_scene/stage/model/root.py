@@ -160,7 +160,7 @@ class _Node(_scn_cor_base._StageBase):
             return attr.get_data()
 
     @classmethod
-    def create_from_data(cls, stage, path, data):
+    def new_from_data(cls, stage, path, data):
         node_type = data['type']
         node = stage.add_node(node_type, path)
         attrs = data['attrs']
@@ -242,8 +242,8 @@ class StageRoot(_scn_cor_base._StageBase):
         )
     
     @classmethod
-    def create_from_json(cls, json_str):
-        return cls.create_from_data(
+    def new_from_json(cls, json_str):
+        return cls.new_from_data(
             json.loads(
                 json_str,
                 object_pairs_hook=collections.OrderedDict
@@ -251,12 +251,16 @@ class StageRoot(_scn_cor_base._StageBase):
         )
     
     @classmethod
-    def create_from_data(cls, data):
-        nodes = data['nodes']
+    def new_from_data(cls, data):
         stage = cls()
-        for k, v in nodes.items():
-            _Node.create_from_data(stage, k, v)
+        for k, v in data['nodes'].items():
+            _Node.new_from_data(stage, k, v)
         return stage
+
+    def update(self, other_stage):
+        other_data = other_stage.to_data()
+        for k, v in other_data['nodes'].items():
+            _Node.new_from_data(self, k, v)
 
     def get_node_paths(self):
         return list(self._data.nodes.keys())
@@ -269,3 +273,8 @@ class StageRoot(_scn_cor_base._StageBase):
 
     def find_nodes(self, cel_str):
         return _cor_cel.CEL(self, cel_str).fetchall()
+
+    def copy(self):
+        return self.new_from_json(
+            self.to_data()
+        )

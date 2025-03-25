@@ -189,6 +189,7 @@ class BackdropGui(_AbsNodeGui):
                 self._model.do_resize_end()
             else:
                 event.ignore()
+
         self._model.clear_action_flag()
 
     def paint(self, painter, option, widget=None):

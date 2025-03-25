@@ -418,7 +418,7 @@ class QtTreeWidget(
         self._left_scroll_box._set_layout_align_left_or_top_()
         self._left_scroll_box.setFixedWidth(self.TOOL_BAR_W)
         # keyword filter
-        self._keyword_filter_tool_box = self._add_top_tool_box_('keyword filter', size_mode=1)
+        self._keyword_filter_tool_box = self._add_top_tool_box('keyword filter', size_mode=1)
         # check
         self._check_tool_box = self._add_left_tool_box_('check')
         self._check_tool_box.hide()
@@ -439,7 +439,7 @@ class QtTreeWidget(
 
         self._build_check_tool_box_()
         self._build_sort_and_chart_tool_box_()
-        self._build_keyword_filter_tool_box_()
+        self._build_keyword_filter_tool_box()
 
         actions = [
             (self._view.selectAll, 'Ctrl+A'),
@@ -475,7 +475,7 @@ class QtTreeWidget(
         self._item_sort_button.setVisible(boolean)
         self._view_model.set_item_sort_enable(boolean)
 
-    def _add_top_tool_box_(self, name, size_mode=0):
+    def _add_top_tool_box(self, name, size_mode=0):
         tool_box = _wgt_container.QtHToolBox()
         self._top_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)
@@ -538,7 +538,7 @@ class QtTreeWidget(
         self._sort_and_chart_tool_box._add_widget_(self._chat_button)
         self._chat_button.press_clicked.connect(self._on_show_chart_)
 
-    def _build_keyword_filter_tool_box_(self):
+    def _build_keyword_filter_tool_box(self):
         self._keyword_filter_input = _wgt_input_for_filter.QtInputForFilter()
         self._keyword_filter_tool_box._add_widget_(self._keyword_filter_input)
 

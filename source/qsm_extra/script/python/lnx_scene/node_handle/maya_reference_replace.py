@@ -70,6 +70,13 @@ class LoadPremiereXml(object):
 
                     replace_reference_node.execute('data.update_info')
 
+                    # replace_reference_node.set(
+                    #     'replace.replace_map',
+                    #     {
+                    #         "X:/QSM_TST/Assets/chr/lily/Rig/Final/scenes/lily_Skin.ma": "X:/QSM_TST/Assets/chr/sam/Rig/Final/scenes/sam_Skin.ma"
+                    #     }
+                    # )
+
                     replace_reference_node.connect(output_maya_scene_node)
 
                     replace_reference_node.set_position(
@@ -110,11 +117,11 @@ class ReplaceMayaReference(object):
     def update_info(self):
         import lxbasic.core as bsc_core
 
-        stage = self._node.generate_stage()
+        stage = self._node.compute_chain_to_stage()
         cel_str = self._node.get('setting.selection')
         stg_nodes = stage.find_nodes(cel_str)
 
-        file_ptn = self._node.get('setting.file_pattern')
+        file_ptn = self._node.get('setting.reference_pattern')
         if file_ptn:
             file_ptn_opt = bsc_core.BscStgParseOpt(file_ptn)
         else:
@@ -145,13 +152,21 @@ class ReplaceMayaReference(object):
 
         import qsm_lazy.api as qsm_lzy_api
 
-        file_ptn = self._node.get('setting.file_pattern')
+        file_ptn = self._node.get('setting.reference_pattern')
         if not file_ptn:
             return
 
         file_ptn_opt = bsc_core.BscStgParseOpt(file_ptn)
 
-        references = self._node.get('data.references')
+        references_all = self._node.get('data.references')
+        if not references_all:
+            return
+
+        value_old = self._node.get('replace.replace_map')
+        references = [x for x in references_all if x not in value_old]
+        if not references:
+            return
+
         reference_old = gui_core.GuiApplication.exec_input_dialog(
             type='choose',
             options=references,
@@ -168,9 +183,41 @@ class ReplaceMayaReference(object):
                     if not file_ptn_opt_new.get_keys():
                         reference_new = file_ptn_opt_new.get_value()
                         if reference_new != reference_old:
-                            value_old = self._node.get('replace.replace_dict')
+
                             value_old[reference_old] = reference_new
-                            self._node.set('replace.replace_dict', value_old)
+                            self._node.set('replace.replace_map', value_old)
 
     def remove_replace(self):
-        print('BBB')
+        import lxgui.core as gui_core
+
+        dict_ = dict(self._node.get('replace.replace_map'))
+        if not dict_:
+            return
+
+        references = list(dict_.keys())
+        reference = gui_core.GuiApplication.exec_input_dialog(
+            type='choose',
+            options=references,
+            info='Choose File...',
+            value=references[0],
+            title='Remove Replace',
+        )
+
+        if reference:
+            dict_.pop(reference)
+            self._node.set('replace.replace_map', dict_)
+
+
+class OutputMayaScene(object):
+    def __init__(self, node):
+        self._node = node
+
+    def output_all(self):
+        stage = self._node.compute_chain_to_stage()
+
+        print(stage)
+
+        # cel_str = self._node.get('setting.selection')
+        # stg_nodes = stage.find_nodes(cel_str)
+        # for i in stg_nodes:
+        #     print(i.get_data('reference_replace_map'))

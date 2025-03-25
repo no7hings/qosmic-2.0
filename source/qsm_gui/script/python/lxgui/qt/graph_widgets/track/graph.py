@@ -796,10 +796,10 @@ class QtTrackWidget(_vew_wgt_base._BaseViewWidget):
         self._left_scroll_box._set_layout_align_left_or_top_()
         self._left_scroll_box.setFixedWidth(self.TOOL_BAR_W)
 
-        self._undo_and_redo_tool_box = self._add_top_tool_box_('undo and redo')
+        self._undo_and_redo_tool_box = self._add_top_tool_box('undo and redo')
 
         # keyword filter
-        self._keyword_filter_tool_box = self._add_top_tool_box_('keyword filter', size_mode=1)
+        self._keyword_filter_tool_box = self._add_top_tool_box('keyword filter', size_mode=1)
 
         self._view = QtTrackView()
         self._grid_lot.addWidget(self._view, 1, 1, 1, 1)
@@ -812,11 +812,11 @@ class QtTrackWidget(_vew_wgt_base._BaseViewWidget):
         self._track_timeline = self._view._track_timeline
         self._track_timehandle = self._view._track_timehandle
 
-        self._build_keyword_filter_tool_box_()
+        self._build_keyword_filter_tool_box()
 
         self._build_undo_and_redo_tool_box_()
 
-    def _add_top_tool_box_(self, name, size_mode=0):
+    def _add_top_tool_box(self, name, size_mode=0):
         tool_box = _wgt_container.QtHToolBox()
         self._top_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)
@@ -860,7 +860,7 @@ class QtTrackWidget(_vew_wgt_base._BaseViewWidget):
         self._undo_and_redo_tool_box._add_widget_(self._redo_button)
         self._view._graph._set_redo_button_(self._redo_button)
 
-    def _build_keyword_filter_tool_box_(self):
+    def _build_keyword_filter_tool_box(self):
         self._keyword_filter_input = _wgt_input_for_filter.QtInputForFilter()
         self._keyword_filter_tool_box._add_widget_(self._keyword_filter_input)
 

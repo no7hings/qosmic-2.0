@@ -167,7 +167,7 @@ class _AbsNode(
         def _undo_fnc():
             return self._set_position(coord_old)
 
-        coord_old = self.get_position()
+        coord_old = self._get_gui_position()
 
         return self.root_model.undo_stack, _redo_fnc, _undo_fnc
 
@@ -181,6 +181,9 @@ class _AbsNode(
         return False
 
     def get_position(self):
+        return self._data.options.position.x, self._data.options.position.y
+
+    def _get_gui_position(self):
         return self._gui.x(), self._gui.y()
 
     def _update_position_option(self):
@@ -244,7 +247,7 @@ class _AbsNode(
 
     def move_by(self, x, y):
         self._gui.moveBy(x, y)
-        return self.get_position()
+        return self._get_gui_position()
 
     # menu
     def set_menu_content(self, content):
@@ -530,7 +533,7 @@ class StandardNode(_AbsNode):
         prt_w, prt_h = prt_size.width(), prt_size.height()
 
         port = self._builtin_data.port.input.gui_cls(self._gui, prt_w, prt_h)
-        atr_path = bsc_core.BscAttributePath.join_by(self.get_path(), port_path)
+        attr_path = self._join_to_attr_path(self.get_path(), port_path)
 
         model = port._model
         self._data.inputs[port_path] = model
@@ -543,7 +546,7 @@ class StandardNode(_AbsNode):
         type_name = 'input'
         model._set_node(self)
         model._set_type(type_name)
-        model._set_path(atr_path)
+        model._set_path(attr_path)
         model._set_port_path(port_path)
         model.set_name(port_path_opt.get_name())
         return True, model
@@ -551,7 +554,6 @@ class StandardNode(_AbsNode):
     def _remove_input(self, port_path):
         port = self.get_input(port_path)
         if port:
-            # gui_scene = self.root_model.get_gui_scene()
             gui = port._gui
             gui.setParentItem(None)
             gui.scene().removeItem(gui)
@@ -628,7 +630,7 @@ class StandardNode(_AbsNode):
         prt_w, prt_h = prt_size.width(), prt_size.height()
 
         port = self._builtin_data.port.output.gui_cls(self._gui, prt_w, prt_h)
-        atr_path = bsc_core.BscAttributePath.join_by(self.get_path(), port_path)
+        attr_path = self._join_to_attr_path(self.get_path(), port_path)
 
         model = port._model
         self._data.outputs[port_path] = model
@@ -641,7 +643,7 @@ class StandardNode(_AbsNode):
         type_name = 'output'
         model._set_node(self)
         model._set_type(type_name)
-        model._set_path(atr_path)
+        model._set_path(attr_path)
         model._set_port_path(port_path)
         model.set_name(port_path_opt.get_name())
 
@@ -708,7 +710,7 @@ class StandardNode(_AbsNode):
                 list_.append(i.get_source().get_node())
         return list_
 
-    def get_node_queue(self):
+    def get_node_queue_itr(self):
         def _rcs_fnc(node_, depth_):
             _nodes = node_.get_source_nodes()
             for _i_index, _i_node in enumerate(_nodes):
@@ -976,23 +978,72 @@ class StandardNode(_AbsNode):
         return self._param_root
     
     def set(self, key, value):
-        return self._param_root.get_parameter(key).set_value(value)
-    
+        p = self._param_root.get_parameter(key)
+        if p:
+            return p.set_value(value)
+
     def get(self, key):
-        return self._param_root.get_parameter(key).get_value()
+        p = self._param_root.get_parameter(key)
+        if p:
+            return p.get_value()
 
     def execute(self, key):
         p = self._param_root.get_parameter(key)
         p._exec_script()
 
-    # stage
-
-    def generate_stage(self):
+    def _compute_stage_from_source(self, source_stages=None):
         stage = _stg_model.StageRoot()
-        node_queue = self.get_node_queue()
-        for i_node in node_queue:
-            i_node.compute(i_node, stage)
+        if source_stages:
+            for i in source_stages:
+                stage.update(i)
+
+        if self.is_bypass() is False:
+            self.compute(self, stage)
         return stage
+
+    def compute_chain_to_stage(self):
+        def _rcs_fnc(node_, depth_):
+            _path = node_.get_path()
+            _nodes = node_.get_source_nodes()
+
+            source_dict[_path] = [_x.get_path() for _x in _nodes]
+            for _i_idx, _i_node in enumerate(_nodes):
+                _i_path = _i_node.get_path()
+                _i_key = (depth_, _i_idx, _i_path)
+                if _i_path not in node_dict:
+                    depth_dict.setdefault(depth_, []).append(_i_path)
+                    node_dict[_i_path] = _i_node
+                    _rcs_fnc(_i_node, depth_+1)
+
+        path = self.get_path()
+
+        depth_dict = {0: [path]}
+        node_dict = {path: self}
+        stage_dict = {}
+        source_dict = {}
+
+        _rcs_fnc(self, 1)
+        keys = list(node_dict.keys())
+        keys.sort()
+        keys.reverse()
+
+        depths = list(depth_dict.keys())
+        depths.sort()
+        depths.reverse()
+
+        for i_depth in depths:
+            i_keys = depth_dict[i_depth]
+            for j_path in i_keys:
+                j_node = node_dict[j_path]
+                if j_path in source_dict:
+                    j_source_paths = source_dict[j_path]
+                    j_stage = j_node._compute_stage_from_source([stage_dict[x] for x in j_source_paths])
+                else:
+                    j_stage = j_node._compute_stage_from_source()
+
+                stage_dict[j_path] = j_stage
+
+        return stage_dict[path]
 
 
 # imaging
@@ -1225,11 +1276,16 @@ class Backdrop(_AbsNode):
 
         self._gui_data.name.color = _cor_base._QtColors.BackdropName
 
-        self._gui_data.move = _scn_cor_base._Dict(
+        self._gui_data.node_move = _scn_cor_base._Dict(
             start_position=QtCore.QPointF(),
             start_point=QtCore.QPointF(),
             node_position_data=[],
             node_set=set(),
+        )
+
+        self._gui_data.action = _scn_cor_base._Dict(
+            move_flag=False,
+            resize_flag=False
         )
 
         self._gui_data.resize = _scn_cor_base._Dict(
@@ -1389,9 +1445,12 @@ class Backdrop(_AbsNode):
     def _check_scene_move(self, point):
         return self._check_move(point-self._gui.pos())
 
+    # move
     def do_move_start(self, event):
-        self._gui_data.move.start_point = event.pos()
-        self._gui_data.move.start_position = self.get_position()
+        self._gui_data.action.move_flag = True
+
+        self._gui_data.node_move.start_point = event.pos()
+        self._gui_data.node_move.start_position = self._get_gui_position()
         x, y = self._gui.x(), self._gui.y()
         rect = self._gui.boundingRect()
         w, h = rect.width(), rect.height()
@@ -1401,44 +1460,65 @@ class Backdrop(_AbsNode):
         self.root_model.clear_selection()
 
         self._gui.setSelected(True)
+
         all_items = self.scene._get_items_by_rect(x, y, w, h)
         for i in all_items:
             if i.ENTITY_TYPE == _scn_cor_base.EntityTypes.Node:
                 i_node = i._model
                 node_position_data.append(
-                    (i_node, i_node.get_position())
+                    (i_node, i_node._get_gui_position())
                 )
                 # i.setSelected(True)
 
-        self._gui_data.move.node_position_data = node_position_data
+        self._gui_data.node_move.node_position_data = node_position_data
 
     def do_move(self, event):
-        delta = event.pos()-self._gui_data.move.start_point
+        delta = event.pos()-self._gui_data.node_move.start_point
         x, y = delta.x(), delta.y()
 
         self._gui.moveBy(x, y)
 
-        for i in self._gui_data.move.node_position_data:
+        for i in self._gui_data.node_move.node_position_data:
             i[0]._gui.moveBy(x, y)
 
     @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeMove)
-    def _push_move_cmd(self):
+    def _push_node_move_cmd(self):
         def _redo_fnc():
-            self._set_position(position_1)
+            [self.root_model._set_node_position(*x) for x in redo_data]
 
         def _undo_fnc():
-            self._set_position(position_0)
+            [self.root_model._set_node_position(*x) for x in undo_data]
 
-        position_0, position_1 = (
-            self._gui_data.move.start_position, self.get_position()
+        redo_data = []
+        undo_data = []
+
+        node_position, node_position_new = (
+            self._gui_data.node_move.start_position, self._get_gui_position()
         )
+        if node_position != node_position_new:
+            redo_data.append((self.get_path(), node_position_new))
+            undo_data.append((self.get_path(), node_position))
 
-        if position_1 != position_0:
+        for i in self._gui_data.node_move.node_position_data:
+            i_node, i_node_position = i
+            i_node_path = i_node.get_path()
+            i_node_position_new = i_node._get_gui_position()
+
+            if i_node_position_new != i_node_position:
+                redo_data.append((i_node_path, i_node_position_new))
+                undo_data.append((i_node_path, i_node_position))
+
+        if redo_data or undo_data:
             return self.root_model.undo_stack, _redo_fnc, _undo_fnc
 
-    def do_move_end(self):
-        self._push_move_cmd()
+    def get_move_flag(self):
+        return self._gui_data.action.move_flag
 
+    def do_move_end(self):
+        self._gui_data.action.move_flag = False
+        self._push_node_move_cmd()
+
+    # resize
     def _check_scene_resize(self, point):
         return self._check_resize(point-self._gui.pos())
 
@@ -1448,6 +1528,8 @@ class Backdrop(_AbsNode):
         return False
 
     def do_resize_start(self, event):
+        self._gui_data.action.resize_flag = True
+
         self._gui_data.resize.start_point = event.pos()
         self._gui_data.resize.start_rect = self._gui.rect()
 
@@ -1471,7 +1553,12 @@ class Backdrop(_AbsNode):
 
         return self.root_model.undo_stack, _redo_fnc, _undo_fnc
 
+    def get_resize_flag(self):
+        return self._gui_data.action.resize_flag
+
     def do_resize_end(self):
+        self._gui_data.action.resize_flag = False
+
         self._push_resize_cmd()
 
     def _auto_resize(self):

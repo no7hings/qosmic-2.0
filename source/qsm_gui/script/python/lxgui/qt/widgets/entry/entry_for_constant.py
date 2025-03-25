@@ -239,8 +239,11 @@ class QtEntryForConstant(
         if not text:
             self.user_entry_value_cleared.emit()
 
-        # send emit for paste
-        self.entry_value_accepted.emit(self._get_value_())
+    def keyPressEvent(self, event):
+        super(QtEntryForConstant, self).keyPressEvent(event)
+        # catch action later
+        if event.key() == QtCore.Qt.Key_V and event.modifiers() == QtCore.Qt.ControlModifier:
+            self.entry_value_accepted.emit(self._get_value_())
 
     def _completion_value_auto_(self):
         if self._value_type in {int, float}:

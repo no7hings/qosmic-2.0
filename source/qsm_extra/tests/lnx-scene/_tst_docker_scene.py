@@ -14,25 +14,34 @@ import lnx_scene.main as m
 import os
 
 
-class W(gui_prx_widgets.PrxBaseWindow):
+class W(gui_prx_widgets.PrxBaseDockerWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        spc = gui_prx_widgets.PrxHSplitter()
-        self.add_widget(spc)
+        # spc = gui_prx_widgets.PrxHSplitter()
+        # self.add_widget(spc)
+        #
+        # self._a = m.QtNodeGraphWidget()
+        # spc.add_widget(self._a)
+        #
+        # self._b = m.QtNodeParamWidget()
+        # self._b._set_root_node_gui(self._a._root_node_gui)
+        # spc.add_widget(self._b)
+        #
+        # spc.set_stretches([4, 2])
 
         self._a = m.QtNodeGraphWidget()
-        spc.add_widget(self._a)
+        self.add_widget(self._a)
 
         self._b = m.QtNodeParamWidget()
         self._b._set_root_node_gui(self._a._root_node_gui)
-        spc.add_widget(self._b)
+        self.create_right_docker('Node Parameters', self._b)
 
-        spc.set_stretches([4, 2])
+        self.accept_corner()
 
-        self._a._scene_file.open(
-            'C:/Users/nothings/QSM/scenes/untitled_1.jsz'
-        )
+        # self._a._scene.open(
+        #     'C:/Users/nothings/QSM/scenes/untitled.jsz'
+        # )
 
         # flag, node = self._a._model.add_node('LoadPremiereXml')
         #

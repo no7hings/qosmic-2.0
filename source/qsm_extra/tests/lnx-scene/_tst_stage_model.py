@@ -2,7 +2,7 @@
 import lnx_scene.stage.model as m
 
 
-stage = m.StageRoot.create_from_json(
+stage = m.StageRoot.new_from_json(
 '''
 {
     "nodes": {
@@ -21,7 +21,7 @@ stage = m.StageRoot.create_from_json(
                 }
             }
         },
-        "/root/maya/scene/A001_001_003": {
+        "/root/maya/scene/A001_001_001": {
             "type": "MaysScene",
             "attrs": {
                 "references": {
@@ -34,6 +34,28 @@ stage = m.StageRoot.create_from_json(
                 }
             }
         },
+        "/root/maya/scene/A001_001_003": {
+            "type": "MaysScene",
+            "attrs": {
+                "references": {
+                    "value": {
+                        "data": [
+                            "X:/QSM_TST/Assets/chr/lily/Rig/Final/scenes/lily_Skin.ma"
+                        ],
+                        "type": "StringArray"
+                    }
+                }
+            }
+        }
+    }
+}
+'''
+)
+
+other_stage = m.StageRoot.new_from_json(
+'''
+{
+    "nodes": {
         "/root/maya/scene/A001_001_001": {
             "type": "MaysScene",
             "attrs": {
@@ -43,6 +65,12 @@ stage = m.StageRoot.create_from_json(
                             "X:/QSM_TST/Assets/chr/lily/Rig/Final/scenes/lily_Skin.ma"
                         ],
                         "type": "StringArray"
+                    }
+                },
+                "reference_replace_map": {
+                    "value": {
+                        "data": {},
+                        "type": "Dict"
                     }
                 }
             }
@@ -66,7 +94,10 @@ stage = m.StageRoot.create_from_json(
 '''
 )
 
+stage.update(other_stage)
+print(stage)
+
 # print(stage.get_nodes())
 
-print(stage.find_nodes('/root/maya/scene//*{attr("type")=="MaysScene"}'))
+# print(stage.find_nodes('/root/maya/scene//*{attr("type")=="MaysScene"}'))
 

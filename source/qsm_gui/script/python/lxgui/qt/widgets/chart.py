@@ -556,17 +556,17 @@ class QtInfoChartBar(
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
+        rect = self.rect()
+        painter._draw_frame_by_rect_(
+            rect=rect,
+            border_color=_qt_core.QtRgba.Transparent,
+            background_color=_qt_core.QtRgba.BkgToolTip,
+        )
+        painter._draw_line_by_points_(
+            point_0=rect.topLeft(), point_1=rect.topRight(),
+            border_color=_qt_core.QtRgba.FadeBasic
+        )
         if self._text:
-            rect = self.rect()
-            painter._draw_frame_by_rect_(
-                rect=rect,
-                border_color=_qt_core.QtRgba.Transparent,
-                background_color=_qt_core.QtRgba.BkgToolTip,
-            )
-            painter._draw_line_by_points_(
-                point_0=rect.topLeft(), point_1=rect.topRight(),
-                border_color=_qt_core.QtRgba.FadeBasic
-            )
             painter._draw_text_by_rect_(
                 rect=self.rect(),
                 text=self._text,

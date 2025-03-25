@@ -22,8 +22,20 @@ class Node(_ng_model.StandardNode):
     def create(cls, node):
         node.set_add_port_enable(True)
         node.set_input_prefix('i0')
-        node._generate_input(port_path='i0')
+        # node._generate_input(port_path='i0')
 
+        # setting
+        node.parameters.add_group(param_path='setting').set_options(
+            gui_name='Setting', gui_name_chs='设置'
+        )
+        node.parameters.create_string(
+            param_path='setting.selection',
+            value='/root/maya/scene//*{attr("type")=="MaysScene"}'
+        ).set_options(
+            widget='path', gui_name='Selection', gui_name_chs='选择'
+        )
+
+        # output
         node.parameters.add_group(param_path='output').set_options(
             gui_name='Output', gui_name_chs='输出'
         )
@@ -35,7 +47,9 @@ class Node(_ng_model.StandardNode):
         )
 
         node.parameters.add_custom(param_path='output_all').set_options(
-            widget='button', gui_name='Output All', gui_name_chs='输出所有'
+            widget='button',
+            script=r'import lnx_scene.node_handle as h; h.OutputMayaScene(node).output_all()',
+            gui_name='Output All', gui_name_chs='输出所有'
         )
 
 
