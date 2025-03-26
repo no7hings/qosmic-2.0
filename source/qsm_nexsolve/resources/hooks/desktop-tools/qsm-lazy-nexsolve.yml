@@ -1,0 +1,21 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-*'
+
+    gui:
+        name: 'Lazy Nexsolve'
+        name_chs: '懒人解索'
+        group_name: 'General'
+
+        icon_name: 'lazy/nexsolve'
+        tool_tip:
+            |-
+            For resource manager.
+
+        tool_tip_chs:
+            |-
+            用于管理资源。
+
+        size: [1280, 960]

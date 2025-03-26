@@ -5,13 +5,15 @@ import platform
 
 import glob
 
+from ..wrap import *
+
 
 class AbsResource(object):
     """
 print(BscExtendResource.get('icons/file/file.svg'))
 print(BscExtendResource.get('icons/file/folder.svg'))
     """
-    CACHE = {}
+    CACHE = LRUCache(maximum=1024)
 
     ENVIRON_KEY = None
 
@@ -160,12 +162,12 @@ print(BscExtendResource.get('icons/file/folder.svg'))
 
 
 class Resource(AbsResource):
-    CACHE = {}
+    CACHE = LRUCache(maximum=1024)
 
     ENVIRON_KEY = 'QSM_RESOURCES'
 
 
 class BscExtendResource(AbsResource):
-    CACHE = {}
+    CACHE = LRUCache(maximum=1024)
 
     ENVIRON_KEY = 'QSM_EXTEND_RESOURCES'

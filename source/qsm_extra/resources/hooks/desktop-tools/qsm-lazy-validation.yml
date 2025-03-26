@@ -9,7 +9,7 @@ option:
         name_chs: '懒人检查工具'
         group_name: 'Animation(s)'
         #
-        icon_name: 'lazy/workspace'
+        icon_name: 'lazy/wotrix'
         tool_tip:
             |-
             To be supplemented.

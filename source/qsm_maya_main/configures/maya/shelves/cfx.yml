@@ -23,7 +23,7 @@ build:
             button_name: 'Workspace'
             button_name_chs: '工作'
             auto_label_color: False
-            icon: 'lazy/workspace'
+            icon: 'lazy/wotrix'
             script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-workspace")'
             dbl_script: ''
 

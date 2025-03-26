@@ -1,9 +1,4 @@
 # coding:utf-8
-import os
-
-import pkgutil
-
-import importlib
 # gui
 import lxgui.core as gui_core
 
@@ -15,31 +10,9 @@ import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.qt.view_widgets.base as gui_qt_vew_wgt_base
 
-from .node_graph.core import event as _cor_event
+from ...node_graph.core import event as _cor_event
 
-from .node_graph import model as _ng_cor_model
-
-from .node_graph import gui as _ng_cor_gui
-
-from . import node_type as _node_type
-
-
-def register_node_types_from(module):
-    dir_path = os.path.dirname(module.__file__)
-
-    all_names = os.listdir(dir_path)
-
-    for i in all_names:
-        if i.startswith('__init__'):
-            continue
-        if i.endswith('.pyc'):
-            continue
-
-        i_module_name = '{}.{}'.format(module.__name__, os.path.splitext(i)[0])
-        if pkgutil.find_loader(i_module_name):
-            i_module = importlib.import_module(i_module_name)
-            if 'register' in i_module.__dict__:
-                i_module.__dict__['register']()
+from ...node_graph import gui as _ng_cor_gui
 
 
 class QtNodeGraphWidget(gui_qt_vew_wgt_base._BaseViewWidget):
@@ -87,8 +60,6 @@ class QtNodeGraphWidget(gui_qt_vew_wgt_base._BaseViewWidget):
         self._build_file_tool_box()
         self._build_keyword_filter_tool_box()
 
-        register_node_types_from(_node_type)
-
     def _add_top_tool_box(self, name, size_mode=0):
         tool_box = gui_qt_widgets.QtHToolBox()
         self._top_scroll_box.addWidget(tool_box)
@@ -96,7 +67,7 @@ class QtNodeGraphWidget(gui_qt_vew_wgt_base._BaseViewWidget):
         tool_box._set_name_text_(name)
         tool_box._set_size_mode_(size_mode)
         return tool_box
-    
+
     def _build_file_tool_box(self):
         self._file_new_button = gui_qt_widgets.QtIconPressButton()
         self._file_tool_box._add_widget_(self._file_new_button)
@@ -200,3 +171,5 @@ class QtStageWidget(QtWidgets.QWidget):
         painter.setPen(pen)
         painter.setBrush(QtGui.QColor(*gui_core.GuiRgba.Dim))
         painter.drawRect(f_x, f_y, f_w, f_h)
+
+

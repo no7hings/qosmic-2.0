@@ -43,8 +43,6 @@ from ..wrap import *
 # process
 from . import configure as _configure
 
-from . import cache as _cache
-
 
 class BscPlatform(object):
     @staticmethod
@@ -379,7 +377,7 @@ class BscStorage(object):
     PATHSEP = '/'
     PATHSEP_EXTRA = '//'
 
-    USER_CACHE = _cache.LRUCache(maximum=1024)
+    USER_CACHE = LRUCache(maximum=1024)
 
     @classmethod
     def shit_path_auto_convert(cls, path):

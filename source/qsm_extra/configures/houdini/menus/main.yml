@@ -15,7 +15,7 @@ build:
             name: 'Lazy Workspace'
             name_chs: '懒人工作空间'
 
-            icon: 'lazy/workspace'
+            icon: 'lazy/wotrix'
             script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/houdini/qsm-lazy-workspace")'
 
         /separator_0:

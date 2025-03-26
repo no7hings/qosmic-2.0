@@ -118,11 +118,11 @@ class ButtonsGui(_AbsCustomGui):
                     i_input_wgt.press_clicked.connect(functools.partial(self._exec_script_fnc, i_script))
 
 
-class _AbsTypedGui(QtWidgets.QWidget):
+class _AbsTypedParamGui(QtWidgets.QWidget):
     QT_INPUT_WGT_CLS = None
 
     def __init__(self, *args, **kwargs):
-        super(_AbsTypedGui, self).__init__(*args, **kwargs)
+        super(_AbsTypedParamGui, self).__init__(*args, **kwargs)
 
         self._param = None
 
@@ -170,7 +170,7 @@ class _AbsTypedGui(QtWidgets.QWidget):
         self._set_value(self._param.get_value())
 
 
-class JsonGui(_AbsTypedGui):
+class JsonGui(_AbsTypedParamGui):
     QT_INPUT_WGT_CLS = gui_qt_widgets.QtInputForContent
 
     def __init__(self, *args, **kwargs):
@@ -192,12 +192,12 @@ class JsonGui(_AbsTypedGui):
         )
 
     def _accept_value(self, value):
-        self._param._set_value(
+        if self._param._set_value(
             json.loads(value, object_pairs_hook=collections.OrderedDict)
-        )
-        sys.stdout.write(
-            'set value: {}.\n'.format(self._param.get_path())
-        )
+        ):
+            sys.stdout.write(
+                'update value at: {}.\n'.format(self._param.get_path())
+            )
 
     def _connect_value_change(self):
         self._input_wgt.input_value_accepted.connect(
@@ -206,7 +206,7 @@ class JsonGui(_AbsTypedGui):
 
 
 # constant
-class ConstantGui(_AbsTypedGui):
+class ConstantGui(_AbsTypedParamGui):
     QT_INPUT_WGT_CLS = gui_qt_widgets.QtInputForConstant
 
     def __init__(self, *args, **kwargs):
@@ -223,7 +223,7 @@ class ConstantGui(_AbsTypedGui):
         )
 
 
-class PathGui(_AbsTypedGui):
+class PathGui(_AbsTypedParamGui):
     QT_INPUT_WGT_CLS = gui_qt_widgets.QtInputForConstant
 
     def __init__(self, *args, **kwargs):
@@ -232,7 +232,7 @@ class PathGui(_AbsTypedGui):
         self._input_wgt._set_value_entry_validator_use_as_path_()
 
 
-class TupleGui(_AbsTypedGui):
+class TupleGui(_AbsTypedParamGui):
     QT_INPUT_WGT_CLS = gui_qt_widgets.QtInputForTuple
 
     def __init__(self, *args, **kwargs):
@@ -245,7 +245,7 @@ class TupleGui(_AbsTypedGui):
         self._input_wgt._set_value_size_(size)
 
 
-class ArrayGui(_AbsTypedGui):
+class ArrayGui(_AbsTypedParamGui):
     QT_INPUT_WGT_CLS = gui_qt_widgets.QtInputForTuple
 
     def __init__(self, *args, **kwargs):
@@ -259,7 +259,7 @@ class ArrayGui(_AbsTypedGui):
 
 
 # boolean
-class BooleanGui(_AbsTypedGui):
+class BooleanGui(_AbsTypedParamGui):
     QT_INPUT_WGT_CLS = gui_qt_widgets.QtCheckButton
 
     def __init__(self, *args, **kwargs):
@@ -283,7 +283,7 @@ class BooleanGui(_AbsTypedGui):
 
 
 # storage
-class _AbsStorageGui(_AbsTypedGui):
+class _AbsStorageGui(_AbsTypedParamGui):
     
     QT_INPUT_WGT_CLS = gui_qt_widgets.QtInputForStorage
     
@@ -347,7 +347,7 @@ class _AbsGroupGui(QtWidgets.QWidget):
                 i_item = layout.itemAt(i)
                 if i_item:
                     i_wgt = i_item.widget()
-                    if isinstance(i_wgt, _AbsTypedGui):
+                    if isinstance(i_wgt, _AbsTypedParamGui):
                         i_w = i_wgt._get_label_width()
                         widths.append(i_w)
 
@@ -357,7 +357,7 @@ class _AbsGroupGui(QtWidgets.QWidget):
                     i_item = layout.itemAt(i)
                     if i_item:
                         i_wgt = i_item.widget()
-                        if isinstance(i_wgt, _AbsTypedGui):
+                        if isinstance(i_wgt, _AbsTypedParamGui):
                             i_wgt._set_label_width(w)
 
     def __init__(self, *args, **kwargs):
