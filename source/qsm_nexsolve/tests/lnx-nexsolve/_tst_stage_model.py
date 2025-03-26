@@ -1,5 +1,5 @@
 # coding:utf-8
-import lnx_scene.stage.model as m
+import lnx_nexsolve.stage.model as m
 
 
 stage = m.StageRoot.new_from_json(
@@ -22,7 +22,7 @@ stage = m.StageRoot.new_from_json(
             }
         },
         "/root/maya/scene/A001_001_001": {
-            "type": "MaysScene",
+            "type": "MayaScene",
             "attrs": {
                 "references": {
                     "value": {
@@ -35,7 +35,7 @@ stage = m.StageRoot.new_from_json(
             }
         },
         "/root/maya/scene/A001_001_003": {
-            "type": "MaysScene",
+            "type": "MayaScene",
             "attrs": {
                 "references": {
                     "value": {
@@ -57,7 +57,7 @@ other_stage = m.StageRoot.new_from_json(
 {
     "nodes": {
         "/root/maya/scene/A001_001_001": {
-            "type": "MaysScene",
+            "type": "MayaScene",
             "attrs": {
                 "references": {
                     "value": {
@@ -76,7 +76,7 @@ other_stage = m.StageRoot.new_from_json(
             }
         },
         "/root/maya/scene/A001_001_002": {
-            "type": "MaysScene",
+            "type": "MayaScene",
             "attrs": {
                 "references": {
                     "value": {
@@ -99,5 +99,5 @@ print(stage)
 
 # print(stage.get_nodes())
 
-# print(stage.find_nodes('/root/maya/scene//*{attr("type")=="MaysScene"}'))
+# print(stage.find_nodes('/root/maya/scene//*{attr("type")=="MayaScene"}'))
 

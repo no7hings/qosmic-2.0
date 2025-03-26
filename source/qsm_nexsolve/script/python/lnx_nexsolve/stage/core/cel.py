@@ -8,11 +8,11 @@ class CEL(object):
 
     @classmethod
     def _to_args(cls, s):
-        # '/root/maya/scene//*{attr("type")=="MaysScene"}'
+        # '/root/maya/scene//*{attr("type")=="MayaScene"}'
         # noinspection RegExpRedundantEscape
         parts = re.split(r'\{(.*?)\}', s, maxsplit=1)
         s_0 = parts[0]  # '/root/world/geo/master//*'
-        s_1 = parts[1] if len(parts) > 1 else ''  # attr("type")=="MaysScene"
+        s_1 = parts[1] if len(parts) > 1 else ''  # attr("type")=="MayaScene"
         return s_0, s_1
 
     def __init__(self, stage, s):

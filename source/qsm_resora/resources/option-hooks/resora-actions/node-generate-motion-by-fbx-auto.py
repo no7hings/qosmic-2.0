@@ -60,6 +60,7 @@ class Main(object):
             if scr_entities:
                 task_window = gui_prx_widgets.PrxSpcTaskWindow()
                 task_window.set_thread_maximum(4)
+
                 if task_window._language == 'chs':
                     task_window.set_window_title('生成动作（MoCap fbx）')
                     task_window.set_tip(

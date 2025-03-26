@@ -9,7 +9,7 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_scene.main as m
+import lnx_nexsolve.main as m
 
 import os
 

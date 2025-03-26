@@ -44,9 +44,7 @@ class MtgBuildScp(object):
         self._mtg_master_layer.connect_to_mocap(self._mocap_resource)
 
     def setup_for_adv(self):
-        self._adv_resource = _adv_resource.AdvResource(
-            self._rig_namespace
-        )
+        self._adv_resource = _adv_resource.AdvResource(self._rig_namespace)
         self._mtg_master_layer = _man_layer.MtgMasterLayer.generate_fnc(self._rig_namespace)
         self._mtg_master_layer.connect_to_adv_resource(self._adv_resource)
 

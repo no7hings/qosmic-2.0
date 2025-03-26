@@ -63,7 +63,7 @@ class Node(_ng_model.ImagingNode):
         # button
         node.parameters.add_custom(param_path='analysis_and_build').set_options(
             widget='button',
-            script=r'import lnx_scene.node_handle as h; h.LoadPremiereXml(node).analysis_and_build()',
+            script=r'import lnx_nexsolve.node_handle as h; h.LoadPremiereXml(node).analysis_and_build()',
             gui_name='Analysis and Build', gui_name_chs='解析并构建',
         )
 

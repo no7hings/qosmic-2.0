@@ -1,7 +1,7 @@
 # coding:utf-8
 import json
 
-import lnx_scene.core.path as p
+import lnx_nexsolve.core.path as p
 
 paths = [
     '/',

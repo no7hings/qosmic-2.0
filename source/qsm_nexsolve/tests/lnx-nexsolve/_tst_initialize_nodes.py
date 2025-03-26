@@ -5,7 +5,7 @@ import pkgutil
 
 import importlib
 
-import lnx_scene.node_graph.nodes as module
+import lnx_nexsolve.node_graph.nodes as module
 
 dir_path = os.path.dirname(module.__file__)
 

@@ -129,7 +129,21 @@ class Cameras(object):
         'front',
         'side'
     ]
+    DEFAULT_PATHS = ['|{}'.format(x) for x in DEFAULT_NAMES]
 
     @classmethod
     def get_all(cls):
         return cmds.ls(type='camera', long=1) or []
+
+    @classmethod
+    def get_non_defaults(cls):
+        list_ = []
+        cameras = Cameras.get_all()
+
+        for i_path in cameras:
+            i_transform = _node_for_shape.Shape.get_transform(i_path)
+            if i_transform in cls.DEFAULT_PATHS:
+                continue
+            list_.append(i_path)
+
+        return list_

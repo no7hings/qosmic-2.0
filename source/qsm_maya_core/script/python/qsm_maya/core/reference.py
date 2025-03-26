@@ -22,10 +22,9 @@ class Reference(object):
     def get_file(cls, path, extend=True):
         # noinspection PyBroadException
         try:
-            _ = cmds.referenceQuery(path, filename=1)
             if extend is True:
                 return cmds.referenceQuery(path, filename=1, withoutCopyNumber=1)
-            return _
+            return cmds.referenceQuery(path, filename=1)
         except Exception:
             return None
 

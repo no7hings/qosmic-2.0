@@ -43,6 +43,7 @@ class RezPackage:
         ('qsm_extra', True),
         #
         ('qsm_resora', True),
+        ('qsm_nexsolve', True),
         #
         ('qsm_dcc_main', True),
         ('qsm_dcc_core', True),

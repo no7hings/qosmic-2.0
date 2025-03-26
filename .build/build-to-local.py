@@ -25,6 +25,7 @@ class Main(object):
         'qsm_extra',
 
         'qsm_resora',
+        'qsm_nexsolve',
 
         'qsm_dcc_main',
         'qsm_dcc_core',

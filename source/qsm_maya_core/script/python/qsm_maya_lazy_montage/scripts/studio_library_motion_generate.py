@@ -9,7 +9,7 @@ import lxbasic.storage as bsc_storage
 
 import qsm_maya.core as qsm_mya_core
 
-from . import adv_motion_export as _motion_export
+from . import adv_character_motion as _motion_export
 
 
 class StlConvertionProcess(object):
@@ -58,4 +58,4 @@ class StlConvertionProcess(object):
             # qsm_mya_core.SceneFile.save_to(maya_scene_file_path_tmp)
             _motion_export.AdvChrMotionExportOpt(
                 namespace
-            ).export(self._cache_file_path)
+            ).execute(self._cache_file_path)

@@ -1,4 +1,6 @@
 # coding:utf-8
+import sys
+
 from ... import core as _gui_core
 # qt
 from ...qt import core as _qt_core
@@ -145,12 +147,10 @@ class PrxSpcTaskWindow(
 
         self._init_progressing_def_()
 
-        self._qt_widget._thread_worker_maximum = 2
-
         self.set_definition_window_size((480, 480))
 
     def set_thread_maximum(self, value):
-        self._qt_widget._thread_worker_maximum = value
+        self._spc_task_widget._set_thread_maximum(value)
 
     def _gui_build_(self):
         self._language = _gui_core.GuiUtil.get_language()

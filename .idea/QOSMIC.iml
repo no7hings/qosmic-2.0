@@ -22,6 +22,7 @@
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_maya_main/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_resora/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_maya_resora/script/python" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/source/qsm_nexsolve/script/python" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_dcc_extra/resources/rig" />
       <excludeFolder url="file://$MODULE_DIR$/.documents" />
       <excludeFolder url="file://$MODULE_DIR$/.pycharm" />

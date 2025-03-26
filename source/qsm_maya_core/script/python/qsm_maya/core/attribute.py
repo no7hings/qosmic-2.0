@@ -263,9 +263,12 @@ class NodeAttribute:
 
     @classmethod
     def set_as_message(cls, path, atr_name, value):
-        cmds.connectAttr(
-            value+'.message', path+'.'+atr_name
-        )
+        source_path = value+'.message'
+        target_path = path+'.'+atr_name
+        if cmds.isConnected(source_path, target_path) is False:
+            cmds.connectAttr(
+                source_path, target_path
+            )
 
     @classmethod
     def get_as_message(cls, path, atr_name):

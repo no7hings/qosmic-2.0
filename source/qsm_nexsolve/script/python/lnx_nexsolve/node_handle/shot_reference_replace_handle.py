@@ -1,6 +1,8 @@
 # coding:utf-8
 import os
 
+import functools
+
 
 class LoadPremiereXml(object):
     def __init__(self, node):
@@ -15,6 +17,8 @@ class LoadPremiereXml(object):
         with root.disable_undo():
             file_path = self._node.get('input.file')
             if file_path:
+                file_opt = bsc_storage.StgFileOpt(file_path)
+
                 directory_path = os.path.dirname(file_path)
 
                 xml = qsm_gnl_dotfile.PremiereXml(file_path)
@@ -82,7 +86,7 @@ class LoadPremiereXml(object):
                         )
 
                         output_maya_scene_node.set(
-                            'output.directory', '{}/replace_output'.format(directory_path)
+                            'output.directory', '{}/{}_output'.format(directory_path, file_opt.name_base)
                         )
 
 
@@ -112,6 +116,7 @@ class LoadMayaScene(object):
 
             self._node.set('data.frame_range', ma.get_frame_range())
             self._node.set('data.fps', ma.get_fps())
+            self._node.set('data.cameras', ma.get_cameras())
             self._node.set('data.references', ma.get_reference_files(ignore_unloaded=ignore_unloaded))
 
 
@@ -314,8 +319,63 @@ class OutputMayaScene(object):
             return task_name, cmd_script, cache_path
         return task_name, None, cache_path
 
+    @classmethod
+    def _push_result(cls, cache_file_path, output_directory_path, with_playblast):
+        import lxbasic.storage as bsc_storage
+
+        cache_file_opt = bsc_storage.StgFileOpt(cache_file_path)
+
+        cache_video_path = '{}.mov'.format(cache_file_opt.path_base)
+
+        output_file_path = '{}/{}'.format(output_directory_path, cache_file_opt.name)
+
+        cache_file_opt.copy_to_file(output_file_path, replace=True)
+
+        if with_playblast is True:
+            output_video_path = '{}/{}.mov'.format(output_directory_path, cache_file_opt.name_base)
+            bsc_storage.StgFileOpt(cache_video_path).copy_to_file(output_video_path, replace=True)
+
+    def _start_delay(self, task_window, execute_args, output_directory_path, with_playblast):
+        process_args = []
+
+        for i_args in execute_args:
+            i_task_name, i_cmd_script, i_cache_path = self.generate_prc_args(*i_args)
+            if i_cmd_script is not None:
+                process_args.append(
+                    (i_task_name, i_cmd_script, i_cache_path)
+                )
+            else:
+                self._push_result(i_cache_path, output_directory_path, with_playblast)
+
+        if process_args:
+            task_window.show_window_auto(exclusive=False)
+            for i_args in process_args:
+                i_task_name, i_cmd_script, i_cache_path = i_args
+                task_window.submit(
+                    self.TASK_KEY,
+                    name=i_task_name,
+                    cmd_script=i_cmd_script,
+                    completed_fnc=functools.partial(
+                        self._push_result, i_cache_path, output_directory_path, with_playblast
+                    ),
+                    application='maya'
+                )
+        else:
+            task_window.close_window()
+
+    def open_output_directory(self):
+        import lxbasic.storage as bsc_storage
+
+        output_directory_path = self._node.get('output.directory')
+        if not output_directory_path:
+            return
+
+        bsc_storage.StgFileOpt(output_directory_path).show_in_system()
+
     def output_all(self):
         import lxgui.core as gui_core
+
+        import lxgui.proxy.widgets as gui_prx_widgets
 
         stage = self._node.compute_chain_to_stage()
 
@@ -323,12 +383,14 @@ class OutputMayaScene(object):
         if not output_directory_path:
             return
 
+        with_playblast = self._node.get('output.with_playblast')
+
         cel_str = self._node.get('setting.selection')
         stg_nodes = stage.find_nodes(cel_str)
 
         results = []
 
-        process_args = []
+        execute_args = []
 
         for i in stg_nodes:
             i_file_path = i.get_data('file')
@@ -340,7 +402,7 @@ class OutputMayaScene(object):
             if i_result:
                 results.append(i_result)
 
-            process_args.append((i_file_path, i_reference_replace_map))
+            execute_args.append((i_file_path, i_reference_replace_map))
 
         if results:
             result = gui_core.GuiApplication.exec_message_dialog(
@@ -353,8 +415,24 @@ class OutputMayaScene(object):
             if result is not True:
                 return
 
-        for i_args in process_args:
-            i_task_name, i_cmd_script, i_cache_path = self.generate_prc_args(*i_args)
+        if execute_args:
+            task_window = gui_prx_widgets.PrxSpcTaskWindow()
+            task_window.set_thread_maximum(2)
 
-            print(i_task_name, i_cmd_script, i_cache_path)
+            if task_window._language == 'chs':
+                task_window.set_window_title('镜头引用替换')
+                task_window.set_tip(
+                    '正在生成镜头，请耐心等待；\n'
+                    '如需要终止任务，请点击“关闭”。'
+                )
+            else:
+                task_window.set_window_title('Shot Reference Replace')
+
+            task_window.run_fnc_delay(
+                functools.partial(
+                    self._start_delay,
+                    task_window, execute_args, output_directory_path, with_playblast
+                ),
+                500
+            )
 

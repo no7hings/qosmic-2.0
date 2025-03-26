@@ -16,6 +16,7 @@ requires = [
     'qsm_extra',
     # tools
     'qsm_resora',
+    'qsm_nexsolve',
 ]
 
 

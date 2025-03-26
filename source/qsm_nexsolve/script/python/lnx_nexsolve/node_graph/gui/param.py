@@ -267,6 +267,11 @@ class BooleanGui(_AbsTypedGui):
 
         self.setFixedHeight(24)
 
+    def _connect_value_change(self):
+        self._input_wgt.check_toggled.connect(
+            self._accept_value
+        )
+
     def _set_label(self, text):
         self._input_wgt._set_name_text_(text)
 

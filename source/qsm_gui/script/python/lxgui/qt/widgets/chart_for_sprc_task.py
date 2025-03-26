@@ -243,7 +243,7 @@ class QtChartForSprcTask(
         )
 
         self._update_timer = QtCore.QTimer(self)
-        self._update_timer.timeout.connect(self._refresh_on_time_)
+        self._update_timer.timeout.connect(self._refresh_on_time)
 
         self._tag_text = None
         self._text = None
@@ -354,7 +354,7 @@ class QtChartForSprcTask(
             return bsc_core.BscSystem.generate_timestamp()-self._start_timestamp
         return self._finish_timestamp-self._start_timestamp
 
-    def _refresh_on_time_(self):
+    def _refresh_on_time(self):
         self._progress_index += 1
         self._refresh_widget_all_()
 

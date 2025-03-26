@@ -16,24 +16,6 @@
             }
           }
         ]
-      },
-      {
-        "id": "58325e0731ed40ad",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "cd01c28b19e047e9",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "开发相关/开发进度/优化-2025.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          }
-        ]
       }
     ],
     "direction": "vertical"
@@ -83,8 +65,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 324.5,
-    "collapsed": true
+    "width": 324.5
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -100,7 +81,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发相关/开发进度/优化-2025.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -117,7 +97,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发相关/开发进度/优化-2025.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -139,9 +118,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "开发相关/开发进度/优化-2025.md"
-              }
+              "state": {}
             }
           },
           {
@@ -161,9 +138,7 @@
             "type": "leaf",
             "state": {
               "type": "file-properties",
-              "state": {
-                "file": "开发相关/开发进度/优化-2025.md"
-              }
+              "state": {}
             }
           },
           {
@@ -202,10 +177,12 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "cd01c28b19e047e9",
+  "active": "27076d9d959e7d8a",
   "lastOpenFiles": [
-    "开发相关/开发进度/开发-2025.md",
+    "技术文档/Qosmic.md",
+    "技术文档/总览.canvas",
     "开发相关/开发进度/优化-2025.md",
+    "开发相关/开发进度/开发-2025.md",
     "开发相关/开发文档/解算流程工具.md",
     "开发相关/开发进度/BUG-2024.md",
     "开发相关/开发进度/优化-2024.md",
@@ -240,7 +217,6 @@
     "开发相关/开发任务/maya/解算相关/节点图模版工具（Node Graph Template Tool）.md",
     "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
     "开发相关/开发任务/maya/动作相关/动作工具.md",
-    "随记/利用标签进行分类.md",
     "未命名.canvas",
     "images",
     "USD/植被流程/流程图.canvas",
@@ -250,7 +226,6 @@
     "开发相关/制作相关",
     "随记/PyQt",
     "文档",
-    "技术文档/总览.canvas",
     "技术文档/Qosmic",
     "技术文档/Qosmic/组件与模块/依赖关系.canvas",
     "随记/python",

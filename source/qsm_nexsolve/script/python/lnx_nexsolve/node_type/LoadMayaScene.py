@@ -21,7 +21,7 @@ class Node(_ng_model.ImagingNode):
         scene_path = node.get('input.file')
         if scene_path:
             location = node.get('setting.location')
-            stg_node = stage.add_node('MaysScene', location)
+            stg_node = stage.add_node('MayaScene', location)
             stg_node.add_attr('file').add_string(
                 scene_path
             )
@@ -30,6 +30,9 @@ class Node(_ng_model.ImagingNode):
             )
             stg_node.add_attr('fps').add_integer(
                 node.get('data.fps')
+            )
+            stg_node.add_attr('cameras').add_string_array(
+                node.get('data.cameras')
             )
             stg_node.add_attr('references').add_string_array(
                 node.get('data.references')
@@ -71,6 +74,9 @@ class Node(_ng_model.ImagingNode):
         node.parameters.add_integer(param_path='data.fps').set_options(
             lock=True, gui_name='FPS', gui_name_chs='帧率'
         )
+        node.parameters.add_string_array(param_path='data.cameras').set_options(
+            widget='json', lock=True, gui_name='Cameras', gui_name_chs='相机'
+        )
         node.parameters.add_string_array(param_path='data.references').set_options(
             widget='json', lock=True, gui_name='References', gui_name_chs='引用'
         )
@@ -78,7 +84,7 @@ class Node(_ng_model.ImagingNode):
         # button
         node.parameters.add_custom(param_path='data.update_data').set_options(
             widget='button',
-            script=r'import lnx_scene.node_handle as h; h.LoadMayaScene(node).update_data()',
+            script=r'import lnx_nexsolve.node_handle as h; h.LoadMayaScene(node).update_data()',
             gui_name='Update Data', gui_name_chs='更新数据',
         )
 

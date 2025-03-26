@@ -64,7 +64,8 @@ class SceneFile:
     def reference_file(cls, file_path, namespace=':'):
         if os.path.isfile(file_path) is False:
             return None
-        return cmds.file(
+
+        file_path = cmds.file(
             file_path,
             ignoreVersion=1,
             reference=1,
@@ -73,6 +74,7 @@ class SceneFile:
             options='v=0;',
             type=cls.get_file_type(file_path)
         )
+        return cls.get_namespace(file_path)
 
     @classmethod
     def get_current(cls):

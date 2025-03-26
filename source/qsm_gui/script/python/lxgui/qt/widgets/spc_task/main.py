@@ -1,4 +1,5 @@
 # coding:utf-8
+import sys
 # gui
 from .... import core as _gui_core
 # qt
@@ -133,7 +134,7 @@ class _QtSpcTaskView(
         self.setItemDelegate(_QtItemDelegate(self))
 
         self._update_timer = QtCore.QTimer(self)
-        self._update_timer.timeout.connect(self._refresh_on_time_)
+        self._update_timer.timeout.connect(self._refresh_on_time)
 
         self._update_timer.start(1000/12)
 
@@ -328,8 +329,12 @@ class _QtSpcTaskView(
         if menu is not None:
             menu._popup_start_()
 
-    def _refresh_on_time_(self):
+    def _refresh_on_time(self):
         self.update()
+    
+    def _set_thread_maximum(self, value):
+        self._thread_worker_maximum = value
+        sys.stdout.write('maximum thread use: {}\n'.format(value))
 
 
 # overview
@@ -445,6 +450,9 @@ class QtSpcTaskWidget(QtWidgets.QWidget):
         self._model = self._view._model
 
         self._overview._set_view_model_(self._model)
+    
+    def _set_thread_maximum(self, value):
+        self._view._set_thread_maximum(value)
 
     def paintEvent(self, event):
         painter = QtGui.QPainter(self)

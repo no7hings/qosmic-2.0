@@ -37,7 +37,7 @@ class Node(_ng_model.StandardNode):
         )
         node.parameters.add_string(
             param_path='setting.selection',
-            value='/root/maya/scene//*{attr("type")=="MaysScene"}'
+            value='/root/maya/scene//*{attr("type")=="MayaScene"}'
         ).set_options(
             widget='path', gui_name='Selection', gui_name_chs='选择'
         )
@@ -60,7 +60,7 @@ class Node(_ng_model.StandardNode):
         # # data button
         # node.parameters.add_custom(param_path='data.update_data').set_options(
         #     widget='button',
-        #     script=r'import lnx_scene.node_handle as h; h.ReplaceMayaReference(node).update_data()',
+        #     script=r'import lnx_nexsolve.node_handle as h; h.ReplaceMayaReference(node).update_data()',
         #     gui_name='Update Data', gui_name_chs='更新数据',
         # )
 
@@ -79,15 +79,15 @@ class Node(_ng_model.StandardNode):
             widget='buttons',
             data=[
                 dict(
-                    script=r'import lnx_scene.node_handle as h; h.ReplaceMayaReference(node).create_replace()',
+                    script=r'import lnx_nexsolve.node_handle as h; h.ReplaceMayaReference(node).create_replace()',
                     gui_name='Create Replace', gui_name_chs='创建替换'
                 ),
                 dict(
-                    script=r'import lnx_scene.node_handle as h; h.ReplaceMayaReference(node).modify_replace()',
+                    script=r'import lnx_nexsolve.node_handle as h; h.ReplaceMayaReference(node).modify_replace()',
                     gui_name='Modify Replace', gui_name_chs='修改替换',
                 ),
                 dict(
-                    script=r'import lnx_scene.node_handle as h; h.ReplaceMayaReference(node).remove_replace()',
+                    script=r'import lnx_nexsolve.node_handle as h; h.ReplaceMayaReference(node).remove_replace()',
                     gui_name='Remove Replace', gui_name_chs='移除替换',
                 )
             ],

@@ -755,8 +755,9 @@ class MtgMasterLayer(AbsMtgLayer):
     def do_bake(self):
         rig_namespace = self.get_rig_namespace()
 
-        control_key_query = self._configure.control_key_query
         if qsm_mya_adv.AdvOpt.check_is_valid(rig_namespace) is True:
+            control_key_query = self._configure.control_key_query
+
             start_frame, end_frame = self.get_frame_range()
             adv_resource = _adv_resource.AdvResource(rig_namespace)
             main_control_keys = control_key_query.values()
@@ -773,8 +774,6 @@ class MtgMasterLayer(AbsMtgLayer):
                     'rotateX', 'rotateY', 'rotateZ',
                 ]
             )
-
-            self.do_delete()
         elif _mcp_resource.MocapResource.check_is_valid(rig_namespace) is True:
             start_frame, end_frame = self.get_frame_range()
 
@@ -787,9 +786,10 @@ class MtgMasterLayer(AbsMtgLayer):
                     'rotateX', 'rotateY', 'rotateZ',
                 ]
             )
-            self.do_delete()
         else:
             pass
+
+        self.do_delete()
 
     def find_root_loc(self):
         _ = cmds.ls('{}:{}'.format(self._namespace, 'root_loc'), long=1)
@@ -935,10 +935,16 @@ class MtgMasterLayer(AbsMtgLayer):
         qsm_mya_core.NodeAttribute.set_as_string(
             mtg_layer.location, 'motion_json', motion_json
         )
+
+        if 'start_frame' in kwargs:
+            start_frame = kwargs.pop('start_frame')
+        else:
+            start_frame = stage_end_frame+1
+
         clip_start, clip_end = mtg_layer.apply_data_for(
             mtg_layer,
             data,
-            start_frame=stage_end_frame+1,
+            start_frame=start_frame,
             pre_cycle=pre_cycle, post_cycle=post_cycle,
             pre_blend=pre_blend, post_blend=post_blend, blend_type='flat',
             **kwargs

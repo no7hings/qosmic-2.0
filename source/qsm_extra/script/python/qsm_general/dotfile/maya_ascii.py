@@ -35,6 +35,7 @@ class MayaAscii(abc_.AbsDotfile):
         p_0 = r'createNode.*'
 
         p_1 = r'createNode (.*?) -s -n "(.*?)"'+self.SEP
+
         p_2 = r'createNode (.*?) -n "(.*?)"'+self.SEP
         p_3 = r'(.*?)" -p "(.*?)'
 
@@ -167,6 +168,14 @@ class MayaAscii(abc_.AbsDotfile):
 
             set_.add(v['file'])
         return list(set_)
+
+    @abc_.DotfileCache.get()
+    def get_cameras(self):
+        list_ = []
+        for k, v in self.get_node_dict().items():
+            if v['type'] == 'camera':
+                list_.append(k)
+        return list_
 
     @abc_.DotfileCache.get()
     def get_fps(self):

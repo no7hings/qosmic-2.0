@@ -121,32 +121,32 @@ class MaterialLightLink(object):
                 ):
                     return i
 
-        def get_is_connected_(connection):
+        def get_is_connected_(attr):
             boolean = False
-            if cmds.objExists(connection):
-                if not cmds.connectionInfo(connection, isDestination=1):
+            if cmds.objExists(attr):
+                if not cmds.connectionInfo(attr, isDestination=1):
                     boolean = True
             return boolean
 
         def get_is_partition_connected_at_(index):
-            connection = cls.OBJ_NAME_0+'.sets[%s]' % index
-            return get_is_connected_(connection)
+            attr = cls.OBJ_NAME_0+'.sets[%s]' % index
+            return get_is_connected_(attr)
 
         def get_is_obj_link_connected_at_(index):
-            connection = cls.OBJ_NAME_1+'.link[%s].object' % index
-            return get_is_connected_(connection)
+            attr = cls.OBJ_NAME_1+'.link[%s].object' % index
+            return get_is_connected_(attr)
 
         def get_is_obj_shadow_link_connected_at_(index):
-            connection = cls.OBJ_NAME_1+'.shadowLink[%s].shadowObject' % index
-            return get_is_connected_(connection)
+            attr = cls.OBJ_NAME_1+'.shadowLink[%s].shadowObject' % index
+            return get_is_connected_(attr)
 
         def get_is_light_link_connected_at_(index):
-            connection = cls.OBJ_NAME_1+'.link[%s].light' % index
-            return get_is_connected_(connection)
+            attr = cls.OBJ_NAME_1+'.link[%s].light' % index
+            return get_is_connected_(attr)
 
         def get_is_light_shadow_link_connected_at_(index):
-            connection = cls.OBJ_NAME_1+'.shadowLink[%s].shadowLight' % index
-            return get_is_connected_(connection)
+            attr = cls.OBJ_NAME_1+'.shadowLink[%s].shadowLight' % index
+            return get_is_connected_(attr)
 
         def main_fnc_():
             index = get_connection_index_()

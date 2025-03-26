@@ -13,7 +13,7 @@ from ..core.transfer import resource as _cor_tsf_resource
 
 from ..core.transfer import handle as _cor_trf_handle
 
-from . import build as _build
+from . import splice_build as _build
 
 
 class MoCapDotFbxMotionGenerateProcess(object):
