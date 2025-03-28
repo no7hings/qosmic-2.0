@@ -785,18 +785,20 @@ class QtTrackWidget(_vew_wgt_base._BaseViewWidget):
             _gui_core.GuiIcon.get('refresh')
         )
         self._refresh_button.press_clicked.connect(self.refresh.emit)
+        
         # top
         self._top_scroll_box = _wgt_scroll.QtHScrollBox()
         self._grid_lot.addWidget(self._top_scroll_box, 0, 1, 1, 1)
         self._top_scroll_box._set_layout_align_left_or_top_()
         self._top_scroll_box.setFixedHeight(self.TOOL_BAR_W)
+        
         # left
         self._left_scroll_box = _wgt_scroll.QtVScrollBox()
         self._grid_lot.addWidget(self._left_scroll_box, 1, 0, 1, 1)
         self._left_scroll_box._set_layout_align_left_or_top_()
         self._left_scroll_box.setFixedWidth(self.TOOL_BAR_W)
 
-        self._undo_and_redo_tool_box = self._add_top_tool_box('undo and redo')
+        self._undo_tool_box = self._add_top_tool_box('undo and redo')
 
         # keyword filter
         self._keyword_filter_tool_box = self._add_top_tool_box('keyword filter', size_mode=1)
@@ -814,7 +816,7 @@ class QtTrackWidget(_vew_wgt_base._BaseViewWidget):
 
         self._build_keyword_filter_tool_box()
 
-        self._build_undo_and_redo_tool_box_()
+        self._build_undo_tool_box()
 
     def _add_top_tool_box(self, name, size_mode=0):
         tool_box = _wgt_container.QtHToolBox()
@@ -824,40 +826,40 @@ class QtTrackWidget(_vew_wgt_base._BaseViewWidget):
         tool_box._set_size_mode_(size_mode)
         return tool_box
 
-    def _insert_top_tool_box_(self, index, name):
+    def _insert_top_tool_box(self, index, name):
         tool_box = _wgt_container.QtVToolBox()
         self._top_scroll_box.insertWidget(index, tool_box)
         tool_box._set_expanded_(True)
         tool_box._set_name_text_(name)
         return tool_box
 
-    def _add_left_tool_box_(self, name):
+    def _add_left_tool_box(self, name):
         tool_box = _wgt_container.QtVToolBox()
         self._left_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)
         tool_box._set_name_text_(name)
         return tool_box
 
-    def _insert_left_tool_box_(self, index, name):
+    def _insert_left_tool_box(self, index, name):
         tool_box = _wgt_container.QtVToolBox()
         self._left_scroll_box.insertWidget(index, tool_box)
         tool_box._set_expanded_(True)
         tool_box._set_name_text_(name)
         return tool_box
 
-    def _build_undo_and_redo_tool_box_(self):
+    def _build_undo_tool_box(self):
         self._undo_button = _wgt_button.QtIconPressButton()
         self._undo_button._set_name_text_('undo')
         self._undo_button._set_icon_name_('montage/undo')
         self._undo_button._set_action_enable_(False)
-        self._undo_and_redo_tool_box._add_widget_(self._undo_button)
+        self._undo_tool_box._add_widget_(self._undo_button)
         self._view._graph._set_undo_button_(self._undo_button)
 
         self._redo_button = _wgt_button.QtIconPressButton()
         self._redo_button._set_name_text_('redo')
         self._redo_button._set_icon_name_('montage/redo')
         self._redo_button._set_action_enable_(False)
-        self._undo_and_redo_tool_box._add_widget_(self._redo_button)
+        self._undo_tool_box._add_widget_(self._redo_button)
         self._view._graph._set_redo_button_(self._redo_button)
 
     def _build_keyword_filter_tool_box(self):

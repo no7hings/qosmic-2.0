@@ -26,18 +26,22 @@ class QtNodeGraphWidget(gui_qt_vew_wgt_base._BaseViewWidget):
             gui_core.GuiIcon.get('refresh')
         )
         # self._refresh_button.press_clicked.connect(self.refresh.emit)
-        # top
+
+        # top toolbar
         self._top_scroll_box = gui_qt_widgets.QtHScrollBox()
         self._grid_lot.addWidget(self._top_scroll_box, 0, 1, 1, 1)
         self._top_scroll_box._set_layout_align_left_or_top_()
         self._top_scroll_box.setFixedHeight(self.TOOL_BAR_W)
-        # left
+
+        # left toolbar
         self._left_scroll_box = gui_qt_widgets.QtVScrollBox()
         self._grid_lot.addWidget(self._left_scroll_box, 1, 0, 1, 1)
         self._left_scroll_box._set_layout_align_left_or_top_()
         self._left_scroll_box.setFixedWidth(self.TOOL_BAR_W)
 
-        self._file_tool_box = self._add_top_tool_box('file')
+        # undo
+        self._undo_tool_box = self._add_top_tool_box('undo and redo')
+
         # keyword filter
         self._keyword_filter_tool_box = self._add_top_tool_box('keyword filter', size_mode=1)
 
@@ -57,7 +61,7 @@ class QtNodeGraphWidget(gui_qt_vew_wgt_base._BaseViewWidget):
         self._grid_lot.addWidget(self._info_bar_chart, 2, 1, 1, 1)
         self._info_bar_chart.hide()
 
-        self._build_file_tool_box()
+        self._build_undo_tool_box()
         self._build_keyword_filter_tool_box()
 
     def _add_top_tool_box(self, name, size_mode=0):
@@ -68,34 +72,24 @@ class QtNodeGraphWidget(gui_qt_vew_wgt_base._BaseViewWidget):
         tool_box._set_size_mode_(size_mode)
         return tool_box
 
-    def _build_file_tool_box(self):
-        self._file_new_button = gui_qt_widgets.QtIconPressButton()
-        self._file_tool_box._add_widget_(self._file_new_button)
-        self._file_new_button._set_icon_name_('file/file')
-        self._file_new_button.press_clicked.connect(self._model._on_new_file_action)
-        self._file_new_button._set_name_text_('New file')
-        self._file_new_button._set_tool_tip_('Ctrl+N')
+    def _build_undo_tool_box(self):
+        self._undo_button = gui_qt_widgets.QtIconPressButton()
+        self._undo_button._set_name_text_('undo')
+        self._undo_button._set_icon_name_('montage/undo')
+        self._undo_button._set_action_enable_(False)
+        self._undo_button._set_tool_tip_('"LMB-click" to undo')
+        self._undo_button._update_action_tip_text_('Ctrl+Z')
+        self._undo_tool_box._add_widget_(self._undo_button)
+        self._root_node_gui._set_undo_button_(self._undo_button)
 
-        self._file_open_button = gui_qt_widgets.QtIconPressButton()
-        self._file_tool_box._add_widget_(self._file_open_button)
-        self._file_open_button._set_icon_name_('file/open-folder')
-        self._file_open_button.press_clicked.connect(self._model._on_open_file_action)
-        self._file_open_button._set_name_text_('Open file')
-        self._file_open_button._set_tool_tip_('Ctrl+O')
-
-        self._file_save_button = gui_qt_widgets.QtIconPressButton()
-        self._file_tool_box._add_widget_(self._file_save_button)
-        self._file_save_button._set_icon_name_('tool/save')
-        self._file_save_button.press_clicked.connect(self._model._on_save_file_action)
-        self._file_save_button._set_name_text_('Save file')
-        self._file_save_button._set_tool_tip_('Ctrl+S')
-
-        self._file_save_to_button = gui_qt_widgets.QtIconPressButton()
-        self._file_tool_box._add_widget_(self._file_save_to_button)
-        self._file_save_to_button._set_icon_name_('tool/save-to')
-        self._file_save_to_button.press_clicked.connect(self._model._on_save_file_to_action)
-        self._file_save_to_button._set_name_text_('Save file to')
-        self._file_save_to_button._set_tool_tip_('Ctrl+Shift+O')
+        self._redo_button = gui_qt_widgets.QtIconPressButton()
+        self._redo_button._set_name_text_('redo')
+        self._redo_button._set_icon_name_('montage/redo')
+        self._redo_button._set_action_enable_(False)
+        self._redo_button._set_tool_tip_('"LMB-click" to redo')
+        self._redo_button._update_action_tip_text_('Ctrl+Shift+Z')
+        self._undo_tool_box._add_widget_(self._redo_button)
+        self._root_node_gui._set_redo_button_(self._redo_button)
 
     def _build_keyword_filter_tool_box(self):
         self._keyword_filter_input = gui_qt_widgets.QtInputForFilter()

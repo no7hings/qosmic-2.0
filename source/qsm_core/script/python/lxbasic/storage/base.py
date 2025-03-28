@@ -1477,7 +1477,7 @@ class StgFileOpt(StgPathOpt):
                     raw = bsc_content.ContentYamlBase.load(y)
                     y.close()
                     return raw
-            elif self.ext in {'.jsz'}:
+            elif self.ext in {'.jsz', '.nxs_prj'}:
                 return StgGzipFileOpt(self._path, '.json').set_read()
             else:
                 with open(self.path) as f:
@@ -1513,7 +1513,7 @@ class StgFileOpt(StgPathOpt):
         elif self.ext in {'.png'}:
             with open(self.path, 'wb') as f:
                 f.write(raw)
-        elif self.ext in {'.jsz'}:
+        elif self.ext in {'.jsz', '.nxs_prj'}:
             StgGzipFileOpt(self._path, '.json').set_write(raw)
         else:
             with open(self.path, 'w') as f:

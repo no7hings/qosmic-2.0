@@ -121,7 +121,10 @@ class QtHistogramChartWidget(
         self._histogram_chart._chart_model.export(file_path)
 
     def _do_export_(self):
-        file_path = _gui_core.GuiStorageDialog.save_file(ext_filter='All File (*.png)', parent=self)
+        file_path = _gui_core.GuiStorageDialog.save_file(
+            ext_filter='All File (*.png)',
+            parent=self
+        )
         if file_path:
             self._export_to_(file_path)
             bsc_storage.StgDirectoryOpt(file_path).show_in_system()

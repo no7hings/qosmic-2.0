@@ -28,6 +28,11 @@ class AdvOpt(_base.AdvNamespaceExtra):
     def __init__(self, namespace):
         self._init_namespace_extra(namespace)
 
+    def find_root_location(self):
+        _ = cmds.ls('|{}:*'.format(self._namespace), long=1)
+        if _:
+            return _[0]
+
     # control motion
     def generate_controls_motion_dict(self):
         controls = self.find_all_controls()

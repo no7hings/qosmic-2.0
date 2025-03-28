@@ -6,7 +6,7 @@ import lxgui.core as gui_core
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.motion.core as qsm_mya_mtn_core
+import qsm_maya.motion as qsm_mya_motion
 
 
 class ControlTransformOpt(object):
@@ -35,7 +35,7 @@ class ControlTransformOpt(object):
         cls.create_root()
 
         for i_main_control in main_controls:
-            qsm_mya_mtn_core.ControlTransform.create_locator_fnc(
+            qsm_mya_motion.ControlTransform.create_locator_fnc(
                 i_main_control,
                 root=cls.ROOT_PATH
             )
@@ -44,7 +44,7 @@ class ControlTransformOpt(object):
     @qsm_mya_core.Undo.execute
     def remove_locators(cls, main_locators):
         for i_main_locator in main_locators:
-            qsm_mya_mtn_core.ControlTransform.remove_locator_fnc(i_main_locator)
+            qsm_mya_motion.ControlTransform.remove_locator_fnc(i_main_locator)
 
     @classmethod
     def create_auto(cls, **kwargs):

@@ -61,6 +61,8 @@ class RootNodeGui(
     node_edited_changed = qt_signal(str)
 
     event_sent = qt_signal(int, int, dict)
+    
+    scene_path_accepted = qt_signal(str)
 
     ActionFlags = _cor_action.ActionFlags
 
@@ -72,8 +74,8 @@ class RootNodeGui(
 
     def _get_scaled_point(self, x, y):
         transform = self.transform()
-        inverted, success = transform.inverted()
-        if success:
+        inverted, flag = transform.inverted()
+        if flag:
             return inverted.map(QtCore.QPointF(x, y))
         return self.mapToScene(0, 0)
 
@@ -139,8 +141,8 @@ class RootNodeGui(
             (self._model._on_paste_action, 'Ctrl+V'),
             # bypass
             (self._model._on_bypass_action, 'D'),
-            # frame select
-            (self._model._on_frame_select_action, 'F'),
+            # frame select, todo: frame select make glob position error
+            # (self._model._on_frame_select_action, 'F'),
             # new file
             (self._model._on_new_file_action, 'Ctrl+N'),
             # open file
@@ -148,7 +150,7 @@ class RootNodeGui(
             # save file
             (self._model._on_save_file_action, 'Ctrl+S'),
             # save file to
-            (self._model._on_save_file_to_action, 'Ctrl+Shift+S')
+            (self._model._on_save_file_as_action, 'Ctrl+Shift+S')
         ]
         for i_fnc, i_shortcut in actions:
             i_action = QtWidgets.QAction(self)
@@ -164,6 +166,25 @@ class RootNodeGui(
             self.addAction(i_action)
 
         self.installEventFilter(self)
+
+    # undo
+    def _set_undo_button_(self, widget):
+        self._undo_button = widget
+        self._undo_button.press_clicked.connect(self._undo_action.trigger)
+        # noinspection PyUnresolvedReferences
+        self._undo_stack.canUndoChanged.connect(self._update_undo_)
+
+    def _update_undo_(self):
+        self._undo_button._set_action_enable_(self._undo_stack.canUndo())
+
+    def _set_redo_button_(self, widget):
+        self._redo_button = widget
+        self._redo_button.press_clicked.connect(self._redo_action.trigger)
+        # noinspection PyUnresolvedReferences
+        self._undo_stack.canRedoChanged.connect(self._update_redo_)
+
+    def _update_redo_(self):
+        self._redo_button._set_action_enable_(self._undo_stack.canRedo())
 
     def _accept_source_connect(self, port_gui):
         if isinstance(port_gui, _port.InputGui):

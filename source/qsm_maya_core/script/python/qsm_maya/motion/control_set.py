@@ -6,7 +6,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.storage as bsc_storage
 
-from ... import core as _mya_core
+from .. import core as _mya_core
 
 from . import base as _base
 

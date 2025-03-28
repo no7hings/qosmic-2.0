@@ -420,10 +420,10 @@ class QtTreeWidget(
         # keyword filter
         self._keyword_filter_tool_box = self._add_top_tool_box('keyword filter', size_mode=1)
         # check
-        self._check_tool_box = self._add_left_tool_box_('check')
+        self._check_tool_box = self._add_left_tool_box('check')
         self._check_tool_box.hide()
         # sort and chart
-        self._sort_and_chart_tool_box = self._add_left_tool_box_('sort and chart')
+        self._sort_and_chart_tool_box = self._add_left_tool_box('sort and chart')
 
         self._view = _QtTreeView()
         self._grid_lot.addWidget(self._view, 1, 1, 1, 1)
@@ -460,7 +460,7 @@ class QtTreeWidget(
             )
             self.addAction(i_action)
 
-    def _insert_left_tool_box_(self, index, name):
+    def _insert_left_tool_box(self, index, name):
         tool_box = _wgt_container.QtVToolBox()
         self._left_scroll_box.insertWidget(index, tool_box)
         tool_box._set_expanded_(True)
@@ -483,7 +483,7 @@ class QtTreeWidget(
         tool_box._set_size_mode_(size_mode)
         return tool_box
 
-    def _add_left_tool_box_(self, name):
+    def _add_left_tool_box(self, name):
         tool_box = _wgt_container.QtVToolBox()
         self._left_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)

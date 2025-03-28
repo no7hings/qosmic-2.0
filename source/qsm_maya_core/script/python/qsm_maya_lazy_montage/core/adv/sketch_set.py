@@ -129,7 +129,8 @@ class AdvChrSketchSet(AdvSketchSet):
         return dict_
 
     def compute_root_height(self):
-        toe = self._sketch_map.get('ToesEnd_R')
+        # do not use ToesEnd_R, ToesEnd_R may not in "DeformSet"
+        toe = self._sketch_map.get('Toes_R')
         point_0 = qsm_mya_core.Transform.get_world_translation(toe)
         root = self._sketch_map.get('Root_M')
         point_1 = qsm_mya_core.Transform.get_world_translation(root)
@@ -154,3 +155,26 @@ class AdvChrSketchSet(AdvSketchSet):
 
     def find_one(self, sketch_key):
         return self._sketch_map.get(sketch_key)
+
+    def constraint_to_transfer_sketch(self, sketch_set, break_parent_inverse=False):
+        root_sketch_key = self._configure.root_sketch_key
+        for i_sketch_key, v in self._sketch_map.items():
+            i_src = v
+            i_tgt = sketch_set.get(i_sketch_key)
+
+            if i_sketch_key == root_sketch_key:
+                qsm_mya_core.PointConstraint.create(
+                    i_src, i_tgt, maintain_offset=0
+                )
+
+            qsm_mya_core.OrientConstraint.create(
+                i_src, i_tgt, maintain_offset=0
+            )
+            i_pair_blend = qsm_mya_core.NodeAttribute.get_source_node(
+                i_tgt, 'rotateX', 'pairBlend'
+            )
+            if i_pair_blend:
+                # set rotation interpolation to quaternions
+                qsm_mya_core.NodeAttribute.set_value(
+                    i_pair_blend, 'rotInterpolation', 1
+                )

@@ -189,7 +189,8 @@ class PrxTreeviewUnitForAssetOpt(
 
     def do_dcc_replace_asset_references(self):
         file_path = gui_core.GuiStorageDialog.open_file(
-            ext_filter='All File (*.ma *.mb)', parent=self._window._qt_widget
+            ext_filter='All File (*.ma *.mb)',
+            parent=self._window._qt_widget
         )
         if file_path:
             _ = self._prx_tree_view.get_selected_items()

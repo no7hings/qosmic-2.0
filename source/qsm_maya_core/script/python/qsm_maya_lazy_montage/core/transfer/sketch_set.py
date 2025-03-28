@@ -7,7 +7,7 @@ import lxbasic.resource as bsc_resource
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.motion.core as qsm_mya_mtn_core
+import qsm_maya.motion as qsm_mya_motion
 
 from ..base import sketch as _bsc_sketch
 
@@ -168,7 +168,7 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
     def get_frame_range(self):
         curve_nodes = []
         for i in self._paths:
-            i_curve_nodes = qsm_mya_mtn_core.ControlMotionOpt(i).get_all_curve_nodes()
+            i_curve_nodes = qsm_mya_motion.ControlMotionOpt(i).get_all_curve_nodes()
             curve_nodes.extend(i_curve_nodes)
         if curve_nodes:
             return qsm_mya_core.AnmCurveNodes.get_range(curve_nodes)

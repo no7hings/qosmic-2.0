@@ -6,7 +6,7 @@ import lxgui.core as gui_core
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.motion.core as qsm_mya_mtn_core
+import qsm_maya.motion as qsm_mya_motion
 
 
 class ControlMoveOpt(object):
@@ -34,7 +34,7 @@ class ControlMoveOpt(object):
         self.create_root()
 
         for i_path in self._main_controls:
-            qsm_mya_mtn_core.ControlMove.create_locator_fnc(
+            qsm_mya_motion.ControlMove.create_locator_fnc(
                 i_path,
                 root=self.ROOT_PATH
             )
@@ -42,7 +42,7 @@ class ControlMoveOpt(object):
     @qsm_mya_core.Undo.execute
     def remove_locators(self):
         for i_path in self._main_controls:
-            qsm_mya_mtn_core.ControlMove.remove_locator_fnc(i_path)
+            qsm_mya_motion.ControlMove.remove_locator_fnc(i_path)
     
     @classmethod
     def create_auto(cls, **kwargs):
@@ -73,7 +73,7 @@ class ControlMoveOpt(object):
             locators = cmds.ls(selection=1, type='locator', dag=1, long=1)
             main_controls = []
             for i_path in locators:
-                i_control = qsm_mya_mtn_core.ControlMove.find_main_control(i_path)
+                i_control = qsm_mya_motion.ControlMove.find_main_control(i_path)
                 if i_control is not None:
                     main_controls.append(i_control)
             if not main_controls:

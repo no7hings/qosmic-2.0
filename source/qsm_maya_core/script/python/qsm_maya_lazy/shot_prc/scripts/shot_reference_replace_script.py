@@ -5,6 +5,10 @@ import lxbasic.storage as bsc_storage
 
 import qsm_maya.core as qsm_mya_core
 
+import qsm_maya.adv as qsm_mya_adv
+
+import qsm_maya.motion as qsm_mya_motion
+
 import qsm_maya.handles.general.scripts as qsm_mya_hdl_gnl_scripts
 
 import qsm_maya_lazy_montage.scripts as qsm_mya_lzy_mtg_scripts
@@ -64,17 +68,26 @@ class ShotReferenceReplace(object):
                         directory_path, i_namespace.replace(':', '__')
                     )
                     if bsc_storage.StgPath.get_is_file(i_json_path) is False:
-                        qsm_mya_lzy_mtg_scripts.AdvChrMotionExportOpt(i_namespace).execute(i_json_path)
+                        qsm_mya_lzy_mtg_scripts.AdvChrMotionExportOpt(i_namespace).execute(
+                            i_json_path, frame_range=qsm_mya_core.Frame.get_frame_range()
+                        )
 
                     qsm_mya_core.Reference.unload(i)
+                    qsm_mya_core.Reference.hide_foster_parent(i)
+                    i_adv_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
+                    # qsm_mya_core.NodeAttribute.set_visible(
+                    #     i_adv_opt.find_root_location(), False
+                    # )
 
                     i_namespace_tgt = qsm_mya_core.SceneFile.reference_file(
                         i_file_path_tgt, namespace=bsc_storage.StgFileOpt(i_file_path_tgt).name_base
                     )
 
+                    start_frame, end_frame = qsm_mya_core.Frame.get_frame_range()
                     qsm_mya_lzy_mtg_scripts.AdvChrMotionImportOpt(i_namespace_tgt).execute(
-                        i_json_path
+                        i_json_path, start_frame=start_frame
                     )
+
             l_p.do_update()
 
             # 3. create preview

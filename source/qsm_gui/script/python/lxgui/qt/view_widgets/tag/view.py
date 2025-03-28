@@ -262,7 +262,7 @@ class QtTagWidget(
         # keyword filter
         self._keyword_filter_tool_box = self._add_top_tool_box('keyword filter', size_mode=1)
         # chart
-        self._sort_chart_tool_box = self._add_left_tool_box_('sort and chart')
+        self._sort_chart_tool_box = self._add_left_tool_box('sort and chart')
 
         self._view = _QtTagViewWidget()
         self._grid_lot.addWidget(self._view, 1, 1, 1, 1)
@@ -280,7 +280,7 @@ class QtTagWidget(
         tool_box._set_size_mode_(size_mode)
         return tool_box
 
-    def _add_left_tool_box_(self, name):
+    def _add_left_tool_box(self, name):
         tool_box = _wgt_container.QtVToolBox()
         self._left_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)

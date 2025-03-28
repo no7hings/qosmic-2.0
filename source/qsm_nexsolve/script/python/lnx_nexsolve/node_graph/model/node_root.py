@@ -36,7 +36,7 @@ class SceneFile(object):
     def __init__(self, root_model):
         self._root_model = root_model
 
-        self._default_path = '{}/QSM/scenes/untitled.jsz'.format(bsc_core.BscSystem.get_home_directory())
+        self._default_path = '{}/QSM/scenes/untitled.nxs_prj'.format(bsc_core.BscSystem.get_home_directory())
         self._current_path = self._default_path
 
         self._current_data = self._root_model.to_data()
@@ -150,7 +150,7 @@ class SceneFile(object):
             return True
         return False
     
-    def save_to_with_dialog(self, file_path):
+    def save_as_with_dialog(self, file_path):
         # check file directory is changed, when changed save to.
         if os.path.abspath(file_path) == os.path.abspath(self.get_current()):
             if self.is_dirty() is True:
@@ -176,7 +176,7 @@ class SceneFile(object):
         return True
 
     def save_with_dialog(self):
-        self.save_to_with_dialog(self.get_current())
+        self.save_as_with_dialog(self.get_current())
 
 
 # scene model
@@ -1256,34 +1256,42 @@ class RootNode(
 
     # file
     def _on_new_file_action(self):
-        self._scene_file.new_with_dialog()
+        if self._scene_file.new_with_dialog():
+            self._gui.scene_path_accepted.emit(self._scene_file.get_current())
 
     def _on_open_file_action(self):
         file_path = gui_core.GuiStorageDialog.open_file(
-            ext_filter='All File (*.jsz *.json)',
+            ext_filter='All File (*.nxs_prj)',
             parent=self._gui,
-            default=self._scene_file.get_current()
+            default=self._scene_file.get_current(),
+            title='Open Scene'
         )
         if file_path:
-            self._scene_file.open_with_dialog(file_path)
+            if self._scene_file.open_with_dialog(file_path):
+                self._gui.scene_path_accepted.emit(self._scene_file.get_current())
 
     def _on_save_file_action(self):
         if self._scene_file.is_default():
             file_path = gui_core.GuiStorageDialog.save_file(
-                ext_filter='All File (*.jsz *.json)',
+                ext_filter='All File (*.nxs_prj)',
                 parent=self._gui,
-                default=self._scene_file.get_current()
+                default=self._scene_file.get_current(),
+                title='Save Scene'
             )
             if file_path:
-                self._scene_file.save_to_with_dialog(file_path)
+                if self._scene_file.save_as_with_dialog(file_path):
+                    self._gui.scene_path_accepted.emit(self._scene_file.get_current())
         else:
-            self._scene_file.save_with_dialog()
+            if self._scene_file.save_with_dialog():
+                self._gui.scene_path_accepted.emit(self._scene_file.get_current())
 
-    def _on_save_file_to_action(self):
+    def _on_save_file_as_action(self):
         file_path = gui_core.GuiStorageDialog.save_file(
-            ext_filter='All File (*.jsz *.json)',
+            ext_filter='All File (*.nxs_prj)',
             parent=self._gui,
-            default=self._scene_file.get_current()
+            default=self._scene_file.get_current(),
+            title='Save Scene As'
         )
         if file_path:
-            self._scene_file.save_to_with_dialog(file_path)
+            if self._scene_file.save_as_with_dialog(file_path):
+                self._gui.scene_path_accepted.emit(self._scene_file.get_current())

@@ -19,7 +19,7 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
 
-import qsm_maya.assembly.core as qsm_mya_asb_core
+import qsm_maya.handles.assembly.core as qsm_mya_hdl_asb_core
 
 import qsm_maya.handles.scenery.core as qsm_mya_hdl_scn_core
 
@@ -117,7 +117,7 @@ class _SceneRegionPrc(object):
         region_paths = []
 
         if mesh_paths:
-            grid_map = qsm_mya_asb_core.GridSpace(mesh_paths, grid_size).generate()
+            grid_map = qsm_mya_hdl_asb_core.GridSpace(mesh_paths, grid_size).generate()
             keys = list(grid_map.keys())
             keys.sort()
             for i_seq, i_key in enumerate(keys):

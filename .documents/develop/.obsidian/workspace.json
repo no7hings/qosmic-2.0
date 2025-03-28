@@ -65,7 +65,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 324.5
+    "width": 324.5,
+    "collapsed": true
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -81,6 +82,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "开发相关/开发进度/优化-2025.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +99,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "开发相关/开发进度/优化-2025.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +121,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "开发相关/开发进度/优化-2025.md"
+              }
             }
           },
           {
@@ -138,7 +143,9 @@
             "type": "leaf",
             "state": {
               "type": "file-properties",
-              "state": {}
+              "state": {
+                "file": "开发相关/开发进度/优化-2025.md"
+              }
             }
           },
           {
@@ -179,10 +186,10 @@
   },
   "active": "27076d9d959e7d8a",
   "lastOpenFiles": [
+    "开发相关/开发进度/开发-2025.md",
     "技术文档/Qosmic.md",
     "技术文档/总览.canvas",
     "开发相关/开发进度/优化-2025.md",
-    "开发相关/开发进度/开发-2025.md",
     "开发相关/开发文档/解算流程工具.md",
     "开发相关/开发进度/BUG-2024.md",
     "开发相关/开发进度/优化-2024.md",

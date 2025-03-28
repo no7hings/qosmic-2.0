@@ -14,7 +14,7 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
-import qsm_maya.motion.core as qsm_mya_mtn_core
+import qsm_maya.motion as qsm_mya_motion
 
 import qsm_maya.adv as qsm_mya_adv
 
@@ -50,7 +50,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
         return results
 
     def get_dcc_control_args(self):
-        args = qsm_mya_mtn_core.ControlSetMotionOpt.get_args_from_selection()
+        args = qsm_mya_motion.ControlSetMotionOpt.get_args_from_selection()
         if not args:
             self._window.exec_message_dialog(
                 self._window.choice_gui_message(
@@ -62,7 +62,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
         return args
 
     def get_dcc_control_args_for_mirror(self):
-        args = qsm_mya_mtn_core.ControlSetMotionOpt.get_args_from_selection_for_mirror()
+        args = qsm_mya_motion.ControlSetMotionOpt.get_args_from_selection_for_mirror()
         if not args:
             self._window.exec_message_dialog(
                 self._window.choice_gui_message(
@@ -131,7 +131,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
         if args:
             namespace, paths = list(args.keys())[-1], list(args.values())[-1]
 
-            opt = qsm_mya_mtn_core.ControlSetMotionOpt(namespace, paths)
+            opt = qsm_mya_motion.ControlSetMotionOpt(namespace, paths)
 
             opt.export_motion_to(
                 qsm_gnl_core.DccCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
@@ -147,7 +147,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
         if args:
             namespace, paths = list(args.keys())[-1], list(args.values())[-1]
 
-            opt = qsm_mya_mtn_core.ControlSetMotionOpt(namespace, paths)
+            opt = qsm_mya_motion.ControlSetMotionOpt(namespace, paths)
 
             opt.export_pose_to(
                 qsm_gnl_core.DccCache.generate_control_pose_file(bsc_core.BscSystem.get_user_name())
@@ -215,7 +215,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
         if args:
             file_path = qsm_gnl_core.DccCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
             for k, v in args.items():
-                i_opt = qsm_mya_mtn_core.ControlSetMotionOpt(k, v)
+                i_opt = qsm_mya_motion.ControlSetMotionOpt(k, v)
                 i_opt.load_motion_from(
                     file_path,
                     control_key_excludes=self.get_control_key_excludes(),
@@ -234,7 +234,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
         if args:
             file_path = qsm_gnl_core.DccCache.generate_control_pose_file(bsc_core.BscSystem.get_user_name())
             for k, v in args.items():
-                i_opt = qsm_mya_mtn_core.ControlSetMotionOpt(k, v)
+                i_opt = qsm_mya_motion.ControlSetMotionOpt(k, v)
                 i_opt.load_pose_from(
                     file_path,
                     control_key_excludes=self.get_control_key_excludes(),
@@ -252,7 +252,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
         if args:
             file_path = qsm_gnl_core.DccCache.generate_character_motion_file(bsc_core.BscSystem.get_user_name())
             for k, v in args.items():
-                i_opt = qsm_mya_mtn_core.ControlSetMotionOpt(k, v)
+                i_opt = qsm_mya_motion.ControlSetMotionOpt(k, v)
                 i_opt.load_motion_from(
                     file_path,
                     control_key_excludes=self.get_control_key_excludes(),
@@ -343,9 +343,9 @@ class ToolsetForMotionCopyAndPasteAndMirror(
                 # generate axis vector dict
                 i_adv_motion_opt = qsm_mya_adv.AdvOpt(k)
                 i_controls = i_adv_motion_opt.find_all_controls()
-                ir_axis_vector_dict = qsm_mya_mtn_core.ControlSetMotionOpt(k, i_controls).generate_axis_vector_dict()
+                ir_axis_vector_dict = qsm_mya_motion.ControlSetMotionOpt(k, i_controls).generate_axis_vector_dict()
 
-                i_opt = qsm_mya_mtn_core.ControlSetMotionOpt(k, v)
+                i_opt = qsm_mya_motion.ControlSetMotionOpt(k, v)
                 i_opt.mirror_all_auto(
                     force=True,
                     frame_offset=self.get_frame_offset(),
@@ -363,7 +363,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
         args = self.get_dcc_control_args_for_mirror()
         if args:
             for k, v in args.items():
-                i_opt = qsm_mya_mtn_core.ControlMirrorPasteOpt(k)
+                i_opt = qsm_mya_motion.ControlMirrorPasteOpt(k)
                 file_path = qsm_gnl_core.DccCache.generate_control_motion_file(
                     bsc_core.BscSystem.get_user_name()
                 )
@@ -401,7 +401,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
         args = self.get_dcc_control_args_for_mirror()
         if args:
             for k, v in args.items():
-                i_opt = qsm_mya_mtn_core.ControlSetMotionOpt(k, v)
+                i_opt = qsm_mya_motion.ControlSetMotionOpt(k, v)
                 i_opt.flip_all(
                     force=True,
                     frame_offset=self.get_frame_offset(),
@@ -434,7 +434,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
             auto_keyframe = self._prx_options_node.get('reset_motion.auto_keyframe')
 
             for k, v in args.items():
-                i_opt = qsm_mya_mtn_core.ControlSetMotionOpt(k, v)
+                i_opt = qsm_mya_motion.ControlSetMotionOpt(k, v)
                 i_opt.reset_transformation(
                     translate=True,
                     rotate=True,

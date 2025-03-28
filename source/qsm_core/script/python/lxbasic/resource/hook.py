@@ -46,11 +46,11 @@ class RscHook(object):
                 return type_, key, configure, yaml_file_path, python_file_path, shell_file_path
 
             bsc_log.Log.trace_warning(
-                'hook file is not valid: "{}"'.format(yaml_file_path)
+                'hook file is not valid: "{}".'.format(yaml_file_path)
             )
             return None
         bsc_log.Log.trace_error(
-            'hook file is found: "{}"'.format(key)
+            'hook file is not found: "{}".'.format(key)
         )
         return None
 

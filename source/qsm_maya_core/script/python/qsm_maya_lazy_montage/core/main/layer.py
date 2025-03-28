@@ -2,6 +2,8 @@
 from __future__ import print_function
 
 import collections
+import sys
+
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 # noinspection PyUnresolvedReferences
@@ -171,6 +173,7 @@ class AbsMtgLayer(_bsc_abc.AbsMontage):
         qsm_mya_core.NodeAttribute.set_as_tuple(
             self._location, 'scale', (scale, scale, scale)
         )
+        sys.stdout.write('apply scale to layer root: \n'.format(scale))
 
     def get_root_scale(self):
         return qsm_mya_core.NodeAttribute.get_value(

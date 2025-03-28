@@ -19,18 +19,18 @@ import qsm_general.process as qsm_gnl_process
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.general.core as qsm_mya_gnl_core
-
-import qsm_maya.resource.core as qsm_mya_rsc_core
+import qsm_maya.resource as qsm_mya_resource
 
 import qsm_maya.adv as qsm_mya_adv
+
+import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
 
 from .. import core as _core
 
 
-class DynamicGpuCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
-    CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.DynamicGpuRoot
-    CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.DynamicGpuName
+class DynamicGpuCacheOpt(qsm_mya_resource.AssetCacheOpt):
+    CACHE_ROOT = qsm_mya_hdl_gnl_core.ResourceCacheNodes.DynamicGpuRoot
+    CACHE_NAME = qsm_mya_hdl_gnl_core.ResourceCacheNodes.DynamicGpuName
 
     def __init__(self, *args, **kwargs):
         super(DynamicGpuCacheOpt, self).__init__(*args, **kwargs)

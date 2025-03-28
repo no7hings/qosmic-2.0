@@ -518,7 +518,8 @@ class _PrxBasicToolset(
         namespaces = self.get_rig_namespaces_by_selection()
         if namespaces:
             scene_path = gui_core.GuiStorageDialog.open_file(
-                ext_filter='All File (*.ma *.mb)', parent=self._window._qt_widget
+                ext_filter='All File (*.ma *.mb)',
+                parent=self._window._qt_widget
             )
             if not scene_path:
                 return

@@ -2,12 +2,12 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-import qsm_maya.resource.core as qsm_mya_rsc_core
+import qsm_maya.resource as qsm_mya_resource
 
 from . import dcc_handle as _dcc_handle
 
 
-class CfxRigAsset(qsm_mya_rsc_core.Asset):
+class CfxRigAsset(qsm_mya_resource.Asset):
 
     def __init__(self, *args, **kwargs):
         super(CfxRigAsset, self).__init__(*args, **kwargs)

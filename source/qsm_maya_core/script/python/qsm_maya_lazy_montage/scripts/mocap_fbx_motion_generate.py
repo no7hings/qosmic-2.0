@@ -52,7 +52,7 @@ class MoCapDotFbxMotionGenerateProcess(object):
             # 2. create sketch and export motion json
             transfer_handle = _cor_trf_handle.MocapTransferHandle(mocap_namespace)
             transfer_handle.setup()
-            transfer_handle.connect_to_mocap()
+            transfer_handle.connect()
             transfer_handle.export_motion_to(motion_json_path)
             l_p.do_update()
 
@@ -109,6 +109,6 @@ class MoCapDotFbxMotionGenerateAutoProcess(object):
             # 2. create sketch and export motion json
             transfer_handle = _cor_trf_handle.MocapTransferHandle(mocap_namespace)
             transfer_handle.setup()
-            transfer_handle.connect_to_mocap()
+            transfer_handle.connect()
             transfer_handle.export_motion_to(motion_json_path)
             l_p.do_update()

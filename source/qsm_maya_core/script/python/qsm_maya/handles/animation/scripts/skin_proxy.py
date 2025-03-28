@@ -25,18 +25,18 @@ import qsm_general.process as qsm_gnl_process
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.general.core as qsm_mya_gnl_core
-
-import qsm_maya.resource.core as qsm_mya_rsc_core
+import qsm_maya.resource as qsm_mya_resource
 
 import qsm_maya.adv as qsm_mya_adv
+
+import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
 
 from .. import core as _core
 
 
-class SkinProxyOpt(qsm_mya_rsc_core.AssetCacheOpt):
-    CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.SkinProxyRoot
-    CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.SkinProxyName
+class SkinProxyOpt(qsm_mya_resource.AssetCacheOpt):
+    CACHE_ROOT = qsm_mya_hdl_gnl_core.ResourceCacheNodes.SkinProxyRoot
+    CACHE_NAME = qsm_mya_hdl_gnl_core.ResourceCacheNodes.SkinProxyName
 
     def __init__(self, *args, **kwargs):
         super(SkinProxyOpt, self).__init__(*args, **kwargs)
@@ -339,8 +339,8 @@ class AdvSkinProxyGenerate(object):
     PROXY_CONTROL_PATH = '|__skin_proxy_control__'
     PROXY_GEOMETRY_GROUP_PATH = '|__skin_proxy_geo_grp__'
 
-    CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.SkinProxyRoot
-    CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.SkinProxyName
+    CACHE_ROOT = qsm_mya_hdl_gnl_core.ResourceCacheNodes.SkinProxyRoot
+    CACHE_NAME = qsm_mya_hdl_gnl_core.ResourceCacheNodes.SkinProxyName
 
     @classmethod
     def _create_group(cls, path):

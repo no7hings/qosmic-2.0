@@ -10,7 +10,10 @@ class PremiereXml(abc_.AbsDotXml):
     def __init__(self, *args, **kwargs):
         super(PremiereXml, self).__init__(*args, **kwargs)
         self._root = self._etree.getroot()
-        self._sequence = self._etree.getroot().find('project').find('children').find('sequence')
+        if self._etree.getroot().find('project') is not None:
+            self._sequence = self._etree.getroot().find('project').find('children').find('sequence')
+        else:
+            self._sequence = self._etree.getroot().find('sequence')
 
     @classmethod
     def _find_one(cls, e_start, key_path):

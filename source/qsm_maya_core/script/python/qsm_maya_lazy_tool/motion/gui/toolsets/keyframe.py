@@ -7,7 +7,7 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
-import qsm_maya.motion.core as qsm_mya_mtn_core
+import qsm_maya.motion as qsm_mya_motion
 
 import qsm_maya.adv as qsm_mya_adv
 
@@ -62,7 +62,7 @@ class ToolsetForMotionKeyframe(
             qsm_mya_core.AnmCurveNodes.euler_filter(anm_curves)
 
     def _do_gui_refresh_timewrap_frame_range(self):
-        frame_range_src, frame_range_tgt = qsm_mya_mtn_core.TimewarpOpt.get_frame_range_args()
+        frame_range_src, frame_range_tgt = qsm_mya_motion.TimewarpOpt.get_frame_range_args()
         self._prx_options_node.set(
             'curve_timewarp.frame_range_src', frame_range_src
         )
@@ -76,7 +76,7 @@ class ToolsetForMotionKeyframe(
             self._prx_options_node.get_port('curve_timewarp.remove_timewarp_preview'),
             self._prx_options_node.get_port('curve_timewarp.apply_timewarp'),
         ]
-        if qsm_mya_mtn_core.TimewarpOpt.check_is_valid() is True:
+        if qsm_mya_motion.TimewarpOpt.check_is_valid() is True:
             for i_b in buttons:
                 i_b.set_status(i_b.ValidationStatus.Enable)
             self._prx_options_node.get_port('curve_timewarp.frame_range_tgt').set_action_enable(True)
@@ -89,12 +89,12 @@ class ToolsetForMotionKeyframe(
         frame_range_src = self._prx_options_node.get('curve_timewarp.frame_range_src')
         if self._prx_options_node.get('curve_timewarp.warp_scheme') == 'frame_range':
             frame_range_tgt = self._prx_options_node.get('curve_timewarp.frame_range_tgt')
-            result = qsm_mya_mtn_core.TimewarpOpt.update_by_frame_range(
+            result = qsm_mya_motion.TimewarpOpt.update_by_frame_range(
                 frame_range_src, frame_range_tgt
             )
         elif self._prx_options_node.get('curve_timewarp.warp_scheme') == 'scale_value':
             scale_value = self._prx_options_node.get('curve_timewarp.scale_value')
-            result = qsm_mya_mtn_core.TimewarpOpt.update_by_scale_value(
+            result = qsm_mya_motion.TimewarpOpt.update_by_scale_value(
                 frame_range_src, scale_value
             )
         else:
@@ -110,7 +110,7 @@ class ToolsetForMotionKeyframe(
         self._do_dcc_refresh_timewrap_buttons()
 
     def _do_dcc_remove_timewrap_preview(self):
-        result = qsm_mya_mtn_core.TimewarpOpt.remove()
+        result = qsm_mya_motion.TimewarpOpt.remove()
         if result is True:
             self._window.popup_message(
                 self._window.choice_gui_message(
@@ -128,7 +128,7 @@ class ToolsetForMotionKeyframe(
         self._do_dcc_refresh_timewrap_buttons()
 
     def _do_dcc_apply_timewrap(self):
-        result = qsm_mya_mtn_core.TimewarpOpt.apply()
+        result = qsm_mya_motion.TimewarpOpt.apply()
         if result is True:
             self._window.popup_message(
                 self._window.choice_gui_message(

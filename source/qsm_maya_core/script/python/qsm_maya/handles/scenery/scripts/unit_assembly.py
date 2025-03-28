@@ -21,21 +21,21 @@ import qsm_general.process as qsm_gnl_process
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.general.core as qsm_mya_gnl_core
+import qsm_maya.resource as qsm_mya_resource
 
-import qsm_maya.resource.core as qsm_mya_rsc_core
+import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
 
-import qsm_maya.assembly.core as qsm_mya_asb_core
+import qsm_maya.handles.assembly.core as qsm_mya_hdl_asb_core
 
 from .. import core as _core
 
 
-class UnitAssemblyOpt(qsm_mya_rsc_core.AssetCacheOpt):
+class UnitAssemblyOpt(qsm_mya_resource.AssetCacheOpt):
     TASK_KEY = 'unit_assembly_generate'
     API_VERSION = 1.0
 
-    CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.UnitAssemblyRoot
-    CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.UnitAssemblyName
+    CACHE_ROOT = qsm_mya_hdl_gnl_core.ResourceCacheNodes.UnitAssemblyRoot
+    CACHE_NAME = qsm_mya_hdl_gnl_core.ResourceCacheNodes.UnitAssemblyName
 
     def __init__(self, resource):
         super(UnitAssemblyOpt, self).__init__(resource)
@@ -258,7 +258,7 @@ class UnitAssemblyProcess(object):
                 l_p.do_update()
 
         if list_for_grid:
-            mapper = qsm_mya_asb_core.GridSpace(list_for_grid, grid_size).generate()
+            mapper = qsm_mya_hdl_asb_core.GridSpace(list_for_grid, grid_size).generate()
             keys = list(mapper.keys())
             keys.sort()
             with bsc_log.LogProcessContext.create(maximum=len(keys), label='grid process') as l_p:

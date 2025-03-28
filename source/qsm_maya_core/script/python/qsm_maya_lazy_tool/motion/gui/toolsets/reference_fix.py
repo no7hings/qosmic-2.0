@@ -3,7 +3,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.motion.core as qsm_mya_mtn_core
+import qsm_maya.motion as qsm_mya_motion
 
 
 class PrxToolsetReferenceFix(gui_prx_widgets.PrxBaseUnit):
@@ -21,7 +21,7 @@ class PrxToolsetReferenceFix(gui_prx_widgets.PrxBaseUnit):
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
             for i_reference_node in reference_nodes:
-                qsm_mya_mtn_core.ReferenceFix(i_reference_node).fix_placeholder()
+                qsm_mya_motion.ReferenceFix(i_reference_node).fix_placeholder()
 
     def __init__(self, window, page, session):
         super(PrxToolsetReferenceFix, self).__init__(window, page, session)

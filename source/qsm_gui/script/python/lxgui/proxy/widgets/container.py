@@ -34,7 +34,7 @@ class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
         qt_layout_0.addWidget(self._qt_head)
         self._qt_head.setFixedHeight(self.QT_HEAD_HEIGHT)
         self._qt_head.expand_toggled.connect(self.set_expanded)
-        self._qt_head._update_tool_action_tip_text_('"LMB-click" to expand "on" / "off"')
+        self._qt_head._update_action_tip_text_('"LMB-click" to expand "on" / "off"')
         self._qt_head.press_toggled.connect(self._qt_widget._set_pressed_)
         #
         qt_widget_1 = gui_qt_wgt_utility.QtTranslucentWidget()

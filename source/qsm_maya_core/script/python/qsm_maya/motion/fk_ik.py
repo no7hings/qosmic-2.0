@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 import copy
-import functools
+
 import math
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -11,7 +11,7 @@ import maya.api.OpenMaya as om2
 
 import lxbasic.resource as bsc_resource
 
-from ... import core as _mya_core
+from .. import core as _mya_core
 
 
 class FKIKSwitch(object):

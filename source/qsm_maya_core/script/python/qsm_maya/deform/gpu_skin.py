@@ -9,7 +9,6 @@ from maya.api import OpenMayaAnim as oma2
 import pymel.core as pm
 
 
-## ======================================================================
 def get_deform_shape(ob):
     """
     Gets the visible geometry shape regardless of whether or not
@@ -29,7 +28,6 @@ def get_deform_shape(ob):
         return (real_shapes[0] if len(real_shapes) else None)
 
 
-## ---------------------------------------------------------------------
 def get_skin_cluster(ob):
     """
     Find the first skinCluster on the object that actually effects it.
@@ -60,7 +58,6 @@ def get_skin_cluster(ob):
     return (None)
 
 
-## ---------------------------------------------------------------------
 def log(msg, warn=False, error=False):
     if warn and error:
         raise ValueError('Please specify only one of warn / error.')
@@ -81,27 +78,23 @@ def get_mobject(name):
     return sel.getDependNode(0)
 
 
-## ---------------------------------------------------------------------
 def get_dag_path(name):
     sel = om2.MGlobal.getSelectionListByName(name)
     return sel.getDagPath(0)
 
 
-## ---------------------------------------------------------------------
 def get_mfn_skin(skin_ob):
     if isinstance(skin_ob, pm.PyNode):
         skin_ob = get_mobject(skin_ob.longName())
     return oma2.MFnSkinCluster(skin_ob)
 
 
-## ---------------------------------------------------------------------
 def get_mfn_mesh(mesh_ob):
     if isinstance(mesh_ob, pm.PyNode):
         mesh_ob = get_mobject(mesh_ob.longName())
     return om2.MFnMesh(mesh_ob)
 
 
-## ---------------------------------------------------------------------
 def get_complete_components(mesh_ob):
     assert (isinstance(mesh_ob, om2.MFnMesh))
     comp = om2.MFnSingleIndexedComponent()
@@ -110,7 +103,6 @@ def get_complete_components(mesh_ob):
     return (ob)
 
 
-## ======================================================================
 def move_skin(source, target):
     source_shape = get_deform_shape(source)
     source_dp = get_dag_path(source_shape.longName())

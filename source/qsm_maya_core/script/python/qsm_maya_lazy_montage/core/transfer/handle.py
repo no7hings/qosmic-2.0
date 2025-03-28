@@ -3,10 +3,6 @@ import tempfile
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-import lxbasic.core as bsc_core
-
-import lxbasic.storage as bsc_storage
-
 import qsm_maya.core as qsm_mya_core
 
 from ..mocap import resource as _mcp_resource
@@ -17,40 +13,38 @@ from . import resource as _resource
 
 
 class MocapTransferHandle(object):
-    def __init__(self, mocap_namespace=None, mocap_location=None):
-        self._mocap_namespace = mocap_namespace
-        self._mocap_location = mocap_location
-
-    def setup(self):
-        _resource.TransferResource.create_sketches(_resource.TransferResource.Namespaces.Transfer)
-        self._transfer_resource = _resource.TransferResource(
-            _resource.TransferResource.Namespaces.Transfer
-        )
-        self._mocap_resource = _mcp_resource.MocapResource(
-            namespace=self._mocap_namespace, location=self._mocap_location
-        )
-
-    def connect_to_mocap(self):
-        self._transfer_resource.connect_from_mocap(self._mocap_resource)
 
     @classmethod
     def test(cls):
         pass
 
-    def export_motion_to(self, motion_json_file):
-        start_frame, end_frame = self._mocap_resource.get_frame_range()
-        self._transfer_resource.export_motion_to(
-            start_frame, end_frame, motion_json_file
+    def __init__(self, mocap_namespace=None, mocap_location=None):
+        self._mocap_namespace = mocap_namespace
+        self._mocap_location = mocap_location
+
+        self._transfer_namespace = '{}_transfer'.format(self._mocap_namespace)
+
+    def setup(self):
+        _resource.TransferResource.create_sketches(self._transfer_namespace)
+        self._transfer_resource = _resource.TransferResource(
+            self._transfer_namespace
+        )
+        self._mocap_resource = _mcp_resource.MocapResource(
+            namespace=self._mocap_namespace, location=self._mocap_location
         )
 
-    @classmethod
-    def mocap_test(cls):
-        locations = _resource.TransferResource.find_mocap_locations()
-        if locations:
-            handle = cls(mocap_location=locations[0])
-            handle.setup()
-            handle.connect_to_mocap()
-            return
+    def connect(self):
+        self._transfer_resource.connect_from_mocap(self._mocap_resource)
+
+    def export_motion_to(self, json_path, frame_range=None):
+        if frame_range is not None:
+            start_frame, end_frame = frame_range
+        else:
+            start_frame, end_frame = self._mocap_resource.get_frame_range()
+
+        self._transfer_resource.export_motion_to(
+            start_frame, end_frame, json_path
+        )
 
 
 class MocapToAdvHandle(object):
@@ -107,3 +101,41 @@ class MocapToAdvHandle(object):
 
         self.bake_adv_controls_keyframes()
         self.delete_transfer_resource()
+
+
+class AdvTransferHandle(object):
+    @classmethod
+    def test(cls):
+        h = cls('sam_Skin')
+        h.setup()
+        h.connect()
+        # h.export_motion_to(
+        #     'Z:/temporaries/premiere_xml_test/motion/test.jsz', qsm_mya_core.Frame.get_frame_range()
+        # )
+
+    def __init__(self, adv_namespace):
+        self._adv_namespace = adv_namespace
+        self._transfer_namespace = '{}_transfer'.format(self._adv_namespace)
+
+    def setup(self):
+        _resource.TransferResource.create_sketches(self._transfer_namespace)
+        self._transfer_resource = _resource.TransferResource(
+            self._transfer_namespace
+        )
+        self._adv_resource = _adv_resource.AdvResource(
+            self._adv_namespace
+        )
+
+    def connect(self):
+        self._transfer_resource.connect_from_adv(self._adv_resource)
+
+    def export_motion_to(self, json_path, frame_range=None):
+        if frame_range is not None:
+            start_frame, end_frame = frame_range
+        else:
+            start_frame, end_frame = self._adv_resource.get_frame_range()
+
+        self._transfer_resource.export_motion_to(
+            start_frame, end_frame, json_path
+        )
+        self._transfer_resource.do_delete()

@@ -115,7 +115,7 @@ class GuiDialogForChooseAsBubble(object):
 # noinspection PyArgumentList
 class GuiStorageDialog(object):
     @classmethod
-    def open_file(cls, ext_filter='All File (*.*)', default='', parent=None):
+    def open_file(cls, ext_filter='All File (*.*)', default='', parent=None, title=None):
         from ..qt import core as gui_qt_core
 
         default = default or bsc_core.BscSystem.get_home_directory()
@@ -125,7 +125,7 @@ class GuiStorageDialog(object):
         # options |= dlg.DontUseNativeDialog
         r = dlg.getOpenFileName(
             parent,
-            'Open File',
+            title or 'Open File',
             default,
             filter=ext_filter,
             options=options,
@@ -137,7 +137,7 @@ class GuiStorageDialog(object):
         return None
 
     @classmethod
-    def save_file(cls, ext_filter='All File (*.*)', default='', parent=None):
+    def save_file(cls, ext_filter='All File (*.*)', default='', parent=None, title=None):
         from ..qt import core as gui_qt_core
 
         default = default or bsc_core.BscSystem.get_home_directory()
@@ -147,7 +147,7 @@ class GuiStorageDialog(object):
         # options |= dlg.DontUseNativeDialog
         r = dlg.getSaveFileName(
             parent,
-            'Save File',
+            title or 'Save File',
             default,
             filter=ext_filter,
             options=options,
@@ -159,7 +159,7 @@ class GuiStorageDialog(object):
         return None
 
     @classmethod
-    def open_directory(cls, default='', parent=None):
+    def open_directory(cls, default='', parent=None, title=None):
         from ..qt import core as gui_qt_core
 
         default = default or bsc_core.BscSystem.get_home_directory()
@@ -169,7 +169,7 @@ class GuiStorageDialog(object):
         # options |= dlg.DontUseNativeDialog
         r = dlg.getExistingDirectory(
             parent,
-            'Open Folder',
+            title or 'Open Directory',
             default,
             options=options,
         )
@@ -178,7 +178,7 @@ class GuiStorageDialog(object):
         return None
 
     @classmethod
-    def save_directory(cls, default='', parent=None):
+    def save_directory(cls, default='', parent=None, title=None):
         from ..qt import core as gui_qt_core
 
         default = default or bsc_core.BscSystem.get_home_directory()
@@ -188,7 +188,7 @@ class GuiStorageDialog(object):
         # options |= dlg.DontUseNativeDialog
         r = dlg.getExistingDirectory(
             parent,
-            'Save Folder',
+            title or 'Save Directory',
             default,
             options=options,
         )

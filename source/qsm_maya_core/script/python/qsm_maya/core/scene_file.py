@@ -360,7 +360,7 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
         return False
 
     @classmethod
-    def save_to_with_dialog(cls, file_path):
+    def save_as_with_dialog(cls, file_path):
         # check file directory is changed, when changed save to.
         if os.path.abspath(file_path) == os.path.abspath(cls.get_current()):
             if cls.is_dirty() is True:

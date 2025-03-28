@@ -106,6 +106,12 @@ class Reference(object):
     def get_nodes(cls, path):
         return [cmds.ls(x, long=1)[0] for x in cmds.referenceQuery(path, nodes=1, dagPath=1) or []]
 
+    @classmethod
+    def hide_foster_parent(cls, path):
+        path = '{}fosterParent1'.format(path)
+        if cmds.objExists(path):
+            cmds.setAttr(path+'.visibility', 0)
+
 
 class References(object):
     NODE_EXCLUDE = [

@@ -18,7 +18,8 @@ def main(session):
     scr_entity = scr_stage.get_node(scr_entity_path)
     if scr_entity:
         image_path = gui_core.GuiStorageDialog.open_file(
-            ext_filter='All File (*.jpg *.png)', parent=window._qt_widget
+            ext_filter='All File (*.jpg *.png)',
+            parent=window._qt_widget
         )
 
         if image_path:

@@ -47,11 +47,11 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
 
         # application
         self._application = 'maya'
-        self._application_switch_qt_tool_box = self._qt_tree_widget._add_left_tool_box_('application')
+        self._application_switch_qt_tool_box = self._qt_tree_widget._add_left_tool_box('application')
         self._gui_add_application_switch_tools()
         
         # extra
-        self._extra_qt_tool_box = self._qt_tree_widget._add_left_tool_box_('extra')
+        self._extra_qt_tool_box = self._qt_tree_widget._add_left_tool_box('extra')
         self._gui_add_extra_tools()
 
     def _gui_add_application_switch_tools(self):
@@ -853,6 +853,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
         self._increment_and_save_qt_button._set_icon_name_('tool/save')
         self._increment_and_save_qt_button._set_auto_width_(True)
         self._increment_and_save_qt_button.press_clicked.connect(self.on_increment_and_save_task_scene)
+
         # save as
         self._save_as_qt_button = gui_qt_widgets.QtPressButton()
         self._bottom_prx_tool_bar.add_widget(self._save_as_qt_button)

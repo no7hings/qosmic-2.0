@@ -7,9 +7,9 @@ import lxbasic.log as bsc_log
 
 import lxbasic.storage as bsc_storage
 
-from ... import core as _mya_core
+from .. import core as _mya_core
 
-from ...general import core as _mya_gnl_core
+from ..general import core as _mya_gnl_core
 
 from . import base as _base
 
@@ -17,11 +17,22 @@ from . import mirror_and_flip as _mirror_and_flip
 
 
 class ControlNamespaceExtra(object):
+    @classmethod
+    def find_one_control_fnc(cls, control_key, namespace):
+        if namespace:
+            _ = cmds.ls('{}:{}'.format(namespace, control_key), long=1)
+            if _:
+                return _[0]
+        else:
+            _ = cmds.ls(control_key, long=1)
+            if _:
+                return _[0]
+
     def _init_namespace_extra(self, namespace):
         self._namespace = namespace
 
     def find_one_control(self, control_key):
-        return _mya_gnl_core.ControlKey.find_one_control_fnc(control_key, self._namespace)
+        return self.find_one_control_fnc(control_key, self._namespace)
 
 
 class ControlMotionOpt(

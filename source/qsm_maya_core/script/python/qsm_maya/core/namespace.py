@@ -36,7 +36,7 @@ class Namespace:
 
     @classmethod
     def is_exists(cls, namespace):
-        return cmds.namespace(exists=namespace)
+        return cmds.namespace(exists=namespace) or False
 
     @classmethod
     def find_roots(cls, namespace):

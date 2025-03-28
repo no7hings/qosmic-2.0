@@ -1,6 +1,6 @@
 # coding:utf-8
 def main(session):
-    import qsm_maya.motion.core as c
+    import qsm_maya.motion as c
 
     option_opt = session.get_option_opt()
 

@@ -7,7 +7,7 @@ import maya.cmds as cmds
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.motion.core as qsm_mya_mtn_core
+import qsm_maya.motion as qsm_mya_motion
 
 from ..base import sketch_set as _bsc_sketch_set
 
@@ -65,6 +65,7 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
         self._sketch_map = self.generate_sketch_map()
 
     def zero_out(self):
+        dict_ = {}
         root_sketch = self._sketch_map.get('Root_M')
 
         root_rotate = cmds.getAttr(root_sketch+'.rotate')[0]
@@ -76,12 +77,17 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
             return
 
         for i in self._paths:
+            i_dict = {}
+            dict_[i] = i_dict
             for j_atr_name in ['rotateX', 'rotateY', 'rotateZ']:
-                cmds.setAttr(i+'.'+j_atr_name, 0)
+                i_atr = i+'.'+j_atr_name
+                i_dict[j_atr_name] = cmds.getAttr(i_atr)
+                cmds.setAttr(i_atr, 0)
 
         # to floor
         distance = self.compute_root_height()
         cmds.setAttr(root_sketch+'.translateY', distance)
+        return dict_
 
     def compute_root_height(self):
         bottom_sketch = self._sketch_map.get('ToesEnd_R')
@@ -146,7 +152,7 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
     def get_frame_range(self):
         curve_nodes = []
         for i in self._paths:
-            i_curve_nodes = qsm_mya_mtn_core.ControlMotionOpt(i).get_all_curve_nodes()
+            i_curve_nodes = qsm_mya_motion.ControlMotionOpt(i).get_all_curve_nodes()
             curve_nodes.extend(i_curve_nodes)
         if curve_nodes:
             return qsm_mya_core.AnmCurveNodes.get_range(curve_nodes)

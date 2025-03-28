@@ -151,7 +151,9 @@ class QtInputForStorage(
 
     def _do_open_file_(self):
         value = gui_core.GuiStorageDialog.open_file(
-            self._ext_filter, default=self._get_value_() or '', parent=self
+            ext_filter=self._ext_filter,
+            default=self._get_value_() or '',
+            parent=self
         )
         if value:
             self._set_value_(value)
@@ -159,7 +161,9 @@ class QtInputForStorage(
 
     def _do_save_file_(self):
         value = gui_core.GuiStorageDialog.save_file(
-            self._ext_filter, default=self._get_value_() or '', parent=self
+            ext_filter=self._ext_filter,
+            default=self._get_value_() or '',
+            parent=self
         )
         if value:
             self._set_value_(value)

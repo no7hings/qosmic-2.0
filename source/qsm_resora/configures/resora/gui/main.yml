@@ -148,15 +148,12 @@ entity-type-actions:
         Node:
             option-hooks:
                 - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
-                # assign
-                - 'separator': {gui_name: 'basic', gui_name_chs: '基础'}
                 - 'resora-actions/node-assign-type-auto': {
                     gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
                 }
                 - 'resora-actions/node-assign-tag-auto': {
                     gui_parent: '/Assign', gui_name: 'Tag', gui_parent_chs: '/指定', gui_name_chs: '标签'
                 }
-                - 'separator': {gui_name: 'extra', gui_name_chs: '扩展'}
                 # generate
                 - 'resora-actions/node-generate-motion-auto': {
                     gui_parent: '/Generate', gui_name: 'Motion(studio library)', gui_parent_chs: '/生成', gui_name_chs: '动作（studio library）'

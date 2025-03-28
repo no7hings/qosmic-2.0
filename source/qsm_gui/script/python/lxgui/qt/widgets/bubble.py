@@ -236,6 +236,8 @@ class QtInfoBubble(
 
         self._style = self.Style.Default
 
+        self.setMinimumHeight(20)
+
         self._text = None
         self._text_font = _qt_core.QtFont.generate(size=8)
         self.setFont(self._text_font)

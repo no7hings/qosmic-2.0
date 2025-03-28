@@ -1,11 +1,11 @@
 # coding:utf-8
 import re
-import sys
 
+import sys
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-from ... import core as _mya_core
+from .. import core as _mya_core
 
 
 class ReferenceFix(object):

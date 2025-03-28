@@ -102,7 +102,8 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
     def _on_dcc_export_track(self):
         if self._rig_namespace is not None:
             track_json_path = gui_core.GuiStorageDialog.save_file(
-                ext_filter='All File (*.jsz)', parent=self._qt_widget
+                ext_filter='All File (*.jsz)',
+                parent=self._qt_widget
             )
             if track_json_path:
                 mtg_stage = qsm_mya_lzy_mtg_core.MtgStage(self._rig_namespace)
@@ -117,7 +118,8 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
         # todo: update is not work
         if self._rig_namespace is not None:
             track_json_path = gui_core.GuiStorageDialog.open_file(
-                ext_filter='All File (*.jsz)', parent=self._qt_widget
+                ext_filter='All File (*.jsz)',
+                parent=self._qt_widget
             )
             if track_json_path:
                 qsm_mya_lzy_mtg_core.MtgStage(self._rig_namespace).import_track_json(track_json_path)
@@ -135,7 +137,8 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
     def _on_dcc_import_fbx(self):
         if self._rig_namespace is not None:
             fbx_path = gui_core.GuiStorageDialog.open_file(
-                ext_filter='All File (*.fbx)', parent=self._qt_widget
+                ext_filter='All File (*.fbx)',
+                parent=self._qt_widget
             )
             if fbx_path:
                 task_name, cmd_script, motion_json_path = qsm_lzy_mtg_scripts.MoCapDotFbxMotionGenerateAuto(

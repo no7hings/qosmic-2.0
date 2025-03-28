@@ -56,6 +56,7 @@ class TransferResource(_bsc_abc.AbsMontage):
         return self._sketch_set.DEFAULT_MASTER_HEIGHT
 
     def fit_scale_from_mocap_resource(self, mocap_resource):
+        # zero sketch in get_root_height method
         height_0 = mocap_resource.get_root_height()
         height_1 = self.get_root_height()
 
@@ -88,7 +89,29 @@ class TransferResource(_bsc_abc.AbsMontage):
         # todo: create keyframe for default?
         self._sketch_set.create_all_keyframe_at(start_frame)
         self.constraint_from_mocap(mocap_resource)
-        
+
+    def fit_scale_from_adv_resource(self, adv_resource):
+        height_0 = adv_resource.get_root_height()
+        height_1 = self.get_root_height()
+
+        scale = height_0/height_1
+
+        root_location = self.find_root_location()
+        cmds.setAttr(root_location+'.scale', scale, scale, scale)
+
+    def constraint_from_adv(self, adv_resource):
+        adv_resource.sketch_set.constraint_to_transfer_sketch(
+            self._sketch_set, break_parent_inverse=True
+        )
+
+    def connect_from_adv(self, adv_resource):
+        start_frame, end_frame = adv_resource.get_frame_range()
+        # qsm_mya_core.Frame.set_current(start_frame)
+        # old_data = adv_resource.zero_all_controls()
+        self.fit_scale_from_adv_resource(adv_resource)
+        # # adv_resource.apply_control_data(old_data)
+        self.constraint_from_adv(adv_resource)
+
     def fit_scale_to_master_resource(self, master_resource):
         height_0 = master_resource.get_root_height()
         height_1 = self.get_root_height()
@@ -139,6 +162,7 @@ class TransferResource(_bsc_abc.AbsMontage):
     def get_motion_data(self, start_frame, end_frame):
         data = self._sketch_set.get_data(start_frame, end_frame)
         data['root_height'] = self.get_root_height()
+        data['scale'] = self.get_scale()
         data['metadata'] = dict(
             ctime=bsc_core.BscSystem.generate_timestamp(),
             user=bsc_core.BscSystem.get_user_name(),
@@ -153,6 +177,10 @@ class TransferResource(_bsc_abc.AbsMontage):
     def do_delete(self):
         location = self.find_root_location()
         qsm_mya_core.Node.delete(location)
+
+    def get_scale(self):
+        location = self.find_root_location()
+        return cmds.getAttr(location+'.scaleX')
 
     @classmethod
     def test(cls):

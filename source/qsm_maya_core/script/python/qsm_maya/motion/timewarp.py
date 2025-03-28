@@ -4,7 +4,7 @@ import maya.cmds as cmds
 
 import lxbasic.log as bsc_log
 
-from ... import core as _mya_core
+from .. import core as _mya_core
 
 
 class TimewarpOpt(object):

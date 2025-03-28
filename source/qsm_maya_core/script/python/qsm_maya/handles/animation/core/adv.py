@@ -9,12 +9,12 @@ import qsm_general.core as qsm_gnl_core
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.general.core as qsm_mya_gnl_core
+import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
 
-import qsm_maya.resource.core as qsm_mya_rsc_core
+import qsm_maya.resource as qsm_mya_resource
 
 
-class AdvRigAsset(qsm_mya_rsc_core.Asset):
+class AdvRigAsset(qsm_mya_resource.Asset):
 
     @classmethod
     def filter_namespaces(cls, namespaces):
@@ -72,7 +72,7 @@ class AdvRigAsset(qsm_mya_rsc_core.Asset):
     # skin proxy
     def get_skin_proxy_location(self):
         _ = cmds.ls(
-            '{}:{}'.format(self.namespace, qsm_mya_gnl_core.ResourceCacheNodes.SkinProxyName),
+            '{}:{}'.format(self.namespace, qsm_mya_hdl_gnl_core.ResourceCacheNodes.SkinProxyName),
             long=1
         )
         if _:
@@ -117,7 +117,7 @@ class AdvRigAsset(qsm_mya_rsc_core.Asset):
     # dynamic gpu
     def get_dynamic_gpu_location(self):
         _ = cmds.ls(
-            '{}:{}'.format(self.namespace, qsm_mya_gnl_core.ResourceCacheNodes.DynamicGpuName),
+            '{}:{}'.format(self.namespace, qsm_mya_hdl_gnl_core.ResourceCacheNodes.DynamicGpuName),
             long=1
         )
         if _:
@@ -163,7 +163,7 @@ class AdvRigAsset(qsm_mya_rsc_core.Asset):
     # cfx cloth
     def get_cfx_cloth_location(self):
         _ = cmds.ls(
-            '{}:{}'.format(self.namespace, qsm_mya_gnl_core.ResourceCacheNodes.CfxClothName),
+            '{}:{}'.format(self.namespace, qsm_mya_hdl_gnl_core.ResourceCacheNodes.CfxClothName),
             long=1
         )
         if _:
@@ -314,7 +314,7 @@ class AdvRigAsset(qsm_mya_rsc_core.Asset):
         return roots
 
 
-class AdvRigAssetsQuery(qsm_mya_rsc_core.AssetsQuery):
+class AdvRigAssetsQuery(qsm_mya_resource.AssetsQuery):
     SCENE_PATTERN = 'X:/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
 
     RESOURCE_CLS = AdvRigAsset

@@ -6,7 +6,7 @@ import maya.mel as mel
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.motion.core as qsm_mya_mtn_core
+import qsm_maya.motion as qsm_mya_motion
 
 from ..base import abc as _bsc_abc
 
@@ -36,7 +36,7 @@ class AbsSketchSet(_bsc_abc.AbsMontage):
 
     def bake_all_keyframes(self, start_frame, end_frame, attributes=None):
         # do not mark undo here
-        qsm_mya_mtn_core.ControlSetBake(self._paths).execute(
+        qsm_mya_motion.ControlSetBake(self._paths).execute(
             start_frame, end_frame,
             attributes=attributes, reduce_filter=False
         )

@@ -33,12 +33,12 @@ class MocapResource(object):
             self._sketch_location, include_transform_type=True
         )
 
-    def find_root_location(self):
-        return self._sketch_location
-
     @property
     def sketch_set(self):
         return self._sketch_set
+
+    def find_root_location(self):
+        return self._sketch_location
 
     def get_root_height(self):
         self._sketch_set.zero_out()

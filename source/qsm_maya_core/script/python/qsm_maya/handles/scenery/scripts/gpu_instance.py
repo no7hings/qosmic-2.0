@@ -17,18 +17,18 @@ import qsm_general.process as qsm_gnl_process
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.general.core as qsm_mya_gnl_core
+import qsm_maya.resource as qsm_mya_resource
 
-import qsm_maya.assembly.core as qsm_mya_asb_core
+import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
 
-import qsm_maya.resource.core as qsm_mya_rsc_core
+import qsm_maya.handles.assembly.core as qsm_mya_hdl_asb_core
 
 from .. import core as _core
 
 
-class GpuInstanceOpt(qsm_mya_rsc_core.AssetCacheOpt):
-    CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.GpuInstanceRoot
-    CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.GpuInstanceName
+class GpuInstanceOpt(qsm_mya_resource.AssetCacheOpt):
+    CACHE_ROOT = qsm_mya_hdl_gnl_core.ResourceCacheNodes.GpuInstanceRoot
+    CACHE_NAME = qsm_mya_hdl_gnl_core.ResourceCacheNodes.GpuInstanceName
 
     def __init__(self, *args, **kwargs):
         super(GpuInstanceOpt, self).__init__(*args, **kwargs)
@@ -146,7 +146,7 @@ class GpuInstanceProcess(object):
                     list_for_grid.append(i_shape_path)
 
         if list_for_grid:
-            mapper = qsm_mya_asb_core.GridSpace(list_for_grid, _core.Assembly.DIMENSION_MINIMUM).generate()
+            mapper = qsm_mya_hdl_asb_core.GridSpace(list_for_grid, _core.Assembly.DIMENSION_MINIMUM).generate()
             keys = list(mapper.keys())
             keys.sort()
             for i_seq, i_key in enumerate(keys):

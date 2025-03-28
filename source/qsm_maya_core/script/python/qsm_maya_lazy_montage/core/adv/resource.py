@@ -18,24 +18,28 @@ from . import control_set as _control_set
 
 
 class AdvResource(_bsc_abc.AbsMontage):
-    """
-    """
     def __init__(self, namespace):
         super(AdvResource, self).__init__()
+        if qsm_mya_core.Namespace.is_exists(namespace) is False:
+            raise RuntimeError()
 
         self._namespace = namespace
 
         self._sketch_set = _sketch_set.AdvChrSketchSet.generate(self._namespace)
         self._control_set = _control_set.AdvChrControlSet.generate(self._namespace)
 
+    @property
+    def sketch_set(self):
+        return self._sketch_set
+
     def find_main_control(self):
         _ = cmds.ls('{}:Main'.format(self._namespace), long=1)
         if _:
             return _[0]
 
-    def export_to(self, file_path):
+    def export_to(self, file_path, frame_range=None):
         bsc_storage.StgFileOpt(file_path).set_write(
-            self.get_data()
+            self.get_data(frame_range)
         )
 
     def find_root_location(self):
@@ -43,8 +47,15 @@ class AdvResource(_bsc_abc.AbsMontage):
         if _:
             return _[0]
 
-    def get_data(self):
-        start_frame, end_frame = self._control_set.get_frame_range()
+    def get_frame_range(self):
+        return self._control_set.get_frame_range()
+
+    def get_data(self, frame_range=None):
+        if frame_range is not None:
+            start_frame, end_frame = frame_range
+        else:
+            start_frame, end_frame = self._control_set.get_frame_range()
+
         # sketch motion
         data = self._sketch_set.get_data(start_frame, end_frame)
         data['root_height'] = self.get_root_height()
@@ -86,14 +97,17 @@ class AdvResource(_bsc_abc.AbsMontage):
             cmds.setAttr(i_control+'.'+'FKIKBlend', 0)
 
     def get_root_height(self):
-        # [0.0, 8.476478501911147, 0.04798655039699984]
-        root_x_control = self._control_set.get('RootX_M')
-        main_control = self._control_set.get('Main')
-        translate_0 = cmds.xform(root_x_control, translation=1, worldSpace=0, query=1)
-        world_translate_0 = cmds.xform(root_x_control, translation=1, worldSpace=1, query=1)
-        world_translate_1 = cmds.xform(main_control, translation=1, worldSpace=1, query=1)
-        t_0 = [world_translate_0[x]-translate_0[x] for x in range(3)]
-        return qsm_mya_core.Transform.compute_distance(t_0, world_translate_1)
+        # to zero and mark
+        old_data = self.zero_all_controls()
+        h = self._sketch_set.compute_root_height()
+        self.apply_control_data(old_data)
+        return h
+    
+    def zero_all_controls(self):
+        return self._control_set.zero_out()
+
+    def apply_control_data(self, data):
+        self._control_set.apply_data(data)
 
     def get_height(self):
         return self._sketch_set.compute_height()

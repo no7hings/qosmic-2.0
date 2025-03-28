@@ -1574,7 +1574,7 @@ class AbsQtNameBaseDef(object):
         self._sub_name_draw_rect = qt_rect()
 
         self._tool_tip_text = None
-        self._tool_action_tip_text = None
+        self._action_tip_text = None
 
         self._tool_tip_css = None
 
@@ -1594,7 +1594,7 @@ class AbsQtNameBaseDef(object):
         self._name_flag = True
         self._name_text = text
 
-        if self._tool_tip_text is not None or self._tool_action_tip_text is not None:
+        if self._tool_tip_text is not None or self._action_tip_text is not None:
             self._update_tool_tip_css_()
 
         self._widget.update()
@@ -1737,8 +1737,8 @@ class AbsQtNameBaseDef(object):
                 i_text = _qt_core.QtUtil.generate_tool_tip_action_css(i_text)
                 css += '<p class="no_wrap">{}</p>\n'.format(i_text)
 
-        if self._tool_action_tip_text:
-            text = self._tool_action_tip_text
+        if self._action_tip_text:
+            text = self._action_tip_text
             css += '<p><hr></p>\n'
             text = text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
             text = _qt_core.QtUtil.generate_tool_tip_action_css(text)
@@ -1751,8 +1751,8 @@ class AbsQtNameBaseDef(object):
         self._tool_tip_text = text
         self._update_tool_tip_css_()
 
-    def _update_tool_action_tip_text_(self, text):
-        self._tool_action_tip_text = text
+    def _update_action_tip_text_(self, text):
+        self._action_tip_text = text
         self._update_tool_tip_css_()
 
     def _update_tool_tip_css_(self):
