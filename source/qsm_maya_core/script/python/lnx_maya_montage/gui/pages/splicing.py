@@ -5,13 +5,13 @@ import lxgui.core as gui_core
 
 import qsm_general.prc_task as qsm_gnl_prc_task
 
-import qsm_lazy_montage.scripts as qsm_lzy_mtg_scripts
+import lnx_montage.scripts as qsm_lzy_mtg_scripts
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya_lazy_montage.core as qsm_mya_lzy_mtg_core
+import lnx_maya_montage.core as qsm_mya_lzy_mtg_core
 
-from qsm_lazy_montage.gui.abstracts import page_for_splicing as _page_for_splicing
+from lnx_montage.gui.abstracts import page_for_splicing as _page_for_splicing
 
 
 class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):

@@ -1,5 +1,5 @@
 # coding:utf-8
-from qsm_lazy_montage.gui.abstracts import subpanel_for_new_splicing as _subpanel_for_new_splicing
+from lnx_montage.gui.abstracts import subpanel_for_new_splicing as _subpanel_for_new_splicing
 
 from ..subpages import general as _subpage_new_general
 

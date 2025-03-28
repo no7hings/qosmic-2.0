@@ -11,7 +11,7 @@ import qsm_maya.motion as qsm_mya_motion
 
 import qsm_maya.handles.general.scripts as qsm_mya_hdl_gnl_scripts
 
-import qsm_maya_lazy_montage.scripts as qsm_mya_lzy_mtg_scripts
+import lnx_maya_montage.scripts as qsm_mya_lzy_mtg_scripts
 
 
 class ShotReferenceReplace(object):

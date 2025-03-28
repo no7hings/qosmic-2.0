@@ -2,7 +2,7 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-import qsm_lazy_montage.core as qsm_lzy_mtg_core
+import lnx_montage.core as qsm_lzy_mtg_core
 
 
 class AbsMontage(object):

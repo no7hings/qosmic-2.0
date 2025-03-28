@@ -70,6 +70,16 @@ if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_resora\99.99.99 (
 ) else (
     mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_resora\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_resora
 )
+if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_wotrix (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_wotrix is exists
+) else (
+    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_wotrix
+)
+if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_wotrix\99.99.99 (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_wotrix\99.99.99 is exists
+) else (
+    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_wotrix\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_wotrix
+)
 if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_nexsolve (
     echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_nexsolve is exists
 ) else (

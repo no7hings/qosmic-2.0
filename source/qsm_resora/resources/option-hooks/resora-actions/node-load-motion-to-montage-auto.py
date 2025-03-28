@@ -5,7 +5,7 @@ import lxgui.core as gui_core
 
 import lnx_screw.core as lnx_scr_core
 
-import qsm_maya_lazy_montage.core as qsm_mya_lzy_mtg_core
+import lnx_maya_montage.core as qsm_mya_lzy_mtg_core
 
 
 class Main(object):

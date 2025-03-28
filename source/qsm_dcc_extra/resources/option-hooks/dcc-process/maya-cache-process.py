@@ -175,7 +175,7 @@ def shot_replace_reference_fnc(option_opt):
 def motion_generate_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy_montage.scripts as s
+    import lnx_maya_montage.scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
@@ -187,7 +187,7 @@ def motion_generate_fnc(option_opt):
 def mocap_fbx_motion_generate_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy_montage.scripts as s
+    import lnx_maya_montage.scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
@@ -199,7 +199,7 @@ def mocap_fbx_motion_generate_fnc(option_opt):
 def mocap_fbx_motion_generate_auto_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy_montage.scripts as s
+    import lnx_maya_montage.scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()

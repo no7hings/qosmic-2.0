@@ -1,13 +1,13 @@
 # coding:utf-8
-from qsm_lazy_montage.gui.abstracts import subpage_for_new_splicing as _subpage_for_adv
+from lnx_montage.gui.abstracts import subpage_for_new_splicing as _subpage_for_adv
 
 import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.adv as qsm_mya_adv
 
-import qsm_maya_lazy_montage.core as qsm_mya_lzy_mtg_core
+import lnx_maya_montage.core as qsm_mya_lzy_mtg_core
 
-import qsm_maya_lazy_montage.scripts as qsm_mya_lzy_mtg_scripts
+import lnx_maya_montage.scripts as qsm_mya_lzy_mtg_scripts
 
 
 class PrxSubpageForNewGeneralSplicing(_subpage_for_adv.AbsPrxSubpageForNewSplicing):

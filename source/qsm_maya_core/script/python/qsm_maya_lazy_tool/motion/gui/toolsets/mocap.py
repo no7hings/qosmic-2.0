@@ -48,7 +48,7 @@ class PrxToolsetForMoCapImport(gui_prx_widgets.PrxBaseUnit):
                 )
                 return
 
-            import qsm_maya_lazy_montage.core.transfer.handle as h
+            import lnx_maya_montage.core.transfer.handle as h
 
             h.MocapToAdvHandle(
                 rig_namespace, mocap_location=mocap_location

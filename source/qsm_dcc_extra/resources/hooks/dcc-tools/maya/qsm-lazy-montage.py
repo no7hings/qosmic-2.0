@@ -2,9 +2,9 @@
 
 
 def main(session):
-    import qsm_maya_lazy_montage.gui.main as m
+    import lnx_maya_montage.gui.main as m
 
-    w = m.PrxLazyMontageTool(window=None, session=session)
+    w = m.PrxMontageTool(window=None, session=session)
     w.show_window_auto()
 
 
