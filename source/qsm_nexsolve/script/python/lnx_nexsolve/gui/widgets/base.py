@@ -94,6 +94,16 @@ class QtNodeGraphWidget(gui_qt_vew_wgt_base._BaseViewWidget):
     def _build_keyword_filter_tool_box(self):
         self._keyword_filter_input = gui_qt_widgets.QtInputForFilter()
         self._keyword_filter_tool_box._add_widget_(self._keyword_filter_input)
+        self._keyword_filter_input._set_occurrence_buttons_visible_(False)
+
+        self._keyword_filter_input.input_value_changed.connect(
+            self._on_keyword_filer
+        )
+
+    def _on_keyword_filer(self):
+        self._model.on_keyword_filter(
+            self._keyword_filter_input._get_all_keywords_()
+        )
 
 
 class QtNodeParamWidget(QtWidgets.QWidget):

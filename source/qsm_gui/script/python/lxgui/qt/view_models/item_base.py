@@ -714,10 +714,11 @@ class AbsItemModel(object):
         self._data.force_refresh_flag = boolean
 
     # keyword filter
-    def generate_keyword_filter_args(self, key_src_set):
+    def generate_keyword_filter_hidden_args(self, key_src_set):
         # todo: use match all mode then, maybe use match one mode also
         if key_src_set:
             context = self.get_keyword_filter_context()
+            context = bsc_core.ensure_unicode(context)
             context = context.lower()
             for i_text in key_src_set:
                 # fixme: chinese word
@@ -728,7 +729,6 @@ class AbsItemModel(object):
                     if not bsc_core.BscFnmatch.filter([context], i_filter_key):
                         return True, True
                 else:
-                    context = bsc_core.ensure_unicode(context)
                     if i_text not in context:
                         return True, True
             return True, False

@@ -326,7 +326,7 @@ class AbsViewModel(object):
                 i_keyword_flag = False
                 # keyword filter
                 if key_src_set:
-                    i_enable, i_flag = i_item._item_model.generate_keyword_filter_args(key_src_set)
+                    i_enable, i_flag = i_item._item_model.generate_keyword_filter_hidden_args(key_src_set)
                     if i_enable is True:
                         i_keyword_flag = i_flag
                 # hide item when any flag is True

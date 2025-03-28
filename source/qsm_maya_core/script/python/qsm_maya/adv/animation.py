@@ -8,7 +8,7 @@ import lxbasic.storage as bsc_storage
 
 import qsm_general.core as qsm_gnl_core
 
-from ..motion import core as _motion_core
+from .. import motion as _motion
 
 from .. import core as _mya_core
 
@@ -37,24 +37,24 @@ class AdvOpt(_base.AdvNamespaceExtra):
     def generate_controls_motion_dict(self):
         controls = self.find_all_controls()
         if controls:
-            return _motion_core.ControlSetMotionOpt(self._namespace, controls).generate_motion_dict()
+            return _motion.ControlSetMotionOpt(self._namespace, controls).generate_motion_dict()
         return {}
 
     def generate_controls_pose_dict(self):
         controls = self.find_all_controls()
         if controls:
-            return _motion_core.ControlSetMotionOpt(self._namespace, controls).generate_pose_dict()
+            return _motion.ControlSetMotionOpt(self._namespace, controls).generate_pose_dict()
         return {}
 
     def apply_controls_motion_dict(self, data, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion_core.ControlSetMotionOpt(self._namespace, controls).apply_motion_dict(data, **kwargs)
+            _motion.ControlSetMotionOpt(self._namespace, controls).apply_motion_dict(data, **kwargs)
 
     def apply_controls_pose_dict(self, data, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion_core.ControlSetMotionOpt(self._namespace, controls).apply_pose_dict(data, **kwargs)
+            _motion.ControlSetMotionOpt(self._namespace, controls).apply_pose_dict(data, **kwargs)
     
     # control motion file
     def export_controls_motion_to(self, file_path):
@@ -87,25 +87,25 @@ class AdvOpt(_base.AdvNamespaceExtra):
     def mirror_controls_left_to_right(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion_core.ControlSetMotionOpt(self._namespace, controls).mirror_all_left_to_right(**kwargs)
+            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_all_left_to_right(**kwargs)
 
     # mirror, do not mark undo, "ControlSetMotionOpt" is already using
     def mirror_controls_middle(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion_core.ControlSetMotionOpt(self._namespace, controls).mirror_all_middle(**kwargs)
+            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_all_middle(**kwargs)
 
     # mirror, do not mark undo, "ControlSetMotionOpt" is already using
     def mirror_controls_right_to_left(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion_core.ControlSetMotionOpt(self._namespace, controls).mirror_all_right_to_left(**kwargs)
+            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_all_right_to_left(**kwargs)
 
     # flip, do not mark undo, "ControlSetMotionOpt" is already using
     def flip_controls(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion_core.ControlSetMotionOpt(self._namespace, controls).flip_all(**kwargs)
+            _motion.ControlSetMotionOpt(self._namespace, controls).flip_all(**kwargs)
 
     # reset, do not mark undo, "ControlSetMotionOpt" is already using
     def rest_controls_transformation(self, **kwargs):
@@ -121,14 +121,14 @@ class AdvOpt(_base.AdvNamespaceExtra):
             controls = self.find_all_controls()
 
         if controls:
-            return _motion_core.ControlSetMotionOpt(self._namespace, controls).reset_transformation(**kwargs)
+            return _motion.ControlSetMotionOpt(self._namespace, controls).reset_transformation(**kwargs)
         return False
 
     def generate_controls_axis_vector_dict(self, **kwargs):
         controls = self.find_all_controls()
 
         if controls:
-            return _motion_core.ControlSetMotionOpt(self._namespace, controls).generate_axis_vector_dict()
+            return _motion.ControlSetMotionOpt(self._namespace, controls).generate_axis_vector_dict()
         return {}
 
     # joint
@@ -204,7 +204,7 @@ class AdvOpt(_base.AdvNamespaceExtra):
     @_mya_core.Undo.execute
     def bake_all_controls(self, *args, **kwargs):
         controls = self.find_all_curve_controls()
-        _motion_core.ControlSetBake(controls).execute(*args, **kwargs)
+        _motion.ControlSetBake(controls).execute(*args, **kwargs)
 
 
 class AdvChrOpt(AdvOpt):

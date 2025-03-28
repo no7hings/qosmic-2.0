@@ -304,6 +304,30 @@ class _AbsNode(
             return self._gui_data.type.gui_name_chs or self._gui_data.type.gui_name
         return self._gui_data.type.gui_name or self._data.type
 
+    # keyword filter
+    def get_keyword_filter_context(self):
+        return u'+'.join({self.get_name()})
+
+    def generate_keyword_filter_match_args(self, key_src_set):
+        # match one
+        if key_src_set:
+            context = self.get_keyword_filter_context()
+            context = bsc_core.ensure_unicode(context)
+            context = context.lower()
+            for i_text in key_src_set:
+                # fixme: chinese word
+                # do not encode, keyword can be use unicode
+                i_text = i_text.lower()
+                if '*' in i_text:
+                    i_filter_key = u'*{}*'.format(i_text.lstrip('*').rstrip('*'))
+                    if bsc_core.BscFnmatch.filter([context], i_filter_key):
+                        return True, True
+                else:
+                    if i_text in context:
+                        return True, True
+            return True, False
+        return False, False
+
 
 # node model
 class StandardNode(_AbsNode):

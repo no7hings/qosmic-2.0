@@ -314,7 +314,7 @@ class QtDockerWindow(QtMainWindow):
     def __init__(self, *args, **kwargs):
         super(QtDockerWindow, self).__init__(*args, **kwargs)
 
-    def _create_center_docker_(self, name, widget):
+    def _create_center_widget_(self, name, widget):
         dock = QtDockerWidget(name, self)
         dock.setWidget(widget)
         dock.setFeatures(QtWidgets.QDockWidget.AllDockWidgetFeatures)

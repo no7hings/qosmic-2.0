@@ -267,6 +267,10 @@ class QtInputForFilter(
                 _gui_core.GuiIcon.get('occurrence-next-disable')
             )
 
+    def _set_occurrence_buttons_visible_(self, boolean):
+        self._occurrence_previous_button.setVisible(boolean)
+        self._occurrence_next_button.setVisible(boolean)
+
     def _set_filter_tip_(self, text):
         self._entry_frame_widget._set_tip_text_(text)
         self._do_refresh_filter_tip_()

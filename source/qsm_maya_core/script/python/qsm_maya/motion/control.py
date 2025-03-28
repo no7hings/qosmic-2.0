@@ -9,8 +9,6 @@ import lxbasic.storage as bsc_storage
 
 from .. import core as _mya_core
 
-from ..general import core as _mya_gnl_core
-
 from . import base as _base
 
 from . import mirror_and_flip as _mirror_and_flip

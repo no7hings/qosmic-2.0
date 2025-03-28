@@ -69,15 +69,7 @@ class RootNodeGui(
     QT_MENU_CLS = gui_qt_widgets.QtMenu
 
     def _map_from_global(self, point):
-        point = self.mapFromGlobal(point)
-        return self._get_scaled_point(point.x(), point.y())
-
-    def _get_scaled_point(self, x, y):
-        transform = self.transform()
-        inverted, flag = transform.inverted()
-        if flag:
-            return inverted.map(QtCore.QPointF(x, y))
-        return self.mapToScene(0, 0)
+        return self.mapToScene(self.mapFromGlobal(point))
 
     def __init__(self, *args):
         super(RootNodeGui, self).__init__(*args)
@@ -142,7 +134,7 @@ class RootNodeGui(
             # bypass
             (self._model._on_bypass_action, 'D'),
             # frame select, todo: frame select make glob position error
-            # (self._model._on_frame_select_action, 'F'),
+            (self._model._on_frame_select_action, 'F'),
             # new file
             (self._model._on_new_file_action, 'Ctrl+N'),
             # open file
@@ -335,7 +327,7 @@ class RootNodeGui(
         elif event.button() == QtCore.Qt.LeftButton:
             items_under_cursor = self._get_items_under_cursor(event.pos())
             point = event.pos()
-            p = self._get_scaled_point(point.x(), point.y())
+            p = self.mapToScene(point)
             self._drag_start_point = point
             # port
             if self._model.is_action_sub_flag_matching(self.ActionFlags.PortSourceHoverMove):
@@ -383,6 +375,7 @@ class RootNodeGui(
                     self._model.set_action_flag(self.ActionFlags.PortSourcePressClick)
                     self._model.set_action_sub_flag(self.ActionFlags.PortSourcePressClick)
                     self._drag_port = item._model
+                    # temp connection
                     connection_gui = _connection.ConnectionGui(source_port=self._drag_port)
                     connection_gui._set_default_color(_cor_base._QtColors.ConnectionNew)
                     self._drag_connection = connection_gui._model
@@ -441,7 +434,7 @@ class RootNodeGui(
                 if self._drag_connection is not None:
                     point = event.pos()
                     item = self._find_item(items_under_cursor, _port.InputGui)
-                    p = self._get_scaled_point(point.x(), point.y())
+                    p = self.mapToScene(point)
 
                     if isinstance(item, _port.InputGui):
                         self._drag_connection.to_correct_status()
@@ -456,7 +449,7 @@ class RootNodeGui(
                 if self._drag_connection is not None:
                     point = event.pos()
                     item = self._find_item(items_under_cursor, _port.OutputGui)
-                    p = self._get_scaled_point(point.x(), point.y())
+                    p = self.mapToScene(point)
                     if isinstance(item, _port.OutputGui):
                         self._drag_connection.to_correct_status()
                     else:
@@ -471,7 +464,7 @@ class RootNodeGui(
                 if self._drag_connection is not None:
                     point = event.pos()
                     item = self._find_item(items_under_cursor, _port.OutputGui)
-                    p = self._get_scaled_point(point.x(), point.y())
+                    p = self.mapToScene(point)
 
                     if isinstance(item, _port.OutputGui):
                         self._drag_connection.to_correct_status()
@@ -486,7 +479,7 @@ class RootNodeGui(
                 if self._drag_connection is not None:
                     point = event.pos()
                     item = self._find_item(items_under_cursor, _port.InputGui)
-                    p = self._get_scaled_point(point.x(), point.y())
+                    p = self.mapToScene(point)
                     if isinstance(item, _port.InputGui):
                         self._drag_connection.to_correct_status()
                     else:
@@ -498,7 +491,7 @@ class RootNodeGui(
         elif event.buttons() == QtCore.Qt.LeftButton:
             point = event.pos()
             items_under_cursor = self._get_items_under_cursor(event.pos())
-            p = self._get_scaled_point(point.x(), point.y())
+            p = self.mapToScene(point)
             # node
             if self._model.is_action_flag_matching(
                 self.ActionFlags.NodePressClick, self.ActionFlags.NodePressMove

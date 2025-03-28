@@ -624,7 +624,7 @@ class PrxBaseDockerWindow(PrxBaseWindow):
 
     def _create_central_widget(self):
         self._qt_central_widget = _qt_wgt_utility.QtTranslucentWidget()
-        self._qt_widget._create_center_docker_('Main', self._qt_central_widget)
+        self._qt_widget._create_center_widget_('Main', self._qt_central_widget)
         self._qt_widget.setCentralWidget(None)
 
     def create_left_docker(self, name, widget):

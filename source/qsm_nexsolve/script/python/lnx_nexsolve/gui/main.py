@@ -121,3 +121,8 @@ class PrxNexsolveTool(gui_prx_widgets.PrxBasePanel):
         self._node_graph._root_node_gui.scene_path_accepted.connect(self._update_scene_path)
 
         register_node_types_from(_node_type)
+
+        # self._node_graph._scene_file.open('C:/Users/nothings/QSM/scenes/untitled_2.nxs_prj')
+
+    def gui_close_fnc(self):
+        self._node_graph._scene_file.close_with_dialog()

@@ -428,16 +428,51 @@ widget:
             border: 1px rgba(<option.rgba.Transparent>); border-radius: 0px; border-style: solid;
         }
 
-    QDockWidget:
+    QDockerWindow:
         |-
+        QMainWindow{
+            background: rgba(<option.rgba.Background>);
+            border: none;
+        }
         QDockWidget{
             background: rgba(<option.rgba.Transparent>);
             color: rgba(<option.rgba.Text>); 
             border: 1px rgba(<option.rgba.Transparent>); border-radius: 0px; border-style: solid;
-            titlebar-close-icon: url(<option.icon-dir>/close.svg);
+            titlebar-close-icon: url(<option.icon-dir>/docker-close.svg);
+            titlebar-normal-icon: url(<option.icon-dir>/docker-separate.svg);
         }
         QDockWidget::title{
             background: rgba(<option.rgba.Transparent>);
             color: rgba(<option.rgba.Text>); 
             border: 1px rgba(<option.rgba.Transparent>); border-radius: 0px; border-style: solid;
+            text-align: left;
+        }
+        QTabWidget::pane {
+            background: rgba(71, 71, 71, 255);
+            border: none;
+        }
+        QTabWidget::tab-bar {
+            left: 5px;
+        }
+        QTableView {
+            background: rgba(<option.rgba.Transparent>);
+            color: rgba(<option.rgba.Text>); 
+            border: 1px rgba(<option.rgba.Transparent>); border-radius: 0px; border-style: solid;
+        }
+        QTabBar::tab {
+            background: rgba(71, 71, 71, 255);
+            color: rgba(<option.rgba.Text>); 
+            border: 1px rgba(87, 87, 87, 255); border-radius: 0px; border-style: solid;
+            min-width: 48px; min-height: 20px;
+            padding: 2px;
+        }
+        
+        QTabBar::tab:selected, QTabBar::tab:hover {
+            background: rgba(95, 95, 95, 255);
+            color: rgba(<option.rgba.Text>); 
+            border: 1px rgba(87, 87, 87, 255); border-radius: 0px; border-style: solid;
+        }
+        
+        QTabBar::tab:!selected {
+            margin-top: 2px;
         }

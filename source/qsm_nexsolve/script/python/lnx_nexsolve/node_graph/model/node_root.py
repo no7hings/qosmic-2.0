@@ -29,8 +29,6 @@ from ..core import action as _cor_action
 
 from ..core import undo as _cor_undo
 
-from ...stage import model as _stg_model
-
 
 class SceneFile(object):
     def __init__(self, root_model):
@@ -177,6 +175,35 @@ class SceneFile(object):
 
     def save_with_dialog(self):
         self.save_as_with_dialog(self.get_current())
+
+    def close_with_dialog(self):
+        if self.is_dirty() is True:
+            if gui_core.GuiUtil.language_is_chs():
+                result = gui_core.GuiApplication.exec_message_dialog(
+                    u'保存修改到: {}?'.format(
+                        self.get_current()
+                    ),
+                    title='保存文件？',
+                    show_no=True,
+                    show_cancel=True,
+                    size=(320, 120),
+                    status='warning'
+                )
+            else:
+                result = gui_core.GuiApplication.exec_message_dialog(
+                    u'Save changes to: {}?'.format(
+                        self.get_current()
+                    ),
+                    title='Save Scene?',
+                    show_no=True,
+                    show_cancel=True,
+                    size=(320, 120),
+                    status='warning'
+                )
+            if result is True:
+                self.save_to(self.get_current())
+                return True
+        return False
 
 
 # scene model
@@ -1182,14 +1209,17 @@ class RootNode(
 
     # frame select
     def _on_frame_select_action(self):
-        items = self._get_selected_node_guis()
-        if not items:
-            items = self._get_all_node_guis()
+        node_guis = self._get_selected_node_guis()
+        if not node_guis:
+            node_guis = self._get_all_node_guis()
 
-        if not items:
+        if not node_guis:
             return
 
-        bounding_rect = self._compute_items_rect(items)
+        self._frame_nodes(node_guis)
+
+    def _frame_nodes(self, node_guis):
+        bounding_rect = self._compute_items_rect(node_guis)
 
         if bounding_rect.isEmpty() is False:
             padding = 20
@@ -1200,9 +1230,9 @@ class RootNode(
             self._update_transformation()
 
     @classmethod
-    def _compute_items_rect(cls, items):
-        bounding_rect = items[0].sceneBoundingRect()
-        for item in items[1:]:
+    def _compute_items_rect(cls, node_guis):
+        bounding_rect = node_guis[0].sceneBoundingRect()
+        for item in node_guis[1:]:
             bounding_rect = bounding_rect.united(item.sceneBoundingRect())
         return bounding_rect
 
@@ -1295,3 +1325,20 @@ class RootNode(
         if file_path:
             if self._scene_file.save_as_with_dialog(file_path):
                 self._gui.scene_path_accepted.emit(self._scene_file.get_current())
+
+    def on_keyword_filter(self, texts):
+        key_src_set = set(texts)
+
+        nodes = []
+        for i_node in self.get_all_nodes():
+            i_match_flag = False
+            if key_src_set:
+                i_match, i_flag = i_node.generate_keyword_filter_match_args(key_src_set)
+                if i_match is True:
+                    i_match_flag = i_flag
+
+            if i_match_flag is True:
+                nodes.append(i_node)
+
+        if nodes:
+            self._frame_nodes([x._gui for x in nodes])
