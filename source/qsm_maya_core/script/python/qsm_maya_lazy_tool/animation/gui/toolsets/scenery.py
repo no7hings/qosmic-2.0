@@ -27,7 +27,7 @@ import qsm_maya.handles.scenery.scripts as qsm_mya_hdl_scn_scripts
 
 import lnx_maya_resora.scripts as qsm_mya_lzy_rsc_scripts
 
-import qsm_maya_gui.core as qsm_mya_gui_core
+import lnx_maya_gui.core as qsm_mya_gui_core
 
 
 class PrxUnitForSceneryAssetView(

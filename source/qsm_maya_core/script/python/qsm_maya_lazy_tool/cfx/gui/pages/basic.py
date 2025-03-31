@@ -9,7 +9,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya_gui.core as qsm_mya_gui_core
+import lnx_maya_gui.core as qsm_mya_gui_core
 
 from ..toolsets import basic as _toolset_basic
 

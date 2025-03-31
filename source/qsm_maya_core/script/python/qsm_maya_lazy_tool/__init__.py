@@ -9,6 +9,6 @@ def do_reload():
             'lxbasic', 'lxsession', 'lxgui',
 
             'qsm_general', 'lnx_scan', 'lnx_screw', 'lnx_shark', 'qsm_lazy', 'qsm_lazy_tool',
-            'qsm_maya', 'qsm_maya_gui', 'qsm_maya_lazy', 'qsm_maya_lazy_tool',
+            'qsm_maya', 'lnx_maya_gui', 'qsm_maya_lazy', 'qsm_maya_lazy_tool',
         ]
     ).do_reload()

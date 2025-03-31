@@ -21,7 +21,7 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.adv as qsm_mya_adv
 
-import qsm_maya_gui.core as qsm_mya_gui_core
+import lnx_maya_gui.core as qsm_mya_gui_core
 
 import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 

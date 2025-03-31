@@ -82,32 +82,48 @@ class AdvOpt(_base.AdvNamespaceExtra):
             self.generate_controls_motion_dict(), **kwargs
         )
 
-    # mirror and flip
-    # mirror, do not mark undo, "ControlSetMotionOpt" is already using
-    def mirror_controls_left_to_right(self, **kwargs):
+    # mirror
+    def mirror_controls_motion_left_to_right(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_all_left_to_right(**kwargs)
-
-    # mirror, do not mark undo, "ControlSetMotionOpt" is already using
-    def mirror_controls_middle(self, **kwargs):
+            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_motion_left_to_right(**kwargs)
+            
+    def mirror_controls_pose_left_to_right(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_all_middle(**kwargs)
+            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_pose_left_to_right(**kwargs)
 
-    # mirror, do not mark undo, "ControlSetMotionOpt" is already using
-    def mirror_controls_right_to_left(self, **kwargs):
+    def mirror_controls_motion_middle(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_all_right_to_left(**kwargs)
-
-    # flip, do not mark undo, "ControlSetMotionOpt" is already using
-    def flip_controls(self, **kwargs):
+            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_motion_middle(**kwargs)
+    
+    def mirror_controls_pose_middle(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).flip_all(**kwargs)
+            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_pose_middle(**kwargs)
 
-    # reset, do not mark undo, "ControlSetMotionOpt" is already using
+    def mirror_controls_motion_right_to_left(self, **kwargs):
+        controls = self.find_all_controls()
+        if controls:
+            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_motion_right_to_left(**kwargs)
+            
+    def mirror_controls_pose_right_to_left(self, **kwargs):
+        controls = self.find_all_controls()
+        if controls:
+            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_pose_right_to_left(**kwargs)
+    
+    # flip
+    def flip_controls_motion(self, **kwargs):
+        controls = self.find_all_controls()
+        if controls:
+            _motion.ControlSetMotionOpt(self._namespace, controls).flip_motion(**kwargs)
+
+    def flip_controls_pose(self, **kwargs):
+        controls = self.find_all_controls()
+        if controls:
+            _motion.ControlSetMotionOpt(self._namespace, controls).flip_pose(**kwargs)
+
     def rest_controls_transformation(self, **kwargs):
         if 'reset_scheme' in kwargs:
             reset_scheme = kwargs.pop('reset_scheme')

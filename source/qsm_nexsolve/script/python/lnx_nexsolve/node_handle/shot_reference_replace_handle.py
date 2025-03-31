@@ -95,6 +95,8 @@ class LoadMayaScene(object):
         self._node = node
 
     def update_data(self):
+        import lxbasic.storage as bsc_storage
+
         import lxgui.core as gui_core
 
         import qsm_general.dotfile as qsm_gnl_dotfile
@@ -118,6 +120,10 @@ class LoadMayaScene(object):
             self._node.set('data.fps', ma.get_fps())
             self._node.set('data.cameras', ma.get_cameras())
             self._node.set('data.references', ma.get_reference_files(ignore_unloaded=ignore_unloaded))
+
+            self._node.set(
+                'setting.location', '/root/maya/scene/{}'.format(bsc_storage.StgFileOpt(file_path).name_base)
+            )
 
 
 class ReplaceMayaReference(object):

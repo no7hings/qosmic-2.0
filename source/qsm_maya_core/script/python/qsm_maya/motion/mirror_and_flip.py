@@ -152,14 +152,14 @@ class MirrorAndFlip(_base.AbsMotion):
         # zero rotate
         cls._zero_rotate(rotate_data)
 
-        world_mat = cmds.xform(path, matrix=1, worldSpace=1, query=1)
+        world_mtx = cmds.xform(path, matrix=1, worldSpace=1, query=1)
         # Rounding the values in the world matrix
-        for i, i_value in enumerate(world_mat):
-            world_mat[i] = round(i_value, 3)
+        for i, i_value in enumerate(world_mtx):
+            world_mtx[i] = round(i_value, 3)
 
-        dict_['x_axis'] = world_mat[0:3]
-        dict_['y_axis'] = world_mat[4:7]
-        dict_['z_axis'] = world_mat[8:11]
+        dict_['x_axis'] = world_mtx[0:3]
+        dict_['y_axis'] = world_mtx[4:7]
+        dict_['z_axis'] = world_mtx[8:11]
         # recover rotate
         cls._recover_rotate(rotate_data)
         # recover auto key
@@ -374,7 +374,7 @@ class MirrorAndFlip(_base.AbsMotion):
         return 1
 
     @classmethod
-    def mirror_side_for(cls, path_src, path_dst, **kwargs):
+    def mirror_motion_side_for(cls, path_src, path_dst, **kwargs):
         """
         left or right only
         """
@@ -395,7 +395,28 @@ class MirrorAndFlip(_base.AbsMotion):
         _base.NodeMotion.apply_motion_properties_fnc(path_dst, data_src, mirror_keys=mirror_keys, **kwargs)
 
     @classmethod
-    def mirror_middle_for(cls, path_src, **kwargs):
+    def mirror_pose_side_for(cls, path_src, path_dst, **kwargs):
+        """
+        left or right only
+        """
+        key_includes = cmds.listAttr(path_src, keyable=True, unlocked=True)
+        if 'data_override' in kwargs:
+            data_src = kwargs.pop('data_override')
+        else:
+            data_src = _base.NodeMotion.generate_pose_properties_fnc(path_src, key_includes=key_includes)
+
+        mirror_axis = 'X'
+
+        mirror_keys = cls.generate_side_mirror_keys(
+            path_src, path_dst,
+            kwargs.get('axis_vector_src'), kwargs.get('axis_vector_dst'),
+            mirror_axis, key_includes
+        )
+
+        _base.NodeMotion.apply_pose_properties_fnc(path_dst, data_src, mirror_keys=mirror_keys, **kwargs)
+
+    @classmethod
+    def mirror_motion_middle_for(cls, path_src, **kwargs):
         """
         middle
         """
@@ -413,3 +434,23 @@ class MirrorAndFlip(_base.AbsMotion):
             mirror_axis, key_includes
         )
         _base.NodeMotion.apply_motion_properties_fnc(path_src, data_src, mirror_keys=mirror_keys, **kwargs)
+
+    @classmethod
+    def mirror_pose_middle_for(cls, path_src, **kwargs):
+        """
+        middle
+        """
+        key_includes = cmds.listAttr(path_src, keyable=True, unlocked=True)
+        if 'data_override' in kwargs:
+            data_src = kwargs.pop('data_override')
+        else:
+            data_src = _base.NodeMotion.generate_pose_properties_fnc(path_src, key_includes=key_includes)
+
+        mirror_axis = 'X'
+
+        mirror_keys = cls.generate_middle_mirror_keys(
+            path_src,
+            kwargs.get('axis_vector_src'),
+            mirror_axis, key_includes
+        )
+        _base.NodeMotion.apply_pose_properties_fnc(path_src, data_src, mirror_keys=mirror_keys, **kwargs)

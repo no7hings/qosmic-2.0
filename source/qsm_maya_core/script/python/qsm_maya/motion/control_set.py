@@ -21,6 +21,13 @@ class ControlSetMotionOpt(
     LOG_PROGRESS_MAXIMUM = 150
 
     @classmethod
+    def test(cls):
+        opt = cls(
+            'sam_Skin', ['sam_Skin:FKShoulder_L', 'sam_Skin:FKShoulder_R']
+        )
+        opt.mirror_pose_left_to_right(auto_keyframe=True)
+
+    @classmethod
     def get_args_from_selection(cls):
         dict_ = {}
         _ = cmds.ls(selection=1, long=1)
@@ -48,7 +55,7 @@ class ControlSetMotionOpt(
         self._init_namespace_extra(namespace)
         self._path_set = set(paths)
 
-    # motion
+    # gain
     def generate_motion_dict(self):
         dict_ = {}
 
@@ -64,6 +71,15 @@ class ControlSetMotionOpt(
             for i_path in self._path_set:
                 i_control_opt = _control.ControlMotionOpt(i_path)
                 dict_[i_control_opt.to_control_key(i_path)] = i_control_opt.generate_motion_properties()
+
+        return dict_
+
+    def generate_pose_dict(self):
+        dict_ = {}
+
+        for i_path in self._path_set:
+            i_control_opt = _control.ControlMotionOpt(i_path)
+            dict_[i_control_opt.to_control_key(i_path)] = i_control_opt.generate_pose_properties()
 
         return dict_
 
@@ -98,16 +114,6 @@ class ControlSetMotionOpt(
                 if i_key in data:
                     _control.ControlMotionOpt(i_path).apply_motion_properties(data[i_key], **kwargs)
 
-    # pose
-    def generate_pose_dict(self):
-        dict_ = {}
-
-        for i_path in self._path_set:
-            i_control_opt = _control.ControlMotionOpt(i_path)
-            dict_[i_control_opt.to_control_key(i_path)] = i_control_opt.generate_pose_properties()
-
-        return dict_
-
     @_mya_core.Undo.execute
     def apply_pose_dict(self, data, **kwargs):
         bsc_log.Log.trace_method_result(
@@ -141,55 +147,109 @@ class ControlSetMotionOpt(
         self.apply_pose_dict(
             bsc_storage.StgFileOpt(file_path).set_read(), **kwargs
         )
-
+    
+    # mirror
     @_mya_core.Undo.execute
-    def mirror_all_auto(self, **kwargs):
+    def mirror_motion_auto(self, **kwargs):
         for i_path in self._path_set:
-            _control.ControlMotionOpt(i_path).do_mirror_auto(
+            _control.ControlMotionOpt(i_path).do_mirror_motion_auto(
                 **kwargs
             )
 
     @_mya_core.Undo.execute
-    def mirror_all_left_to_right(self, **kwargs):
+    def mirror_pose_auto(self, **kwargs):
+        for i_path in self._path_set:
+            _control.ControlMotionOpt(i_path).do_mirror_pose_auto(
+                **kwargs
+            )
+
+    @_mya_core.Undo.execute
+    def mirror_motion_left_to_right(self, **kwargs):
+
         # mark axis vector first
         axis_vector_dict = self.generate_axis_vector_dict()
         for i_path in self._path_set:
+
             # ignore neither has "translate", "rotate"
             if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
                 continue
 
-            _control.ControlMotionOpt(i_path).do_mirror_side(
+            _control.ControlMotionOpt(i_path).do_mirror_motion_side_auto(
                 self.MirrorSchemes.LeftToRight,
                 axis_vector_dict=axis_vector_dict,
                 **kwargs
             )
 
     @_mya_core.Undo.execute
-    def mirror_all_middle(self, **kwargs):
+    def mirror_pose_left_to_right(self, **kwargs):
         # mark axis vector first
         axis_vector_dict = self.generate_axis_vector_dict()
         for i_path in self._path_set:
+
             # ignore neither has "translate", "rotate"
             if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
                 continue
 
-            _control.ControlMotionOpt(i_path).do_mirror_middle(axis_vector_dict=axis_vector_dict, **kwargs)
+            _control.ControlMotionOpt(i_path).do_mirror_pose_side_auto(
+                self.MirrorSchemes.LeftToRight,
+                axis_vector_dict=axis_vector_dict,
+                **kwargs
+            )
 
     @_mya_core.Undo.execute
-    def mirror_all_right_to_left(self, **kwargs):
+    def mirror_motion_right_to_left(self, **kwargs):
+
         # mark axis vector first
         axis_vector_dict = self.generate_axis_vector_dict()
         for i_path in self._path_set:
+
             # ignore neither has "translate", "rotate"
             if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
                 continue
 
-            _control.ControlMotionOpt(i_path).do_mirror_side(
+            _control.ControlMotionOpt(i_path).do_mirror_motion_side_auto(
                 self.MirrorSchemes.RightToLeft, axis_vector_dict=axis_vector_dict, **kwargs
             )
 
     @_mya_core.Undo.execute
-    def flip_all(self, **kwargs):
+    def mirror_pose_right_to_left(self, **kwargs):
+        # mark axis vector first
+        axis_vector_dict = self.generate_axis_vector_dict()
+        for i_path in self._path_set:
+
+            # ignore neither has "translate", "rotate"
+            if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
+                continue
+
+            _control.ControlMotionOpt(i_path).do_mirror_pose_side_auto(
+                self.MirrorSchemes.RightToLeft, axis_vector_dict=axis_vector_dict, **kwargs
+            )
+
+    @_mya_core.Undo.execute
+    def mirror_motion_middle(self, **kwargs):
+        # mark axis vector first
+        axis_vector_dict = self.generate_axis_vector_dict()
+        for i_path in self._path_set:
+            # ignore neither has "translate", "rotate"
+            if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
+                continue
+
+            _control.ControlMotionOpt(i_path).do_mirror_motion_middle_auto(axis_vector_dict=axis_vector_dict, **kwargs)
+
+    @_mya_core.Undo.execute
+    def mirror_pose_middle(self, **kwargs):
+        # mark axis vector first
+        axis_vector_dict = self.generate_axis_vector_dict()
+        for i_path in self._path_set:
+            # ignore neither has "translate", "rotate"
+            if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
+                continue
+
+            _control.ControlMotionOpt(i_path).do_mirror_pose_middle_auto(axis_vector_dict=axis_vector_dict, **kwargs)
+
+    # flip
+    @_mya_core.Undo.execute
+    def flip_motion(self, **kwargs):
         # mark data first
         data = self.generate_motion_dict()
         # mark axis vector
@@ -212,7 +272,7 @@ class ControlSetMotionOpt(
                         l_p.do_update()
                         continue
 
-                    _control.ControlMotionOpt(i_path).do_mirror_auto(
+                    _control.ControlMotionOpt(i_path).do_mirror_motion_auto(
                         data_override=i_data, axis_vector_dict=axis_vector_dict, **kwargs
                     )
 
@@ -229,7 +289,52 @@ class ControlSetMotionOpt(
                 if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
                     continue
 
-                _control.ControlMotionOpt(i_path).do_mirror_auto(
+                _control.ControlMotionOpt(i_path).do_mirror_motion_auto(
+                    data_override=i_data, axis_vector_dict=axis_vector_dict, **kwargs
+                )
+
+    @_mya_core.Undo.execute
+    def flip_pose(self, **kwargs):
+        # mark data first
+        data = self.generate_pose_dict()
+        # mark axis vector
+        axis_vector_dict = self.generate_axis_vector_dict()
+
+        key_excludes = kwargs.pop('control_key_excludes') if 'control_key_excludes' in kwargs else None
+
+        c = len(self._path_set)
+        if c >= self.LOG_PROGRESS_MAXIMUM:
+            with bsc_log.LogProcessContext.create(maximum=len(self._path_set)) as l_p:
+                for i_key, i_data in data.items():
+                    if key_excludes:
+                        if i_key in key_excludes:
+                            l_p.do_update()
+                            continue
+
+                    i_path = self.find_one_control(i_key)
+                    # ignore neither has "translate", "rotate"
+                    if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
+                        l_p.do_update()
+                        continue
+
+                    _control.ControlMotionOpt(i_path).do_mirror_pose_auto(
+                        data_override=i_data, axis_vector_dict=axis_vector_dict, **kwargs
+                    )
+
+                    l_p.do_update()
+        else:
+
+            for i_key, i_data in data.items():
+                if key_excludes:
+                    if i_key in key_excludes:
+                        continue
+
+                i_path = self.find_one_control(i_key)
+                # ignore neither has "translate", "rotate"
+                if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
+                    continue
+
+                _control.ControlMotionOpt(i_path).do_mirror_pose_auto(
                     data_override=i_data, axis_vector_dict=axis_vector_dict, **kwargs
                 )
 

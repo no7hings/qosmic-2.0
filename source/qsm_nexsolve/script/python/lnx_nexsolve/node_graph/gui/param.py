@@ -222,6 +222,12 @@ class ConstantGui(_AbsTypedParamGui):
             self._accept_value
         )
 
+    def _accept_value(self, value):
+        if self._param._set_value(value):
+            sys.stdout.write(
+                'update value at: {}.\n'.format(self._param.get_path())
+            )
+
 
 class PathGui(_AbsTypedParamGui):
     QT_INPUT_WGT_CLS = gui_qt_widgets.QtInputForConstant
@@ -230,6 +236,17 @@ class PathGui(_AbsTypedParamGui):
         super(PathGui, self).__init__(*args, **kwargs)
 
         self._input_wgt._set_value_entry_validator_use_as_path_()
+
+    def _connect_value_change(self):
+        self._input_wgt.input_value_accepted.connect(
+            self._accept_value
+        )
+
+    def _accept_value(self, value):
+        if self._param._set_value(value):
+            sys.stdout.write(
+                'update value at: {}.\n'.format(self._param.get_path())
+            )
 
 
 class TupleGui(_AbsTypedParamGui):
@@ -454,7 +471,7 @@ class _AbsGroupGui(QtWidgets.QWidget):
             )
             icn_w, icn_h = self._gui_data.head.icon.size
             self._gui_data.head.icon.rect.setRect(
-                x+(hed_h-icn_w)/2, y+(hed_h-icn_h)/2, icn_w, icn_h
+                int(x+(hed_h-icn_w)/2), int(y+(hed_h-icn_h)/2), icn_w, icn_h
             )
 
             self._gui_data.head.text.rect.setRect(

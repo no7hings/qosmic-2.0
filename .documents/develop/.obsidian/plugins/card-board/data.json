@@ -23,7 +23,7 @@
           {
             "tag": "completed",
             "data": {
-              "collapsed": true,
+              "collapsed": false,
               "index": 2,
               "limit": 50,
               "name": "测试中/完成（Testing/Completed）"

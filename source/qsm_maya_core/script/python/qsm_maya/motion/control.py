@@ -305,10 +305,11 @@ class ControlMotionOpt(
         cmds.select(clear=1)
 
     # mirror
-    def do_mirror_auto(self, **kwargs):
+    def do_mirror_motion_auto(self, **kwargs):
         path_src = self._path
         ctr_key_src = self.to_control_key(path_src)
         ctr_key_dst, direction = self.to_control_direction_args(ctr_key_src)
+
         # side
         if ctr_key_dst is not None:
             path_dst = self.find_one_control(ctr_key_dst)
@@ -317,34 +318,79 @@ class ControlMotionOpt(
                     self.LOG_KEY, 'control for "{}" is not found'.format(ctr_key_dst)
                 )
                 return
+
             # left or right
             if direction in {
                 self.ControlDirections.Left, self.ControlDirections.Right
             }:
+
                 # override axis vector
                 if 'axis_vector_dict' in kwargs:
                     axis_vector_dict = kwargs.pop('axis_vector_dict')
+
                     # key may not in dict
                     kwargs['axis_vector_src'] = axis_vector_dict.get(path_src)
                     kwargs['axis_vector_dst'] = axis_vector_dict.get(path_dst)
 
-                _mirror_and_flip.MirrorAndFlip.mirror_side_for(path_src, path_dst, **kwargs)
+                _mirror_and_flip.MirrorAndFlip.mirror_motion_side_for(path_src, path_dst, **kwargs)
         else:
             if direction in {
                 self.ControlDirections.Middle
             }:
+
                 # override axis vector
                 if 'axis_vector_dict' in kwargs:
                     axis_vector_dict = kwargs.pop('axis_vector_dict')
                     kwargs['axis_vector_src'] = axis_vector_dict.get(path_src)
 
-                _mirror_and_flip.MirrorAndFlip.mirror_middle_for(path_src, **kwargs)
+                _mirror_and_flip.MirrorAndFlip.mirror_motion_middle_for(path_src, **kwargs)
 
-    def do_mirror_side(self, scheme, **kwargs):
+    def do_mirror_pose_auto(self, **kwargs):
+        path_src = self._path
+        ctr_key_src = self.to_control_key(path_src)
+        ctr_key_dst, direction = self.to_control_direction_args(ctr_key_src)
+
+        # side
+        if ctr_key_dst is not None:
+            path_dst = self.find_one_control(ctr_key_dst)
+            if path_dst is None:
+                bsc_log.Log.trace_method_warning(
+                    self.LOG_KEY, 'control for "{}" is not found'.format(ctr_key_dst)
+                )
+                return
+
+            # left or right
+            if direction in {
+                self.ControlDirections.Left, self.ControlDirections.Right
+            }:
+
+                # override axis vector
+                if 'axis_vector_dict' in kwargs:
+                    axis_vector_dict = kwargs.pop('axis_vector_dict')
+
+                    # key may not in dict
+                    kwargs['axis_vector_src'] = axis_vector_dict.get(path_src)
+                    kwargs['axis_vector_dst'] = axis_vector_dict.get(path_dst)
+
+                _mirror_and_flip.MirrorAndFlip.mirror_pose_side_for(path_src, path_dst, **kwargs)
+        else:
+            if direction in {
+                self.ControlDirections.Middle
+            }:
+
+                # override axis vector
+                if 'axis_vector_dict' in kwargs:
+                    axis_vector_dict = kwargs.pop('axis_vector_dict')
+                    kwargs['axis_vector_src'] = axis_vector_dict.get(path_src)
+
+                _mirror_and_flip.MirrorAndFlip.mirror_pose_middle_for(path_src, **kwargs)
+
+    def do_mirror_motion_side_auto(self, scheme, **kwargs):
         path_src = self._path
         ctr_key_src = self.to_control_key(path_src)
         if scheme == self.MirrorSchemes.LeftToRight:
             ctr_key_dst, direction = self.to_control_direction_args(ctr_key_src)
+
             # check is side
             if ctr_key_dst is not None:
                 path_dst = self.find_one_control(ctr_key_dst)
@@ -353,17 +399,20 @@ class ControlMotionOpt(
                         self.LOG_KEY, 'control for "{}" is not found'.format(ctr_key_dst)
                     )
                     return
+
                 # left
                 if direction == self.ControlDirections.Left:
+
                     # override axis vector
                     if 'axis_vector_dict' in kwargs:
                         axis_vector_dict = kwargs.pop('axis_vector_dict')
                         kwargs['axis_vector_src'] = axis_vector_dict.get(path_src)
                         kwargs['axis_vector_dst'] = axis_vector_dict.get(path_dst)
 
-                    _mirror_and_flip.MirrorAndFlip.mirror_side_for(path_src, path_dst, **kwargs)
+                    _mirror_and_flip.MirrorAndFlip.mirror_motion_side_for(path_src, path_dst, **kwargs)
         elif scheme == self.MirrorSchemes.RightToLeft:
             ctr_key_dst, direction = self.to_control_direction_args(ctr_key_src)
+
             # check is side
             if ctr_key_dst is not None:
                 path_dst = self.find_one_control(ctr_key_dst)
@@ -372,27 +421,90 @@ class ControlMotionOpt(
                         self.LOG_KEY, 'control for "{}" is not found'.format(ctr_key_dst)
                     )
                     return
-                    # right
+
+                # right
                 if direction == self.ControlDirections.Right:
+
                     # override axis vector
                     if 'axis_vector_dict' in kwargs:
                         axis_vector_dict = kwargs.pop('axis_vector_dict')
                         kwargs['axis_vector_src'] = axis_vector_dict.get(path_src)
                         kwargs['axis_vector_dst'] = axis_vector_dict.get(path_dst)
 
-                    _mirror_and_flip.MirrorAndFlip.mirror_side_for(path_src, path_dst, **kwargs)
+                    _mirror_and_flip.MirrorAndFlip.mirror_motion_side_for(path_src, path_dst, **kwargs)
 
-    def do_mirror_middle(self, **kwargs):
+    def do_mirror_pose_side_auto(self, scheme, **kwargs):
+        path_src = self._path
+        ctr_key_src = self.to_control_key(path_src)
+        if scheme == self.MirrorSchemes.LeftToRight:
+            ctr_key_dst, direction = self.to_control_direction_args(ctr_key_src)
+
+            # check is side
+            if ctr_key_dst is not None:
+                path_dst = self.find_one_control(ctr_key_dst)
+                if path_dst is None:
+                    bsc_log.Log.trace_method_warning(
+                        self.LOG_KEY, 'control for "{}" is not found'.format(ctr_key_dst)
+                    )
+                    return
+
+                if direction == self.ControlDirections.Left:
+
+                    # override axis vector
+                    if 'axis_vector_dict' in kwargs:
+                        axis_vector_dict = kwargs.pop('axis_vector_dict')
+                        kwargs['axis_vector_src'] = axis_vector_dict.get(path_src)
+                        kwargs['axis_vector_dst'] = axis_vector_dict.get(path_dst)
+
+                    _mirror_and_flip.MirrorAndFlip.mirror_pose_side_for(path_src, path_dst, **kwargs)
+        elif scheme == self.MirrorSchemes.RightToLeft:
+            ctr_key_dst, direction = self.to_control_direction_args(ctr_key_src)
+
+            # check is side
+            if ctr_key_dst is not None:
+                path_dst = self.find_one_control(ctr_key_dst)
+                if path_dst is None:
+                    bsc_log.Log.trace_method_warning(
+                        self.LOG_KEY, 'control for "{}" is not found'.format(ctr_key_dst)
+                    )
+                    return
+
+                # right
+                if direction == self.ControlDirections.Right:
+
+                    # override axis vector
+                    if 'axis_vector_dict' in kwargs:
+                        axis_vector_dict = kwargs.pop('axis_vector_dict')
+                        kwargs['axis_vector_src'] = axis_vector_dict.get(path_src)
+                        kwargs['axis_vector_dst'] = axis_vector_dict.get(path_dst)
+
+                    _mirror_and_flip.MirrorAndFlip.mirror_pose_side_for(path_src, path_dst, **kwargs)
+
+    def do_mirror_motion_middle_auto(self, **kwargs):
         path_src = self._path
         ctr_key_src = self.to_control_key(path_src)
         _, direction = self.to_control_direction_args(ctr_key_src)
         if direction == self.ControlDirections.Middle:
+
             # override axis vector
             if 'axis_vector_dict' in kwargs:
                 axis_vector_dict = kwargs.pop('axis_vector_dict')
                 kwargs['axis_vector_src'] = axis_vector_dict.get(path_src)
 
-            _mirror_and_flip.MirrorAndFlip.mirror_middle_for(path_src, **kwargs)
+            _mirror_and_flip.MirrorAndFlip.mirror_motion_middle_for(path_src, **kwargs)
+
+    def do_mirror_pose_middle_auto(self, **kwargs):
+        path_src = self._path
+        ctr_key_src = self.to_control_key(path_src)
+        _, direction = self.to_control_direction_args(ctr_key_src)
+        if direction == self.ControlDirections.Middle:
+
+            # override axis vector
+            if 'axis_vector_dict' in kwargs:
+                axis_vector_dict = kwargs.pop('axis_vector_dict')
+                kwargs['axis_vector_src'] = axis_vector_dict.get(path_src)
+
+            _mirror_and_flip.MirrorAndFlip.mirror_pose_middle_for(path_src, **kwargs)
 
 
 class ControlMirrorPasteOpt(
@@ -415,7 +527,7 @@ class ControlMirrorPasteOpt(
                 if cmds.objExists(i_path+'.translate') is False and cmds.objExists(i_path+'.rotate') is False:
                     continue
 
-                ControlMotionOpt(i_path).do_mirror_auto(data_override=i_data, **kwargs)
+                ControlMotionOpt(i_path).do_mirror_motion_auto(data_override=i_data, **kwargs)
 
     def load_motion_from(self, file_path, **kwargs):
         self.apply_motion_dict(

@@ -56,7 +56,7 @@ class QtEntryForConstant(
         # fixme, emit sent in event filter?
         # self.returnPressed.connect(self.user_entry_finished.emit)
         # noinspection PyUnresolvedReferences
-        self.returnPressed.connect(self._execute_text_change_accepted_)
+        # self.returnPressed.connect(self._execute_text_change_accepted_)
         # emit send by setText
         # noinspection PyUnresolvedReferences
         self.textChanged.connect(self._do_entry_change_)
@@ -83,8 +83,8 @@ class QtEntryForConstant(
         # self.setFocusPolicy(QtCore.Qt.StrongFocus)
 
     def _execute_text_change_accepted_(self):
-        self.user_entry_text_accepted.emit(self._get_value_())
         self.entry_value_accepted.emit(self._get_value_())
+        self.user_entry_text_accepted.emit(self._get_value_())
 
     def _set_entry_tip_(self, text):
         self.setPlaceholderText(text)
@@ -169,6 +169,7 @@ class QtEntryForConstant(
                     self.user_key_tab_pressed.emit()
                 elif event.key() in {QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter}:
                     self.user_entry_finished.emit()
+                    self._execute_text_change_accepted_()
                     self._completion_value_auto_()
                 elif event.key() == QtCore.Qt.Key_Escape:
                     self.clearFocus()
@@ -371,13 +372,30 @@ class QtEntryForConstant(
                 return 0.0
         return _
 
+    def _to_typed_value_(self, text):
+        # do not encode output, use original data
+        if self._value_type == str:
+            return text
+        elif self._value_type == int:
+            try:
+                return int(text or 0)
+            except ValueError:
+                return 0
+        elif self._value_type == float:
+            try:
+                return float(text or 0.0)
+            except ValueError:
+                return 0.0
+        return text
+
     def _set_value_(self, value):
         value_pre = self.text()
         if value is not None:
             value = bsc_core.ensure_string(value)
             value_pre = bsc_core.ensure_string(value_pre)
             if self._value_type is not None:
-                value = self._value_type(value)
+                value = self._to_typed_value_(value)
+                value_pre = self._to_typed_value_(value_pre)
 
             if value != value_pre:
                 self.entry_value_accepted.emit(value)

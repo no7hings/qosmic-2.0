@@ -4,15 +4,19 @@
     "type": "split",
     "children": [
       {
-        "id": "098df820a7a3800f",
+        "id": "778cbc1d675897ce",
         "type": "tabs",
         "children": [
           {
-            "id": "27076d9d959e7d8a",
+            "id": "22d20fc82ddf162f",
             "type": "leaf",
             "state": {
-              "type": "card-board-view",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "开发相关/开发进度/优化-2025.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -184,7 +188,7 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "27076d9d959e7d8a",
+  "active": "22d20fc82ddf162f",
   "lastOpenFiles": [
     "开发相关/开发进度/开发-2025.md",
     "技术文档/Qosmic.md",

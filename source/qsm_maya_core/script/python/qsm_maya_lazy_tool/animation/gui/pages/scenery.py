@@ -7,7 +7,7 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
 
-import qsm_maya_gui.core as qsm_mya_gui_core
+import lnx_maya_gui.core as qsm_mya_gui_core
 
 from ..toolsets import scenery as _toolsets_scenery
 

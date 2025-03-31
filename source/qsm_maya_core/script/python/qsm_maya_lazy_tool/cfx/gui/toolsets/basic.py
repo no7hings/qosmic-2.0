@@ -17,7 +17,7 @@ import qsm_maya.handles.cfx.core as qsm_mya_hdl_cfx_core
 
 import qsm_maya.handles.cfx.scripts as qsm_mya_hdl_cfx_scripts
 
-import qsm_maya_gui.core as qsm_mya_gui_core
+import lnx_maya_gui.core as qsm_mya_gui_core
 
 
 class UnitForCfxResourceView(

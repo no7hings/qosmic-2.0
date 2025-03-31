@@ -132,9 +132,10 @@ class PathOpt(str):
             return [pathsep, ]
         return path.split(pathsep)
 
-    def __init__(self, path):
-        super(PathOpt, self).__init__(path)
+    def __new__(cls, path):
+        self = super(PathOpt, cls).__new__(cls, path)
         self._args = self._to_args(path, self.PATHSEP)
+        return self
 
     def get_parent(self):
         if len(self._args) == 1:

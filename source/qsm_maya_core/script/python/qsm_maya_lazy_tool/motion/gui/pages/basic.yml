@@ -165,6 +165,7 @@ build:
                                 可以按“Z”撤销。
                         join_to_next: True
 
+                    # mirror
                     mirror_motion:
                         widget: group
                         name: 'Mirror Motion'
@@ -174,7 +175,8 @@ build:
                         widget: button
                         name: 'Mirror Character (R to L)'
                         name_chs: '镜像角色（右到左）'
-                        icon: 'tool/maya/mirror_all_right_to_left'
+                        icon: 'tool/maya/mirror_right_to_left'
+                        menu_enable: True
                         tool_tip:
                             |-
                             To be supplemented.
@@ -184,6 +186,8 @@ build:
                                 镜像右边（*_R）控制器的动作（数值和曲线）到左边（*_L）；
                                 可以在“设置”的“帧偏移”修改曲线偏移，实现错帧镜像；
                                 可以按“Z”撤销。
+                            右键/点击小三角：
+                                当前帧（Pose）：只镜像前帧（时间轴）。
                         join_to_next: True
 
                     mirror_motion/mirror_characters_middle:
@@ -191,6 +195,7 @@ build:
                         name: 'Mirror Character (M)'
                         name_chs: '镜像角色（中间）'
                         icon: 'tool/maya/mirror'
+                        menu_enable: True
                         tool_tip:
                             |-
                             To be supplemented.
@@ -200,13 +205,16 @@ build:
                                 镜像中间（*_M）控制器的动作（数值和曲线），如90变成-90；
                                 可以在“设置”的“帧偏移”修改曲线偏移，实现错帧镜像；
                                 可以按“Z”撤销。
+                            右键/点击小三角：
+                                当前帧（Pose）：只镜像前帧（时间轴）。
                         join_to_next: True
 
                     mirror_motion/mirror_characters_left_to_right:
                         widget: button
                         name: 'Mirror Character (L to R)'
                         name_chs: '镜像角色（左到右）'
-                        icon: 'tool/maya/mirror_all_left_to_right'
+                        icon: 'tool/maya/mirror_left_to_right'
+                        menu_enable: True
                         tool_tip:
                             |-
                             To be supplemented.
@@ -216,12 +224,15 @@ build:
                                 镜像左边（*_L）控制器的动作（数值和曲线）到右边（*_R）；
                                 可以在“设置”的“帧偏移”修改曲线偏移，实现错帧镜像；
                                 可以按“Z”撤销。
+                            右键/点击小三角：
+                                当前帧（Pose）：只镜像前帧（时间轴）。
 
                     mirror_motion/mirror_selected_auto:
                         widget: button
                         name: 'Mirror SEL (Auto)'
                         name_chs: '镜像选中（自动）'
                         icon: 'tool/maya/mirror'
+                        menu_enable: True
                         tool_tip:
                             |-
                             To be supplemented.
@@ -232,7 +243,9 @@ build:
                                 如果选择的是中间（*_M）的控制器，会自动镜像数值和曲线，如90变成-90；
                                 可以在“设置”的“帧偏移”修改曲线偏移，实现错帧镜像；
                                 可以按“Z”撤销。
-
+                            右键/点击小三角：
+                                当前帧（Pose）：只镜像前帧（时间轴）。
+                    # mirror paste
                     mirror_and_paste_motion:
                         widget: group
                         name: 'Mirror and Paste Motion'
@@ -257,6 +270,7 @@ build:
                                 可以在“设置”的“帧偏移”修改曲线偏移，实现错帧镜像；
                                 可以按“Z”撤销。
 
+                    # flip
                     flip_motion:
                         widget: group
                         name: 'Mirror Motion'
@@ -267,6 +281,7 @@ build:
                         name: 'Flip Character'
                         name_chs: '翻转角色'
                         icon: 'tool/maya/flip'
+                        menu_enable: True
                         join_to_next: True
                         tool_tip:
                             |-
@@ -276,12 +291,15 @@ build:
                             点击翻转角色（所有控制器）动作：
                                 会左右翻转整个角色的动作；
                                 可以按“Z”撤销。
+                            右键/点击小三角：
+                                当前帧（Pose）：只翻转前帧（时间轴）。
 
                     flip_motion/flip_controls:
                         widget: button
                         name: 'Flip SEL'
                         name_chs: '翻转控制器'
                         icon: 'tool/maya/flip'
+                        menu_enable: True
                         tool_tip:
                             |-
                             To be supplemented.
@@ -291,6 +309,8 @@ build:
                                 会左右翻转选中控制器的动作；
                                 请保证左右两边的控制器都被选中（如选中了A_L，也需要选中A_R）；
                                 可以按“Z”撤销。
+                            右键/点击小三角：
+                                当前帧（Pose）：只翻转前帧（时间轴）。
 
                     reset_motion:
                         widget: group

@@ -96,7 +96,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
             )
 
     # copy
-    def on_dcc_copy_character(self):
+    def on_dcc_copy_character_motion(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
             namespace = namespaces[-1]
@@ -126,7 +126,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
                 )
             )
 
-    def on_dcc_copy_controls(self):
+    def on_dcc_copy_controls_motion(self):
         args = self.get_dcc_control_args()
         if args:
             namespace, paths = list(args.keys())[-1], list(args.values())[-1]
@@ -159,7 +159,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
             )
 
     # paste
-    def do_dcc_paste_characters(self):
+    def do_dcc_paste_characters_motion(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
             file_path = qsm_gnl_core.DccCache.generate_character_motion_file(
@@ -210,7 +210,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
                     )
                 )
 
-    def on_dcc_paste_controls(self):
+    def on_dcc_paste_controls_motion(self):
         args = self.get_dcc_control_args()
         if args:
             file_path = qsm_gnl_core.DccCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
@@ -285,14 +285,13 @@ class ToolsetForMotionCopyAndPasteAndMirror(
                 )
             )
 
-    # mirror
     # mirror character
-    def do_dcc_mirror_characters_right_to_left(self):
+    def do_dcc_mirror_characters_motion_right_to_left(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
             for i_namespace in namespaces:
                 i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
-                i_opt.mirror_controls_right_to_left(
+                i_opt.mirror_controls_motion_right_to_left(
                     force=True,
                     frame_offset=self.get_frame_offset(),
                 )
@@ -303,12 +302,27 @@ class ToolsetForMotionCopyAndPasteAndMirror(
                 )
             )
 
-    def do_dcc_mirror_characters_middle(self):
+    def do_dcc_mirror_characters_pose_right_to_left(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
             for i_namespace in namespaces:
                 i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
-                i_opt.mirror_controls_middle(
+                i_opt.mirror_controls_pose_right_to_left(
+                    auto_keyframe=True
+                )
+
+            self._window.popup_message(
+                self._window.choice_gui_message(
+                    self._page._configure.get('build.messages.mirror_any')
+                )
+            )
+
+    def do_dcc_mirror_characters_motion_middle(self):
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            for i_namespace in namespaces:
+                i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
+                i_opt.mirror_controls_motion_middle(
                     force=True,
                     frame_offset=self.get_frame_offset(),
                 )
@@ -319,14 +333,44 @@ class ToolsetForMotionCopyAndPasteAndMirror(
                 )
             )
 
-    def do_dcc_mirror_characters_left_to_right(self):
+    def do_dcc_mirror_characters_pose_middle(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
             for i_namespace in namespaces:
                 i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
-                i_opt.mirror_controls_left_to_right(
+                i_opt.mirror_controls_pose_middle(
+                    auto_keyframe=True
+                )
+
+            self._window.popup_message(
+                self._window.choice_gui_message(
+                    self._page._configure.get('build.messages.mirror_any')
+                )
+            )
+
+    def do_dcc_mirror_characters_motion_left_to_right(self):
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            for i_namespace in namespaces:
+                i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
+                i_opt.mirror_controls_motion_left_to_right(
                     force=True,
                     frame_offset=self.get_frame_offset(),
+                )
+
+            self._window.popup_message(
+                self._window.choice_gui_message(
+                    self._page._configure.get('build.messages.mirror_any')
+                )
+            )
+
+    def do_dcc_mirror_characters_pose_left_to_right(self):
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            for i_namespace in namespaces:
+                i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
+                i_opt.mirror_controls_pose_left_to_right(
+                    auto_keyframe=True
                 )
 
             self._window.popup_message(
@@ -336,20 +380,41 @@ class ToolsetForMotionCopyAndPasteAndMirror(
             )
 
     # mirror control
-    def on_dcc_mirror_selected_auto(self):
+    def on_dcc_mirror_selection_motion_auto(self):
         args = self.get_dcc_control_args_for_mirror()
         if args:
             for k, v in args.items():
-                # generate axis vector dict
-                i_adv_motion_opt = qsm_mya_adv.AdvOpt(k)
-                i_controls = i_adv_motion_opt.find_all_controls()
-                ir_axis_vector_dict = qsm_mya_motion.ControlSetMotionOpt(k, i_controls).generate_axis_vector_dict()
+                # generate axis vector dict first
+                i_adv_opt = qsm_mya_adv.AdvOpt(k)
+                i_controls = i_adv_opt.find_all_controls()
+                i_axis_vector_dict = qsm_mya_motion.ControlSetMotionOpt(k, i_controls).generate_axis_vector_dict()
 
                 i_opt = qsm_mya_motion.ControlSetMotionOpt(k, v)
-                i_opt.mirror_all_auto(
+                i_opt.mirror_motion_auto(
                     force=True,
                     frame_offset=self.get_frame_offset(),
-                    axis_vector_dict=ir_axis_vector_dict
+                    axis_vector_dict=i_axis_vector_dict
+                )
+
+            self._window.popup_message(
+                self._window.choice_gui_message(
+                    self._page._configure.get('build.messages.mirror_any')
+                )
+            )
+
+    def on_dcc_mirror_selection_pose_auto(self):
+        args = self.get_dcc_control_args_for_mirror()
+        if args:
+            for k, v in args.items():
+                # generate axis vector dict first
+                i_adv_opt = qsm_mya_adv.AdvOpt(k)
+                i_controls = i_adv_opt.find_all_controls()
+                i_axis_vector_dict = qsm_mya_motion.ControlSetMotionOpt(k, i_controls).generate_axis_vector_dict()
+
+                i_opt = qsm_mya_motion.ControlSetMotionOpt(k, v)
+                i_opt.mirror_pose_auto(
+                    axis_vector_dict=i_axis_vector_dict,
+                    auto_keyframe=True
                 )
 
             self._window.popup_message(
@@ -380,12 +445,12 @@ class ToolsetForMotionCopyAndPasteAndMirror(
             )
 
     # flip
-    def on_dcc_flip_characters(self):
+    def on_dcc_flip_characters_motion(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
             for i_namespace in namespaces:
                 i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
-                i_opt.flip_controls(
+                i_opt.flip_controls_motion(
                     control_key_excludes=self.get_control_key_excludes(),
                     force=True,
                     frame_offset=self.get_frame_offset(),
@@ -397,14 +462,45 @@ class ToolsetForMotionCopyAndPasteAndMirror(
                 )
             )
 
-    def on_dcc_flip_controls(self):
+    def on_dcc_flip_characters_pose(self):
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            for i_namespace in namespaces:
+                i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
+                i_opt.flip_controls_pose(
+                    control_key_excludes=self.get_control_key_excludes(),
+                    auto_keyframe=True,
+                )
+
+            self._window.popup_message(
+                self._window.choice_gui_message(
+                    self._page._configure.get('build.messages.mirror_any')
+                )
+            )
+
+    def on_dcc_flip_controls_motion(self):
         args = self.get_dcc_control_args_for_mirror()
         if args:
             for k, v in args.items():
                 i_opt = qsm_mya_motion.ControlSetMotionOpt(k, v)
-                i_opt.flip_all(
+                i_opt.flip_motion(
                     force=True,
                     frame_offset=self.get_frame_offset(),
+                )
+
+            self._window.popup_message(
+                self._window.choice_gui_message(
+                    self._page._configure.get('build.messages.mirror_any')
+                )
+            )
+
+    def on_dcc_flip_controls_pose(self):
+        args = self.get_dcc_control_args_for_mirror()
+        if args:
+            for k, v in args.items():
+                i_opt = qsm_mya_motion.ControlSetMotionOpt(k, v)
+                i_opt.flip_pose(
+                    auto_keyframe=True,
                 )
 
             self._window.popup_message(
@@ -476,7 +572,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
         )
         # copy
         self._prx_options_node.set(
-            'character_motion.copy_character', self.on_dcc_copy_character
+            'character_motion.copy_character', self.on_dcc_copy_character_motion
         )
         if self._window._language == 'chs':
             self._prx_options_node.get_port('character_motion.copy_character').set_menu_data(
@@ -491,7 +587,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
                 ]
             )
         self._prx_options_node.set(
-            'control_motion.copy_controls', self.on_dcc_copy_controls
+            'control_motion.copy_controls', self.on_dcc_copy_controls_motion
         )
         if self._window._language == 'chs':
             self._prx_options_node.get_port('control_motion.copy_controls').set_menu_data(
@@ -508,7 +604,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
 
         # paste
         self._prx_options_node.set(
-            'character_motion.paste_character', self.do_dcc_paste_characters
+            'character_motion.paste_character', self.do_dcc_paste_characters_motion
         )
         if self._window._language == 'chs':
             self._prx_options_node.get_port('character_motion.paste_character').set_menu_data(
@@ -524,7 +620,7 @@ class ToolsetForMotionCopyAndPasteAndMirror(
             )
 
         self._prx_options_node.set(
-            'control_motion.paste_controls', self.on_dcc_paste_controls
+            'control_motion.paste_controls', self.on_dcc_paste_controls_motion
         )
         if self._window._language == 'chs':
             self._prx_options_node.get_port('control_motion.paste_controls').set_menu_data(
@@ -548,21 +644,65 @@ class ToolsetForMotionCopyAndPasteAndMirror(
         )
 
         # mirror
-        self._prx_options_node.set(
-            'mirror_motion.mirror_characters_right_to_left', self.do_dcc_mirror_characters_right_to_left
-        )
+        p = self._prx_options_node.get_port('mirror_motion.mirror_characters_right_to_left')
+        p.set(self.do_dcc_mirror_characters_motion_right_to_left)
+        if self._window._language == 'chs':
+            p.set_menu_data(
+                [
+                    ('当前帧（Pose）', 'tool/paste', self.do_dcc_mirror_characters_pose_right_to_left)
+                ]
+            )
+        else:
+            p.set_menu_data(
+                [
+                    ('current frame (pose)', 'tool/paste', self.do_dcc_mirror_characters_pose_right_to_left)
+                ]
+            )
 
-        self._prx_options_node.set(
-            'mirror_motion.mirror_characters_middle', self.do_dcc_mirror_characters_middle
-        )
+        p = self._prx_options_node.get_port('mirror_motion.mirror_characters_middle')
+        p.set(self.do_dcc_mirror_characters_motion_middle)
+        if self._window._language == 'chs':
+            p.set_menu_data(
+                [
+                    ('当前帧（Pose）', 'tool/paste', self.do_dcc_mirror_characters_pose_middle)
+                ]
+            )
+        else:
+            p.set_menu_data(
+                [
+                    ('current frame (pose)', 'tool/paste', self.do_dcc_mirror_characters_pose_middle)
+                ]
+            )
 
-        self._prx_options_node.set(
-            'mirror_motion.mirror_characters_left_to_right', self.do_dcc_mirror_characters_left_to_right
-        )
-
-        self._prx_options_node.set(
-            'mirror_motion.mirror_selected_auto', self.on_dcc_mirror_selected_auto
-        )
+        p = self._prx_options_node.get_port('mirror_motion.mirror_characters_left_to_right')
+        p.set(self.do_dcc_mirror_characters_motion_left_to_right)
+        if self._window._language == 'chs':
+            p.set_menu_data(
+                [
+                    ('当前帧（Pose）', 'tool/paste', self.do_dcc_mirror_characters_pose_left_to_right)
+                ]
+            )
+        else:
+            p.set_menu_data(
+                [
+                    ('current frame (pose)', 'tool/paste', self.do_dcc_mirror_characters_pose_left_to_right)
+                ]
+            )
+        
+        p = self._prx_options_node.get_port('mirror_motion.mirror_selected_auto')
+        p.set(self.on_dcc_mirror_selection_motion_auto)
+        if self._window._language == 'chs':
+            p.set_menu_data(
+                [
+                    ('当前帧（Pose）', 'tool/paste', self.on_dcc_mirror_selection_pose_auto)
+                ]
+            )
+        else:
+            p.set_menu_data(
+                [
+                    ('current frame (pose)', 'tool/paste', self.on_dcc_mirror_selection_pose_auto)
+                ]
+            )
 
         # mirror and paste
         self._prx_options_node.set(
@@ -570,12 +710,35 @@ class ToolsetForMotionCopyAndPasteAndMirror(
         )
 
         # flip
-        self._prx_options_node.set(
-            'flip_motion.flip_characters', self.on_dcc_flip_characters
-        )
-        self._prx_options_node.set(
-            'flip_motion.flip_controls', self.on_dcc_flip_controls
-        )
+        p = self._prx_options_node.get_port('flip_motion.flip_characters')
+        p.set(self.on_dcc_flip_characters_motion)
+        if self._window._language == 'chs':
+            p.set_menu_data(
+                [
+                    ('当前帧（Pose）', 'tool/paste', self.on_dcc_flip_characters_pose)
+                ]
+            )
+        else:
+            p.set_menu_data(
+                [
+                    ('current frame (pose)', 'tool/paste', self.on_dcc_flip_characters_pose)
+                ]
+            )
+        
+        p = self._prx_options_node.get_port('flip_motion.flip_controls')
+        p.set(self.on_dcc_flip_controls_motion)
+        if self._window._language == 'chs':
+            p.set_menu_data(
+                [
+                    ('当前帧（Pose）', 'tool/paste', self.on_dcc_flip_controls_pose)
+                ]
+            )
+        else:
+            p.set_menu_data(
+                [
+                    ('current frame (pose)', 'tool/paste', self.on_dcc_flip_controls_pose)
+                ]
+            )
 
         # reset
         self._prx_options_node.set(

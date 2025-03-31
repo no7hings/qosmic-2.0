@@ -51,11 +51,11 @@ class QtInputForConstant(
         self._entry_frame_widget = self
 
         self._value_type = value_type
-        #
+
         entry_layout = _wgt_base.QtHBoxLayout(self)
         entry_layout.setContentsMargins(2, 2, 2, 2)
         entry_layout.setSpacing(4)
-        #
+
         self._entry_widget = self.QT_ENTRY_CLS()
         entry_layout.addWidget(self._entry_widget)
         self._entry_widget._set_value_type_(self._value_type)

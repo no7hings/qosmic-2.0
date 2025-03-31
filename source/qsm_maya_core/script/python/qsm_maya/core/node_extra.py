@@ -545,6 +545,7 @@ class EtrNodeOpt(object):
                 )
 
     def apply_pose_properties(self, data, excludes=None, **kwargs):
+        # use auto keyframe context to auto keyframe
         auto_keyframe = kwargs.get('auto_keyframe', False)
         with _keyframe.auto_keyframe_context(auto_keyframe):
             mirror_keys = kwargs.get('mirror_keys', [])
