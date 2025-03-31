@@ -2,8 +2,8 @@
 import lxgui
 lxgui.do_reload()
 
-import qsm_maya_lazy_tool
-qsm_maya_lazy_tool.do_reload()
+import lnx_maya_montage
+lnx_maya_montage.do_reload()
 
 import lxgui.proxy.core as gui_prx_core
 

@@ -99,6 +99,12 @@ class Main(object):
             'QSM_EXTEND_CONFIGURES': ['{root}/configures'],
             'QSM_EXTEND_RESOURCES': ['{root}/resources'],
         },
+        'qsm_wotrix': {
+            'QSM_WOTRIX_BASE': '{root}',
+            'PYTHONPATH': ['{root}/script/python'],
+            'QSM_EXTEND_CONFIGURES': ['{root}/configures'],
+            'QSM_EXTEND_RESOURCES': ['{root}/resources'],
+        },
         #
         'qsm_dcc_core': {
             'QSM_DCC_CORE_BASE': '{root}',

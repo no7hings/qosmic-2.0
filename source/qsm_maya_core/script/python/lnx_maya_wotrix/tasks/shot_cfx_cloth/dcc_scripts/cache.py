@@ -104,9 +104,9 @@ class ShotCfxClothCacheOpt(qsm_mya_resource.AssetCacheOpt):
             qsm_mya_core.DagNode.parent_to(cache_location, self.CACHE_ROOT)
 
     def do_export(
-        self, directory_path, frame_range, frame_step, frame_offset
+        self, directory_path, frame_range, frame_step, frame_offset, include_customize_deform_geometry=True
     ):
-        mesh_transforms = self._resource.generate_cfx_cloth_export_args()
+        mesh_transforms = self._resource.generate_cfx_cloth_export_args(include_customize_deform_geometry)
         if mesh_transforms:
             name = self._resource.rig_namespace
             # fix mult layer namespace
@@ -176,7 +176,8 @@ class ShotCfxClothCacheExportProcess(object):
         namespaces,
         directory_path,
         frame_range, frame_step=1, frame_offset=0,
-        scene_src_path_override=None
+        scene_src_path_override=None,
+        include_customize_deform_geometry=True,
     ):
         options = dict(
             directory=directory_path,
@@ -199,6 +200,7 @@ class ShotCfxClothCacheExportProcess(object):
                 frame_range=frame_range,
                 frame_step=frame_step,
                 frame_offset=frame_offset,
+                include_customize_deform_geometry=include_customize_deform_geometry
             )
         )
         return task_name, scene_src_path, cmd_script
@@ -209,7 +211,8 @@ class ShotCfxClothCacheExportProcess(object):
         namespaces,
         directory_path,
         frame_range, frame_step=1, frame_offset=0,
-        scene_src_path_override=None
+        scene_src_path_override=None,
+        include_customize_deform_geometry=True,
     ):
         options = dict(
             directory=directory_path,
@@ -232,6 +235,7 @@ class ShotCfxClothCacheExportProcess(object):
                 frame_range=frame_range,
                 frame_step=frame_step,
                 frame_offset=frame_offset,
+                include_customize_deform_geometry=include_customize_deform_geometry
             ),
             job_name=task_name,
             output_directory=directory_path
@@ -244,6 +248,7 @@ class ShotCfxClothCacheExportProcess(object):
         frame_range = self._kwargs['frame_range']
         frame_step = self._kwargs['frame_step']
         frame_offset = self._kwargs['frame_offset']
+        include_customize_deform_geometry = self._kwargs['include_customize_deform_geometry']
 
         options = dict(
             directory=directory_path,
@@ -266,7 +271,8 @@ class ShotCfxClothCacheExportProcess(object):
 
                 ShotCfxClothCacheOpt(i_resource).do_export(
                     directory_path,
-                    frame_range, frame_step, frame_offset
+                    frame_range, frame_step, frame_offset,
+                    include_customize_deform_geometry=include_customize_deform_geometry
                 )
 
                 l_p.do_update()

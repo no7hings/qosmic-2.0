@@ -2,7 +2,7 @@
 
 
 def main(session):
-    import qsm_maya_lazy_tool.animation.gui.main as m
+    import lnx_maya_tool.animation.gui.main as m
 
     w = m.PrxLazyAnimation(window=None, session=None)
     w.show_window_auto()

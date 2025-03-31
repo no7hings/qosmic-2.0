@@ -229,7 +229,7 @@ class ShotCfxRigHandle:
     def generate_export_args(self):
         mesh_transforms = []
         location = self.find_output_geo_location()
-        meshes = qsm_mya_core.Group.find_siblings(
+        meshes = qsm_mya_core.Group.find_descendants(
             location, 'mesh'
         )
         for i_shape in meshes:

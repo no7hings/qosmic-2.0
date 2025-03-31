@@ -48,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#processing",
+                "query": "tag:#waiting",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -65,12 +65,12 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 324.5,
-    "collapsed": true
+    "width": 324.5
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -188,7 +188,7 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "22d20fc82ddf162f",
+  "active": "15555a3b0fd2386a",
   "lastOpenFiles": [
     "开发相关/开发进度/开发-2025.md",
     "技术文档/Qosmic.md",

@@ -417,7 +417,7 @@ class _GpuPrc(object):
         if roots:
             for i_path in roots:
                 if qsm_mya_core.Node.is_transform_type(i_path):
-                    i_shape_paths = qsm_mya_core.Group.find_siblings(i_path, ['mesh'])
+                    i_shape_paths = qsm_mya_core.Group.find_descendants(i_path, ['mesh'])
                     for j_shape_path in i_shape_paths:
                         j_transform_path = qsm_mya_core.Shape.get_transform(j_shape_path)
                         qsm_mya_core.DagNode.parent_to(j_transform_path, transform_path, relative=True)
@@ -454,7 +454,7 @@ class _GpuImportPrc(object):
         if roots:
             for i_path in roots:
                 if qsm_mya_core.Node.is_transform_type(i_path):
-                    i_shape_paths = qsm_mya_core.Group.find_siblings(i_path, ['mesh'])
+                    i_shape_paths = qsm_mya_core.Group.find_descendants(i_path, ['mesh'])
                     for j_shape_path in i_shape_paths:
                         j_transform_path = qsm_mya_core.Shape.get_transform(j_shape_path)
                         qsm_mya_core.DagNode.parent_to(j_transform_path, transform_path, relative=True)

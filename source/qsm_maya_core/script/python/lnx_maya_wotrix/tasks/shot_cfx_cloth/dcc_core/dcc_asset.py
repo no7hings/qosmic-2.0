@@ -18,8 +18,11 @@ class CfxRigAsset(qsm_mya_resource.Asset):
     def rig_namespace(self):
         return self._rig_namespace
 
-    def generate_cfx_cloth_export_args(self):
+    def generate_cfx_cloth_export_args(self, include_customize_deform_geometry=True):
         handle = _dcc_handle.ShotCfxRigHandle(self._namespace)
         geometry_args = handle.generate_export_args()
-        extend_geometry_args = handle.get_extend_geometry_args()
-        return geometry_args+extend_geometry_args
+        if include_customize_deform_geometry is True:
+            extend_geometry_args = handle.get_extend_geometry_args()
+            return geometry_args+extend_geometry_args
+        else:
+            return geometry_args

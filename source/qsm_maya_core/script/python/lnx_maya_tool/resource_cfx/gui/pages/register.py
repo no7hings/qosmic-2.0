@@ -7,7 +7,7 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.handles.general.scripts as qsm_mya_hdl_gnl_scripts
 
-import qsm_maya_lazy.resource as mya_lzy_rcs_scripts
+import lnx_maya_tool_prc.resource as mya_lzy_rcs_scripts
 
 
 class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):

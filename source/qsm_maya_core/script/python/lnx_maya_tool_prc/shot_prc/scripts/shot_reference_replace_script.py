@@ -96,7 +96,9 @@ class ShotReferenceReplace(object):
                 video_path,
                 camera=camera,
                 # use render
-                resolution=qsm_mya_core.RenderSettings.get_resolution()
+                resolution=qsm_mya_core.RenderSettings.get_resolution(),
+                # ignore light and shadow
+                texture_enable=True, light_enable=False, shadow_enable=False
             )
             l_p.do_update()
 

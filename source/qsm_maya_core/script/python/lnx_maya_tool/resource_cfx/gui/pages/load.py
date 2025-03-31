@@ -7,7 +7,7 @@ import qsm_lazy_tool.resource_cfx.gui.abstracts as _abstracts
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya_lazy.resource as mya_lzy_rcs_scripts
+import lnx_maya_tool_prc.resource as mya_lzy_rcs_scripts
 
 
 class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):

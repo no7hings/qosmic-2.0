@@ -927,6 +927,7 @@ class StandardNode(_AbsNode):
     def set_add_port_enable(self, boolean):
         self._data.options.add_input_enable = boolean
         self._gui._add_input_aux.setVisible(boolean)
+        self._auto_resize()
 
     def _update_add_input(self):
         if self._data.options.add_input_enable is True:

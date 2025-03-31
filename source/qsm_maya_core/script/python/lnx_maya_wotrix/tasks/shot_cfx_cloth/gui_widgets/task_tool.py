@@ -794,6 +794,9 @@ class _PrxExportToolset(
     def on_export_cloth_cache_auto(self):
         if self._unit._gui_task_tool_opt is not None:
             export_scheme = self._prx_options_node.get('cache_export.scheme')
+            include_customize_deform_geometry = self._prx_options_node.get(
+                'cache_export.include_customize_deform_geometry'
+            )
             if export_scheme == 'all':
                 rig_namespaces = self.get_all_rig_namespaces()
             elif export_scheme == 'selected':
@@ -815,7 +818,8 @@ class _PrxExportToolset(
                                 i_rig_namespace,
                                 directory_path=directory_path,
                                 frame_range=frame_range,
-                                frame_step=frame_step
+                                frame_step=frame_step,
+                                include_customize_deform_geometry=include_customize_deform_geometry
                             )
 
                         g_p.do_update()
@@ -825,6 +829,9 @@ class _PrxExportToolset(
     def on_export_cloth_cache_auto_as_subprocess(self):
         if self._unit._gui_task_tool_opt is not None:
             export_scheme = self._prx_options_node.get('cache_export.scheme')
+            include_customize_deform_geometry = self._prx_options_node.get(
+                'cache_export.include_customize_deform_geometry'
+            )
             if export_scheme == 'all':
                 rig_namespaces = self.get_all_rig_namespaces()
             elif export_scheme == 'selected':
@@ -850,7 +857,8 @@ class _PrxExportToolset(
                         namespaces=cfx_rig_namespaces,
                         directory_path=directory_path,
                         frame_range=frame_range,
-                        frame_step=frame_step
+                        frame_step=frame_step,
+                        include_customize_deform_geometry=include_customize_deform_geometry
                     )
 
                     qsm_gnl_prc_task.SubprocessTaskSubmit.execute_one(
@@ -866,6 +874,9 @@ class _PrxExportToolset(
 
         if self._unit._gui_task_tool_opt is not None:
             export_scheme = self._prx_options_node.get('cache_export.scheme')
+            include_customize_deform_geometry = self._prx_options_node.get(
+                'cache_export.include_customize_deform_geometry'
+            )
             if export_scheme == 'all':
                 rig_namespaces = self.get_all_rig_namespaces()
             elif export_scheme == 'selected':
@@ -891,7 +902,8 @@ class _PrxExportToolset(
                         namespaces=cfx_rig_namespaces,
                         directory_path=directory_path,
                         frame_range=frame_range,
-                        frame_step=frame_step
+                        frame_step=frame_step,
+                        include_customize_deform_geometry=include_customize_deform_geometry
                     )
 
                     qsm_gnl_prc_task.BackstageTaskSubmit.execute(
@@ -917,6 +929,9 @@ class _PrxExportToolset(
 
         if self._unit._gui_task_tool_opt is not None:
             export_scheme = self._prx_options_node.get('cache_export.scheme')
+            include_customize_deform_geometry = self._prx_options_node.get(
+                'cache_export.include_customize_deform_geometry'
+            )
             if export_scheme == 'all':
                 rig_namespaces = self.get_all_rig_namespaces()
             elif export_scheme == 'selected':
@@ -940,7 +955,8 @@ class _PrxExportToolset(
                         namespaces=cfx_rig_namespaces,
                         directory_path=directory_path,
                         frame_range=frame_range,
-                        frame_step=frame_step
+                        frame_step=frame_step,
+                        include_customize_deform_geometry=include_customize_deform_geometry
                     )
 
                     qsm_gnl_prc_task.FarmTaskSubmit.execute_by_hook_option(

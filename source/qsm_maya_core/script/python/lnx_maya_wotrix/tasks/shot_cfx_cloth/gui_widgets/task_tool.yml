@@ -472,6 +472,17 @@ build:
                         |-
                         默认为导出所有，如果需要导出选择，请选中需要导出的绑定，任意部件。
 
+                cache_export/include_customize_deform_geometry:
+                    widget: boolean
+                    name: 'Include Customize Deform Geometry'
+                    name_chs: '包含自定义的变形模型'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        开启此选项后，导出缓存的时候会包含文件中加了变形器（如wave, nCloth）的模型。
+
                 cache_export/export_cloth_cache:
                     widget: button
                     name: 'Export Cache'
