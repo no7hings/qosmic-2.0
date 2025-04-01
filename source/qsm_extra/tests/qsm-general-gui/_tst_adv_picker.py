@@ -1,9 +1,7 @@
 # coding:utf-8
-import lxgui.qt.widgets as qt_widgets
-
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.gui.qt.widgets as lzy_gui_qt_widgets
+import lnx_dcc_tool_prc.gui.qt.widgets as lzy_gui_qt_widgets
 
 
 class W(gui_prx_widgets.PrxBaseWindow):

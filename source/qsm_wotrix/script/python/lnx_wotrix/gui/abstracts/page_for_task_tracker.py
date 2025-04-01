@@ -7,7 +7,7 @@ import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
+import lnx_dcc_tool_prc.gui.proxy.widgets as lzy_gui_prx_widgets
 
 
 class AbsPrxPageForTaskTracker(gui_prx_widgets.PrxBasePage):

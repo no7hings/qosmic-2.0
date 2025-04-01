@@ -3,7 +3,7 @@ import random
 
 import lnx_screw.core as lnx_scr_core
 
-import qsm_lazy_tool.resource_cfx.gui.abstracts as _abstracts
+import lnx_dcc_tool.resource_cfx.gui.abstracts as _abstracts
 
 import qsm_maya.core as qsm_mya_core
 

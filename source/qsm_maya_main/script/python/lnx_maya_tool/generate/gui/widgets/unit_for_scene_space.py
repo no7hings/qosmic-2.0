@@ -1,7 +1,5 @@
 # coding:utf-8
-import lxgui.qt.core as gui_qt_core
-
-import qsm_lazy_tool.generate.gui.abstracts as _gnl_gui_abstracts
+import lnx_dcc_tool.generate.gui.abstracts as _gnl_gui_abstracts
 
 import qsm_maya.core as qsm_maya_core
 

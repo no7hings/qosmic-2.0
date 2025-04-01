@@ -110,7 +110,7 @@ import lxbasic.core as bsc_core
 #             )
 #             parentPtr = OpenMayaUI.MQtUtil.getCurrentParent()
 #             parentWidget = wrapInstance(parentPtr, QtWidgets.QWidget)
-#             import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
+#             import lnx_dcc_tool_prc.gui.proxy.widgets as lzy_gui_prx_widgets
 #             p = lzy_gui_prx_widgets.AbsPrxUnitForWorkarea()
 #             p.widget.setParent(parentWidget)
 #             OpenMayaUI.MQtUtil.addWidgetToMayaLayout(

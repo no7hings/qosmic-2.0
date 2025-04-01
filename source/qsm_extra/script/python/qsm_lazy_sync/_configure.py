@@ -8,3 +8,4 @@ class SyncServer(object):
     else:
         HOST = '10.33.4.90'
     PORT = 12308
+    PORT_BACKUP = 12309

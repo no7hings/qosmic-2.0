@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_lazy_tool.resource_cfx.gui.abstracts as _abstracts
+import lnx_dcc_tool.resource_cfx.gui.abstracts as _abstracts
 
 import lnx_screw.core as lnx_scr_core
 

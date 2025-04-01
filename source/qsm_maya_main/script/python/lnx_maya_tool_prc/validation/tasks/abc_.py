@@ -11,7 +11,7 @@ import lxbasic.content as bsc_content
 
 import lxbasic.resource as bsc_resource
 
-import qsm_lazy.validation.core as lzy_vld_core
+import lnx_dcc_tool_prc.validation.core as lzy_vld_core
 
 import qsm_maya.core as qsm_mya_core
 

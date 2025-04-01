@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.gui.proxy.widgets as w
+import lnx_dcc_tool_prc.gui.proxy.widgets as w
 
 import os
 

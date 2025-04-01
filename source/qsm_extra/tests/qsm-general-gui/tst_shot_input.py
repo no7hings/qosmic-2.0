@@ -1,15 +1,7 @@
 # coding:utf-8
-import fnmatch
-
-import lxbasic.core as bsc_core
-
-import lxgui.qt.core as gui_qt_core
-
-import lxgui.qt.widgets as qt_widgets
-
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.gui.proxy.widgets as qsm_proxy_widgets
+import lnx_dcc_tool_prc.gui.proxy.widgets as qsm_proxy_widgets
 
 
 class W0(gui_prx_widgets.PrxBaseWindow):

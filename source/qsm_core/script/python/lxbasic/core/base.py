@@ -651,10 +651,10 @@ class BscStorage(object):
             i_format = i_ext[1:]
             set_.add(i_format)
             dict_.setdefault(i_path_base, []).append(i_format)
-        #
+
         fs = [i for i in formats]
         [fs.append(i) for i in set_ if i not in fs]
-        #
+
         for k, v in dict_.items():
             v.sort(key=fs.index)
             list_.append('{}.{}'.format(k, v[0]))

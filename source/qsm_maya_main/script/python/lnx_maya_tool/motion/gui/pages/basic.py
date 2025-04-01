@@ -3,7 +3,7 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
-import qsm_lazy.gui.qt.widgets as lzy_gui_qt_widgets
+import lnx_dcc_tool_prc.gui.qt.widgets as lzy_gui_qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 

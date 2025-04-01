@@ -101,6 +101,9 @@ entity-type-actions:
                 - 'resora-actions/node-generate-preview-auto': {
                     gui_parent: '/Fix', gui_name: 'Generate Preview', gui_parent_chs: '/修复', gui_name_chs: '生成预览'
                 }
+                - 'resora-actions/node-find-lost-source-auto': {
+                    gui_parent: '/Fix', gui_name: 'Find Lost File (source)', gui_parent_chs: '/修复', gui_name_chs: '找回丢失的文件（源）'
+                }
 
     media/episode:
         Node:
@@ -120,13 +123,12 @@ entity-type-actions:
                 - 'resora-actions/node-lock-disable-auto': {
                     gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '关闭'
                 }
-                # preview
+                # fix
                 - 'resora-actions/node-generate-preview-auto': {
                     gui_parent: '/Fix', gui_name: 'Generate Preview', gui_parent_chs: '/修复', gui_name_chs: '生成预览'
                 }
-                # find
                 - 'resora-actions/node-find-lost-source-auto': {
-                    gui_parent: '/Fix', gui_name: 'Find Lost File (Source)', gui_parent_chs: '/修复', gui_name_chs: '找回丢失的文件（源）'
+                    gui_parent: '/Fix', gui_name: 'Find Lost File (source)', gui_parent_chs: '/修复', gui_name_chs: '找回丢失的文件（源）'
                 }
 
     media/audio:

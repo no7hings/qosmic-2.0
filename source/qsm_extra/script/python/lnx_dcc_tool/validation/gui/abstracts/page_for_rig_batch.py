@@ -11,23 +11,19 @@ import lxgui.core as gui_core
 
 import lxgui.qt.core as gui_qt_core
 
-import lxgui.qt.widgets as gui_qt_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.qt.view_widgets as gui_qt_vew_widgets
-
-import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_general.core as qsm_gnl_core
 
 import lnx_scan as lnx_scan
 
-import qsm_lazy.validation.scripts as lzy_vld_scripts
+import lnx_dcc_tool_prc.validation.scripts as lzy_vld_scripts
 
 
-class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
-    QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
-
-    GUI_KEY = 'scenery_batch'
+class AbsPrxPageForChrRigBatch(gui_prx_widgets.PrxBasePage):
+    GUI_KEY = 'rig_batch'
 
     def _start_delay(self, window, file_paths, process_options):
         process_args = []
@@ -50,7 +46,7 @@ class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
             for i_args in process_args:
                 i_qt_item, i_task_name, i_cmd_script, i_validation_cache_path, i_mesh_count_cache_path = i_args
                 window.submit(
-                    'scenery_validation_process',
+                    'rig_validation_process',
                     i_task_name,
                     i_cmd_script,
                     completed_fnc=functools.partial(
@@ -117,13 +113,13 @@ class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
 
         window = gui_prx_widgets.PrxSprcTaskWindow()
         if window._language == 'chs':
-            window.set_window_title('场景批量检查')
+            window.set_window_title('绑定批量检查')
             window.set_tip(
                 '正在运行检查程序，请耐心等待；\n'
                 '如需要终止任务，请点击“关闭”。'
             )
         else:
-            window.set_window_title('Scenery Batch Validation')
+            window.set_window_title('Rig Batch Validation')
 
         file_paths = [x._item_model.get_assign_file() for x in qt_items]
         window.run_fnc_delay(
@@ -176,12 +172,12 @@ class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
             )
         )
 
-        roles = qsm_gnl_core.QsmAsset.get_scenery_role_mask()
-
+        roles = qsm_gnl_core.QsmAsset.get_character_role_mask()
         role = roles[0]
-        # add root
+
         self._create_root()
         self._create_role(role)
+
         self._add_for_role(role, pattern, directory_path, process_options, self._gui_thread_flag)
 
     def _create_root(self):
@@ -211,11 +207,16 @@ class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
 
         path_regex = pattern_opt.get_pattern_for_fnmatch()
 
-        bsc_scan.ScanGlob.concurrent_glob_file(
+        if role in self._concurrent_execute_dict:
+            cce = self._concurrent_execute_dict[role]
+            cce.shutdown(wait=True)
+
+        cce = bsc_scan.ScanGlob.concurrent_glob_file(
             path_regex,
             result_fnc=functools.partial(self._signals.accepted.emit, (role, process_options, gui_thread_flag)),
             finish_fnc=finish_fnc_
         )
+        self._concurrent_execute_dict[role] = cce
 
     def _add_asset_fnc(self, args, file_path):
         role, process_options, gui_thread_flag = args
@@ -283,7 +284,7 @@ class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
         self._file_to_item_dict[file_path] = qt_item
 
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxPageForScnModelBatch, self).__init__(window, session, *args, **kwargs)
+        super(AbsPrxPageForChrRigBatch, self).__init__(window, session, *args, **kwargs)
 
         self._scan_root = lnx_scan.Stage().get_root()
 
@@ -292,11 +293,13 @@ class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
 
         self._gui_thread_flag = 0
 
-        self._validation_opt = lzy_vld_scripts.SceneryValidationOpt()
+        self._validation_opt = lzy_vld_scripts.RigValidationOpt()
 
         self._file_to_item_dict = {}
 
         self.gui_page_setup_fnc()
+
+        self._concurrent_execute_dict = {}
 
     def gui_page_setup_fnc(self):
         prx_v_sca = gui_prx_widgets.PrxVScrollArea()

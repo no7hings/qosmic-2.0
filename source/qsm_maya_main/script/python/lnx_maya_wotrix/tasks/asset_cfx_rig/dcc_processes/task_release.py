@@ -66,9 +66,12 @@ class AssetCfxRigReleaseProcess(object):
 
             # reset rig preset to default
             _task_dcc_core.AssetCfxRigHandle.load_rig_preset('default')
+            
+            # create enable aux
+            _task_dcc_core.AssetCfxRigHandle.create_nclothes_enable_aux()
 
             bsc_log.Log.trace_method_result(
-                self.LOG_KEY, 'export scene: {}'.format(scene_path)
+                self.LOG_KEY, 'export scene: {}.'.format(scene_path)
             )
 
             location = _task_dcc_core.AssetCfxRigHandle.LOCATION
@@ -85,11 +88,12 @@ class AssetCfxRigReleaseProcess(object):
             no_version_path = task_session.get_file_for(
                 'asset-release-no_version-dir'
             )
-            # fixme: cannot use for production
+            
+            # fixme: cannot use for production, server not support.
             # c.TaskClient.new_task('symlink', source=version_path, target=no_version_path, replace=True)
             l_p.do_update()
-            # sync to other studio
             
+            # sync to other studio
             studio = qsm_gnl_core.Sync().studio.get_current()
             
             symlink_kwargs = qsm_gnl_core.Sync().generate_sync_kwargs(

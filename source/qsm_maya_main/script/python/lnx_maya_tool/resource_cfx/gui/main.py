@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_lazy_tool.resource_cfx.gui.abstracts as _abstracts
+import lnx_dcc_tool.resource_cfx.gui.abstracts as _abstracts
 
 from .pages import register as _page_register
 

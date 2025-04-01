@@ -5,7 +5,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
+import lnx_dcc_tool_prc.gui.proxy.widgets as lzy_gui_prx_widgets
 
 import lnx_maya_gui.core as qsm_mya_gui_core
 

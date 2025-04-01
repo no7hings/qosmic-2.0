@@ -290,19 +290,22 @@ class GuiQtMenuOpt(object):
     def __init__(self, menu):
         if isinstance(menu, QtWidgets.QMenu):
             self._root_menu = menu
+
             self._item_dic = {
                 '/': self._root_menu
             }
         else:
             raise RuntimeError()
 
+    @staticmethod
     @_gui_core.GuiModifier.run_with_exception_catch
-    def _debug_run_cmd_script(self, cmd_str):
+    def _debug_run_cmd_script(cmd_str, *args, **kwargs):
         # for python3
         exec (cmd_str)
 
+    @staticmethod
     @_gui_core.GuiModifier.run_with_exception_catch
-    def _debug_run_fnc(self, fnc):
+    def _debug_run_fnc(fnc, *args, **kwargs):
         fnc()
 
     def create_by_content(self, content, append=False):
@@ -312,6 +315,7 @@ class GuiQtMenuOpt(object):
             self._item_dic = {
                 '/': self._root_menu
             }
+
         # when append is True, but item_dict not root key, we create new
         else:
             if '/' not in self._item_dic:
@@ -396,7 +400,8 @@ class GuiQtMenuOpt(object):
             s.setText(name)
         return s
 
-    def _create_action_fnc(self, menu, content):
+    @classmethod
+    def _create_action_fnc(cls, menu, content):
         def set_disable_fnc_(widget_action_):
             widget_action_.setFont(_base.QtFonts.NameDisable)
             widget_action_.setDisabled(True)
@@ -422,7 +427,7 @@ class GuiQtMenuOpt(object):
             widget_action.setIcon(
                 _base.QtIcon.generate_by_text(name, background_color=(64, 64, 64))
             )
-        #
+
         if isinstance(executable_fnc, (bool, int)):
             executable = executable_fnc
             if executable is False:
@@ -431,18 +436,16 @@ class GuiQtMenuOpt(object):
             executable = executable_fnc()
             if executable is False:
                 set_disable_fnc_(widget_action)
-        #
+
         if isinstance(execute_fnc, (types.FunctionType, types.MethodType, functools.partial, types.LambdaType)):
-            fnc = execute_fnc
             # noinspection PyUnresolvedReferences
             widget_action.triggered.connect(
-                functools.partial(self._debug_run_fnc, fnc)
+                functools.partial(cls._debug_run_fnc, execute_fnc)
             )
         elif isinstance(execute_fnc, six.string_types):
-            cmd_script = execute_fnc
             # noinspection PyUnresolvedReferences
             widget_action.triggered.connect(
-                functools.partial(self._debug_run_cmd_script, cmd_script)
+                functools.partial(cls._debug_run_cmd_script, execute_fnc)
             )
         return widget_action
 

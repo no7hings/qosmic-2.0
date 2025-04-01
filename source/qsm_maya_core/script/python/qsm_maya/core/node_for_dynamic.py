@@ -165,10 +165,55 @@ class NCloth:
             return _shape.Shape.get_transform(_)
 
     @classmethod
+    def find_input_mesh_shape(cls, path):
+        # target
+        return _attribute.NodeAttribute.get_source_node(
+            path, 'inputMesh', 'mesh'
+        )
+
+    @classmethod
+    def find_output_mesh_shapes(cls, path):
+        return _attribute.NodeAttribute.get_target_nodes(
+            path, 'outputMesh', 'mesh'
+        )
+
+    @classmethod
     def get_nucleus(cls, shape_path):
         return _attribute.NodeAttribute.get_source_node(
             shape_path, 'startFrame', 'nucleus'
         )
+
+    @classmethod
+    def create_enable_aux(cls, path):
+        name = path.split('|')[-1]
+        input_cdt_name = '{}_input_cdt'.format(name)
+        if cmds.objExists(input_cdt_name) is False:
+            input_mesh_shape = cls.find_input_mesh_shape(path)
+            if input_mesh_shape:
+                cmds.createNode('condition', name=input_cdt_name, skipSelect=1)
+                cmds.setAttr(input_cdt_name+'.secondTerm', 1)
+                cmds.setAttr(input_cdt_name+'.operation', 1)
+                cmds.connectAttr(
+                    path+'.isDynamic', input_cdt_name+'.firstTerm'
+                )
+                cmds.connectAttr(
+                    input_cdt_name+'.outColorR', input_mesh_shape+'.intermediateObject'
+                )
+
+        output_cdt_name = '{}_output_cdt'.format(name)
+        if cmds.objExists(output_cdt_name) is False:
+            output_mesh_shapes = cls.find_output_mesh_shapes(path)
+            if output_mesh_shapes:
+                output_mesh_shape = output_mesh_shapes[0]
+                cmds.createNode('condition', name=output_cdt_name, skipSelect=1)
+                cmds.setAttr(output_cdt_name+'.secondTerm', 1)
+                cmds.setAttr(output_cdt_name+'.operation', 0)
+                cmds.connectAttr(
+                    path+'.isDynamic', output_cdt_name+'.firstTerm'
+                )
+                cmds.connectAttr(
+                    output_cdt_name+'.outColorR', output_mesh_shape+'.intermediateObject'
+                )
 
 
 class MeshNCloth:

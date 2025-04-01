@@ -9,7 +9,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_general.core as qsm_gnl_core
 
-import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
+import lnx_dcc_tool_prc.gui.proxy.widgets as lzy_gui_prx_widgets
 
 
 class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):

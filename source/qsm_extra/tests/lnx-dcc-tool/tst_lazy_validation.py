@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxgui.proxy.core as gui_prx_core
 
-import qsm_lazy_tool.validation.gui.main as m
+import lnx_dcc_tool.validation.gui.main as m
 
 import os
 

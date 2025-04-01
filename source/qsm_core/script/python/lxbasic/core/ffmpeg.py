@@ -924,7 +924,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
         s_p.communicate()
 
     @classmethod
-    def concat_by_videos(cls, output_video, video_paths, fps=None, coding='libx264', replace=False):
+    def concat_by_videos(cls, output_video, videos, fps=None, coding='libx264', replace=False):
         if os.path.isfile(output_video) and not replace:
             return
 
@@ -933,7 +933,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
         if os.path.exists(directory_path) is False:
             os.makedirs(directory_path)
 
-        first_video = video_paths[0]
+        first_video = videos[0]
         cmd_args = [
             cls.get_ffprobe_source(),
             '-i', first_video,
@@ -953,22 +953,25 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
 
         fd, file_list = tempfile.mkstemp(suffix='.concat.files')
         with os.fdopen(fd, 'w') as f:
-            for video in video_paths:
-                adjusted_video = tempfile.mktemp(suffix='.mov')
-                cmd_args = [
+            for i_video in videos:
+                i_video_path_tmp = tempfile.mktemp(suffix='.mov')
+
+                i_cmd_args = [
                     cls.get_ffmpeg_source(),
-                    '-i', video,
+                    '-i', i_video,
                     '-vf', 'scale={}:{}'.format(width, height),
                     '-r', str(fps),
                     '-c:v', coding,
                     '-pix_fmt', 'yuv420p',
-                    '-y', adjusted_video
+                    '-y', i_video_path_tmp
                 ]
-                adjust_process = subprocess.Popen(cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-                adjust_process.communicate()
-                if adjust_process.returncode != 0:
-                    raise RuntimeError("Error adjusting video: {}".format(video))
-                f.write("file '{}'\n".format(adjusted_video))
+
+                i_prc = subprocess.Popen(i_cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+                i_prc.communicate()
+                if i_prc.returncode != 0:
+                    raise RuntimeError("Error adjusting video: {}".format(i_video))
+
+                f.write("file '{}'\n".format(i_video_path_tmp))
 
         cmd_args = [
             cls.get_ffmpeg_source(),
@@ -979,8 +982,10 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
             '-y',
             output_video
         ]
+
         concat_process = subprocess.Popen(cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         concat_process.communicate()
+
         if concat_process.returncode != 0:
             raise RuntimeError("Error concatenating videos")
 

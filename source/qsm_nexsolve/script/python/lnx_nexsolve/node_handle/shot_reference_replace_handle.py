@@ -202,7 +202,7 @@ class ReplaceMayaReference(object):
 
         import lnx_scan
 
-        import qsm_lazy.api as qsm_lzy_api
+        import lnx_dcc_tool_prc.api as qsm_lzy_api
 
         reference_old = gui_core.GuiApplication.exec_input_dialog(
             type='choose',

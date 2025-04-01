@@ -356,6 +356,12 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
 
                 l_p.do_update()
 
+    @qsm_mya_core.Undo.execute
+    def create_nclothes_enable_aux(self):
+        nclothes = self._group_opt.find_all_shapes_by_type('nCloth')
+        for i in nclothes:
+            qsm_mya_core.NCloth.create_enable_aux(i)
+
     @staticmethod
     def rename_fnc(mesh_transform, mesh_transform_src):
         name = qsm_mya_core.DagNode.to_name_without_namespace(mesh_transform_src)
@@ -429,7 +435,3 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
         qsm_mya_core.MeshWrapSource.auto_collect_base_transforms(
             mesh_transform_tgt_new
         )
-
-    @classmethod
-    def save_properties_template(cls, name):
-        pass

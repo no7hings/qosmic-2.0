@@ -9,9 +9,9 @@ import lxgui.qt.widgets as qt_widgets
 
 import lnx_scan as lnx_scan
 
-import qsm_lazy.validation.scripts as lzy_vld_scripts
+import lnx_dcc_tool_prc.validation.scripts as lzy_vld_scripts
 
-import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
+import lnx_dcc_tool_prc.gui.proxy.widgets as lzy_gui_prx_widgets
 
 
 class AbsPrxPageForScnModel(gui_prx_widgets.PrxBasePage):
