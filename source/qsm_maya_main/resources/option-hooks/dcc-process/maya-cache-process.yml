@@ -7,7 +7,7 @@ option:
     gui:
         group_name: 'python'
         #
-        name: 'Maya Task Process'
+        name: 'Maya Cache Process'
         icon_name: 'application/python'
 #
 hook_option:
@@ -26,5 +26,5 @@ hook_option:
         extend_packages: [
             'maya-2020',
             'mtoa',
-            'qsm_dcc_main',
+            'qsm_maya_main',
         ]

@@ -19,14 +19,14 @@ from . import base as _base
 
 
 class Verify:
-    __PASS = False
+    __PASSED = False
 
     @classmethod
     def __main_fnc(cls, key, expiration_days):
-        if cls.__PASS is False:
+        if cls.__PASSED is False:
             result = cls.__match_fnc(key, expiration_days)
             if result is True:
-                cls.__PASS = True
+                cls.__PASSED = True
             return result
         return True
 
@@ -35,7 +35,7 @@ class Verify:
         password = _base.GuiApplication.exec_input_dialog(
             type='password',
             info='Entry password...',
-            title='Password'
+            title='Password for {}'.format(key)
         )
         if password:
             if cls.__match_server_fnc(key, password) is True:

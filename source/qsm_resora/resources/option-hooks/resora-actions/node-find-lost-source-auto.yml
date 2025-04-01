@@ -1,0 +1,25 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'node'
+        #
+        name: 'Find Lost Source File'
+        icon_name: 'application/python'
+        #
+        size: [720, 720]
+
+        window:
+            name: 'Find Lost Source File'
+            name_chs: '找回丢失的源文件'
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        stage_name: ''
+        #
+        entity_type: ''
+        entity: ''

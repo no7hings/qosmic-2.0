@@ -870,7 +870,7 @@ class ParamRootStackGui(QtWidgets.QWidget):
             self._stack.addWidget(param_root_gui)
             param_root_gui._set_node(node)
             self._dict[node_path] = param_root_gui
-            sys.stdout.write('load parameters: {}\n'.format(node_path))
+            sys.stdout.write('Load parameters: {}\n'.format(node_path))
             self._stack.setCurrentWidget(param_root_gui)
 
     def _unregister_node(self, node):

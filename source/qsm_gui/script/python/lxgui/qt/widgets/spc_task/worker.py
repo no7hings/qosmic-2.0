@@ -39,16 +39,18 @@ class _Sprc(object):
 
     @classmethod
     def _stdout(cls, text):
-        text = text.decode('utf-8', 'ignore')
-        text = text.encode('utf-8')
+        text = bsc_core.ensure_unicode(text)
+        # text = text.decode('utf-8', 'ignore')
+        # text = text.encode('utf-8')
         if cls.VERBOSE_LEVEL < 1:
             sys.stdout.write(text)
         return text
 
     @classmethod
     def _stderr(cls, text):
-        text = text.decode('utf-8', 'ignore')
-        text = text.encode('utf-8')
+        text = bsc_core.ensure_unicode(text)
+        # text = text.decode('utf-8', 'ignore')
+        # text = text.encode('utf-8')
         if cls.VERBOSE_LEVEL <= 1:
             sys.stderr.write(text)
         return text

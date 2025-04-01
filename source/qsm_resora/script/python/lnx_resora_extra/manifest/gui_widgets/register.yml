@@ -26,7 +26,7 @@ build:
     messages:
         register_successful:
             message: 'Register Successful'
-            message_chs: '登记成功'
+            message_chs: '录入成功'
 
     options:
         name: 'Options'

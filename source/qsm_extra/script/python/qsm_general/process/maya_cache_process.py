@@ -14,7 +14,10 @@ class MayaCacheSubprocess(_base.DccProcess):
         if bsc_core.BscApplication.get_is_maya():
             maya_version = bsc_core.BscApplication.get_maya_version()
         else:
-            maya_version = '2020'
+            if bsc_core.BscEnviron.get_python_version() == '3':
+                maya_version = '2024'
+            else:
+                maya_version = '2020'
         # do not use unicode
         # windows
         main_arg = 'rez-env maya-{} mtoa qsm_maya_main'.format(maya_version)

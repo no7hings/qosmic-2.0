@@ -140,8 +140,10 @@ class QtThreadWorkerForBuild(QtCore.QThread):
                     self._stdout(
                         'thread is finished at: {}, cost {}s\n'.format(self._entity, ct)
                     )
-                    self.parent()._thread_workers.remove(self)
-                    self.parent()._thread_worker_value -= 1
+                    # may remove when close
+                    if self in self.parent()._thread_workers:
+                        self.parent()._thread_workers.remove(self)
+                        self.parent()._thread_worker_value -= 1
                     self.parent()._thread_worker_condition.wakeOne()
 
                 self.run_finished.emit()
@@ -149,8 +151,10 @@ class QtThreadWorkerForBuild(QtCore.QThread):
                 self.set_status(self.Status.Finished)
         else:
             with QtCore.QMutexLocker(self.parent()._thread_worker_mutex):
-                self.parent()._thread_workers.remove(self)
-                self.parent()._thread_worker_value -= 1
+                # may remove when close
+                if self in self.parent()._thread_workers:
+                    self.parent()._thread_workers.remove(self)
+                    self.parent()._thread_worker_value -= 1
                 self.parent()._thread_worker_condition.wakeOne()
 
             self._stderr('thread is ignored at: {}\n'.format(self._entity))

@@ -654,6 +654,9 @@ class _GuiSourceTaskUnitSceneOpt(_GuiBaseOpt):
     def gui_restore(self):
         self._qt_list_widget._view_model.restore()
 
+    def gui_close(self):
+        self._qt_list_widget._view._do_kill_all_thread_workers_()
+
 
 class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
     GUI_KEY = 'task_manager'
@@ -916,3 +919,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
     def gui_update_task_session(self):
         self._task_session = self._task_parse.generate_task_session_by_resource_source_scene_src_auto()
         return self._task_session
+
+    def gui_close_fnc(self):
+        # close threads
+        self._gui_task_scene_opt.gui_close()

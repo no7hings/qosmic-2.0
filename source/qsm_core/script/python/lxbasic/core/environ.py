@@ -5,9 +5,10 @@ import os
 
 
 class BscEnviron(object):
-    PYTHON_VERSION = 'QSM_PYTHON_VERSION'
-    CORE_ROOT = 'QSM_CORE_BASE'
+    PYTHON_VERSION_KEY = 'QSM_PYTHON_VERSION'
+    CORE_BASE_KEY = 'QSM_CORE_BASE'
 
+    # todo, rename to QSM_GUI_LANGUAGE
     GUI_LANGUAGE_KEY = 'QSM_UI_LANGUAGE'
     DEPLOY_ROOT_KEY = 'QSM_DEPLOY_ROOT'
 
@@ -18,6 +19,10 @@ class BscEnviron(object):
 
     TRUE = 'true'
     FALSE = 'false'
+    
+    @classmethod
+    def get_python_version(cls):
+        return cls.get(cls.PYTHON_VERSION_KEY)
 
     @classmethod
     def get_test_flag(cls):
@@ -170,7 +175,7 @@ class BscEnviron(object):
 
     @classmethod
     def get_core_version(cls):
-        path = os.environ.get(cls.CORE_ROOT)
+        path = os.environ.get(cls.CORE_BASE_KEY)
         if path:
             _ = os.path.basename(path)
             # if _ == '99.99.99':

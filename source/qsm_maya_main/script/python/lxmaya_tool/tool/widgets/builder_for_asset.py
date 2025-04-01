@@ -11,7 +11,7 @@ class PnlBuilderForAsset(bdr_gui_abstracts.AbsPnlBuilderForAsset):
     def __init__(self, session, *args, **kwargs):
         super(PnlBuilderForAsset, self).__init__(session, *args, **kwargs)
 
-    @gui_prx_core.GuiProxyModifier.window_proxy_waiting
+    @gui_prx_core.GuiModifier.window_proxy_waiting
     def _set_build_run_(self):
         import lxmaya.fnc.objects as mya_fnc_objects
 

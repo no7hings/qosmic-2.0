@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+import sys
 
 import lxbasic.storage as bsc_storage
 # gui
@@ -41,8 +42,10 @@ class AbsQtMediaBaseDef(
         try:
             if os.path.isfile(video_path):
                 import lxbasic.cv.core as bsc_cv_core
+
                 with bsc_cv_core.VideoCaptureOpt(video_path) as opt:
                     if opt.is_valid() is False:
+                        sys.stderr.write('video capture is not valid.\n')
                         return []
 
                     data = opt.get_data(0)

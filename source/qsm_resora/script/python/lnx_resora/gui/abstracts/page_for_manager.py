@@ -1257,7 +1257,7 @@ class AbsPrxPageForManager(
 
         self.gui_page_setup_fnc()
 
-    @gui_core.Verify.execute('resora', 7)
+    @gui_core.Verify.execute('resora-admin', 7)
     def _gui_show_register_subwindow(self):
         resource_type = self._scr_stage.type
         w = self._window.gui_generate_sub_panel_for('register')

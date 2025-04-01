@@ -46,6 +46,8 @@ import lxbasic.log as bsc_log
 
 import lxbasic.content as bsc_content
 
+from ..wrap import *
+
 from ..scan import base as _scan_base
 
 from ..scan import glob_ as _scan_glob
@@ -1199,7 +1201,7 @@ class StgFileSearchOpt(object):
             self.append_search_directory(i, recursion_enable=recursion_enable)
             bsc_log.Log.trace_method_result(
                 self.LOG_KEY,
-                'append search directory: "{}"'.format(i)
+                u'append search directory: "{}"'.format(i)
             )
         #
         self._set_key_sort_()
@@ -1218,10 +1220,10 @@ class StgFileSearchOpt(object):
                 i_ext = i_ext.lower()
             # noinspection PyBroadException
             try:
-                self._search_dict[six.u('{}/{}{}').format(i_directory_path, i_name_base, i_ext)] = i
+                self._search_dict[u'{}/{}{}'.format(i_directory_path, i_name_base, i_ext)] = i
             except Exception:
                 bsc_log.Log.trace_error(
-                    six.u('file "{}" is not valid').format(i)
+                    u'file "{}" is not valid'.format(i)
                 )
         # sort
         self._set_key_sort_()
@@ -1517,8 +1519,7 @@ class StgFileOpt(StgPathOpt):
             StgGzipFileOpt(self._path, '.json').set_write(raw)
         else:
             with open(self.path, 'w') as f:
-                if isinstance(raw, six.text_type):
-                    raw = raw.encode('utf-8')
+                raw = ensure_unicode(raw)
                 f.write(raw)
 
     def append(self, text):

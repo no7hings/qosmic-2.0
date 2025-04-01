@@ -2,7 +2,7 @@
 import lxgui.core as gui_core
 
 
-@gui_core.Verify.execute('resora', 7)
+@gui_core.Verify.execute('resora-admin', 7)
 def main(session):
     window = session.find_window()
     if not window:

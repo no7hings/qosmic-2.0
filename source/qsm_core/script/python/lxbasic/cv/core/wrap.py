@@ -16,3 +16,5 @@ if _module:
 
     # noinspection PyUnresolvedReferences
     import cv2
+    # noinspection PyUnresolvedReferences
+    import numpy

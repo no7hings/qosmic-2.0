@@ -91,9 +91,14 @@ class Hook(object):
                     i_gui_parent_path_opt = bsc_core.BscNodePathOpt(i_gui_parent_path)
 
                     if i_gui_parent_path_opt.get_is_root():
-                        i_gui_separator_path = six.u('/{}').format(i_gui_name)
+                        i_gui_separator_path = six.u('/{}').format(
+                            i_gui_name.replace('/', '__')
+                        )
                     else:
-                        i_gui_separator_path = six.u('{}/{}').format(i_gui_parent_path, i_gui_name)
+                        i_gui_separator_path = six.u('{}/{}').format(
+                            i_gui_parent_path,
+                            i_gui_name.replace('/', '__')
+                        )
 
                     d_.set(
                         six.u('{}.properties.type').format(i_gui_separator_path), 'separator'
@@ -130,9 +135,16 @@ class Hook(object):
                         i_gui_parent_path_opt = bsc_core.BscNodePathOpt(i_gui_parent_path)
 
                         if i_gui_parent_path_opt.get_is_root():
-                            i_gui_path = u'/{}'.format(i_gui_name)
+                            i_gui_path = u'/{}'.format(
+                                # remove pathsep
+                                i_gui_name.replace('/', '__')
+                            )
                         else:
-                            i_gui_path = u'{}/{}'.format(i_gui_parent_path, i_gui_name)
+                            i_gui_path = u'{}/{}'.format(
+                                i_gui_parent_path,
+                                # remove pathsep
+                                i_gui_name.replace('/', '__')
+                            )
 
                         d_.set(
                             u'{}.properties.type'.format(i_gui_path), 'action'
@@ -218,9 +230,14 @@ class OptionHook(object):
                 i_gui_parent_path_opt = bsc_core.BscNodePathOpt(i_gui_parent_path)
 
                 if i_gui_parent_path_opt.get_is_root():
-                    i_gui_separator_path = six.u('/{}').format(i_gui_name)
+                    i_gui_separator_path = six.u('/{}').format(
+                        i_gui_name.replace('/', '__')
+                    )
                 else:
-                    i_gui_separator_path = six.u('{}/{}').format(i_gui_parent_path, i_gui_name)
+                    i_gui_separator_path = six.u('{}/{}').format(
+                        i_gui_parent_path,
+                        i_gui_name.replace('/', '__')
+                    )
 
                 d_.set(
                     six.u('{}.properties.type').format(i_gui_separator_path), 'separator'
@@ -263,13 +280,21 @@ class OptionHook(object):
                         i_gui_parent_path_opt = bsc_core.BscNodePathOpt(i_gui_parent_path)
 
                         if i_gui_parent_path_opt.get_is_root():
-                            i_gui_path = six.u('/{}').format(i_gui_name)
+                            i_gui_path = six.u('/{}').format(
+                                # remove pathsep
+                                i_gui_name.replace('/', '__')
+                            )
                         else:
-                            i_gui_path = six.u('{}/{}').format(i_gui_parent_path, i_gui_name)
+                            i_gui_path = six.u('{}/{}').format(
+                                i_gui_parent_path,
+                                # remove pathsep
+                                i_gui_name.replace('/', '__')
+                            )
 
                         d_.set(
                             six.u('{}.properties.type').format(i_gui_path), 'action'
                         )
+                        # todo: group_name key may not do any thing
                         d_.set(
                             six.u('{}.properties.group_name').format(i_gui_path), i_gui_group_name
                         )

@@ -30,7 +30,7 @@ entity-type-actions:
     basic:
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
+                - 'separator': {gui_name: 'Selected/Checked/Current', gui_name_chs: '选中/勾选/当前'}
                 # assign
                 - 'resora-actions/node-assign-type-auto': {
                     gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
@@ -56,7 +56,7 @@ entity-type-actions:
     manifest:
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
+                - 'separator': {gui_name: 'Selected/Checked/Current', gui_name_chs: '选中/勾选/当前'}
                 # assign
                 - 'resora-actions/node-assign-type-auto': {
                     gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
@@ -82,7 +82,7 @@ entity-type-actions:
     media/video:
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
+                - 'separator': {gui_name: 'Selected/Checked/Current', gui_name_chs: '选中/勾选/当前'}
                 # assign
                 - 'resora-actions/node-assign-type-auto': {
                     gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
@@ -97,7 +97,7 @@ entity-type-actions:
                 - 'resora-actions/node-lock-disable-auto': {
                     gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '关闭'
                 }
-                # preview
+                # fix
                 - 'resora-actions/node-generate-preview-auto': {
                     gui_parent: '/Fix', gui_name: 'Generate Preview', gui_parent_chs: '/修复', gui_name_chs: '生成预览'
                 }
@@ -105,7 +105,7 @@ entity-type-actions:
     media/episode:
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
+                - 'separator': {gui_name: 'Selected, Checked', gui_name_chs: '选中/勾选/当前'}
                 # assign
                 - 'resora-actions/node-assign-type-auto': {
                     gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
@@ -124,11 +124,15 @@ entity-type-actions:
                 - 'resora-actions/node-generate-preview-auto': {
                     gui_parent: '/Fix', gui_name: 'Generate Preview', gui_parent_chs: '/修复', gui_name_chs: '生成预览'
                 }
+                # find
+                - 'resora-actions/node-find-lost-source-auto': {
+                    gui_parent: '/Fix', gui_name: 'Find Lost File (Source)', gui_parent_chs: '/修复', gui_name_chs: '找回丢失的文件（源）'
+                }
 
     media/audio:
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
+                - 'separator': {gui_name: 'Selected, Checked', gui_name_chs: '选中/勾选/当前'}
                 # assign
                 - 'resora-actions/node-assign-type-auto': {
                     gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
@@ -147,7 +151,7 @@ entity-type-actions:
     data/motion:
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
+                - 'separator': {gui_name: 'Selected, Checked', gui_name_chs: '选中/勾选/当前'}
                 - 'resora-actions/node-assign-type-auto': {
                     gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
                 }
@@ -172,7 +176,7 @@ entity-type-actions:
     other/asset:
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
+                - 'separator': {gui_name: 'Selected, Checked', gui_name_chs: '选中/勾选/当前'}
                 # mesh count
                 - 'resora-actions/node-generate-mesh-count-auto': {
                     gui_parent: '/Generate', gui_name: 'Mesh Count', gui_parent_chs: '/生成', gui_name_chs: '网格计数'
@@ -205,7 +209,7 @@ entity-type-actions:
     dcc/maya_scene:
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
+                - 'separator': {gui_name: 'Selected, Checked', gui_name_chs: '选中/勾选/当前'}
                 # assign
                 - 'resora-actions/node-assign-type-auto': {
                     gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
@@ -257,7 +261,7 @@ entity-type-actions:
         $: '..basic'
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'many', gui_name_chs: '多个'}
+                - 'separator': {gui_name: 'Selected/Checked/Current', gui_name_chs: '选中/勾选/当前'}
                 # assign
                 - 'resora-actions/node-assign-type-auto': {
                     gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
@@ -347,7 +351,7 @@ entity-actions:
 
         Node:
             option-hooks:
-                -   'separator': {gui_name: 'one', gui_name_chs: '单个'}
+                -   'separator': {gui_name: 'current', gui_name_chs: '当前'}
                 -   'resora-actions/node-rename': {
                     gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
                 }
@@ -360,7 +364,7 @@ entity-actions:
                 }
                 # copy
                 -   'resora-actions/node-copy-source-path': {
-                    gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
+                    gui_parent: '/Copy Path', gui_name: 'File (Source)', gui_parent_chs: '/复制路径', gui_name_chs: '文件（源）'
                 }
                 # cover
                 -   'resora-actions/node-upload-cover': {
@@ -371,7 +375,7 @@ entity-actions:
         $: '..basic'
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'one', gui_name_chs: '单个'}
+                - 'separator': {gui_name: 'current', gui_name_chs: '当前'}
                 - 'resora-actions/node-rename': {
                     gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
                 }
@@ -387,7 +391,7 @@ entity-actions:
         $: '..basic'
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'one', gui_name_chs: '单个'}
+                - 'separator': {gui_name: 'current', gui_name_chs: '当前'}
                 - 'resora-actions/node-rename': {
                     gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
                 }
@@ -400,14 +404,14 @@ entity-actions:
                 }
                 # copy
                 - 'resora-actions/node-copy-source-path': {
-                    gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
+                    gui_parent: '/Copy Path', gui_name: 'File (Source)', gui_parent_chs: '/复制路径', gui_name_chs: '文件（源）'
                 }
 
     media/episode:
         $: '..basic'
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'one', gui_name_chs: '单个'}
+                - 'separator': {gui_name: 'current', gui_name_chs: '当前'}
                 - 'resora-actions/node-rename': {
                     gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
                 }
@@ -420,14 +424,14 @@ entity-actions:
                 }
                 # copy
                 - 'resora-actions/node-copy-source-path': {
-                    gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
+                    gui_parent: '/Copy Path', gui_name: 'File (Source)', gui_parent_chs: '/复制路径', gui_name_chs: '文件（源）'
                 }
 
     media/audio:
         $: '..basic'
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'one', gui_name_chs: '单个'}
+                - 'separator': {gui_name: 'current', gui_name_chs: '当前'}
                 - 'resora-actions/node-rename': {
                     gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
                 }
@@ -440,7 +444,7 @@ entity-actions:
                 }
                 # copy
                 - 'resora-actions/node-copy-source-path': {
-                    gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
+                    gui_parent: '/Copy Path', gui_name: 'File (Source)', gui_parent_chs: '/复制路径', gui_name_chs: '文件（源）'
                 }
                 # history
                 - 'resora-actions/node-show-lock-history': {
@@ -451,7 +455,7 @@ entity-actions:
         $: '..basic'
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'one', gui_name_chs: '单个'}
+                - 'separator': {gui_name: 'current', gui_name_chs: '当前'}
                 - 'resora-actions/node-rename': {
                     gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
                 }
@@ -464,13 +468,13 @@ entity-actions:
                 }
                 # copy
                 - 'resora-actions/node-copy-source-path': {
-                    gui_parent: '/Copy', gui_name: 'Folder', gui_parent_chs: '/复制', gui_name_chs: '文件（源）'
+                    gui_parent: '/Copy Path', gui_name: 'File (Source)', gui_parent_chs: '/复制路径', gui_name_chs: '文件（源）'
                 }
 
     other/asset:
         Node:
             option-hooks:
-                - 'separator': {gui_name: 'one', gui_name_chs: '单个'}
+                - 'separator': {gui_name: 'current', gui_name_chs: '当前'}
                 - 'resora-actions/node-open-scene-directory': {
                     gui_parent: '/Open', gui_name: 'Folder (Model, Rig)', gui_parent_chs: '/打开', gui_name_chs: '目录(模型，绑定)'
                 }

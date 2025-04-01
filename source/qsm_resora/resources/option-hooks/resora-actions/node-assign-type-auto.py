@@ -7,7 +7,7 @@ class Main(object):
         self._session = session
         self._option_opt = self._session.option_opt
 
-    @gui_core.Verify.execute('resora', 7)
+    @gui_core.Verify.execute('resora-secondary', 7)
     def execute(self):
         window = self._session.find_window()
         if window is not None:

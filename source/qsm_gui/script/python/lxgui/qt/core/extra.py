@@ -297,12 +297,12 @@ class GuiQtMenuOpt(object):
             raise RuntimeError()
 
     @_gui_core.GuiModifier.run_with_exception_catch
-    def _set_cmd_debug_run_(self, cmd_str):
+    def _debug_run_cmd_script(self, cmd_str):
         # for python3
         exec (cmd_str)
 
     @_gui_core.GuiModifier.run_with_exception_catch
-    def _set_fnc_debug_run_(self, fnc):
+    def _debug_run_fnc(self, fnc):
         fnc()
 
     def create_by_content(self, content, append=False):
@@ -436,13 +436,13 @@ class GuiQtMenuOpt(object):
             fnc = execute_fnc
             # noinspection PyUnresolvedReferences
             widget_action.triggered.connect(
-                fnc
+                functools.partial(self._debug_run_fnc, fnc)
             )
         elif isinstance(execute_fnc, six.string_types):
-            cmd = execute_fnc
+            cmd_script = execute_fnc
             # noinspection PyUnresolvedReferences
             widget_action.triggered.connect(
-                lambda *args, **kwargs: self._set_cmd_debug_run_(cmd)
+                functools.partial(self._debug_run_cmd_script, cmd_script)
             )
         return widget_action
 

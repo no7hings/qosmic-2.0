@@ -1,7 +1,5 @@
 # coding:utf-8
-import re
-
-import urllib
+import lxbasic.web as bsc_web
 
 from . import abc_
 
@@ -41,7 +39,7 @@ class PremiereXml(abc_.AbsDotXml):
                 if j_e is not None:
                     j_text = j_e.text
                     if j_text.startswith('file://localhost/'):
-                        j_file_path = urllib.unquote(j_text[len('file://localhost/'):])
+                        j_file_path = bsc_web.UrlValue.unquote(j_text[len('file://localhost/'):])
                         list_.append(j_file_path)
         return list_
 

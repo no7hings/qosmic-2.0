@@ -717,8 +717,8 @@ class ListItemModel(_item_base.AbsItemModel):
                 return _
             # fixme: when check is file cost lost of time
             # if os.path.isfile(_file_path):
-            _image = QtGui.QImage()
-            _image.load(_file_path)
+            reader = QtGui.QImageReader(_file_path)
+            _image = reader.read()
             if _image.isNull() is False:
                 _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
                 _cache = [_pixmap]
@@ -895,13 +895,14 @@ class ListItemModel(_item_base.AbsItemModel):
             _capture_opt = bsc_cv_core.VideoCaptureOpt(_file_path)
             # catch first frame
             if _capture_opt.is_valid():
-                _image = _capture_opt.generate_qt_image(QtGui.QImage, frame_index=_capture_opt.get_middle_frame_index())
-                _frame_count = _capture_opt.get_frame_count()
-                _fps = _capture_opt.get_frame_rate()
-                _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
-                _cache = [_capture_opt, _pixmap, _frame_count, _fps]
-                self._view._view_model.push_video_cache(_file_path, _cache)
-                return _cache
+                _index_default = _capture_opt.get_middle_frame_index()
+                _image_data = _capture_opt.get_data(_index_default)
+                if _image_data:
+                    _frame_count = _capture_opt.get_frame_count()
+                    _fps = _capture_opt.get_frame_rate()
+                    _cache = [_capture_opt, _image_data, _frame_count, _fps, _index_default]
+                    self._view._view_model.push_video_cache(_file_path, _cache)
+                    return _cache
             return []
 
         def build_fnc_(data_):
@@ -909,12 +910,14 @@ class ListItemModel(_item_base.AbsItemModel):
                 return
 
             if data_:
-                _capture_opt, _pixmap, _frame_count, _fps = data_
+                _capture_opt, _image_data, _frame_count, _fps, _index_default = data_
+                _image = _capture_opt.to_qt_image(QtGui.QImage, _image_data)
+                _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
                 self._data.video_enable = True
                 self._data.video.capture_opt = _capture_opt
                 self._data.video.pixmap = _pixmap
                 self._data.video.size = _pixmap.size()
-                self._data.video.index_default = int(_frame_count/2)
+                self._data.video.index_default = _index_default
                 self._data.video.index_maximum = _frame_count-1
                 self._data.video.fps = _fps
 
@@ -961,10 +964,12 @@ class ListItemModel(_item_base.AbsItemModel):
             self._data.video.pixmap = self._data.video.pixmap_cache_dict[index]
         else:
             capture_opt = self._data.video.capture_opt
+            # fixme: may lost frame as white flat
             image = capture_opt.generate_qt_image(QtGui.QImage, index)
-            pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
-            self._data.video.pixmap = pixmap
-            self._data.video.pixmap_cache_dict[index] = pixmap
+            if image.isNull() is False:
+                pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
+                self._data.video.pixmap = pixmap
+                self._data.video.pixmap_cache_dict[index] = pixmap
 
         self.mark_force_refresh(True)
         self.update_view()

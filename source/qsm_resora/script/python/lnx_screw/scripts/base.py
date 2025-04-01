@@ -85,14 +85,19 @@ class ManifestStageOpt(object):
             type_group_gui_name = main_configure.get('types.{}.gui_name'.format(type_group_name))
             type_group_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(type_group_name))
             scr_type_group_path = '/type/{}'.format(type_group_name)
+            # type group
             self._scr_stage.create_type(
-                scr_type_group_path, gui_name=type_group_gui_name, gui_name_chs=type_group_gui_name_chs
+                scr_type_group_path,
+                gui_name=type_group_gui_name, gui_name_chs=type_group_gui_name_chs,
+                kind='unavailable',
             )
 
         type_gui_name = main_configure.get('types.{}.gui_name'.format(type_name))
         type_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(type_name))
+        # type
         self._scr_stage.create_type(
-            scr_type_path, gui_name=type_gui_name, gui_name_chs=type_gui_name_chs
+            scr_type_path, gui_name=type_gui_name, gui_name_chs=type_gui_name_chs,
+            kind='unavailable',
         )
         return scr_type_path
 

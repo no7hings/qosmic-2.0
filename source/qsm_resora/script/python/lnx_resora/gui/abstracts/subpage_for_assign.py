@@ -192,6 +192,7 @@ class AbsPrxSubpageForTypeAssign(AbsPrxSubpageForAnyAssign):
         entities = self._scr_stage.find_all(
             self._scr_stage.EntityTypes.Type,
             filters=[
+                # ignore unavailable kind, this kind do not support for user action.
                 ('kind', 'is not', 'unavailable'),
                 ('trash', 'is', False),
             ]

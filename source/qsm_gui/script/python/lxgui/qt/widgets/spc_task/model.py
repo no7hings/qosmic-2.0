@@ -334,7 +334,7 @@ class _SpcTaskItemModel(object):
             )
             bsc_storage.StgFileOpt(
                 file_path
-            ).set_write(''.join(results))
+            ).set_write(bsc_core.ensure_unicode(''.join(results)))
 
             self.set_menu_data(
                 [

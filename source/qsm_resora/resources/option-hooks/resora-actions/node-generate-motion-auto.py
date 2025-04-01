@@ -47,7 +47,7 @@ class Main(object):
         else:
             task_window.close_window()
 
-    @gui_core.Verify.execute('resora', 7)
+    @gui_core.Verify.execute('resora-admin', 7)
     def execute(self):
         window = self._session.find_window()
         if window is not None:

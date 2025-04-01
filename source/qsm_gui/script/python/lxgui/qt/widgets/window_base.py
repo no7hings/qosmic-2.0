@@ -243,13 +243,13 @@ class QtMainWindow(
             w._do_window_exec_()
             if w._get_result_():
                 self._do_window_close_()
-                self._do_kill_all_thread_worker_()
+                self._do_kill_all_thread_workers_()
                 event.accept()
             else:
                 event.ignore()
         else:
             self._do_window_close_()
-            self._do_kill_all_thread_worker_()
+            self._do_kill_all_thread_workers_()
             event.accept()
 
     def _exec_message_dialog_(self, message, *args, **kwargs):

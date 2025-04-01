@@ -953,7 +953,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
         # return not bsc_storage.StgFileOpt(file_path_src).get_timestamp_is_same_to(file_path_tgt)
         return True
 
-    @gui_prx_core.GuiProxyModifier.window_proxy_waiting
+    @gui_prx_core.GuiModifier.window_proxy_waiting
     def set_camera_publish(self):
         camera_work_maya_scene_scr_file_path = self._camera_work_maya_scene_src_file_rsv_unit.get_result(
             version='latest'
@@ -988,7 +988,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                 use_exec=False
             )
 
-    @gui_prx_core.GuiProxyModifier.window_proxy_waiting
+    @gui_prx_core.GuiModifier.window_proxy_waiting
     def set_submit(self):
         if self._camera_abc_file_rsv_unit.get_result(
                 version='latest'
@@ -1273,7 +1273,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
         return self._start_frame
 
     # options
-    @gui_prx_core.GuiProxyModifier.window_proxy_waiting
+    @gui_prx_core.GuiModifier.window_proxy_waiting
     def set_options_refresh(self):
         import lxusd.rsv.objects as usd_rsv_objects
 
@@ -1409,7 +1409,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
                         k.replace('/', '.'), v
                     )
 
-    @gui_prx_core.GuiProxyModifier.window_proxy_waiting
+    @gui_prx_core.GuiModifier.window_proxy_waiting
     def set_renderers_refresh(self):
         def set_thread_create_fnc_(prx_item_, variants_):
             prx_item_.set_show_build_fnc(
@@ -1507,7 +1507,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
         # return not bsc_storage.StgFileOpt(file_path_src).get_timestamp_is_same_to(file_path_tgt)
         return True
 
-    @gui_prx_core.GuiProxyModifier.window_proxy_waiting
+    @gui_prx_core.GuiModifier.window_proxy_waiting
     def set_submit(self):
         hook_option_dic = self._get_hook_option_dic_()
         if hook_option_dic:

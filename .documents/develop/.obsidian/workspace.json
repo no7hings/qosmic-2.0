@@ -48,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#waiting",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -65,8 +65,7 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -188,7 +187,7 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "15555a3b0fd2386a",
+  "active": "8f2ca1bd910eda9a",
   "lastOpenFiles": [
     "开发相关/开发进度/开发-2025.md",
     "技术文档/Qosmic.md",

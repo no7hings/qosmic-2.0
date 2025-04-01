@@ -170,7 +170,7 @@ class GuiProxyUtil(object):
                             return window_proxy
 
 
-class GuiProxyLog(object):
+class GuiLog(object):
     @staticmethod
     def trace_result(text):
         window_proxies = GuiProxyUtil.find_all_tool_window_proxies()
@@ -200,7 +200,7 @@ class GuiProxyLog(object):
             return GuiProxyUtil.window_proxy_write_log(window_proxy, text)
 
 
-class GuiProxyModifier(object):
+class GuiModifier(object):
     @staticmethod
     def window_proxy_waiting(method):
         def sub_fnc_(*args, **kwargs):
@@ -212,7 +212,7 @@ class GuiProxyModifier(object):
         return sub_fnc_
 
 
-class GuiProxyProcess(object):
+class GuiProgress(object):
     @staticmethod
     def create(maximum, label=None):
         list_ = []
@@ -227,11 +227,11 @@ class GuiProxyProcess(object):
         return list_
 
 
-class GuiProxyException(object):
+class GuiExceptionCatch(object):
     ValidationStatus = gui_core.GuiValidationStatus
 
     @classmethod
-    def _generate_window_(cls):
+    def _generate_window(cls):
         from .. import widgets as gui_prx_widgets
 
         _0 = GuiProxyUtil.find_widget_proxy_by_category(['exception_window'])
@@ -261,7 +261,7 @@ class GuiProxyException(object):
                     '    file "{}" line {} in {}\n        {}'.format(i_file_path, i_line, i_fnc, i_fnc_line)
                 )
 
-            w = cls._generate_window_()
+            w = cls._generate_window()
 
             w.set_status(cls.ValidationStatus.Error)
             w.add_content('*'*80)
@@ -269,17 +269,19 @@ class GuiProxyException(object):
             [w.add_content(i) for i in exc_texts]
             w.add_content(value)
             w.add_content('*'*80)
-
+            
+            # save log
             file_path = bsc_log.LogBase.get_user_debug_file(
                 'script', create=True
             )
             bsc_storage.StgFileOpt(
                 file_path
             ).set_write('\n'.join(exc_texts))
-
-            # sys.stderr.write('traceback:\n')
-            # sys.stderr.write('\n'.join(exc_texts)+'\n')
-            # sys.stderr.write(value+'\n')
+            
+            # output
+            sys.stderr.write('traceback:\n')
+            sys.stderr.write('\n'.join(exc_texts)+'\n')
+            sys.stderr.write(value+'\n')
             return w
 
 
@@ -291,9 +293,9 @@ class GuiProxyLogBridge(object):
         if log_bridge.__dict__['BRG_FNC_LOG_GUI_TRACE_ENABLE'] is False:
             log_bridge.__dict__['BRG_FNC_LOG_GUI_TRACE_ENABLE'] = True
 
-            log_bridge.__dict__['BRG_FNC_LOG_GUI_TRACE_RESULT'] = GuiProxyLog.trace_result
-            log_bridge.__dict__['BRG_FNC_LOG_GUI_TRACE_WARNING'] = GuiProxyLog.trace_warning
-            log_bridge.__dict__['BRG_FNC_LOG_GUI_TRACE_ERROR'] = GuiProxyLog.trace_error
+            log_bridge.__dict__['BRG_FNC_LOG_GUI_TRACE_RESULT'] = GuiLog.trace_result
+            log_bridge.__dict__['BRG_FNC_LOG_GUI_TRACE_WARNING'] = GuiLog.trace_warning
+            log_bridge.__dict__['BRG_FNC_LOG_GUI_TRACE_ERROR'] = GuiLog.trace_error
 
             bsc_log.Log.trace_method_result(
                 cls.LOG_KEY, 'generate log trace'
@@ -304,7 +306,7 @@ class GuiProxyLogBridge(object):
         if log_bridge.__dict__['BRG_FNC_LOG_GUI_PROCESS_ENABLE'] is False:
             log_bridge.__dict__['BRG_FNC_LOG_GUI_PROCESS_ENABLE'] = True
 
-            log_bridge.__dict__['BRG_FNC_LOG_GUI_PROCESS_CREATE'] = GuiProxyProcess.create
+            log_bridge.__dict__['BRG_FNC_LOG_GUI_PROCESS_CREATE'] = GuiProgress.create
 
             bsc_log.Log.trace_method_result(
                 cls.LOG_KEY, 'generate log progress'
@@ -315,7 +317,7 @@ class GuiProxyLogBridge(object):
         if log_bridge.__dict__['BRG_FNC_LOG_GUI_EXCEPTION_ENABLE'] is False:
             log_bridge.__dict__['BRG_FNC_LOG_GUI_EXCEPTION_ENABLE'] = True
 
-            log_bridge.__dict__['BRG_FNC_LOG_GUI_EXCEPTION_TRACE'] = GuiProxyException.trace
+            log_bridge.__dict__['BRG_FNC_LOG_GUI_EXCEPTION_TRACE'] = GuiExceptionCatch.trace
 
             bsc_log.Log.trace_method_result(
                 cls.LOG_KEY, 'generate log exception'

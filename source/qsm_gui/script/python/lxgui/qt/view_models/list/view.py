@@ -16,7 +16,7 @@ class ListViewModel(_view_base.AbsViewModel):
 
     def do_close(self):
         self._close_flag = True
-        self._widget._do_kill_all_thread_worker_()
+        self._widget._do_kill_all_thread_workers_()
         # for i in self.get_all_items():
         #     i._item_model.do_close()
 

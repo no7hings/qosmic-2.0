@@ -36,6 +36,7 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
                         i_type_group_gui_name = v['type_group']['gui_name_chs']
                     else:
                         i_type_group_gui_name = v['type_group']['gui_name']
+
                     i_type_group_path = u'/{}'.format(i_type_group_name)
                     content.set(
                         u'{}.properties.type'.format(i_type_group_path), 'group'
@@ -48,6 +49,7 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
                     )
 
                 i_type_path = u'/{}'.format(i_type_name)
+
                 content.set(
                     u'{}.properties.type'.format(i_type_path), 'group'
                 )
@@ -59,6 +61,7 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
                 )
 
                 i_path = u'{}/{}'.format(i_type_path, i_node_name)
+
                 content.set(
                     u'{}.properties.type'.format(i_path), 'action'
                 )

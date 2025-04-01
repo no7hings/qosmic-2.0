@@ -790,16 +790,13 @@ class QtTextItem(
 
     def __init__(self, *args, **kwargs):
         super(QtTextItem, self).__init__(*args, **kwargs)
-        #
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.installEventFilter(self)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
-        #
         self._init_name_base_def_(self)
-        #
         self._init_action_for_hover_def_(self)
         self._init_action_base_def_(self)
         self._init_action_for_press_def_(self)
@@ -832,15 +829,12 @@ class QtTextItem(
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
         self._refresh_widget_draw_geometry_()
+
         # name
         if self._name_text is not None:
             color, hover_color = self._get_text_rgba_args_by_validator_status_(self._status)
             text_color = [color, hover_color][self._is_hovered]
 
-            # painter.fillRect(
-            #     self._name_draw_rect, QtGui.QColor(255, 0, 0, 255)
-            # )
-            #
             painter._draw_text_by_rect_(
                 rect=self._name_draw_rect,
                 text=self._name_text,

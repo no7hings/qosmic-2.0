@@ -424,6 +424,8 @@ class PrxBaseUnit(
         self._qt_layout.setContentsMargins(*[0]*4)
         self._qt_layout.setSpacing(2)
 
+        self._window.register_window_close_method(self.gui_close_fnc)
+
     def gui_create_tab_tool_box(self):
         prx_tab_tool_box = _container_for_tab.PrxVTabToolBox()
 
@@ -451,6 +453,9 @@ class PrxBaseUnit(
         pass
 
     def do_gui_refresh_toolsets(self):
+        pass
+
+    def gui_close_fnc(self):
         pass
 
 
