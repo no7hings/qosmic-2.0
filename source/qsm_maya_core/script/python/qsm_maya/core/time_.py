@@ -54,6 +54,10 @@ class Frame(object):
         start_frame = cmds.playbackOptions(query=1, minTime=1)
         end_frame = cmds.playbackOptions(query=1, maxTime=1)
         return int(start_frame), int(end_frame)
+
+    @classmethod
+    def to_start(cls):
+        cmds.currentTime(cmds.playbackOptions(query=1, minTime=1))
     
     @classmethod
     def to_frame_range(cls, frame=None):

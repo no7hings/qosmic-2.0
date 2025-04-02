@@ -53,10 +53,11 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
             return _[0]
 
     @classmethod
-    def generate(cls, namespace):
-        return cls(
-            cmds.ls(cls.find_root_location(namespace), type='joint', long=1, dag=1) or []
-        )
+    def find_sketches(cls, namespace):
+        _ = cls.find_root_location(namespace)
+        if _:
+            return cmds.ls(_, type='joint', long=1, dag=1) or []
+        return []
 
     def __init__(self, *args, **kwargs):
         super(TransferSketchSet, self).__init__(*args, **kwargs)

@@ -8,15 +8,21 @@ import lxbasic.storage as bsc_storage
 
 import qsm_general.core as qsm_gnl_core
 
-from .. import motion as _motion
+from .. import motion as _mya_motion
 
 from .. import core as _mya_core
 
 from . import base as _base
 
+from . import sketch_set as _sketch_set
+
+from . import control_set as _control_set
+
 
 class AdvOpt(_base.AdvNamespaceExtra):
     LOG_KEY = 'adv rig motion'
+
+    CONTROL_SET_CLS = _control_set.AdvControlSet
 
     @classmethod
     def check_is_valid(cls, namespace):
@@ -28,6 +34,9 @@ class AdvOpt(_base.AdvNamespaceExtra):
     def __init__(self, namespace):
         self._init_namespace_extra(namespace)
 
+        self._sketch_set = _sketch_set.AdvSketchSet.generate(self._namespace)
+        self._control_set = self.CONTROL_SET_CLS.generate(self._namespace)
+
     def find_root_location(self):
         _ = cmds.ls('|{}:*'.format(self._namespace), long=1)
         if _:
@@ -37,24 +46,24 @@ class AdvOpt(_base.AdvNamespaceExtra):
     def generate_controls_motion_dict(self):
         controls = self.find_all_controls()
         if controls:
-            return _motion.ControlSetMotionOpt(self._namespace, controls).generate_motion_dict()
+            return _mya_motion.ControlSetMotionOpt(self._namespace, controls).generate_motion_dict()
         return {}
 
     def generate_controls_pose_dict(self):
         controls = self.find_all_controls()
         if controls:
-            return _motion.ControlSetMotionOpt(self._namespace, controls).generate_pose_dict()
+            return _mya_motion.ControlSetMotionOpt(self._namespace, controls).generate_pose_dict()
         return {}
 
     def apply_controls_motion_dict(self, data, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).apply_motion_dict(data, **kwargs)
+            _mya_motion.ControlSetMotionOpt(self._namespace, controls).apply_motion_dict(data, **kwargs)
 
     def apply_controls_pose_dict(self, data, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).apply_pose_dict(data, **kwargs)
+            _mya_motion.ControlSetMotionOpt(self._namespace, controls).apply_pose_dict(data, **kwargs)
     
     # control motion file
     def export_controls_motion_to(self, file_path):
@@ -86,43 +95,43 @@ class AdvOpt(_base.AdvNamespaceExtra):
     def mirror_controls_motion_left_to_right(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_motion_left_to_right(**kwargs)
+            _mya_motion.ControlSetMotionOpt(self._namespace, controls).mirror_motion_left_to_right(**kwargs)
             
     def mirror_controls_pose_left_to_right(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_pose_left_to_right(**kwargs)
+            _mya_motion.ControlSetMotionOpt(self._namespace, controls).mirror_pose_left_to_right(**kwargs)
 
     def mirror_controls_motion_middle(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_motion_middle(**kwargs)
+            _mya_motion.ControlSetMotionOpt(self._namespace, controls).mirror_motion_middle(**kwargs)
     
     def mirror_controls_pose_middle(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_pose_middle(**kwargs)
+            _mya_motion.ControlSetMotionOpt(self._namespace, controls).mirror_pose_middle(**kwargs)
 
     def mirror_controls_motion_right_to_left(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_motion_right_to_left(**kwargs)
+            _mya_motion.ControlSetMotionOpt(self._namespace, controls).mirror_motion_right_to_left(**kwargs)
             
     def mirror_controls_pose_right_to_left(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).mirror_pose_right_to_left(**kwargs)
+            _mya_motion.ControlSetMotionOpt(self._namespace, controls).mirror_pose_right_to_left(**kwargs)
     
     # flip
     def flip_controls_motion(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).flip_motion(**kwargs)
+            _mya_motion.ControlSetMotionOpt(self._namespace, controls).flip_motion(**kwargs)
 
     def flip_controls_pose(self, **kwargs):
         controls = self.find_all_controls()
         if controls:
-            _motion.ControlSetMotionOpt(self._namespace, controls).flip_pose(**kwargs)
+            _mya_motion.ControlSetMotionOpt(self._namespace, controls).flip_pose(**kwargs)
 
     def rest_controls_transformation(self, **kwargs):
         if 'reset_scheme' in kwargs:
@@ -137,20 +146,19 @@ class AdvOpt(_base.AdvNamespaceExtra):
             controls = self.find_all_controls()
 
         if controls:
-            return _motion.ControlSetMotionOpt(self._namespace, controls).reset_transformation(**kwargs)
+            return _mya_motion.ControlSetMotionOpt(self._namespace, controls).reset_transformation(**kwargs)
         return False
 
     def generate_controls_axis_vector_dict(self, **kwargs):
         controls = self.find_all_controls()
 
         if controls:
-            return _motion.ControlSetMotionOpt(self._namespace, controls).generate_axis_vector_dict()
+            return _mya_motion.ControlSetMotionOpt(self._namespace, controls).generate_axis_vector_dict()
         return {}
 
     # joint
     def find_joint_set(self):
         """
-        DeformSet：是ADV的默认设置
         """
         _ = cmds.ls('{}:DeformSet'.format(self._namespace), long=1)
         if _:
@@ -166,7 +174,6 @@ class AdvOpt(_base.AdvNamespaceExtra):
 
     def find_geometry_location(self):
         """
-        Geometry：是ADV的默认设置
         """
         _ = cmds.ls('{}:Geometry'.format(self._namespace), long=1)
         if _:
@@ -174,7 +181,6 @@ class AdvOpt(_base.AdvNamespaceExtra):
 
     def find_all_meshes(self):
         """
-        默认忽略中间对象
         """
         _ = self.find_geometry_location()
         if _:
@@ -185,7 +191,6 @@ class AdvOpt(_base.AdvNamespaceExtra):
 
     def find_geo_lower_location(self):
         """
-        Low_Grp：ADV没有这个设置，这是个临时设置，后面会使用配置控制
         """
         _ = cmds.ls('{}:Low_Grp'.format(self._namespace), long=1)
         if _:
@@ -196,7 +201,6 @@ class AdvOpt(_base.AdvNamespaceExtra):
 
     def find_all_lower_meshes(self):
         """
-        默认忽略中间对象
         """
         _ = self.find_geo_lower_location()
         if _:
@@ -207,6 +211,8 @@ class AdvOpt(_base.AdvNamespaceExtra):
 
     @_mya_core.Undo.execute
     def duplicate(self, **kwargs):
+        """
+        """
         namespace_new = _mya_core.Reference.duplicate(
             _mya_core.ReferencesCache().get(self._namespace)
         )
@@ -220,11 +226,51 @@ class AdvOpt(_base.AdvNamespaceExtra):
     @_mya_core.Undo.execute
     def bake_all_controls(self, *args, **kwargs):
         controls = self.find_all_curve_controls()
-        _motion.ControlSetBake(controls).execute(*args, **kwargs)
+        _mya_motion.ControlSetBake(controls).execute(*args, **kwargs)
+
+    def compute_main_control_to_toe_offset(self):
+        toes = filter(None, [self._sketch_set.get('ToesEnd_L'), self._sketch_set.get('ToesEnd_R')])
+
+        xs, ys, zs = [], [], []
+        for i in toes:
+            i_x, i_y, i_z = _mya_core.Transform.get_world_translation(i)
+            xs.append(i_x)
+            ys.append(i_y)
+            zs.append(i_z)
+
+        x, y, z = sum(xs)/2, min(ys), sum(zs)/2
+
+        main_control = self._control_set.get('Main')
+        x_0, y_0, z_0 = _mya_core.Transform.get_world_translation(main_control)
+        return x-x_0, y-y_0, z-z_0
+
+    @_mya_core.Undo.execute
+    def translate_main_control_to_toe(self):
+        """
+        support FK only
+        """
+
+        x, y, z = self.compute_main_control_to_toe_offset()
+
+        # move root
+        root_control = self._control_set.get('RootX_M')
+        root_locator = _mya_motion.ControlMove.create_locator_fnc(root_control)
+        x_0, y_0, z_0 = _mya_core.Transform.get_translate(root_locator)
+        _mya_core.Transform.set_translate(root_locator, (x_0-x, y_0-y, z_0-z))
+        _mya_motion.ControlMove.remove_locator_fnc(root_control)
+
+        # move main
+        main_control = self._control_set.get('Main')
+        main_locator = _mya_motion.ControlMove.create_locator_fnc(main_control)
+        x_0, y_0, z_0 = _mya_core.Transform.get_translate(main_locator)
+        _mya_core.Transform.set_translate(main_locator, (x_0+x, y_0+y, z_0+z))
+        _mya_motion.ControlMove.remove_locator_fnc(main_control)
 
 
 class AdvChrOpt(AdvOpt):
     LOG_KEY = 'adv rig motion'
+
+    CONTROL_SET_CLS = _control_set.AdvChrControlSet
 
     def __init__(self, *args, **kwargs):
         super(AdvChrOpt, self).__init__(*args, **kwargs)

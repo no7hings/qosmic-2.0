@@ -1,6 +1,11 @@
 # coding:utf-8
 import collections
 
+import re
+
+# noinspection PyUnresolvedReferences
+import maya.cmds as cmds
+
 import lxbasic.core as bsc_core
 
 import lxbasic.log as bsc_log
@@ -9,9 +14,9 @@ import qsm_maya.core as qsm_mya_core
 
 from qsm_maya.handles import abc_
 
-from . import dcc_organize as _cfx_rig_operate
+from . import dcc_organize as _dcc_dcc_organize
 
-from . import dcc_asset as _rig_operate
+from . import dcc_asset as _dcc_asset
 
 
 class AssetCfxRigHandle(abc_.AbsGroupOpt):
@@ -278,10 +283,10 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
                 if i_ncloth_args:
                     i_ntransform, i_nucleus = i_ncloth_args
                     if valid_fnc(i_ntransform) is True:
-                        _cfx_rig_operate.CfxNClothGrpOrg().add_one(i_ntransform)
+                        _dcc_dcc_organize.CfxNClothGrpOrg().add_one(i_ntransform)
     
                     if valid_fnc(i_nucleus) is True:
-                        _cfx_rig_operate.CfxNucleusGrpOrg().add_one(i_nucleus)
+                        _dcc_dcc_organize.CfxNucleusGrpOrg().add_one(i_nucleus)
     
                 # input rigid
                 i_nrigid_args = qsm_mya_core.MeshNRigid.get_args(
@@ -290,10 +295,10 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
                 if i_nrigid_args:
                     i_ntransform, i_nucleus = i_nrigid_args
                     if valid_fnc(i_ntransform) is True:
-                        _cfx_rig_operate.CfxNRigidGrpOrg().add_one(i_ntransform)
+                        _dcc_dcc_organize.CfxNRigidGrpOrg().add_one(i_ntransform)
     
                     if valid_fnc(i_nucleus) is True:
-                        _cfx_rig_operate.CfxNucleusGrpOrg().add_one(i_nucleus)
+                        _dcc_dcc_organize.CfxNucleusGrpOrg().add_one(i_nucleus)
                 
                 # input wrap
                 i_input_wrap_args = qsm_mya_core.MeshWrapTarget.get_args(
@@ -303,7 +308,7 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
                     i_deform_node, i_wrap_transforms, i_wrap_base_transforms = i_input_wrap_args
                     for j_wrap_transform in i_wrap_transforms:
                         if valid_fnc(j_wrap_transform) is True:
-                            j_wrap_transform_new = _cfx_rig_operate.CfxWrapGrpOrg().add_one(j_wrap_transform)
+                            j_wrap_transform_new = _dcc_dcc_organize.CfxWrapGrpOrg().add_one(j_wrap_transform)
     
                             qsm_mya_core.MeshWrapSource.auto_collect_base_transforms(j_wrap_transform_new)
     
@@ -314,7 +319,7 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
             
     @qsm_mya_core.Undo.execute
     def auto_name(self):
-        rig_opt = _rig_operate.AssetCfxRigSceneOpt()
+        rig_opt = _dcc_asset.AssetCfxRigSceneOpt()
         mesh_hash_dict = rig_opt.generate_mesh_hash_map()
         mesh_face_vertices_dict = rig_opt.generate_mesh_face_vertices_map()
 
@@ -340,7 +345,7 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
                     i_mesh_transform_src = qsm_mya_core.MeshShape.get_transform(i_mesh_shape_src)
                     self.rename_fnc(i_mesh_transform, i_mesh_transform_src)
                     # add source to layer
-                    _cfx_rig_operate.CfxSourceGeoLyrOrg().add_one(i_mesh_transform_src)
+                    _dcc_dcc_organize.CfxSourceGeoLyrOrg().add_one(i_mesh_transform_src)
                 else:
                     i_key = i_mesh_opt.get_face_vertices_as_uuid()
                     if i_key in mesh_face_vertices_dict:
@@ -348,7 +353,7 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
                         i_mesh_transform_src = qsm_mya_core.MeshShape.get_transform(i_mesh_shape_src)
                         self.rename_fnc(i_mesh_transform, i_mesh_transform_src)
                         # add source to layer
-                        _cfx_rig_operate.CfxSourceGeoLyrOrg().add_one(i_mesh_transform_src)
+                        _dcc_dcc_organize.CfxSourceGeoLyrOrg().add_one(i_mesh_transform_src)
                     else:
                         bsc_log.Log.trace_warning(
                             'no match found for: "{}"'.format(i_mesh_shape)
@@ -380,7 +385,7 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
         temporary function
         """
         errors = []
-        rig_opt = _rig_operate.AssetCfxRigSceneOpt()
+        rig_opt = _dcc_asset.AssetCfxRigSceneOpt()
         mesh_set = rig_opt.mesh_set
         with bsc_log.LogProcessContext.create(maximum=len(mesh_set), label='auto connection') as l_p:
             for i_mesh_shape_src in mesh_set:
@@ -426,9 +431,9 @@ class AssetCfxRigHandle(abc_.AbsGroupOpt):
         new_name = '{}__copy'.format(name)
         result = qsm_mya_core.DagNode.rename(mesh_transform_tgt, new_name)
         # collection
-        mesh_transform_tgt_new = _cfx_rig_operate.CfxBridgeGeoGrpOrg().add_one(result)
-        _cfx_rig_operate.CfxBridgeGeoLyrOrg().add_one(mesh_transform_tgt_new)
-        _cfx_rig_operate.CfxBridgeGeoMtlOrg().assign_to(mesh_transform_tgt_new)
+        mesh_transform_tgt_new = _dcc_dcc_organize.CfxBridgeGeoGrpOrg().add_one(result)
+        _dcc_dcc_organize.CfxBridgeGeoLyrOrg().add_one(mesh_transform_tgt_new)
+        _dcc_dcc_organize.CfxBridgeGeoMtlOrg().assign_to(mesh_transform_tgt_new)
         # blend
         qsm_mya_core.BlendShape.create(mesh_transform_src, mesh_transform_tgt_new)
         # auto collection wrap base

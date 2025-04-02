@@ -11,8 +11,6 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
-import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
-
 from lnx_wotrix.gui.abstracts import unit_for_task_tool as _abs_unit_for_task_tool
 
 from ...shot_cfx_cloth import dcc_core as _shot_cfx_cloth_core

@@ -167,6 +167,14 @@ class Transform(_node_for_dag.DagNode):
             return not cmds.getAttr(path+'.overrideVisibility')
         return False
 
+    @classmethod
+    def get_translate(cls, path):
+        return cmds.getAttr(path+'.translate')[0]
+
+    @classmethod
+    def set_translate(cls, path, p):
+        cmds.setAttr(path+'.translate', *p)
+
 
 class TransformOpt(object):
     def __init__(self, transform_path):

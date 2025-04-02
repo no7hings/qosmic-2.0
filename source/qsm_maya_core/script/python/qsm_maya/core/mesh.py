@@ -106,8 +106,7 @@ class Mesh(_shape.Shape):
 MeshShape = Mesh
 
 
-class MeshShapes(object):
-
+class Meshes(object):
     @classmethod
     def get_evaluate(cls, paths):
         data = {}
@@ -123,7 +122,10 @@ class MeshShapes(object):
         return cmds.polyEvaluate(paths, triangle=1) or 0
 
 
-class MeshShapeOpt(_shape.ShapeOpt):
+MeshShapes = Meshes
+
+
+class MeshOpt(_shape.ShapeOpt):
     @classmethod
     def to_om2_dag_path(cls, path):
         return om2.MGlobal.getSelectionListByName(path).getDagPath(0)
@@ -147,7 +149,7 @@ class MeshShapeOpt(_shape.ShapeOpt):
         """
         path is shape
         """
-        super(MeshShapeOpt, self).__init__(path)
+        super(MeshOpt, self).__init__(path)
         self._om2_obj_fnc = self.to_om2_mesh_fnc(self._path)
 
     def get_face_vertices(self):
@@ -361,3 +363,6 @@ class MeshShapeOpt(_shape.ShapeOpt):
         for i_idx in indices:
             p = '{}.vtx[{}]'.format(self._path, i_idx)
             cmds.delete(p)
+
+
+MeshShapeOpt = MeshOpt

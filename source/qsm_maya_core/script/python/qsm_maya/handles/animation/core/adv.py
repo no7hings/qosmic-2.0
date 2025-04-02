@@ -287,6 +287,7 @@ class AdvRigAsset(qsm_mya_resource.Asset):
                 # ignore when not form this asset
                 if not i_transform_name.startswith(namespace+':'):
                     continue
+
                 i_key = self.path_to_key(namespace, geometry_root, i_transform_path, pathsep='|')
                 dict_[i_key] = qsm_mya_core.MeshShapeOpt(i).get_face_vertices_as_uuid()
         return dict_
@@ -300,6 +301,7 @@ class AdvRigAsset(qsm_mya_resource.Asset):
                 data = bsc_storage.StgFileOpt(data_path).set_read()
             else:
                 data = self.generate_geometry_topology_data()
+
                 bsc_storage.StgFileOpt(data_path).set_write(data)
             return data
 

@@ -37,6 +37,11 @@ class AbsGroupOrg(AbsSetBaseOpt):
             return path
         return qsm_mya_core.Group.add_one(self.LOCATION, path)
 
+    def find_descendants(self, type_includes):
+        return qsm_mya_core.Group.find_descendants(
+            self.LOCATION, type_includes
+        )
+
 
 #   bridge
 class CfxBridgeGeoGrpOrg(AbsGroupOrg):
@@ -53,12 +58,28 @@ class CfxBridgeControlGrpOrg(AbsGroupOrg):
         super(CfxBridgeControlGrpOrg, self).__init__()
 
 
-#   cloth
+#   output
+class CfxOutputGrpOrg(AbsGroupOrg):
+    LOCATION = '|master|cfx_rig|cfx_output_geo_grp'
+
+    def __init__(self):
+        super(CfxOutputGrpOrg, self).__init__()
+
+
+#   output cloth
 class CfxClothGeoGrpOrg(AbsGroupOrg):
     LOCATION = '|master|cfx_rig|cfx_output_geo_grp|cfx_cloth_geo_grp'
 
     def __init__(self):
         super(CfxClothGeoGrpOrg, self).__init__()
+
+
+#   output appendix
+class CfxAppendixGeoGrpOrg(AbsGroupOrg):
+    LOCATION = '|master|cfx_rig|cfx_output_geo_grp|cfx_appendix_geo_grp'
+
+    def __init__(self):
+        super(CfxAppendixGeoGrpOrg, self).__init__()
 
 
 #   cloth proxy
@@ -89,14 +110,6 @@ class CfxColliderGeoGrpOrg(AbsGroupOrg):
 
     def __init__(self):
         super(CfxColliderGeoGrpOrg, self).__init__()
-
-
-#   appendix
-class CfxAppendixGeoGrpOrg(AbsGroupOrg):
-    LOCATION = '|master|cfx_rig|cfx_output_geo_grp|cfx_appendix_geo_grp'
-
-    def __init__(self):
-        super(CfxAppendixGeoGrpOrg, self).__init__()
 
 
 #   dynamic

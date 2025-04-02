@@ -29,15 +29,18 @@ class AssetCfxRigReleaseProcess(object):
             raise RuntimeError()
 
         with bsc_log.LogProcessContext.create(maximum=6) as l_p:
+
             # step 1
             qsm_mya_core.SceneFile.new()
             l_p.do_update()
+
             # step 2
             bsc_log.Log.trace_method_result(
                 self.LOG_KEY, 'import scene_src: {}'.format(scene_src_path)
             )
             qsm_mya_core.SceneFile.open(scene_src_path)
             l_p.do_update()
+
             # step 3, save blend_map
             if rig_variant == 'default':
                 connect_map_json_path = task_session.get_file_for(
@@ -51,9 +54,11 @@ class AssetCfxRigReleaseProcess(object):
             data = _task_dcc_core.AssetCfxRigSceneOpt().generate_connect_map()
             bsc_storage.StgFileOpt(connect_map_json_path).set_write(data)
             l_p.do_update()
+
             # step 4, remove rig
             _task_dcc_core.AssetCfxRigSceneOpt().remove_rig()
             l_p.do_update()
+
             # step 5
             if rig_variant == 'default':
                 scene_path = task_session.get_file_for(
@@ -70,15 +75,16 @@ class AssetCfxRigReleaseProcess(object):
             # create enable aux
             _task_dcc_core.AssetCfxRigHandle.create_nclothes_enable_aux()
 
-            bsc_log.Log.trace_method_result(
-                self.LOG_KEY, 'export scene: {}.'.format(scene_path)
-            )
-
+            # export scene
             location = _task_dcc_core.AssetCfxRigHandle.LOCATION
             qsm_mya_core.SceneFile.export_file(
                 scene_path, location, locations_extend=['QSM_SET']
             )
+            bsc_log.Log.trace_method_result(
+                self.LOG_KEY, 'export scene: {}.'.format(scene_path)
+            )
             l_p.do_update()
+
             # step 6, link to no version directory
             import qsm_lazy_sync.client as c
 

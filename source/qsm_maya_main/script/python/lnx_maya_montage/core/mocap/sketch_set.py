@@ -14,7 +14,7 @@ from ..base import sketch_set as _bsc_sketch_set
 
 class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
     @classmethod
-    def find_roots(cls, namespace):
+    def find_root_locations(cls, namespace):
         return cmds.ls('|{}:*'.format(namespace, long=1))
 
     @classmethod
@@ -43,14 +43,13 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
             return _[0]
 
     @classmethod
-    def generate(cls, namespace):
-        # todo, may has more than one root
-        paths = []
-        for i_location in cls.find_roots(namespace):
+    def find_sketches(cls, namespace):
+        list_ = []
+        for i_location in cls.find_root_locations(namespace):
             i_paths = cmds.ls(i_location, type='joint', long=1, dag=1) or []
             if i_paths:
-                paths.extend(i_paths)
-        return cls(paths)
+                list_.extend(i_paths)
+        return list_
 
     @classmethod
     def generate_by_location(cls, location, include_transform_type=False):

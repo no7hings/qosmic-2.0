@@ -51,6 +51,9 @@ class NodeAttributeKeyframeOpt(object):
     def find_curve_node(self):
         return NodeAttributeKeyframe.find_curve_node(self._path, self._atr_name)
 
+    def has_keyframe(self):
+        return bool(self.find_curve_node())
+
     def get_index_count(self):
         return cmds.keyframe(
             self._path,

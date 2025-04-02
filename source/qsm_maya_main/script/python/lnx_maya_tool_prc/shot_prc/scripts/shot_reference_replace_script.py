@@ -74,10 +74,6 @@ class ShotReferenceReplace(object):
 
                     qsm_mya_core.Reference.unload(i)
                     qsm_mya_core.Reference.hide_foster_parent(i)
-                    i_adv_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
-                    # qsm_mya_core.NodeAttribute.set_visible(
-                    #     i_adv_opt.find_root_location(), False
-                    # )
 
                     i_namespace_tgt = qsm_mya_core.SceneFile.reference_file(
                         i_file_path_tgt, namespace=bsc_storage.StgFileOpt(i_file_path_tgt).name_base
@@ -88,6 +84,10 @@ class ShotReferenceReplace(object):
                         i_json_path, start_frame=start_frame
                     )
 
+                    qsm_mya_core.Frame.to_start()
+
+                    i_adv_opt_tgt = qsm_mya_adv.AdvChrOpt(i_namespace_tgt)
+                    i_adv_opt_tgt.translate_main_control_to_toe()
             l_p.do_update()
 
             # 3. create preview

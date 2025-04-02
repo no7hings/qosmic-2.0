@@ -15,34 +15,23 @@ from ..base import sketch_set as _bsc_sketch_set
 # set
 class AdvSketchSet(_bsc_sketch_set.AbsSketchSet):
     @classmethod
-    def find_deform_set(cls, namespace):
-        _ = cmds.ls('{}:DeformSet'.format(namespace), long=1)
+    def find_root_location(cls, namespace):
+        _ = cmds.ls('{}:DeformationSystem'.format(namespace), long=1)
         if _:
             return _[0]
 
     @classmethod
     def find_sketches(cls, namespace):
-        _ = cls.find_deform_set(namespace)
+        _ = cls.find_root_location(namespace)
         if _:
-            return [qsm_mya_core.DagNode.to_path(x) for x in cmds.sets(_, query=1) or []]
+            return cmds.ls(_, type='joint', long=1, dag=1) or []
         return []
-
-    @classmethod
-    def generate(cls, namespace):
-        return cls(
-            cls.find_sketches(namespace)
-        )
 
     def __init__(self, *args, **kwargs):
         super(AdvSketchSet, self).__init__(*args, **kwargs)
 
 
 class AdvChrSketchSet(AdvSketchSet):
-    @classmethod
-    def generate(cls, namespace):
-        return cls(
-            cls.find_sketches(namespace)
-        )
 
     def __init__(self, *args, **kwargs):
         super(AdvChrSketchSet, self).__init__(*args, **kwargs)

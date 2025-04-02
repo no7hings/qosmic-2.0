@@ -48,6 +48,7 @@ class FKIKSwitch(object):
                                     i_main_key_inverse = i_main_key[:-2]+'fk'
                                 else:
                                     i_main_key_inverse = i_main_key[:-2]+'ik'
+
                                 i_data = cfg.get_as_content('limb_switch.{}'.format(i_main_key_inverse))
                                 return i_data, namespace, direction
                 elif direction in ['M']:
@@ -136,11 +137,15 @@ class FKIKSwitch(object):
     @_mya_core.Undo.execute
     def switch_limb_auto(cls, content, namespace, direction, mark_key=True):
         frame = _mya_core.Frame.get_current()
+
+        # mark selection
         selection_mark = cmds.ls(selection=1) or []
+
         options = dict(
             direction=direction,
             namespace=namespace
         )
+
         # check blend
         blend_control = ('{namespace}:'+content.get('blend_control.path')).format(**options)
         blend_port = content.get('blend_control.port')
@@ -148,11 +153,13 @@ class FKIKSwitch(object):
         blend_value_pre = _mya_core.NodeAttribute.get_value(blend_control, blend_port)
         if blend_value_pre == blend_value:
             return
+
         # mark pre key
         if mark_key is True:
             blend_curve_opt = _mya_core.NodeAttributeKeyframeOpt(blend_control, blend_port)
             blend_curve_opt.create_value_at_time(frame-1, blend_value_pre)
             blend_curve_opt.set_out_tangent_type_at_time(frame-1, 'step')
+
         # mark correspond controls key
         if mark_key is True:
             correspond_controls = content.get('correspond_controls')
@@ -160,6 +167,7 @@ class FKIKSwitch(object):
                 for k, v in correspond_controls.items():
                     i_control = '{}:{}'.format(namespace, v['control'].format(**options))
                     cls.mark_control_key_auto(i_control, frame)
+
         # switch controls
         controls = content.get('controls')
         if controls:
@@ -197,6 +205,7 @@ class FKIKSwitch(object):
                 # mark key
                 if mark_key is True:
                     cls.mark_control_key_auto(i_control, frame)
+
         # switch pole
         pole = content.get('pole')
         if pole:
@@ -208,14 +217,18 @@ class FKIKSwitch(object):
             cls.match_pole(pole_control, start, middle, end, distance_source)
             if mark_key is True:
                 cls.mark_control_key_auto(pole_control, frame)
+
         # apply new blend
         cmds.setAttr(blend_control+'.FKIKBlend', blend_value)
         if mark_key is True:
-            _mya_core.NodeAttributeKeyframeOpt(blend_control, blend_port).create_value_at_time(
+            blend_curve_opt = _mya_core.NodeAttributeKeyframeOpt(blend_control, blend_port)
+            blend_curve_opt.create_value_at_time(
                 frame, blend_value
             )
 
         cmds.select(clear=1)
+
+        # restore selection
         # if selection_mark:
         #     cmds.select(selection_mark)
 
@@ -269,6 +282,7 @@ class FKIKSwitch(object):
                 or cmds.objExists(i_fx) is False
             ):
                 continue
+
             i_translation = cmds.xform(i_ikx, translation=1, worldSpace=1, query=1)
             i_rotation = cmds.xform(i_ikx, rotation=1, worldSpace=1, query=1)
             i_parts = cmds.ls('{namespace}:IKX{key}Part*_{direction}'.format(**i_options), long=1)

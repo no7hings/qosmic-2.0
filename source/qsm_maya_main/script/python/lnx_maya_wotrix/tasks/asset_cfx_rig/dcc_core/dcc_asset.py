@@ -1,6 +1,5 @@
 # coding:utf-8
 import json
-
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -13,34 +12,39 @@ from . import dcc_organize as _cfx_rig_operate
 
 # rig
 class AssetCfxRigSceneOpt(object):
-    NAMESPACE = 'rig'
+    RIG_NAMESPACE = 'rig'
 
     @classmethod
     def load_rig(cls, scene_path):
         qsm_mya_core.SceneFile.reference_file(
-            scene_path, cls.NAMESPACE
+            scene_path, cls.RIG_NAMESPACE
         )
 
     @classmethod
     def remove_rig(cls):
         qsm_mya_core.Frame.set_current(1)
 
-        opt = qsm_mya_adv.AdvOpt(cls.NAMESPACE)
+        opt = qsm_mya_adv.AdvOpt(cls.RIG_NAMESPACE)
         opt.rest_controls_transformation(translate=True, rotate=True)
         qsm_mya_core.SceneFile.refresh()
 
-        node = qsm_mya_core.ReferencesCache().get(cls.NAMESPACE)
+        node = qsm_mya_core.ReferencesCache().get(cls.RIG_NAMESPACE)
         qsm_mya_core.Reference.remove(node)
 
     def __init__(self, *args, **kwargs):
-        if qsm_mya_core.Namespace.is_exists(self.NAMESPACE) is False:
+        if qsm_mya_core.Namespace.is_exists(self.RIG_NAMESPACE) is False:
             raise RuntimeError()
 
-        self._adv_rig = qsm_mya_adv.AdvOpt(self.NAMESPACE)
+        self._adv_rig = qsm_mya_adv.AdvOpt(self.RIG_NAMESPACE)
 
         self._mesh_set = set(self._adv_rig.find_all_meshes())
         self._mesh_set.update(set(self._adv_rig.find_all_lower_meshes()))
         self._control_set = set(self._adv_rig.find_all_transform_controls())
+
+    def find_rig_node(self, name):
+        _ = cmds.ls('{}:{}'.format(self.RIG_NAMESPACE, name), long=1)
+        if _:
+            return _[0]
 
     @property
     def mesh_set(self):

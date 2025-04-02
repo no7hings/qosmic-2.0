@@ -12,6 +12,16 @@ from ..base import abc as _bsc_abc
 
 
 class AbsSketchSet(_bsc_abc.AbsMontage):
+    @classmethod
+    def find_sketches(cls, namespace):
+        raise NotImplementedError()
+
+    @classmethod
+    def generate(cls, namespace):
+        return cls(
+            cls.find_sketches(namespace)
+        )
+
     def __init__(self, paths):
         super(AbsSketchSet, self).__init__()
 
@@ -19,6 +29,7 @@ class AbsSketchSet(_bsc_abc.AbsMontage):
         self._namespace = qsm_mya_core.DagNode.extract_namespace(self._paths[0])
 
         self._cache_dict = {}
+
         self._cache_all()
 
     def _cache_all(self):

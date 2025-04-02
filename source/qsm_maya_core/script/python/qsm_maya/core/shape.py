@@ -84,7 +84,6 @@ class Geometry(Shape):
     @classmethod
     def get_material_assign_map(cls, shape_path):
         dict_ = {}
-        transform_path = cls.get_transform(shape_path)
         material_paths = cls.get_materials(shape_path)
         if material_paths:
             for i_material_path in material_paths:

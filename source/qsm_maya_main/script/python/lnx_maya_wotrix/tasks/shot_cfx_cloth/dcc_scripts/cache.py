@@ -57,6 +57,7 @@ class ShotCfxClothCacheOpt(qsm_mya_resource.AssetCacheOpt):
 
     def load_cache(self, cache_path):
         self.create_cache_root_auto()
+
         cache_location_new = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
         cache_location = '|{}:{}'.format(self._namespace, self.CACHE_NAME)
         if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
