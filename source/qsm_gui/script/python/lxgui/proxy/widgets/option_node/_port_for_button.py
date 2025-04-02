@@ -31,8 +31,8 @@ class PrxPortForPressButton(_port_base.AbsPrxPort):
             _gui_core.GuiIcon.get(icon_key)
         )
 
-    def set_name_icon_text(self, text):
-        self._prx_port_input.set_name_icon_text(text)
+    def set_icon_text(self, text):
+        self._prx_port_input.set_icon_text(text)
 
     def set_status(self, status):
         self.get_input_widget()._set_status_(status)

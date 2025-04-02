@@ -245,7 +245,7 @@ class AdvOpt(_base.AdvNamespaceExtra):
         return x-x_0, y-y_0, z-z_0
 
     @_mya_core.Undo.execute
-    def translate_main_control_to_toe(self):
+    def move_main_control_to_toe(self):
         """
         support FK only
         """
@@ -258,6 +258,20 @@ class AdvOpt(_base.AdvNamespaceExtra):
         x_0, y_0, z_0 = _mya_core.Transform.get_translate(root_locator)
         _mya_core.Transform.set_translate(root_locator, (x_0-x, y_0-y, z_0-z))
         _mya_motion.ControlMove.remove_locator_fnc(root_control)
+
+        # move ik leg
+        leg_fkik_blend_controls = [
+            self._control_set.get('FKIKLeg_R'), self._control_set.get('FKIKLeg_L')
+        ]
+        for i in leg_fkik_blend_controls:
+            # check is IK
+            if _mya_core.NodeAttribute.get_value(i, 'FKIKBlend') == 10:
+                i_direction = i[-1]
+                i_ik_control = self._control_set.get('IKLeg_{}'.format(i_direction))
+                i_ik_locator = _mya_motion.ControlMove.create_locator_fnc(i_ik_control)
+                i_x_0, i_y_0, i_z_0 = _mya_core.Transform.get_translate(i_ik_locator)
+                _mya_core.Transform.set_translate(i_ik_locator, (i_x_0-x, i_y_0-y, i_z_0-z))
+                _mya_motion.ControlMove.remove_locator_fnc(i_ik_control)
 
         # move main
         main_control = self._control_set.get('Main')

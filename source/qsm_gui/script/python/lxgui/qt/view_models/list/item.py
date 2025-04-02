@@ -51,6 +51,9 @@ class _FramePlayThread(QtCore.QThread):
 
 
 class _AudioPlayThread(QtCore.QThread):
+    """
+    thread for play, fix timer fps error
+    """
     finished = qt_signal()
     progress_percent_changed = qt_signal(float)
 
@@ -872,6 +875,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 fps=24,
 
                 pixmap_cache_dict={},
+                hover_flag=False,
             )
             self._data.video.file = file_path
             self._data.video.load_flag = True
@@ -946,9 +950,12 @@ class ListItemModel(_item_base.AbsItemModel):
         if flag is True:
             index = int(self._data.video.index_maximum*percent)
             if index != self._data.video.index:
+                self._data.video.hover_flag = True
                 self._update_video_frame_at(index)
+            else:
+                self._data.video.hover_flag = False
 
-    def _update_video_frame_at(self, index):
+    def _update_video_frame_at(self, index, cache_flag=True):
         index = max(min(index, self._data.video.index_maximum), 0)
         self._data.video.index = index
         # update percent by index changing
@@ -959,17 +966,21 @@ class ListItemModel(_item_base.AbsItemModel):
             index+1,
             self._data.video.fps
         )
+
         # cache pixmap
         if index in self._data.video.pixmap_cache_dict:
             self._data.video.pixmap = self._data.video.pixmap_cache_dict[index]
         else:
             capture_opt = self._data.video.capture_opt
-            # fixme: may lost frame as white flat
+            # capture_opt.update()
+            # fixme: may lost frame as white flat.
             image = capture_opt.generate_qt_image(QtGui.QImage, index)
             if image.isNull() is False:
                 pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
                 self._data.video.pixmap = pixmap
-                self._data.video.pixmap_cache_dict[index] = pixmap
+                # todo: disable cache when hover for fix error frame.
+                if cache_flag is True:
+                    self._data.video.pixmap_cache_dict[index] = pixmap
 
         self.mark_force_refresh(True)
         self.update_view()

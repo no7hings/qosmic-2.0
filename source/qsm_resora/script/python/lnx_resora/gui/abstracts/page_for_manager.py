@@ -152,6 +152,7 @@ class _GuiBaseOpt(
         return t
 
 
+# type
 class _GuiTypeOpt(
     _GuiBaseOpt
 ):
@@ -539,6 +540,7 @@ class _GuiTypeOpt(
             qt_item._item_model.do_delete()
 
 
+# tag
 class _GuiTagOpt(
     _GuiBaseOpt
 ):
@@ -794,6 +796,7 @@ class _GuiTagOpt(
             qt_item._item_model.do_delete()
 
 
+# node
 class _GuiNodeOpt(_GuiBaseOpt):
     CHUNK_SIZE_MINIMUM = 16
     THREAD_MAXIMUM = 128
@@ -1228,6 +1231,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
             self.gui_add_entities(list(self._node_path_set), self.gui_update_thread_flag())
 
 
+# page
 class AbsPrxPageForManager(
     gui_prx_widgets.PrxBasePage,
     _GuiThreadExtra,

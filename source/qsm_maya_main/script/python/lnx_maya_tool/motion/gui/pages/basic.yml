@@ -642,6 +642,7 @@ build:
                         name: 'Control Move'
                         name_chs: '控制器移动'
 
+                    # control move
                     control_move/create_locator:
                         widget: button
                         name: 'Create Locator'
@@ -669,7 +670,29 @@ build:
                         tool_tip_chs:
                             |-
                             点击移除定位器，移除后会把定位器的位移和旋转数据偏移到控制器上。
-                    
+
+                    # character move
+                    character_move:
+                        widget: group
+                        name: 'Character Move'
+                        name_chs: '角色移动'
+
+                    character_move/move_main_control_to_toe:
+                        widget: button
+                        name: 'Move Main Control to Toe'
+                        name_chs: '移动主控制器（大环）到脚趾'
+                        icon: 'tool/maya/move'
+                        join_to_next: True
+                        tool_tip:
+                            |-
+                            To be supplemented.
+                        tool_tip_chs:
+                            |-
+                            将角色的大环移动到脚趾的位置：
+                                选中绑定的任意部件，然后点击按钮;
+                                如果角色的腿为IK模式，也会匹配腿的IK控制器。
+
+                    # control transform
                     control_transform:
                         widget: group
                         name: 'Control Transform'
@@ -699,7 +722,8 @@ build:
                         tool_tip_chs:
                             |-
                             待补充。
-                    
+
+                    # control
                     control:
                         widget: group
                         name: 'Control'

@@ -1,0 +1,62 @@
+entity:
+    resolve_patterns:
+        # entity_type: pattern
+        Project: '{root}/{project}/Assets'
+        Role: '{root}/{project}/Assets/{role}'
+        Asset: '{root}/{project}/Assets/{role}/{asset}'
+        Episode: '{root}/{project}/{episode}'
+        # do not add "{seq_IGN}"
+        Sequence: '{root}/{project}/{episode}/{sequence}/分镜'
+        # sequence variant has chinese word, so add "{seq_IGN}" for match result.
+        Shot: '{root}/{project}/{episode}/{sequence}{seq_IGN}/分镜/通过文件/{shot}.ma'
+
+        ProjectTask: '{root}/{project}/{task}'
+        AssetTask: '{root}/{project}/Assets/{role}/{asset}/{task}/Final'
+        SequenceTask: '{root}/{project}/{sequence}/{task}'
+        ShotTask: '{root}/{project}/{sequence}/{shot}/{task}'
+
+    path_patterns:
+        Project: '/{project}'
+        Role: '/{project}/{role}'
+        Asset: '/{project}/{asset}'
+
+        Episode: '/{project}/{episode}'
+        Sequence: '/{project}/{sequence}'
+        Shot: '/{project}/{sequence}/{shot}'
+
+        ProjectTask: '/{project}/{task}'
+        AssetTask: '/{project}/{asset}/{task}'
+        SequenceTask: '/{project}/{sequence}/{task}'
+        ShotTask: '/{project}/{sequence}/{shot}/{task}'
+
+    variant_keys:
+        Root: 'root'
+        Project: 'project'
+        Role: 'role'
+        Asset: 'asset'
+        Episode: 'episode'
+        Sequence: 'sequence'
+        Shot: 'shot'
+        Task: 'task'
+
+    variant_key_regexes:
+        project: '[a-zA-Z]*'
+        role: '[a-zA-Z]*'
+        asset: '[a-zA-Z]*'
+
+        episode: '[a-zA-Z]*[0-9]*'
+        sequence: '[a-zA-Z]*'
+        shot: '[a-zA-Z]*[0-9]'
+
+    tasks:
+        Concept: 'Design'
+        Model: 'Maya'
+        Rig: 'Rig'
+        Surface: 'UE'
+
+        Animation: '动画'
+
+file_patterns:
+    MayaRigFile: '{root}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
+    MayaModelFIle: '{root}/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
+

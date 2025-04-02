@@ -15,9 +15,9 @@ import lxgui.proxy.abstracts as prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy_backstage.core as qsm_dcc_task_core
+import lnx_backstage.core as qsm_dcc_task_core
 
-import qsm_lazy_backstage.worker as lzy_bks_worker
+import lnx_backstage.worker as lzy_bks_worker
 
 
 class _GuiBaseOpt(object):

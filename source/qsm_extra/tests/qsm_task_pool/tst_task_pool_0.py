@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-import qsm_lazy_backstage.core as lzy_bks_core
+import lnx_backstage.core as lzy_bks_core
 
 p = lzy_bks_core.TaskPool.generate()
 p.do_update()

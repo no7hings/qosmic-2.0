@@ -5,7 +5,7 @@ import lxbasic.web as bsc_web
 
 import lxgui.core as gui_core
 
-import qsm_lazy_backstage.worker as lzy_bks_worker
+import lnx_backstage.worker as lzy_bks_worker
 
 
 class BackstageTaskSubmit:

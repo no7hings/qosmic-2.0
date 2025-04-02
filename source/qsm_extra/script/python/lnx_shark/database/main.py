@@ -3,12 +3,12 @@ import re
 
 from . import _my_sql
 
-from . import abc_
+from . import _abc_
 
 from . import _handle
 
 
-class Stage(abc_.AbsBase):
+class Stage(_abc_.AbsBase):
 
     def __init__(self):
         pass

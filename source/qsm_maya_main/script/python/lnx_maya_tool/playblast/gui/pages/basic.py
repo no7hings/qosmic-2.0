@@ -333,7 +333,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
     def on_playblast_backstage(self):
         import lxbasic.web as bsc_web
 
-        import qsm_lazy_backstage.worker as lzy_bks_worker
+        import lnx_backstage.worker as lzy_bks_worker
 
         if lzy_bks_worker.TaskClient.get_server_status():
             camera = self.gui_get_camera_path()

@@ -728,7 +728,14 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                 port.set_menu_enable(create_options['menu_enable'])
 
             if 'use_name_icon' in create_options:
-                port.set_name_icon_text(widget_name)
+                port.set_icon_text(widget_name)
+            
+            if 'icon_text' in create_options:
+                icon_text = create_options['icon_text']
+                if gui_language == _gui_core.GuiLanguage.CHS:
+                    if 'icon_text_chs' in create_options:
+                        icon_text = create_options['icon_text_chs']
+                port.set_icon_text(icon_text)
 
         elif widget_type in {'check_button'}:
             port = _port_for_button.PrxPortForCheckButton(

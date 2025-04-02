@@ -829,6 +829,15 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
         subprocess.check_call(cmd_script)
 
     @classmethod
+    def create_thumbnail(cls, video_path_src):
+        base, ext = os.path.splitext(video_path_src)
+        video_path_dst = '{}.thumbnail.mov'.format(base)
+        if os.path.isfile(video_path_dst) is True:
+            return video_path_dst
+        cls.create_compress(video_path_src, video_path_dst, width_maximum=256)
+        return video_path_dst
+
+    @classmethod
     def concat_by_image_sequence(
         cls,
         image_sequence, video_path, 
@@ -963,6 +972,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
                     '-r', str(fps),
                     '-c:v', coding,
                     '-pix_fmt', 'yuv420p',
+                    '-bf', '0',
                     '-y', i_video_path_tmp
                 ]
 
@@ -979,6 +989,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
             '-safe', '0',
             '-i', file_list,
             '-c', 'copy',
+            '-bf', '0',
             '-y',
             output_video
         ]

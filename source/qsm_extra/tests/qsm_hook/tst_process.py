@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_lazy_backstage.worker as lzy_bks_worker
+import lnx_backstage.worker as lzy_bks_worker
 
 
 rtc = lzy_bks_worker.TaskSubprocess(

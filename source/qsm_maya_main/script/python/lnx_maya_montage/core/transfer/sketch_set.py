@@ -42,7 +42,7 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
     @classmethod
     def create(cls, namespace):
         graph = _SketchGraph(
-            namespace, 'maya/motion/sketch'
+            namespace, 'maya/montage/mtg_sketch'
         )
         graph.create_all()
 

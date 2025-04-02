@@ -53,7 +53,7 @@ class TaskBase(object):
 
     @classmethod
     def update_killed(cls, task_id):
-        import qsm_lazy_backstage.core as lzy_bks_core
+        import lnx_backstage.core as lzy_bks_core
 
         task_pool = lzy_bks_core.TaskPool.generate()
         bks_task = task_pool.find_entity(task_id)
@@ -62,7 +62,7 @@ class TaskBase(object):
 
     @classmethod
     def update_stopped(cls, task_id):
-        import qsm_lazy_backstage.core as lzy_bks_core
+        import lnx_backstage.core as lzy_bks_core
 
         task_pool = lzy_bks_core.TaskPool.generate()
         bks_task = task_pool.find_entity(task_id)
@@ -150,7 +150,7 @@ class TaskServer(object):
             if not data or 'cmd_script' not in data:
                 return flask.jsonify({'error': 'Invalid input'}), 400
 
-            import qsm_lazy_backstage.core as lzy_bks_core
+            import lnx_backstage.core as lzy_bks_core
 
             task_pool = lzy_bks_core.TaskPool.generate()
             bks_task = task_pool.new_entity(**data)
@@ -183,7 +183,7 @@ class TaskServer(object):
             )
             return flask.jsonify({'error': 'task is already in queue'}), 400
 
-        import qsm_lazy_backstage.core as lzy_bks_core
+        import lnx_backstage.core as lzy_bks_core
 
         task_pool = lzy_bks_core.TaskPool.generate()
         bks_task = task_pool.find_entity(task_id)
@@ -435,7 +435,7 @@ class TaskWorker(object):
             try:
                 import lxbasic.web as bsc_web
 
-                import qsm_lazy_backstage.worker as lzy_bks_worker
+                import lnx_backstage.worker as lzy_bks_worker
 
                 skt = bsc_web.WebSocket(
                     lzy_bks_worker.NoticeWebServerBase.HOST, lzy_bks_worker.NoticeWebServerBase.PORT
@@ -443,7 +443,7 @@ class TaskWorker(object):
                 if skt.connect() is True:
                     skt.send(_completed_notice)
 
-                import qsm_lazy_backstage.core as lzy_bks_core
+                import lnx_backstage.core as lzy_bks_core
 
                 notice_pool = lzy_bks_core.NoticePool.generate()
                 notice_pool.new_entity(
@@ -485,7 +485,7 @@ class TaskWorker(object):
         try:
             import lxbasic.web as bsc_web
 
-            import qsm_lazy_backstage.worker as lzy_bks_worker
+            import lnx_backstage.worker as lzy_bks_worker
 
             skt = bsc_web.WebSocket(
                 lzy_bks_worker.TaskWebServerBase.HOST, lzy_bks_worker.TaskWebServerBase.PORT

@@ -3,7 +3,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.web as bsc_web
 
-import qsm_lazy_backstage.worker as lzy_bks_worker
+import lnx_backstage.worker as lzy_bks_worker
 
 time_tag = bsc_core.BscSystem.get_time_tag()
 

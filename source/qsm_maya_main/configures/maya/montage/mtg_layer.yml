@@ -1,142 +1,63 @@
 options:
     namespace: ''
 
+    angle_input_factor: 57.295779513082323
+    angle_output_factor: 0.017453292519943295
+
 dag_nodes:
     /montage_master:
         type: transform
-        properties: {}
+        properties:
+            translateX: 0.0
+            translateY: 0.0
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+        create_properties:
+            start_translate_x:
+                type: float
+                value: 0
+            start_translate_y:
+                type: float
+                value: 0
+            start_translate_z:
+                type: float
+                value: 0
+
+            start_rotate_x:
+                type: angle
+                value: 0
+            start_rotate_y:
+                type: angle
+                value: 0
+            start_rotate_z:
+                type: angle
+                value: 0
+
     /montage_master/aux:
         type: transform
         properties: {}
-    /montage_master/aux/locator_grp:
+
+    /montage_master/aux/joint_grp:
         type: transform
         properties:
             visibility: 0
-    /montage_master/aux/locator_grp/root_loc:
-        type: transform
-        properties:
-            translateX: 0
-            translateY: 8.372549042545922
-            translateZ: 0
-            rotateX: 0
-            rotateY: 0
-            rotateZ: 0
-    /montage_master/aux/locator_grp/root_loc/root_locShape:
-        type: locator
-        properties: {}
-    /montage_master/aux/locator_grp/min_loc:
-        type: transform
-        properties: {}
-    /montage_master/aux/locator_grp/min_loc/min_locShape:
-        type: locator
-        properties: {}
-    /montage_master/aux/locator_grp/max_loc:
-        type: transform
-        properties: {}
-    /montage_master/aux/locator_grp/max_loc/max_locShape:
-        type: locator
-        properties: {}
-
-    /montage_master/aux/camera_grp:
-        type: transform
-        properties: {}
-
-    /montage_master/aux/camera_grp/camera_grp_PRC:
-        type: parentConstraint
-        properties:
-            enableRestPosition: 1
-
-        connections:
-            # translation
-            - "<options.namespace>:camera_grp_PRC.constraintTranslateX"
-            - "<options.namespace>:camera_grp.translateX"
-            - "<options.namespace>:camera_grp_PRC.constraintTranslateY"
-            - "<options.namespace>:camera_grp.translateY"
-            - "<options.namespace>:camera_grp_PRC.constraintTranslateZ"
-            - "<options.namespace>:camera_grp.translateZ"
-            # rotation
-            - "<options.namespace>:camera_grp_PRC.constraintRotateX"
-            - "<options.namespace>:camera_grp.rotateX"
-            - "<options.namespace>:camera_grp_PRC.constraintRotateY"
-            - "<options.namespace>:camera_grp.rotateY"
-            - "<options.namespace>:camera_grp_PRC.constraintRotateZ"
-            - "<options.namespace>:camera_grp.rotateZ"
-            # default use start source translate
-            - '<options.namespace>:root_loc.translate'
-            - '<options.namespace>:camera_grp_PRC.target[0].targetTranslate'
-            - '<options.namespace>:root_loc.rotate'
-            - '<options.namespace>:camera_grp_PRC.target[0].targetRotate'
-
-    /montage_master/aux/camera_grp/persp_cam:
-        type: transform
-        properties:
-            translateX: -28
-            translateY: 18.5
-            translateZ: 28
-            rotateX: -15
-            rotateY: -45
-            rotateZ: 0.0
-
-    /montage_master/aux/camera_grp/persp_cam/persp_camShape:
-        type: camera
-        properties:
-            filmFit: 1
-            displayResolution: 1
-            focalLength: 55
-            overscan: 1
-            displayGateMaskOpacity: 1
-            displayGateMaskColor: [0, 0, 0]
-
-    /montage_master/aux/geometry_grp:
-        type: transform
-        properties: {}
-
-    /montage_master/aux/geometry_grp/ground_plane_geo:
-        type: transform
-        properties:
-            scaleX: 24
-            scaleY: 24
-            scaleZ: 24
-
-    /montage_master/aux/geometry_grp/ground_plane_geo/ground_plane_geoShape:
-        type: mesh
-
-    # constraint
-    /montage_master/aux/geometry_grp/geometry_grp_PTC:
-        type: pointConstraint
-        properties:
-            enableRestPosition: 1
-
-    /montage_master/aux/geometry_grp/x_axis_geo:
-        type: transform
-        properties:
-            translateX: 2.5
-            translateY: 0
-            translateZ: -0.2
-            rotateX: 0
-            rotateY: 90
-            rotateZ: 0
-
-    /montage_master/aux/geometry_grp/x_axis_geo/x_axis_geoShape:
-        type: mesh
-
-    /montage_master/aux/geometry_grp/z_axis_geo:
-        type: transform
-        properties:
-            translateX: -0.25
-            translateY: 0
-            translateZ: 2.5
-            rotateX: 0
-            rotateY: 0
-            rotateZ: 0
-
-    /montage_master/aux/geometry_grp/z_axis_geo/z_axis_geoShape:
-        type: mesh
 
     /montage_master/ROOT:
         type: transform
         properties:
+            translateX: 0.0
+            translateY: 0.0
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
             visibility: 0
+
+            overrideEnabled: 1
+            overrideRGBColors: 1
+            overrideColorRGB: [0, 0, 0]
 
     /montage_master/ROOT/Root_M:
         type: joint
@@ -148,30 +69,10 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 1.1198709655450322e-13
+            rotateOrder: 0
             jointOrientX: 90.00000250447816
             jointOrientY: 0.0
             jointOrientZ: 90.00000250447816
-        connections:
-            - '<options.namespace>:geometry_grp_PTC.constraintTranslateX'
-            - '<options.namespace>:geometry_grp.translateX'
-            - '<options.namespace>:geometry_grp_PTC.constraintTranslateZ'
-            - '<options.namespace>:geometry_grp.translateZ'
-            #
-            - '<options.namespace>:geometry_grp.parentInverseMatrix'
-            - '<options.namespace>:geometry_grp_PTC.constraintParentInverseMatrix'
-            - '<options.namespace>:geometry_grp.rotatePivot'
-            - '<options.namespace>:geometry_grp_PTC.constraintRotatePivot'
-            - '<options.namespace>:geometry_grp.rotatePivotTranslate'
-            - '<options.namespace>:geometry_grp_PTC.constraintRotateTranslate'
-            #
-            - '<options.namespace>:Root_M.translate'
-            - '<options.namespace>:geometry_grp_PTC.target[0].targetTranslate'
-            - '<options.namespace>:Root_M.rotatePivot'
-            - '<options.namespace>:geometry_grp_PTC.target[0].targetRotatePivot'
-            - '<options.namespace>:Root_M.rotatePivotTranslate'
-            - '<options.namespace>:geometry_grp_PTC.target[0].targetRotateTranslate'
-            - '<options.namespace>:Root_M.parentMatrix'
-            - '<options.namespace>:geometry_grp_PTC.target[0].targetParentMatrix'
     /montage_master/ROOT/Root_M/Hip_R:
         type: joint
         properties:
@@ -182,6 +83,7 @@ dag_nodes:
             rotateX: -1.218242606159776e-06
             rotateY: 1.1035610010232429e-16
             rotateZ: 3.5163275573808946e-06
+            rotateOrder: 2
             jointOrientX: 179.45021576190533
             jointOrientY: 0.2930566034566698
             jointOrientZ: -179.3865857195975
@@ -195,6 +97,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: -1.9295923281396557e-06
+            rotateOrder: 2
             jointOrientX: -9.939233379573492e-17
             jointOrientY: -5.590818776010089e-17
             jointOrientZ: -3.4260508487653136
@@ -208,6 +111,7 @@ dag_nodes:
             rotateX: -1.5643429783092405e-14
             rotateY: 1.1217639225746935e-07
             rotateZ: -1.2373401603105654e-07
+            rotateOrder: 3
             jointOrientX: -1.0169722652891755
             jointOrientY: 0.2871404056553959
             jointOrientZ: 4.042253226767524
@@ -221,6 +125,7 @@ dag_nodes:
             rotateX: 1.413855963287628e-14
             rotateY: -5.565970310434482e-15
             rotateZ: 3.097097061820337e-06
+            rotateOrder: 5
             jointOrientX: 2.1228236478136107
             jointOrientY: -1.0785970067453798
             jointOrientZ: 59.98037853616664
@@ -234,6 +139,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 5
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -247,6 +153,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: -3.791516639546772e-22
             jointOrientY: -5.18178130076575e-22
             jointOrientZ: -2.0127412719108724e-29
@@ -260,6 +167,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: -3.791516639546772e-22
             jointOrientY: -5.18178130076575e-22
             jointOrientZ: -2.0127412719108724e-29
@@ -273,6 +181,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 5.565970692561154e-15
+            rotateOrder: 0
             jointOrientX: -3.791516639546772e-22
             jointOrientY: -9.47879159886693e-23
             jointOrientZ: -4.899102165692916
@@ -286,6 +195,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 1.113194138512231e-14
+            rotateOrder: 5
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 11.793716668165006
@@ -299,6 +209,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 5
             jointOrientX: 7.583033279093544e-22
             jointOrientY: 7.73113939782584e-22
             jointOrientZ: -7.136957298186947
@@ -312,6 +223,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -325,6 +237,7 @@ dag_nodes:
             rotateX: -2.255646083250215e-06
             rotateY: 3.721000492564906e-15
             rotateZ: 1.987845943464573e-16
+            rotateOrder: 2
             jointOrientX: 57.95465371135073
             jointOrientY: 90.02123073241857
             jointOrientZ: 54.91946107818551
@@ -338,6 +251,7 @@ dag_nodes:
             rotateX: -4.611648987600542e-15
             rotateY: -1.2970699560343405e-14
             rotateZ: 3.683728371304424e-15
+            rotateOrder: 5
             jointOrientX: -7.945795556775837
             jointOrientY: 0.29736421166712645
             jointOrientZ: -1.6286531647825455
@@ -351,6 +265,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 4.373262687012335e-15
+            rotateOrder: 5
             jointOrientX: -2.7462428959817215e-19
             jointOrientY: 1.9868632290703983e-16
             jointOrientZ: 3.3711672905765
@@ -364,6 +279,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 5
             jointOrientX: -2.761171992749937e-19
             jointOrientY: -9.958731327945418e-17
             jointOrientZ: -1.987846675914698e-16
@@ -377,6 +293,7 @@ dag_nodes:
             rotateX: -4.67143968839954e-15
             rotateY: -9.641056378186285e-15
             rotateZ: -5.466578358765416e-16
+            rotateOrder: 0
             jointOrientX: 8.042128544829708
             jointOrientY: 4.627903101395208
             jointOrientZ: -0.3748403547634773
@@ -390,6 +307,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 8.348956038841729e-15
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 3.3063643767221156
             jointOrientZ: 0.0
@@ -403,6 +321,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 1.5455507905236776e-14
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.31504276895152905
             jointOrientZ: 0.0
@@ -416,6 +335,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -429,6 +349,7 @@ dag_nodes:
             rotateX: -2.1235695370375725e-06
             rotateY: 6.361109624477255e-15
             rotateZ: 1.4113711281112565e-14
+            rotateOrder: 0
             jointOrientX: -65.49810587602644
             jointOrientY: 15.002501974196528
             jointOrientZ: 27.02196834726151
@@ -442,6 +363,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -455,6 +377,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -468,6 +391,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -481,6 +405,7 @@ dag_nodes:
             rotateX: 7.516545243302449e-16
             rotateY: 1.6660639952510062e-14
             rotateZ: -1.6151254241806921e-15
+            rotateOrder: 0
             jointOrientX: 3.051447202745257
             jointOrientY: 2.6966607102717637
             jointOrientZ: 2.31415496226883
@@ -494,6 +419,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 9.541664044390549e-15
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 6.422779058192061
             jointOrientZ: 0.0
@@ -507,6 +433,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 1.967968209155551e-14
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: -0.36182308142249014
             jointOrientZ: 0.0
@@ -520,6 +447,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -533,6 +461,7 @@ dag_nodes:
             rotateX: -1.441188840038156e-14
             rotateY: 1.4908850069360234e-14
             rotateZ: 4.969616689786743e-15
+            rotateOrder: 0
             jointOrientX: 20.021096164984744
             jointOrientY: -10.054865764922
             jointOrientZ: 5.831025128880507
@@ -546,6 +475,7 @@ dag_nodes:
             rotateX: 3.458853216091575e-14
             rotateY: 6.361109362927032e-15
             rotateZ: 5.218097524276084e-15
+            rotateOrder: 0
             jointOrientX: -8.883761529831595
             jointOrientY: 5.055206992947206
             jointOrientZ: -16.76448928947933
@@ -559,6 +489,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 7.951386703658789e-15
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 8.250591894714006
             jointOrientZ: 0.0
@@ -572,6 +503,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 1.987846675914698e-15
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: -1.145915564648438
             jointOrientZ: 0.0
@@ -585,6 +517,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -598,6 +531,7 @@ dag_nodes:
             rotateX: -4.1545995526617185e-14
             rotateY: 1.3318572728628477e-14
             rotateZ: -3.3793393490549915e-15
+            rotateOrder: 0
             jointOrientX: -13.90484873966683
             jointOrientY: 9.357466738396896
             jointOrientZ: -13.573562366806408
@@ -611,6 +545,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 1.3517357396219947e-14
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 6.875493387890622
             jointOrientZ: 0.0
@@ -624,6 +559,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -637,6 +573,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -650,6 +587,7 @@ dag_nodes:
             rotateX: 5.075171348277815e-12
             rotateY: -1.908332808877947e-14
             rotateZ: 3.6775163504421066e-14
+            rotateOrder: 2
             jointOrientX: -122.04534881356916
             jointOrientY: 89.9787694464316
             jointOrientZ: 54.919460596166864
@@ -663,6 +601,7 @@ dag_nodes:
             rotateX: 1.1220224296108548e-11
             rotateY: 3.071595835540049e-13
             rotateZ: 1.0851779244232573e-13
+            rotateOrder: 5
             jointOrientX: -7.945795556775837
             jointOrientY: 0.29736421166712645
             jointOrientZ: -1.6286531647825455
@@ -676,6 +615,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 1.0774128983457664e-13
+            rotateOrder: 5
             jointOrientX: -5.589359042103863e-18
             jointOrientY: -1.182106513289636e-16
             jointOrientZ: 3.3711672905764987
@@ -689,6 +629,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 5
             jointOrientX: -2.4819267922473163e-18
             jointOrientY: -1.8721675328633496e-17
             jointOrientZ: 1.987846675914698e-16
@@ -702,6 +643,7 @@ dag_nodes:
             rotateX: -4.6105618839496516e-14
             rotateY: -1.9170296380852366e-14
             rotateZ: 2.236327510404042e-15
+            rotateOrder: 0
             jointOrientX: 8.042128544829708
             jointOrientY: 4.627903101395208
             jointOrientZ: -0.3748403547634773
@@ -715,6 +657,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: -1.590277340731758e-15
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 3.3063643767221156
             jointOrientZ: 0.0
@@ -728,6 +671,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 5.665363026356889e-15
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.31504276895152905
             jointOrientZ: 0.0
@@ -741,6 +685,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -754,6 +699,7 @@ dag_nodes:
             rotateX: -1.779122774943655e-14
             rotateY: 2.2263882770244617e-14
             rotateZ: -8.945310041616143e-15
+            rotateOrder: 0
             jointOrientX: -65.498107999596
             jointOrientY: 15.002501974196548
             jointOrientZ: 27.021968347261506
@@ -767,6 +713,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -780,6 +727,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -793,6 +741,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -806,6 +755,7 @@ dag_nodes:
             rotateX: -6.323837237753633e-15
             rotateY: 2.5220804700667736e-15
             rotateZ: 1.7393658414253597e-16
+            rotateOrder: 0
             jointOrientX: 3.051447202745257
             jointOrientY: 2.6966607102717637
             jointOrientZ: 2.31415496226883
@@ -819,6 +769,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 2.385416011097637e-15
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 6.422779058192061
             jointOrientZ: 0.0
@@ -832,6 +783,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 7.851994369863057e-15
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: -0.36182308142249014
             jointOrientZ: 0.0
@@ -845,6 +797,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -858,6 +811,7 @@ dag_nodes:
             rotateX: -1.5505204072134644e-14
             rotateY: 1.2324649390671126e-14
             rotateZ: -9.342879376799082e-15
+            rotateOrder: 0
             jointOrientX: 20.021096164984744
             jointOrientY: -10.054865764922
             jointOrientZ: 5.831025128880507
@@ -871,6 +825,7 @@ dag_nodes:
             rotateX: -9.34287937679908e-15
             rotateY: -9.939233379573494e-16
             rotateZ: -3.677516350442191e-15
+            rotateOrder: 0
             jointOrientX: -8.883761529831595
             jointOrientY: 5.055206992947206
             jointOrientZ: -16.76448928947933
@@ -884,6 +839,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: -3.180554681463516e-15
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 8.250591894714006
             jointOrientZ: 0.0
@@ -897,6 +853,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 1.133072605271378e-14
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: -1.145915564648438
             jointOrientZ: 0.0
@@ -910,6 +867,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -923,6 +881,7 @@ dag_nodes:
             rotateX: -2.8426207465580184e-14
             rotateY: -2.6040791454482544e-14
             rotateZ: 1.1927080055488253e-15
+            rotateOrder: 0
             jointOrientX: -13.90484873966683
             jointOrientY: 9.357466738396896
             jointOrientZ: -13.573562366806408
@@ -936,6 +895,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: -3.180554681463517e-14
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 6.875493387890622
             jointOrientZ: 0.0
@@ -949,6 +909,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -962,6 +923,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 0
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
@@ -975,6 +937,7 @@ dag_nodes:
             rotateX: -3.8825130388958935e-19
             rotateY: 3.3675432571793796e-37
             rotateZ: -9.939233379573487e-17
+            rotateOrder: 2
             jointOrientX: 179.4502145256768
             jointOrientY: 0.2930565955557249
             jointOrientZ: 0.6134107639427042
@@ -988,6 +951,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: -1.929592313032021e-06
+            rotateOrder: 2
             jointOrientX: 0.0
             jointOrientY: -6.212020862233431e-18
             jointOrientZ: -3.4260508487653136
@@ -1001,6 +965,7 @@ dag_nodes:
             rotateX: -9.102361782540403e-15
             rotateY: 1.3692611757468858e-07
             rotateZ: -1.2330451683565046e-07
+            rotateOrder: 3
             jointOrientX: -1.0169722652891755
             jointOrientY: 0.2871404056553959
             jointOrientZ: 4.042253226767524
@@ -1014,6 +979,7 @@ dag_nodes:
             rotateX: 1.9679682091555504e-14
             rotateY: 3.776908684237962e-15
             rotateZ: 2.0975199042374293e-13
+            rotateOrder: 5
             jointOrientX: 2.122823589543671
             jointOrientY: -1.0785971214673817
             jointOrientZ: 59.98038163168668
@@ -1027,195 +993,948 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            rotateOrder: 5
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
 
+    # root proxy
+    /montage_master/ROOT/ROOT_END_TRS_PRX:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            visibility: 0
+        connections:
+            - "<options.namespace>:Root_M.jointOrient"
+            - "<options.namespace>:ROOT_END_TRS_PRX.jointOrient"
+
+    # joint aux
+    /montage_master/aux/joint_grp/ROOT_START_SRC:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            visibility: 0
+            overrideEnabled: 1
+            # red
+            overrideColor: 12
+    /montage_master/aux/joint_grp/ROOT_END_SRC:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            visibility: 0
+            overrideEnabled: 1
+            # blue
+            overrideColor: 6
+    # root start
+    /montage_master/aux/joint_grp/ROOT_START:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            overrideEnabled: 1
+            # red
+            overrideColor: 12
+
+    /montage_master/aux/joint_grp/ROOT_START_INPUT:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            overrideEnabled: 1
+            # red
+            overrideColor: 12
+
+    /montage_master/aux/joint_grp/ROOT_START/ROOT_START_PRC:
+        type: parentConstraint
+        properties:
+            enableRestPosition: 1
+        connections:
+            # translation
+            # rotation
+            - "<options.namespace>:ROOT_START_PRC.constraintRotateX"
+            - "<options.namespace>:ROOT_START.rotateX"
+            - "<options.namespace>:ROOT_START_PRC.constraintRotateY"
+            - "<options.namespace>:ROOT_START.rotateY"
+            - "<options.namespace>:ROOT_START_PRC.constraintRotateZ"
+            - "<options.namespace>:ROOT_START.rotateZ"
+            # default use start source translate
+            - '<options.namespace>:ROOT_START_INPUT.translate'
+            - '<options.namespace>:ROOT_START_PRC.target[0].targetTranslate'
+            - '<options.namespace>:ROOT_START_INPUT.rotate'
+            - '<options.namespace>:ROOT_START_PRC.target[0].targetRotate'
+    # root end
+    /montage_master/aux/joint_grp/ROOT_END:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            overrideEnabled: 1
+            # blue
+            overrideColor: 6
+        connections:
+            # to rotation
+            - "<options.namespace>:ROOT_START.translate"
+            - "<options.namespace>:ROOT.rotatePivot"
+            - "<options.namespace>:ROOT_START.translate"
+            - "<options.namespace>:ROOT.scalePivot"
+            # to main
+            - "<options.namespace>:ROOT_START.translateX"
+            - "<options.namespace>:montage_master.start_translate_x"
+            - "<options.namespace>:ROOT_START.translateY"
+            - "<options.namespace>:montage_master.start_translate_y"
+            - "<options.namespace>:ROOT_START.translateZ"
+            - "<options.namespace>:montage_master.start_translate_z"
+            #
+            - "<options.namespace>:ROOT_START.rotateX"
+            - "<options.namespace>:montage_master.start_rotate_x"
+            - "<options.namespace>:ROOT_START.rotateY"
+            - "<options.namespace>:montage_master.start_rotate_y"
+            - "<options.namespace>:ROOT_START.rotateZ"
+            - "<options.namespace>:montage_master.start_rotate_z"
+    /montage_master/aux/joint_grp/ROOT_END/ROOT_END_PTC:
+        type: pointConstraint
+        properties:
+            enableRestPosition: 1
+        connections:
+            #
+            - "<options.namespace>:ROOT_END_PTC.constraintTranslateX"
+            - "<options.namespace>:ROOT_END.translateX"
+            - "<options.namespace>:ROOT_END_PTC.constraintTranslateY"
+            - "<options.namespace>:ROOT_END.translateY"
+            - "<options.namespace>:ROOT_END_PTC.constraintTranslateZ"
+            - "<options.namespace>:ROOT_END.translateZ"
+            #
+            - "<options.namespace>:ROOT_END.parentInverseMatrix"
+            - "<options.namespace>:ROOT_END_PTC.constraintParentInverseMatrix"
+            - "<options.namespace>:ROOT_END.rotatePivot"
+            - "<options.namespace>:ROOT_END_PTC.constraintRotatePivot"
+            #
+            - "<options.namespace>:ROOT_END.rotatePivotTranslate"
+            - "<options.namespace>:ROOT_END_PTC.constraintRotateTranslate"
+            #
+            - "<options.namespace>:ROOT_END_TRS_PRX.translate"
+            - "<options.namespace>:ROOT_END_PTC.target[0].targetTranslate"
+            - "<options.namespace>:ROOT_END_TRS_PRX.rotatePivot"
+            - "<options.namespace>:ROOT_END_PTC.target[0].targetRotatePivot"
+            - "<options.namespace>:ROOT_END_TRS_PRX.rotatePivotTranslate"
+            - "<options.namespace>:ROOT_END_PTC.target[0].targetRotateTranslate"
+            - "<options.namespace>:ROOT_END_TRS_PRX.parentMatrix"
+            - "<options.namespace>:ROOT_END_PTC.target[0].targetParentMatrix"
+    /montage_master/aux/joint_grp/ROOT_END/ROOT_END_ORC:
+        type: orientConstraint
+        properties:
+            offsetY: 90
+            enableRestPosition: 1
+        connections:
+            - "<options.namespace>:ROOT_END_ORC.constraintRotateX"
+            - "<options.namespace>:ROOT_END.rotateX"
+            - "<options.namespace>:ROOT_END_ORC.constraintRotateY"
+            - "<options.namespace>:ROOT_END.rotateY"
+            - "<options.namespace>:ROOT_END_ORC.constraintRotateZ"
+            - "<options.namespace>:ROOT_END.rotateZ"
+            #
+            - "<options.namespace>:ROOT_END.rotateOrder"
+            - "<options.namespace>:ROOT_END_ORC.constraintRotateOrder"
+            - "<options.namespace>:ROOT_END.parentInverseMatrix"
+            - "<options.namespace>:ROOT_END_ORC.constraintParentInverseMatrix"
+            - "<options.namespace>:ROOT_END.jointOrient"
+            - "<options.namespace>:ROOT_END_ORC.constraintJointOrient"
+            - "<options.namespace>:ROOT_END.inverseScale"
+            - "<options.namespace>:ROOT_END_ORC.inverseScale"
+    # root rotation
+    /montage_master/aux/joint_grp/ROOT_END_RTT:
+        type: transform
+        properties:
+            translateX: 0.0
+            translateY: 0.0
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            visibility: 0
+        connections:
+            - "<options.namespace>:ROOT_END.translate"
+            - "<options.namespace>:ROOT_END_RTT.translate"
+    #
+    /montage_master/aux/joint_grp/ROOT_END_RTT/ROOT_END_AMI:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 1
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+
+    /montage_master/aux/joint_grp/ROOT_END_RTT/ROOT_END_AMI/ROOT_END_AMI_PTC:
+        type: pointConstraint
+        properties:
+            enableRestPosition: 1
+        connections:
+            # ignore Y
+            - "<options.namespace>:ROOT_END_AMI_PTC.constraintTranslateX"
+            - "<options.namespace>:ROOT_END_AMI.translateX"
+            # no Y
+            - "<options.namespace>:ROOT_END_AMI_PTC.constraintTranslateZ"
+            - "<options.namespace>:ROOT_END_AMI.translateZ"
+            #
+            - "<options.namespace>:ROOT_END_AMI.parentInverseMatrix"
+            - "<options.namespace>:ROOT_END_AMI_PTC.constraintParentInverseMatrix"
+            - "<options.namespace>:ROOT_END_AMI.rotatePivot"
+            - "<options.namespace>:ROOT_END_AMI_PTC.constraintRotatePivot"
+            - "<options.namespace>:ROOT_END_AMI.rotatePivotTranslate"
+            - "<options.namespace>:ROOT_END_AMI_PTC.constraintRotateTranslate"
+
+    /montage_master/aux/joint_grp/ROOT_END_RTT/ROOT_END_RTT_PRX:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: -90
+            jointOrientZ: 0
+            overrideEnabled: 1
+            overrideColor: 17
+
+    /montage_master/aux/joint_grp/ROOT_END_RTT/ROOT_END_RTT_PRX/ROOT_END_RTT_PRX_AMI:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 1
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            overrideEnabled: 1
+            overrideColor: 17
+
+    /montage_master/aux/joint_grp/ROOT_END_RTT/ROOT_END_RTT_PRX/ROOT_END_RTT_PRX_AMC:
+        type: aimConstraint
+        properties:
+            enableRestPosition: 1
+        connections:
+            - "<options.namespace>:ROOT_END_RTT_PRX.parentInverseMatrix"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintParentInverseMatrix"
+            - "<options.namespace>:ROOT_END_RTT_PRX.translate"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintTranslate"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotatePivot"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintRotatePivot"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotatePivotTranslate"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintRotateTranslate"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotateOrder"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintRotateOrder"
+            - "<options.namespace>:ROOT_END_RTT_PRX.jointOrient"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintJointOrient"
+            - "<options.namespace>:ROOT_END_RTT_PRX.inverseScale"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.inverseScale"
+            - "<options.namespace>:ROOT_END_AMI.translate"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.target[0].targetTranslate"
+            - "<options.namespace>:ROOT_END_AMI.rotatePivot"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.target[0].targetRotatePivot"
+            - "<options.namespace>:ROOT_END_AMI.rotatePivotTranslate"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.target[0].targetRotateTranslate"
+            - "<options.namespace>:ROOT_END_AMI.parentMatrix"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.target[0].targetParentMatrix"
+            #
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintRotateX"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotateX"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintRotateY"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotateY"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintRotateZ"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotateZ"
+            #
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotate"
+            - "<options.namespace>:ROOT_END_ORC.target[0].targetRotate"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotateOrder"
+            - "<options.namespace>:ROOT_END_ORC.target[0].targetRotateOrder"
+            - "<options.namespace>:ROOT_END_RTT_PRX.parentMatrix"
+            - "<options.namespace>:ROOT_END_ORC.target[0].targetParentMatrix"
+            - "<options.namespace>:ROOT_END_RTT_PRX.jointOrient"
+            - "<options.namespace>:ROOT_END_ORC.target[0].targetJointOrient"
+    /montage_master/aux/joint_grp/ROOT_END_RTT/ROOT_END_RTT_BSE:
+        type: transform
+        properties:
+            translateX: 0.0
+            translateY: 0.0
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+
+    /montage_master/aux/joint_grp/ROOT_END_RTT/ROOT_END_RTT_BSE/ROOT_END_RTT_BSE_AMI:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 1
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+        connections:
+            # to constraint
+            - "<options.namespace>:ROOT_END_RTT_BSE_AMI.translate"
+            - "<options.namespace>:ROOT_END_AMI_PTC.target[0].targetTranslate"
+            - "<options.namespace>:ROOT_END_RTT_BSE_AMI.rotatePivot"
+            - "<options.namespace>:ROOT_END_AMI_PTC.target[0].targetRotatePivot"
+            - "<options.namespace>:ROOT_END_RTT_BSE_AMI.rotatePivotTranslate"
+            - "<options.namespace>:ROOT_END_AMI_PTC.target[0].targetRotateTranslate"
+            - "<options.namespace>:ROOT_END_RTT_BSE_AMI.parentMatrix"
+            - "<options.namespace>:ROOT_END_AMI_PTC.target[0].targetParentMatrix"
+
 nodes:
-    ground_plane_geo_input:
+    ROOT_START_SRC_MTX:
         name: '<options.namespace>:<..key>'
-        type: polyPlane
+        type: decomposeMatrix
+        connections:
+            - '<options.namespace>:ROOT_START_SRC.worldMatrix[0]'
+            - '<options.namespace>:ROOT_START_SRC_MTX.inputMatrix'
+    ROOT_OFFSET_MTX:
+        name: '<options.namespace>:<..key>'
+        type: decomposeMatrix
+        connections:
+            - '<options.namespace>:ROOT_START.worldMatrix[0]'
+            - '<options.namespace>:ROOT_OFFSET_MTX.inputMatrix'
+    # translation
+    root_translate_offset_dif:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            operation: 2
+        connections:
+            - "<options.namespace>:ROOT_OFFSET_MTX.outputTranslate"
+            - "<options.namespace>:root_translate_offset_dif.input3D[0]"
+            - "<options.namespace>:ROOT_START_SRC_MTX.outputTranslate"
+            - "<options.namespace>:root_translate_offset_dif.input3D[1]"
+
+    root_translate_offset_scale:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            operation: 2
+        connections:
+            - "<options.namespace>:root_translate_offset_dif.output3D"
+            - "<options.namespace>:root_translate_offset_scale.input1"
+            - "<options.namespace>:ROOT_START_SRC_MTX.outputScale"
+            - "<options.namespace>:root_translate_offset_scale.input2"
+    # anim curve for root
+    Root_M_translateX:
+        name: '<options.namespace>:<..key>'
+        type: animCurveTL
+        properties:
+            preInfinity: 4
+            postInfinity: 4
+
+    Root_M_translateY:
+        name: '<options.namespace>:<..key>'
+        type: animCurveTL
+        properties:
+            preInfinity: 4
+            postInfinity: 4
+
+    Root_M_translateZ:
+        name: '<options.namespace>:<..key>'
+        type: animCurveTL
+        properties:
+            preInfinity: 4
+            postInfinity: 4
+    # root source start and end
+    # start
+    Root_M_translateX_start:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # from curve
+            - "<options.namespace>:Root_M_translateX.output"
+            - "<options.namespace>:Root_M_translateX_start.stream"
+            # to joint
+            - "<options.namespace>:Root_M_translateX_start.varying"
+            - "<options.namespace>:ROOT_START_SRC.translateX"
+    Root_M_translateY_start:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # from curve
+            - "<options.namespace>:Root_M_translateY.output"
+            - "<options.namespace>:Root_M_translateY_start.stream"
+            # to joint
+            - "<options.namespace>:Root_M_translateY_start.varying"
+            - "<options.namespace>:ROOT_START_SRC.translateY"
+    Root_M_translateZ_start:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # from curve
+            - "<options.namespace>:Root_M_translateZ.output"
+            - "<options.namespace>:Root_M_translateZ_start.stream"
+            # to joint
+            - "<options.namespace>:Root_M_translateZ_start.varying"
+            - "<options.namespace>:ROOT_START_SRC.translateZ"
+    # end
+    Root_M_translateX_end:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # from curve
+            - "<options.namespace>:Root_M_translateX.output"
+            - "<options.namespace>:Root_M_translateX_end.stream"
+            # to joint
+            - "<options.namespace>:Root_M_translateX_end.varying"
+            - "<options.namespace>:ROOT_END_SRC.translateX"
+    Root_M_translateY_end:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # from curve
+            - "<options.namespace>:Root_M_translateY.output"
+            - "<options.namespace>:Root_M_translateY_end.stream"
+            # to joint
+            - "<options.namespace>:Root_M_translateY_end.varying"
+            - "<options.namespace>:ROOT_END_SRC.translateY"
+    Root_M_translateZ_end:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # from curve
+            - "<options.namespace>:Root_M_translateZ.output"
+            - "<options.namespace>:Root_M_translateZ_end.stream"
+            # to joint
+            - "<options.namespace>:Root_M_translateZ_end.varying"
+            - "<options.namespace>:ROOT_END_SRC.translateZ"
+
+    root_translate_sum:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
         properties: {}
         connections:
-            - '<options.namespace>:ground_plane_geo_input.output'
-            - '<options.namespace>:ground_plane_geoShape.inMesh'
-
-    ground_plane_translate_scale:
-        name: '<options.namespace>:<..key>'
-        type: multiplyDivide
-        properties:
-            operation: 2
-
-    ground_plane_repeat:
-        name: '<options.namespace>:<..key>'
-        type: multiplyDivide
-        properties:
-            operation: 2
-
-    ground_plane_translate_scale_invert:
-        name: '<options.namespace>:<..key>'
-        type: multiplyDivide
-        properties:
-            input2: [-1, 1, 1]
-        connections:
-            - '<options.namespace>:ground_plane_translate_scale.outputZ'
-            - '<options.namespace>:ground_plane_translate_scale_invert.input1X'
-
-    ground_plane_uv_transform:
-        name: '<options.namespace>:<..key>'
-        type: place2dTexture
-        properties:
-            repeatUV: [2, 2]
-
-        connections:
-            # self
-            - '<options.namespace>:ground_plane_uv_transform.repeatU'
-            - '<options.namespace>:ground_plane_uv_transform.repeatV'
+            - "<options.namespace>:root_translate_offset_scale.outputX"
+            - "<options.namespace>:root_translate_sum.input3D[0].input3Dx"
+            # fixme: ignore Y axis?
+            - "<options.namespace>:root_translate_offset_scale.outputZ"
+            - "<options.namespace>:root_translate_sum.input3D[0].input3Dz"
             #
-            - '<options.namespace>:ground_plane_translate_scale.outputX'
-            - '<options.namespace>:ground_plane_uv_transform.offsetU'
-            #
-            - '<options.namespace>:ground_plane_translate_scale_invert.outputX'
-            - '<options.namespace>:ground_plane_uv_transform.offsetV'
-            #
-            - '<options.namespace>:ground_plane_repeat.outputX'
-            - '<options.namespace>:ground_plane_translate_scale.input2X'
-            - '<options.namespace>:ground_plane_repeat.outputZ'
-            - '<options.namespace>:ground_plane_translate_scale.input2Z'
-            #
-            - '<options.namespace>:ground_plane_uv_transform.repeatU'
-            - '<options.namespace>:ground_plane_repeat.input2X'
-            - '<options.namespace>:ground_plane_uv_transform.repeatU'
-            - '<options.namespace>:ground_plane_repeat.input2Z'
-            #
-            - '<options.namespace>:geometry_grp.translateX'
-            - '<options.namespace>:ground_plane_translate_scale.input1X'
-            - '<options.namespace>:geometry_grp.translateZ'
-            - '<options.namespace>:ground_plane_translate_scale.input1Z'
-            #
-            - '<options.namespace>:ground_plane_geo.scaleZ'
-            - '<options.namespace>:ground_plane_repeat.input1X'
-            - '<options.namespace>:ground_plane_geo.scaleZ'
-            - '<options.namespace>:ground_plane_repeat.input1Z'
-
-    ground_plane_mask:
+            - "<options.namespace>:Root_M_translateX.output"
+            - "<options.namespace>:root_translate_sum.input3D[1].input3Dx"
+            - "<options.namespace>:Root_M_translateY.output"
+            - "<options.namespace>:root_translate_sum.input3D[1].input3Dy"
+            - "<options.namespace>:Root_M_translateZ.output"
+            - "<options.namespace>:root_translate_sum.input3D[1].input3Dz"
+            # to joint
+            - "<options.namespace>:root_translate_sum.output3D"
+            - "<options.namespace>:Root_M.translate"
+    # root end
+    root_end_translate_sum:
         name: '<options.namespace>:<..key>'
-        type: ramp
+        type: plusMinusAverage
+        properties: {}
+        connections:
+            - "<options.namespace>:ROOT_END_SRC.translate"
+            - "<options.namespace>:root_end_translate_sum.input3D[0]"
+            #
+            - "<options.namespace>:root_translate_offset_scale.output"
+            - "<options.namespace>:root_end_translate_sum.input3D[1]"
+            # to joint
+            - "<options.namespace>:root_end_translate_sum.output3D"
+            - "<options.namespace>:ROOT_END_TRS_PRX.translate"
+    # rotation
+    Root_M_rotateX:
+        name: '<options.namespace>:<..key>'
+        type: animCurveTA
         properties:
-            type: 4
-            colorEntryList[0]/position: 0.0
-            colorEntryList[0]/color: [0, 0, 0]
-            colorEntryList[1]/position: 0.5
-            colorEntryList[1]/color: [1, 1, 1]
-
-    ground_plane_checker:
-        name: '<options.namespace>:<..key>'
-        type: checker
-
+            preInfinity: 4
+            postInfinity: 4
         connections:
-            # from uv transform
-            - '<options.namespace>:ground_plane_uv_transform.outUvFilterSize'
-            - '<options.namespace>:ground_plane_checker.uvFilterSize'
-            - '<options.namespace>:ground_plane_uv_transform.outUV'
-            - '<options.namespace>:ground_plane_checker.uvCoord'
-
-    ground_plane_shader:
+            - "<options.namespace>:Root_M_rotateX.output"
+            - "<options.namespace>:Root_M.rotateX"
+    Root_M_rotateY:
         name: '<options.namespace>:<..key>'
-        type: lambert
-        connections:
-            # checker
-            - '<options.namespace>:ground_plane_checker.outColor'
-            - '<options.namespace>:ground_plane_shader.color'
-            # mask
-            - '<options.namespace>:ground_plane_mask.outColor'
-            - '<options.namespace>:ground_plane_shader.transparency'
-
-    ground_plane_material:
-        name: '<options.namespace>:<..key>'
-        type: shadingEngine
-        connections:
-            # from shader
-            - '<options.namespace>:ground_plane_shader.outColor'
-            - '<options.namespace>:ground_plane_material.surfaceShader'
-            # to geo
-            - '<options.namespace>:ground_plane_geoShape.instObjGroups[0]'
-            - '<options.namespace>:ground_plane_material.dagSetMembers[0]'
-
-    axis_geo_input:
-        name: '<options.namespace>:<..key>'
-        type: polyCube
+        type: animCurveTA
         properties:
-            width: 0.5
-            height: 0.05
-            depth: 5
+            preInfinity: 4
+            postInfinity: 4
         connections:
-            - '<options.namespace>:axis_geo_input.output'
-            - '<options.namespace>:x_axis_geoShape.inMesh'
-            - '<options.namespace>:axis_geo_input.output'
-            - '<options.namespace>:z_axis_geoShape.inMesh'
-
-    x_axis_shader:
+            - "<options.namespace>:Root_M_rotateY.output"
+            - "<options.namespace>:Root_M.rotateY"
+    Root_M_rotateZ:
         name: '<options.namespace>:<..key>'
-        type: lambert
+        type: animCurveTA
         properties:
-            color: [1, 0, 0]
-
-    x_axis_material:
-        name: '<options.namespace>:<..key>'
-        type: shadingEngine
+            preInfinity: 4
+            postInfinity: 4
         connections:
-            # from shader
-            - '<options.namespace>:x_axis_shader.outColor'
-            - '<options.namespace>:x_axis_material.surfaceShader'
-            # to geo
-            - '<options.namespace>:x_axis_geoShape.instObjGroups[0]'
-            - '<options.namespace>:x_axis_material.dagSetMembers[0]'
-
-    z_axis_shader:
+            - "<options.namespace>:Root_M_rotateZ.output"
+            - "<options.namespace>:Root_M.rotateZ"
+    Root_M_rotateX_end_CVT_IN:
         name: '<options.namespace>:<..key>'
-        type: lambert
+        type: unitConversion
         properties:
-            color: [0, 0, 1]
-
-    z_axis_material:
-        name: '<options.namespace>:<..key>'
-        type: shadingEngine
+            conversionFactor: <options.angle_input_factor>
         connections:
-            # from shader
-            - '<options.namespace>:z_axis_shader.outColor'
-            - '<options.namespace>:z_axis_material.surfaceShader'
-            # to geo
-            - '<options.namespace>:z_axis_geoShape.instObjGroups[0]'
-            - '<options.namespace>:z_axis_material.dagSetMembers[0]'
+            - "<options.namespace>:Root_M_rotateX.output"
+            - "<options.namespace>:Root_M_rotateX_end_CVT_IN.input"
+    Root_M_rotateY_end_CVT_IN:
+        name: '<options.namespace>:<..key>'
+        type: unitConversion
+        properties:
+            conversionFactor: <options.angle_input_factor>
+        connections:
+            - "<options.namespace>:Root_M_rotateY.output"
+            - "<options.namespace>:Root_M_rotateY_end_CVT_IN.input"
+    Root_M_rotateZ_end_CVT_IN:
+        name: '<options.namespace>:<..key>'
+        type: unitConversion
+        properties:
+            conversionFactor: <options.angle_input_factor>
+        connections:
+            - "<options.namespace>:Root_M_rotateZ.output"
+            - "<options.namespace>:Root_M_rotateZ_end_CVT_IN.input"
+    Root_M_rotateX_end:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            - "<options.namespace>:Root_M_rotateX_end_CVT_IN.output"
+            - "<options.namespace>:Root_M_rotateX_end.stream"
+    Root_M_rotateY_end:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            - "<options.namespace>:Root_M_rotateY_end_CVT_IN.output"
+            - "<options.namespace>:Root_M_rotateY_end.stream"
+    Root_M_rotateZ_end:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            - "<options.namespace>:Root_M_rotateZ_end_CVT_IN.output"
+            - "<options.namespace>:Root_M_rotateZ_end.stream"
+    root_rotate_sum:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        connections:
+            - "<options.namespace>:Root_M_rotateX_end.varying"
+            - "<options.namespace>:root_rotate_sum.input3D[0].input3Dx"
+            - "<options.namespace>:Root_M_rotateY_end.varying"
+            - "<options.namespace>:root_rotate_sum.input3D[0].input3Dy"
+            - "<options.namespace>:Root_M_rotateZ_end.varying"
+            - "<options.namespace>:root_rotate_sum.input3D[0].input3Dz"
+    root_rotate_CVT_OUT:
+        name: '<options.namespace>:<..key>'
+        type: unitConversion
+        properties:
+            conversionFactor: <options.angle_output_factor>
+        connections:
+            - "<options.namespace>:root_rotate_sum.output3D"
+            - "<options.namespace>:root_rotate_CVT_OUT.input"
+            # to joint
+            - "<options.namespace>:root_rotate_CVT_OUT.output"
+            - "<options.namespace>:ROOT_END_TRS_PRX.rotate"
+    ROOT_END_ROT_MTX:
+        name: '<options.namespace>:<..key>'
+        type: decomposeMatrix
 
+        connections:
+            - "<options.namespace>:ROOT_END_TRS_PRX.worldMatrix"
+            - "<options.namespace>:ROOT_END_ROT_MTX.inputMatrix"
+            #
+            - "<options.namespace>:ROOT_END_ROT_MTX.outputRotate"
+            - "<options.namespace>:ROOT_END_RTT_BSE.rotate"
+    #
+    root_start_rotate_offset_sum_CVT_IN:
+        name: '<options.namespace>:<..key>'
+        type: unitConversion
+        properties:
+            conversionFactor: <options.angle_input_factor>
+        connections:
+            - "<options.namespace>:ROOT_START.rotate"
+            - "<options.namespace>:root_start_rotate_offset_sum_CVT_IN.input"
+
+    root_start_rotate_offset_sum:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        connections:
+            - "<options.namespace>:root_start_rotate_offset_sum_CVT_IN.output"
+            - "<options.namespace>:root_start_rotate_offset_sum.input3D[0]"
+
+    root_start_rotate_offset_sum_CVT_OUT:
+        name: '<options.namespace>:<..key>'
+        type: unitConversion
+        properties:
+            conversionFactor: <options.angle_output_factor>
+        connections:
+            #
+            - "<options.namespace>:root_start_rotate_offset_sum.output3D"
+            - "<options.namespace>:root_start_rotate_offset_sum_CVT_OUT.input"
+            #
+            - "<options.namespace>:root_start_rotate_offset_sum_CVT_OUT.output"
+            - "<options.namespace>:ROOT.rotate"
+
+    root_start_translate_offset_sum:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        connections:
+            - "<options.namespace>:ROOT_START_PRC.constraintTranslate"
+            - "<options.namespace>:root_start_translate_offset_sum.input3D[0]"
+            #
+            - "<options.namespace>:root_start_translate_offset_sum.output3D"
+            - "<options.namespace>:ROOT_START.translate"
+    
+    main_weight_disable_sum:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+
+    main_weight_disable_cdt:
+        name: '<options.namespace>:<..key>'
+        type: condition
+        properties:
+            # by pass
+            firstTerm: 0
+            #
+            secondTerm: 0
+            # when == 0, output main_weight value
+            operation: 0
+            # time, start_frame
+            colorIfTrue: [0, 0, 0]
+            colorIfFalse: [0, 0, 0]
 
 containers:
-    MASTER_LAYER:
+    LAYER:
         name: '<options.namespace>:<..key>'
         type: dagContainer
         properties:
-            iconName: 'out_timeEditorLayersFolder.png'
+            iconName: 'out_timeEditorLayer.png'
         create_properties:
             qsm_type:
                 type: string
-                value: 'motion_master_layer'
+                value: 'mtg_layer'
 
-            qsm_resource:
-                type: message
+            motion_json:
+                type: string
+                value: ''
 
             match_scale:
                 type: float
                 value: 1.0
 
-            root_loc_tx_curve:
+            TIME:
                 type: message
-            root_loc_ty_curve:
+                value: '<options.namespace>:TIME'
+
+            main_weight:
+                type: float
+                value: 1.0
+
+            main_weight_curve:
                 type: message
-            root_loc_tz_curve:
+
+            main_weight_output:
+                type: float
+                value: 1.0
+
+            root_start_input_from:
+                type: string
+
+            root_start_input_tx:
+                type: length
+                value: 0.0
+
+            root_start_input_tx_curve:
                 type: message
-            root_loc_rx_curve:
+
+            root_start_input_ty:
+                type: length
+                value: 0.0
+
+            root_start_input_ty_curve:
                 type: message
-            root_loc_ry_curve:
+
+            root_start_input_tz:
+                type: length
+                value: 0.0
+
+            root_start_input_tz_curve:
                 type: message
-            root_loc_rz_curve:
+
+            root_start_input_rx:
+                type: angle
+                value: 0.0
+
+            root_start_input_rx_curve:
                 type: message
+
+            root_start_input_ry:
+                type: angle
+                value: 0.0
+
+            root_start_input_ry_curve:
+                type: message
+
+            root_start_input_rz:
+                type: angle
+                value: 0.0
+
+            root_start_input_rz_curve:
+                type: message
+
+            output_end:
+                type: integer
+                value: 1
+
+            key:
+                type: string
+                value: 'untitled'
+
+            clip_start:
+                type: integer
+                value: 1
+
+            clip_end:
+                type: integer
+                value: 24
+
+            valid_start:
+                type: integer
+                value: 1
+
+            valid_end:
+                type: integer
+                value: 24
+
+            start:
+                type: integer
+                value: 1
+
+            speed:
+                type: float
+                value: 1.0
+            
+            count:
+                type: integer
+                value: 24
+
+            source_start:
+                type: integer
+                value: 0
+
+            source_end:
+                type: integer
+                value: 24
+
+            pre_cycle:
+                type: integer
+                value: 1
+
+            post_cycle:
+                type: integer
+                value: 10
+
+            scale_start:
+                type: integer
+                value: 1
+
+            scale_end:
+                type: integer
+                value: 24
+
+            scale_offset:
+                type: integer
+                value: 0
+
+            pre_blend:
+                type: integer
+                value: 4
+
+            post_blend:
+                type: integer
+                value: 4
+
+            blend_type:
+                type: string
+                value: 'flat'
+
+            translate_offset:
+                type: float3
+                value: [0, 0, 0]
+
+            rotate_offset:
+                type: float3
+                value: [0, 0, 0]
+
+            rgb:
+                type: float3
+                value: [0, 0, 0]
+
+            layer_index:
+                type: integer
+                value: 0
+
+            is_bypass:
+                type: integer
+                value: 0
+
+            is_trash:
+                type: integer
+                value: 0
+
+        connections:
+            # main weight disable
+            - '<options.namespace>:LAYER.is_bypass'
+            - "<options.namespace>:main_weight_disable_sum.input1D[0]"
+            #
+            - '<options.namespace>:LAYER.is_trash'
+            - "<options.namespace>:main_weight_disable_sum.input1D[1]"
+            # main weight bypass
+            - '<options.namespace>:LAYER.main_weight'
+            - '<options.namespace>:main_weight_disable_cdt.colorIfTrueR'
+            #
+            - '<options.namespace>:main_weight_disable_sum.output1D'
+            - '<options.namespace>:main_weight_disable_cdt.firstTerm'
+            #
+            - '<options.namespace>:main_weight_disable_cdt.outColorR'
+            - '<options.namespace>:LAYER.main_weight_output'
+            # connect to clip
+            - '<options.namespace>:LAYER.valid_start'
+            - '<options.namespace>:TIME.clip_start'
+            - '<options.namespace>:LAYER.clip_end'
+            - '<options.namespace>:TIME.clip_end'
+            #
+            - '<options.namespace>:LAYER.start'
+            - '<options.namespace>:TIME.start'
+            #
+            - '<options.namespace>:LAYER.speed'
+            - '<options.namespace>:TIME.speed'
+            #
+            - '<options.namespace>:LAYER.source_start'
+            - '<options.namespace>:TIME.source_start'
+            - '<options.namespace>:LAYER.source_end'
+            - '<options.namespace>:TIME.source_end'
+            #
+            - '<options.namespace>:LAYER.pre_cycle'
+            - '<options.namespace>:TIME.pre_cycle'
+            - '<options.namespace>:LAYER.post_cycle'
+            - '<options.namespace>:TIME.post_cycle'
+            #
+            - '<options.namespace>:LAYER.main_weight_output'
+            - '<options.namespace>:LAYER.visibility'
+            # translation
+            # start
+            - '<options.namespace>:LAYER.clip_start'
+            - "<options.namespace>:Root_M_translateX_start.varyTime"
+            - '<options.namespace>:LAYER.clip_start'
+            - "<options.namespace>:Root_M_translateY_start.varyTime"
+            - '<options.namespace>:LAYER.clip_start'
+            - "<options.namespace>:Root_M_translateZ_start.varyTime"
+            # end translation
+            - '<options.namespace>:LAYER.output_end'
+            - "<options.namespace>:Root_M_translateX_end.varyTime"
+            - '<options.namespace>:LAYER.output_end'
+            - "<options.namespace>:Root_M_translateY_end.varyTime"
+            - '<options.namespace>:LAYER.output_end'
+            - "<options.namespace>:Root_M_translateZ_end.varyTime"
+            # end rotation
+            - '<options.namespace>:LAYER.output_end'
+            - "<options.namespace>:Root_M_rotateX_end.varyTime"
+            - '<options.namespace>:LAYER.output_end'
+            - "<options.namespace>:Root_M_rotateY_end.varyTime"
+            - '<options.namespace>:LAYER.output_end'
+            - "<options.namespace>:Root_M_rotateZ_end.varyTime"
+            #
+            - '<options.namespace>:LAYER.rotate_offset'
+            - "<options.namespace>:root_start_rotate_offset_sum.input3D[1]"
+            #
+            - '<options.namespace>:LAYER.translate_offset'
+            - "<options.namespace>:root_start_translate_offset_sum.input3D[1]"
+            - "<options.namespace>:LAYER.translate_offsetY"
+            - "<options.namespace>:root_translate_sum.input3D[0].input3Dy"
+            # root start input
+            - '<options.namespace>:LAYER.root_start_input_tx'
+            - '<options.namespace>:ROOT_START_INPUT.translateX'
+            - '<options.namespace>:LAYER.root_start_input_ty'
+            - '<options.namespace>:ROOT_START_INPUT.translateY'
+            - '<options.namespace>:LAYER.root_start_input_tz'
+            - '<options.namespace>:ROOT_START_INPUT.translateZ'
+            #
+            - '<options.namespace>:LAYER.root_start_input_rx'
+            - '<options.namespace>:ROOT_START_INPUT.rotateX'
+            - '<options.namespace>:LAYER.root_start_input_ry'
+            - '<options.namespace>:ROOT_START_INPUT.rotateY'
+            - '<options.namespace>:LAYER.root_start_input_rz'
+            - '<options.namespace>:ROOT_START_INPUT.rotateZ'
+            #
+            - '<options.namespace>:LAYER.rgb'
+            - '<options.namespace>:ROOT.overrideColorRGB'

@@ -3,8 +3,6 @@ import functools
 
 import time
 
-import six
-
 import sys
 
 import lxbasic.core as bsc_core
@@ -51,6 +49,9 @@ class AbsBase(object):
 
     @classmethod
     def shorten_text(cls, text, max_length=120, placeholder="..."):
+        """
+        for print
+        """
         if len(text) <= max_length:
             return text
         keep_length = (max_length-len(placeholder))//2

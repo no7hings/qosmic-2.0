@@ -41,6 +41,7 @@ class ShotReferenceReplace(object):
         directory_path = bsc_storage.StgFileOpt(cache_path).directory_path
 
         with bsc_log.LogProcessContext.create(maximum=4) as l_p:
+
             # 1. open file
             qsm_mya_core.SceneFile.new()
             qsm_mya_core.SceneFile.open(file_path)
@@ -87,7 +88,7 @@ class ShotReferenceReplace(object):
                     qsm_mya_core.Frame.to_start()
 
                     i_adv_opt_tgt = qsm_mya_adv.AdvChrOpt(i_namespace_tgt)
-                    i_adv_opt_tgt.translate_main_control_to_toe()
+                    i_adv_opt_tgt.move_main_control_to_toe()
             l_p.do_update()
 
             # 3. create preview

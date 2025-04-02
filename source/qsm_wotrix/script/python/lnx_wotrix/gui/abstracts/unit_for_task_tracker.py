@@ -324,14 +324,17 @@ class _GuiVersionOpt(_unit_base._GuiBaseOpt):
             )
             _release_preview_path = _release_preview_ptn.get_value()
             if os.path.isfile(_release_preview_path):
+                # create thumbnail for ui playing
                 _video = _release_preview_path
+                _thumbnail = bsc_core.BscFfmpegVideo.create_thumbnail(_release_preview_path)
             else:
                 _video = None
+                _thumbnail = None
             # mtime
             _mtime = bsc_storage.StgFileOpt(_release_directory_path).get_mtime()
             _user = bsc_storage.StgFileOpt(_release_directory_path).get_user()
             return [
-                [_mtime, _user, _video, _release_directory_path], gui_thread_flag
+                [_mtime, _user, _video, _thumbnail, _release_directory_path], gui_thread_flag
             ]
 
         def build_fnc_(data_):
@@ -340,13 +343,13 @@ class _GuiVersionOpt(_unit_base._GuiBaseOpt):
                 return
 
             if _d:
-                _mtime, _user, _video, _folder = _d
+                _mtime, _user, _video, _thumbnail, _folder = _d
                 qt_item._item_model.set_mtime(_mtime)
                 if _user:
                     qt_item._item_model.set_user(_user)
 
                 if _video:
-                    qt_item._item_model.set_video(_video)
+                    qt_item._item_model.set_video(_thumbnail)
                     qt_item._item_model.register_press_dbl_click_fnc(
                         functools.partial(
                             bsc_storage.StgPath.start_in_system, _video

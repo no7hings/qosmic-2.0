@@ -60,13 +60,16 @@ class ResourceTypes:
 
 
 class StepKeys:
+    # general
     General = 'general'
+    # asset
     Model = 'model'
     Groom = 'groom'
     Rig = 'rig'
     CFX = 'cfx'
     Surface = 'surface'
     Layout = 'layout'
+    # shot
     Animation = 'animation'
 
     All = [
@@ -77,12 +80,15 @@ class StepKeys:
 
 
 class TaskKeys:
+    # general
     General = 'general'
+    # asset
     Model = 'model'
     Groom = 'groom'
     Rig = 'rig'
     CFXRig = 'cfx_rig'
     Surface = 'surface'
+    # shot
     Layout = 'layout'
     Animation = 'animation'
 

@@ -16,7 +16,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         self.add_widget(self._d)
 
-        import qsm_lazy_backstage.core as lzy_bks_core
+        import lnx_backstage.core as lzy_bks_core
 
         p = lzy_bks_core.NoticePool.generate()
         p.do_update()

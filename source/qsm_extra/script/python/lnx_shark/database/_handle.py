@@ -5,7 +5,7 @@ import json
 
 import threading
 
-from . import abc_
+from . import _abc_
 
 from . import _my_sql
 
@@ -14,10 +14,10 @@ from . import _base
 from . import _model
 
 
-class Entity(dict):
+class _Entity(dict):
     def __init__(self, entity_type, *args, **kwargs):
         self.entity_type = entity_type
-        super(Entity, self).__init__(*args, **kwargs)
+        super(_Entity, self).__init__(*args, **kwargs)
 
     def __getattr__(self, item):
         return self.__getitem__(item)  # = self[item]
@@ -31,7 +31,7 @@ class Entity(dict):
         return '\n'+self.__str__()
 
 
-class Database(abc_.AbsBase):
+class Database(_abc_.AbsBase):
     LOCK = threading.Lock()
     
     @classmethod
@@ -63,7 +63,7 @@ class Database(abc_.AbsBase):
 
     @classmethod
     def _to_entity(cls, entity_type, data):
-        return Entity(entity_type, data)
+        return _Entity(entity_type, data)
 
     def _to_dtb_entity_type(self, entity_type):
         # fixme: reconnect for timeout?

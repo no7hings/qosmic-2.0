@@ -18,6 +18,7 @@ class ToolsetForMotionControlAndMove(
     @staticmethod
     def do_dcc_create_control_move_locator():
         import lxbasic.session as bsc_session
+
         bsc_session.OptionHook.execute(
             "option_hook_key=dcc-script/maya/qsm-control-move-create-script"
         )
@@ -25,9 +26,17 @@ class ToolsetForMotionControlAndMove(
     @staticmethod
     def do_dcc_remove_control_move_locator():
         import lxbasic.session as bsc_session
+
         bsc_session.OptionHook.execute(
             "option_hook_key=dcc-script/maya/qsm-control-move-remove-script"
         )
+
+    def do_dcc_character_move_main_control_to_toe(self):
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            for i_namespace in namespaces:
+                i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
+                i_opt.move_main_control_to_toe()
 
     @staticmethod
     def do_dcc_create_control_transform_locator():
@@ -107,7 +116,12 @@ class ToolsetForMotionControlAndMove(
         self._prx_options_node.set(
             'control_move.remove_locator', self.do_dcc_remove_control_move_locator
         )
-        
+
+        # character move
+        self._prx_options_node.set(
+            'character_move.move_main_control_to_toe', self.do_dcc_character_move_main_control_to_toe
+        )
+
         # control transform
         self._prx_options_node.set(
             'control_transform.create_locator', self.do_dcc_create_control_transform_locator

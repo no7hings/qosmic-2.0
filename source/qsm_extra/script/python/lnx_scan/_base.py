@@ -34,13 +34,13 @@ class Configure(object):
         self = super(Configure, cls).__new__(cls)
         
         # init
-        cfg = bsc_resource.BscExtendConfigure.get_as_content('lazy/scan')
-        self._entity_resolve_pattern_dict = cfg.get('default.entity.resolve_patterns')
-        self._entity_path_pattern_dict = cfg.get('default.entity.path_patterns')
-        self._entity_task_dict = cfg.get('default.entity.tasks')
-        self._entity_variant_key_dict = cfg.get('default.entity.variant_keys')
-        self._entity_variant_key_regex_dict = cfg.get('default.entity.variant_key_regexes')
-        self._file_pattern_dict = cfg.get('default.file_patterns')
+        cfg = bsc_resource.BscExtendConfigure.get_as_content('scan/default')
+        self._entity_resolve_pattern_dict = cfg.get('entity.resolve_patterns')
+        self._entity_path_pattern_dict = cfg.get('entity.path_patterns')
+        self._entity_task_dict = cfg.get('entity.tasks')
+        self._entity_variant_key_dict = cfg.get('entity.variant_keys')
+        self._entity_variant_key_regex_dict = cfg.get('entity.variant_key_regexes')
+        self._file_pattern_dict = cfg.get('file_patterns')
 
         cls.INSTANCE = self
         return self
@@ -66,6 +66,9 @@ class EntityTypes(object):
 
 
 class EntityVariantKeys:
+    """
+    virtual value, real value is from configure.
+    """
     Root = None
     Project = None
     Role = None

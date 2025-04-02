@@ -1,6 +1,5 @@
 # coding:utf-8
-import os.path
-import sys
+import os
 
 import copy
 
@@ -18,15 +17,15 @@ import lxbasic.storage as bsc_storage
 
 import lxbasic.pinyin as bsc_pinyin
 
-from . import abc_
+from . import _abc_
 
 
-class Entity(abc_.AbsEntity):
+class _Entity(_abc_.AbsEntity):
     def __init__(self, *args, **kwargs):
-        super(Entity, self).__init__(*args, **kwargs)
+        super(_Entity, self).__init__(*args, **kwargs)
 
 
-class Stage(abc_.AbsBase):
+class Stage(_abc_.AbsBase):
     class Roots:
         """
         virtual value, real value is from configure.
@@ -88,7 +87,7 @@ class Stage(abc_.AbsBase):
         self._scheme = scheme
         self._platform = bsc_core.BscPlatform.get_current()
 
-        self._configure = bsc_resource.BscExtendConfigure.get_as_content('wsp_task/parse/{}'.format(self._scheme))
+        self._configure = bsc_resource.BscExtendConfigure.get_as_content('shark/parse/{}'.format(self._scheme))
         self._configure.do_flatten()
         self._variants = dict(
             scheme=self._scheme,
@@ -161,6 +160,10 @@ class Stage(abc_.AbsBase):
     @property
     def variants(self):
         return self._variants
+
+    @property
+    def configure(self):
+        return self._configure
 
     def generate_pattern_opt_for(self, keyword, **kwargs):
         kwargs_new = copy.copy(kwargs)
@@ -339,7 +342,7 @@ class Stage(abc_.AbsBase):
             flag, entity_variants_next = self._resolve_entity_variants_from_storage(entity_type, entity_variants)
 
         if flag is True:
-            instance = Entity(self, entity_type, entity_variants_next)
+            instance = _Entity(self, entity_type, entity_variants_next)
             self.ENTITY_DICT[entity_key] = instance
             self.ENTITY_PATH_QUERY[instance.path] = instance
             return instance
@@ -554,7 +557,7 @@ class Stage(abc_.AbsBase):
                 list_.append(i_instance)
                 continue
 
-            i_instance = Entity(self, entity_type, i_entity_variants)
+            i_instance = _Entity(self, entity_type, i_entity_variants)
             self.ENTITY_DICT[i_entity_key] = i_instance
             self.ENTITY_PATH_QUERY[i_instance.path] = i_instance
             list_.append(i_instance)
