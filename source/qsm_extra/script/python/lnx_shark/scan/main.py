@@ -23,13 +23,13 @@ class Stage(object):
         cls.INSTANCE = self
         return self
 
-    def get_root(self, location='X:'):
+    def root(self, location='X:'):
         if location in self._root_dict:
             return self._root_dict[location]
 
-        root_instance = _root.Root()
-        self._root_dict[location] = root_instance
-        return root_instance
+        instance = _root.Root()
+        self._root_dict[location] = instance
+        return instance
     
     @staticmethod
     def set_sync_cache_flag(boolean):

@@ -17,15 +17,15 @@ import lxbasic.storage as bsc_storage
 
 import lxbasic.pinyin as bsc_pinyin
 
-from . import _abc_
+from ..abstracts import base as _abc_base
 
 
-class _Entity(_abc_.AbsEntity):
+class _Entity(_abc_base.AbsEntity):
     def __init__(self, *args, **kwargs):
         super(_Entity, self).__init__(*args, **kwargs)
 
 
-class Stage(_abc_.AbsBase):
+class Stage(_abc_base.AbsStage):
     class Roots:
         """
         virtual value, real value is from configure.
@@ -273,6 +273,7 @@ class Stage(_abc_.AbsBase):
         keys = self._get_entity_unique_variant_keys(entity_type)
         keys_unpack = []
         ss = []
+
         for i_key in keys:
             i_value = variants[i_key]
             if i_key == 'entity_key':
@@ -676,34 +677,6 @@ class Stage(_abc_.AbsBase):
                     )
                     list_.extend(j_next_entity_variants_list)
         return list_
-
-    # any entity
-    def find_entity(self, entity_type, name, **kwargs):
-        """
-        entity_type includes see self.EntityTypes, kwargs is variants
-        """
-        return self._find_entity_fnc(
-            self, entity_type, name, **kwargs
-        )
-
-    def find_entities(self, entity_type, **kwargs):
-        """
-        entity_type includes see self.EntityTypes
-        """
-        return self._find_entities_fnc(
-            self, entity_type, **kwargs
-        )
-
-    # project
-    def project(self, name, **kwargs):
-        return self.find_entity(
-            self.EntityTypes.Project, name, **kwargs
-        )
-
-    def projects(self, **variants):
-        return self.find_entities(
-            self.EntityTypes.Project, **variants
-        )
 
     def all(self):
         return self.ENTITY_DICT.values()

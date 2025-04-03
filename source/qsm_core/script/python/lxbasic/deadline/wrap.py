@@ -11,7 +11,7 @@ if _deadline:
     DEADLINE_FLAG = True
 
     _log_core.Log.trace_method_result(
-        'deadline', 'load successful'
+        'deadline', 'load successful.'
     )
     # noinspection PyUnresolvedReferences
     from Deadline import DeadlineConnect

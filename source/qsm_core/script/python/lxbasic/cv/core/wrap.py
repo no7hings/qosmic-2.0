@@ -11,7 +11,7 @@ if _module:
     CV2_FLAG = True
 
     _log_core.Log.trace_method_result(
-        'cv2', 'load successful'
+        'cv2', 'load successful.'
     )
 
     # noinspection PyUnresolvedReferences

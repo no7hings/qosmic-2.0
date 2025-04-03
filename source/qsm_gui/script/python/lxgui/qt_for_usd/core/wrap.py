@@ -16,7 +16,7 @@ if __pypxr and QT_LOAD_INDEX == 1:
     QT_USD_FLAG = True
 
     _log_core.Log.trace_method_result(
-        'qt for usd', 'load successful'
+        'qt for usd', 'load successful.'
     )
 
     from pxr import Usd, Sdf, Vt, Gf, Glf, Tf, Kind, UsdShade, UsdGeom, UsdLux

@@ -4,7 +4,7 @@ from functools import update_wrapper
 from threading import RLock
 
 __all__ = [
-    'lru_cache'
+    'lru_cache',
 ]
 
 

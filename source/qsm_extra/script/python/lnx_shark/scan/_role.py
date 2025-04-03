@@ -11,10 +11,10 @@ class Role(_base.AbsEntity):
     VariantKey = _base.EntityVariantKeys.Role
 
     NextEntitiesCacheClassDict = {
-        _base.EntityTypes.Asset: _asset.AssetsCacheOpt,
+        _base.EntityTypes.Asset: _asset.AssetsGenerator,
     }
 
-    TasksCacheOptClass = _task.TasksCacheOpt
+    TasksGeneratorClass = _task.TasksGenerator
 
     @classmethod
     def _variant_validation_fnc(cls, variants):
@@ -26,9 +26,13 @@ class Role(_base.AbsEntity):
     def find_assets(self, variants_extend=None, cache_flag=True):
         return self._find_next_entities(_base.EntityTypes.Asset, variants_extend, cache_flag)
 
+    def assets(self, **kwargs):
+        cache_flag = kwargs.pop('cache_flag') if 'cache_flag' in kwargs else False
+        return self.find_assets(variants_extend=kwargs, cache_flag=cache_flag)
 
-class RolesCacheOpt(_base.AbsEntitiesCacheOpt):
+
+class RolesGenerator(_base.AbsEntitiesGenerator):
     EntityClass = Role
 
     def __init__(self, *args, **kwargs):
-        super(RolesCacheOpt, self).__init__(*args, **kwargs)
+        super(RolesGenerator, self).__init__(*args, **kwargs)

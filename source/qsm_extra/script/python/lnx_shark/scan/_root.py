@@ -1,4 +1,6 @@
 # coding:utf-8
+from ..core import base as _cor_base
+
 from . import _base
 
 from . import _project
@@ -11,13 +13,13 @@ class Root(_base.AbsEntity):
     VariantKey = 'root'
 
     NextEntitiesCacheClassDict = {
-        _base.EntityTypes.Project: _project.ProjectsCacheOpt
+        _base.EntityTypes.Project: _project.ProjectsGenerator
     }
 
-    INSTANCE = None
-
     def __init__(self, root='X:'):
-        self._root_entity_stack = _base.EntityStack()
+        # create before super
+        self._root_entity_stack = _cor_base.EntityStack()
+
         super(Root, self).__init__(
             self, '/', dict(root=root)
         )
@@ -29,23 +31,14 @@ class Root(_base.AbsEntity):
     def find_projects(self, variants_extend=None, cache_flag=True):
         return self._find_next_entities(_base.EntityTypes.Project, variants_extend, cache_flag)
 
-    @property
-    def projects(self):
-        return self._find_next_entities(_base.EntityTypes.Project)
-
-    def project(self, name):
-        return self._find_next_entity(name, _base.EntityTypes.Project)
+    def projects(self, **kwargs):
+        return self.find_projects(variants_extend=kwargs)
 
     def find_project(self, name, variants_extend=None, cache_flag=True):
         return self._find_next_entity(name, _base.EntityTypes.Project, variants_extend, cache_flag)
 
+    def project(self, name, **kwargs):
+        return self.find_project(name, variants_extend=kwargs)
+
     def get_entity(self, path):
         return self._root_entity_stack.get(path)
-
-    @classmethod
-    def generate(cls):
-        if cls.INSTANCE is not None:
-            return cls.INSTANCE
-        _ = cls(root='X:')
-        cls.INSTANCE = _
-        return _

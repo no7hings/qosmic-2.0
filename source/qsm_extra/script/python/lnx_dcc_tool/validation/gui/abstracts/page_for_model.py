@@ -7,7 +7,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.qt.widgets as qt_widgets
 
-import lnx_scan as lnx_scan
+import lnx_shark.scan as lnx_srk_scan
 
 import lnx_dcc_tool_prc.validation.scripts as lzy_vld_scripts
 
@@ -118,7 +118,7 @@ class AbsPrxPageForScnModel(gui_prx_widgets.PrxBasePage):
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForScnModel, self).__init__(window, session, *args, **kwargs)
         self._asset_path = None
-        self._scan_root = lnx_scan.Stage().get_root()
+        self._scan_root = lnx_srk_scan.Stage().root()
 
         self._validation_opt = lzy_vld_scripts.SceneryValidationOpt()
 

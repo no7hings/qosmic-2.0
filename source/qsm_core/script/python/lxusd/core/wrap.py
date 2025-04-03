@@ -13,7 +13,7 @@ if __pypxr:
     USD_FLAG = True
 
     _log_core.Log.trace_method_result(
-        'usd', 'load successful'
+        'usd', 'load successful.'
     )
 
     from pxr import Usd, Sdf, Vt, Gf, Kind, UsdShade, UsdGeom, UsdLux

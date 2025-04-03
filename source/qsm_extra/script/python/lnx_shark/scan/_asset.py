@@ -8,7 +8,7 @@ class Asset(_base.AbsEntity):
     Type = _base.EntityTypes.Asset
     VariantKey = _base.EntityVariantKeys.Asset
 
-    TasksCacheOptClass = _task.TasksCacheOpt
+    TasksGeneratorClass = _task.TasksGenerator
 
     @classmethod
     def _variant_validation_fnc(cls, variants):
@@ -18,8 +18,8 @@ class Asset(_base.AbsEntity):
         super(Asset, self).__init__(*args, **kwargs)
 
 
-class AssetsCacheOpt(_base.AbsEntitiesCacheOpt):
+class AssetsGenerator(_base.AbsEntitiesGenerator):
     EntityClass = Asset
 
     def __init__(self, *args, **kwargs):
-        super(AssetsCacheOpt, self).__init__(*args, **kwargs)
+        super(AssetsGenerator, self).__init__(*args, **kwargs)

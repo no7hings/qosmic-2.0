@@ -1,9 +1,9 @@
 # coding:utf-8
 from __future__ import print_function
 
-import lnx_scan as lnx_scan
+import lnx_shark.scan as lnx_srk_scan
 
-root = lnx_scan.Stage().get_root()
+root = lnx_srk_scan.Stage().root()
 
 print(root)
 

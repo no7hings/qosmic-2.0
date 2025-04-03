@@ -11,7 +11,7 @@ if _module:
     CRYPTO_FLAG = True
 
     _log_core.Log.trace_method_result(
-        'cryptography', 'load successful'
+        'cryptography', 'load successful.'
     )
 
     # noinspection PyUnresolvedReferences

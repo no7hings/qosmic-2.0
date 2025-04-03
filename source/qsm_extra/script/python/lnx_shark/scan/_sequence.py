@@ -13,10 +13,10 @@ class Sequence(_base.AbsEntity):
     VariantKey = _base.EntityVariantKeys.Sequence
 
     NextEntitiesCacheClassDict = {
-        _base.EntityTypes.Shot: _shot.ShotsCacheOpt,
+        _base.EntityTypes.Shot: _shot.ShotsGenerator,
     }
 
-    TasksCacheOptClass = _task.TasksCacheOpt
+    TasksGeneratorClass = _task.TasksGenerator
     
     @classmethod
     def _variant_cleanup_fnc(cls, variants):
@@ -41,9 +41,13 @@ class Sequence(_base.AbsEntity):
     def find_shots(self, variants_extend=None, cache_flag=True):
         return self._find_next_entities(_base.EntityTypes.Shot, variants_extend, cache_flag)
 
+    def shots(self, **kwargs):
+        cache_flag = kwargs.pop('cache_flag') if 'cache_flag' in kwargs else False
+        return self.find_shots(variants_extend=kwargs, cache_flag=cache_flag)
 
-class SequencesCacheOpt(_base.AbsEntitiesCacheOpt):
+
+class SequencesGenerator(_base.AbsEntitiesGenerator):
     EntityClass = Sequence
 
     def __init__(self, *args, **kwargs):
-        super(SequencesCacheOpt, self).__init__(*args, **kwargs)
+        super(SequencesGenerator, self).__init__(*args, **kwargs)

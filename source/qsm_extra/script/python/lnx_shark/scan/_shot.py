@@ -8,7 +8,7 @@ class Shot(_base.AbsEntity):
     Type = _base.EntityTypes.Shot
     VariantKey = _base.EntityVariantKeys.Shot
 
-    TasksCacheOptClass = _task.TasksCacheOpt
+    TasksGeneratorClass = _task.TasksGenerator
 
     @classmethod
     def _variant_validation_fnc(cls, variants):
@@ -28,8 +28,8 @@ class Shot(_base.AbsEntity):
         super(Shot, self).__init__(*args, **kwargs)
 
 
-class ShotsCacheOpt(_base.AbsEntitiesCacheOpt):
+class ShotsGenerator(_base.AbsEntitiesGenerator):
     EntityClass = Shot
 
     def __init__(self, *args, **kwargs):
-        super(ShotsCacheOpt, self).__init__(*args, **kwargs)
+        super(ShotsGenerator, self).__init__(*args, **kwargs)

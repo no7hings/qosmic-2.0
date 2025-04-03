@@ -7,18 +7,18 @@ import sys
 
 import lxbasic.core as bsc_core
 
-from . import _base
+from ..core import base as _cor_base
 
 
 class AbsBase(object):
-    EntityTypes = _base.EntityTypes
+    EntityTypes = _cor_base.EntityTypes
 
-    RootKeys = _base.RootKeys
-    SpaceKeys = _base.SpaceKeys
+    RootKeys = _cor_base.RootKeys
+    SpaceKeys = _cor_base.SpaceKeys
 
-    ResourceTypes = _base.ResourceTypes
-    StepKeys = _base.StepKeys
-    TaskKeys = _base.TaskKeys
+    ResourceTypes = _cor_base.ResourceTypes
+    StepKeys = _cor_base.StepKeys
+    TaskKeys = _cor_base.TaskKeys
 
     # 1 is error only
     VERBOSE_LEVEL = 1
@@ -62,7 +62,7 @@ class AbsEntity(AbsBase):
 
     def __init__(self, stage, entity_type, variants):
         self._stage = stage
-        self._variants = _base.Properties(**variants)
+        self._variants = _cor_base.Variants(**variants)
 
         self._entity_type = entity_type
         self._variants['entity_type'] = self._entity_type
@@ -123,4 +123,40 @@ class AbsEntity(AbsBase):
     def find_entities(self, entity_type, **kwargs):
         return self._stage._find_entities_fnc(
             self, entity_type, **kwargs
+        )
+
+
+class AbsStage(AbsBase):
+    # find entity
+    def _find_entity_fnc(self, entity_pre, entity_type, name, **variants):
+        raise NotImplementedError()
+
+    def _find_entities_fnc(self, entity_pre, entity_type, **variants):
+        raise NotImplementedError()
+
+    def find_entity(self, entity_type, name, **kwargs):
+        """
+        entity_type includes see self.EntityTypes, kwargs is variants
+        """
+        return self._find_entity_fnc(
+            self, entity_type, name, **kwargs
+        )
+
+    def find_entities(self, entity_type, **kwargs):
+        """
+        entity_type includes see self.EntityTypes
+        """
+        return self._find_entities_fnc(
+            self, entity_type, **kwargs
+        )
+
+    # project
+    def project(self, name, **kwargs):
+        return self.find_entity(
+            self.EntityTypes.Project, name, **kwargs
+        )
+
+    def projects(self, **variants):
+        return self.find_entities(
+            self.EntityTypes.Project, **variants
         )

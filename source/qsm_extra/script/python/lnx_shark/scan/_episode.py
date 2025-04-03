@@ -13,11 +13,11 @@ class Episode(_base.AbsEntity):
     VariantKey = _base.EntityVariantKeys.Episode
 
     NextEntitiesCacheClassDict = {
-        _base.EntityTypes.Sequence: _sequence.SequencesCacheOpt,
-        _base.EntityTypes.Shot: _shot.ShotsCacheOpt,
+        _base.EntityTypes.Sequence: _sequence.SequencesGenerator,
+        _base.EntityTypes.Shot: _shot.ShotsGenerator,
     }
 
-    TasksCacheOptClass = _task.TasksCacheOpt
+    TasksGeneratorClass = _task.TasksGenerator
 
     @classmethod
     def _variant_validation_fnc(cls, variants):
@@ -29,12 +29,20 @@ class Episode(_base.AbsEntity):
     def find_sequences(self, variants_extend=None, cache_flag=True):
         return self._find_next_entities(_base.EntityTypes.Sequence, variants_extend, cache_flag)
 
+    def sequences(self, **kwargs):
+        cache_flag = kwargs.pop('cache_flag') if 'cache_flag' in kwargs else False
+        return self.find_sequences(variants_extend=kwargs, cache_flag=cache_flag)
+
     def find_shots(self, variants_extend=None, cache_flag=True):
         return self._find_next_entities(_base.EntityTypes.Shot, variants_extend, cache_flag)
 
+    def shots(self, **kwargs):
+        cache_flag = kwargs.pop('cache_flag') if 'cache_flag' in kwargs else False
+        return self.find_shots(variants_extend=kwargs, cache_flag=cache_flag)
 
-class EpisodesCacheOpt(_base.AbsEntitiesCacheOpt):
+
+class EpisodesGenerator(_base.AbsEntitiesGenerator):
     EntityClass = Episode
 
     def __init__(self, *args, **kwargs):
-        super(EpisodesCacheOpt, self).__init__(*args, **kwargs)
+        super(EpisodesGenerator, self).__init__(*args, **kwargs)

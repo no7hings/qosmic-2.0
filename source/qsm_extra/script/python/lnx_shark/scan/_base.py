@@ -1,6 +1,8 @@
 # coding:utf-8
 import copy
 
+import json
+
 import six
 
 import lxbasic.log as bsc_log
@@ -12,7 +14,7 @@ import lxbasic.resource as bsc_resource
 import lxbasic.storage as bsc_storage
 
 __all__ = [
-    'EntityTypes'
+    'EntityTypes',
 ]
 
 
@@ -56,6 +58,7 @@ class Properties(dict):
 
 class EntityTypes(object):
     Root = 'Root'
+
     Project = 'Project'
     Role = 'Role'
     Asset = 'Asset'
@@ -92,6 +95,9 @@ class VariantKeyMatch:
 
 
 class EntityTasks(object):
+    """
+    virtual value, real value is from configure.
+    """
     Concept = None
     Model = None
     Rig = None
@@ -101,28 +107,11 @@ class EntityTasks(object):
 
 
 class FilePatterns(object):
+    """
+    virtual value, real value is from configure.
+    """
     MayaRigFile = None
     MayaModelFIle = None
-
-
-class EntityStack(object):
-    def __init__(self):
-        self._paths = []
-        self._entity_dict = {}
-
-    def register(self, path, entity):
-        self._paths.append(path)
-        self._entity_dict[path] = entity
-
-    def get(self, path):
-        if path in self._entity_dict:
-            return self._entity_dict[path]
-
-    def get_all(self):
-        return [self._entity_dict[i] for i in self._paths]
-
-    def exists(self, path):
-        return path in self._entity_dict
 
 
 class AbsEntity(object):
@@ -130,7 +119,7 @@ class AbsEntity(object):
     VariantKey = None
     NextEntitiesCacheClassDict = dict()
 
-    TasksCacheOptClass = None
+    TasksGeneratorClass = None
 
     EntityTypes = EntityTypes
 
@@ -156,7 +145,7 @@ class AbsEntity(object):
     def _generate_next_entities_cache_key(cls, entity_type, variants, variants_extend=None):
         variants = copy.copy(variants)
         variants['entity_type'] = entity_type
-        if variants_extend is not None:
+        if variants_extend:
             variants.update(variants_extend)
         return bsc_core.BscHash.to_hash_key(variants)
 
@@ -217,7 +206,7 @@ class AbsEntity(object):
 
     def _find_next_entities(self, entity_type, variants_extend=None, cache_flag=True):
         entities_cache_opt = self._generate_next_entities_cache_opt(entity_type, variants_extend, cache_flag)
-        if variants_extend is not None:
+        if variants_extend:
             return entities_cache_opt.find_all(variants_extend)
         return entities_cache_opt.get_all()
 
@@ -231,7 +220,7 @@ class AbsEntity(object):
             return self._tasks_cache_opt
 
         variants = copy.copy(self._variants)
-        _ = self.TasksCacheOptClass(self, variants)
+        _ = self.TasksGeneratorClass(self, variants)
         _.update_from_storage(variants_extend, cache_flag)
         self._tasks_cache_opt = _
         return _
@@ -250,8 +239,8 @@ class AbsEntity(object):
         self._tasks_cache_opt = None
 
     def __str__(self):
-        return '{}(path="{}")'.format(
-            self.Type, bsc_core.ensure_string(self._path),
+        return '{}({})'.format(
+            self.Type, json.dumps(self._variants, indent=4),
         )
 
     def __repr__(self):
@@ -291,7 +280,7 @@ class AbsEntity(object):
         return _.get(name)
 
 
-class AbsEntitiesCacheOpt(object):
+class AbsEntitiesGenerator(object):
     EntityClass = None
 
     def _generate_stg_ptn_opts(self):
@@ -478,7 +467,7 @@ class AbsTask(object):
         return p_opt.get_value()
 
 
-class AbsTasksCacheOpt(object):
+class AbsTasksGenerator(object):
     EntityClass = None
 
     def _generate_stg_ptn_opts(self):
@@ -546,3 +535,15 @@ class AbsTasksCacheOpt(object):
         if matches:
             variants_new = matches[0]
             return self.register(variants_new)
+
+
+class EntityFactory:
+    @staticmethod
+    def find_all(entity_type):
+        def decorator(fnc):
+            def wrapper(entity, variants_extend, cache_flag):
+                fnc(entity, variants_extend, cache_flag)
+                result = entity._find_next_entities(entity_type, variants_extend, cache_flag)
+                return result
+            return wrapper
+        return decorator

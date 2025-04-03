@@ -10,8 +10,8 @@ class Task(_base.AbsTask):
         super(Task, self).__init__(*args, **kwargs)
 
 
-class TasksCacheOpt(_base.AbsTasksCacheOpt):
+class TasksGenerator(_base.AbsTasksGenerator):
     EntityClass = Task
 
     def __init__(self, *args, **kwargs):
-        super(TasksCacheOpt, self).__init__(*args, **kwargs)
+        super(TasksGenerator, self).__init__(*args, **kwargs)

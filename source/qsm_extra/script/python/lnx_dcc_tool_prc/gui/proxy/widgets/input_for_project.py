@@ -11,7 +11,7 @@ import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.proxy.abstracts as prx_abstracts
 
-import lnx_scan as lnx_scan
+import lnx_shark.scan as lnx_srk_scan
 
 
 class PrxInputForProject(prx_abstracts.AbsPrxWidget):
@@ -57,7 +57,7 @@ class PrxInputForProject(prx_abstracts.AbsPrxWidget):
         self._qt_path_input = gui_qt_widgets.QtInputForPath()
         self._qt_layout_0.addWidget(self._qt_path_input)
 
-        self._scan_root = lnx_scan.Stage().get_root()
+        self._scan_root = lnx_srk_scan.Stage().root()
 
         self._qt_path_input._set_next_buffer_fnc_(
             self._next_buffer_fnc
@@ -153,11 +153,11 @@ class PrxInputForProject(prx_abstracts.AbsPrxWidget):
     def _on_resync_entities(self):
         def post_fnc_():
             self._scan_cache_flag = True
-            lnx_scan.Stage.set_sync_cache_flag(True)
+            lnx_srk_scan.Stage.set_sync_cache_flag(True)
 
         def fnc_():
             self._scan_cache_flag = False
-            lnx_scan.Stage.set_sync_cache_flag(False)
+            lnx_srk_scan.Stage.set_sync_cache_flag(False)
             self._qt_path_input._update_next_data_for_(path_text, post_fnc_)
 
         path_text = self._qt_path_input._get_value_()

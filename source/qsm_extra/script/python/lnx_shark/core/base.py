@@ -2,6 +2,8 @@
 
 
 class EntityTypes(object):
+    Root = 'Root'
+
     Project = 'Project'
     Asset = 'Asset'
     Episode = 'Episode'
@@ -10,7 +12,11 @@ class EntityTypes(object):
     Task = 'Task'
     Version = 'Version'
 
+    User = 'User'
+
     All = [
+        Root,
+
         Project,
         Asset,
         Episode,
@@ -18,6 +24,8 @@ class EntityTypes(object):
         Shot,
         Task,
         Version,
+
+        User
     ]
 
 
@@ -99,9 +107,9 @@ class TaskKeys:
     ]
 
 
-class Properties(dict):
+class Variants(dict):
     def __init__(self, *args, **kwargs):
-        super(Properties, self).__init__(*args, **kwargs)
+        super(Variants, self).__init__(*args, **kwargs)
 
     def __getattr__(self, item):
         return self.__getitem__(item)  # = self[item]
@@ -114,3 +122,23 @@ class Properties(dict):
                 ['    {}="{}"'.format(k, self[k]) for k in keys]
             )
         )
+
+
+class EntityStack(object):
+    def __init__(self):
+        self._paths = []
+        self._entity_dict = {}
+
+    def register(self, path, entity):
+        self._paths.append(path)
+        self._entity_dict[path] = entity
+
+    def get(self, path):
+        if path in self._entity_dict:
+            return self._entity_dict[path]
+
+    def get_all(self):
+        return [self._entity_dict[i] for i in self._paths]
+
+    def exists(self, path):
+        return path in self._entity_dict
