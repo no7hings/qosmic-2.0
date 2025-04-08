@@ -18,13 +18,14 @@ from . import _shot
 
 class Project(_base.AbsEntity):
     Type = _cor_base.EntityTypes.Project
+    VariantKey = _cor_base.EntityVariantKeys.Project
 
     def __init__(self, *args, **kwargs):
         super(Project, self).__init__(*args, **kwargs)
 
     # role
     def roles(self, **kwargs):
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
 
         list_ = []
 
@@ -39,8 +40,8 @@ class Project(_base.AbsEntity):
             t_tw.info.fields(cgt_dtb, cgt_type)
         ):
             list_.append(
-                _role.Role(
-                    self._root,
+                self._root._new_entity_fnc(
+                    _role.Role,
                     dict(
                         project=self._variants['project'],
                         role=i_cgt_variants['asset_type.entity'],
@@ -51,7 +52,7 @@ class Project(_base.AbsEntity):
         return list_
 
     def role(self, name, **kwargs):
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
 
         filters = [['asset_type.entity', '=', name]]
 
@@ -64,8 +65,8 @@ class Project(_base.AbsEntity):
                 cgt_dtb, cgt_type,
                 id_list, t_tw.info.fields(cgt_dtb, cgt_type)
             )[0]
-            return _role.Role(
-                self._root,
+            return self._root._new_entity_fnc(
+                _role.Role,
                 dict(
                     project=self._variants['project'],
                     role=cgt_variants['asset_type.entity'],
@@ -79,7 +80,7 @@ class Project(_base.AbsEntity):
         @param kwargs: role = str or list
         @return: list
         """
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
 
         list_ = []
 
@@ -103,8 +104,8 @@ class Project(_base.AbsEntity):
             t_tw.info.fields(cgt_dtb, cgt_type)
         ):
             list_.append(
-                _asset.Asset(
-                    self._root,
+                self._root._new_entity_fnc(
+                    _asset.Asset,
                     dict(
                         project=self._variants['project'],
                         role=i_cgt_variants['asset_type.entity'],
@@ -116,7 +117,7 @@ class Project(_base.AbsEntity):
         return list_
 
     def asset(self, name, **kwargs):
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
 
         filters = [['asset.entity', '=', name]]
 
@@ -129,8 +130,8 @@ class Project(_base.AbsEntity):
                 cgt_dtb, cgt_type,
                 id_list, t_tw.info.fields(cgt_dtb, cgt_type)
             )[0]
-            return _asset.Asset(
-                self._root,
+            return self._root._new_entity_fnc(
+                _asset.Asset,
                 dict(
                     project=self._variants['project'],
                     role=cgt_variants['asset_type.entity'],
@@ -141,7 +142,7 @@ class Project(_base.AbsEntity):
 
     # episode
     def episodes(self, **kwargs):
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
 
         list_ = []
 
@@ -156,8 +157,8 @@ class Project(_base.AbsEntity):
             t_tw.info.fields(cgt_dtb, cgt_type)
         ):
             list_.append(
-                _episode.Episode(
-                    self._root,
+                self._root._new_entity_fnc(
+                    _episode.Episode,
                     dict(
                         project=self._variants['project'],
                         episode=i_cgt_variants['eps.entity'],
@@ -168,7 +169,7 @@ class Project(_base.AbsEntity):
         return list_
 
     def episode(self, name, **kwargs):
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
 
         filters = [['eps.entity', '=', name]]
 
@@ -181,8 +182,8 @@ class Project(_base.AbsEntity):
                 cgt_dtb, cgt_type,
                 id_list, t_tw.info.fields(cgt_dtb, cgt_type)
             )[0]
-            return _episode.Episode(
-                self._root,
+            return self._root._new_entity_fnc(
+                _episode.Episode,
                 dict(
                     project=self._variants['project'],
                     episode=cgt_variants.get('eps.entity'),
@@ -192,7 +193,7 @@ class Project(_base.AbsEntity):
 
     # sequence
     def sequences(self, **kwargs):
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
 
         list_ = []
 
@@ -216,8 +217,8 @@ class Project(_base.AbsEntity):
             t_tw.info.fields(cgt_dtb, cgt_type)
         ):
             list_.append(
-                _sequence.Sequence(
-                    self._root,
+                self._root._new_entity_fnc(
+                    _sequence.Sequence,
                     dict(
                         project=self._variants['project'],
                         episode=i_cgt_variants['eps.entity'],
@@ -229,7 +230,7 @@ class Project(_base.AbsEntity):
         return list_
 
     def sequence(self, name, **kwargs):
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
 
         filters = [['seq.entity', '=', name]]
 
@@ -242,8 +243,8 @@ class Project(_base.AbsEntity):
                 cgt_dtb, cgt_type,
                 id_list, t_tw.info.fields(cgt_dtb, cgt_type)
             )[0]
-            return _sequence.Sequence(
-                self._root,
+            return self._root._new_entity_fnc(
+                _sequence.Sequence,
                 dict(
                     project=self._variants['project'],
                     episode=cgt_variants.get('eps.entity'),
@@ -254,7 +255,7 @@ class Project(_base.AbsEntity):
 
     # shot
     def shots(self, **kwargs):
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
 
         list_ = []
 
@@ -287,8 +288,8 @@ class Project(_base.AbsEntity):
             t_tw.info.fields(cgt_dtb, cgt_type)
         ):
             list_.append(
-                _shot.Shot(
-                    self._root,
+                self._root._new_entity_fnc(
+                    _shot.Shot,
                     dict(
                         project=self._variants['project'],
                         # may no episode?
@@ -302,7 +303,7 @@ class Project(_base.AbsEntity):
         return list_
 
     def shot(self, name, **kwargs):
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
 
         filters = [['shot.entity', '=', name]]
 
@@ -315,8 +316,8 @@ class Project(_base.AbsEntity):
                 cgt_dtb, cgt_type,
                 id_list, t_tw.info.fields(cgt_dtb, cgt_type)
             )[0]
-            return _shot.Shot(
-                self._root,
+            return self._root._new_entity_fnc(
+                _shot.Shot,
                 dict(
                     project=self._variants['project'],
                     episode=cgt_variants.get('eps.entity'),

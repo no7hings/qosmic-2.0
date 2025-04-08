@@ -8,22 +8,22 @@ from . import _task
 
 class Shot(_base.AbsEntity):
     Type = _cor_base.EntityTypes.Shot
-    VariantKey = _base.EntityVariantKeys.Shot
+    VariantKey = _cor_base.EntityVariantKeys.Shot
 
     TasksGeneratorClass = _task.TasksGenerator
 
     @classmethod
     def _variant_validation_fnc(cls, variants):
         # episode maybe unused
-        if _base.EntityVariantKeys.Episode in variants:
+        if _cor_base.EntityVariantKeys.Episode in variants:
             return (
-                _base.VariantKeyMatch.match_fnc(variants, _base.EntityVariantKeys.Episode) and
-                _base.VariantKeyMatch.match_fnc(variants, _base.EntityVariantKeys.Sequence) and
-                _base.VariantKeyMatch.match_fnc(variants, cls.VariantKey)
+                _cor_base.EntityVariantKeyFnc.match_fnc(variants, _cor_base.EntityVariantKeys.Episode) and
+                _cor_base.EntityVariantKeyFnc.match_fnc(variants, _cor_base.EntityVariantKeys.Sequence) and
+                _cor_base.EntityVariantKeyFnc.match_fnc(variants, cls.VariantKey)
             )
         return (
-            _base.VariantKeyMatch.match_fnc(variants, _base.EntityVariantKeys.Sequence) and
-            _base.VariantKeyMatch.match_fnc(variants, cls.VariantKey)
+            _cor_base.EntityVariantKeyFnc.match_fnc(variants, _cor_base.EntityVariantKeys.Sequence) and
+            _cor_base.EntityVariantKeyFnc.match_fnc(variants, cls.VariantKey)
         )
 
     def __init__(self, *args, **kwargs):

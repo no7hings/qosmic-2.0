@@ -10,7 +10,7 @@ from . import _task
 
 class Role(_base.AbsEntity):
     Type = _cor_base.EntityTypes.Role
-    VariantKey = _base.EntityVariantKeys.Role
+    VariantKey = _cor_base.EntityVariantKeys.Role
 
     NextEntitiesCacheClassDict = {
         _cor_base.EntityTypes.Asset: _asset.AssetsGenerator,
@@ -20,7 +20,7 @@ class Role(_base.AbsEntity):
 
     @classmethod
     def _variant_validation_fnc(cls, variants):
-        return _base.VariantKeyMatch.match_fnc(variants, cls.VariantKey)
+        return _cor_base.EntityVariantKeyFnc.match_fnc(variants, cls.VariantKey)
 
     def __init__(self, *args, **kwargs):
         super(Role, self).__init__(*args, **kwargs)

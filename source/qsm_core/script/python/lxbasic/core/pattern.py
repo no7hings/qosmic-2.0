@@ -509,7 +509,7 @@ class BscStgParseOpt(AbsParseOpt):
                         i_r['pattern'] = self._pattern_origin
                         list_.append(i_r)
 
-                # when variant value is '', we collected result also, etc. "X:A{var_0}/B", "X:A/B"
+                # when variant value is '', we collected result also, etc. "X:A{var_IGN}/B", "X:A/B"
                 else:
                     i_vars_new = {}
                     for i_key in keys:

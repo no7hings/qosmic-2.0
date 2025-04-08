@@ -10,15 +10,18 @@ from . import _project
 
 class Root(_base.AbsEntity):
     Type = _cor_base.EntityTypes.Root
+    VariantKey = _cor_base.EntityVariantKeys.Root
 
     def __init__(self, stage, location='X:'):
         self._stage = stage
+
         # create before super
         self._root_entity_stack = _cor_base.EntityStack()
 
         super(Root, self).__init__(
             # root is self
             self,
+            '/',
             dict(root=location),
             {}
         )
@@ -30,30 +33,26 @@ class Root(_base.AbsEntity):
     def get_entity(self, path):
         return self._root_entity_stack.get(path)
 
+    def _new_entity_fnc(self, entity_class, variants, cgt_variants):
+        variants = _cor_base.EntityVariantKeyFnc.clean_fnc(variants)
+
+        entity_type = entity_class.Type
+        path = self.to_entity_path(entity_type, variants)
+        if self._root_entity_stack.exists(path):
+            return self._root_entity_stack.get(path)
+
+        entity = entity_class(
+            self._root, path, variants, cgt_variants
+        )
+        self._root_entity_stack.register(path, entity)
+        return entity
+        
     def current_user(self):
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
         return self.user(name=t_tw.login.account())
 
-    def user(self, name, **kwargs):
-        t_tw = self._stage._tw
-
-        filters = [['account.entity', '=', name]]
-        id_list = t_tw.account.get_id(
-            filters
-        )
-        if id_list:
-            cgt_variants = t_tw.account.get(id_list, t_tw.account.fields())[0]
-            return _user.User(
-                self,
-                dict(
-                    cgt_user=name,
-                    user=None
-                ),
-                cgt_variants
-            )
-
     def users(self, **kwargs):
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
 
         list_ = []
 
@@ -66,35 +65,38 @@ class Root(_base.AbsEntity):
             t_tw.account.fields()
         ):
             list_.append(
-                _user.User(
-                    self,
+                self._new_entity_fnc(
+                    _user.User,
                     dict(
                         cgt_user=i_cgt_variants['account.entity'],
                         # todo: add field to save login user name
-                        user=None,
+                        user=i_cgt_variants['account.entity'],
                     ),
                     i_cgt_variants
                 )
             )
         return list_
 
-    def project(self, name, **kwargs):
-        t_tw = self._stage._tw
+    def user(self, name, **kwargs):
+        t_tw = self._stage._api
 
-        filters = [['project.entity', '=', name]]
-        id_list = t_tw.project.get_id(filters)
+        filters = [['account.entity', '=', name]]
+        id_list = t_tw.account.get_id(
+            filters
+        )
         if id_list:
-            cgt_variants = t_tw.project.get(id_list, t_tw.project.fields())[0]
-            return _project.Project(
-                self._root,
+            cgt_variants = t_tw.account.get(id_list, t_tw.account.fields())[0]
+            return self._new_entity_fnc(
+                _user.User,
                 dict(
-                    project=name
+                    cgt_user=name,
+                    user=None
                 ),
                 cgt_variants
             )
 
     def projects(self, **kwargs):
-        t_tw = self._stage._tw
+        t_tw = self._stage._api
 
         list_ = []
 
@@ -107,8 +109,8 @@ class Root(_base.AbsEntity):
             t_tw.project.fields()
         ):
             list_.append(
-                _project.Project(
-                    self._root,
+                self._new_entity_fnc(
+                    _project.Project,
                     dict(
                         project=i_cgt_variants['project.entity']
                     ),
@@ -116,3 +118,18 @@ class Root(_base.AbsEntity):
                 )
             )
         return list_
+
+    def project(self, name, **kwargs):
+        t_tw = self._stage._api
+
+        filters = [['project.entity', '=', name]]
+        id_list = t_tw.project.get_id(filters)
+        if id_list:
+            cgt_variants = t_tw.project.get(id_list, t_tw.project.fields())[0]
+            return self._new_entity_fnc(
+                _project.Project,
+                dict(
+                    project=name
+                ),
+                cgt_variants
+            )

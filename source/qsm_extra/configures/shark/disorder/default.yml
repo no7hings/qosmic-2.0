@@ -16,6 +16,10 @@ entity:
         ShotTask: '{root}/{project}/{sequence}/{shot}/{task}'
 
     path_patterns:
+        User: '/{user}'
+
+        Root: '/{root}'
+
         Project: '/{project}'
         Role: '/{project}/{role}'
         Asset: '/{project}/{asset}'
@@ -30,6 +34,7 @@ entity:
         ShotTask: '/{project}/{sequence}/{shot}/{task}'
 
     variant_keys:
+        User: 'user'
         Root: 'root'
         Project: 'project'
         Role: 'role'
@@ -38,6 +43,7 @@ entity:
         Sequence: 'sequence'
         Shot: 'shot'
         Task: 'task'
+        Version: 'version'
 
     variant_key_regexes:
         project: '[a-zA-Z]*'
@@ -47,6 +53,9 @@ entity:
         episode: '[a-zA-Z]*[0-9]*'
         sequence: '[a-zA-Z]*'
         shot: '[a-zA-Z]*[0-9]'
+
+    variant_cleanup_keys:
+        - sequence
 
     tasks:
         Concept: 'Design'

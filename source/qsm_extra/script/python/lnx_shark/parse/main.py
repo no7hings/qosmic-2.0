@@ -325,14 +325,6 @@ class Stage(_abc_.AbsStage):
         )
         if entity_key in self.ENTITY_DICT:
             instance = self.ENTITY_DICT[entity_key]
-            # kwargs = {}
-            # keys = ['space_key']
-            # for i in keys:
-            #     if i in variants:
-            #         kwargs[i] = variants[i]
-            # instance.update_variants(
-            #     **kwargs
-            # )
             return instance
 
         if entity_type == self.EntityTypes.Task:
@@ -551,10 +543,6 @@ class Stage(_abc_.AbsStage):
             # todo: when variants is changed, update variants?
             if i_entity_key in self.ENTITY_DICT:
                 i_instance = self.ENTITY_DICT[i_entity_key]
-                # i_kwargs = {}
-                # for j in keys:
-                #     if j in variants:
-                #         i_kwargs[j] = variants[j]
                 list_.append(i_instance)
                 continue
 

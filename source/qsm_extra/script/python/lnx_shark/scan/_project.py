@@ -18,7 +18,7 @@ from . import _task
 
 class Project(_base.AbsEntity):
     Type = _cor_base.EntityTypes.Project
-    VariantKey = _base.EntityVariantKeys.Project
+    VariantKey = _cor_base.EntityVariantKeys.Project
 
     NextEntitiesCacheClassDict = {
         _cor_base.EntityTypes.Role: _role.RolesGenerator,
@@ -32,7 +32,7 @@ class Project(_base.AbsEntity):
 
     @classmethod
     def _variant_validation_fnc(cls, variants):
-        return _base.VariantKeyMatch.match_fnc(variants, cls.VariantKey)
+        return _cor_base.EntityVariantKeyFnc.match_fnc(variants, cls.VariantKey)
 
     def __init__(self, *args, **kwargs):
         super(Project, self).__init__(*args, **kwargs)

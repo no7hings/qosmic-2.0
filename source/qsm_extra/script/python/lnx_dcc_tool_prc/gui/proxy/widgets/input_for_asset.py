@@ -105,7 +105,7 @@ class PrxInputForAssetCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
         name_texts = []
         keyword_filter_dict = collections.OrderedDict()
         tag_filter_dict = collections.OrderedDict()
-        for i_project in self._scan_root.find_projects(cache_flag=self._scan_cache_flag):
+        for i_project in self._scan_root.projects(cache_flag=self._scan_cache_flag):
             i_name = i_project.name
             name_texts.append(i_project.name)
 
@@ -338,7 +338,7 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
         name_texts = []
         keyword_filter_dict = collections.OrderedDict()
         tag_filter_dict = collections.OrderedDict()
-        for i_project in self._scan_root.find_projects(cache_flag=self._scan_cache_flag):
+        for i_project in self._scan_root.projects(cache_flag=self._scan_cache_flag):
             i_name = i_project.name
             name_texts.append(i_project.name)
 

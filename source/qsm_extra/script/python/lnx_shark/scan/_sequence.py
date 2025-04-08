@@ -12,30 +12,23 @@ from . import _task
 
 class Sequence(_base.AbsEntity):
     Type = _cor_base.EntityTypes.Sequence
-    VariantKey = _base.EntityVariantKeys.Sequence
+    VariantKey = _cor_base.EntityVariantKeys.Sequence
 
     NextEntitiesCacheClassDict = {
         _cor_base.EntityTypes.Shot: _shot.ShotsGenerator,
     }
 
     TasksGeneratorClass = _task.TasksGenerator
-    
-    @classmethod
-    def _variant_cleanup_fnc(cls, variants):
-        # todo: cleanup name?
-        name = variants[cls.VariantKey]
-        variants[cls.VariantKey] = bsc_pinyin.Text.cleanup(name, stop_on_chs=True)
-        return variants
 
     @classmethod
     def _variant_validation_fnc(cls, variants):
         # maybe episode is unused
-        if _base.EntityVariantKeys.Episode in variants:
+        if _cor_base.EntityVariantKeys.Episode in variants:
             return (
-                _base.VariantKeyMatch.match_fnc(variants, _base.EntityVariantKeys.Episode) and
-                _base.VariantKeyMatch.match_fnc(variants, cls.VariantKey)
+                _cor_base.EntityVariantKeyFnc.match_fnc(variants, _cor_base.EntityVariantKeys.Episode) and
+                _cor_base.EntityVariantKeyFnc.match_fnc(variants, cls.VariantKey)
             )
-        return _base.VariantKeyMatch.match_fnc(variants, cls.VariantKey)
+        return _cor_base.EntityVariantKeyFnc.match_fnc(variants, cls.VariantKey)
 
     def __init__(self, *args, **kwargs):
         super(Sequence, self).__init__(*args, **kwargs)

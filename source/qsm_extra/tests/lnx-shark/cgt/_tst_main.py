@@ -5,4 +5,6 @@ root = c.Stage().root()
 
 project = root.project('WSX')
 
-print(project.shots())
+for i in project.sequences():
+    for j in i.shots():
+        print(j.path)

@@ -7,7 +7,7 @@ root = lnx_srk_scan.Stage().root()
 
 print(root)
 
-project = root.find_project('QSM_TST')
+project = root.project('QSM_TST')
 
 print(project)
 

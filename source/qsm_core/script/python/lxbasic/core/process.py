@@ -515,3 +515,15 @@ class BscProcess(object):
             )
         )
         t_0.start()
+
+    @classmethod
+    def find_process_path_by_name(cls, name):
+        try:
+            output = subprocess.check_output(
+                'wmic process where "name=\'{name}\'" get ExecutablePath'.format(name=name),
+                shell=True
+            ).decode('utf-8', errors='ignore').splitlines()
+            paths = [line.strip() for line in output if line.strip() and 'ExecutablePath' not in line]
+            return list(set(paths))
+        except subprocess.CalledProcessError:
+            return []

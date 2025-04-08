@@ -21,11 +21,12 @@ class Stage(object):
         self = super(Stage, cls).__new__(cls)
         if CGT_FLAG is True:
             # noinspection PyUnresolvedReferences
-            self._tw = cgtw2.tw()
+            self._api = cgtw2.tw()
         else:
             raise RuntimeError()
 
         self._root_dict = dict()
+
         cls.INSTANCE = self
         return self
 

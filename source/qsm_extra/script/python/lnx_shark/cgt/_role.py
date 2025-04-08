@@ -5,6 +5,9 @@ from . import _base
 
 
 class Role(_base.AbsEntity):
+    Type = _cor_base.EntityTypes.Role
+    VariantKey = _cor_base.EntityVariantKeys.Role
+
     def __init__(self, *args, **kwargs):
         super(Role, self).__init__(*args, **kwargs)
 

@@ -18,74 +18,10 @@ class GlobalVar:
     SYNC_CACHE_FLAG = True
 
 
-class EntityVariantKeys:
-    """
-    virtual value, real value is from configure.
-    """
-    Root = None
-    Project = None
-    Role = None
-    Asset = None
-    Episode = None
-    Sequence = None
-    Shot = None
-    Task = None
-
-
-class VariantKeyMatch:
-    @classmethod
-    def is_name_match(cls, name, p):
-        return bsc_core.BscFnmatch.is_match(name, p)
-    
-    @classmethod
-    def match_fnc(cls, variants, key):
-        return bsc_core.BscFnmatch.is_match(
-            variants[key], _cor_base.EntityConfig()._entity_variant_key_regex_dict[key]
-        )
-
-
-class EntityTasks(object):
-    """
-    virtual value, real value is from configure.
-    """
-    Concept = None
-    Model = None
-    Rig = None
-    Surface = None
-
-    Animation = None
-
-
-class FilePatterns(object):
-    """
-    virtual value, real value is from configure.
-    """
-    MayaRigFile = None
-    MayaModelFIle = None
-
-
-class AbsEntity(object):
-    Type = None
-    VariantKey = None
+class AbsEntity(_cor_base.AbsEntityBase):
     NextEntitiesCacheClassDict = dict()
 
     TasksGeneratorClass = None
-
-    EntityTypes = _cor_base.EntityTypes
-
-    # update variants from configure here.
-    EntityVariantKeys = EntityVariantKeys
-    [setattr(EntityVariantKeys, k, v) for k, v in _cor_base.EntityConfig()._entity_variant_key_dict.items()]
-
-    EntityTasks = EntityTasks
-    [setattr(EntityTasks, k, v) for k, v in _cor_base.EntityConfig()._entity_task_dict.items()]
-
-    FilePatterns = FilePatterns
-    [setattr(FilePatterns, k, v) for k, v in _cor_base.EntityConfig()._file_pattern_dict.items()]
-
-    @classmethod
-    def _variant_cleanup_fnc(cls, variants):
-        return variants
 
     @classmethod
     def _variant_validation_fnc(cls, variants):
@@ -120,7 +56,7 @@ class AbsEntity(object):
         cache_path = self._generate_next_entities_cache_path(cache_key)
         bsc_storage.StgFileOpt(cache_path).set_write(data)
 
-    def _generate_next_entities_cache_opt(self, entity_type, variants_extend=None, cache_flag=True):
+    def _generate_next_entities_generator(self, entity_type, variants_extend=None, cache_flag=True):
         # generate key by scan variant, when variants is changed, generate new variant
         variants = copy.copy(self._variants)
 
@@ -129,8 +65,8 @@ class AbsEntity(object):
         # cache flag, when is True, use cache from dict
         if cache_flag is True:
             # when is created use exists
-            if cache_key in self._next_entities_cache_opt_dict:
-                entities_cache_opt = self._next_entities_cache_opt_dict[cache_key]
+            if cache_key in self._next_entities_generator_dict:
+                entities_cache_opt = self._next_entities_generator_dict[cache_key]
                 return entities_cache_opt
 
         # sync cache flag, when is True, use cache from json
@@ -151,17 +87,17 @@ class AbsEntity(object):
             'scan {} for: {}'.format(entity_type, bsc_core.ensure_string(self._path))
         )
 
-        self._next_entities_cache_opt_dict[cache_key] = entities_cache_opt
+        self._next_entities_generator_dict[cache_key] = entities_cache_opt
         return entities_cache_opt
 
     def _find_next_entities(self, entity_type, variants_extend=None, cache_flag=True):
-        entities_cache_opt = self._generate_next_entities_cache_opt(entity_type, variants_extend, cache_flag)
+        entities_cache_opt = self._generate_next_entities_generator(entity_type, variants_extend, cache_flag)
         if variants_extend:
             return entities_cache_opt.find_all(variants_extend)
         return entities_cache_opt.get_all()
 
     def _find_next_entity(self, name, entity_type, variants_extend=None, cache_flag=True):
-        entities_cache_opt = self._generate_next_entities_cache_opt(entity_type, variants_extend, cache_flag)
+        entities_cache_opt = self._generate_next_entities_generator(entity_type, variants_extend, cache_flag)
         return entities_cache_opt.get(name)
 
     # evey entity has task, either project, asset, sequence, shot
@@ -185,7 +121,7 @@ class AbsEntity(object):
         self._properties = _cor_base.EntityVariants()
         self._properties.update(variants)
 
-        self._next_entities_cache_opt_dict = dict()
+        self._next_entities_generator_dict = dict()
         self._tasks_cache_opt = None
 
     def __str__(self):
@@ -253,10 +189,13 @@ class AbsEntitiesGenerator(object):
 
         self._variants = {}
         self._variants.update(variants)
+
+        # storage
         self._stg_ptn_opt_for_scan = bsc_core.BscStgParseOpt(
             _cor_base.EntityConfig()._entity_resolve_pattern_dict[self.EntityClass.Type]
         )
         self._stg_ptn_opt_for_scan.update_variants(**self._variants)
+        # path
         self._dcc_ptn_opt = bsc_core.BscDccParseOpt(
             _cor_base.EntityConfig()._entity_path_pattern_dict[self.EntityClass.Type]
         )
@@ -277,7 +216,7 @@ class AbsEntitiesGenerator(object):
                     i_variants[k] = v
                     i_matchers = self.scan_fnc(i_variants)
                     for k_variant in i_matchers:
-                        self.register(k_variant)
+                        self._new_entity_fnc(k_variant)
                 # variant is many
                 elif isinstance(v, list):
                     for j in v:
@@ -285,14 +224,14 @@ class AbsEntitiesGenerator(object):
                         j_variants[k] = j
                         j_matchers = self.scan_fnc(j_variants)
                         for k_variant in j_matchers:
-                            self.register(k_variant)
+                            self._new_entity_fnc(k_variant)
                 else:
                     raise RuntimeError()
         else:
             variants = copy.copy(self._variants)
             matches = self.scan_fnc(variants)
             for i_variants in matches:
-                self.register(i_variants)
+                self._new_entity_fnc(i_variants)
 
         return self._variants_list
 
@@ -304,8 +243,8 @@ class AbsEntitiesGenerator(object):
         matchers = pth_opt.find_matches(sort=True)
         return matchers
 
-    def register(self, variants):
-        variants = self.EntityClass._variant_cleanup_fnc(variants)
+    def _new_entity_fnc(self, variants):
+        variants = _cor_base.EntityVariantKeyFnc.clean_fnc(variants)
         path = self._dcc_ptn_opt.update_variants_to(**variants).get_value()
         if path in self._entity_dict:
             return self._entity_dict[path]
@@ -324,7 +263,7 @@ class AbsEntitiesGenerator(object):
 
     def update_from_cache(self, data):
         for i_variants in data:
-            self.register(i_variants)
+            self._new_entity_fnc(i_variants)
 
     def get_all(self):
         return self._entity_dict.values()
@@ -357,7 +296,7 @@ class AbsEntitiesGenerator(object):
         matches = ptn_opt.find_matches()
         if matches:
             variants_new = matches[0]
-            return self.register(variants_new)
+            return self._new_entity_fnc(variants_new)
 
     def exist(self, name):
         path = self.to_entity_path(name)
@@ -450,14 +389,13 @@ class AbsTasksGenerator(object):
 
         self._entity_dict = {}
         self._entity_variant_key = self.EntityClass.VariantKey
-        pass
 
     def update_from_storage(self, variants_extend=None, cache_flag=True):
         matches = self._stg_ptn_opt_for_scan.find_matches(sort=True)
         for i_variants in matches:
-            self.register(i_variants)
+            self._new_entity_fnc(i_variants)
     
-    def register(self, variants):
+    def _new_entity_fnc(self, variants):
         path = self._dcc_ptn_opt.update_variants_to(**variants).get_value()
         entity = self.EntityClass(self._entity, path, variants)
         self._entity_dict[path] = entity
@@ -484,7 +422,7 @@ class AbsTasksGenerator(object):
         matches = ptn_opt.find_matches()
         if matches:
             variants_new = matches[0]
-            return self.register(variants_new)
+            return self._new_entity_fnc(variants_new)
 
 
 class EntityFactory:

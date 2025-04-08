@@ -8,13 +8,13 @@ from . import _task
 
 class Asset(_base.AbsEntity):
     Type = _cor_base.EntityTypes.Asset
-    VariantKey = _base.EntityVariantKeys.Asset
+    VariantKey = _cor_base.EntityVariantKeys.Asset
 
     TasksGeneratorClass = _task.TasksGenerator
 
     @classmethod
     def _variant_validation_fnc(cls, variants):
-        return _base.VariantKeyMatch.match_fnc(variants, cls.VariantKey)
+        return _cor_base.EntityVariantKeyFnc.match_fnc(variants, cls.VariantKey)
 
     def __init__(self, *args, **kwargs):
         super(Asset, self).__init__(*args, **kwargs)

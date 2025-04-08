@@ -6,6 +6,7 @@ from . import _base
 
 class Episode(_base.AbsEntity):
     Type = _cor_base.EntityTypes.Episode
+    VariantKey = _cor_base.EntityVariantKeys.Episode
 
     def __init__(self, *args, **kwargs):
         super(Episode, self).__init__(*args, **kwargs)
