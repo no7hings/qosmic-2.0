@@ -1,11 +1,13 @@
 # coding:utf-8
+from ..core import base as _cor_base
+
 from . import _base
 
 from . import _task
 
 
 class Asset(_base.AbsEntity):
-    Type = _base.EntityTypes.Asset
+    Type = _cor_base.EntityTypes.Asset
     VariantKey = _base.EntityVariantKeys.Asset
 
     TasksGeneratorClass = _task.TasksGenerator

@@ -73,7 +73,7 @@ class AssetBatchRegisterOpt(object):
 
     def register_character_assets(self, project_name):
         project = self._scan_root.project(project_name)
-        assets = project.find_assets(dict(role=qsm_gnl_core.QsmAsset.get_character_role_mask()))
+        assets = project.assets(role=qsm_gnl_core.QsmAsset.get_character_role_mask())
         with bsc_log.LogProcessContext.create(maximum=len(assets)) as l_p:
             for i_asset in assets:
                 i_task = i_asset.task(self._scan_root.EntityTasks.Rig)
@@ -90,7 +90,7 @@ class AssetBatchRegisterOpt(object):
 
     def register_prop_assets(self, project_name):
         project = self._scan_root.project(project_name)
-        assets = project.find_assets(dict(role=qsm_gnl_core.QsmAsset.get_prop_role_mask()))
+        assets = project.assets(role=qsm_gnl_core.QsmAsset.get_prop_role_mask())
         with bsc_log.LogProcessContext.create(maximum=len(assets)) as l_p:
             for i_asset in assets:
                 i_task = i_asset.task(self._scan_root.EntityTasks.Rig)
@@ -107,7 +107,7 @@ class AssetBatchRegisterOpt(object):
 
     def register_scenery_assets(self, project_name):
         project = self._scan_root.project(project_name)
-        assets = project.find_assets(dict(role=qsm_gnl_core.QsmAsset.get_scenery_role_mask()))
+        assets = project.assets(role=qsm_gnl_core.QsmAsset.get_scenery_role_mask())
         with bsc_log.LogProcessContext.create(maximum=len(assets)) as l_p:
             for i_asset in assets:
                 i_task = i_asset.task(self._scan_root.EntityTasks.Model)

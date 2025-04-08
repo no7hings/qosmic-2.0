@@ -1,10 +1,12 @@
 # coding:utf-8
+import lxbasic.resource as bsc_resource
 
 
 class EntityTypes(object):
     Root = 'Root'
 
     Project = 'Project'
+    Role = 'Role'
     Asset = 'Asset'
     Episode = 'Episode'
     Sequence = 'Sequence'
@@ -18,6 +20,7 @@ class EntityTypes(object):
         Root,
 
         Project,
+        Role,
         Asset,
         Episode,
         Sequence,
@@ -107,9 +110,9 @@ class TaskKeys:
     ]
 
 
-class Variants(dict):
+class EntityVariants(dict):
     def __init__(self, *args, **kwargs):
-        super(Variants, self).__init__(*args, **kwargs)
+        super(EntityVariants, self).__init__(*args, **kwargs)
 
     def __getattr__(self, item):
         return self.__getitem__(item)  # = self[item]
@@ -122,6 +125,32 @@ class Variants(dict):
                 ['    {}="{}"'.format(k, self[k]) for k in keys]
             )
         )
+
+
+class EntityConfig(object):
+    INSTANCE = None
+    INITIALIZED = False
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def __new__(cls, *args, **kwargs):
+        if cls.INSTANCE is not None:
+            return cls.INSTANCE
+
+        self = super(EntityConfig, cls).__new__(cls)
+
+        # init
+        cfg = bsc_resource.BscExtendConfigure.get_as_content('scan/default')
+        self._entity_resolve_pattern_dict = cfg.get('entity.resolve_patterns')
+        self._entity_path_pattern_dict = cfg.get('entity.path_patterns')
+        self._entity_task_dict = cfg.get('entity.tasks')
+        self._entity_variant_key_dict = cfg.get('entity.variant_keys')
+        self._entity_variant_key_regex_dict = cfg.get('entity.variant_key_regexes')
+        self._file_pattern_dict = cfg.get('file_patterns')
+
+        cls.INSTANCE = self
+        return self
 
 
 class EntityStack(object):

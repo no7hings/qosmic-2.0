@@ -131,7 +131,7 @@ class PrxInputForAssetCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
             else:
                 role_mask = self.ROLE_MASK
 
-            assets = project.find_assets(variants_extend=dict(role=role_mask), cache_flag=self._scan_cache_flag)
+            assets = project.assets(role=role_mask, cache_flag=self._scan_cache_flag)
             for i_asset in assets:
                 i_name = i_asset.name
                 name_texts.append(i_asset.name)
@@ -367,7 +367,7 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
             else:
                 role_mask = self.ROLE_MASK
 
-            assets = project.find_assets(variants_extend=dict(role=role_mask), cache_flag=self._scan_cache_flag)
+            assets = project.assets(role=role_mask, cache_flag=self._scan_cache_flag)
             for i_asset in assets:
                 i_name = i_asset.name
                 name_texts.append(i_asset.name)

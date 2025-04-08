@@ -121,7 +121,7 @@ class PrxInputForSequence(prx_abstracts.AbsPrxWidget):
 
         project = self._scan_root.get_entity(path_opt.to_string())
         if project is not None:
-            sequences = project.find_sequences(cache_flag=self._scan_cache_flag)
+            sequences = project.sequences(cache_flag=self._scan_cache_flag)
             for i_sequence in sequences:
                 i_name = i_sequence.name
                 name_texts.append(i_sequence.name)

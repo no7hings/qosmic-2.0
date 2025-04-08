@@ -1,11 +1,13 @@
 # coding:utf-8
+from ..core import base as _cor_base
+
 from . import _base
 
 from . import _task
 
 
 class Shot(_base.AbsEntity):
-    Type = _base.EntityTypes.Shot
+    Type = _cor_base.EntityTypes.Shot
     VariantKey = _base.EntityVariantKeys.Shot
 
     TasksGeneratorClass = _task.TasksGenerator

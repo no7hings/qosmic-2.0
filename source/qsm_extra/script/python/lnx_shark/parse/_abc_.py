@@ -62,7 +62,7 @@ class AbsEntity(AbsBase):
 
     def __init__(self, stage, entity_type, variants):
         self._stage = stage
-        self._variants = _cor_base.Variants(**variants)
+        self._variants = _cor_base.EntityVariants(**variants)
 
         self._entity_type = entity_type
         self._variants['entity_type'] = self._entity_type

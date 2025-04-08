@@ -121,7 +121,7 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
 
         project = self._scan_root.get_entity(path_opt.to_string())
         if project is not None:
-            sequences = project.find_sequences(cache_flag=self._scan_cache_flag)
+            sequences = project.sequences(cache_flag=self._scan_cache_flag)
             for i_sequence in sequences:
                 i_name = i_sequence.name
                 name_texts.append(i_sequence.name)
@@ -143,7 +143,7 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
 
         sequence = self._scan_root.get_entity(path_opt.to_string())
         if sequence is not None:
-            shots = sequence.find_shots(cache_flag=self._scan_cache_flag)
+            shots = sequence.shots(cache_flag=self._scan_cache_flag)
             for i_shot in shots:
                 i_name = i_shot.name
                 name_texts.append(i_shot.name)

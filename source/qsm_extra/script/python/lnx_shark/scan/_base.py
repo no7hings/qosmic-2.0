@@ -9,63 +9,13 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.resource as bsc_resource
-
 import lxbasic.storage as bsc_storage
 
-__all__ = [
-    'EntityTypes',
-]
+from ..core import base as _cor_base
 
 
 class GlobalVar:
     SYNC_CACHE_FLAG = True
-
-
-class Configure(object):
-    INSTANCE = None
-    INITIALIZED = False
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    def __new__(cls, *args, **kwargs):
-        if cls.INSTANCE is not None:
-            return cls.INSTANCE
-
-        self = super(Configure, cls).__new__(cls)
-        
-        # init
-        cfg = bsc_resource.BscExtendConfigure.get_as_content('scan/default')
-        self._entity_resolve_pattern_dict = cfg.get('entity.resolve_patterns')
-        self._entity_path_pattern_dict = cfg.get('entity.path_patterns')
-        self._entity_task_dict = cfg.get('entity.tasks')
-        self._entity_variant_key_dict = cfg.get('entity.variant_keys')
-        self._entity_variant_key_regex_dict = cfg.get('entity.variant_key_regexes')
-        self._file_pattern_dict = cfg.get('file_patterns')
-
-        cls.INSTANCE = self
-        return self
-
-
-class Properties(dict):
-    def __init__(self, *args, **kwargs):
-        super(Properties, self).__init__(*args, **kwargs)
-
-    def __getattr__(self, item):
-        return self.__getitem__(item)  # = self[item]
-
-
-class EntityTypes(object):
-    Root = 'Root'
-
-    Project = 'Project'
-    Role = 'Role'
-    Asset = 'Asset'
-    Episode = 'Episode'
-    Sequence = 'Sequence'
-    Shot = 'Shot'
-    Task = 'Task'
 
 
 class EntityVariantKeys:
@@ -90,7 +40,7 @@ class VariantKeyMatch:
     @classmethod
     def match_fnc(cls, variants, key):
         return bsc_core.BscFnmatch.is_match(
-            variants[key], Configure()._entity_variant_key_regex_dict[key]
+            variants[key], _cor_base.EntityConfig()._entity_variant_key_regex_dict[key]
         )
 
 
@@ -121,17 +71,17 @@ class AbsEntity(object):
 
     TasksGeneratorClass = None
 
-    EntityTypes = EntityTypes
+    EntityTypes = _cor_base.EntityTypes
 
     # update variants from configure here.
     EntityVariantKeys = EntityVariantKeys
-    [setattr(EntityVariantKeys, k, v) for k, v in Configure()._entity_variant_key_dict.items()]
+    [setattr(EntityVariantKeys, k, v) for k, v in _cor_base.EntityConfig()._entity_variant_key_dict.items()]
 
     EntityTasks = EntityTasks
-    [setattr(EntityTasks, k, v) for k, v in Configure()._entity_task_dict.items()]
+    [setattr(EntityTasks, k, v) for k, v in _cor_base.EntityConfig()._entity_task_dict.items()]
 
     FilePatterns = FilePatterns
-    [setattr(FilePatterns, k, v) for k, v in Configure()._file_pattern_dict.items()]
+    [setattr(FilePatterns, k, v) for k, v in _cor_base.EntityConfig()._file_pattern_dict.items()]
 
     @classmethod
     def _variant_cleanup_fnc(cls, variants):
@@ -232,7 +182,7 @@ class AbsEntity(object):
         self._path_opt = bsc_core.BscNodePathOpt(self._path)
         self._name = self._path_opt.get_name()
         self._variants = variants
-        self._properties = Properties()
+        self._properties = _cor_base.EntityVariants()
         self._properties.update(variants)
 
         self._next_entities_cache_opt_dict = dict()
@@ -284,7 +234,7 @@ class AbsEntitiesGenerator(object):
     EntityClass = None
 
     def _generate_stg_ptn_opts(self):
-        _ = Configure()._entity_resolve_pattern_dict[self.EntityClass.Type]
+        _ = _cor_base.EntityConfig()._entity_resolve_pattern_dict[self.EntityClass.Type]
         if isinstance(_, list):
             ps = _
         else:
@@ -304,11 +254,11 @@ class AbsEntitiesGenerator(object):
         self._variants = {}
         self._variants.update(variants)
         self._stg_ptn_opt_for_scan = bsc_core.BscStgParseOpt(
-            Configure()._entity_resolve_pattern_dict[self.EntityClass.Type]
+            _cor_base.EntityConfig()._entity_resolve_pattern_dict[self.EntityClass.Type]
         )
         self._stg_ptn_opt_for_scan.update_variants(**self._variants)
         self._dcc_ptn_opt = bsc_core.BscDccParseOpt(
-            Configure()._entity_path_pattern_dict[self.EntityClass.Type]
+            _cor_base.EntityConfig()._entity_path_pattern_dict[self.EntityClass.Type]
         )
 
         self._entity_dict = {}
@@ -348,7 +298,7 @@ class AbsEntitiesGenerator(object):
 
     def scan_fnc(self, variants):
         pth_opt = bsc_core.BscStgParseOpt(
-            Configure()._entity_resolve_pattern_dict[self.EntityClass.Type]
+            _cor_base.EntityConfig()._entity_resolve_pattern_dict[self.EntityClass.Type]
         )
         pth_opt.update_variants(**variants)
         matchers = pth_opt.find_matches(sort=True)
@@ -424,7 +374,7 @@ class AbsTask(object):
         self._name = self._path_opt.get_name()
 
         self._variants = variants
-        self._properties = Properties()
+        self._properties = _cor_base.EntityVariants()
         self._properties.update(variants)
 
     def __str__(self):
@@ -471,7 +421,7 @@ class AbsTasksGenerator(object):
     EntityClass = None
 
     def _generate_stg_ptn_opts(self):
-        _ = Configure()._entity_resolve_pattern_dict[self.EntityClass.Type]
+        _ = _cor_base.EntityConfig()._entity_resolve_pattern_dict[self.EntityClass.Type]
         if isinstance(_, list):
             ps = _
         else:
@@ -491,11 +441,11 @@ class AbsTasksGenerator(object):
         self._variants.update(variants)
         key = '{}{}'.format(self._entity.Type, self.EntityClass.Type)
         self._stg_ptn_opt_for_scan = bsc_core.BscStgParseOpt(
-            Configure()._entity_resolve_pattern_dict[key]
+            _cor_base.EntityConfig()._entity_resolve_pattern_dict[key]
         )
         self._stg_ptn_opt_for_scan.update_variants(**self._variants)
         self._dcc_ptn_opt = bsc_core.BscDccParseOpt(
-            Configure()._entity_path_pattern_dict[key]
+            _cor_base.EntityConfig()._entity_path_pattern_dict[key]
         )
 
         self._entity_dict = {}

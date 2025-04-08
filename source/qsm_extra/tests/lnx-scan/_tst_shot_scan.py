@@ -11,20 +11,20 @@ project = root.find_project('QSM_TST')
 
 print(project)
 
-assets = project.find_assets()
+assets = project.assets()
 print(assets)
 
-# episodes = project.find_episodes()
-# print episodes
+# episodes = project.episodes()
+# print (episodes)
 #
 # for i in episodes:
-#     print i.find_sequences()
-#     print i.find_shots()
+#     print (i.sequences())
+#     print (i.shots())
 
-sequences = project.find_sequences()
+sequences = project.sequences()
 print(sequences)
 for i in sequences:
-    print(i.find_shots())
+    print(i.shots())
 
-# shots = project.find_shots()
-# print shots
+# shots = project.shots()
+# print (shots)

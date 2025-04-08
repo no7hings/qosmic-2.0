@@ -27,7 +27,7 @@ class Stage(object):
         if location in self._root_dict:
             return self._root_dict[location]
 
-        instance = _root.Root()
+        instance = _root.Root(location)
         self._root_dict[location] = instance
         return instance
     

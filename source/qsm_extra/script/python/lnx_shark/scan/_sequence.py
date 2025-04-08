@@ -1,6 +1,8 @@
 # coding:utf-8
 import lxbasic.pinyin as bsc_pinyin
 
+from ..core import base as _cor_base
+
 from . import _base
 
 from . import _shot
@@ -9,11 +11,11 @@ from . import _task
 
 
 class Sequence(_base.AbsEntity):
-    Type = _base.EntityTypes.Sequence
+    Type = _cor_base.EntityTypes.Sequence
     VariantKey = _base.EntityVariantKeys.Sequence
 
     NextEntitiesCacheClassDict = {
-        _base.EntityTypes.Shot: _shot.ShotsGenerator,
+        _cor_base.EntityTypes.Shot: _shot.ShotsGenerator,
     }
 
     TasksGeneratorClass = _task.TasksGenerator
@@ -38,12 +40,12 @@ class Sequence(_base.AbsEntity):
     def __init__(self, *args, **kwargs):
         super(Sequence, self).__init__(*args, **kwargs)
 
-    def find_shots(self, variants_extend=None, cache_flag=True):
-        return self._find_next_entities(_base.EntityTypes.Shot, variants_extend, cache_flag)
+    def _find_shots(self, variants_extend=None, cache_flag=True):
+        return self._find_next_entities(_cor_base.EntityTypes.Shot, variants_extend, cache_flag)
 
     def shots(self, **kwargs):
         cache_flag = kwargs.pop('cache_flag') if 'cache_flag' in kwargs else False
-        return self.find_shots(variants_extend=kwargs, cache_flag=cache_flag)
+        return self._find_shots(variants_extend=kwargs, cache_flag=cache_flag)
 
 
 class SequencesGenerator(_base.AbsEntitiesGenerator):
