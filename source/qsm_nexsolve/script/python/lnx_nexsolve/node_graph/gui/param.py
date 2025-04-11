@@ -605,7 +605,7 @@ class GroupGui(_AbsGroupGui):
 
 class ParamRootGuiFactory:
     @staticmethod
-    def add(scheme='typed'):
+    def add_one(scheme='typed'):
         def decorator(fnc):
             def wrapper(self, param, *args, **kwargs):
                 param_path = param.get_param_path()
@@ -631,6 +631,7 @@ class ParamRootGuiFactory:
         return decorator
 
 
+# root
 class ParamRootGui(_AbsGroupGui):
     GROUP_HEAD_H = 28
     GROUP_INDENT_W = 4
@@ -669,28 +670,30 @@ class ParamRootGui(_AbsGroupGui):
             path_text = bsc_core.ensure_string(self._node.get_path())
 
             txt_rect = self._gui_data.head.text.rect
-            txt_w_0 = QtGui.QFontMetrics(self._gui_data.head.text.font).width(path_text)+16
-
+            # type
             txt_x, txt_y, txt_w, txt_h = txt_rect.x(), txt_rect.y(), txt_rect.width(), txt_rect.height()
-            txt_rect_0 = QtCore.QRect(txt_x, txt_y, txt_w_0, txt_h)
 
-            gui_qt_core.QtItemDrawBase._draw_name_text(
-                painter,
-                rect=txt_rect_0,
-                text=path_text,
-                text_color=self._gui_data.head.text.color_0,
-                text_option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
-                text_font=self._gui_data.head.text.font
-            )
-
-            txt_w_1 = QtGui.QFontMetrics(self._gui_data.head.text.font).width(type_text)+16
-            txt_rect_1 = QtCore.QRect(txt_x+txt_w_0, txt_y, txt_w_1, txt_h)
+            txt_w_1 = QtGui.QFontMetrics(self._gui_data.head.text.font).width(type_text)+8
+            txt_rect_1 = QtCore.QRect(txt_x, txt_y, txt_w_1, txt_h)
 
             gui_qt_core.QtItemDrawBase._draw_name_text(
                 painter,
                 rect=txt_rect_1,
                 text=type_text,
                 text_color=self._gui_data.head.text.color_1,
+                text_option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
+                text_font=self._gui_data.head.text.font
+            )
+
+            # path
+            txt_w_0 = QtGui.QFontMetrics(self._gui_data.head.text.font).width(path_text)+8
+            txt_rect_0 = QtCore.QRect(txt_x++txt_w_1, txt_y, txt_w_0, txt_h)
+
+            gui_qt_core.QtItemDrawBase._draw_name_text(
+                painter,
+                rect=txt_rect_0,
+                text=path_text,
+                text_color=self._gui_data.head.text.color_0,
                 text_option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
                 text_font=self._gui_data.head.text.font
             )
@@ -714,17 +717,17 @@ class ParamRootGui(_AbsGroupGui):
             return self._dict[parent_path]
         return self
 
-    @ParamRootGuiFactory.add('group')
+    @ParamRootGuiFactory.add_one('group')
     def _add_group(self, param):
         gui = GroupGui()
         return gui
 
-    @ParamRootGuiFactory.add()
+    @ParamRootGuiFactory.add_one()
     def _add_json(self, param):
         gui = JsonGui()
         return gui
 
-    @ParamRootGuiFactory.add()
+    @ParamRootGuiFactory.add_one()
     def _add_constant(self, param):
         gui = ConstantGui()
         if param.get_type() == 'string':
@@ -735,27 +738,27 @@ class ParamRootGui(_AbsGroupGui):
             gui._set_value_type(float)
         return gui
 
-    @ParamRootGuiFactory.add()
+    @ParamRootGuiFactory.add_one()
     def _add_path(self, param):
         gui = PathGui()
         return gui
 
-    @ParamRootGuiFactory.add()
+    @ParamRootGuiFactory.add_one()
     def _add_boolean(self, param):
         gui = BooleanGui()
         return gui
 
-    @ParamRootGuiFactory.add()
+    @ParamRootGuiFactory.add_one()
     def _add_button(self, param):
         gui = ButtonGui()
         return gui
 
-    @ParamRootGuiFactory.add()
+    @ParamRootGuiFactory.add_one()
     def _add_buttons(self, param):
         gui = ButtonsGui()
         return gui
 
-    @ParamRootGuiFactory.add()
+    @ParamRootGuiFactory.add_one()
     def _add_file(self, param):
         options = param.get_options()
         gui = FileGui()
@@ -767,7 +770,7 @@ class ParamRootGui(_AbsGroupGui):
             raise RuntimeError()
         return gui
 
-    @ParamRootGuiFactory.add()
+    @ParamRootGuiFactory.add_one()
     def _add_directory(self, param):
         options = param.get_options()
         gui = DirectoryGui()
@@ -779,7 +782,7 @@ class ParamRootGui(_AbsGroupGui):
             raise RuntimeError()
         return gui
 
-    @ParamRootGuiFactory.add()
+    @ParamRootGuiFactory.add_one()
     def _add_tuple(self, param):
 
         options = param.get_options()
@@ -799,7 +802,7 @@ class ParamRootGui(_AbsGroupGui):
 
         return gui
 
-    @ParamRootGuiFactory.add()
+    @ParamRootGuiFactory.add_one()
     def _add_array(self, param):
         options = param.get_options()
         gui = ArrayGui()
@@ -843,6 +846,7 @@ class ParamRootGui(_AbsGroupGui):
         self._get_parameter(key)._set_value(value)
 
 
+# root stack
 class ParamRootStackGui(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         super(ParamRootStackGui, self).__init__(*args, **kwargs)

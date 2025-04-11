@@ -34,8 +34,11 @@ entity:
         ShotTask: '/{project}/{sequence}/{shot}/{task}'
 
     variant_keys:
+        Department: 'department'
         User: 'user'
+        #
         Root: 'root'
+        #
         Project: 'project'
         Role: 'role'
         Asset: 'asset'

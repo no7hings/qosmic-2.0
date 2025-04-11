@@ -8,6 +8,7 @@ import contextlib
 import functools
 
 import json
+import sys
 
 import six
 
@@ -29,181 +30,7 @@ from ..core import action as _cor_action
 
 from ..core import undo as _cor_undo
 
-
-class SceneFile(object):
-    def __init__(self, root_model):
-        self._root_model = root_model
-
-        self._default_path = '{}/QSM/scenes/untitled.nxs_prj'.format(bsc_core.BscSystem.get_home_directory())
-        self._current_path = self._default_path
-
-        self._current_data = self._root_model.to_data()
-
-    def is_dirty(self):
-        return self._root_model.to_data() != self._current_data
-
-    def get_current(self):
-        return self._current_path
-
-    def is_default(self):
-        return self.get_current() == self._default_path
-
-    def _set_current_path(self, file_path):
-        self._current_path = file_path
-
-    def _set_current_data(self, data):
-        self._current_data = data
-
-    def save_to(self, file_path):
-        data = self._root_model.to_data()
-        if data:
-            bsc_storage.StgFileOpt(file_path).set_write(data)
-            self._set_current_path(file_path)
-            self._set_current_data(data)
-
-    def save(self):
-        self.save_to(self.get_current())
-
-    def open(self, file_path):
-        data = bsc_storage.StgFileOpt(file_path).set_read()
-        if data:
-            self._root_model.load_from_data(data)
-            self._set_current_path(file_path)
-            self._set_current_data(data)
-
-    def new(self):
-        self._current_path = self._default_path
-        return self._root_model.restore()
-
-    def new_with_dialog(self):
-        if self.is_dirty() is True:
-            if gui_core.GuiUtil.language_is_chs():
-                result = gui_core.GuiApplication.exec_message_dialog(
-                    u'保存修改到: {}?'.format(
-                        self.get_current()
-                    ),
-                    title='保存文件？',
-                    show_no=True,
-                    show_cancel=True,
-                    size=(320, 120),
-                    status='warning',
-                )
-            else:
-                result = gui_core.GuiApplication.exec_message_dialog(
-                    u'Save changes to: {}?'.format(
-                        self.get_current()
-                    ),
-                    title='Save Scene?',
-                    show_no=True,
-                    show_cancel=True,
-                    size=(320, 120),
-                    status='warning',
-                )
-            if result is True:
-                self.save_to(self.get_current())
-                self.new()
-                return True
-            elif result is False:
-                self.new()
-                return True
-        else:
-            self.new()
-            return True
-        return False
-
-    def open_with_dialog(self, file_path):
-        if self.is_dirty() is True:
-            if gui_core.GuiUtil.language_is_chs():
-                result = gui_core.GuiApplication.exec_message_dialog(
-                    u'保存修改到: {}?'.format(
-                        self.get_current()
-                    ),
-                    title='保存文件？',
-                    show_no=True,
-                    show_cancel=True,
-                    size=(320, 120),
-                    status='warning'
-                )
-            else:
-                result = gui_core.GuiApplication.exec_message_dialog(
-                    u'Save changes to: {}?'.format(
-                        self.get_current()
-                    ),
-                    title='Save Scene?',
-                    show_no=True,
-                    show_cancel=True,
-                    size=(320, 120),
-                    status='warning'
-                )
-
-            if result is True:
-                self.save_to(self.get_current())
-                self.open(file_path)
-                return True
-            elif result is False:
-                self.open(file_path)
-                return True
-        else:
-            self.open(file_path)
-            return True
-        return False
-    
-    def save_as_with_dialog(self, file_path):
-        # check file directory is changed, when changed save to.
-        if os.path.abspath(file_path) == os.path.abspath(self.get_current()):
-            if self.is_dirty() is True:
-                self.save_to(file_path)
-                return True
-
-            if gui_core.GuiUtil.language_is_chs():
-                gui_core.GuiApplication.exec_message_dialog(
-                    '沒有需要保存的更改。',
-                    title='保存文件',
-                    size=(320, 120),
-                    status='warning',
-                )
-            else:
-                gui_core.GuiApplication.exec_message_dialog(
-                    'No changes to save.',
-                    title='Save Scene',
-                    size=(320, 120),
-                    status='warning',
-                )
-            return False
-        self.save_to(file_path)
-        return True
-
-    def save_with_dialog(self):
-        self.save_as_with_dialog(self.get_current())
-
-    def close_with_dialog(self):
-        if self.is_dirty() is True:
-            if gui_core.GuiUtil.language_is_chs():
-                result = gui_core.GuiApplication.exec_message_dialog(
-                    u'保存修改到: {}?'.format(
-                        self.get_current()
-                    ),
-                    title='保存文件？',
-                    show_no=True,
-                    show_cancel=True,
-                    size=(320, 120),
-                    status='warning'
-                )
-            else:
-                result = gui_core.GuiApplication.exec_message_dialog(
-                    u'Save changes to: {}?'.format(
-                        self.get_current()
-                    ),
-                    title='Save Scene?',
-                    show_no=True,
-                    show_cancel=True,
-                    size=(320, 120),
-                    status='warning'
-                )
-            if result is True:
-                self.save_to(self.get_current())
-                return True
-        return False
+from . import scene_file as _scene_file
 
 
 # scene model
@@ -223,6 +50,8 @@ class RootNode(
         self._data.type = 'root'
         self._data.path = '/'
         self._data.name = ''
+
+        self._data.version = '0.0.0'
 
         self._data.nodes = collections.OrderedDict()
         self._builtin_data.connection_dict = collections.OrderedDict()
@@ -289,7 +118,7 @@ class RootNode(
 
         self._stage_model = None
 
-        self._scene_file = SceneFile(self)
+        self._scene_file = _scene_file.SceneFile(self)
 
     def get_gui_scene(self):
         return self._gui.scene()
@@ -458,11 +287,16 @@ class RootNode(
         return set(self._data.nodes.keys())
 
     @classmethod
-    def register_node_type(cls, type_name, model_cls, gui_cls, type_gui_name=None, type_gui_name_chs=None):
+    def register_node_type(
+        cls,
+        type_name, model_cls, gui_cls, version=None,
+        type_gui_name=None, type_gui_name_chs=None
+    ):
         gui_cls.MODEL_CLS = model_cls
         cls.NODE_GUI_CLS_DICT[type_name] = dict(
             model_cls=model_cls,
             gui_cls=gui_cls,
+            version=version,
             type_gui_name=type_gui_name,
             type_gui_name_chs=type_gui_name_chs,
         )
@@ -487,7 +321,12 @@ class RootNode(
         model = gui._model
         model._set_root_model(self)
         model._set_type(
-            type_name, gui_name=node_data['type_gui_name'], gui_name_chs=node_data['type_gui_name_chs']
+            type_name,
+            gui_name=node_data['type_gui_name'], gui_name_chs=node_data['type_gui_name_chs']
+        )
+        model._set_version(
+            # version default use from kwargs
+            kwargs.get('version') or node_data['version']
         )
         model._set_path(path)
         model.set_name(kwargs.get('name', path_opt.get_name()))
@@ -499,7 +338,9 @@ class RootNode(
     def _create_node_by_data(self, data):
         type_name = data['type']
         name = data['name']
-        flag, node = self._generate_node(type_name, name)
+        # version maybe non exists, use get
+        version = data.get('version')
+        flag, node = self._generate_node(type_name, name, version=version)
         node.set_options(data['options'])
         for k, v in data.get('inputs', {}).items():
             node._add_input_by_data(v)
@@ -627,9 +468,8 @@ class RootNode(
             )
 
         if source_node_path == target_node_path:
-            raise RuntimeError(
-                'can not connect same port.'
-            )
+            sys.stderr.write('can not connect same port.\n')
+            return False, None
 
         return self._connect_ports(source_port, target_port)
 
@@ -1248,6 +1088,7 @@ class RootNode(
         yield
         self.undo_stack.endMacro()
 
+    # todo: do not work
     @contextlib.contextmanager
     def disable_undo(self):
         self.undo_stack.setActive(False)

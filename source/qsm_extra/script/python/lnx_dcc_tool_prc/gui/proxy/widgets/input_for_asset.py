@@ -168,7 +168,8 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
                 i_gui_name = i_entity.variants.get('entity_gui_name')
                 gui_name_dict[i_name] = i_gui_name
                 keyword_filter_dict[i_name] = filter(None, [i_name, i_gui_name])
-                tag_filter_dict[i_name] = ['All']
+                i_level = i_entity.dtb_variants.get('asset.difficulty_level')
+                tag_filter_dict[i_name] = filter(None, ['All', i_level])
 
         return dict(
             type_text='asset',

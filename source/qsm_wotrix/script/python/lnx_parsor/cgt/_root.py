@@ -3,7 +3,7 @@ from ..core import base as _cor_base
 
 from . import _base
 
-from . import _account
+from . import _people
 
 from . import _project
 
@@ -58,6 +58,12 @@ class Root(_base.AbsEntity):
             name=t_tw.login.account()
         )
 
+    def department(self, name, **kwargs):
+        pass
+
+    def departments(self, **kwargs):
+        pass
+
     def users(self, **kwargs):
         t_tw = self._stage._api
 
@@ -73,7 +79,7 @@ class Root(_base.AbsEntity):
         ):
             list_.append(
                 self._root._new_entity_fnc(
-                    _account.User,
+                    _people.User,
                     dict(
                         cgt_user=i_dtb_variants['account.entity'],
                         # todo: add field to save login
@@ -97,7 +103,7 @@ class Root(_base.AbsEntity):
         if id_list:
             dtb_variants = t_tw.account.get(id_list, t_tw.account.fields())[0]
             return self._root._new_entity_fnc(
-                _account.User,
+                _people.User,
                 dict(
                     user=name,
                     # todo: add field to save login

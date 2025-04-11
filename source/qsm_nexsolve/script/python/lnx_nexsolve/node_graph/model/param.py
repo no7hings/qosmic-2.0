@@ -243,7 +243,7 @@ class DictParam(_AbsTypedParam):
 
 class ParamFactory:
     @staticmethod
-    def add(scheme='typed'):
+    def add_one(scheme='typed'):
         def decorator(fnc):
             if scheme == 'typed':
                 def wrapper(param_root, name=None, parent_path=None, param_path=None, *args, **kwargs):
@@ -329,6 +329,7 @@ class ParamFactory:
         return decorator
 
 
+# root
 class ParamRoot(_scn_cor_base._Base):
     PARAM_CLS_MAP = {
         GroupParam.PARAM_TYPE: GroupParam,
@@ -368,48 +369,48 @@ class ParamRoot(_scn_cor_base._Base):
                     param_path = '{}.{}'.format(parent_path, name)
         return param_path
 
-    @ParamFactory.add('auto')
+    @ParamFactory.add_one('auto')
     def add_auto(self, type_name, name=None, parent_path=None, param_path=None, *args, **kwargs):
         param_cls = self.PARAM_CLS_MAP[type_name]
         model = param_cls(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamFactory.add('group')
+    @ParamFactory.add_one('group')
     def add_group(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = GroupParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamFactory.add('typed')
+    @ParamFactory.add_one('typed')
     def add_custom(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = CustomParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamFactory.add('typed')
+    @ParamFactory.add_one('typed')
     def add_string(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = StringParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamFactory.add('typed')
+    @ParamFactory.add_one('typed')
     def add_integer(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = IntegerParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamFactory.add('typed')
+    @ParamFactory.add_one('typed')
     def add_boolean(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = BooleanParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamFactory.add('typed')
+    @ParamFactory.add_one('typed')
     def add_integer_array(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = IntegerArrayParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamFactory.add('typed')
+    @ParamFactory.add_one('typed')
     def add_string_array(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = StringArrayParam(self.get_root_model(), self.get_node_path())
         return model
 
-    @ParamFactory.add('typed')
+    @ParamFactory.add_one('typed')
     def add_dict(self, name=None, parent_path=None, param_path=None, *args, **kwargs):
         model = DictParam(self.get_root_model(), self.get_node_path())
         return model

@@ -454,6 +454,9 @@ class _SbjBase(_Base):
         # name
         self._data.name = ''
 
+        # version
+        self._data.version = '0.0.0'
+
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self.get_path() == other.get_path()
@@ -505,6 +508,15 @@ class _SbjBase(_Base):
 
     def get_type(self):
         return self._data.type
+
+    def _set_version(self, text):
+        if text is not None:
+            self._data.version = text
+            return True
+        return False
+
+    def get_version(self):
+        return self._data.version
 
     # path
     def _set_path(self, path):

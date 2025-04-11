@@ -15,6 +15,7 @@ class GlobalVar:
 
 
 class EntityTypes(object):
+    Department = 'Department'
     User = 'User'
 
     Root = 'Root'
@@ -171,6 +172,7 @@ class EntityVariantKeys:
     """
     virtual value, real value is from configure.
     """
+    Department = None
     User = None
 
     Root = None

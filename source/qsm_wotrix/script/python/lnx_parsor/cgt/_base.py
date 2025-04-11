@@ -63,12 +63,12 @@ class AbsEntity(_cor_base.AbsEntityBase):
         return self._path_opt
 
     @property
-    def properties(self):
-        return self._properties
-
-    @property
     def variants(self):
         return self._variants
+
+    @property
+    def properties(self):
+        return self._properties
 
     @property
     def dtb_variants(self):

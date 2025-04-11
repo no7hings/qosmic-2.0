@@ -16,6 +16,7 @@ class Swap(object):
         if cls.STAGE_CACHE:
             return cls.STAGE_CACHE.root(location)
 
+        # find cg teamwork
         cgt_exe_paths = bsc_core.BscProcess.find_process_path_by_name(
             'CgTeamWork.exe'
         )

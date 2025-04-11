@@ -377,6 +377,7 @@ class _QtEntityChooseWidget(QtWidgets.QWidget):
     def _connect_to_stack(self, widget):
         self._view.press_released.connect(widget._on_accept)
         self.key_enter_pressed.connect(widget._on_accept)
+
         self._close_button.press_clicked.connect(widget._on_cancel)
         self.key_escape_pressed.connect(widget._on_cancel)
 

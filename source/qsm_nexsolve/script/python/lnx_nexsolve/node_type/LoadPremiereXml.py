@@ -12,6 +12,7 @@ from ..node_graph import gui as _ng_gui
 
 class Node(_ng_model.ImagingNode):
     NODE_TYPE = os.path.splitext(os.path.basename(__file__))[0]
+    NODE_VERSION = '0.0.0'
 
     def __init__(self, *args, **kwargs):
         super(Node, self).__init__(*args, **kwargs)
@@ -76,5 +77,6 @@ class NodeGui(_ng_gui.StandardNodeGui):
 def register():
     sys.stdout.write('Register node: {}.\n'.format(Node.NODE_TYPE))
     _ng_model.RootNode.register_node_type(
-        Node.NODE_TYPE, Node, NodeGui, 'Load Premiere XML', '加载Premiere XML'
+        Node.NODE_TYPE, Node, NodeGui, Node.NODE_VERSION,
+        'Load Premiere XML', '加载Premiere XML'
     )
