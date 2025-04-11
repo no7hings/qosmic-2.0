@@ -504,9 +504,9 @@ class _AbsGroupGui(QtWidgets.QWidget):
                 painter,
                 rect=self._gui_data.head.text.rect,
                 text=self._param.get_label(),
-                color=self._gui_data.head.text.color_0,
-                option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
-                font=self._gui_data.head.text.font
+                text_color=self._gui_data.head.text.color_0,
+                text_option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
+                text_font=self._gui_data.head.text.font
             )
 
             if self._gui_data.expand_flag is True:
@@ -678,9 +678,9 @@ class ParamRootGui(_AbsGroupGui):
                 painter,
                 rect=txt_rect_0,
                 text=path_text,
-                color=self._gui_data.head.text.color_0,
-                option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
-                font=self._gui_data.head.text.font
+                text_color=self._gui_data.head.text.color_0,
+                text_option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
+                text_font=self._gui_data.head.text.font
             )
 
             txt_w_1 = QtGui.QFontMetrics(self._gui_data.head.text.font).width(type_text)+16
@@ -690,9 +690,9 @@ class ParamRootGui(_AbsGroupGui):
                 painter,
                 rect=txt_rect_1,
                 text=type_text,
-                color=self._gui_data.head.text.color_1,
-                option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
-                font=self._gui_data.head.text.font
+                text_color=self._gui_data.head.text.color_1,
+                text_option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
+                text_font=self._gui_data.head.text.font
             )
 
             if self._gui_data.expand_flag is True:

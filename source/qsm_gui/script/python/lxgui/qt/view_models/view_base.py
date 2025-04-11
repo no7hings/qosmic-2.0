@@ -68,6 +68,11 @@ class AbsViewModel(object):
             key_src_set=set(),
             cache=None
         )
+        # tag filter
+        self._data.tag_filter = _gui_core.DictOpt(
+            key_src_set=set(),
+            cache=None
+        )
         # occurrence
         self._data.occurrence = _gui_core.DictOpt(
             index=None
@@ -313,7 +318,8 @@ class AbsViewModel(object):
         self._data.keyword_filter.key_src_set = set(texts)
 
     def refresh_items_visible_by_any_filter(self):
-        key_src_set = self._data.keyword_filter.key_src_set
+        t_f_key_src_set = self._data.tag_filter.key_src_set
+        k_f_key_src_set = self._data.keyword_filter.key_src_set
 
         items = self.get_all_items()
         for i_item in items:
@@ -321,14 +327,24 @@ class AbsViewModel(object):
             if i_force_hidden_flag is True:
                 i_is_hidden = True
             else:
+
+                # tag
                 i_tag_flag = False
+                if t_f_key_src_set:
+                    i_enable, i_flag = i_item._item_model.generate_tag_filter_hidden_args(t_f_key_src_set)
+                    if i_enable is True:
+                        i_tag_flag = i_flag
+
+                # semantic
                 i_semantic_flag = False
+
+                # keyword
                 i_keyword_flag = False
-                # keyword filter
-                if key_src_set:
-                    i_enable, i_flag = i_item._item_model.generate_keyword_filter_hidden_args(key_src_set)
+                if k_f_key_src_set:
+                    i_enable, i_flag = i_item._item_model.generate_keyword_filter_hidden_args(k_f_key_src_set)
                     if i_enable is True:
                         i_keyword_flag = i_flag
+
                 # hide item when any flag is True
                 if True in [i_tag_flag, i_semantic_flag, i_keyword_flag]:
                     i_is_hidden = True
@@ -351,6 +367,10 @@ class AbsViewModel(object):
         if not self._data.keyword_filter.cache:
             self._data.keyword_filter.cache = self.generate_item_keyword_filter_keys()
         return self._data.keyword_filter.cache
+
+    # tag filter
+    def set_tag_filter_key_src(self, texts):
+        self._data.tag_filter.key_src_set = set(texts)
 
     def get_all_items(self):
         raise NotImplementedError()

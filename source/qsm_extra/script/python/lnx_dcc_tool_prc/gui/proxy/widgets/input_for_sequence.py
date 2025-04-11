@@ -11,7 +11,7 @@ import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.proxy.abstracts as prx_abstracts
 
-import lnx_shark.scan as lnx_srk_scan
+import lnx_parsor.swap as lnx_srk_swap
 
 
 class PrxInputForSequence(prx_abstracts.AbsPrxWidget):
@@ -54,31 +54,26 @@ class PrxInputForSequence(prx_abstracts.AbsPrxWidget):
                 )
             )
 
-        self._qt_path_input = gui_qt_widgets.QtInputForPath()
-        self._qt_layout_0.addWidget(self._qt_path_input)
+        self._qt_entity_input = gui_qt_widgets.QtInputForEntity()
+        self._qt_layout_0.addWidget(self._qt_entity_input)
 
-        self._scan_root = lnx_srk_scan.Stage().root()
+        self._scan_root = lnx_srk_swap.Swap.generate_root()
 
-        self._qt_path_input._set_next_buffer_fnc_(
+        self._qt_entity_input._set_next_buffer_fnc_(
             self._next_buffer_fnc
         )
 
-        # self._qt_path_input._set_root_text_('Shot:')
-        self._qt_path_input._set_value_('/')
-        self._qt_path_input._set_choose_popup_auto_resize_enable_(False)
-        self._qt_path_input._set_choose_popup_tag_filter_enable_(True)
-        self._qt_path_input._set_choose_popup_keyword_filter_enable_(True)
+        # self._qt_entity_input._set_root_text_('Shot:')
+        self._qt_entity_input._set_value_('/')
 
-        self._qt_path_input._set_choose_popup_item_size_(40, 40)
-
-        self._qt_path_input._setup_()
+        self._qt_entity_input._setup_()
 
         if history_key is None:
             history_key = self.HISTORY_KEY
 
-        self._qt_path_input._set_history_key_(history_key)
-        self._qt_path_input._pull_history_latest_()
-        self._qt_path_input.user_history_pull_accepted.connect(self._pull_history_fnc)
+        self._qt_entity_input._set_history_key_(history_key)
+        self._qt_entity_input._pull_history_latest_()
+        self._qt_entity_input.user_history_pull_accepted.connect(self._pull_history_fnc)
 
         self._qt_reload_button.press_clicked.connect(self._on_reload_entities)
         if gui_core.GuiUtil.language_is_chs():
@@ -95,42 +90,50 @@ class PrxInputForSequence(prx_abstracts.AbsPrxWidget):
             )
 
         self._cache_entities()
+        self._on_reload_entities()
 
     def _cache_projects(self):
         name_texts = []
+        subname_dict = {}
         keyword_filter_dict = collections.OrderedDict()
         tag_filter_dict = collections.OrderedDict()
-        for i_project in self._scan_root.projects(cache_flag=self._scan_cache_flag):
-            i_name = i_project.name
-            name_texts.append(i_project.name)
+        for i_entity in self._scan_root.projects(cache_flag=self._scan_cache_flag):
+            i_name = i_entity.name
+            name_texts.append(i_entity.name)
 
-            keyword_filter_dict[i_name] = [i_name]
+            i_name_chs = i_entity.variants.get('entity_name_chs')
+            subname_dict[i_name] = i_name_chs
+            keyword_filter_dict[i_name] = filter(None, [i_name, i_name_chs])
             tag_filter_dict[i_name] = ['All']
 
         return dict(
             type_text='project',
             name_texts=name_texts,
+            subname_dict=subname_dict,
             tag_filter_dict=tag_filter_dict,
             keyword_filter_dict=keyword_filter_dict
         )
 
     def _cache_sequences(self, path_opt):
         name_texts = []
+        subname_dict = {}
         keyword_filter_dict = collections.OrderedDict()
         tag_filter_dict = collections.OrderedDict()
 
         project = self._scan_root.get_entity(path_opt.to_string())
         if project is not None:
             sequences = project.sequences(cache_flag=self._scan_cache_flag)
-            for i_sequence in sequences:
-                i_name = i_sequence.name
-                name_texts.append(i_sequence.name)
-
-                keyword_filter_dict[i_name] = [i_name]
-                tag_filter_dict[i_name] = ['All', i_sequence.properties.episode]
+            for i_entity in sequences:
+                i_name = i_entity.name
+                name_texts.append(i_entity.name)
+                i_name_chs = i_entity.variants.get('entity_name_chs')
+                subname_dict[i_name] = i_name_chs
+                keyword_filter_dict[i_name] = filter(None, [i_name, i_name_chs])
+                tag_filter_dict[i_name] = ['All', i_entity.properties.episode]
 
         return dict(
             type_text='sequence',
+            subname_dict=subname_dict,
             name_texts=name_texts,
             tag_filter_dict=tag_filter_dict,
             keyword_filter_dict=keyword_filter_dict
@@ -154,10 +157,10 @@ class PrxInputForSequence(prx_abstracts.AbsPrxWidget):
         return dict()
 
     def connect_input_change_accepted_to(self, fnc):
-        self._qt_path_input.input_value_accepted.connect(fnc)
+        self._qt_entity_input.input_value_accepted.connect(fnc)
 
     def _cache_entities(self):
-        path = self._qt_path_input._get_value_()
+        path = self._qt_entity_input._get_value_()
         path_opt = bsc_core.BscNodePathOpt(path)
         cs = path_opt.get_components()
         cs.reverse()
@@ -173,21 +176,21 @@ class PrxInputForSequence(prx_abstracts.AbsPrxWidget):
         def post_fnc_():
             self._scan_cache_flag = True
 
-        path_text = self._qt_path_input._get_value_()
+        path_text = self._qt_entity_input._get_value_()
         self._scan_cache_flag = False
-        self._qt_path_input._update_next_data_for_(path_text, post_fnc_)
+        self._qt_entity_input._update_next_data_for_(path_text, post_fnc_)
 
     def _on_resync_entities(self):
         def post_fnc_():
             self._scan_cache_flag = True
-            lnx_srk_scan.Stage.set_sync_cache_flag(True)
+            lnx_srk_swap.Swap.set_sync_cache_flag(True)
 
         def fnc_():
             self._scan_cache_flag = False
-            lnx_srk_scan.Stage.set_sync_cache_flag(False)
-            self._qt_path_input._update_next_data_for_(path_text, post_fnc_)
+            lnx_srk_swap.Swap.set_sync_cache_flag(False)
+            self._qt_entity_input._update_next_data_for_(path_text, post_fnc_)
 
-        path_text = self._qt_path_input._get_value_()
+        path_text = self._qt_entity_input._get_value_()
 
         if gui_core.GuiUtil.language_is_chs():
             result = gui_core.GuiApplication.exec_message_dialog(
@@ -225,9 +228,9 @@ class PrxInputForSequence(prx_abstracts.AbsPrxWidget):
         return self._scan_root.get_entity(path_text)
 
     def get_path(self):
-        return self._qt_path_input._get_value_()
+        return self._qt_entity_input._get_value_()
 
     def set_path(self, path_text):
-        self._qt_path_input._set_value_(path_text)
+        self._qt_entity_input._set_value_(path_text)
         # cache when path is applied
         self._cache_entities()

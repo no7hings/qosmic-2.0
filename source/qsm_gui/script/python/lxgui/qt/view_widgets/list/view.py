@@ -56,6 +56,11 @@ class _QtListView(
 ):
     QT_MENU_CLS = _wgt_utility.QtMenu
 
+    MODEL_CLS = _vew_mod_list.ListViewModel
+
+    ITEM_CLS = _item.QtListItem
+    ITEM_GROUP_CLS = _item.QtListGroupItem
+
     def __init__(self, *args, **kwargs):
         super(_QtListView, self).__init__(*args, **kwargs)
 
@@ -78,9 +83,9 @@ class _QtListView(
         # noinspection PyUnresolvedReferences
         self.itemSelectionChanged.connect(self.item_select_changed.emit)
 
-        self._view_model = _vew_mod_list.ListViewModel(self)
-        self._view_model.data.item.cls = _item.QtListItem
-        self._view_model.data.item.group_cls = _item.QtListGroupItem
+        self._view_model = self.MODEL_CLS(self)
+        self._view_model.data.item.cls = self.ITEM_CLS
+        self._view_model.data.item.group_cls = self.ITEM_GROUP_CLS
 
         self.setItemDelegate(_QtListItemDelegate(self))
 

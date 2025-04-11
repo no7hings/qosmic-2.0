@@ -527,7 +527,7 @@ workspace:
         project_task_unit: '<.project_task>/{task_unit}'
         project_task_unit_scene: '<.project_task_unit>/{project}.{step}.{task}.{task_unit}.v{version}'
         # asset
-        asset: '/{project}/{asset}'
+        asset: '/{project}/{role}/{asset}'
         asset_task: '<.asset>/user.{artist}/{step}.{task}'
         asset_task_unit: '<.asset_task>/{task_unit}'
         asset_task_unit_scene: '<.asset_task_unit>/{asset}.{step}.{task}.{task_unit}.v{version}'

@@ -130,3 +130,41 @@ class Texts(object):
     @classmethod
     def split_any_to_words_extra(cls, texts):
         return list(itertools.chain(*map(Text.split_any_to_words_extra, texts)))
+
+
+class KeywordFilter(object):
+    @classmethod
+    def generate_hidden_args(cls, texts_src, texts_tgt):
+        # todo: use match all mode then, maybe use match one mode also
+        if texts_src and texts_tgt:
+            contexts_src = map(ensure_unicode, texts_src)
+            context_tgt = '+'.join(cls.to_keys(texts_tgt))
+            context_tgt = context_tgt.lower()
+
+            for i_text in contexts_src:
+                i_text = i_text.lower()
+                if '*' in i_text:
+                    i_filter_key = '*{}*'.format(i_text.lstrip('*').rstrip('*'))
+                    if not Fnmatch.is_match(context_tgt, i_filter_key):
+                        return True, True
+                else:
+                    if i_text not in context_tgt:
+                        return True, True
+            return True, False
+        return False, False
+
+    @classmethod
+    def to_keys(cls, texts):
+        if not texts:
+            return []
+
+        keys = set()
+        # add pinyin to keyword filter
+        for i_text in texts:
+            if not i_text:
+                continue
+
+            i_texts = Text.split_any_to_words_extra(i_text)
+            keys.update(i_texts)
+
+        return keys

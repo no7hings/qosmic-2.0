@@ -169,11 +169,21 @@ class QtEntryForConstant(
                     self.user_key_tab_pressed.emit()
                 elif event.key() in {QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter}:
                     self.user_entry_finished.emit()
+                    self.key_enter_pressed.emit()
                     self._execute_text_change_accepted_()
                     self._completion_value_auto_()
                 elif event.key() == QtCore.Qt.Key_Escape:
                     self.clearFocus()
+                    self.key_escape_pressed.emit()
                     return True
+                elif event.key() == QtCore.Qt.Key_Up:
+                    self.key_up_pressed.emit()
+                elif event.key() == QtCore.Qt.Key_Down:
+                    self.key_down_pressed.emit()
+                elif event.key() == QtCore.Qt.Key_Left:
+                    self.key_left_pressed.emit()
+                elif event.key() == QtCore.Qt.Key_Right:
+                    self.key_right_pressed.emit()
         return False
 
     def dropEvent(self, event):
@@ -193,7 +203,7 @@ class QtEntryForConstant(
             ('redo', None, (True, self.redo, False), QtGui.QKeySequence.Redo),
             ('select all', None, (True, self.selectAll, False), QtGui.QKeySequence.SelectAll),
         ]
-        #
+
         if self.isReadOnly():
             menu_raw = [
                 ('basic',),
@@ -201,7 +211,7 @@ class QtEntryForConstant(
                 ('extend',),
                 ('select all', None, (True, self.selectAll, False), QtGui.QKeySequence.SelectAll)
             ]
-        #
+
         if self._entry_use_as_storage is True:
             menu_raw.extend(
                 [
@@ -216,7 +226,7 @@ class QtEntryForConstant(
                     )
                 ]
             )
-        #
+
         if menu_raw:
             self._qt_menu = _wgt_utility.QtMenu(self)
             self._qt_menu._set_menu_data_(menu_raw)

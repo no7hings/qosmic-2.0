@@ -38,7 +38,7 @@ from .entry.entry_for_tag import *
 
 from .entry.cmp_entry_for_guide import *
 
-from .entry.cmp_entry_for_path import *
+from .entry.cmp_entry_for_entity import *
 
 # input
 from .input.input_for_tuple import *
@@ -55,7 +55,7 @@ from .input.input_for_tag import *
 
 from .input.input_for_storage import *
 
-from .input.input_for_path import *
+from .input.input_for_entity import *
 
 from .input.input_for_guide import *
 

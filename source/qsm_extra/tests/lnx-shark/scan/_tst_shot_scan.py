@@ -1,7 +1,7 @@
 # coding:utf-8
 from __future__ import print_function
 
-import lnx_shark.scan as lnx_srk_scan
+import lnx_parsor.scan as lnx_srk_scan
 
 root = lnx_srk_scan.Stage().root()
 

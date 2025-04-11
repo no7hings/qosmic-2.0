@@ -8,10 +8,12 @@ from ...view_models.list import item as _vew_mod_item
 class QtListItem(QtWidgets.QListWidgetItem):
     GROUP_FLAG = False
 
+    MODEL_CLS = _vew_mod_item.ListItemModel
+
     def __init__(self, *args, **kwargs):
         super(QtListItem, self).__init__(*args)
 
-        self._item_model = _vew_mod_item.ListItemModel(self)
+        self._item_model = self.MODEL_CLS(self)
 
     def __hash__(self):
         return hash(self._item_model.get_path())

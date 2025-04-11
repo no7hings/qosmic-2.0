@@ -217,6 +217,7 @@ class AbsQtInputChooseExtraDef(
         self._choose_popup_widget._set_popup_auto_resize_enable_(True)
         self._choose_popup_widget._set_entry_widget_(self._get_entry_widget_())
         self._choose_popup_widget._set_entry_frame_widget_(self._get_entry_frame_widget_())
+        # self._choose_popup_widget._set_popup_item_multiply_enable_(True)
 
         self._choose_popup_widget.user_popup_finished.connect(
             self.input_choose_changed.emit

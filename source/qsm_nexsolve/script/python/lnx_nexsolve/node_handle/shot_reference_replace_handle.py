@@ -200,7 +200,7 @@ class ReplaceMayaReference(object):
     def create_or_update(self, references, value_old, file_ptn_opt):
         import lxgui.core as gui_core
 
-        import lnx_srk_scan
+        import lnx_parsor.core as lnx_srk_core
 
         import lnx_dcc_tool_prc.api as qsm_lzy_api
 
@@ -215,7 +215,7 @@ class ReplaceMayaReference(object):
         if reference_old:
             scan_entity = qsm_lzy_api.get_asset_entity()
             if scan_entity:
-                if scan_entity.type == lnx_srk_scan.EntityTypes.Asset:
+                if scan_entity.type == lnx_srk_core.EntityTypes.Asset:
                     file_ptn_opt_new = file_ptn_opt.update_variants_to(**scan_entity.variants)
                     if not file_ptn_opt_new.get_keys():
                         reference_new = file_ptn_opt_new.get_value()

@@ -19,7 +19,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
 
     SCAN_RESOURCE_INPUT_CLS_DICT = dict(
         project=lzy_gui_prx_widgets.PrxInputForProject,
-        asset=lzy_gui_prx_widgets.PrxInputForAssetCharacterAndProp,
+        asset=lzy_gui_prx_widgets.PrxInputForAsset,
         sequence=lzy_gui_prx_widgets.PrxInputForSequence,
         shot=lzy_gui_prx_widgets.PrxInputForShot
     )

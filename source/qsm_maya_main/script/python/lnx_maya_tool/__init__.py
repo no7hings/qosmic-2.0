@@ -8,7 +8,7 @@ def do_reload():
         [
             'lxbasic', 'lxsession', 'lxgui',
 
-            'qsm_general', 'lnx_screw', 'lnx_shark', 'lnx_dcc_tool_prc', 'lnx_dcc_tool',
+            'qsm_general', 'lnx_screw', 'lnx_parsor', 'lnx_dcc_tool_prc', 'lnx_dcc_tool',
             'qsm_maya', 'lnx_maya_gui', 'lnx_maya_tool_prc', 'lnx_maya_tool',
         ]
     ).do_reload()

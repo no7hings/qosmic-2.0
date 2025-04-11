@@ -231,6 +231,13 @@ class TreeViewModel(_view_base.AbsViewModel):
             self._data.occurrence.index = None
         return maximum, self._data.occurrence.index
 
+    def reset_occurrence(self):
+        self._data.occurrence.index = None
+
+    def restore(self):
+        super(TreeViewModel, self).restore()
+        self.reset_occurrence()
+
     @property
     def data(self):
         return self._data

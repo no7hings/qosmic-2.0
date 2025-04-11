@@ -9,7 +9,7 @@ import lxbasic.content as bsc_content
 
 import lxbasic.resource as bsc_resource
 
-import lnx_shark.parse as lnx_srk_parse
+import lnx_parsor.parse as lnx_srk_parse
 
 from . import task_session as _task_session
 
@@ -100,7 +100,7 @@ class TaskParse(object):
                 **variants_new
             )
         elif resource_type == self.ResourceTypes.Asset:
-            return u'/{project}/{asset}'.format(
+            return u'/{project}/{role}/{asset}'.format(
                 **variants_new
             )
         elif resource_type == self.ResourceTypes.Sequence:

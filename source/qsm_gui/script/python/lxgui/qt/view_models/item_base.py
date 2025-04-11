@@ -22,6 +22,8 @@ class AbsItemModel(object):
 
     GroupKey = _gui_core.GuiItemGroupKey
 
+    TagFilterMode = _gui_core.GuiTagFilterMode
+
     NUMBER_TEXT_FORMAT = '{}'
 
     NAME_H = 20
@@ -66,7 +68,7 @@ class AbsItemModel(object):
         painter.drawText(rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter, text)
 
     @classmethod
-    def _draw_text(cls, painter, rect, text, color, text_alignment=None):
+    def _draw_text(cls, painter, rect, text, color, option=None):
         text = painter.fontMetrics().elidedText(
             text,
             QtCore.Qt.ElideMiddle,
@@ -74,9 +76,9 @@ class AbsItemModel(object):
             QtCore.Qt.TextShowMnemonic
         )
         painter.setPen(color)
-        text_alignment = text_alignment or QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
+        option = option or QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
 
-        painter.drawText(rect, text_alignment, text)
+        painter.drawText(rect, option, text)
 
     @classmethod
     def _draw_rect(cls, painter, rect, color):
@@ -121,60 +123,75 @@ class AbsItemModel(object):
     def __init__(self, item, data):
         self._item = item
         self._data = data
+
         # main
         self._data.rect = qt_rect()
+
         # basic
         self._data.basic = _gui_core.DictOpt(
             rect=qt_rect(),
             size=QtCore.QSize(),
         )
+
         # text option for draw
         self._data.text = _gui_core.DictOpt(
             font=_qt_core.QtFont.generate(size=8),
             color=QtGui.QColor(223, 223, 223),
             action_color=QtGui.QColor(31, 31, 31),
+
             # all text height
             height=20
         )
+
         # frame for draw
         self._data.frame = _gui_core.DictOpt(
             rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.Dark),
             brush=QtGui.QBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
         )
+
         # index
         self._data.index_enable = True
         self._data.index = 0
+
         # path
         self._data.path = _gui_core.DictOpt(
             text=None
         )
+
         # category
         self._data.category_enable = False
         self._data.category = _gui_core.DictOpt(
             text=None
         )
+
         # type
         self._data.type_enable = False
         self._data.type = _gui_core.DictOpt(
             text=None
         )
+
         # name
         self._data.name_enable = True
         self._data.name = _gui_core.DictOpt(
             text=None,
+            text_option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
             rect=qt_rect(),
         )
-        # sub name
+
+        # subname
         self._data.subname_enable = False
         self._data.subname = _gui_core.DictOpt(
             text=None,
+            text_option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
             rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.TxtTemporary)
         )
+
         # mtime
         self._data.mtime_enable = False
         self._data.user_enable = False
+
         # number
         self._data.number_enable = False
         self._data.number = _gui_core.DictOpt(
@@ -183,23 +200,31 @@ class AbsItemModel(object):
             text=None,
             rect=qt_rect(),
         )
+
         # status
         self._data.status_enable = False
+
         # lock
         self._data.lock_enable = False
+
         # icon
         self._data.icon_enable = False
         self._data.icon = _gui_core.DictOpt(
             file_flag=False,
             file=None,
 
+            text_flag=False,
+            text=None,
+
             pixmap_flag=False,
             pixmap=None,
 
             rect=qt_rect(),
         )
+
         # color
         self._data.color_enable = False
+
         # hover
         self._data.hover = _gui_core.DictOpt(
             enable=True,
@@ -207,6 +232,7 @@ class AbsItemModel(object):
             rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.LightOrange),
         )
+
         # select
         self._data.select = _gui_core.DictOpt(
             enable=True,
@@ -214,14 +240,17 @@ class AbsItemModel(object):
             rect=qt_rect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue),
         )
+
         # check
         self._data.check_enable = False
         self._data.check = None
+
         # drag
         self._data.drag = _gui_core.DictOpt(
             enable=False,
             data=None
         )
+
         # tool tip
         self._data.tool_tip = _gui_core.DictOpt(
             enable=False,
@@ -229,6 +258,7 @@ class AbsItemModel(object):
             text=None,
             css=None
         )
+
         # show
         self._data.show = _gui_core.DictOpt(
             load_flag=False,
@@ -236,6 +266,7 @@ class AbsItemModel(object):
             cache_fnc=None,
             build_fnc=None,
         )
+
         # menu
         self._data.menu = _gui_core.DictOpt(
             content=None,
@@ -244,13 +275,22 @@ class AbsItemModel(object):
             data_generate_fnc=None,
             name_dict=dict()
         )
+
         # force
         self._data.force_hidden_flag = False
         self._data.force_refresh_flag = True
+
         # keyword filter
         self._data.keyword_filter = _gui_core.DictOpt(
             key_tgt_set=set()
         )
+
+        # tag filter
+        self._data.tag_filter = _gui_core.DictOpt(
+            key_tgt_set=set(),
+            mode=self.TagFilterMode.MatchOne
+        )
+
         # assign
         self._data.assign_enable = True
         self._data.assign = _gui_core.DictOpt(
@@ -260,10 +300,13 @@ class AbsItemModel(object):
             directory=None,
             properties=None
         )
+
         # sort
         self._data.sort_enable = False
+
         # property
         self._data.property_dict = dict()
+
         # press
         self._data.press_enable = True
         self._data.press = _gui_core.DictOpt(
@@ -363,6 +406,7 @@ class AbsItemModel(object):
             self._data.subname_enable = True
             self._data.subname.text = text
             return True
+
         self._data.subname_enable = False
         return False
 
@@ -374,7 +418,7 @@ class AbsItemModel(object):
                 timestamp=0,
                 text='',
                 text_color=_qt_core.QtRgba.TxtMtime,
-                text_alignment=QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter,
+                text_option=QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter,
                 rect=qt_rect(),
             )
 
@@ -394,7 +438,7 @@ class AbsItemModel(object):
             self._data.user = _gui_core.DictOpt(
                 text='',
                 text_color=_qt_core.QtRgba.TxtUser,
-                text_alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter,
+                text_option=QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter,
                 rect=qt_rect(),
             )
 
@@ -472,12 +516,8 @@ class AbsItemModel(object):
 
     # icon
     def set_icon_name(self, icon_name):
-        # do not check file exists
-        file_path = _gui_core.GuiIcon.get(icon_name)
-        if file_path:
-            self._data.icon_enable = True
-            self._data.icon.file_flag = True
-            self._data.icon.file = file_path
+        if icon_name:
+            self.set_icon_file(_gui_core.GuiIcon.get(icon_name))
 
     def set_icon(self, icon):
         if isinstance(icon, QtGui.QIcon):
@@ -485,6 +525,19 @@ class AbsItemModel(object):
             self._data.icon_enable = True
             self._data.icon.pixmap_flag = True
             self._data.icon.pixmap = pixmap
+
+    def set_icon_file(self, file_path):
+        # do not check file exists
+        if file_path:
+            self._data.icon_enable = True
+            self._data.icon.file_flag = True
+            self._data.icon.file = file_path
+
+    def set_icon_text(self, text):
+        if text:
+            self._data.icon_enable = True
+            self._data.icon.text_flag = True
+            self._data.icon.text = text
 
     # assign
     def set_assign_path_set(self, path_set):
@@ -717,28 +770,34 @@ class AbsItemModel(object):
     def generate_keyword_filter_hidden_args(self, key_src_set):
         # todo: use match all mode then, maybe use match one mode also
         if key_src_set:
-            context = self.get_keyword_filter_context()
-            context = bsc_core.ensure_unicode(context)
-            context = context.lower()
-            for i_text in key_src_set:
+            contexts_src = map(bsc_core.ensure_unicode, key_src_set)
+            context_tgt = self.get_keyword_filter_context()
+            context_tgt = context_tgt.lower()
+            for i_text in contexts_src:
                 # fixme: chinese word
                 # do not encode, keyword can be use unicode
                 i_text = i_text.lower()
                 if '*' in i_text:
                     i_filter_key = six.u('*{}*').format(i_text.lstrip('*').rstrip('*'))
-                    if not bsc_core.BscFnmatch.filter([context], i_filter_key):
+                    if not bsc_core.BscFnmatch.filter([context_tgt], i_filter_key):
                         return True, True
                 else:
-                    if i_text not in context:
+                    if i_text not in context_tgt:
                         return True, True
             return True, False
         return False, False
 
     def register_keyword_filter_keys(self, texts):
+        if not texts:
+            return
+
         keys = []
-        keys.extend(texts)
+        # add pinyin to keyword filter
         for i_text in texts:
-            i_texts = bsc_pinyin.Text.split_any_to_words(i_text)
+            if not i_text:
+                continue
+
+            i_texts = bsc_pinyin.Text.split_any_to_words_extra(i_text)
             keys.extend(i_texts)
 
         self._data.keyword_filter.key_tgt_set = set(keys)
@@ -747,10 +806,34 @@ class AbsItemModel(object):
         _ = self._data.keyword_filter.key_tgt_set
         if _:
             return _
-        return {self.get_name()}
+        return {bsc_core.ensure_unicode(self.get_name())}
 
     def get_keyword_filter_context(self):
         return '+'.join(self.get_keyword_filter_key_tgt_set())
+
+    # tag filter
+    def register_tag_filter_keys(self, texts):
+        if not texts:
+            return
+
+        self._data.tag_filter.key_tgt_set = set(texts)
+
+    def generate_tag_filter_hidden_args(self, key_src_set):
+        key_tgt_set = self._data.tag_filter.key_tgt_set
+        mode = self._data.tag_filter.mode
+        if key_tgt_set:
+            if mode == self.TagFilterMode.MatchAll:
+                for i_key_tgt in key_tgt_set:
+                    if i_key_tgt not in key_src_set:
+                        return True, True
+                return True, False
+            elif mode == self.TagFilterMode.MatchOne:
+                for i_key_tgt in key_tgt_set:
+                    if i_key_tgt in key_src_set:
+                        return True, False
+                return True, True
+            return True, False
+        return False, False
 
     @classmethod
     def _draw_icon_by_file(cls, painter, rect, file_path):
@@ -859,9 +942,9 @@ class AbsItemModel(object):
     def focus_select(self):
         self._item.setSelected(True)
 
-    def set_selected(self, boolean):
+    def set_selected(self, boolean=True):
         self._item.setSelected(boolean)
-    
+
     # DAG
     def get_parent(self):
         raise NotImplementedError()

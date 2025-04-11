@@ -7,7 +7,7 @@ from ....qt import core as _qt_core
 # qt widgets
 from ....qt.widgets.input import input_for_bubble as _qt_wgt_ipt_for_bubble
 
-from ....qt.widgets.input import input_for_path as _qt_wgt_ipt_for_path
+from ....qt.widgets.input import input_for_entity as _qt_wgt_ipt_for_path
 
 from ....qt.widgets import base as _qt_wgt_base
 
@@ -68,37 +68,32 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
             self.__update_branch
         )
 
-        self._qt_path_input = _qt_wgt_ipt_for_path.QtInputForPath()
-        l_0.addWidget(self._qt_path_input)
+        self._qt_entity_input = _qt_wgt_ipt_for_path.QtInputForEntity()
+        l_0.addWidget(self._qt_entity_input)
 
-        self._qt_path_input._set_next_buffer_fnc_(
+        self._qt_entity_input._set_next_buffer_fnc_(
             self._next_buffer_fnc
         )
 
-        self._qt_path_input._set_value_('/')
-        self._qt_path_input._set_choose_popup_auto_resize_enable_(False)
-        self._qt_path_input._set_choose_popup_tag_filter_enable_(True)
-        self._qt_path_input._set_choose_popup_keyword_filter_enable_(True)
+        self._qt_entity_input._set_value_('/')
 
-        self._qt_path_input._set_choose_popup_item_size_(40, 40)
+        self._qt_entity_input._setup_()
 
-        self._qt_path_input._setup_()
-
-        self._qt_path_input.input_value_accepted.connect(self.__update_task)
-        self._qt_path_input.user_input_entry_finished.connect(self.__accept_result)
+        self._qt_entity_input.input_value_accepted.connect(self.__update_task)
+        self._qt_entity_input.user_input_entry_finished.connect(self.__accept_result)
 
         self._qt_scheme_input._set_value_(self.Schemes.AssetTask)
 
         self._qt_scheme_input._set_history_key_('gui.shotgun-branch')
         self._qt_scheme_input._pull_history_latest_()
 
-        self._qt_path_input._set_history_key_('gui.input-path-{}'.format(self.__scheme))
-        self._qt_path_input._pull_history_latest_()
+        self._qt_entity_input._set_history_key_('gui.input-path-{}'.format(self.__scheme))
+        self._qt_entity_input._pull_history_latest_()
 
-        self._qt_path_input._create_widget_shortcut_action_(
+        self._qt_entity_input._create_widget_shortcut_action_(
             self.__to_next_scheme, 'Alt+Right'
         )
-        self._qt_path_input._create_widget_shortcut_action_(
+        self._qt_entity_input._create_widget_shortcut_action_(
             self.__to_previous_scheme, 'Alt+Left'
         )
 
@@ -109,10 +104,10 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
         self._qt_scheme_input._get_entry_widget_()._to_previous_()
 
     def set_focus_in(self):
-        self._qt_path_input._set_input_entry_focus_in_()
+        self._qt_entity_input._set_input_entry_focus_in_()
 
     def has_focus(self):
-        return self._qt_path_input._get_input_entry_has_focus_()
+        return self._qt_entity_input._get_input_entry_has_focus_()
 
     def connect_result_to(self, fnc):
         self.__signals.dict_accepted.connect(fnc)
@@ -122,11 +117,11 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
 
     def __update_branch(self, text):
         if text != self.__scheme:
-            path_text = self._qt_path_input._get_value_()
+            path_text = self._qt_entity_input._get_value_()
             path = bsc_core.BscNodePathOpt(path_text)
 
             self.__scheme = text
-            self._qt_path_input._restore_next_cache_()
+            self._qt_entity_input._restore_next_cache_()
 
             self.__resource_type = None
             if self.__scheme == self.Schemes.AssetTask:
@@ -136,17 +131,17 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
             elif self.__scheme == self.Schemes.ShotTask:
                 self.__resource_type = 'shot'
 
-            self._qt_path_input._set_history_key_('gui.input-path-{}'.format(self.__scheme))
-            if self._qt_path_input._pull_history_latest_() is False:
+            self._qt_entity_input._set_history_key_('gui.input-path-{}'.format(self.__scheme))
+            if self._qt_entity_input._pull_history_latest_() is False:
                 cs = path.get_components()
                 cs.reverse()
                 d = len(cs)
                 if d > 1:
-                    self._qt_path_input._set_value_(cs[1].to_string())
+                    self._qt_entity_input._set_value_(cs[1].to_string())
 
-            path_text_cur = self._qt_path_input._get_value_()
+            path_text_cur = self._qt_entity_input._get_value_()
             if path_text_cur == path_text:
-                self._qt_path_input._update_next_()
+                self._qt_entity_input._update_next_()
 
     def _cache_projects(self):
         self.__project_dict = {}
@@ -375,7 +370,7 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
 
     def __accept_result(self):
         self.__update_task(
-            self._qt_path_input._get_value_()
+            self._qt_entity_input._get_value_()
         )
         dict_ = self.__result_dict
         if dict_:
@@ -435,4 +430,4 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
         else:
             raise RuntimeError()
 
-        self._qt_path_input._set_value_(peth_text)
+        self._qt_entity_input._set_value_(peth_text)

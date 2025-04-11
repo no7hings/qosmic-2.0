@@ -19,7 +19,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_general.core as qsm_gnl_core
 
-import lnx_shark.scan as lnx_srk_scan
+import lnx_parsor.swap as lnx_srk_swap
 
 import lnx_dcc_tool_prc.validation.scripts as lzy_vld_scripts
 
@@ -285,7 +285,7 @@ class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForScnModelBatch, self).__init__(window, session, *args, **kwargs)
 
-        self._scan_root = lnx_srk_scan.Stage().root()
+        self._scan_root = lnx_srk_swap.Swap.generate_root()
 
         self._signals = gui_qt_core.QtConcurrentGlobSignals(self._qt_widget)
         self._signals.accepted.connect(self._add_asset_fnc)

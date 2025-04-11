@@ -1,9 +1,9 @@
 # coding:utf-8
-import lnx_shark.cgt as c
+import lnx_parsor.swap as s
 
-root = c.Stage().root()
+root = s.Swap.generate_root()
 
-project = root.project('WSX')
+project = root.project('QSM_TST')
 
 for i in project.sequences():
     for j in i.shots():

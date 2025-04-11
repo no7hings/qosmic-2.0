@@ -13,7 +13,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.qt.widgets as qt_widgets
 
-import lnx_shark.scan as lnx_srk_scan
+import lnx_parsor.swap as lnx_srk_swap
 
 import lnx_dcc_tool_prc.validation.scripts as lzy_vld_scripts
 
@@ -125,7 +125,7 @@ class AbsPrxPageForChrRig(gui_prx_widgets.PrxBasePage):
         super(AbsPrxPageForChrRig, self).__init__(window, session, *args, **kwargs)
 
         self._asset_path = None
-        self._scan_root = lnx_srk_scan.Stage().root()
+        self._scan_root = lnx_srk_swap.Swap.generate_root()
 
         self._validation_opt = lzy_vld_scripts.RigValidationOpt()
 

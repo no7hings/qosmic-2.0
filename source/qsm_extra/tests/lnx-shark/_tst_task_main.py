@@ -1,7 +1,7 @@
 # coding:utf-8
 from __future__ import print_function
 
-import lnx_shark.parse as c
+import lnx_parsor.parse as c
 
 
 stage = c.Stage()

@@ -5,7 +5,7 @@ import lxbasic.core as bsc_core
 import lxgui.qt.view_widgets as gui_qt_view_widgets
 
 
-import lnx_shark.parse as lnx_srk_parse
+import lnx_parsor.parse as lnx_srk_parse
 
 
 class _GuiBaseOpt(object):

@@ -523,7 +523,11 @@ class BscProcess(object):
                 'wmic process where "name=\'{name}\'" get ExecutablePath'.format(name=name),
                 shell=True
             ).decode('utf-8', errors='ignore').splitlines()
-            paths = [line.strip() for line in output if line.strip() and 'ExecutablePath' not in line]
-            return list(set(paths))
+
+            output = filter(None, output)
+            if output:
+                paths = [line.strip() for line in output if line.strip() and 'ExecutablePath' not in line]
+                return list(set(paths))
+            return []
         except subprocess.CalledProcessError:
             return []

@@ -135,6 +135,12 @@ class ListViewModel(_view_base.AbsViewModel):
     def scroll_to_item_top(self, item):
         self._widget.scrollToItem(item, self._widget.PositionAtTop)
         self._widget.setCurrentItem(item)
+    
+    def scroll_to_item_top_auto(self):
+        self.occurrence_item_next()
+
+    def reset_occurrence(self):
+        self._data.occurrence.index = None
 
     def occurrence_item_previous(self):
         items = self.get_visible_items()
@@ -177,6 +183,7 @@ class ListViewModel(_view_base.AbsViewModel):
                     idx = idx_min
                 else:
                     idx += 1
+
                 idx_nxt = max(min(idx, idx_max), 0)
                 item_nxt = items[idx_nxt]
                 self.scroll_to_item_top(item_nxt)
@@ -196,7 +203,7 @@ class ListViewModel(_view_base.AbsViewModel):
                     # frame
                     frame_width=128, frame_height=128,
                     frame_width_maximum=512, frame_height_maximum=512,
-                    frame_width_minimum=24, frame_height_minimum=24,
+                    frame_width_minimum=40, frame_height_minimum=40,
                     text_height=0,
                     grid_size=QtCore.QSize(128, 128),
                     #
@@ -442,3 +449,10 @@ class ListViewModel(_view_base.AbsViewModel):
                 group_names.sort(reverse=sort_order)
             return group_names
         return []
+
+    def set_single_selection(self):
+        self._widget.setSelectionMode(self._widget.SingleSelection)
+
+    def restore(self):
+        super(ListViewModel, self).restore()
+        self.reset_occurrence()

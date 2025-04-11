@@ -7,6 +7,10 @@ import getpass as _getpass
 
 import collections as _collections
 
+import re as _re
+
+import fnmatch as _fnmatch
+
 
 class LRUCache:
     def __init__(self, maximum=64):
@@ -49,6 +53,39 @@ class LRUCache:
 
     def pop(self, key):
         self._dict.pop(key)
+
+
+class Fnmatch(object):
+    FILTER_CACHE = LRUCache(1024)
+    FILTER_CACHE_MAXIMUM = 1000
+
+    MAGIC_CHECK = _re.compile('[*?[]')
+
+    @classmethod
+    def filter(cls, texts, p):
+        list_ = []
+        try:
+            re_pat = cls.FILTER_CACHE[p]
+        except KeyError:
+            res = _fnmatch.translate(p)
+            cls.FILTER_CACHE[p] = re_pat = _re.compile(res, _re.IGNORECASE)
+
+        match = re_pat.match
+        for i_text in texts:
+            if match(i_text):
+                list_.append(i_text)
+        return list_
+
+    @classmethod
+    def is_match(cls, text, p):
+        try:
+            re_pat = cls.FILTER_CACHE[p]
+        except KeyError:
+            res = _fnmatch.translate(p)
+            cls.FILTER_CACHE[p] = re_pat = _re.compile(res, _re.IGNORECASE)
+
+        match = re_pat.match
+        return match(text)
 
 
 def ensure_string(s):

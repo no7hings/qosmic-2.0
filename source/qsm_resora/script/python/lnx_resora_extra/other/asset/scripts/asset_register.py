@@ -5,7 +5,7 @@ import lxbasic.log as bsc_log
 
 import qsm_general.core as qsm_gnl_core
 
-import lnx_shark.scan as lnx_srk_scan
+import lnx_parsor.swap as lnx_srk_swap
 
 import lnx_screw.core as lnx_scr_core
 
@@ -14,7 +14,7 @@ class AssetBatchRegisterOpt(object):
     def __init__(self, project_name, project_chs_name):
         self._project_name = project_name
         self._project_chs_name = project_chs_name
-        self._scan_root = lnx_srk_scan.Stage().root()
+        self._scan_root = lnx_srk_swap.Swap.generate_root()
 
         self._scr_stage = lnx_scr_core.Stage('asset_test')
 

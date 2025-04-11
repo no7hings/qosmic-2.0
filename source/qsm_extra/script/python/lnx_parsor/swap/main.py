@@ -1,0 +1,34 @@
+# coding:utf-8
+import os
+
+import sys
+
+import lxbasic.core as bsc_core
+
+from ..core import base as _cor_base
+
+
+class Swap(object):
+    @classmethod
+    def generate_root(cls, location='X:'):
+        cgt_exe_paths = bsc_core.BscProcess.find_process_path_by_name(
+            'CgTeamWork.exe'
+        )
+        if cgt_exe_paths:
+            dir_path = os.path.dirname(cgt_exe_paths[0])
+            py_path = '{}/base'.format(os.path.dirname(dir_path.replace('\\', '/')))
+            if py_path not in sys.path:
+                sys.path.append(py_path)
+
+            # import here
+            from .. import cgt as _cgt
+            return _cgt.Stage().root(location)
+
+        # import here
+        from .. import scan as _scan
+        return _scan.Stage().root(location)
+
+    @staticmethod
+    def set_sync_cache_flag(boolean):
+        _cor_base.GlobalVar.SYNC_CACHE_FLAG = boolean
+

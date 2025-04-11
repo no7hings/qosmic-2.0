@@ -100,7 +100,7 @@ class _AbsQtPopupAsChoose(
             )
             tbr_w = c_w
             # close button
-            self.__popup_cancel_button.setGeometry(
+            self._popup_cancel_button.setGeometry(
                 c_x+c_w-h_top_tbr*1, c_y, h_top_tbr, h_top_tbr
             )
             tbr_w -= (h_top_tbr+spacing)
@@ -165,7 +165,7 @@ class _AbsQtPopupAsChoose(
                 c_x, c_y, tbr_w-h_top_tbr, h_top_tbr
             )
             # close button
-            self.__popup_cancel_button.setGeometry(
+            self._popup_cancel_button.setGeometry(
                 c_x+c_w-h_top_tbr*1, c_y, h_top_tbr, h_top_tbr
             )
             tbr_w -= (h_top_tbr+spacing)
@@ -200,14 +200,14 @@ class _AbsQtPopupAsChoose(
         self._w_popup_item, self._h_popup_item = 20, 20
         self._popup_tag_filter_item_width, self._popup_tag_filter_item_height = 20, 20
 
-        self.__popup_cancel_button = _button.QtIconPressButton(self)
-        self.__popup_cancel_button._set_name_text_('cancel popup')
-        self.__popup_cancel_button._set_icon_file_path_(_gui_core.GuiIcon.get('close-hover'))
-        self.__popup_cancel_button._set_icon_frame_draw_size_(18, 18)
-        self.__popup_cancel_button._set_tool_tip_text_(
+        self._popup_cancel_button = _button.QtIconPressButton(self)
+        self._popup_cancel_button._set_name_text_('cancel popup')
+        self._popup_cancel_button._set_icon_file_path_(_gui_core.GuiIcon.get('close-hover'))
+        self._popup_cancel_button._set_icon_frame_draw_size_(18, 18)
+        self._popup_cancel_button._set_tool_tip_text_(
             '"LMB-click" to cancel'
         )
-        self.__popup_cancel_button.press_clicked.connect(self._do_popup_close_)
+        self._popup_cancel_button.press_clicked.connect(self._do_popup_close_)
         #
         self._popup_item_multiply_is_enable = False
         self._popup_all_checked_button = _button.QtIconPressButton(self)
@@ -514,6 +514,83 @@ class _AbsQtPopupAsChoose(
             return _+_count_width+24
         return _+_count_width
 
+    def _add_values_(
+        self,
+        values,
+        values_cur
+    ):
+        icon_file_path = self._popup_item_icon_file_path
+        icon_file_path_dict = self._popup_item_icon_file_path_dict
+        # image
+        image_url_dict = self._popup_item_image_url_dict
+        # filter
+        keyword_filter_dict = self._popup_item_keyword_filter_dict
+        tag_filter_dict = self._popup_item_tag_filter_dict
+        # todo: do not sort value default, and a flag to auto make?
+        # values = bsc_core.BscTexts.sort_by_number(values)
+        for index, i_value in enumerate(values):
+            i_item_widget = _utility._QtHItem()
+            i_item = _item_for_list.QtListItem()
+            i_item.setSizeHint(QtCore.QSize(self._w_popup_item, self._h_popup_item))
+
+            self._popup_view.addItem(i_item)
+            self._popup_view.setItemWidget(i_item, i_item_widget)
+            i_item._initialize_item_show_()
+
+            i_item_widget._set_name_text_(i_value)
+            i_item_widget._set_tool_tip_('"LMB-click" to choose')
+            # use multiply choose
+            if self._get_popup_item_multiply_is_enable_() is True:
+                i_item_widget._set_check_action_enable_(True)
+                i_item_widget._set_check_enable_(True)
+
+            if self._popup_use_as_icon_choose is True:
+                self._popup_item_show_deferred_fnc_1_(
+                    i_item, i_item_widget, [i_value]
+                )
+            else:
+                if i_value in image_url_dict:
+                    self._popup_item_show_deferred_fnc_(
+                        i_item, i_item_widget, [image_url_dict[i_value]]
+                    )
+                else:
+                    if icon_file_path:
+                        i_item_widget._set_icon_file_path_(icon_file_path)
+                    else:
+                        if i_value in icon_file_path_dict:
+                            i_icon_file_path = icon_file_path_dict[i_value]
+                            i_item_widget._set_icon_file_path_(i_icon_file_path)
+                        else:
+                            i_item_widget._set_name_icon_text_(i_value)
+
+            if i_value in keyword_filter_dict:
+                i_filter_keys = keyword_filter_dict[i_value]
+                i_item._update_item_keyword_filter_keys_tgt_(i_filter_keys)
+                i_item_widget._set_name_texts_(i_filter_keys)
+                i_item_widget._set_tool_tip_('"LMB-click" to choose')
+            else:
+                i_item._update_item_keyword_filter_keys_tgt_([i_value])
+
+            if i_value in tag_filter_dict:
+                i_filter_keys = tag_filter_dict[i_value]
+                i_item._set_item_tag_filter_mode_(i_item.TagFilterMode.MatchOne)
+                i_item._update_item_tag_filter_keys_tgt_(i_filter_keys)
+
+            if values_cur:
+                # auto select last item
+                if isinstance(values_cur, (tuple, list)):
+                    if i_value == values_cur[-1]:
+                        i_item.setSelected(True)
+                elif isinstance(values_cur, six.string_types):
+                    if i_value == values_cur:
+                        i_item.setSelected(True)
+                # scroll to selected
+                self._popup_view._set_scroll_to_selected_item_top_()
+            else:
+                pass
+
+            i_item_widget.press_clicked.connect(self._do_popup_end_)
+
     def _do_popup_start_(self):
         if self._popup_is_activated is False:
             self._popup_view._do_clear_()
@@ -521,83 +598,11 @@ class _AbsQtPopupAsChoose(
             self._popup_keyword_filter_entry._do_clear_()
             values = self._get_popup_values_()
             if values and isinstance(values, (tuple, list)):
-                # icon
-                icon_file_path = self._popup_item_icon_file_path
-                icon_file_path_dict = self._popup_item_icon_file_path_dict
-                # image
-                image_url_dict = self._popup_item_image_url_dict
-                # filter
-                keyword_filter_dict = self._popup_item_keyword_filter_dict
-                tag_filter_dict = self._popup_item_tag_filter_dict
-                #
                 values_cur = self._get_popup_values_current_()
-                # todo: do not sort value default, and a flag to auto make?
-                # values = bsc_core.BscTexts.sort_by_number(values)
-                for index, i_value in enumerate(values):
-                    i_item_widget = _utility._QtHItem()
-                    i_item = _item_for_list.QtListItem()
-                    i_item.setSizeHint(QtCore.QSize(self._w_popup_item, self._h_popup_item))
-
-                    self._popup_view.addItem(i_item)
-                    self._popup_view.setItemWidget(i_item, i_item_widget)
-                    i_item._initialize_item_show_()
-
-                    i_item_widget._set_name_text_(i_value)
-                    i_item_widget._set_tool_tip_('"LMB-click" to choose')
-                    # use multiply choose
-                    if self._get_popup_item_multiply_is_enable_() is True:
-                        i_item_widget._set_check_action_enable_(True)
-                        i_item_widget._set_check_enable_(True)
-
-                    if self._popup_use_as_icon_choose is True:
-                        self._popup_item_show_deferred_fnc_1_(
-                            i_item, i_item_widget, [i_value]
-                        )
-                    else:
-                        if i_value in image_url_dict:
-                            self._popup_item_show_deferred_fnc_(
-                                i_item, i_item_widget, [image_url_dict[i_value]]
-                            )
-                        else:
-                            if icon_file_path:
-                                i_item_widget._set_icon_file_path_(icon_file_path)
-                            else:
-                                if i_value in icon_file_path_dict:
-                                    i_icon_file_path = icon_file_path_dict[i_value]
-                                    i_item_widget._set_icon_file_path_(i_icon_file_path)
-                                else:
-                                    i_item_widget._set_name_icon_text_(i_value)
-                    #
-                    if i_value in keyword_filter_dict:
-                        i_filter_keys = keyword_filter_dict[i_value]
-                        i_item._update_item_keyword_filter_keys_tgt_(i_filter_keys)
-                        i_item_widget._set_name_texts_(i_filter_keys)
-                        i_item_widget._set_tool_tip_('"LMB-click" to choose')
-                    else:
-                        i_item._update_item_keyword_filter_keys_tgt_([i_value])
-                    #
-                    if i_value in tag_filter_dict:
-                        i_filter_keys = tag_filter_dict[i_value]
-                        i_item._set_item_tag_filter_mode_(i_item.TagFilterMode.MatchOne)
-                        i_item._update_item_tag_filter_keys_tgt_(i_filter_keys)
-                    #
-                    if values_cur:
-                        # auto select last item
-                        if isinstance(values_cur, (tuple, list)):
-                            if i_value == values_cur[-1]:
-                                i_item.setSelected(True)
-                        elif isinstance(values_cur, six.string_types):
-                            if i_value == values_cur:
-                                i_item.setSelected(True)
-                        # scroll to selected
-                        self._popup_view._set_scroll_to_selected_item_top_()
-                    else:
-                        pass
-                    #
-                    i_item_widget.press_clicked.connect(self._do_popup_end_)
+                self._add_values_(values, values_cur)
                 # tag filter
                 if self._popup_item_tag_filter_is_enable is True:
-                    tags = list(set([i for k, v in tag_filter_dict.items() for i in v]))
+                    tags = list(set([i for k, v in self._popup_item_tag_filter_dict.items() for i in v]))
                     # sort tag by default, and make sure "all" is first
                     tags = bsc_core.BscTexts.sort_by_number(tags)
                     if self.TAG_ALL in tags:
@@ -621,15 +626,14 @@ class _AbsQtPopupAsChoose(
                         #
                         i_item_widget._add_item_tag_filter_keys_src_(i_tag)
 
-                press_pos = self._get_popup_pos_from_(self._get_entry_frame_widget_())
-                width, height = self._get_popup_size_from_(self._get_entry_frame_widget_())
-                item_count = int(self.HEIGHT_MAX/self._h_popup_item)
-                height_max_0 = self._popup_view._compute_height_maximum_(item_count)
-                height_max_1 = self._popup_tag_filter_view._compute_height_maximum_(item_count)
-                height_max = max([height_max_0, height_max_1])
-                height_max += self._h_popup_top_toolbar
-
                 if self._popup_style == self.PopupStyle.FromFrame:
+                    press_pos = self._get_popup_pos_from_(self._get_entry_frame_widget_())
+                    width, height = self._get_popup_size_from_(self._get_entry_frame_widget_())
+                    item_count = int(self.HEIGHT_MAX/self._h_popup_item)
+                    height_max_0 = self._popup_view._compute_height_maximum_(item_count)
+                    height_max_1 = self._popup_tag_filter_view._compute_height_maximum_(item_count)
+                    height_max = max([height_max_0, height_max_1])
+                    height_max += self._h_popup_top_toolbar
                     self._show_popup_(
                         press_pos,
                         (width, height_max)
@@ -654,6 +658,7 @@ class _AbsQtPopupAsChoose(
                 self._entry_widget._set_focused_(True)
 
                 self._popup_is_activated = True
+
                 # show
                 self._popup_view._refresh_all_items_viewport_showable_()
                 self._popup_tag_filter_view._refresh_all_items_viewport_showable_()
@@ -815,7 +820,7 @@ class QtPopupForCompletion(
         )
         tbr_w = c_w
         # close button
-        self.__popup_cancel_button.setGeometry(
+        self._popup_cancel_button.setGeometry(
             c_x+c_w-h_top_tbr*1, c_y, h_top_tbr, h_top_tbr
         )
         tbr_w -= (h_top_tbr+spacing)
@@ -840,12 +845,12 @@ class QtPopupForCompletion(
         self._init_frame_base_def_(self)
         self._init_popup_base_def_(self)
         #
-        self.__popup_cancel_button = _button.QtIconPressButton(self)
-        self.__popup_cancel_button._set_name_text_('cancel popup')
-        self.__popup_cancel_button._set_icon_file_path_(_gui_core.GuiIcon.get('close-hover'))
-        self.__popup_cancel_button._set_icon_frame_draw_size_(18, 18)
-        self.__popup_cancel_button.press_clicked.connect(self._do_popup_close_)
-        self.__popup_cancel_button._set_tool_tip_text_(
+        self._popup_cancel_button = _button.QtIconPressButton(self)
+        self._popup_cancel_button._set_name_text_('cancel popup')
+        self._popup_cancel_button._set_icon_file_path_(_gui_core.GuiIcon.get('close-hover'))
+        self._popup_cancel_button._set_icon_frame_draw_size_(18, 18)
+        self._popup_cancel_button.press_clicked.connect(self._do_popup_close_)
+        self._popup_cancel_button._set_tool_tip_text_(
             '"LMB-click" to cancel'
         )
         #
@@ -1042,12 +1047,12 @@ class QtPopupAsChooseForGuide(
             self._do_popup_filter_
         )
         #
-        self.__popup_cancel_button = _button.QtIconPressButton(self)
-        self.__popup_cancel_button._set_name_text_('close popup')
-        self.__popup_cancel_button._set_icon_file_path_(_gui_core.GuiIcon.get('close'))
-        self.__popup_cancel_button._set_icon_hover_color_(_qt_core.QtRgba.BkgDeleteHover)
-        self.__popup_cancel_button.press_clicked.connect(self._do_popup_close_)
-        self.__popup_cancel_button._set_tool_tip_text_(
+        self._popup_cancel_button = _button.QtIconPressButton(self)
+        self._popup_cancel_button._set_name_text_('close popup')
+        self._popup_cancel_button._set_icon_file_path_(_gui_core.GuiIcon.get('close'))
+        self._popup_cancel_button._set_icon_hover_color_(_qt_core.QtRgba.BkgDeleteHover)
+        self._popup_cancel_button.press_clicked.connect(self._do_popup_close_)
+        self._popup_cancel_button._set_tool_tip_text_(
             '"LMB-click" to close'
         )
         #
@@ -1102,7 +1107,7 @@ class QtPopupAsChooseForGuide(
             c_x, c_y, tbr_w-h_top_tbr, h_top_tbr
         )
         # close button
-        self.__popup_cancel_button.setGeometry(
+        self._popup_cancel_button.setGeometry(
             c_x+c_w-h_top_tbr*1, c_y, h_top_tbr, h_top_tbr
         )
         tbr_w -= (h_top_tbr+spacing)

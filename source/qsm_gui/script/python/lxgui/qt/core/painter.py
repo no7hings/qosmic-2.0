@@ -1562,17 +1562,21 @@ class QtPainter(QtGui.QPainter):
                 )
                 self.drawRect(frame_rect)
 
-        if r >= 31:
-            texts = bsc_core.BscText.find_words(text)
-            if len(texts) > 1:
-                txt_size = int(r*.5)
-                text_draw = (texts[0][0]+texts[1][0]).upper()
+        if text:
+            if r >= 31:
+                texts = bsc_core.BscText.find_words(text)
+                if len(texts) > 1:
+                    txt_size = int(r*.5)
+                    text_draw = (texts[0][0]+texts[1][0]).upper()
+                else:
+                    txt_size = int(r*.675)
+                    text_draw = text[:2].capitalize()
             else:
                 txt_size = int(r*.675)
-                text_draw = text[:2].capitalize()
+                text_draw = text[0].upper()
         else:
             txt_size = int(r*.675)
-            text_draw = text[0].upper()
+            text_draw = 'N/a'
 
         txt_size = max(txt_size, 1)
 

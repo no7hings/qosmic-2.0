@@ -22,14 +22,14 @@ entity:
 
         Project: '/{project}'
         Role: '/{project}/{role}'
-        Asset: '/{project}/{asset}'
+        Asset: '/{project}/{role}/{asset}'
 
         Episode: '/{project}/{episode}'
         Sequence: '/{project}/{sequence}'
         Shot: '/{project}/{sequence}/{shot}'
 
         ProjectTask: '/{project}/{task}'
-        AssetTask: '/{project}/{asset}/{task}'
+        AssetTask: '/{project}/{role}/{asset}/{task}'
         SequenceTask: '/{project}/{sequence}/{task}'
         ShotTask: '/{project}/{sequence}/{shot}/{task}'
 

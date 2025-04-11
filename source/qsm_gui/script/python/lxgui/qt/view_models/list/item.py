@@ -374,7 +374,6 @@ class ListItemModel(_item_base.AbsItemModel):
         painter.restore()
 
     def draw_base(self, painter, option, index):
-
         condition = (self._data.hover.flag, self._data.select.flag)
         # hover
         if condition == (True, False):
@@ -403,10 +402,24 @@ class ListItemModel(_item_base.AbsItemModel):
 
         # draw check
         if self._data.check_enable is True:
-            self._draw_icon_by_file(painter, self._data.check.rect, self._data.check.file)
+            _qt_core.QtItemDrawBase._draw_icon_by_file(
+                painter, self._data.check.rect, self._data.check.file
+            )
+
         # draw icon
         if self._data.icon_enable is True:
-            self._draw_icon_by_file(painter, self._data.icon.rect, self._data.icon.file)
+
+            # file icon
+            if self._data.icon.file_flag is True:
+                _qt_core.QtItemDrawBase._draw_icon_by_file(
+                    painter, self._data.icon.rect, self._data.icon.file
+                )
+
+            # text icon
+            elif self._data.icon.text_flag is True:
+                _qt_core.QtItemDrawBase._draw_icon_by_text(
+                    painter, self._data.icon.rect, self._data.icon.text
+                )
 
     def draw_lock(self, painter, option, index):
         if self._data.lock_enable is True:
@@ -430,21 +443,34 @@ class ListItemModel(_item_base.AbsItemModel):
                 text_color = [
                     self._data.text.color, self._data.text.action_color
                 ][self._data.select.flag or self._data.hover.flag]
-            self._draw_text(
+
+            _qt_core.QtItemDrawBase._draw_name_text(
                 painter, self._data.name.rect, self._data.name.text,
-                text_color
+                text_color, self._data.name.text_option, self._data.text.font
             )
+
+        # subname
+        if self._data.subname_enable is True:
+            text_color = [
+                self._data.text.color, self._data.text.action_color
+            ][self._data.select.flag or self._data.hover.flag]
+            _qt_core.QtItemDrawBase._draw_name_text(
+                painter, self._data.subname.rect, self._data.subname.text,
+                text_color, self._data.subname.text_option, self._data.text.font
+            )
+
         # mtime
         if self._data.mtime_enable is True:
-            self._draw_text(
+            _qt_core.QtItemDrawBase._draw_name_text(
                 painter, self._data.mtime.rect, self._data.mtime.text,
-                self._data.mtime.text_color, self._data.mtime.text_alignment
+                self._data.mtime.text_color, self._data.mtime.text_option, self._data.text.font
             )
+
         # user
         if self._data.user_enable is True:
-            self._draw_text(
+            _qt_core.QtItemDrawBase._draw_name_text(
                 painter, self._data.user.rect, self._data.user.text,
-                self._data.user.text_color, self._data.user.text_alignment
+                self._data.user.text_color, self._data.user.text_option, self._data.text.font
             )
 
     def refresh_pixmap_cache(self):
@@ -629,7 +655,7 @@ class ListItemModel(_item_base.AbsItemModel):
             item_h = 20
             item_icon_w = 16
 
-            item_y = y+bsc_h_0
+            txt_x, txt_y = x, y+bsc_h_0
             # lock
             if self._data.lock_enable is True:
                 lck_w = lck_h = int(min(bsc_w, bsc_h)*.75)
@@ -641,14 +667,14 @@ class ListItemModel(_item_base.AbsItemModel):
             if self._data.check_enable is True:
                 cck_w = 20
                 self._data.check.rect.setRect(
-                    x+(cck_w-item_icon_w)/2+1, item_y+(cck_w-item_icon_w)/2, item_icon_w, item_icon_w
+                    txt_x+(cck_w-item_icon_w)/2+1, txt_y+(cck_w-item_icon_w)/2, item_icon_w, item_icon_w
                 )
             # icon
             icn_w = 0
             if self._data.icon_enable is True:
                 icn_w = 20
                 self._data.icon.rect.setRect(
-                    x+cck_w+(icn_w-item_icon_w)/2+1, item_y+(icn_w-item_icon_w)/2, item_icon_w, item_icon_w
+                    txt_x+cck_w+(icn_w-item_icon_w)/2+1, txt_y+(icn_w-item_icon_w)/2, item_icon_w, item_icon_w
                 )
             # name
             txt_w_sub = cck_w+icn_w
@@ -658,16 +684,16 @@ class ListItemModel(_item_base.AbsItemModel):
                 txt_offset = txt_w_sub+2
 
             self._data.name.rect.setRect(
-                x+txt_offset+1, item_y, w-txt_w_sub-4, item_h
+                txt_x+txt_offset+1, txt_y, w-txt_w_sub-4, item_h
             )
             # mtime
             if self._data.mtime_enable is True:
                 self._data.mtime.rect.setRect(
-                    x+txt_offset, item_y+20, w-txt_w_sub-4, item_h
+                    txt_x+txt_offset, txt_y+20, w-txt_w_sub-4, item_h
                 )
             if self._data.user_enable is True:
                 self._data.user.rect.setRect(
-                    x+txt_offset, item_y+40, w-txt_w_sub-4, item_h
+                    txt_x+txt_offset, txt_y+40, w-txt_w_sub-4, item_h
                 )
             # status
             self._update_status_rect(rect)

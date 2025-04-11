@@ -3,9 +3,13 @@ import time
 
 import lxbasic.core as bsc_core
 
-from ... import core as _gui_core
+import lxbasic.pinyin as bsc_pinyin
 
 from .wrap import *
+
+from ... import core as _gui_core
+
+from . import base as _base
 
 
 class QtItemDrawBase:
@@ -73,32 +77,61 @@ class QtItemDrawBase:
             cls._draw_image(painter, rect, file_path)
 
     @classmethod
-    def _draw_name_text(cls, painter, rect, text, color, option, font=None):
+    def _draw_icon_by_text(cls, painter, rect, text):
+        if text:
+            text = bsc_core.ensure_unicode(text)
+            txt_draw = text[0].capitalize()
+        else:
+            txt_draw = 'N/a'
+
+        w, h = rect.width(), rect.height()
+
+        txt_r = min(w, h)*.75
+
+        r, g, b = bsc_core.BscTextOpt(text or '').to_hash_rgb(s_p=(35, 50), v_p=(65, 85))
+
+        background_rgba, text_rgba = _base.QtColor.generate_color_args_by_rgb(r, g, b)
+
+        cls._draw_frame(
+            painter, rect,
+            border_color=QtGui.QColor(47, 47, 47),
+            background_color=QtGui.QColor(*background_rgba)
+        )
+        painter.setPen(QtGui.QColor(*text_rgba))
+        painter.setFont(_base.QtFont.generate_2(txt_r))
+        painter.drawText(rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter, txt_draw)
+
+    @classmethod
+    def _draw_name_text(cls, painter, rect, text, text_color, text_option=None, text_font=None):
+        painter.setPen(text_color)
+
+        if text_font:
+            painter.setFont(text_font)
+
         text = painter.fontMetrics().elidedText(
             text,
             QtCore.Qt.ElideMiddle,
             rect.width(),
             QtCore.Qt.TextShowMnemonic
         )
-        painter.setPen(color)
-        if font:
-            painter.setFont(font)
-        painter.drawText(rect, option, text)
+
+        text_option = text_option or QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
+        painter.drawText(rect, text_option, text)
 
     @classmethod
-    def _draw_description_text(cls, painter, rect, text, color, font=None):
-        option = QtGui.QTextOption()
-        painter.setPen(color)
-        if font:
-            painter.setFont(font)
+    def _draw_description_text(cls, painter, rect, text, text_color, text_font=None):
+        text_option = QtGui.QTextOption()
+        painter.setPen(text_color)
+        if text_font:
+            painter.setFont(text_font)
 
-        option.setWrapMode(
-            option.WrapAnywhere
+        text_option.setWrapMode(
+            text_option.WrapAnywhere
         )
         rect = QtCore.QRectF(
             rect
         )
-        painter.drawText(rect, text, option)
+        painter.drawText(rect, text, text_option)
 
     @classmethod
     def _draw_frame(cls, painter, rect, border_color, background_color, border_width=1, border_radius=0):

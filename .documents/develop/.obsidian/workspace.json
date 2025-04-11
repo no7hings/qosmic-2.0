@@ -4,19 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "778cbc1d675897ce",
+        "id": "b3238a6f88e08ef6",
         "type": "tabs",
         "children": [
           {
-            "id": "ea86fe14cc3e85e0",
-            "type": "leaf",
-            "state": {
-              "type": "card-board-view",
-              "state": {}
-            }
-          },
-          {
-            "id": "cc85cbb9ea0e6139",
+            "id": "8fd5fa39e02a27e3",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -27,8 +19,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -57,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#waiting",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,12 +65,12 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 324.5
+    "width": 324.5,
+    "collapsed": true
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -197,7 +188,7 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "cc85cbb9ea0e6139",
+  "active": "8fd5fa39e02a27e3",
   "lastOpenFiles": [
     "开发相关/开发进度/开发-2025.md",
     "开发相关/开发进度/优化-2025.md",

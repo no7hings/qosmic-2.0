@@ -1,5 +1,5 @@
 # coding:utf-8
-import lnx_shark.parse as c
+import lnx_parsor.parse as c
 
 stage_default = c.Stage(scheme='default')
 

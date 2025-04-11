@@ -469,9 +469,9 @@ class StandardNode(_AbsNode):
             painter,
             rect=self._gui_data.type.rect,
             text=type_text,
-            color=self._gui_data.type.color,
-            option=QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
-            font=self._gui_data.type.font
+            text_color=self._gui_data.type.color,
+            text_option=QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+            text_font=self._gui_data.type.font
         )
 
         # draw viewed
@@ -1426,9 +1426,9 @@ class Backdrop(_AbsNode):
         # type
         gui_qt_core.QtItemDrawBase._draw_name_text(
             painter, self._gui_data.type.rect, self._data.type,
-            color=self._gui_data.type.color,
-            option=QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
-            font=self._gui_data.type.font
+            text_color=self._gui_data.type.color,
+            text_option=QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+            text_font=self._gui_data.type.font
         )
 
         # headline
@@ -1451,8 +1451,8 @@ class Backdrop(_AbsNode):
             painter,
             rect=self._gui_data.description.text_rect,
             text=self._gui_data.description.text,
-            color=self._gui_data.description.color,
-            font=self._gui_data.description.font
+            text_color=self._gui_data.description.color,
+            text_font=self._gui_data.description.font
         )
 
         # resize

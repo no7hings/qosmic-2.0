@@ -11,7 +11,7 @@ import lxgui.qt.view_widgets as gui_qt_view_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_shark.parse as lnx_srk_parse
+import lnx_parsor.parse as lnx_srk_parse
 
 from ... import core as _wsp_core
 

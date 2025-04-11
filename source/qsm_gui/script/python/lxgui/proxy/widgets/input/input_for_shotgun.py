@@ -22,11 +22,6 @@ class PrxInputForShotgunEntityChoose(_input_base.AbsPrxInput):
         # entry
         self._qt_input_widget._set_entry_enable_(True)
         # choose
-        self._qt_input_widget._set_choose_popup_auto_resize_enable_(False)
-        self._qt_input_widget._set_choose_index_show_enable_(True)
-        self._qt_input_widget._set_choose_popup_tag_filter_enable_(True)
-        self._qt_input_widget._set_choose_popup_keyword_filter_enable_(True)
-        self._qt_input_widget._set_choose_popup_item_size_(40, 40)
         self._qt_input_widget._set_value_choose_button_icon_file_path_(
             _gui_core.GuiIcon.get('application/shotgrid')
         )
@@ -132,10 +127,6 @@ class PrxInputForShotgunEntitiesChoose(_input_base.AbsPrxInput):
         self._qt_input_widget._get_resize_handle_()._set_resize_minimum_(42)
         self._qt_input_widget._set_size_policy_height_fixed_mode_()
         #
-        self._qt_input_widget._set_choose_popup_auto_resize_enable_(False)
-        self._qt_input_widget._set_choose_popup_tag_filter_enable_(True)
-        self._qt_input_widget._set_choose_popup_keyword_filter_enable_(True)
-        self._qt_input_widget._set_choose_popup_item_size_(40, 40)
         self._qt_input_widget._set_value_choose_button_icon_file_path_(
             _gui_core.GuiIcon.get('application/shotgrid')
         )
