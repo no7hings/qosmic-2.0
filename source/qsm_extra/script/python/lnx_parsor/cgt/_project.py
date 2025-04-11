@@ -31,27 +31,27 @@ class Project(_base.AbsEntity):
 
         filters = []
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'asset_type'
 
-        for i_cgt_variants in t_tw.info.get(
+        for i_dtb_variants in t_tw.info.get(
             cgt_dtb, cgt_type,
             t_tw.info.get_id(cgt_dtb, cgt_type, filters),
             t_tw.info.fields(cgt_dtb, cgt_type)
         ):
-            i_cgt_variants['project.database'] = cgt_dtb
+            i_dtb_variants['project.database'] = cgt_dtb
             list_.append(
                 self._root._new_entity_fnc(
                     _role.Role,
                     dict(
                         root=self._variants['root'],
                         project=self._variants['project'],
-                        role=i_cgt_variants['asset_type.entity'],
+                        role=i_dtb_variants['asset_type.entity'],
                         #
-                        entity_name=i_cgt_variants['asset_type.entity'],
-                        entity_name_chs=i_cgt_variants.get('asset_type.cn_name'),
+                        entity_name=i_dtb_variants['asset_type.entity'],
+                        entity_gui_name=i_dtb_variants.get('asset_type.cn_name'),
                     ),
-                    i_cgt_variants
+                    i_dtb_variants
                 )
             )
         return list_
@@ -61,27 +61,27 @@ class Project(_base.AbsEntity):
 
         filters = [['asset_type.entity', '=', name]]
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'asset_type'
 
         id_list = t_tw.info.get_id(cgt_dtb, cgt_type, filters)
         if id_list:
-            cgt_variants = t_tw.info.get(
+            dtb_variants = t_tw.info.get(
                 cgt_dtb, cgt_type,
                 id_list, t_tw.info.fields(cgt_dtb, cgt_type)
             )[0]
-            cgt_variants['project.database'] = cgt_dtb
+            dtb_variants['project.database'] = cgt_dtb
             return self._root._new_entity_fnc(
                 _role.Role,
                 dict(
                     root=self._variants['root'],
                     project=self._variants['project'],
-                    role=cgt_variants['asset_type.entity'],
+                    role=dtb_variants['asset_type.entity'],
                     #
-                    entity_name=cgt_variants['asset_type.entity'],
-                    entity_name_chs=cgt_variants.get('asset_type.cn_name'),
+                    entity_name=dtb_variants['asset_type.entity'],
+                    entity_gui_name=dtb_variants.get('asset_type.cn_name'),
                 ),
-                cgt_variants
+                dtb_variants
             )
 
     # asset
@@ -105,28 +105,28 @@ class Project(_base.AbsEntity):
                 raise RuntimeError()
             filters.append(['asset_type.entity', opt, vs])
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'asset'
 
-        for i_cgt_variants in t_tw.info.get(
+        for i_dtb_variants in t_tw.info.get(
             cgt_dtb, cgt_type,
             t_tw.info.get_id(cgt_dtb, cgt_type, filters),
             t_tw.info.fields(cgt_dtb, cgt_type)
         ):
-            i_cgt_variants['project.database'] = cgt_dtb
+            i_dtb_variants['project.database'] = cgt_dtb
             list_.append(
                 self._root._new_entity_fnc(
                     _asset.Asset,
                     dict(
                         root=self._variants['root'],
                         project=self._variants['project'],
-                        role=i_cgt_variants['asset_type.entity'],
-                        asset=i_cgt_variants['asset.entity'],
+                        role=i_dtb_variants['asset_type.entity'],
+                        asset=i_dtb_variants['asset.entity'],
                         #
-                        entity_name=i_cgt_variants['asset.entity'],
-                        entity_name_chs=i_cgt_variants.get('asset.cn_name')
+                        entity_name=i_dtb_variants['asset.entity'],
+                        entity_gui_name=i_dtb_variants.get('asset.cn_name')
                     ),
-                    i_cgt_variants
+                    i_dtb_variants
                 )
             )
         return list_
@@ -136,28 +136,28 @@ class Project(_base.AbsEntity):
 
         filters = [['asset.entity', '=', name]]
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'asset'
 
         id_list = t_tw.info.get_id(cgt_dtb, cgt_type, filters)
         if id_list:
-            cgt_variants = t_tw.info.get(
+            dtb_variants = t_tw.info.get(
                 cgt_dtb, cgt_type,
                 id_list, t_tw.info.fields(cgt_dtb, cgt_type)
             )[0]
-            cgt_variants['project.database'] = cgt_dtb
+            dtb_variants['project.database'] = cgt_dtb
             return self._root._new_entity_fnc(
                 _asset.Asset,
                 dict(
                     root=self._variants['root'],
                     project=self._variants['project'],
-                    role=cgt_variants['asset_type.entity'],
-                    asset=cgt_variants['asset.entity'],
+                    role=dtb_variants['asset_type.entity'],
+                    asset=dtb_variants['asset.entity'],
                     #
-                    entity_name=cgt_variants['asset.entity'],
-                    entity_name_chs=cgt_variants.get('asset.cn_name')
+                    entity_name=dtb_variants['asset.entity'],
+                    entity_gui_name=dtb_variants.get('asset.cn_name')
                 ),
-                cgt_variants
+                dtb_variants
             )
 
     # episode
@@ -168,27 +168,27 @@ class Project(_base.AbsEntity):
 
         filters = []
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'eps'
 
-        for i_cgt_variants in t_tw.info.get(
+        for i_dtb_variants in t_tw.info.get(
             cgt_dtb, cgt_type,
             t_tw.info.get_id(cgt_dtb, cgt_type, filters),
             t_tw.info.fields(cgt_dtb, cgt_type)
         ):
-            i_cgt_variants['project.database'] = cgt_dtb
+            i_dtb_variants['project.database'] = cgt_dtb
             list_.append(
                 self._root._new_entity_fnc(
                     _episode.Episode,
                     dict(
                         root=self._variants['root'],
                         project=self._variants['project'],
-                        episode=i_cgt_variants['eps.entity'],
+                        episode=i_dtb_variants['eps.entity'],
                         #
-                        entity_name=i_cgt_variants['eps.entity'],
-                        entity_name_chs=i_cgt_variants.get('eps.cn_name')
+                        entity_name=i_dtb_variants['eps.entity'],
+                        entity_gui_name=i_dtb_variants.get('eps.cn_name')
                     ),
-                    i_cgt_variants
+                    i_dtb_variants
                 )
             )
         return list_
@@ -201,27 +201,27 @@ class Project(_base.AbsEntity):
         opt = self._root._to_resource_filter_opt_fnc(entity_cls.VariantKey)
         filters = [['eps.entity', opt, name]]
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'eps'
 
         id_list = t_tw.info.get_id(cgt_dtb, cgt_type, filters)
         if id_list:
-            cgt_variants = t_tw.info.get(
+            dtb_variants = t_tw.info.get(
                 cgt_dtb, cgt_type,
                 id_list, t_tw.info.fields(cgt_dtb, cgt_type)
             )[0]
-            cgt_variants['project.database'] = cgt_dtb
+            dtb_variants['project.database'] = cgt_dtb
             return self._root._new_entity_fnc(
                 entity_cls,
                 dict(
                     root=self._variants['root'],
                     project=self._variants['project'],
-                    episode=cgt_variants.get('eps.entity'),
+                    episode=dtb_variants.get('eps.entity'),
                     #
-                    entity_name=cgt_variants['eps.entity'],
-                    entity_name_chs=cgt_variants.get('eps.cn_name')
+                    entity_name=dtb_variants['eps.entity'],
+                    entity_gui_name=dtb_variants.get('eps.cn_name')
                 ),
-                cgt_variants
+                dtb_variants
             )
 
     # sequence
@@ -241,28 +241,28 @@ class Project(_base.AbsEntity):
                 raise RuntimeError()
             filters.append(['eps.entity', opt, vs])
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'seq'
 
-        for i_cgt_variants in t_tw.info.get(
+        for i_dtb_variants in t_tw.info.get(
             cgt_dtb, cgt_type,
             t_tw.info.get_id(cgt_dtb, cgt_type, filters),
             t_tw.info.fields(cgt_dtb, cgt_type)
         ):
-            i_cgt_variants['project.database'] = cgt_dtb
+            i_dtb_variants['project.database'] = cgt_dtb
             list_.append(
                 self._root._new_entity_fnc(
                     _sequence.Sequence,
                     dict(
                         root=self._variants['root'],
                         project=self._variants['project'],
-                        episode=i_cgt_variants['eps.entity'],
-                        sequence=i_cgt_variants['seq.entity'],
+                        episode=i_dtb_variants['eps.entity'],
+                        sequence=i_dtb_variants['seq.entity'],
                         #
-                        entity_name=i_cgt_variants['seq.entity'],
-                        entity_name_chs=i_cgt_variants.get('seq.cn_name')
+                        entity_name=i_dtb_variants['seq.entity'],
+                        entity_gui_name=i_dtb_variants.get('seq.cn_name')
                     ),
-                    i_cgt_variants
+                    i_dtb_variants
                 )
             )
         return list_
@@ -275,28 +275,28 @@ class Project(_base.AbsEntity):
         opt = self._root._to_resource_filter_opt_fnc(entity_cls.VariantKey)
         filters = [['seq.entity', opt, name]]
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'seq'
 
         id_list = t_tw.info.get_id(cgt_dtb, cgt_type, filters)
         if id_list:
-            cgt_variants = t_tw.info.get(
+            dtb_variants = t_tw.info.get(
                 cgt_dtb, cgt_type,
                 id_list, t_tw.info.fields(cgt_dtb, cgt_type)
             )[0]
-            cgt_variants['project.database'] = cgt_dtb
+            dtb_variants['project.database'] = cgt_dtb
             return self._root._new_entity_fnc(
                 entity_cls,
                 dict(
                     root=self._variants['root'],
                     project=self._variants['project'],
-                    episode=cgt_variants.get('eps.entity'),
-                    sequence=cgt_variants.get('seq.entity'),
+                    episode=dtb_variants.get('eps.entity'),
+                    sequence=dtb_variants.get('seq.entity'),
                     #
-                    entity_name=cgt_variants['seq.entity'],
-                    entity_name_chs=cgt_variants.get('seq.cn_name')
+                    entity_name=dtb_variants['seq.entity'],
+                    entity_gui_name=dtb_variants.get('seq.cn_name')
                 ),
-                cgt_variants
+                dtb_variants
             )
 
     # shot
@@ -325,15 +325,15 @@ class Project(_base.AbsEntity):
                 raise RuntimeError()
             filters.append(['seq.entity', opt, vs])
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'shot'
 
-        for i_cgt_variants in t_tw.info.get(
+        for i_dtb_variants in t_tw.info.get(
             cgt_dtb, cgt_type,
             t_tw.info.get_id(cgt_dtb, cgt_type, filters),
             t_tw.info.fields(cgt_dtb, cgt_type)
         ):
-            i_cgt_variants['project.database'] = cgt_dtb
+            i_dtb_variants['project.database'] = cgt_dtb
             list_.append(
                 self._root._new_entity_fnc(
                     _shot.Shot,
@@ -341,14 +341,14 @@ class Project(_base.AbsEntity):
                         root=self._variants['root'],
                         project=self._variants['project'],
                         # may no episode?
-                        episode=i_cgt_variants.get('eps.entity'),
-                        sequence=i_cgt_variants.get('seq.entity'),
-                        shot=i_cgt_variants['shot.entity'],
+                        episode=i_dtb_variants.get('eps.entity'),
+                        sequence=i_dtb_variants.get('seq.entity'),
+                        shot=i_dtb_variants['shot.entity'],
                         #
-                        entity_name=i_cgt_variants['shot.entity'],
-                        entity_name_chs=i_cgt_variants.get('shot.cn_name')
+                        entity_name=i_dtb_variants['shot.entity'],
+                        entity_gui_name=i_dtb_variants.get('shot.cn_name')
                     ),
-                    i_cgt_variants
+                    i_dtb_variants
                 )
             )
         return list_
@@ -361,27 +361,27 @@ class Project(_base.AbsEntity):
         opt = self._root._to_resource_filter_opt_fnc(entity_cls.VariantKey)
         filters = [['shot.entity', opt, name]]
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'shot'
 
         id_list = t_tw.info.get_id(cgt_dtb, cgt_type, filters)
         if id_list:
-            cgt_variants = t_tw.info.get(
+            dtb_variants = t_tw.info.get(
                 cgt_dtb, cgt_type,
                 id_list, t_tw.info.fields(cgt_dtb, cgt_type)
             )[0]
-            cgt_variants['project.database'] = cgt_dtb
+            dtb_variants['project.database'] = cgt_dtb
             return self._root._new_entity_fnc(
                 _shot.Shot,
                 dict(
                     root=self._variants['root'],
                     project=self._variants['project'],
-                    episode=cgt_variants.get('eps.entity'),
-                    sequence=cgt_variants.get('seq.entity'),
-                    shot=cgt_variants['shot.entity'],
+                    episode=dtb_variants.get('eps.entity'),
+                    sequence=dtb_variants.get('seq.entity'),
+                    shot=dtb_variants['shot.entity'],
                     #
-                    entity_name=cgt_variants['shot.entity'],
-                    entity_name_chs=cgt_variants.get('shot.cn_name')
+                    entity_name=dtb_variants['shot.entity'],
+                    entity_gui_name=dtb_variants.get('shot.cn_name')
                 ),
-                cgt_variants
+                dtb_variants
             )

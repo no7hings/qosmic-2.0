@@ -1,11 +1,11 @@
 # coding:utf-8
-import lxbasic.core as bsc_core
-
-import lxbasic.resource as bsc_resource
-
 import lxgui.core as gui_core
 
+import lxgui.qt.widgets.entity as gui_qt_wgt_entity
+
 import lxgui.proxy.widgets as gui_prx_widgets
+
+import lnx_parsor.swap as lnx_prs_swap
 
 
 class AbsPrxWotrixTool(gui_prx_widgets.PrxBasePanel):
@@ -19,9 +19,15 @@ class AbsPrxWotrixTool(gui_prx_widgets.PrxBasePanel):
         super(AbsPrxWotrixTool, self).__init__(window, session, *args, **kwargs)
 
     def gui_setup_fnc(self):
+        self._prs_root = lnx_prs_swap.Swap.generate_root()
+
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
 
         self.add_widget(self._page_prx_tab_tool_box)
+
+        self._account = gui_qt_wgt_entity.QtAccountWidget()
+        self.add_widget(self._account)
+        self._account._model.load_entity(self._prs_root.current_user())
 
         self.gui_setup_pages_for(
             [

@@ -61,6 +61,26 @@ types:
         applications:
             - 'standalone'
 
+    media/image:
+        type: node
+        enable: True
+        gui_name: 'Image'
+        gui_name_chs: '图片'
+        gui_item_frame_size: [222, 110]
+        applications:
+            - 'standalone'
+            - 'maya'
+
+    media/image_sequence:
+        type: node
+        enable: True
+        gui_name: 'Image Sequence'
+        gui_name_chs: '图片序列'
+        gui_item_frame_size: [222, 110]
+        applications:
+            - 'standalone'
+            - 'maya'
+
     # dcc
     dcc:
         type: group

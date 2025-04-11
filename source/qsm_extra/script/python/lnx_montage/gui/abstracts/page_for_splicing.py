@@ -11,7 +11,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.graphs as gui_prx_graphs
 
-import lnx_parsor.swap as lnx_srk_swap
+import lnx_parsor.swap as lnx_prs_swap
 
 
 class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
@@ -168,7 +168,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         self.gui_page_setup_fnc()
 
     def gui_page_setup_fnc(self):
-        self._scan_root = lnx_srk_swap.Swap.generate_root()
+        self._prs_root = lnx_prs_swap.Swap.generate_root()
 
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         self._qt_layout.addWidget(self._top_prx_tool_bar.widget)

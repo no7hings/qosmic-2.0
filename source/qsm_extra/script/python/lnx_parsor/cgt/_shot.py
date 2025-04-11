@@ -21,13 +21,13 @@ class Shot(_base.AbsEntity):
         list_ = []
 
         filters = [
-            ['shot.entity', '=', self._cgt_variants['shot.entity']],
+            ['shot.entity', '=', self._dtb_variants['shot.entity']],
         ]
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'shot'
 
-        for i_cgt_variants in t_tw.task.get(
+        for i_dtb_variants in t_tw.task.get(
             cgt_dtb, cgt_type,
             t_tw.task.get_id(cgt_dtb, cgt_type, filters),
             t_tw.task.fields(cgt_dtb, cgt_type)
@@ -41,9 +41,9 @@ class Shot(_base.AbsEntity):
                         sequence=self._variants.get('sequence'),
                         shot=self._variants['shot'],
 
-                        task=i_cgt_variants['task.entity'],
+                        task=i_dtb_variants['task.entity'],
                     ),
-                    i_cgt_variants
+                    i_dtb_variants
                 )
             )
         return list_
@@ -52,16 +52,16 @@ class Shot(_base.AbsEntity):
         t_tw = self._stage._api
 
         filters = [
-            ['shot.entity', '=', self._cgt_variants['shot.entity']],
+            ['shot.entity', '=', self._dtb_variants['shot.entity']],
             ['task.entity', '=', name]
         ]
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'shot'
 
         id_list = t_tw.task.get_id(cgt_dtb, cgt_type, filters)
         if id_list:
-            cgt_variants = t_tw.task.get(
+            dtb_variants = t_tw.task.get(
                 cgt_dtb, cgt_type,
                 id_list, t_tw.task.fields(cgt_dtb, cgt_type)
             )[0]
@@ -73,7 +73,7 @@ class Shot(_base.AbsEntity):
                     sequence=self._variants.get('sequence'),
                     shot=self._variants['shot'],
 
-                    task=cgt_variants['task.entity'],
+                    task=dtb_variants['task.entity'],
                 ),
-                cgt_variants
+                dtb_variants
             )

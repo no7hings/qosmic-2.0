@@ -5,7 +5,7 @@ import lxbasic.log as bsc_log
 
 import qsm_general.core as qsm_gnl_core
 
-import lnx_parsor.swap as lnx_srk_swap
+import lnx_parsor.swap as lnx_prs_swap
 
 import lnx_screw.core as lnx_scr_core
 
@@ -14,7 +14,7 @@ class AssetBatchRegisterOpt(object):
     def __init__(self, project_name, project_chs_name):
         self._project_name = project_name
         self._project_chs_name = project_chs_name
-        self._scan_root = lnx_srk_swap.Swap.generate_root()
+        self._prs_root = lnx_prs_swap.Swap.generate_root()
 
         self._scr_stage = lnx_scr_core.Stage('asset_test')
 
@@ -72,14 +72,14 @@ class AssetBatchRegisterOpt(object):
             )
 
     def register_character_assets(self, project_name):
-        project = self._scan_root.project(project_name)
+        project = self._prs_root.project(project_name)
         assets = project.assets(role=qsm_gnl_core.QsmAsset.get_character_role_mask())
         with bsc_log.LogProcessContext.create(maximum=len(assets)) as l_p:
             for i_asset in assets:
-                i_task = i_asset.task(self._scan_root.EntityTasks.Rig)
+                i_task = i_asset.task(self._prs_root.EntityTasks.Rig)
                 if i_task is not None:
                     i_maya_scene_path = i_task.find_result(
-                        self._scan_root.FilePatterns.MayaRigFile
+                        self._prs_root.FilePatterns.MayaRigFile
                     )
                     if i_maya_scene_path is not None:
                         i_asset_path = i_asset.path
@@ -89,14 +89,14 @@ class AssetBatchRegisterOpt(object):
                 l_p.do_update()
 
     def register_prop_assets(self, project_name):
-        project = self._scan_root.project(project_name)
+        project = self._prs_root.project(project_name)
         assets = project.assets(role=qsm_gnl_core.QsmAsset.get_prop_role_mask())
         with bsc_log.LogProcessContext.create(maximum=len(assets)) as l_p:
             for i_asset in assets:
-                i_task = i_asset.task(self._scan_root.EntityTasks.Rig)
+                i_task = i_asset.task(self._prs_root.EntityTasks.Rig)
                 if i_task is not None:
                     i_maya_scene_path = i_task.find_result(
-                        self._scan_root.FilePatterns.MayaRigFile
+                        self._prs_root.FilePatterns.MayaRigFile
                     )
                     if i_maya_scene_path is not None:
                         i_asset_path = i_asset.path
@@ -106,14 +106,14 @@ class AssetBatchRegisterOpt(object):
                 l_p.do_update()
 
     def register_scenery_assets(self, project_name):
-        project = self._scan_root.project(project_name)
+        project = self._prs_root.project(project_name)
         assets = project.assets(role=qsm_gnl_core.QsmAsset.get_scenery_role_mask())
         with bsc_log.LogProcessContext.create(maximum=len(assets)) as l_p:
             for i_asset in assets:
-                i_task = i_asset.task(self._scan_root.EntityTasks.Model)
+                i_task = i_asset.task(self._prs_root.EntityTasks.Model)
                 if i_task is not None:
                     i_maya_scene_path = i_task.find_result(
-                        self._scan_root.FilePatterns.MayaModelFIle
+                        self._prs_root.FilePatterns.MayaModelFIle
                     )
                     if i_maya_scene_path is not None:
                         i_asset_path = i_asset.path

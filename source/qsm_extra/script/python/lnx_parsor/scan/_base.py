@@ -107,7 +107,7 @@ class AbsEntity(_cor_base.AbsEntityBase):
         self._tasks_cache_opt = _
         return _
 
-    def __init__(self, root, path, variants):
+    def __init__(self, root, path, variants, dtb_variants=None):
         self._root = root
         self._stage = self._root._stage
         self._root_entity_stack = root.entity_stack
@@ -121,6 +121,8 @@ class AbsEntity(_cor_base.AbsEntityBase):
         self._entity_type = self.Type
         self._variants['entity_type'] = self._entity_type
         self._variants['entity_path'] = self._entity_path
+
+        self._dtb_variants = dtb_variants or {}
 
         self._next_entities_generator_dict = dict()
         self._tasks_cache_opt = None
@@ -257,7 +259,7 @@ class AbsEntitiesGenerator(object):
 
         if self.EntityClass._variant_validation_fnc(variants) is True:
             variants['entity_name'] = variants[self.EntityClass.VariantKey]
-            variants['entity_name_chs'] = None
+            variants['entity_gui_name'] = None
 
             entity = self.EntityClass(self._root, path, variants)
             self._root_entity_stack.register(path, entity)

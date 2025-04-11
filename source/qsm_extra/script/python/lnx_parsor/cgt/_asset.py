@@ -21,13 +21,13 @@ class Asset(_base.AbsEntity):
         list_ = []
 
         filters = [
-            ['asset.entity', '=', self._cgt_variants['asset.entity']],
+            ['asset.entity', '=', self._dtb_variants['asset.entity']],
         ]
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'asset'
 
-        for i_cgt_variants in t_tw.task.get(
+        for i_dtb_variants in t_tw.task.get(
             cgt_dtb, cgt_type,
             t_tw.task.get_id(cgt_dtb, cgt_type, filters),
             t_tw.task.fields(cgt_dtb, cgt_type)
@@ -39,9 +39,9 @@ class Asset(_base.AbsEntity):
                         project=self._variants['project'],
                         role=self._variants['role'],
                         asset=self._variants['asset'],
-                        task=i_cgt_variants['task.entity'],
+                        task=i_dtb_variants['task.entity'],
                     ),
-                    i_cgt_variants
+                    i_dtb_variants
                 )
             )
         return list_
@@ -50,16 +50,16 @@ class Asset(_base.AbsEntity):
         t_tw = self._stage._api
 
         filters = [
-            ['asset.entity', '=', self._cgt_variants['asset.entity']],
+            ['asset.entity', '=', self._dtb_variants['asset.entity']],
             ['task.entity', '=', name]
         ]
 
-        cgt_dtb = self._cgt_variants['project.database']
+        cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'asset'
 
         id_list = t_tw.task.get_id(cgt_dtb, cgt_type, filters)
         if id_list:
-            cgt_variants = t_tw.task.get(
+            dtb_variants = t_tw.task.get(
                 cgt_dtb, cgt_type,
                 id_list, t_tw.task.fields(cgt_dtb, cgt_type)
             )[0]
@@ -69,7 +69,7 @@ class Asset(_base.AbsEntity):
                     project=self._variants['project'],
                     role=self._variants['role'],
                     asset=self._variants['asset'],
-                    task=cgt_variants['task.entity'],
+                    task=dtb_variants['task.entity'],
                 ),
-                cgt_variants
+                dtb_variants
             )

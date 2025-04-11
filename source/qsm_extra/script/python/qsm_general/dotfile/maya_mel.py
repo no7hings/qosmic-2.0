@@ -46,11 +46,11 @@ class MayaMelPreset(abc_.AbsDotfile):
             for i_file_path in file_paths:
                 i_key = bsc_storage.StgFileOpt(i_file_path).name_base
                 i_name = bsc_core.BscCamelcaseStr.to_prettify(i_key)
-                i_name_chs = bsc_translate.GoogleTranslate.eng_to_chs(i_name)
+                i_gui_name = bsc_translate.GoogleTranslate.eng_to_chs(i_name)
 
                 i_data = dict(
                     name=i_name,
-                    name_chs=i_name_chs,
+                    name_chs=i_gui_name,
                     properties=cls(i_file_path).to_dict()
                 )
 

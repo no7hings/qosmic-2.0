@@ -13,7 +13,7 @@ import lxgui.proxy.abstracts as gui_prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_parsor.swap as lnx_srk_swap
+import lnx_parsor.swap as lnx_prs_swap
 
 import qsm_general.core as qsm_gnl_core
 
@@ -46,7 +46,7 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
             self._qt_reload_button._set_name_text_('重载')
             self._qt_reload_button._set_tool_tip_(
                 (
-                    '点击重缓存中重载实体。\n'
+                    '点击从缓存中重载实体。\n'
                     '右键/点击小三角：\n'
                     '   从系统中重载：重新生成实体缓存。'
                 )
@@ -64,7 +64,7 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
         self._qt_entity_input = gui_qt_widgets.QtInputForEntity()
         self._qt_layout_0.addWidget(self._qt_entity_input)
 
-        self._scan_root = lnx_srk_swap.Swap.generate_root()
+        self._prs_root = lnx_prs_swap.Swap.generate_root()
 
         self._qt_entity_input._set_next_buffer_fnc_(self._next_buffer_fnc)
 
@@ -99,33 +99,33 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
 
     def _cache_projects(self):
         name_texts = []
-        subname_dict = {}
+        gui_name_dict = {}
         keyword_filter_dict = collections.OrderedDict()
         tag_filter_dict = collections.OrderedDict()
-        for i_entity in self._scan_root.projects(cache_flag=self._scan_cache_flag):
+        for i_entity in self._prs_root.projects(cache_flag=self._scan_cache_flag):
             i_name = i_entity.name
             name_texts.append(i_entity.name)
 
-            i_name_chs = i_entity.variants.get('entity_name_chs')
-            subname_dict[i_name] = i_name_chs
-            keyword_filter_dict[i_name] = filter(None, [i_name, i_name_chs])
+            i_gui_name = i_entity.variants.get('entity_gui_name')
+            gui_name_dict[i_name] = i_gui_name
+            keyword_filter_dict[i_name] = filter(None, [i_name, i_gui_name])
             tag_filter_dict[i_name] = ['All']
 
         return dict(
             type_text='project',
             name_texts=name_texts,
-            subname_dict=subname_dict,
+            gui_name_dict=gui_name_dict,
             tag_filter_dict=tag_filter_dict,
             keyword_filter_dict=keyword_filter_dict
         )
 
     def _cache_roles(self, path_opt):
         name_texts = []
-        subname_dict = {}
+        gui_name_dict = {}
         keyword_filter_dict = collections.OrderedDict()
         tag_filter_dict = collections.OrderedDict()
 
-        project = self._scan_root.get_entity(path_opt.to_string())
+        project = self._prs_root.get_entity(path_opt.to_string())
         if project is not None:
             if qsm_gnl_core.scheme_is_release():
                 role_mask = self.ROLE_MASK_NEW
@@ -140,40 +140,40 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
             for i_entity in roles:
                 i_name = i_entity.name
                 name_texts.append(i_entity.name)
-                i_name_chs = i_entity.variants.get('entity_name_chs')
-                subname_dict[i_name] = i_name_chs
-                keyword_filter_dict[i_name] = filter(None, [i_name, i_name_chs])
+                i_gui_name = i_entity.variants.get('entity_gui_name')
+                gui_name_dict[i_name] = i_gui_name
+                keyword_filter_dict[i_name] = filter(None, [i_name, i_gui_name])
                 tag_filter_dict[i_name] = ['All']
 
         return dict(
             type_text='role',
             name_texts=name_texts,
-            subname_dict=subname_dict,
+            gui_name_dict=gui_name_dict,
             tag_filter_dict=tag_filter_dict,
             keyword_filter_dict=keyword_filter_dict
         )
 
     def _cache_assets(self, path_opt):
         name_texts = []
-        subname_dict = {}
+        gui_name_dict = {}
         keyword_filter_dict = collections.OrderedDict()
         tag_filter_dict = collections.OrderedDict()
 
-        role = self._scan_root.get_entity(path_opt.to_string())
+        role = self._prs_root.get_entity(path_opt.to_string())
         if role is not None:
             assets = role.assets(cache_flag=self._scan_cache_flag)
             for i_entity in assets:
                 i_name = i_entity.name
                 name_texts.append(i_entity.name)
-                i_name_chs = i_entity.variants.get('entity_name_chs')
-                subname_dict[i_name] = i_name_chs
-                keyword_filter_dict[i_name] = filter(None, [i_name, i_name_chs])
+                i_gui_name = i_entity.variants.get('entity_gui_name')
+                gui_name_dict[i_name] = i_gui_name
+                keyword_filter_dict[i_name] = filter(None, [i_name, i_gui_name])
                 tag_filter_dict[i_name] = ['All']
 
         return dict(
             type_text='asset',
             name_texts=name_texts,
-            subname_dict=subname_dict,
+            gui_name_dict=gui_name_dict,
             tag_filter_dict=tag_filter_dict,
             keyword_filter_dict=keyword_filter_dict
         )
@@ -189,11 +189,11 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
     def _on_resync_entities(self):
         def post_fnc_():
             self._scan_cache_flag = True
-            lnx_srk_swap.Swap.set_sync_cache_flag(True)
+            lnx_prs_swap.Swap.set_sync_cache_flag(True)
 
         def fnc_():
             self._scan_cache_flag = False
-            lnx_srk_swap.Swap.set_sync_cache_flag(False)
+            lnx_prs_swap.Swap.set_sync_cache_flag(False)
             self._qt_entity_input._update_next_data_for_(path_text, post_fnc_)
 
         path_text = self._qt_entity_input._get_value_()
@@ -269,7 +269,7 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
         return button
 
     def get_entity(self, path):
-        return self._scan_root.get_entity(path)
+        return self._prs_root.get_entity(path)
 
     def get_path(self):
         return self._qt_entity_input._get_value_()

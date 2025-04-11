@@ -13,7 +13,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.qt.widgets as qt_widgets
 
-import lnx_parsor.swap as lnx_srk_swap
+import lnx_parsor.swap as lnx_prs_swap
 
 import lnx_dcc_tool_prc.validation.scripts as lzy_vld_scripts
 
@@ -33,10 +33,10 @@ class AbsPrxPageForChrRig(gui_prx_widgets.PrxBasePage):
         entity = self._asset_prx_input.get_entity(path)
         if entity is not None:
             if entity.type == 'Asset':
-                task = entity.task(self._scan_root.EntityTasks.Rig)
+                task = entity.task(self._prs_root.EntityTasks.Rig)
                 if task is not None:
                     result = task.find_result(
-                        self._scan_root.FilePatterns.MayaRigFile
+                        self._prs_root.FilePatterns.MayaRigFile
                     )
                     if result is not None:
                         self._asset_path = result
@@ -125,7 +125,7 @@ class AbsPrxPageForChrRig(gui_prx_widgets.PrxBasePage):
         super(AbsPrxPageForChrRig, self).__init__(window, session, *args, **kwargs)
 
         self._asset_path = None
-        self._scan_root = lnx_srk_swap.Swap.generate_root()
+        self._prs_root = lnx_prs_swap.Swap.generate_root()
 
         self._validation_opt = lzy_vld_scripts.RigValidationOpt()
 

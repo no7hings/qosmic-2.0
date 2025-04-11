@@ -65,7 +65,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -190,8 +191,8 @@
   },
   "active": "8fd5fa39e02a27e3",
   "lastOpenFiles": [
-    "开发相关/开发进度/开发-2025.md",
     "开发相关/开发进度/优化-2025.md",
+    "开发相关/开发进度/开发-2025.md",
     "开发相关/开发进度/优化-2024.md",
     "技术文档/Qosmic.md",
     "技术文档/总览.canvas",

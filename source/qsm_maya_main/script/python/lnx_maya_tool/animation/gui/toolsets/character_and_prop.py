@@ -15,7 +15,7 @@ import lxgui.proxy.scripts as gui_prx_scripts
 
 import qsm_general.core as qsm_gnl_core
 
-import lnx_parsor.swap as lnx_srk_swap
+import lnx_parsor.swap as lnx_prs_swap
 
 import qsm_maya.core as qsm_mya_core
 
@@ -51,7 +51,7 @@ class PrxToolbarForCharacterAndPropReference(
 ):
     def __init__(self, window, unit, session, prx_input_for_asset):
         super(PrxToolbarForCharacterAndPropReference, self).__init__(window, unit, session)
-        self._scan_root = lnx_srk_swap.Swap.generate_root()
+        self._prs_root = lnx_prs_swap.Swap.generate_root()
 
         self._asset_prx_input = prx_input_for_asset
 
@@ -132,10 +132,10 @@ class PrxToolbarForCharacterAndPropReference(
         entity = self._asset_prx_input.get_entity(path)
         if entity is not None:
             if entity.type == 'Asset':
-                task = entity.task(self._scan_root.EntityTasks.Rig)
+                task = entity.task(self._prs_root.EntityTasks.Rig)
                 if task is not None:
                     result = task.find_result(
-                        self._scan_root.FilePatterns.MayaRigFile
+                        self._prs_root.FilePatterns.MayaRigFile
                     )
                     if result is not None:
                         self._asset_path = result

@@ -13,8 +13,8 @@ class User(_base.AbsEntity):
 
     @property
     def group_name(self):
-        return self._cgt_variants.get('account.group')
+        return self._dtb_variants.get('account.group')
 
     @property
     def department_name(self):
-        return self._cgt_variants.get('account.department')
+        return self._dtb_variants.get('account.department')

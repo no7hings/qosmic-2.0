@@ -78,23 +78,22 @@ class QtItemDrawBase:
 
     @classmethod
     def _draw_icon_by_text(cls, painter, rect, text):
+        w, h = rect.width(), rect.height()
         if text:
             text = bsc_core.ensure_unicode(text)
             txt_draw = text[0].capitalize()
+            txt_r = min(w, h)*.75
+            r, g, b = bsc_core.BscTextOpt(text or '').to_hash_rgb(s_p=(35, 50), v_p=(65, 85))
         else:
             txt_draw = 'N/a'
-
-        w, h = rect.width(), rect.height()
-
-        txt_r = min(w, h)*.75
-
-        r, g, b = bsc_core.BscTextOpt(text or '').to_hash_rgb(s_p=(35, 50), v_p=(65, 85))
+            txt_r = min(w, h)*.5
+            r, g, b = 71, 71, 71
 
         background_rgba, text_rgba = _base.QtColor.generate_color_args_by_rgb(r, g, b)
 
         cls._draw_frame(
             painter, rect,
-            border_color=QtGui.QColor(47, 47, 47),
+            border_color=QtGui.QColor(95, 95, 95),
             background_color=QtGui.QColor(*background_rgba)
         )
         painter.setPen(QtGui.QColor(*text_rgba))

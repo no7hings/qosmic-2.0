@@ -18,7 +18,7 @@ class HoudiniStartupCreate(object):
             i_parent_path = i_path_opt.get_parent_path()
             i_type = v['type']
             i_name = v.get('name') or k
-            i_name_chs = v.get('name_chs')
+            i_gui_name = v.get('name_chs')
             if i_type == 'menu':
                 if i_parent_path is None:
                     i_menu = self._menu_bar.create_menu(i_name)

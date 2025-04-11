@@ -4,12 +4,12 @@ import functools
 import lxbasic.core as bsc_core
 
 import lxbasic.pinyin as bsc_pinyin
+
+from .... import core as _gui_core
 # qt
 from ....qt.core.wrap import *
 
 from ....qt import core as _qt_core
-
-from .... import core as _gui_core
 
 from ...view_models.list import item as _vew_mdl_lst_item
 
@@ -189,7 +189,7 @@ class _QtEntityChooseWidget(QtWidgets.QWidget):
         self._tag_view.item_select_changed.connect(self._on_any_filer)
 
         self._name_texts = []
-        self._subname_dict = {}
+        self._gui_name_dict = {}
         self._tag_filter_dict = {}
         self._keyword_filter_dict = {}
 
@@ -258,7 +258,7 @@ class _QtEntityChooseWidget(QtWidgets.QWidget):
 
     def _set_data(self, data):
         self._name_texts = data.get('name_texts') or []
-        self._subname_dict = data.get('subname_dict') or {}
+        self._gui_name_dict = data.get('gui_name_dict') or {}
         self._tag_filter_dict = data.get('tag_filter_dict') or {}
         self._keyword_filter_dict = data.get('keyword_filter_dict') or {}
 
@@ -302,25 +302,26 @@ class _QtEntityChooseWidget(QtWidgets.QWidget):
     def _cache_fnc(self, names, gui_thread_flag):
         args_list = []
         for i_name in names:
-            i_subname = self._subname_dict.get(i_name)
+            i_gui_name = self._gui_name_dict.get(i_name)
             i_tag_filter_keys = self._tag_filter_dict.get(i_name)
             i_keyword_filter_keys = self._keyword_filter_dict.get(i_name)
-            args_list.append((i_name, i_subname, i_tag_filter_keys, i_keyword_filter_keys))
+            args_list.append((i_name, i_gui_name, i_tag_filter_keys, i_keyword_filter_keys))
         return [args_list, gui_thread_flag]
 
     def _build_fnc(self, data):
         if data:
             args_list, gui_thread_flag = data
             for i_args in args_list:
-                i_name, i_subname, i_tag_filter_keys, i_keyword_filter_keys = i_args
+                i_name, i_gui_name, i_tag_filter_keys, i_keyword_filter_keys = i_args
                 i_path = u'/{}'.format(i_name)
                 i_flag, i_item = self._view_model.create_item(i_path)
                 i_item_model = i_item._item_model
 
-                i_item_model.set_icon_text(i_name)
-                i_item_model.set_subname(i_subname)
+                i_item_model.set_subname(i_gui_name)
                 i_item_model.register_tag_filter_keys(i_tag_filter_keys)
                 i_item_model.register_keyword_filter_keys(i_keyword_filter_keys)
+
+                i_item_model.set_icon_text(i_gui_name or i_name)
 
                 i_item_model.set_tool_tip(i_path)
 
@@ -610,7 +611,7 @@ class QtEntityCompletionWidget(QtWidgets.QWidget):
         self._name_texts = data.get('name_texts') or []
         self._keyword = keyword
 
-        self._subname_dict = data.get('subname_dict') or {}
+        self._gui_name_dict = data.get('gui_name_dict') or {}
         self._keyword_filter_dict = data.get('keyword_filter_dict') or {}
 
         if self._name_texts and self._keyword:
@@ -639,9 +640,14 @@ class QtEntityCompletionWidget(QtWidgets.QWidget):
                 i_flag, i_item = self._view_model.create_item(i_path)
 
                 i_item_model = i_item._item_model
-                i_item_model.set_icon_text(i_name)
-                if i_name in self._subname_dict:
-                    i_item_model.set_subname(self._subname_dict[i_name])
+                
+                if i_name in self._gui_name_dict:
+                    i_gui_name = self._gui_name_dict[i_name]
+                    i_item_model.set_subname(i_gui_name)
+                else:
+                    i_gui_name = None
+
+                i_item_model.set_icon_text(i_gui_name or i_name)
 
             self._view_model.scroll_to_item_top_auto()
             return True

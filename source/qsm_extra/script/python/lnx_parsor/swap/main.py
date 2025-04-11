@@ -9,8 +9,13 @@ from ..core import base as _cor_base
 
 
 class Swap(object):
+    STAGE_CACHE = None
+
     @classmethod
     def generate_root(cls, location='X:'):
+        if cls.STAGE_CACHE:
+            return cls.STAGE_CACHE.root(location)
+
         cgt_exe_paths = bsc_core.BscProcess.find_process_path_by_name(
             'CgTeamWork.exe'
         )
@@ -22,11 +27,15 @@ class Swap(object):
 
             # import here
             from .. import cgt as _cgt
-            return _cgt.Stage().root(location)
+            stage = _cgt.Stage()
+            cls.STAGE_CACHE = stage
+            return stage.root(location)
 
         # import here
         from .. import scan as _scan
-        return _scan.Stage().root(location)
+        stage = _scan.Stage()
+        cls.STAGE_CACHE = stage
+        return stage.root(location)
 
     @staticmethod
     def set_sync_cache_flag(boolean):

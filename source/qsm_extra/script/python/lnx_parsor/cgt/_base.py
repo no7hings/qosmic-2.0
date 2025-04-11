@@ -15,7 +15,7 @@ class AbsEntity(_cor_base.AbsEntityBase):
     def _variant_validation_fnc(cls, variants):
         return True
 
-    def __init__(self, root, path, variants, cgt_variants=None):
+    def __init__(self, root, path, variants, dtb_variants=None):
         self._root = root
         self._stage = root._stage
 
@@ -30,7 +30,7 @@ class AbsEntity(_cor_base.AbsEntityBase):
         self._variants['entity_type'] = self._entity_type
         self._variants['entity_path'] = self._entity_path
 
-        self._cgt_variants = cgt_variants or {}
+        self._dtb_variants = dtb_variants or {}
 
         self._task_dict = {}
 
@@ -71,15 +71,15 @@ class AbsEntity(_cor_base.AbsEntityBase):
         return self._variants
 
     @property
-    def cgt_variants(self):
-        return self._cgt_variants
+    def dtb_variants(self):
+        return self._dtb_variants
 
-    def _new_task_fnc(self, variants, cgt_variants):
+    def _new_task_fnc(self, variants, dtb_variants):
         variants = _cor_base.EntityVariantKeyFnc.clean_fnc(variants)
 
         path = self.to_task_path(self.Type, variants)
         return self.TaskCls(
-            self, path, variants, cgt_variants=cgt_variants
+            self, path, variants, dtb_variants=dtb_variants
         )
 
     def tasks(self, **kwargs):
@@ -93,4 +93,4 @@ class AbsTask(_cor_base.AbsTaskBase):
 
     def __init__(self, *args, **kwargs):
         super(AbsTask, self).__init__(*args, **kwargs)
-        self._cgt_variants = kwargs.get('cgt_variants', {})
+        self._dtb_variants = kwargs.get('dtb_variants', {})

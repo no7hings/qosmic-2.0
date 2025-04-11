@@ -11,7 +11,7 @@ import lxgui.qt.widgets.entity.choose_and_completion as m
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_parsor.swap as lnx_srk_swap
+import lnx_parsor.swap as lnx_prs_swap
 
 
 class W(gui_prx_widgets.PrxBaseWindow):
@@ -24,10 +24,10 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self._d = m.QtEntityCompletionWidget()
         self.add_widget(self._d)
 
-        root = lnx_srk_swap.Swap.generate_root()
+        root = lnx_prs_swap.Swap.generate_root()
 
         name_texts = []
-        subname_dict = {}
+        gui_name_dict = {}
         tag_filter_dict = {}
         keyword_filter_dict = {}
 
@@ -35,18 +35,18 @@ class W(gui_prx_widgets.PrxBaseWindow):
         for seq, i in enumerate(project.assets()):
             i_name = i.name
             name_texts.append(i_name)
-            i_name_chs = i.variants.get('entity_name_chs')
+            i_gui_name = i.variants.get('entity_gui_name')
             if seq%2:
-                i_name_chs = '测试'
-            # i_name_chs = bsc_translate.GoogleTranslate.eng_to_chs(i_name)
-            subname_dict[i_name] = i_name_chs
+                i_gui_name = '测试'
+            # i_gui_name = bsc_translate.GoogleTranslate.eng_to_chs(i_name)
+            gui_name_dict[i_name] = i_gui_name
             tag_filter_dict[i_name] = ['All', i.variants['role']]
-            keyword_filter_dict[i_name] = [i_name, i_name_chs]
+            keyword_filter_dict[i_name] = [i_name, i_gui_name]
 
         self._data = dict(
             type_text='asset',
             name_texts=name_texts,
-            subname_dict=subname_dict,
+            gui_name_dict=gui_name_dict,
             tag_filter_dict=tag_filter_dict,
             keyword_filter_dict=keyword_filter_dict
         )

@@ -17,7 +17,7 @@ class Sequence(_base.AbsEntity):
         return self._root.project(
             self._variants['project']
         ).shots(
-            episode=self._cgt_variants['eps.entity'],
-            sequence=self._cgt_variants['seq.entity'],
+            episode=self._dtb_variants['eps.entity'],
+            sequence=self._dtb_variants['seq.entity'],
             **kwargs
         )

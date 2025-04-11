@@ -32,3 +32,6 @@ class QtTreeItem(QtWidgets.QTreeWidgetItem):
 
     def __repr__(self):
         return '\n'+self.__str__()
+
+    def __hash__(self):
+        return hash(self._item_model.get_path())

@@ -39,7 +39,7 @@ class Root(_base.AbsEntity):
             return 'start'
         return '='
 
-    def _new_entity_fnc(self, entity_cls, variants, cgt_variants):
+    def _new_entity_fnc(self, entity_cls, variants, dtb_variants):
         variants = _cor_base.EntityVariantKeyFnc.clean_fnc(variants)
 
         path = self.to_entity_path(entity_cls.Type, variants)
@@ -47,14 +47,16 @@ class Root(_base.AbsEntity):
             return self._root_entity_stack.get(path)
 
         entity = entity_cls(
-            self._root, path, variants, cgt_variants
+            self._root, path, variants, dtb_variants
         )
         self._root_entity_stack.register(path, entity)
         return entity
 
     def current_user(self):
         t_tw = self._stage._api
-        return self.user(name=t_tw.login.account())
+        return self.user(
+            name=t_tw.login.account()
+        )
 
     def users(self, **kwargs):
         t_tw = self._stage._api
@@ -65,7 +67,7 @@ class Root(_base.AbsEntity):
         if 'active' in kwargs:
             filters.append(['account.status', '=', 'Y'])
 
-        for i_cgt_variants in t_tw.account.get(
+        for i_dtb_variants in t_tw.account.get(
             t_tw.account.get_id(filters),
             t_tw.account.fields()
         ):
@@ -73,14 +75,14 @@ class Root(_base.AbsEntity):
                 self._root._new_entity_fnc(
                     _account.User,
                     dict(
-                        cgt_user=i_cgt_variants['account.entity'],
+                        cgt_user=i_dtb_variants['account.entity'],
                         # todo: add field to save login
-                        user=i_cgt_variants['account.login'],
+                        user=i_dtb_variants.get('account.login'),
                         #
-                        entity_name=i_cgt_variants['account.entity'],
-                        entity_name_chs=i_cgt_variants['account.name'],
+                        entity_name=i_dtb_variants['account.entity'],
+                        entity_gui_name=i_dtb_variants['account.name'],
                     ),
-                    i_cgt_variants
+                    i_dtb_variants
                 )
             )
         return list_
@@ -93,18 +95,18 @@ class Root(_base.AbsEntity):
             filters
         )
         if id_list:
-            cgt_variants = t_tw.account.get(id_list, t_tw.account.fields())[0]
+            dtb_variants = t_tw.account.get(id_list, t_tw.account.fields())[0]
             return self._root._new_entity_fnc(
                 _account.User,
                 dict(
-                    cgt_user=name,
+                    user=name,
                     # todo: add field to save login
-                    user=cgt_variants['account.login'],
+                    login=dtb_variants.get('account.login'),
                     #
-                    entity_name=cgt_variants['account.entity'],
-                    entity_name_chs=cgt_variants['account.name'],
+                    entity_name=dtb_variants['account.entity'],
+                    entity_gui_name=dtb_variants['account.name'],
                 ),
-                cgt_variants
+                dtb_variants
             )
 
     def projects(self, **kwargs):
@@ -116,7 +118,7 @@ class Root(_base.AbsEntity):
         if 'active' in kwargs:
             filters.append(['project.status', '=', 'Active'])
 
-        for i_cgt_variants in t_tw.project.get(
+        for i_dtb_variants in t_tw.project.get(
             t_tw.project.get_id(filters),
             t_tw.project.fields()
         ):
@@ -125,12 +127,12 @@ class Root(_base.AbsEntity):
                     _project.Project,
                     dict(
                         root=self._variants['root'],
-                        project=i_cgt_variants['project.entity'],
+                        project=i_dtb_variants['project.entity'],
                         #
-                        entity_name=i_cgt_variants['project.entity'],
-                        entity_name_chs=i_cgt_variants.get('project.full_name')
+                        entity_name=i_dtb_variants['project.entity'],
+                        entity_gui_name=i_dtb_variants.get('project.full_name')
                     ),
-                    i_cgt_variants
+                    i_dtb_variants
                 )
             )
         return list_
@@ -145,15 +147,15 @@ class Root(_base.AbsEntity):
         filters = [['project.entity', opt, name]]
         id_list = t_tw.project.get_id(filters)
         if id_list:
-            cgt_variants = t_tw.project.get(id_list, t_tw.project.fields())[0]
+            dtb_variants = t_tw.project.get(id_list, t_tw.project.fields())[0]
             return self._root._new_entity_fnc(
                 entity_cls,
                 dict(
                     root=self._variants['root'],
                     project=name,
                     #
-                    entity_name=cgt_variants['project.entity'],
-                    entity_name_chs=cgt_variants.get('project.full_name')
+                    entity_name=dtb_variants['project.entity'],
+                    entity_gui_name=dtb_variants.get('project.full_name')
                 ),
-                cgt_variants
+                dtb_variants
             )

@@ -5,7 +5,7 @@ import lxbasic.core as bsc_core
 
 import lxgui.qt.widgets as qt_widgets
 
-import lxgui.qt.widgets.entity.choose_and_completion as m
+import lxgui.qt.widgets.entity.account as m
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
@@ -17,36 +17,12 @@ class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        self._d = m.QtEntityChooseStack()
+        self._d = m.QtAccountWidget()
         self.add_widget(self._d)
-
+        
         root = lnx_prs_swap.Swap.generate_root()
 
-        name_texts = []
-        gui_name_dict = {}
-        tag_filter_dict = {}
-        keyword_filter_dict = {}
-
-        project = root.project('QSM_TST')
-        for i in project.assets():
-            i_name = i.name
-            name_texts.append(i_name)
-            i_gui_name = i.variants.get('entity_gui_name')
-            i_gui_name = '测试'
-            gui_name_dict[i_name] = i_gui_name
-            tag_filter_dict[i_name] = ['All', i.variants['role']]
-            keyword_filter_dict[i_name] = [i_name, i_gui_name]
-
-        data = dict(
-            type_text='asset',
-            name_texts=name_texts,
-            gui_name_dict=gui_name_dict,
-            tag_filter_dict=tag_filter_dict,
-            keyword_filter_dict=keyword_filter_dict
-        )
-
-        self._d._load_data(data)
-        self._d._resize_current()
+        self._d._model.load_entity(root.current_user())
 
 
 def test():

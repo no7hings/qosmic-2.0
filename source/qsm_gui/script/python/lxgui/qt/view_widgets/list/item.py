@@ -15,6 +15,15 @@ class QtListItem(QtWidgets.QListWidgetItem):
 
         self._item_model = self.MODEL_CLS(self)
 
+    def __str__(self):
+        return '{}(path={})'.format(
+            self.__class__.__name__,
+            self._item_model.get_path()
+        )
+
+    def __repr__(self):
+        return '\n'+self.__str__()
+
     def __hash__(self):
         return hash(self._item_model.get_path())
 
