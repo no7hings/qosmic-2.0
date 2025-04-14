@@ -1,4 +1,6 @@
 # coding:utf-8
+import urllib
+
 import collections
 
 import lxbasic.core as bsc_core
@@ -23,6 +25,9 @@ class W(gui_prx_widgets.PrxBaseWindow):
         root = lnx_prs_swap.Swap.generate_root()
 
         self._d._model.load_entity(root.current_user())
+        self._d._model.set_icon_data(
+            urllib.urlopen('https://icons.veryicon.com/png/System/Simply%20Styled/Autodesk%20Maya.png').read()
+        )
 
 
 def test():

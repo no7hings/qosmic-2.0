@@ -215,6 +215,9 @@ class AbsItemModel(object):
 
             text_flag=False,
             text=None,
+            
+            image_flag=False,
+            image=None,
 
             pixmap_flag=False,
             pixmap=None,
@@ -538,6 +541,19 @@ class AbsItemModel(object):
             self._data.icon_enable = True
             self._data.icon.text_flag = True
             self._data.icon.text = text
+            
+    def set_icon_data(self, data):
+        if data:
+            # noinspection PyBroadException
+            try:
+                image = QtGui.QImage()
+                image.loadFromData(data)
+                if image.isNull() is False:
+                    self._data.icon_enable = True
+                    self._data.icon.image_flag = True
+                    self._data.icon.image = image
+            except Exception:
+                pass
 
     # assign
     def set_assign_path_set(self, path_set):
@@ -842,7 +858,7 @@ class AbsItemModel(object):
         if file_path.endswith('.svg'):
             cls._draw_svg(painter, rect, file_path)
         else:
-            cls._draw_image(painter, rect, file_path)
+            cls._draw_image_file(painter, rect, file_path)
 
     @classmethod
     def _draw_icon_by_pixmap(cls, painter, rect, pixmap):
@@ -857,7 +873,7 @@ class AbsItemModel(object):
         svg_render.render(painter, QtCore.QRectF(rect))
 
     @classmethod
-    def _draw_image(cls, painter, rect, file_path):
+    def _draw_image_file(cls, painter, rect, file_path):
         pixmap = QtGui.QPixmap()
         pixmap.load(file_path)
         if pixmap.isNull() is False:

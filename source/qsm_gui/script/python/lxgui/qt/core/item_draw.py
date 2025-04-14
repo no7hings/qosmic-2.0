@@ -49,7 +49,7 @@ class QtItemDrawBase:
         svg_render.render(painter, QtCore.QRectF(rect))
 
     @classmethod
-    def _draw_image(cls, painter, rect, file_path):
+    def _draw_image_file(cls, painter, rect, file_path):
         pixmap = QtGui.QPixmap()
         pixmap.load(file_path)
         if pixmap.isNull() is False:
@@ -74,7 +74,17 @@ class QtItemDrawBase:
         if file_path.endswith('.svg'):
             cls._draw_svg(painter, rect, file_path)
         else:
-            cls._draw_image(painter, rect, file_path)
+            cls._draw_image_file(painter, rect, file_path)
+    
+    @classmethod
+    def _draw_image(cls, painter, rect, image):
+        pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
+        pxm_scaled = pixmap.scaled(
+            rect.size(),
+            QtCore.Qt.IgnoreAspectRatio,
+            QtCore.Qt.SmoothTransformation
+        )
+        painter.drawPixmap(rect, pxm_scaled)
 
     @classmethod
     def _draw_icon_by_text(cls, painter, rect, text):

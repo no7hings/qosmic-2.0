@@ -1,16 +1,8 @@
 # coding:utf-8
-import six
-
 import urllib
 
-if six.PY2:
-    # python 2
-    # noinspection PyCompatibility
-    from urlparse import parse_qs, unquote
-else:
-    # python 3
-    # noinspection PyUnresolvedReferences,PyCompatibility
-    from urllib.parse import parse_qs, unquote
+# noinspection PyUnresolvedReferences
+from six.moves.urllib.parse import parse_qs, unquote
 
 import socket
 

@@ -190,6 +190,7 @@ class _QtEntityChooseWidget(QtWidgets.QWidget):
 
         self._name_texts = []
         self._gui_name_dict = {}
+        self._image_url_dict = {}
         self._tag_filter_dict = {}
         self._keyword_filter_dict = {}
 
@@ -259,6 +260,7 @@ class _QtEntityChooseWidget(QtWidgets.QWidget):
     def _set_data(self, data):
         self._name_texts = data.get('name_texts') or []
         self._gui_name_dict = data.get('gui_name_dict') or {}
+        self._image_url_dict = data.get('image_url_dict') or {}
         self._tag_filter_dict = data.get('tag_filter_dict') or {}
         self._keyword_filter_dict = data.get('keyword_filter_dict') or {}
 
@@ -540,6 +542,12 @@ class QtEntityCompletionWidget(QtWidgets.QWidget):
 
         self._input_pos = 0, 0
 
+        self._name_texts = []
+        self._keyword = None
+        self._gui_name_dict = {}
+        self._image_url_dict = {}
+        self._keyword_filter_dict = {}
+
         self._timer = QtCore.QTimer(self)
         self._timer.setInterval(50)
         self._timer.timeout.connect(self._auto_cancel)
@@ -611,8 +619,8 @@ class QtEntityCompletionWidget(QtWidgets.QWidget):
 
         self._name_texts = data.get('name_texts') or []
         self._keyword = keyword
-
         self._gui_name_dict = data.get('gui_name_dict') or {}
+        self._image_url_dict = data.get('image_url_dict') or {}
         self._keyword_filter_dict = data.get('keyword_filter_dict') or {}
 
         if self._name_texts and self._keyword:

@@ -421,6 +421,12 @@ class ListItemModel(_item_base.AbsItemModel):
                     painter, self._data.icon.rect, self._data.icon.text
                 )
 
+            # image
+            elif self._data.icon.image_flag is True:
+                _qt_core.QtItemDrawBase._draw_image(
+                    painter, self._data.icon.rect, self._data.icon.image
+                )
+
     def draw_lock(self, painter, option, index):
         if self._data.lock_enable is True:
             if self._data.lock.flag is True:

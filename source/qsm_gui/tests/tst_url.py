@@ -1,8 +1,10 @@
 # coding:utf-8
 from __future__ import print_function
+
 import urllib
 
-import urlparse
+# noinspection PyUnresolvedReferences
+from six.moves.urllib.parse import parse_qs, unquote
 
 d = dict(
     title='通知',
@@ -15,4 +17,4 @@ d = dict(
 d_ = urllib.urlencode(d)
 print(d_)
 
-print urlparse.parse_qs(d_)
+print(parse_qs(d_))

@@ -26,6 +26,9 @@ class Stage(object):
         if CGT_FLAG is True:
             # noinspection PyUnresolvedReferences
             self._api = cgtw2.tw()
+            # noinspection PyUnresolvedReferences
+            self._address = cgtw2.G_tw_http_ip
+            self._host = self._address.split(':')[0]
         else:
             raise RuntimeError()
 
@@ -35,6 +38,18 @@ class Stage(object):
 
         sys.stdout.write('resolve entity from {}.\n'.format(self.SWAP_FLAG))
         return self
+
+    @property
+    def address(self):
+        return self._address
+
+    @property
+    def host(self):
+        return self._host
+
+    @property
+    def api(self):
+        return self._api
 
     def root(self, location='X:'):
         if location in self._root_dict:

@@ -25,6 +25,18 @@ class Stage(object):
         sys.stdout.write('resolve entity from {}.\n'.format(self.SWAP_FLAG))
         return self
 
+    @property
+    def address(self):
+        return None
+
+    @property
+    def host(self):
+        return None
+
+    @property
+    def api(self):
+        return None
+
     def root(self, location='X:'):
         if location in self._root_dict:
             return self._root_dict[location]

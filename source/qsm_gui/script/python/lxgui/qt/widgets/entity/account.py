@@ -13,10 +13,15 @@ class QtAccountWidget(QtWidgets.QWidget):
 
             self._data = _gui_core.DictOpt(
                 flag=False,
-                image=_gui_core.DictOpt(
+                icon=_gui_core.DictOpt(
                     rect=QtCore.QRect(),
                     border_color=QtGui.QColor(95, 95, 95),
-                    file=None
+
+                    file_flag=False,
+                    file=None,
+
+                    image_flag=False,
+                    image=None,
                 ),
                 name=_gui_core.DictOpt(
                     rect=QtCore.QRect(),
@@ -44,15 +49,28 @@ class QtAccountWidget(QtWidgets.QWidget):
                 self._data.name.text = entity.properties.entity_gui_name
                 self._data.department.text = entity.department_name
 
+        def set_icon_data(self, data):
+            print(data)
+            if data:
+                # noinspection PyBroadException
+                try:
+                    image = QtGui.QImage()
+                    image.loadFromData(data)
+                    if image.isNull() is False:
+                        self._data.icon.image_flag = True
+                        self._data.icon.image = image
+                except Exception:
+                    pass
+
         def update(self):
             x, y, w, h = 1, 1, self._wgt.width()-2, self._wgt.height()-2
             self._wgt.update()
 
             spc = 2
 
-            # image
+            # icon
             img_w, img_h = h, h
-            self._data.image.rect.setRect(
+            self._data.icon.rect.setRect(
                 x, y, img_w, img_h
             )
 
@@ -79,13 +97,16 @@ class QtAccountWidget(QtWidgets.QWidget):
         def draw(self, painter):
             painter.save()
 
-            # image
-            if self._data.image.file:
+            # icon
+            if self._data.icon.file_flag:
+                pass
+            elif self._data.icon.image_flag:
+                print('ABC')
                 pass
             else:
                 _qt_core.QtItemDrawBase._draw_icon_by_text(
                     painter,
-                    self._data.image.rect,
+                    self._data.icon.rect,
                     self._data.name.text
                 )
 
