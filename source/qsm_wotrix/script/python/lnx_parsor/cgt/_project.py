@@ -15,13 +15,79 @@ from . import _sequence
 
 from . import _shot
 
+from . import _step
+
+from . import _task
+
 
 class Project(_base.AbsEntity):
     Type = _cor_base.EntityTypes.Project
     VariantKey = _cor_base.EntityVariantKeys.Project
 
+    StepCls = _step.Step
+    TaskCls = _task.Task
+
     def __init__(self, *args, **kwargs):
         super(Project, self).__init__(*args, **kwargs)
+
+    # base
+    def steps(self, **kwargs):
+        t_tw = self._stage._api
+
+        list_ = []
+
+        filters = []
+        if 'resource_type' in kwargs:
+            filters.append(['module', '=', self.ResourceTypeMapReverse[kwargs['resource_type']]])
+
+        cgt_dtb = self._dtb_variants['project.database']
+        cgt_type = self.CgtEntityTypes.Step
+
+        for i_dtb_variants in t_tw.pipeline.get(
+            cgt_dtb, cgt_type,
+            t_tw.pipeline.get_id(cgt_dtb, cgt_type, filters),
+            t_tw.pipeline.fields(cgt_dtb, cgt_type)
+        ):
+            list_.append(
+                self._new_step_fnc(
+                    dict(
+                        root=self._variants['root'],
+                        project=self._variants['project'],
+                        #
+                        resource_type=self.ResourceTypeMap[i_dtb_variants['module']],
+                        #
+                        step=i_dtb_variants['entity'],
+                    ),
+                    i_dtb_variants
+                )
+            )
+
+    def step(self, name, **kwargs):
+        t_tw = self._stage._api
+
+        filters = [['asset_type.entity', '=', name]]
+
+        cgt_dtb = self._dtb_variants['project.database']
+        cgt_type = self.CgtEntityTypes.Role
+
+        id_list = t_tw.pipeline.get_id(cgt_dtb, cgt_type, filters)
+        if id_list:
+            dtb_variants = t_tw.pipeline.get(
+                cgt_dtb, cgt_type,
+                id_list, t_tw.pipeline.fields(cgt_dtb, cgt_type)
+            )[0]
+            dtb_variants['project.database'] = cgt_dtb
+            return self._new_step_fnc(
+                dict(
+                    root=self._variants['root'],
+                    project=self._variants['project'],
+                    #
+                    resource_type=self.ResourceTypeMap[dtb_variants['module']],
+                    #
+                    step=dtb_variants['entity'],
+                ),
+                dtb_variants
+            )
 
     # role
     def roles(self, **kwargs):
@@ -32,7 +98,7 @@ class Project(_base.AbsEntity):
         filters = []
 
         cgt_dtb = self._dtb_variants['project.database']
-        cgt_type = 'asset_type'
+        cgt_type = self.CgtEntityTypes.Role
 
         for i_dtb_variants in t_tw.info.get(
             cgt_dtb, cgt_type,
@@ -62,7 +128,7 @@ class Project(_base.AbsEntity):
         filters = [['asset_type.entity', '=', name]]
 
         cgt_dtb = self._dtb_variants['project.database']
-        cgt_type = 'asset_type'
+        cgt_type = self.CgtEntityTypes.Role
 
         id_list = t_tw.info.get_id(cgt_dtb, cgt_type, filters)
         if id_list:
@@ -106,7 +172,7 @@ class Project(_base.AbsEntity):
             filters.append(['asset_type.entity', opt, vs])
 
         cgt_dtb = self._dtb_variants['project.database']
-        cgt_type = 'asset'
+        cgt_type = self.CgtEntityTypes.Asset
 
         for i_dtb_variants in t_tw.info.get(
             cgt_dtb, cgt_type,
@@ -120,8 +186,11 @@ class Project(_base.AbsEntity):
                     dict(
                         root=self._variants['root'],
                         project=self._variants['project'],
+                        #
                         role=i_dtb_variants['asset_type.entity'],
                         asset=i_dtb_variants['asset.entity'],
+                        #
+                        resource_type=self.ResourceTypeMap[cgt_type],
                         #
                         entity_name=i_dtb_variants['asset.entity'],
                         entity_gui_name=i_dtb_variants.get('asset.cn_name')
@@ -137,7 +206,7 @@ class Project(_base.AbsEntity):
         filters = [['asset.entity', '=', name]]
 
         cgt_dtb = self._dtb_variants['project.database']
-        cgt_type = 'asset'
+        cgt_type = self.CgtEntityTypes.Asset
 
         id_list = t_tw.info.get_id(cgt_dtb, cgt_type, filters)
         if id_list:
@@ -151,8 +220,11 @@ class Project(_base.AbsEntity):
                 dict(
                     root=self._variants['root'],
                     project=self._variants['project'],
+                    #
                     role=dtb_variants['asset_type.entity'],
                     asset=dtb_variants['asset.entity'],
+                    #
+                    resource_type=self.ResourceTypeMap[cgt_type],
                     #
                     entity_name=dtb_variants['asset.entity'],
                     entity_gui_name=dtb_variants.get('asset.cn_name')
@@ -169,7 +241,7 @@ class Project(_base.AbsEntity):
         filters = []
 
         cgt_dtb = self._dtb_variants['project.database']
-        cgt_type = 'eps'
+        cgt_type = self.CgtEntityTypes.Episode
 
         for i_dtb_variants in t_tw.info.get(
             cgt_dtb, cgt_type,
@@ -202,7 +274,7 @@ class Project(_base.AbsEntity):
         filters = [['eps.entity', opt, name]]
 
         cgt_dtb = self._dtb_variants['project.database']
-        cgt_type = 'eps'
+        cgt_type = self.CgtEntityTypes.Episode
 
         id_list = t_tw.info.get_id(cgt_dtb, cgt_type, filters)
         if id_list:
@@ -242,7 +314,7 @@ class Project(_base.AbsEntity):
             filters.append(['eps.entity', opt, vs])
 
         cgt_dtb = self._dtb_variants['project.database']
-        cgt_type = 'seq'
+        cgt_type = self.CgtEntityTypes.Sequence
 
         for i_dtb_variants in t_tw.info.get(
             cgt_dtb, cgt_type,
@@ -256,8 +328,11 @@ class Project(_base.AbsEntity):
                     dict(
                         root=self._variants['root'],
                         project=self._variants['project'],
+                        #
                         episode=i_dtb_variants['eps.entity'],
                         sequence=i_dtb_variants['seq.entity'],
+                        #
+                        resource_type=self.ResourceTypeMap[cgt_type],
                         #
                         entity_name=i_dtb_variants['seq.entity'],
                         entity_gui_name=i_dtb_variants.get('seq.cn_name')
@@ -276,7 +351,7 @@ class Project(_base.AbsEntity):
         filters = [['seq.entity', opt, name]]
 
         cgt_dtb = self._dtb_variants['project.database']
-        cgt_type = 'seq'
+        cgt_type = self.CgtEntityTypes.Sequence
 
         id_list = t_tw.info.get_id(cgt_dtb, cgt_type, filters)
         if id_list:
@@ -290,8 +365,11 @@ class Project(_base.AbsEntity):
                 dict(
                     root=self._variants['root'],
                     project=self._variants['project'],
+                    #
                     episode=dtb_variants.get('eps.entity'),
                     sequence=dtb_variants.get('seq.entity'),
+                    #
+                    resource_type=self.ResourceTypeMap[cgt_type],
                     #
                     entity_name=dtb_variants['seq.entity'],
                     entity_gui_name=dtb_variants.get('seq.cn_name')
@@ -326,7 +404,7 @@ class Project(_base.AbsEntity):
             filters.append(['seq.entity', opt, vs])
 
         cgt_dtb = self._dtb_variants['project.database']
-        cgt_type = 'shot'
+        cgt_type = self.CgtEntityTypes.Shot
 
         for i_dtb_variants in t_tw.info.get(
             cgt_dtb, cgt_type,
@@ -345,6 +423,8 @@ class Project(_base.AbsEntity):
                         sequence=i_dtb_variants.get('seq.entity'),
                         shot=i_dtb_variants['shot.entity'],
                         #
+                        resource_type=self.ResourceTypeMap[cgt_type],
+                        #
                         entity_name=i_dtb_variants['shot.entity'],
                         entity_gui_name=i_dtb_variants.get('shot.cn_name')
                     ),
@@ -362,7 +442,7 @@ class Project(_base.AbsEntity):
         filters = [['shot.entity', opt, name]]
 
         cgt_dtb = self._dtb_variants['project.database']
-        cgt_type = 'shot'
+        cgt_type = self.CgtEntityTypes.Shot
 
         id_list = t_tw.info.get_id(cgt_dtb, cgt_type, filters)
         if id_list:
@@ -376,12 +456,109 @@ class Project(_base.AbsEntity):
                 dict(
                     root=self._variants['root'],
                     project=self._variants['project'],
+                    #
                     episode=dtb_variants.get('eps.entity'),
                     sequence=dtb_variants.get('seq.entity'),
                     shot=dtb_variants['shot.entity'],
+                    #
+                    resource_type=self.ResourceTypeMap[cgt_type],
                     #
                     entity_name=dtb_variants['shot.entity'],
                     entity_gui_name=dtb_variants.get('shot.cn_name')
                 ),
                 dtb_variants
             )
+
+    # task
+    def all_asset_tasks(self, **kwargs):
+        t_tw = self._stage._api
+
+        list_ = []
+
+        filters = [
+            ['project.entity', '=', self._dtb_variants['project.entity']],
+        ]
+        if 'user' in kwargs:
+            filters.append(
+                ['task.account', '=', kwargs['user']]
+            )
+
+        cgt_dtb = self._dtb_variants['project.database']
+        cgt_type = self.CgtEntityTypes.Asset
+
+        for i_dtb_variants in t_tw.task.get(
+            cgt_dtb, cgt_type,
+            t_tw.task.get_id(cgt_dtb, cgt_type, filters),
+            t_tw.task.fields(cgt_dtb, cgt_type)
+        ):
+            i_entity_variants = dict(
+                root=self._variants['root'],
+                project=self._variants['project'],
+                #
+                role=i_dtb_variants['asset_type.entity'],
+                asset=i_dtb_variants['asset.entity'],
+                #
+                resource_type=self.ResourceTypeMap[cgt_type],
+            )
+            i_entity_path = self.to_entity_path(self.EntityTypes.Asset, i_entity_variants)
+            i_variants = dict(i_entity_variants)
+            i_variants.update(
+                dict(
+                    entity_path=i_entity_path,
+                    task=i_dtb_variants['task.entity'],
+                )
+            )
+            list_.append(
+                self._new_task_fnc(
+                    i_variants,
+                    i_dtb_variants
+                )
+            )
+        return list_
+
+    def all_shot_tasks(self, **kwargs):
+        t_tw = self._stage._api
+
+        list_ = []
+
+        filters = [
+            ['project.entity', '=', self._dtb_variants['project.entity']],
+        ]
+        if 'user' in kwargs:
+            filters.append(
+                ['task.account', '=', kwargs['user']]
+            )
+
+        cgt_dtb = self._dtb_variants['project.database']
+        cgt_type = self.CgtEntityTypes.Shot
+
+        for i_dtb_variants in t_tw.task.get(
+            cgt_dtb, cgt_type,
+            t_tw.task.get_id(cgt_dtb, cgt_type, filters),
+            t_tw.task.fields(cgt_dtb, cgt_type)
+        ):
+            i_entity_variants = dict(
+                root=self._variants['root'],
+                project=self._variants['project'],
+                #
+                episode=i_dtb_variants.get('eps.entity'),
+                sequence=i_dtb_variants.get('seq.entity'),
+                shot=i_dtb_variants['shot.entity'],
+                #
+                resource_type=self.ResourceTypeMap[cgt_type],
+            )
+            i_entity_path = self.to_entity_path(self.EntityTypes.Shot, i_entity_variants)
+            i_variants = dict(i_entity_variants)
+            i_variants.update(
+                dict(
+                    entity_path=i_entity_path,
+                    task=i_dtb_variants['task.entity'],
+                )
+            )
+            list_.append(
+                self._new_task_fnc(
+                    i_variants,
+                    i_dtb_variants
+                )
+            )
+        return list_

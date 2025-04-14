@@ -26,3 +26,9 @@ class User(_base.AbsEntity):
     @property
     def department_name(self):
         return self._dtb_variants.get('account.department')
+
+    def all_project_tasks(self, **kwargs):
+        return []
+
+    def all_asset_tasks(self, **kwargs):
+        return []

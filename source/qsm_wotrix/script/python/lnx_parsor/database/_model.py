@@ -29,24 +29,6 @@ class _Entity(_Prim):
     status = CharField(default='default')
 
 
-class BaseStep(_Prim):
-    gui_name = CharField(default='')
-    gui_name_chs = CharField(default='')
-
-
-class BaseTask(_Prim):
-    gui_name = CharField(default='')
-    gui_name_chs = CharField(default='')
-
-    step = ForeignKeyField(BaseStep, backref='bs')
-
-
-# role
-class Role(_Prim):
-    gui_name = CharField(default='')
-    gui_name_chs = CharField(default='')
-
-
 class User(_Prim):
     gui_name = CharField(default='')
     gui_name_chs = CharField(default='')
@@ -55,6 +37,29 @@ class User(_Prim):
 # project
 class Project(_Entity):
     category = CharField(default='')
+
+
+class ResourceType(_Prim):
+    gui_name = CharField(default='')
+    gui_name_chs = CharField(default='')
+
+    project = ForeignKeyField(Project, backref='bs')
+
+
+class Step(_Prim):
+    gui_name = CharField(default='')
+    gui_name_chs = CharField(default='')
+
+    project = ForeignKeyField(Project, backref='bs')
+    resource_type = ForeignKeyField(ResourceType, backref='bs')
+
+
+# role
+class Role(_Prim):
+    gui_name = CharField(default='')
+    gui_name_chs = CharField(default='')
+
+    project = ForeignKeyField(Project, backref='bs')
 
 
 # asset
@@ -82,13 +87,15 @@ class Shot(_Entity):
 
 
 # task
-class Task(BaseTask):
+class Task(_Entity):
     resource_type = CharField(default='')
 
     asset = ForeignKeyField(Asset, backref='bs')
     episode = ForeignKeyField(Episode, backref='bs')
     sequence = ForeignKeyField(Sequence, backref='bs')
     shot = ForeignKeyField(Shot, backref='bs')
+
+    step = ForeignKeyField(Step, backref='bs')
 
 
 # version

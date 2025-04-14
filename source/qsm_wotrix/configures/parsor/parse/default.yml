@@ -80,11 +80,14 @@ entities:
         Shot: 'disorder'
 
     variant_key:
+        User: 'user'
         Project: 'project'
+        ResourceType: 'resource_type'
         Asset: 'asset'
         Episode: 'episode'
         Sequence: 'sequence'
         Shot: 'shot'
+        Step: 'step'
         Task: 'task'
         Version: 'version'
 
@@ -545,7 +548,7 @@ workspace:
     tasks:
         # resource type
         project:
-            # step
+            # step key
             general:
                 - general
             light:
@@ -564,6 +567,9 @@ workspace:
                 - cfx_rig
             surface:
                 - surface
+        episode:
+            general:
+                - general
         sequence:
             general:
                 - general

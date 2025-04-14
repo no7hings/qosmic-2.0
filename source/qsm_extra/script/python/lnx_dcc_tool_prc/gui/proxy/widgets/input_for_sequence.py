@@ -122,8 +122,7 @@ class PrxInputForSequence(prx_abstracts.AbsPrxWidget):
 
         project = self._prs_root.get_entity(path_opt.to_string())
         if project is not None:
-            sequences = project.sequences(cache_flag=self._scan_cache_flag)
-            for i_entity in sequences:
+            for i_entity in project.sequences(cache_flag=self._scan_cache_flag):
                 i_name = i_entity.name
                 name_texts.append(i_entity.name)
                 i_gui_name = i_entity.variants.get('entity_gui_name')

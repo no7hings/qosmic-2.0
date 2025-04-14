@@ -48,7 +48,7 @@ class Episode(_base.AbsEntity):
 
 
 class EpisodesGenerator(_base.AbsEntitiesGenerator):
-    EntityClass = Episode
+    EntityCls = Episode
 
     def __init__(self, *args, **kwargs):
         super(EpisodesGenerator, self).__init__(*args, **kwargs)

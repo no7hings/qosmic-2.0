@@ -17,9 +17,10 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
 
     RESOURCE_TYPES = []
 
-    SCAN_RESOURCE_INPUT_CLS_DICT = dict(
+    SWAP_RESOURCE_INPUT_CLS_DICT = dict(
         project=lzy_gui_prx_widgets.PrxInputForProject,
         asset=lzy_gui_prx_widgets.PrxInputForAsset,
+        episode=lzy_gui_prx_widgets.PrxInputForEpisode,
         sequence=lzy_gui_prx_widgets.PrxInputForSequence,
         shot=lzy_gui_prx_widgets.PrxInputForShot
     )
@@ -149,7 +150,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
             return resource_prx_input
 
         # create new
-        resource_prx_input = self.SCAN_RESOURCE_INPUT_CLS_DICT[resource_type](
+        resource_prx_input = self.SWAP_RESOURCE_INPUT_CLS_DICT[resource_type](
             history_key=self._resource_history_key.format(resource_type=resource_type)
         )
         unit = self._tab_widget_dict[resource_type]

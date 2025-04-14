@@ -15,6 +15,8 @@ from . import _shot
 
 from . import _task
 
+from . import _step
+
 
 class Project(_base.AbsEntity):
     Type = _cor_base.EntityTypes.Project
@@ -36,6 +38,13 @@ class Project(_base.AbsEntity):
 
     def __init__(self, *args, **kwargs):
         super(Project, self).__init__(*args, **kwargs)
+
+    # step
+    def steps(self, **kwargs):
+        pass
+
+    def step(self, name, **kwargs):
+        pass
 
     # role
     @_base.EntityFactory.find_all(_cor_base.EntityTypes.Role)
@@ -84,7 +93,7 @@ class Project(_base.AbsEntity):
 
 
 class ProjectsGenerator(_base.AbsEntitiesGenerator):
-    EntityClass = Project
+    EntityCls = Project
 
     def __init__(self, *args, **kwargs):
         super(ProjectsGenerator, self).__init__(*args, **kwargs)

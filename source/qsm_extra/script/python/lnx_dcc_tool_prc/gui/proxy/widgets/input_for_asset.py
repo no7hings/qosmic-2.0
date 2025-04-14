@@ -133,11 +133,11 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
                 role_mask = self.ROLE_MASK
 
             if role_mask:
-                roles = filter(None, [project.role(x, cache_flag=self._scan_cache_flag) for x in role_mask])
+                entities = filter(None, [project.role(x, cache_flag=self._scan_cache_flag) for x in role_mask])
             else:
-                roles = project.roles(cache_flag=self._scan_cache_flag)
+                entities = project.roles(cache_flag=self._scan_cache_flag)
 
-            for i_entity in roles:
+            for i_entity in entities:
                 i_name = i_entity.name
                 name_texts.append(i_entity.name)
                 i_gui_name = i_entity.variants.get('entity_gui_name')
@@ -161,8 +161,7 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
 
         role = self._prs_root.get_entity(path_opt.to_string())
         if role is not None:
-            assets = role.assets(cache_flag=self._scan_cache_flag)
-            for i_entity in assets:
+            for i_entity in role.assets(cache_flag=self._scan_cache_flag):
                 i_name = i_entity.name
                 name_texts.append(i_entity.name)
                 i_gui_name = i_entity.variants.get('entity_gui_name')

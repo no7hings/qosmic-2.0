@@ -71,7 +71,7 @@ class TaskParse(object):
 
         self._parse_configure = self._parse_stage.configure
 
-        self._dcc_configure = bsc_resource.BscExtendConfigure.get_as_content('shark/dcc/default')
+        self._dcc_configure = bsc_resource.BscExtendConfigure.get_as_content('parsor/dcc/default')
         self._dcc_configure.do_flatten()
 
         self._properties = bsc_content.DictProperties(self._parse_stage.variants)

@@ -1,7 +1,7 @@
 # coding:utf-8
-from ... import core as _lzy_wsp_core
+from .... import core as _lzy_wsp_core
 
-from ..abstracts import unit_for_task_manager as _abs_unit_for_task_manager
+from ...abstracts import unit_for_task_manager as _abs_unit_for_task_manager
 
 
 class PrxUnitForAssetTaskManager(_abs_unit_for_task_manager.AbsPrxUnitForTaskManager):

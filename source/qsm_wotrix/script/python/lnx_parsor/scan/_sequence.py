@@ -41,7 +41,7 @@ class Sequence(_base.AbsEntity):
 
 
 class SequencesGenerator(_base.AbsEntitiesGenerator):
-    EntityClass = Sequence
+    EntityCls = Sequence
 
     def __init__(self, *args, **kwargs):
         super(SequencesGenerator, self).__init__(*args, **kwargs)

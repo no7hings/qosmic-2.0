@@ -35,6 +35,8 @@ class Shot(_base.AbsEntity):
             list_.append(
                 self._new_task_fnc(
                     dict(
+                        entity_path=self._variants['entity_path'],
+                        #
                         root=self._variants['root'],
                         project=self._variants['project'],
                         episode=self._variants.get('episode'),
@@ -67,6 +69,8 @@ class Shot(_base.AbsEntity):
             )[0]
             return self._new_task_fnc(
                 dict(
+                    entity_path=self._variants['entity_path'],
+                    #
                     root=self._variants['root'],
                     project=self._variants['project'],
                     episode=self._variants.get('episode'),

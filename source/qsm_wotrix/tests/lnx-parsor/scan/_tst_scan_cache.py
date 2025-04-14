@@ -12,8 +12,8 @@ print(root.EntityVariantKeys.Asset)
 project = root.project('QSM_TST')
 
 for i in project.assets():
-    print(i)
-    # print(i.task('Rig'))
+    # print(i)
+    print(i.task('Rig'))
 
 # for i in project.episodes():
 #     print(i)

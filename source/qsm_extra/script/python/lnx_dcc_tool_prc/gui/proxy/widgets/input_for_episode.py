@@ -14,10 +14,10 @@ import lxgui.proxy.abstracts as prx_abstracts
 import lnx_parsor.swap as lnx_prs_swap
 
 
-class PrxInputForShot(prx_abstracts.AbsPrxWidget):
+class PrxInputForEpisode(prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
-    HISTORY_KEY = 'gui.input-entity-path-shot'
+    HISTORY_KEY = 'gui.input-entity-path-episode'
 
     def __init__(self, *args, **kwargs):
         if 'history_key' in kwargs:
@@ -25,7 +25,7 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
         else:
             history_key = None
 
-        super(PrxInputForShot, self).__init__(*args, **kwargs)
+        super(PrxInputForEpisode, self).__init__(*args, **kwargs)
 
         self._scan_cache_flag = True
 
@@ -63,7 +63,6 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
             self._next_buffer_fnc
         )
 
-        # self._qt_entity_input._set_root_text_('Shot:')
         self._qt_entity_input._set_value_('/')
 
         self._qt_entity_input._setup_()
@@ -114,7 +113,7 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
             keyword_filter_dict=keyword_filter_dict
         )
 
-    def _cache_sequences(self, path_opt):
+    def _cache_episodes(self, path_opt):
         name_texts = []
         gui_name_dict = {}
         keyword_filter_dict = collections.OrderedDict()
@@ -122,7 +121,7 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
 
         project = self._prs_root.get_entity(path_opt.to_string())
         if project is not None:
-            for i_entity in project.sequences(cache_flag=self._scan_cache_flag):
+            for i_entity in project.episodes(cache_flag=self._scan_cache_flag):
                 i_name = i_entity.name
                 name_texts.append(i_entity.name)
                 i_gui_name = i_entity.variants.get('entity_gui_name')
@@ -133,29 +132,6 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
         return dict(
             type_text='sequence',
             gui_name_dict=gui_name_dict,
-            name_texts=name_texts,
-            tag_filter_dict=tag_filter_dict,
-            keyword_filter_dict=keyword_filter_dict
-        )
-
-    def _cache_shots(self, path_opt):
-        name_texts = []
-        gui_name_dict = {}
-        keyword_filter_dict = collections.OrderedDict()
-        tag_filter_dict = collections.OrderedDict()
-
-        sequence = self._prs_root.get_entity(path_opt.to_string())
-        if sequence is not None:
-            for i_entity in sequence.shots(cache_flag=self._scan_cache_flag):
-                i_name = i_entity.name
-                name_texts.append(i_entity.name)
-                i_gui_name = i_entity.variants.get('entity_gui_name')
-                gui_name_dict[i_name] = i_gui_name
-                keyword_filter_dict[i_name] = filter(None, [i_name, i_gui_name])
-                tag_filter_dict[i_name] = ['All', i_entity.properties.sequence]
-
-        return dict(
-            type_text='shot',
             name_texts=name_texts,
             tag_filter_dict=tag_filter_dict,
             keyword_filter_dict=keyword_filter_dict
@@ -174,11 +150,8 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
             project_data = self._cache_projects()
             return project_data
         elif d == 2:
-            sequence_data = self._cache_sequences(path_opt)
+            sequence_data = self._cache_episodes(path_opt)
             return sequence_data
-        elif d == 3:
-            shot_data = self._cache_shots(path_opt)
-            return shot_data
         return dict()
 
     def connect_input_change_accepted_to(self, fnc):
@@ -195,9 +168,7 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
             if i_d == 1:
                 self._cache_projects()
             elif i_d == 2:
-                self._cache_sequences(i)
-            elif i_d == 3:
-                self._cache_shots(i)
+                self._cache_episodes(i)
 
     def _on_reload_entities(self):
         def post_fnc_():

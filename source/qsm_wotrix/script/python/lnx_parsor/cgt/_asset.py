@@ -23,6 +23,10 @@ class Asset(_base.AbsEntity):
         filters = [
             ['asset.entity', '=', self._dtb_variants['asset.entity']],
         ]
+        if 'user' in kwargs:
+            filters.append(
+                ['task.account', '=', kwargs['user']]
+            )
 
         cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'asset'
@@ -35,6 +39,8 @@ class Asset(_base.AbsEntity):
             list_.append(
                 self._new_task_fnc(
                     dict(
+                        entity_path=self._variants['entity_path'],
+                        #
                         root=self._variants['root'],
                         project=self._variants['project'],
                         role=self._variants['role'],
@@ -65,6 +71,8 @@ class Asset(_base.AbsEntity):
             )[0]
             return self._new_task_fnc(
                 dict(
+                    entity_path=self._variants['entity_path'],
+                    #
                     root=self._variants['root'],
                     project=self._variants['project'],
                     role=self._variants['role'],

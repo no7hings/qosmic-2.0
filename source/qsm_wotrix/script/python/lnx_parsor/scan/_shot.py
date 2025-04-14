@@ -31,7 +31,7 @@ class Shot(_base.AbsEntity):
 
 
 class ShotsGenerator(_base.AbsEntitiesGenerator):
-    EntityClass = Shot
+    EntityCls = Shot
 
     def __init__(self, *args, **kwargs):
         super(ShotsGenerator, self).__init__(*args, **kwargs)

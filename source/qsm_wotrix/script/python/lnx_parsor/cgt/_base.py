@@ -9,7 +9,28 @@ from ..core import base as _cor_base
 class AbsEntity(_cor_base.AbsEntityBase):
     Type = None
 
+    StepCls = None
     TaskCls = None
+    
+    class CgtEntityTypes:
+        Project = 'project'
+        Role = 'asset_type'
+        Asset = 'asset'
+        Episode = 'eps'
+        Sequence = 'seq'
+        Shot = 'Shot'
+
+        Step = 'pipeline'
+
+    ResourceTypeMap = {
+        CgtEntityTypes.Project: _cor_base.ResourceTypes.Project,
+        CgtEntityTypes.Asset: _cor_base.ResourceTypes.Asset,
+        CgtEntityTypes.Sequence: _cor_base.ResourceTypes.Sequence,
+        CgtEntityTypes.Shot: _cor_base.ResourceTypes.Shot,
+    }
+    ResourceTypeMapReverse = {
+        v: k for k, v in ResourceTypeMap.items()
+    }
 
     @classmethod
     def _variant_validation_fnc(cls, variants):
@@ -74,6 +95,14 @@ class AbsEntity(_cor_base.AbsEntityBase):
     def dtb_variants(self):
         return self._dtb_variants
 
+    def _new_step_fnc(self, variants, dtb_variants):
+        variants = _cor_base.EntityVariantKeyFnc.clean_fnc(variants)
+
+        path = self.to_step_path(self.Type, variants)
+        return self.StepCls(
+            self, path, variants, dtb_variants=dtb_variants
+        )
+
     def _new_task_fnc(self, variants, dtb_variants):
         variants = _cor_base.EntityVariantKeyFnc.clean_fnc(variants)
 
@@ -89,8 +118,26 @@ class AbsEntity(_cor_base.AbsEntityBase):
         raise NotImplementedError()
 
 
+class AbsStep(_cor_base.AbsStepBase):
+    def __init__(self, *args, **kwargs):
+        super(AbsStep, self).__init__(*args, **kwargs)
+        self._dtb_variants = kwargs.get('dtb_variants', {})
+
+    @property
+    def dtb_variants(self):
+        return self._dtb_variants
+
+
 class AbsTask(_cor_base.AbsTaskBase):
 
     def __init__(self, *args, **kwargs):
         super(AbsTask, self).__init__(*args, **kwargs)
         self._dtb_variants = kwargs.get('dtb_variants', {})
+
+    @property
+    def dtb_variants(self):
+        return self._dtb_variants
+
+    @property
+    def step_name(self):
+        return self._dtb_variants.get('pipeline.entity')

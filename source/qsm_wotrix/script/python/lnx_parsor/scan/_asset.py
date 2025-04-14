@@ -21,7 +21,7 @@ class Asset(_base.AbsEntity):
 
 
 class AssetsGenerator(_base.AbsEntitiesGenerator):
-    EntityClass = Asset
+    EntityCls = Asset
 
     def __init__(self, *args, **kwargs):
         super(AssetsGenerator, self).__init__(*args, **kwargs)

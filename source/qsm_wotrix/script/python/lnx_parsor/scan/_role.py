@@ -36,7 +36,7 @@ class Role(_base.AbsEntity):
 
 
 class RolesGenerator(_base.AbsEntitiesGenerator):
-    EntityClass = Role
+    EntityCls = Role
 
     def __init__(self, *args, **kwargs):
         super(RolesGenerator, self).__init__(*args, **kwargs)

@@ -107,8 +107,7 @@ class Database(_abc_.AbsBase):
             return self._to_entity(entity_type, _.first().__data__)
 
     def connect(self):
-        self.BaseStep = _base.generate_entity_type_models(_model.BaseStep, self._dtb)
-        self.BaseTask = _base.generate_entity_type_models(_model.BaseTask, self._dtb)
+        self.Step = _base.generate_entity_type_models(_model.Step, self._dtb)
 
         self.Project = _base.generate_entity_type_models(_model.Project, self._dtb)
         self.Role = _base.generate_entity_type_models(_model.Role, self._dtb)
@@ -120,8 +119,7 @@ class Database(_abc_.AbsBase):
         self.Version = _base.generate_entity_type_models(_model.Version, self._dtb)
         
         self.All = [
-            self.BaseStep,
-            self.BaseTask,
+            self.Step,
 
             self.Project,
             self.Role,

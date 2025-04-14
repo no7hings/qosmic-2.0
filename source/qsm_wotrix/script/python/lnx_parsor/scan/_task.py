@@ -13,7 +13,7 @@ class Task(_base.AbsTask):
 
 
 class TasksGenerator(_base.AbsTasksGenerator):
-    EntityClass = Task
+    TaskCls = Task
 
     def __init__(self, *args, **kwargs):
         super(TasksGenerator, self).__init__(*args, **kwargs)

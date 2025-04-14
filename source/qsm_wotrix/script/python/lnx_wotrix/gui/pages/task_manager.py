@@ -5,13 +5,15 @@ from ... import core as _lzy_wsp_core
 
 from ..abstracts import page_for_task_manager as _abs_page_for_task_manager
 
-from ..units import project_task_manager as _unit_project_task_manager
+from ..units.task_manager import project as _unit_project
 
-from ..units import asset_task_manager as _unit_asset_task_manager
+from ..units.task_manager import asset as _unit_asset
 
-from ..units import sequence_task_manager as _unit_sequence_task_manager
+from ..units.task_manager import episode as _unit_episode
 
-from ..units import shot_task_manager as _unit_shot_task_manager
+from ..units.task_manager import sequence as _unit_sequence
+
+from ..units.task_manager import shot as _unit_shot
 
 
 class PrxPageForTaskManager(_abs_page_for_task_manager.AbsPrxPageForTaskManager):
@@ -19,18 +21,24 @@ class PrxPageForTaskManager(_abs_page_for_task_manager.AbsPrxPageForTaskManager)
 
     if qsm_gnl_core.scheme_is_release():
         RESOURCE_TYPES = [
-            'asset', 'shot'
+            TASK_PARSE_CLS.ResourceTypes.Asset,
+            TASK_PARSE_CLS.ResourceTypes.Shot
         ]
     else:
         RESOURCE_TYPES = [
-            'project', 'asset', 'sequence', 'shot'
+            TASK_PARSE_CLS.ResourceTypes.Project,
+            TASK_PARSE_CLS.ResourceTypes.Asset,
+            TASK_PARSE_CLS.ResourceTypes.Episode,
+            TASK_PARSE_CLS.ResourceTypes.Sequence,
+            TASK_PARSE_CLS.ResourceTypes.Shot,
         ]
 
     UNIT_CLASSES = [
-        _unit_project_task_manager.PrxUnitForProjectTaskManager,
-        _unit_asset_task_manager.PrxUnitForAssetTaskManager,
-        _unit_sequence_task_manager.PrxUnitForSequenceTaskManager,
-        _unit_shot_task_manager.PrxUnitForShotTaskManager,
+        _unit_project.PrxUnitForProjectTaskManager,
+        _unit_asset.PrxUnitForAssetTaskManager,
+        _unit_episode.PrxUnitForEpisodeTaskManager,
+        _unit_sequence.PrxUnitForSequenceTaskManager,
+        _unit_shot.PrxUnitForShotTaskManager,
     ]
 
     def __init__(self, *args, **kwargs):

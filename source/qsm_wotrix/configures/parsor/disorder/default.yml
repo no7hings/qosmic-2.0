@@ -21,12 +21,18 @@ entity:
         Root: '/{root}'
 
         Project: '/{project}'
+
+        ResourceType: '/{project}/{resource_type}'
+
         Role: '/{project}/{role}'
         Asset: '/{project}/{role}/{asset}'
 
         Episode: '/{project}/{episode}'
         Sequence: '/{project}/{sequence}'
         Shot: '/{project}/{sequence}/{shot}'
+
+        Step: '/{project}/{step}'
+        Task: '{entity_path}/{task}'
 
         ProjectTask: '/{project}/{task}'
         AssetTask: '/{project}/{role}/{asset}/{task}'
@@ -40,19 +46,25 @@ entity:
         Root: 'root'
         #
         Project: 'project'
+        #
+        ResourceType: 'resource_type'
+        #
         Role: 'role'
         Asset: 'asset'
         Episode: 'episode'
         Sequence: 'sequence'
         Shot: 'shot'
+        #
+        Step: 'step'
         Task: 'task'
+        #
         Version: 'version'
 
     variant_key_regexes:
         project: '[a-zA-Z]*'
         role: '[a-zA-Z]*'
         asset: '[a-zA-Z]*'
-
+        #
         episode: '[a-zA-Z]*[0-9]*'
         sequence: '[a-zA-Z]*'
         shot: '[a-zA-Z]*[0-9]'
@@ -60,15 +72,28 @@ entity:
     variant_cleanup_keys:
         - sequence
 
+    steps:
+        Concept: 'Design'
+        Model: 'Maya'
+        Rig: 'Rig'
+        Surface: 'UE'
+
+        Layout: 'Layout'
+        Animation: '动画'
+
     tasks:
         Concept: 'Design'
         Model: 'Maya'
         Rig: 'Rig'
         Surface: 'UE'
 
+        Layout: 'Layout'
         Animation: '动画'
+
 
 file_patterns:
     MayaRigFile: '{root}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
     MayaModelFIle: '{root}/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
 
+    MayaLayoutFile: '{root}/{project}/{episode}/{sequence}{seq_IGN}/分镜/通过文件/{shot}.ma'
+    MayaAnimationFile: '{root}/{project}/{episode}/{sequence}{seq_IGN}/动画/通过文件/{shot}.ma'
