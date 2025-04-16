@@ -5,13 +5,15 @@ from lnx_wotrix.gui.abstracts import subpanel_for_task_create as _subpanel_for_t
 
 
 class PrxSubPanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCreate):
-    SUB_PAGE_CLASSES = [
+    SUBPAGE_CLASSES = [
     ]
 
     if qsm_gnl_core.scheme_is_release():
         pass
     else:
         pass
+
+    TASK_MODULE_ROOT = 'lnx_houdini_wotrix_tasks'
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxSubPanelForTaskCreate, self).__init__(window, session, *args, **kwargs)

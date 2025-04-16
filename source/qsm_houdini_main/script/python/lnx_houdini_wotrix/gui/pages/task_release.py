@@ -10,5 +10,7 @@ class PrxPageForTaskRelease(_abs_page_for_task_release.AbsPrxPageForTaskRelease)
     UNIT_CLASSES = [
     ]
 
+    TASK_MODULE_ROOT = 'lnx_houdini_wotrix_tasks'
+
     def __init__(self, *args, **kwargs):
         super(PrxPageForTaskRelease, self).__init__(*args, **kwargs)

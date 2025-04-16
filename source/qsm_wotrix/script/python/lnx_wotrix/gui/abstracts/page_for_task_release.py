@@ -1,4 +1,8 @@
 # coding:utf-8
+import sys
+
+import lxbasic.core as bsc_core
+
 import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
@@ -8,6 +12,24 @@ class AbsPrxPageForTaskRelease(gui_prx_widgets.PrxBasePage):
     GUI_KEY = 'task_release'
 
     TASK_PARSE_CLS = None
+
+    TASK_MODULE_ROOT = None
+
+    @classmethod
+    def _find_gui_cls(cls, resource_type, task):
+        # noinspection PyBroadException
+        try:
+            module_path = '{}.{}.{}.gui_widgets.task_release'.format(
+                cls.TASK_MODULE_ROOT, resource_type, task
+            )
+            module = bsc_core.PyModule(module_path)
+            if module.get_is_exists():
+                gui_cls = module.get_method('GuiTaskReleaseMain')
+                if gui_cls:
+                    sys.stdout.write('find task release gui for {}/{} successful.\n'.format(resource_type, task))
+                    return gui_cls
+        except Exception:
+            pass
 
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForTaskRelease, self).__init__(window, session, *args, **kwargs)
@@ -23,18 +45,22 @@ class AbsPrxPageForTaskRelease(gui_prx_widgets.PrxBasePage):
         # catch task session
         self._task_session = self._task_parse.generate_task_session_by_resource_source_scene_src_auto()
         if self._task_session:
+            resource_type = self._task_session.properties['resource_type']
             task = self._task_session.properties['task']
         else:
-            task = 'no-task'
+            resource_type = None
+            task = None
 
-        if task != self._task:
+        if task is not None and task != self._task:
             self._task = task
+
+            self._qt_layout._clear_all_widgets_()
             
             self._gui_task_unit = None
 
-            self._qt_layout._clear_all_widgets_()
-            if self._task in self._unit_class_dict:
-                self._gui_task_unit = self._unit_class_dict[self._task](self._window, self, self._session)
+            gui_cls = self._find_gui_cls(resource_type, task)
+            if gui_cls:
+                self._gui_task_unit = self.gui_instance_unit(gui_cls)
                 self._qt_layout.addWidget(self._gui_task_unit.widget)
             else:
                 placeholder = gui_qt_widgets.QtVScrollArea()

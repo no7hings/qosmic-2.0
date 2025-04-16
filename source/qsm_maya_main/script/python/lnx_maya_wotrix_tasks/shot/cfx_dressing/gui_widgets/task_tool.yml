@@ -1,0 +1,93 @@
+build:
+    messages:
+        no_characters:
+            message_chs: '选择一个或者多个角色（任意部件）。'
+            message: 'Select one or more character (any part).'
+
+    import:
+        name: 'Import'
+        name_chs: '导入'
+
+        tool_tip:
+            |-
+            To be supplemented.
+
+        tool_tip_chs:
+            |-
+            待补充。
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                cache_directory:
+                    widget: group
+                    name: 'Cache Directory'
+                    name_chs: '缓存目录'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        缓存导入相关。
+
+                cache_directory/version_directory:
+                    widget: directory
+                    open_or_save: open
+                    name_chs: '导入版本目录'
+                    value: ''
+                    history_group: ['wotrix', 'shot', 'cfx_dressing', 'task_tool']
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        选择一个版本文件夹，默认会自动匹配最后一个版本。
+
+                cache_directory/file_tree:
+                    widget: file_tree
+                    name: 'File'
+                    name_chs: '文件'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        展示缓存文件树。
+
+                cache_import:
+                    widget: group
+                    name: 'Cache Import'
+                    name_chs: '缓存导入'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        缓存导入相关。
+
+                cache_import/load_cloth_cache:
+                    widget: button
+                    name: 'Import Cache'
+                    name_chs: '导入缓存'
+                    icon: 'load'
+                    join_to_next: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        选择一个目录（版本目录），勾选需要导入的文件，然后点击“导入缓存”。
+
+                cache_import/remove_cloth_cache:
+                    widget: button
+                    name: 'Remove Cache'
+                    name_chs: '移除CFX布料'
+                    icon: 'tool/maya/delete'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击移除缓存。

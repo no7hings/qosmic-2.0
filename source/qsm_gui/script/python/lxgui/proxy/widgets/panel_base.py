@@ -357,8 +357,11 @@ class PrxBasePage(
         fix some size bug for size setup delay
         """
 
-    def generate_unit_for(self, key):
+    def gui_generate_unit_for(self, key):
         return self._unit_class_dict[key](self._window, self, self._session)
+
+    def gui_instance_unit(self, gui_cls):
+        return gui_cls(self._window, self, self._session)
 
     def _to_unit_instance(self, cls):
         return cls(self._window, self, self._session)
@@ -504,7 +507,7 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
     GUI_KEY = None
 
     SUB_PAGE_CLASS_DICT = {}
-    SUB_PAGE_CLASSES = []
+    SUBPAGE_CLASSES = []
 
     SUB_PAGE_KEYS = []
 
@@ -533,8 +536,8 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
             self._sub_page_class_dict = self.SUB_PAGE_CLASS_DICT
         else:
             self._sub_page_class_dict = {}
-            if self.SUB_PAGE_CLASSES:
-                for i_cls in self.SUB_PAGE_CLASSES:
+            if self.SUBPAGE_CLASSES:
+                for i_cls in self.SUBPAGE_CLASSES:
                     self._sub_page_class_dict[i_cls.GUI_KEY] = i_cls
 
         self._tab_widget_dict = {}
@@ -625,8 +628,11 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
     def gui_setup_fnc(self):
         pass
 
-    def gui_generate_sub_page_for(self, key):
+    def gui_generate_subpage_for(self, key):
         return self._sub_page_class_dict[key](self._window, self._session, self)
+
+    def gui_instance_subpage(self, gui_cls):
+        return gui_cls(self._window, self._session, self)
 
     def gui_find_page(self, key):
         return self._tab_widget_dict.get(key)

@@ -1,0 +1,127 @@
+build:
+    buttons:
+        validation:
+            name: 'Validation'
+            name_chs: '检查'
+
+        release:
+            name: 'Release'
+            name_chs: '发布'
+
+    groups:
+        tip:
+            name: 'Tip'
+            name_chs: '提示'
+
+    messages:
+        no_record:
+            message: 'no release record'
+            message_chs: '没有发布记录。'
+
+    tip:
+        description:
+            |-
+            To be supplemented.
+        description_chs:
+            |-
+            1. 确认绑定的控制器归零，且没有动画；
+            2. 点击发布。
+
+    basic:
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+
+                preview_scheme:
+                    widget: capsule_string
+                    name: 'Preview Scheme'
+                    name_chs: '预览方案'
+                    options: ['image', 'video']
+                    default: 'image'
+                    option_names: ['Image', 'Video']
+                    option_names_chs: ['图片', '视频']
+
+                    history_group: ['wotrix', 'asset', 'cfx_rig', 'task_release']
+                    pull_history_latest: True
+
+                images:
+                    widget: medias
+                    name: 'Image'
+                    name_chs: '图片'
+                    value: ''
+                    history_group: ['wotrix', 'asset', 'cfx_rig', 'task_release']
+                    ext_includes: ['.jpg', '.png', '.exr']
+                    height: 120
+                    tool_tip:
+                        |-
+                        Add some screenshots as preview.
+                    tool_tip_chs:
+                        |-
+                        加入审核图片（截屏），图片会被自动拼接成一个视频。
+
+                    visible_condition: {
+                        operator: 'is', port: 'preview_scheme', value: 'image'
+                    }
+
+                videos:
+                    widget: files
+                    name: 'Video'
+                    name_chs: '视频'
+                    value: ''
+                    history_group: ['wotrix', 'asset', 'cfx_rig', 'task_release']
+                    ext_includes: ['.mov']
+                    height: 120
+                    tool_tip:
+                        |-
+                        Add review video (playblast).
+                    tool_tip_chs:
+                        |-
+                        加入审核视频（拍屏）。
+
+                    visible_condition: {
+                        operator: 'is', port: 'preview_scheme', value: 'video'
+                    }
+
+                note:
+                    widget: script
+                    name: 'Note'
+                    name_chs: '备注'
+                    height: 120
+                    tool_tip:
+                        |-
+                        Fill in the release notes to record the updated information.
+                    tool_tip_chs:
+                        |-
+                        填写发布备注，记录更新信息。
+
+                notice:
+                    widget: script
+                    name: 'Notice'
+                    name_chs: '通知'
+                    height: 120
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        待补充。
+
+                rig_variant:
+                    widget: enumerate
+                    name: 'Rig Variant'
+                    name_chs: '预设变体'
+                    options: ['default']
+                    default: 'default'
+
+                show_release_directory:
+                    widget: button
+                    name: 'Show Release Directory'
+                    name_chs: '查看发布目录'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击查看发布目录。

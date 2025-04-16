@@ -1,4 +1,8 @@
 # coding:utf-8
+import sys
+
+import lxbasic.core as bsc_core
+
 import lxgui.proxy.widgets as gui_prx_widgets
 
 
@@ -15,6 +19,24 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
     ]
     SHOT_TASKS = [
     ]
+
+    TASK_MODULE_ROOT = None
+
+    @classmethod
+    def _find_gui_cls(cls, resource_type, task):
+        # noinspection PyBroadException
+        try:
+            module_path = '{}.{}.{}.gui_widgets.task_create'.format(
+                cls.TASK_MODULE_ROOT, resource_type, task
+            )
+            module = bsc_core.PyModule(module_path)
+            if module.get_is_exists():
+                gui_cls = module.get_method('GuiTaskCreateMain')
+                if gui_cls:
+                    sys.stdout.write('find task create gui for {}/{} successful.\n'.format(resource_type, task))
+                    return gui_cls
+        except Exception:
+            pass
 
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxSubpanelForTaskCreate, self).__init__(window, session, *args, **kwargs)
@@ -46,19 +68,26 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
         )
         self._sub_page_prx_tab_tool_box.load_history()
 
-    def _find_subpage_cls(self, resource_type, task):
-        pass
-
     def gui_setup_subpages_for(self, resource_type, tasks):
         self._tab_widget_dict = {}
 
         for i_task in tasks:
             i_gui_key = '{}/{}'.format(resource_type, i_task)
-            if i_gui_key not in self._sub_page_class_dict:
+
+            i_prx_page = None
+
+            # when is register, use register cls, either use auto find
+            if i_gui_key in self._sub_page_class_dict:
+                i_prx_page = self._subwindow.gui_generate_subpage_for(i_gui_key)
+            else:
+                i_gui_cls = self._find_gui_cls(resource_type, i_task)
+                if i_gui_cls:
+                    i_prx_page = self._subwindow.gui_instance_subpage(i_gui_cls)
+
+            if i_prx_page is None:
                 continue
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
-            i_prx_page = self._subwindow.gui_generate_sub_page_for(i_gui_key)
             i_prx_sca.add_widget(i_prx_page)
 
             self._sub_page_prx_tab_tool_box.add_widget(

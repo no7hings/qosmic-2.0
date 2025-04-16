@@ -79,7 +79,7 @@ def cfx_cloth_cache_generate_fnc(option_opt):
 def shot_animation_cache_export_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import lnx_maya_wotrix.tasks.shot_animation.dcc_scripts as s
+    import lnx_maya_wotrix_tasks.shot.animation.dcc_scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
@@ -91,7 +91,7 @@ def shot_animation_cache_export_fnc(option_opt):
 def shot_cfx_cloth_cache_export_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import lnx_maya_wotrix.tasks.shot_cfx_cloth.dcc_scripts as s
+    import lnx_maya_wotrix_tasks.shot.cfx_cloth.dcc_scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()

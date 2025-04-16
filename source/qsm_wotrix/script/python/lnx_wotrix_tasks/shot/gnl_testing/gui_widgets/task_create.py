@@ -5,10 +5,10 @@ from ..gui_operates import task_create as _task_create_opt
 
 
 # cfx rig
-class PrxSubpageForShotGnlTestingCreate(_sub_page_for_task_create.AbsPrxSubpageForTaskCreate):
+class GuiTaskCreateMain(_sub_page_for_task_create.AbsPrxSubpageForTaskCreate):
     TASK_CREATE_OPT_CLS = _task_create_opt.DccShotGnlTestingCreateOpt
 
     GUI_KEY = '{}/{}'.format(TASK_CREATE_OPT_CLS.RESOURCE_TYPE, TASK_CREATE_OPT_CLS.TASK)
 
     def __init__(self, *args, **kwargs):
-        super(PrxSubpageForShotGnlTestingCreate, self).__init__(*args, **kwargs)
+        super(GuiTaskCreateMain, self).__init__(*args, **kwargs)

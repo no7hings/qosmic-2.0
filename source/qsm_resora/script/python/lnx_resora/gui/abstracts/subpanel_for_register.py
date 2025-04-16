@@ -49,7 +49,7 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubpanel):
                 continue
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
-            i_prx_page = self._subwindow.gui_generate_sub_page_for(i_resource_type)
+            i_prx_page = self._subwindow.gui_generate_subpage_for(i_resource_type)
             i_prx_sca.add_widget(i_prx_page)
 
             self._page_prx_tab_tool_box.add_widget(

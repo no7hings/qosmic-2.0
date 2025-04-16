@@ -5,7 +5,7 @@ from ..subpages import general as _subpage_new_general
 
 
 class PrxSubPanelForNewSplicing(_subpanel_for_new_splicing.AbsPrxSubpanelForNewSplicing):
-    SUB_PAGE_CLASSES = [
+    SUBPAGE_CLASSES = [
         _subpage_new_general.PrxSubpageForNewGeneralSplicing,
     ]
 

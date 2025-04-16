@@ -10,5 +10,7 @@ class PrxPageFortTaskTool(_abs_page_for_task_tool.AbsPrxPageForTaskTool):
     UNIT_CLASSES = [
     ]
 
+    TASK_MODULE_ROOT = 'lnx_katana_wotrix_tasks'
+
     def __init__(self, window, session, *args, **kwargs):
         super(PrxPageFortTaskTool, self).__init__(window, session, *args, **kwargs)
