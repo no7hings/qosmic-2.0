@@ -25,11 +25,11 @@ class W(gui_prx_widgets.PrxBaseWindow):
         scr_stage = lnx_scr_core.Stage('video_test')
 
         self._d = gui_qt_view_widgets.QtTreeWidget()
-        self._d._set_item_check_enable_(True)
+        self._d._set_item_check_enable(True)
         self._d._view_model.set_item_color_enable(True)
         self._d._view_model.set_item_drop_enable(True)
         self._d._view_model.set_item_number_enable(True)
-        self._d._set_item_sort_enable_(True)
+        self._d._set_item_sort_enable(True)
         self.add_widget(self._d)
         # self._d._view._set_view_header_([('name', 4), ('index', 4)], 320-48)
         # self._d._view_model.create_root()

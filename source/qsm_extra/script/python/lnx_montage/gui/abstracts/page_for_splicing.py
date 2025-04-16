@@ -281,6 +281,6 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         pass
 
     def _on_gui_show_new_splicing_window(self):
-        w = self._window.gui_generate_sub_panel_for('new_splicing')
+        w = self._window.gui_generate_subpanel_for('new_splicing')
         w.do_gui_refresh_all()
         w.show_window_auto()

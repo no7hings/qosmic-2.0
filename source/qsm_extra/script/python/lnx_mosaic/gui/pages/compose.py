@@ -50,7 +50,7 @@ class _GuiPackageOpt(_GuiBaseOpt):
 
         self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()
         self._unit._prx_h_splitter.add_widget(self._qt_tree_widget)
-        self._qt_tree_widget._set_item_sort_enable_(True)
+        self._qt_tree_widget._set_item_sort_enable(True)
         self._qt_tree_widget._view_model.set_item_expand_record_enable(True)
         self._qt_tree_widget._view_model.set_menu_name_dict(self._window._configure.get('build.menu_names'))
 
@@ -68,7 +68,7 @@ class _GuiLaunchOpt(_GuiBaseOpt):
 
         self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()
         self._unit._prx_h_splitter.add_widget(self._qt_tree_widget)
-        self._qt_tree_widget._set_item_sort_enable_(True)
+        self._qt_tree_widget._set_item_sort_enable(True)
         self._qt_tree_widget._view_model.set_item_expand_record_enable(True)
         self._qt_tree_widget._view_model.set_menu_name_dict(self._window._configure.get('build.menu_names'))
 

@@ -30,10 +30,10 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self._indices = range(10)
 
         self._d = gui_qt_view_widgets.QtListWidget()
-        self._d._set_item_sort_enable_(True)
-        self._d._set_item_group_enable_(True)
+        self._d._set_item_sort_enable(True)
+        self._d._set_item_group_enable(True)
         self._d._view_model.set_item_group_keys(['category'])
-        self._d._set_item_check_enable_(True)
+        self._d._set_item_check_enable(True)
         self._d._view_model.set_item_category_enable(True)
         self._d._view_model.set_item_drag_enable(True)
         self._d._view_model.set_item_lock_enable(True)

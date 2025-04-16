@@ -437,7 +437,7 @@ class QtTreeWidget(
             self._info_bar_chart._set_text_
         )
 
-        self._build_check_tool_box_()
+        self._build_check_tool_box()
         self._build_sort_and_chart_tool_box_()
         self._build_keyword_filter_tool_box()
 
@@ -467,11 +467,11 @@ class QtTreeWidget(
         tool_box._set_name_text_(name)
         return tool_box
 
-    def _set_item_check_enable_(self, boolean):
+    def _set_item_check_enable(self, boolean):
         self._check_tool_box.setVisible(boolean)
         self._view_model.set_item_check_enable(boolean)
 
-    def _set_item_sort_enable_(self, boolean):
+    def _set_item_sort_enable(self, boolean):
         self._item_sort_button.setVisible(boolean)
         self._view_model.set_item_sort_enable(boolean)
 
@@ -490,19 +490,19 @@ class QtTreeWidget(
         tool_box._set_name_text_(name)
         return tool_box
 
-    def _build_check_tool_box_(self):
+    def _build_check_tool_box(self):
         self._check_all_button = _wgt_button.QtIconPressButton()
         self._check_all_button._set_name_text_('check all')
         self._check_all_button._set_icon_file_path_(_gui_core.GuiIcon.get('all_checked'))
         self._check_tool_box._add_widget_(self._check_all_button)
-        self._check_all_button.press_clicked.connect(self._on_check_all_)
+        self._check_all_button.press_clicked.connect(self._on_check_all)
         self._check_all_button._set_tool_tip_text_(
             '"LMB-click" for checked all visible items'
         )
         self._check_all_button._set_menu_data_(
             [
                 ('Check By', ),
-                ('visible', 'tool/show', self._on_check_visible_)
+                ('visible', 'tool/show', self._on_check_visible)
             ]
         )
         #
@@ -510,14 +510,14 @@ class QtTreeWidget(
         self._uncheck_all_button._set_icon_file_path_(_gui_core.GuiIcon.get('all_unchecked'))
         self._uncheck_all_button._set_name_text_('uncheck all')
         self._check_tool_box._add_widget_(self._uncheck_all_button)
-        self._uncheck_all_button.press_clicked.connect(self._on_uncheck_all_)
+        self._uncheck_all_button.press_clicked.connect(self._on_uncheck_all)
         self._uncheck_all_button._set_tool_tip_text_(
             '"LMB-click" for unchecked all visible items'
         )
         self._uncheck_all_button._set_menu_data_(
             [
                 ('Uncheck By',),
-                ('visible', 'tool/show', self._on_uncheck_visible_)
+                ('visible', 'tool/show', self._on_uncheck_visible)
             ]
         )
 
@@ -530,7 +530,7 @@ class QtTreeWidget(
         self._item_sort_button._set_menu_data_generate_fnc_(
             self._view_model.generate_item_sort_menu_data
         )
-        self._item_sort_button.press_clicked.connect(self._on_sort_order_swap_)
+        self._item_sort_button.press_clicked.connect(self._on_swap_item_sort_order)
 
         self._chat_button = _wgt_button.QtIconPressButton()
         self._chat_button._set_name_text_('chart')
@@ -552,19 +552,19 @@ class QtTreeWidget(
         )
         self._keyword_filter_input._set_occurrence_buttons_enable_(True)
 
-    def _on_check_all_(self):
+    def _on_check_all(self):
         self._view_model.set_all_items_checked(True)
 
-    def _on_check_visible_(self):
+    def _on_check_visible(self):
         self._view_model.set_visible_items_checked(True)
 
-    def _on_uncheck_all_(self):
+    def _on_uncheck_all(self):
         self._view_model.set_all_items_checked(False)
 
-    def _on_uncheck_visible_(self):
+    def _on_uncheck_visible(self):
         self._view_model.set_visible_items_checked(False)
 
-    def _on_sort_order_swap_(self):
+    def _on_swap_item_sort_order(self):
         if self._view_model.is_item_sort_enable():
             self._view_model.swap_item_sort_order()
 

@@ -329,7 +329,7 @@ class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
         # asset
         self._asset_qt_tree_widget = gui_qt_vew_widgets.QtTreeWidget()
         self._file_prx_tool_group.add_widget(self._asset_qt_tree_widget)
-        self._asset_qt_tree_widget._set_item_check_enable_(True)
+        self._asset_qt_tree_widget._set_item_check_enable(True)
         self._asset_qt_tree_widget._view_model.set_item_sort_enable(True)
         self._asset_qt_tree_widget._view_model.set_head_data(
             [('asset', 4), ('description', 4)], max_width=560

@@ -241,7 +241,7 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
     def do_gui_refresh_all(self):
         pass
 
-    def gui_generate_sub_panel_for(self, key):
+    def gui_generate_subpanel_for(self, key):
         return self._sub_panel_class_dict[key](self._window, self._session)
 
     def gui_generate_page_for(self, key):
@@ -358,7 +358,7 @@ class PrxBasePage(
         """
 
     def gui_generate_unit_for(self, key):
-        return self._unit_class_dict[key](self._window, self, self._session)
+        return self.gui_instance_unit(self._unit_class_dict[key])
 
     def gui_instance_unit(self, gui_cls):
         return gui_cls(self._window, self, self._session)
@@ -629,7 +629,7 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
         pass
 
     def gui_generate_subpage_for(self, key):
-        return self._sub_page_class_dict[key](self._window, self._session, self)
+        return self.gui_instance_subpage(self._sub_page_class_dict[key])
 
     def gui_instance_subpage(self, gui_cls):
         return gui_cls(self._window, self._session, self)

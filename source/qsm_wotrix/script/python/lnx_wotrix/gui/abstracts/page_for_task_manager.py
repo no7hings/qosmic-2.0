@@ -123,7 +123,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         unit = self._tab_widget_dict[resource_type]
         resource_properties = unit._resource_properties
         if unit._resource_properties:
-            w = self._window.gui_generate_sub_panel_for('task_create')
+            w = self._window.gui_generate_subpanel_for('task_create')
             w.gui_setup(unit, resource_properties)
             w.do_gui_refresh_all()
             w.show_window_auto()

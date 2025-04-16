@@ -175,8 +175,8 @@ class _GuiTypeOpt(
         self._qt_tree_widget = gui_qt_vew_widgets.QtTreeWidget()
         self._page._prx_v_splitter_0.add_widget(self._qt_tree_widget)
 
-        self._qt_tree_widget._set_item_sort_enable_(True)
-        # self._qt_tree_widget._set_item_check_enable_(True)
+        self._qt_tree_widget._set_item_sort_enable(True)
+        # self._qt_tree_widget._set_item_check_enable(True)
         self._qt_tree_widget._view_model.set_item_color_enable(True)
         self._qt_tree_widget._view_model.set_item_drop_enable(True)
 
@@ -837,9 +837,9 @@ class _GuiNodeOpt(_GuiBaseOpt):
 
         self._qt_list_widget._view_model.set_item_frame_size(*item_frame_size)
 
-        self._qt_list_widget._set_item_sort_enable_(True)
+        self._qt_list_widget._set_item_sort_enable(True)
         self._qt_list_widget._view_model.set_item_lock_enable(True)
-        self._qt_list_widget._set_item_check_enable_(True)
+        self._qt_list_widget._set_item_check_enable(True)
         self._qt_list_widget._view_model.set_item_drag_enable(True)
 
         self._qt_list_widget._view.press_released.connect(self.do_save_context)
@@ -1264,7 +1264,7 @@ class AbsPrxPageForManager(
     @gui_core.Verify.execute('resora-admin', 7)
     def _gui_show_register_subwindow(self):
         resource_type = self._scr_stage.type
-        w = self._window.gui_generate_sub_panel_for('register')
+        w = self._window.gui_generate_subpanel_for('register')
         w.gui_setup_pages_for([resource_type])
         w.show_window_auto()
         register_page = w.gui_find_page(resource_type)

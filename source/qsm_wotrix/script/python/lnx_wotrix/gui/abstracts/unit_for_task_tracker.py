@@ -24,7 +24,7 @@ class _GuiTaskOpt(_unit_base._GuiBaseOpt):
 
         self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()
         self._unit._prx_v_splitter.add_widget(self._qt_tree_widget)
-        self._qt_tree_widget._set_item_sort_enable_(True)
+        self._qt_tree_widget._set_item_sort_enable(True)
         self._qt_tree_widget._view_model.set_item_expand_record_enable(True)
         self._qt_tree_widget._view_model.set_menu_name_dict(self._window._configure.get('build.menu_names'))
 
@@ -287,11 +287,12 @@ class _GuiVersionOpt(_unit_base._GuiBaseOpt):
         self._qt_list_widget = gui_qt_view_widgets.QtListWidget()
         self._unit._prx_h_splitter.add_widget(self._qt_list_widget)
 
-        self._qt_list_widget._set_item_sort_enable_(True)
-        self._qt_list_widget._view_model.apply_item_sort_order(
-            self._qt_list_widget._view_model.ItemSortOrder.Descending
-        )
-        # self._qt_list_widget._set_item_group_enable_(True)
+        self._qt_list_widget._set_item_sort_enable(True)
+        self._qt_list_widget._on_swap_item_sort_order()
+        # self._qt_list_widget._view_model.apply_item_sort_order(
+        #     self._qt_list_widget._view_model.ItemSortOrder.Descending
+        # )
+        # self._qt_list_widget._set_item_group_enable(True)
         self._qt_list_widget._view_model.set_item_category_enable(True)
         self._qt_list_widget._view_model.set_item_mtime_enable(True)
         self._qt_list_widget._view_model.set_item_user_enable(True)
