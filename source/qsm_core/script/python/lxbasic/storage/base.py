@@ -70,6 +70,7 @@ from ..core import thread_ as _cor_thread
 
 
 class StgRpc(object):
+    # old method
     RPC_SERVER = '10.10.206.117'
     RPC_PORT = 58888
     PATHSEP = '/'

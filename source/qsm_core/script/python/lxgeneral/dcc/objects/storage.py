@@ -10,6 +10,7 @@ import lxbasic.storage as bsc_storage
 from .. import abstracts as gnl_dcc_abstracts
 
 
+# old method, need to remove all
 class StgDirectory(gnl_dcc_abstracts.AbsStgDirectory):
     def __init__(self, path):
         super(StgDirectory, self).__init__(path)

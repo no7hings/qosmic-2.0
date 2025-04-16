@@ -10,3 +10,8 @@
 [https://rk8o3v6r7h.feishu.cn/docx/EZAAdpu6wo5AZJxdzBFc6vbin3b]
 ### Lazy MAYA Tools
 [https://rk8o3v6r7h.feishu.cn/docx/BDrEd9K9moznaZxKpJpcsws7nZv]
+### Lazy Backstage 1.0
+[https://rk8o3v6r7h.feishu.cn/docx/VSGudl3GNonYsExCTXGc7nksnMc]
+## 2025 update
+### Lazy Nexsolve 0.0
+[https://rk8o3v6r7h.feishu.cn/docx/VjALdOeJaodseJxY6TacXWo0nPo]
