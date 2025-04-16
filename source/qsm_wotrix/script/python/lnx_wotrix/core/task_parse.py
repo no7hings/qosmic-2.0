@@ -9,21 +9,21 @@ import lxbasic.content as bsc_content
 
 import lxbasic.resource as bsc_resource
 
-import lnx_parsor.parse as lnx_srk_parse
+import lnx_parsor.parse as lnx_prs_parse
 
 from . import task_session as _task_session
 
 
 # todo: support to each project different stage?
 class TaskParse(object):
-    EntityTypes = lnx_srk_parse.Stage.EntityTypes
-    SpaceKeys = lnx_srk_parse.Stage.SpaceKeys
-    ResourceTypes = lnx_srk_parse.Stage.ResourceTypes
+    EntityTypes = lnx_prs_parse.Stage.EntityTypes
+    SpaceKeys = lnx_prs_parse.Stage.SpaceKeys
+    ResourceTypes = lnx_prs_parse.Stage.ResourceTypes
 
-    Roots = lnx_srk_parse.Stage.Roots
-    Spaces = lnx_srk_parse.Stage.Spaces
-    Steps = lnx_srk_parse.Stage.Steps
-    Tasks = lnx_srk_parse.Stage.Tasks
+    Roots = lnx_prs_parse.Stage.Roots
+    Spaces = lnx_prs_parse.Stage.Spaces
+    Steps = lnx_prs_parse.Stage.Steps
+    Tasks = lnx_prs_parse.Stage.Tasks
 
     INSTANCE = None
 
@@ -63,7 +63,7 @@ class TaskParse(object):
 
         self = super(TaskParse, cls).__new__(cls)
 
-        self._parse_stage = lnx_srk_parse.Stage(scheme='default')
+        self._parse_stage = lnx_prs_parse.Stage(scheme='default')
         self.Roots = self._parse_stage.Roots
         self.Spaces = self._parse_stage.Spaces
         self.Steps = self._parse_stage.Steps

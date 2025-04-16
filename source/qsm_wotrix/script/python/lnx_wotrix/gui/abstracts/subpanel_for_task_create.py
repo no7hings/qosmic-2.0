@@ -33,20 +33,23 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
         resource_type = resource_properties['resource_type']
         self._resource_properties = resource_properties
         if resource_type == 'project':
-            self.gui_setup_sub_pages_for(resource_type, self.PROJECT_TASKS)
+            self.gui_setup_subpages_for(resource_type, self.PROJECT_TASKS)
         elif resource_type == 'asset':
-            self.gui_setup_sub_pages_for(resource_type, self.ASSET_TASKS)
+            self.gui_setup_subpages_for(resource_type, self.ASSET_TASKS)
         elif resource_type == 'sequence':
-            self.gui_setup_sub_pages_for(resource_type, self.SEQUENCE_TASKS)
+            self.gui_setup_subpages_for(resource_type, self.SEQUENCE_TASKS)
         elif resource_type == 'shot':
-            self.gui_setup_sub_pages_for(resource_type, self.SHOT_TASKS)
+            self.gui_setup_subpages_for(resource_type, self.SHOT_TASKS)
 
         self._sub_page_prx_tab_tool_box.set_history_key(
             [self._window.GUI_KEY, '{}_{}.page'.format(self._gui_path, resource_type)]
         )
         self._sub_page_prx_tab_tool_box.load_history()
 
-    def gui_setup_sub_pages_for(self, resource_type, tasks):
+    def _find_subpage_cls(self, resource_type, task):
+        pass
+
+    def gui_setup_subpages_for(self, resource_type, tasks):
         self._tab_widget_dict = {}
 
         for i_task in tasks:

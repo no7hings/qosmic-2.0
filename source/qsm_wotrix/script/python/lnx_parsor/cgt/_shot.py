@@ -1,4 +1,6 @@
 # coding:utf-8
+import six
+
 from ..core import base as _cor_base
 
 from . import _base
@@ -23,6 +25,17 @@ class Shot(_base.AbsEntity):
         filters = [
             ['shot.entity', '=', self._dtb_variants['shot.entity']],
         ]
+        if 'account' in kwargs:
+            vs = kwargs['account']
+            if isinstance(vs, six.string_types):
+                opt = '='
+            elif isinstance(vs, list):
+                opt = 'in'
+            else:
+                raise RuntimeError()
+            filters.append(
+                ['task.account', opt, vs]
+            )
 
         cgt_dtb = self._dtb_variants['project.database']
         cgt_type = 'shot'
@@ -42,7 +55,8 @@ class Shot(_base.AbsEntity):
                         episode=self._variants.get('episode'),
                         sequence=self._variants.get('sequence'),
                         shot=self._variants['shot'],
-
+                        #
+                        step=i_dtb_variants['task.pipeline'],
                         task=i_dtb_variants['task.entity'],
                     ),
                     i_dtb_variants
@@ -76,7 +90,8 @@ class Shot(_base.AbsEntity):
                     episode=self._variants.get('episode'),
                     sequence=self._variants.get('sequence'),
                     shot=self._variants['shot'],
-
+                    #
+                    step=dtb_variants['task.pipeline'],
                     task=dtb_variants['task.entity'],
                 ),
                 dtb_variants

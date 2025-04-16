@@ -37,7 +37,19 @@ class Root(_base.AbsEntity):
     def get_entity(self, path):
         return self._root_entity_stack.get(path)
 
+    def statuses(self, **kwargs):
+        return []
+
+    def status(self, name, **kwargs):
+        return None
+
     def current_user(self):
+        return None
+
+    def departments(self, **kwargs):
+        return []
+
+    def department(self, name, **kwargs):
         return None
 
     def users(self, **kwargs):

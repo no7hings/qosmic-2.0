@@ -69,40 +69,11 @@ class TagViewModel(_view_base.AbsViewModel):
 
         self._widget._restore_()
 
-    def create_item_as_group(self, path, *args, **kwargs):
-        return self._widget._create_group_(path, *args, **kwargs)
-
     def create_group_item(self, path, *args, **kwargs):
         return self._widget._create_group_(path, *args, **kwargs)
 
     def create_item(self, path, *args, **kwargs):
         return self._widget._create_node_(path, *args, **kwargs)
-
-    def create_item_(self, path, *args, **kwargs):
-        if path in self._data.item_dict:
-            return False, self._data.item_dict[path]
-
-        path_opt = bsc_core.BscNodePathOpt(path)
-        index_cur = len(self._data.item_dict)
-        item = self._data.item.cls()
-
-        parent_path = path_opt.get_parent_path()
-        if parent_path not in self._data.item_dict:
-            raise RuntimeError()
-        parent_item = self._data.item_dict[parent_path]
-        if isinstance(parent_item, self._data.item.group_cls) is False:
-            raise RuntimeError()
-
-        parent_item._add_node_(item)
-
-        name = path_opt.get_name()
-        item._item_model.set_path(path)
-        item._item_model.set_index(index_cur)
-        item._item_model.set_name(name)
-        item.user_filter_checked.connect(self._widget._user_filter_check_cbk_)
-
-        self._data.item_dict[path] = item
-        return True, item
 
     def _remove_item_fnc(self, item):
         item._do_delete_()

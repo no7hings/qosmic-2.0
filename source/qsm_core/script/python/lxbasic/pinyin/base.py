@@ -138,7 +138,7 @@ class KeywordFilter(object):
         # todo: use match all mode then, maybe use match one mode also
         if texts_src and texts_tgt:
             contexts_src = map(ensure_unicode, texts_src)
-            context_tgt = '+'.join(cls.to_keys(texts_tgt))
+            context_tgt = '_'.join(cls.to_keys(texts_tgt))
             context_tgt = context_tgt.lower()
 
             for i_text in contexts_src:
@@ -165,6 +165,7 @@ class KeywordFilter(object):
                 continue
 
             i_texts = Text.split_any_to_words_extra(i_text)
+            keys.add(i_text)
             keys.update(i_texts)
 
         return keys

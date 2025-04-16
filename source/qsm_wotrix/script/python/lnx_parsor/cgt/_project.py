@@ -30,7 +30,7 @@ class Project(_base.AbsEntity):
     def __init__(self, *args, **kwargs):
         super(Project, self).__init__(*args, **kwargs)
 
-    # base
+    # step
     def steps(self, **kwargs):
         t_tw = self._stage._api
 
@@ -38,15 +38,14 @@ class Project(_base.AbsEntity):
 
         filters = []
         if 'resource_type' in kwargs:
-            filters.append(['module', '=', self.ResourceTypeMapReverse[kwargs['resource_type']]])
+            filters.append(['module', '=', self.ResourceTypeQuery[kwargs['resource_type']]])
 
         cgt_dtb = self._dtb_variants['project.database']
-        cgt_type = self.CgtEntityTypes.Step
 
         for i_dtb_variants in t_tw.pipeline.get(
-            cgt_dtb, cgt_type,
-            t_tw.pipeline.get_id(cgt_dtb, cgt_type, filters),
-            t_tw.pipeline.fields(cgt_dtb, cgt_type)
+            cgt_dtb,
+            t_tw.pipeline.get_id(cgt_dtb, filters),
+            t_tw.pipeline.fields(cgt_dtb)
         ):
             list_.append(
                 self._new_step_fnc(
@@ -54,27 +53,27 @@ class Project(_base.AbsEntity):
                         root=self._variants['root'],
                         project=self._variants['project'],
                         #
-                        resource_type=self.ResourceTypeMap[i_dtb_variants['module']],
+                        resource_type=self.ResourceTypeMap.get(i_dtb_variants['module']),
                         #
                         step=i_dtb_variants['entity'],
                     ),
                     i_dtb_variants
                 )
             )
+        return list_
 
     def step(self, name, **kwargs):
         t_tw = self._stage._api
 
-        filters = [['asset_type.entity', '=', name]]
+        filters = [['entity', '=', name]]
 
         cgt_dtb = self._dtb_variants['project.database']
-        cgt_type = self.CgtEntityTypes.Role
 
-        id_list = t_tw.pipeline.get_id(cgt_dtb, cgt_type, filters)
+        id_list = t_tw.pipeline.get_id(cgt_dtb, filters)
         if id_list:
             dtb_variants = t_tw.pipeline.get(
-                cgt_dtb, cgt_type,
-                id_list, t_tw.pipeline.fields(cgt_dtb, cgt_type)
+                cgt_dtb,
+                id_list, t_tw.pipeline.fields(cgt_dtb)
             )[0]
             dtb_variants['project.database'] = cgt_dtb
             return self._new_step_fnc(
@@ -470,17 +469,26 @@ class Project(_base.AbsEntity):
             )
 
     # task
+    def all_project_tasks(self, **kwargs):
+        return []
+
     def all_asset_tasks(self, **kwargs):
         t_tw = self._stage._api
 
         list_ = []
 
-        filters = [
-            ['project.entity', '=', self._dtb_variants['project.entity']],
-        ]
-        if 'user' in kwargs:
+        filters = []
+        # for user
+        if 'account' in kwargs:
+            vs = kwargs['account']
+            if isinstance(vs, six.string_types):
+                opt = '='
+            elif isinstance(vs, list):
+                opt = 'in'
+            else:
+                raise RuntimeError()
             filters.append(
-                ['task.account', '=', kwargs['user']]
+                ['task.account', opt, vs]
             )
 
         cgt_dtb = self._dtb_variants['project.database']
@@ -488,10 +496,11 @@ class Project(_base.AbsEntity):
 
         for i_dtb_variants in t_tw.task.get(
             cgt_dtb, cgt_type,
-            t_tw.task.get_id(cgt_dtb, cgt_type, filters),
+            # fixme: limit to 1000?
+            t_tw.task.get_id(cgt_dtb, cgt_type, filters)[:1000],
             t_tw.task.fields(cgt_dtb, cgt_type)
         ):
-            i_entity_variants = dict(
+            i_variants = dict(
                 root=self._variants['root'],
                 project=self._variants['project'],
                 #
@@ -500,11 +509,12 @@ class Project(_base.AbsEntity):
                 #
                 resource_type=self.ResourceTypeMap[cgt_type],
             )
-            i_entity_path = self.to_entity_path(self.EntityTypes.Asset, i_entity_variants)
-            i_variants = dict(i_entity_variants)
+            i_entity_path = self.to_entity_path(self.EntityTypes.Asset, i_variants)
             i_variants.update(
                 dict(
                     entity_path=i_entity_path,
+                    #
+                    step=i_dtb_variants['task.pipeline'],
                     task=i_dtb_variants['task.entity'],
                 )
             )
@@ -516,6 +526,12 @@ class Project(_base.AbsEntity):
             )
         return list_
 
+    def all_episode_tasks(self, **kwargs):
+        return []
+
+    def all_sequence_tasks(self, **kwargs):
+        return []
+
     def all_shot_tasks(self, **kwargs):
         t_tw = self._stage._api
 
@@ -524,9 +540,17 @@ class Project(_base.AbsEntity):
         filters = [
             ['project.entity', '=', self._dtb_variants['project.entity']],
         ]
-        if 'user' in kwargs:
+        # for user
+        if 'account' in kwargs:
+            vs = kwargs['account']
+            if isinstance(vs, six.string_types):
+                opt = '='
+            elif isinstance(vs, list):
+                opt = 'in'
+            else:
+                raise RuntimeError()
             filters.append(
-                ['task.account', '=', kwargs['user']]
+                ['task.account', opt, vs]
             )
 
         cgt_dtb = self._dtb_variants['project.database']
@@ -534,10 +558,11 @@ class Project(_base.AbsEntity):
 
         for i_dtb_variants in t_tw.task.get(
             cgt_dtb, cgt_type,
-            t_tw.task.get_id(cgt_dtb, cgt_type, filters),
+            # fixme: limit to 1000?
+            t_tw.task.get_id(cgt_dtb, cgt_type, filters)[:1000],
             t_tw.task.fields(cgt_dtb, cgt_type)
         ):
-            i_entity_variants = dict(
+            i_variants = dict(
                 root=self._variants['root'],
                 project=self._variants['project'],
                 #
@@ -547,11 +572,12 @@ class Project(_base.AbsEntity):
                 #
                 resource_type=self.ResourceTypeMap[cgt_type],
             )
-            i_entity_path = self.to_entity_path(self.EntityTypes.Shot, i_entity_variants)
-            i_variants = dict(i_entity_variants)
+            i_entity_path = self.to_entity_path(self.EntityTypes.Shot, i_variants)
             i_variants.update(
                 dict(
                     entity_path=i_entity_path,
+                    #
+                    step=i_dtb_variants['task.pipeline'],
                     task=i_dtb_variants['task.entity'],
                 )
             )

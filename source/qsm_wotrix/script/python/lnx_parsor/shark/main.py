@@ -5,7 +5,7 @@ from . import _my_sql
 
 from . import _abc_
 
-from . import _handle
+from . import _root
 
 
 class Stage(_abc_.AbsBase):
@@ -14,22 +14,22 @@ class Stage(_abc_.AbsBase):
         pass
 
     def initialize(self):
-        database = _handle.Database(self.EntityTypes.User, 'master')
-        database.initialize()
+        root = _root.Root(self.EntityTypes.User, 'master')
+        root.initialize()
 
     def create_user(self, name, **kwargs):
         pass
 
     def create_project(self, name, **kwargs):
-        database = _handle.Database(self.EntityTypes.Project, name)
-        database.build(**kwargs)
+        root = _root.Root(self.EntityTypes.Project, name)
+        root.build(**kwargs)
 
     def get_project(self, name):
         database_name = self._to_database_key(self.EntityTypes.Project, name)
         if _my_sql.MySql.database_is_exists(
             self._get_mysql_options(), database_name
         ) is True:
-            return _handle.Database(self.EntityTypes.Project, name).find_one(
+            return _root.Root(self.EntityTypes.Project, name).find_one(
                 self.EntityTypes.Project,
                 [
                     ('name', 'is', name)

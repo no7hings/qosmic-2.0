@@ -1,5 +1,5 @@
 # coding:utf-8
-from ...shot_base.gui_operates import task_create as _shot_gnl_task_create
+from ...base.gui_operates import task_create as _shot_gnl_task_create
 
 
 class DccShotGnlTestingCreateOpt(_shot_gnl_task_create.DccShotTaskCreateOpt):

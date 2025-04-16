@@ -1,5 +1,5 @@
 # coding:utf-8
-import lnx_parsor.database as dtb
+import lnx_parsor.shark as dtb
 
 stage = dtb.Stage()
 

@@ -11,7 +11,7 @@ import lxgui.qt.view_widgets as gui_qt_view_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_parsor.parse as lnx_srk_parse
+import lnx_parsor.parse as lnx_prs_parse
 
 from ... import core as _wsp_core
 
@@ -29,14 +29,17 @@ class _GuiTaskOpt(_unit_base._GuiBaseOpt):
         self._qt_tree_widget._view_model.set_menu_name_dict(self._window._configure.get('build.menu_names'))
 
         self._qt_tree_widget.refresh.connect(
-            functools.partial(self.gui_load_all_tasks, sync_flag=True)
+            functools.partial(self.do_gui_refresh_all, force=True)
         )
 
         self._task_options = {}
 
+    def do_gui_refresh_all(self, force=False):
+        self.gui_load_all_tasks(sync_flag=force)
+
     def gui_update_task_options(self, options):
         self._task_options = options
-        self.gui_load_all_tasks()
+        self.do_gui_refresh_all()
 
     def _gui_add_entity_groups(self, path):
         path_opt = bsc_core.BscNodePathOpt(path)
@@ -58,7 +61,7 @@ class _GuiTaskOpt(_unit_base._GuiBaseOpt):
 
         self.gui_update_thread_flag()
 
-        ett_project = lnx_srk_parse.Stage().project(
+        ett_project = lnx_prs_parse.Stage().project(
             project,
             space_key=space_key
         )
@@ -132,12 +135,12 @@ class _GuiTaskOpt(_unit_base._GuiBaseOpt):
             if gui_thread_flag != self._gui_thread_flag:
                 return [[], 0]
 
-            _source_directory_ptn = lnx_srk_parse.Stage().generate_pattern_opt_for(
+            _source_directory_ptn = lnx_prs_parse.Stage().generate_pattern_opt_for(
                 '{}-source-dir'.format(resource_type), **ett_resource.variants
             )
             _source_directory_path = _source_directory_ptn.get_value()
 
-            _release_directory_ptn = lnx_srk_parse.Stage().generate_pattern_opt_for(
+            _release_directory_ptn = lnx_prs_parse.Stage().generate_pattern_opt_for(
                 '{}-release-dir'.format(resource_type), **ett_resource.variants
             )
             _release_directory_path = _release_directory_ptn.get_value()
@@ -296,7 +299,10 @@ class _GuiVersionOpt(_unit_base._GuiBaseOpt):
         self._qt_list_widget._view_model.set_item_frame_size(190, 100)
         self._qt_list_widget._view_model.set_menu_name_dict(self._window._configure.get('build.menu_names'))
 
-        self._qt_list_widget.refresh.connect(self.gui_load_all_versions)
+        self._qt_list_widget.refresh.connect(self.do_gui_refresh_all)
+    
+    def do_gui_refresh_all(self, force=False):
+        self.gui_load_all_versions()
 
     def gui_load_all_versions(self):
         self._qt_list_widget._view_model.restore()
@@ -312,12 +318,12 @@ class _GuiVersionOpt(_unit_base._GuiBaseOpt):
             if gui_thread_flag != self._gui_thread_flag:
                 return [[], 0]
 
-            _release_directory_ptn = lnx_srk_parse.Stage().generate_pattern_opt_for(
+            _release_directory_ptn = lnx_prs_parse.Stage().generate_pattern_opt_for(
                 '{}-release-version-dir'.format(resource_type), **ett_version.variants
             )
             _release_directory_path = _release_directory_ptn.get_value()
 
-            _release_preview_ptn = lnx_srk_parse.Stage().generate_pattern_opt_for(
+            _release_preview_ptn = lnx_prs_parse.Stage().generate_pattern_opt_for(
                 '{}-release-preview-mov-file'.format(resource_type), **ett_version.variants
             )
             _release_preview_path = _release_preview_ptn.get_value()
@@ -415,7 +421,7 @@ class AbsPrxUnitForTaskTracker(gui_prx_widgets.PrxBaseUnit):
 
         self._gui_version_opt = _GuiVersionOpt(self._window, self, self._session)
         self._gui_task_opt._qt_tree_widget._view.item_select_changed.connect(
-            self._gui_version_opt.gui_load_all_versions
+            self._gui_version_opt.do_gui_refresh_all
         )
 
         self._prx_h_splitter.set_fixed_size_at(0, 320)
@@ -425,7 +431,7 @@ class AbsPrxUnitForTaskTracker(gui_prx_widgets.PrxBaseUnit):
         project = scn_entity.name
         if project != self._project:
             self._project = project
-            self._gui_task_opt.gui_load_all_tasks()
+            self._gui_task_opt.do_gui_refresh_all()
             self._gui_task_filter_opt.gui_load_all_task_tags()
 
     def do_gui_refresh_all(self):
@@ -437,4 +443,4 @@ class AbsPrxUnitForTaskTracker(gui_prx_widgets.PrxBaseUnit):
             if project != self._project or space_key != self._space_key:
                 self._project = project
                 self._space_key = space_key
-                self._gui_task_opt.gui_load_all_tasks()
+                self._gui_task_opt.do_gui_refresh_all()

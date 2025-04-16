@@ -153,7 +153,7 @@ class AbsPrxPageForMediaRegister(
                     i_gui_name = i_scr_entity.gui_name_chs
 
                 if i_scr_entity.category == 'group':
-                    i_flag, i_group = self._type_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
+                    i_flag, i_group = self._type_qt_tag_widget._view_model.create_group_item(i_scr_entity.path)
 
                     i_group._set_expanded_(True)
 
@@ -169,7 +169,7 @@ class AbsPrxPageForMediaRegister(
                 if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
 
-                i_flag, i_group = self._type_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
+                i_flag, i_group = self._type_qt_tag_widget._view_model.create_group_item(i_scr_entity.path)
 
                 i_group._set_expanded_(True)
 
@@ -193,7 +193,7 @@ class AbsPrxPageForMediaRegister(
                 if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
                 if i_scr_entity.category == 'group':
-                    i_flag, i_group = self._tag_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
+                    i_flag, i_group = self._tag_qt_tag_widget._view_model.create_group_item(i_scr_entity.path)
 
                     i_group._set_expanded_(True)
                     i_group._item_model.set_name(i_gui_name)
@@ -209,7 +209,7 @@ class AbsPrxPageForMediaRegister(
                 if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
 
-                i_flag, i_group = self._tag_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
+                i_flag, i_group = self._tag_qt_tag_widget._view_model.create_group_item(i_scr_entity.path)
 
                 i_group._set_expanded_(True)
                 i_group._item_model.set_name(i_gui_name)
@@ -386,7 +386,7 @@ class AbsPrxPageForAnyRegister(
                     i_gui_name = i_scr_entity.gui_name_chs
 
                 if i_scr_entity.category == 'group':
-                    i_flag, i_group = self._type_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
+                    i_flag, i_group = self._type_qt_tag_widget._view_model.create_group_item(i_scr_entity.path)
 
                     i_group._set_expanded_(True)
 
@@ -402,7 +402,7 @@ class AbsPrxPageForAnyRegister(
                 if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
 
-                i_flag, i_group = self._type_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
+                i_flag, i_group = self._type_qt_tag_widget._view_model.create_group_item(i_scr_entity.path)
 
                 i_group._set_expanded_(True)
 
@@ -425,7 +425,7 @@ class AbsPrxPageForAnyRegister(
                 if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
                 if i_scr_entity.category == 'group':
-                    i_flag, i_group = self._tag_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
+                    i_flag, i_group = self._tag_qt_tag_widget._view_model.create_group_item(i_scr_entity.path)
 
                     i_group._set_expanded_(True)
                     i_group._item_model.set_name(i_gui_name)
@@ -441,7 +441,7 @@ class AbsPrxPageForAnyRegister(
                 if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
 
-                i_flag, i_group = self._tag_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
+                i_flag, i_group = self._tag_qt_tag_widget._view_model.create_group_item(i_scr_entity.path)
 
                 i_group._set_expanded_(True)
                 i_group._item_model.set_name(i_gui_name)

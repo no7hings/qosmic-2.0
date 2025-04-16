@@ -54,6 +54,8 @@ class Stage(_abc_.AbsStage):
         model = None
         groom = None
         cfx = None
+
+        layout = None
         animation = None
         all = []
 
@@ -64,6 +66,8 @@ class Stage(_abc_.AbsStage):
         model = None
         groom = None
         cfx_rig = None
+
+        layout = None
         animation = None
         all = []
 
@@ -91,7 +95,7 @@ class Stage(_abc_.AbsStage):
         self._configure.do_flatten()
         self._variants = dict(
             scheme=self._scheme,
-            platform=self._platform
+            platform=self._platform,
         )
         for k, v in self._configure.get('roots').items():
             i_location = v[self._platform]
@@ -252,6 +256,7 @@ class Stage(_abc_.AbsStage):
                 variants[k] = bsc_pinyin.Text.cleanup(v, stop_on_chs=True)
         return variants
 
+    # space
     def _to_space(self, space_key):
         return self._configure.get(
             'spaces.{}'.format(space_key)

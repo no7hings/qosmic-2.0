@@ -132,10 +132,10 @@ class PrxToolbarForCharacterAndPropReference(
         entity = self._asset_prx_input.get_entity(path)
         if entity is not None:
             if entity.type == 'Asset':
-                task = entity.task(self._prs_root.EntityTasks.Rig)
+                task = entity.task(self._prs_root.Tasks.rig)
                 if task is not None:
                     result = task.find_result(
-                        self._prs_root.FilePatterns.MayaRigFile
+                        self._prs_root.Patterns.MayaRigFile
                     )
                     if result is not None:
                         self._asset_path = result

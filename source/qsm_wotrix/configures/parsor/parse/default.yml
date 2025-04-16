@@ -20,17 +20,7 @@ roots:
         windows: 'Z:/projects'
 
 entities:
-    # version is task's version
-    unique_variant_keys:
-        Project: ['project']
-        Asset: ['project', 'asset']
-        Episode: ['project', 'episode']
-        Sequence: ['project', 'sequence']
-        Shot: ['project', 'shot']
-        Task: ['entity_key', 'task']
-        # version may in source either in release.
-        Version: ['entity_key', 'space', 'version']
-
+    # pattern for resolve
     resolve_patterns:
         Project:
             disorder:
@@ -39,6 +29,15 @@ entities:
                 - '{root_source}/{project}/<spaces.source>'
             release:
                 - '{root_release}/{project}/QSM/<spaces.release>'
+        # role
+        Role:
+            disorder:
+                - '{root_disorder}/{project}/Assets/{role}'
+            source:
+                - '{root_source}/{project}/<spaces.source>/assets/{role}'
+            release:
+                - '{root_release}/{project}/QSM/<spaces.release>/assets/{role}'
+        # asset
         Asset:
             disorder:
                 - '{root_disorder}/{project}/Assets/{role}/{asset}'
@@ -54,6 +53,7 @@ entities:
                 - '{root_source}/{project}/{space}/episodes/{episode}'
             release:
                 - '{root_release}/{project}/QSM/{space}/episodes/{episode}'
+        # sequence
         Sequence:
             disorder:
                 - '{root_disorder}/{project}/{episode}/{sequence}{seq_IGN}/分镜'
@@ -63,6 +63,7 @@ entities:
             release:
                 - '{root_release}/{project}/QSM/{space}/sequences/{sequence}'
                 - '{root_release}/{project}/QSM/<spaces.release>/shots/{sequence}/{shot}'
+        # shot
         Shot:
             disorder:
                 - '{root_disorder}/{project}/{episode}/{sequence}{seq_IGN}/分镜/通过文件/{shot}.ma'
@@ -71,6 +72,19 @@ entities:
                 - '{root_source}/{project}/{space}/shots/{sequence}/{shot}'
             release:
                 - '{root_release}/{project}/QSM/<spaces.release>/shots/{sequence}/{shot}'
+    # version is task's version
+    unique_variant_keys:
+        Project: ['project']
+        #
+        Role: ['project', 'role']
+        Asset: ['project', 'role', 'asset']
+        #
+        Episode: ['project', 'episode']
+        Sequence: ['project', 'sequence']
+        Shot: ['project', 'shot']
+        Task: ['entity_key', 'task']
+        # version may in source either in release.
+        Version: ['entity_key', 'space', 'version']
 
     default_space:
         Project: 'disorder'
@@ -93,6 +107,7 @@ entities:
 
     path_pattern:
         Project: '/{project}'
+        Role: '/{project}/{role}'
         Asset: '/{project}/{role}/{asset}'
         Episode: '/{project}/{episode}'
         Sequence: '/{project}/{sequence}'
@@ -105,6 +120,19 @@ entities:
     next_methods:
         # add dynamic method for Entity, etc. Project.assets(), Project.asset('same')
         Project: {
+            # role
+            role: {
+                fnc_name: 'find_entity',
+                kwargs: {
+                    entity_type: 'Role',
+                }
+            },
+            roles: {
+                fnc_name: 'find_entities',
+                kwargs: {
+                    entity_type: 'Role',
+                }
+            },
             # asset
             asset: {
                 fnc_name: 'find_entity',
@@ -168,6 +196,21 @@ entities:
                 fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Task',
+                }
+            },
+        }
+        Role: {
+            # asset
+            asset: {
+                fnc_name: 'find_entity',
+                kwargs: {
+                    entity_type: 'Asset',
+                }
+            },
+            assets: {
+                fnc_name: 'find_entities',
+                kwargs: {
+                    entity_type: 'Asset',
                 }
             },
         }
@@ -315,6 +358,7 @@ steps:
     animation: 'ani'
     light: 'lgt'
 
+# gui naming
 step_names: {}
 
 tasks:
@@ -332,7 +376,74 @@ tasks:
     light: 'lighting'
     light_rig: 'light_rig'
 
+# gui naming
 task_names: {}
+
+workspace:
+    path_pattern:
+        # project
+        project: '/{project}'
+        project_task: '<.project>/user.{artist}/{step}.{task}'
+        project_task_unit: '<.project_task>/{task_unit}'
+        project_task_unit_scene: '<.project_task_unit>/{project}.{step}.{task}.{task_unit}.v{version}'
+        # asset
+        asset: '/{project}/{role}/{asset}'
+        asset_task: '<.asset>/user.{artist}/{step}.{task}'
+        asset_task_unit: '<.asset_task>/{task_unit}'
+        asset_task_unit_scene: '<.asset_task_unit>/{asset}.{step}.{task}.{task_unit}.v{version}'
+        # sequence
+        sequence: '/{project}/{sequence}'
+        sequence_task: '<.sequence>/user.{artist}/{step}.{task}'
+        sequence_task_unit: '<.sequence_task>/{task_unit}'
+        sequence_task_unit_scene: '<.sequence_task_unit>/{sequence}.{step}.{task}.{task_unit}.v{version}'
+        # shot
+        shot: '/{project}/{shot}'
+        shot_task: '<.shot>/user.{artist}/{step}.{task}'
+        shot_task_unit: '<.shot_task>/{task_unit}'
+        shot_task_unit_scene: '<.shot_task_unit>/{shot}.{step}.{task}.{task_unit}.v{version}'
+
+    tasks:
+        # resource type
+        project:
+            # step key
+            general:
+                - general
+            light:
+                - light_rig
+        asset:
+            general:
+                - general
+            model:
+                - model
+            rig:
+                - rig
+                - rig_test
+            groom:
+                - groom
+            cfx:
+                - cfx_rig
+            surface:
+                - surface
+        episode:
+            general:
+                - general
+        sequence:
+            general:
+                - general
+            light:
+                - light_rig
+        shot:
+            general:
+                - general
+            layout:
+                - layout
+            animation:
+                - animation
+            cfx:
+                - cfx_cloth
+                - cfx_dress
+            light:
+                - light
 
 patterns:
     # project
@@ -424,8 +535,27 @@ patterns:
             task-dir: '<.dir>/{step}.{task}'
 
     episode:
+        task-version-name: '{episode}.{step}.{task}.v{version}'
+        task_unit-version-name: '{episode}.{step}.{task}.{task_unit}.v{version}'
+
         source:
             dir: '{root_source}/{project}/{space}/episodes/{episode}'
+            # task
+            task-dir: '<.dir>/user.{artist}/{step}.{task}'
+            task_unit-dir: '<.task-dir>/{task_unit}'
+            # maya
+            maya-dir: '<.task_unit-dir>/maya'
+            # scene_src
+            maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
+            maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
+            # houdini
+            houdini-dir: '<.task_unit-dir>/houdini'
+            houdini-scene_src-file: '<.task_unit-dir>/houdini/scenes/<..task_unit-version-name>.hip'
+            houdini-thumbnail-file: '<.task_unit-dir>/houdini/.thumbnails/<..task_unit-version-name>.jpg'
+            # katana
+            katana-dir: '<.task_unit-dir>/katana'
+            katana-scene_src-file: '<.task_unit-dir>/katana/scenes/<..task_unit-version-name>.katana'
+            katana-thumbnail-file: '<.task_unit-dir>/katana/.thumbnails/<..task_unit-version-name>.jpg'
 
     sequence:
         task-version-name: '{sequence}.{step}.{task}.v{version}'
@@ -515,75 +645,9 @@ patterns:
             preview-mov-file: '<.version-dir>/preview/<..task-version-name>.mov'
 
             maya-scene-file: '<.version-dir>/maya/{shot}.ma'
-            
+
             cache-abc-dir: '<.version-dir>/cache/abc'
 
             pack-dir: '<.version-dir>/pack'
             pack-maya-scene-file: '<.pack-dir>/{shot}.ma'
             pack-preview-mov-file: '<.pack-dir>/{shot}.mov'
-
-workspace:
-    path_pattern:
-        # project
-        project: '/{project}'
-        project_task: '<.project>/user.{artist}/{step}.{task}'
-        project_task_unit: '<.project_task>/{task_unit}'
-        project_task_unit_scene: '<.project_task_unit>/{project}.{step}.{task}.{task_unit}.v{version}'
-        # asset
-        asset: '/{project}/{role}/{asset}'
-        asset_task: '<.asset>/user.{artist}/{step}.{task}'
-        asset_task_unit: '<.asset_task>/{task_unit}'
-        asset_task_unit_scene: '<.asset_task_unit>/{asset}.{step}.{task}.{task_unit}.v{version}'
-        # sequence
-        sequence: '/{project}/{sequence}'
-        sequence_task: '<.sequence>/user.{artist}/{step}.{task}'
-        sequence_task_unit: '<.sequence_task>/{task_unit}'
-        sequence_task_unit_scene: '<.sequence_task_unit>/{sequence}.{step}.{task}.{task_unit}.v{version}'
-        # shot
-        shot: '/{project}/{shot}'
-        shot_task: '<.shot>/user.{artist}/{step}.{task}'
-        shot_task_unit: '<.shot_task>/{task_unit}'
-        shot_task_unit_scene: '<.shot_task_unit>/{shot}.{step}.{task}.{task_unit}.v{version}'
-
-    tasks:
-        # resource type
-        project:
-            # step key
-            general:
-                - general
-            light:
-                - light_rig
-        asset:
-            general:
-                - general
-            model:
-                - model
-            rig:
-                - rig
-                - rig_test
-            groom:
-                - groom
-            cfx:
-                - cfx_rig
-            surface:
-                - surface
-        episode:
-            general:
-                - general
-        sequence:
-            general:
-                - general
-            light:
-                - light_rig
-        shot:
-            general:
-                - general
-            layout:
-                - layout
-            animation:
-                - animation
-            cfx:
-                - cfx_cloth
-                - cfx_dress
-            light:
-                - light

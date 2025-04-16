@@ -5,7 +5,7 @@ import lxbasic.core as bsc_core
 import lxgui.qt.view_widgets as gui_qt_view_widgets
 
 
-import lnx_parsor.parse as lnx_srk_parse
+import lnx_parsor.parse as lnx_prs_parse
 
 
 class _GuiBaseOpt(object):
@@ -49,7 +49,7 @@ class _GuiTaskFilterOpt(_GuiBaseOpt):
         self._qt_tag_widget._view_model.restore()
 
         resource_type = self._unit.RESOURCE_TYPE
-        task_paths = lnx_srk_parse.Stage().generate_wsp_task_paths(resource_type)
+        task_paths = lnx_prs_parse.Stage().generate_wsp_task_paths(resource_type)
         for i in task_paths:
             self.gui_add_task_tag(i)
 

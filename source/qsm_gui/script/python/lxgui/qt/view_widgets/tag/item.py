@@ -300,33 +300,46 @@ class _QtTagNodeItem(
         item_model_data = self._item_model._data
         is_hovered = item_model_data.hover.flag
 
+        condition = (is_hovered, self._is_checked)
+        hover_color = item_model_data.hover.color
         if item_model_data.number_enable is True:
             if item_model_data.number.flag is True:
-                if is_hovered:
-                    bkg_color = item_model_data.hover.color
-                elif self._is_checked:
-                    bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightPurple)
-                else:
-                    bkg_color = QtGui.QColor(223, 223, 223)
+                check_color = QtGui.QColor(*_gui_core.GuiRgba.LightPurple)
+                default_color = QtGui.QColor(223, 223, 223)
 
                 txt_color = QtGui.QColor(*_gui_core.GuiRgba.LightBlack)
             else:
+                check_color = QtGui.QColor(*_gui_core.GuiRgba.DarkPurple)
+                default_color = QtGui.QColor(0, 0, 0, 0)
+
                 txt_color = QtGui.QColor(*_gui_core.GuiRgba.Gray)
-                if is_hovered:
-                    bkg_color = item_model_data.hover.color
-                elif self._is_checked:
-                    bkg_color = QtGui.QColor(*_gui_core.GuiRgba.DarkPurple)
-                else:
-                    bkg_color = QtGui.QColor(0, 0, 0, 0)
         else:
-            if is_hovered:
-                bkg_color = item_model_data.hover.color
-            elif self._is_checked:
-                bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightPurple)
-            else:
-                bkg_color = QtGui.QColor(223, 223, 223)
+            check_color = QtGui.QColor(*_gui_core.GuiRgba.LightPurple)
+            default_color = QtGui.QColor(223, 223, 223)
 
             txt_color = QtGui.QColor(*_gui_core.GuiRgba.LightBlack)
+
+        # hover
+        if condition == (True, False):
+            bkg_color = item_model_data.hover.color
+        # check
+        elif condition == (False, True):
+            bkg_color = check_color
+        # hover and check
+        elif condition == (True, True):
+            # left to right
+            rect = item_model_data.frame.rect
+            bkg_color = QtGui.QLinearGradient(
+                rect.topLeft(), rect.topRight()
+            )
+            bkg_color.setColorAt(
+                0, hover_color
+            )
+            bkg_color.setColorAt(
+                1, check_color
+            )
+        else:
+            bkg_color = default_color
 
         painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
         # frame
@@ -536,6 +549,7 @@ class _QtTagGroupItem(
             x+1, y+1, w-2, frm_h-2
         )
         c_x = x
+
         # check
         icn_w = icn_h = 16
         self._check_frame_rect.setRect(
@@ -545,6 +559,7 @@ class _QtTagGroupItem(
             c_x+(frm_w-icn_w)/2, y+(frm_h-icn_h)/2, icn_w, icn_h
         )
         c_x += frm_w+spc
+
         # expand
         icn_w = icn_h = 16
         self._expand_frame_rect.setRect(
@@ -557,12 +572,14 @@ class _QtTagGroupItem(
             x+1, y+1, w-1, frm_h-1
         )
         c_x += frm_w+spc
+
         # text
         txt_w, txt_h = QtGui.QFontMetrics(font).width(item_model_data.name.text)+8, frm_h
         item_model_data.name.rect.setRect(
             c_x, y, txt_w, txt_h
         )
         c_x += txt_w+spc
+
         # number
         if item_model_data.number_enable is True:
             num_w, num_h = QtGui.QFontMetrics(font).width(item_model_data.number.text)+8, frm_h
@@ -571,6 +588,7 @@ class _QtTagGroupItem(
                 c_x, y, num_w, num_h
             )
             c_x += num_w
+
         # sub text
         self._sub_text_draw_rect.setRect(
             c_x, y, w-c_x, txt_h

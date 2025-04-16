@@ -1,4 +1,4 @@
-entity:
+entities:
     resolve_patterns:
         # entity_type: pattern
         Project: '{root}/{project}/Assets'
@@ -9,35 +9,24 @@ entity:
         Sequence: '{root}/{project}/{episode}/{sequence}/分镜'
         # sequence variant has chinese word, so add "{seq_IGN}" for match result.
         Shot: '{root}/{project}/{episode}/{sequence}{seq_IGN}/分镜/通过文件/{shot}.ma'
-
-        ProjectTask: '{root}/{project}/{task}'
+        #
+        ProjectTask: ''
         AssetTask: '{root}/{project}/Assets/{role}/{asset}/{task}/Final'
-        SequenceTask: '{root}/{project}/{sequence}/{task}'
-        ShotTask: '{root}/{project}/{sequence}/{shot}/{task}'
+        SequenceTask: ''
+        ShotTask: '{root}/{project}/{episode}/{sequence}{seq_IGN}/{task}/通过文件/{shot}.ma'
 
     path_patterns:
         User: '/{user}'
-
         Root: '/{root}'
-
         Project: '/{project}'
-
         ResourceType: '/{project}/{resource_type}'
-
         Role: '/{project}/{role}'
         Asset: '/{project}/{role}/{asset}'
-
         Episode: '/{project}/{episode}'
         Sequence: '/{project}/{sequence}'
         Shot: '/{project}/{sequence}/{shot}'
-
         Step: '/{project}/{step}'
         Task: '{entity_path}/{task}'
-
-        ProjectTask: '/{project}/{task}'
-        AssetTask: '/{project}/{role}/{asset}/{task}'
-        SequenceTask: '/{project}/{sequence}/{task}'
-        ShotTask: '/{project}/{sequence}/{shot}/{task}'
 
     variant_keys:
         Department: 'department'
@@ -72,26 +61,45 @@ entity:
     variant_cleanup_keys:
         - sequence
 
-    steps:
-        Concept: 'Design'
-        Model: 'Maya'
-        Rig: 'Rig'
-        Surface: 'UE'
+steps:
+    concept: 'Design'
+    model: 'Maya'
+    rig: 'Rig'
+    surface: 'UE'
 
-        Layout: 'Layout'
-        Animation: '动画'
+    layout: 'Layout'
+    animation: '动画'
 
+tasks:
+    concept: 'Design'
+    model: 'Maya'
+    rig: 'Rig'
+    surface: 'UE'
+
+    layout: 'Layout'
+    animation: '动画'
+    
+workspace:
     tasks:
-        Concept: 'Design'
-        Model: 'Maya'
-        Rig: 'Rig'
-        Surface: 'UE'
+        project: {}
+        asset:
+            concept:
+                - concept
+            model:
+                - model
+            rig:
+                - rig
+            surface:
+                - surface
+        episode: {}
+        sequence: {}
+        shot:
+            layout:
+                - layout
+            animation:
+                - animation
 
-        Layout: 'Layout'
-        Animation: '动画'
-
-
-file_patterns:
+patterns:
     MayaRigFile: '{root}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
     MayaModelFIle: '{root}/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
 

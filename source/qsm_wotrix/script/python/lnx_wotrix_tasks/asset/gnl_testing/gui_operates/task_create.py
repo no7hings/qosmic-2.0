@@ -1,5 +1,5 @@
 # coding:utf-8
-from ...asset_base.gui_operates import task_create as _asset_gnl_task_create
+from ...base.gui_operates import task_create as _asset_gnl_task_create
 
 
 class DccAssetGnlTestingCreateOpt(_asset_gnl_task_create.DccAssetTaskCreateOpt):

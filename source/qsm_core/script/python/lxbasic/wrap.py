@@ -9,6 +9,8 @@ import collections as _collections
 
 import re as _re
 
+import os as _os
+
 import fnmatch as _fnmatch
 
 
@@ -127,3 +129,16 @@ def is_windows():
 
 def get_user_name():
     return _getpass.getuser()
+
+
+def get_env_mark():
+    dict_ = {}
+    _ = _os.path.join(_os.environ["TEMP"], "qosmic.env_mark.txt")
+    if _os.path.isfile(_):
+        with open(_, "r") as f:
+            for line in f:
+                line = line.strip()
+                if "=" in line:
+                    k, v = line.split("=", 1)
+                    dict_[k] = v
+    return dict_

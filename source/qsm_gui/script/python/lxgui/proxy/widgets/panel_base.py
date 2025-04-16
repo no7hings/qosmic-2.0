@@ -341,7 +341,7 @@ class PrxBasePage(
 
         prx_tab_tool_box.load_history()
 
-    def do_gui_refresh_units(self, prx_tab_tool_box):
+    def do_gui_refresh_unit_auto(self, prx_tab_tool_box):
         key = prx_tab_tool_box.get_current_key()
         gui = self._tab_widget_dict.get(key)
         if gui:

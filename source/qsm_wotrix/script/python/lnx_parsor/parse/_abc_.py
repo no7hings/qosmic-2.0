@@ -1,6 +1,8 @@
 # coding:utf-8
 import functools
 
+import json
+
 import time
 
 import sys
@@ -88,10 +90,8 @@ class AbsEntity(AbsBase):
             setattr(self, k, i_fnc)
 
     def __str__(self):
-        return self.shorten_text(
-            '{}({})'.format(
-                self._entity_type, bsc_core.ensure_string(self._entity_key)
-            )
+        return '{}({})'.format(
+            self._entity_type, json.dumps(self._variants, indent=4)
         )
 
     def __repr__(self):

@@ -41,10 +41,12 @@ class Project(_base.AbsEntity):
 
     # step
     def steps(self, **kwargs):
-        pass
+        if 'resource_type' in kwargs:
+            return _cor_base.DisorderConfig()._resource_step_dict.get(kwargs['resource_type'], [])
+        return self.Steps.all
 
     def step(self, name, **kwargs):
-        pass
+        return None
 
     # role
     @_base.EntityFactory.find_all(_cor_base.EntityTypes.Role)

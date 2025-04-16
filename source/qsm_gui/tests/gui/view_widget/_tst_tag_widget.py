@@ -55,7 +55,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
                 i_item._set_assign_path_set_(i_path_set)
                 i_item._update_assign_path_set_to_ancestors()
             else:
-                i_flag, i_item = self._d_0._view_model.create_item_as_group(i_path)
+                i_flag, i_item = self._d_0._view_model.create_group_item(i_path)
                 i_item._item_model.set_name(i.gui_name_chs)
 
                 i_item._set_expanded_(True)

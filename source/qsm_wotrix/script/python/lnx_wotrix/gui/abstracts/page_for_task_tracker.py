@@ -99,7 +99,7 @@ class AbsPrxPageForTaskTracker(gui_prx_widgets.PrxBasePage):
             v.gui_setup_post_fnc()
 
     def do_gui_refresh_all(self):
-        self.do_gui_refresh_units(self._unit_prx_tab_tool_box)
+        self.do_gui_refresh_unit_auto(self._unit_prx_tab_tool_box)
 
     def _do_gui_refresh_resource_for(self, path):
         self._resource_path = path

@@ -1,4 +1,6 @@
 # coding:utf-8
+import six
+
 from ..core import base as _cor_base
 
 from . import _base
@@ -12,6 +14,20 @@ class Asset(_base.AbsEntity):
 
     TaskCls = _task.Task
 
+    @classmethod
+    def _to_task_variants(cls, variants, dtb_variants):
+        return dict(
+            entity_path=variants['entity_path'],
+            #
+            root=variants['root'],
+            project=variants['project'],
+            role=variants['role'],
+            asset=variants['asset'],
+            #
+            step=dtb_variants['task.pipeline'],
+            task=dtb_variants['task.entity'],
+        )
+
     def __init__(self, *args, **kwargs):
         super(Asset, self).__init__(*args, **kwargs)
 
@@ -23,9 +39,16 @@ class Asset(_base.AbsEntity):
         filters = [
             ['asset.entity', '=', self._dtb_variants['asset.entity']],
         ]
-        if 'user' in kwargs:
+        if 'account' in kwargs:
+            vs = kwargs['account']
+            if isinstance(vs, six.string_types):
+                opt = '='
+            elif isinstance(vs, list):
+                opt = 'in'
+            else:
+                raise RuntimeError()
             filters.append(
-                ['task.account', '=', kwargs['user']]
+                ['task.account', opt, vs]
             )
 
         cgt_dtb = self._dtb_variants['project.database']
@@ -45,6 +68,8 @@ class Asset(_base.AbsEntity):
                         project=self._variants['project'],
                         role=self._variants['role'],
                         asset=self._variants['asset'],
+                        #
+                        step=i_dtb_variants['task.pipeline'],
                         task=i_dtb_variants['task.entity'],
                     ),
                     i_dtb_variants
@@ -77,6 +102,8 @@ class Asset(_base.AbsEntity):
                     project=self._variants['project'],
                     role=self._variants['role'],
                     asset=self._variants['asset'],
+                    #
+                    step=dtb_variants['task.pipeline'],
                     task=dtb_variants['task.entity'],
                 ),
                 dtb_variants

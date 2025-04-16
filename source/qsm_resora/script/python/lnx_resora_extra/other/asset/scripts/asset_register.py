@@ -76,10 +76,10 @@ class AssetBatchRegisterOpt(object):
         assets = project.assets(role=qsm_gnl_core.QsmAsset.get_character_role_mask())
         with bsc_log.LogProcessContext.create(maximum=len(assets)) as l_p:
             for i_asset in assets:
-                i_task = i_asset.task(self._prs_root.EntityTasks.Rig)
+                i_task = i_asset.task(self._prs_root.Tasks.rig)
                 if i_task is not None:
                     i_maya_scene_path = i_task.find_result(
-                        self._prs_root.FilePatterns.MayaRigFile
+                        self._prs_root.Patterns.MayaRigFile
                     )
                     if i_maya_scene_path is not None:
                         i_asset_path = i_asset.path
@@ -93,10 +93,10 @@ class AssetBatchRegisterOpt(object):
         assets = project.assets(role=qsm_gnl_core.QsmAsset.get_prop_role_mask())
         with bsc_log.LogProcessContext.create(maximum=len(assets)) as l_p:
             for i_asset in assets:
-                i_task = i_asset.task(self._prs_root.EntityTasks.Rig)
+                i_task = i_asset.task(self._prs_root.Tasks.rig)
                 if i_task is not None:
                     i_maya_scene_path = i_task.find_result(
-                        self._prs_root.FilePatterns.MayaRigFile
+                        self._prs_root.Patterns.MayaRigFile
                     )
                     if i_maya_scene_path is not None:
                         i_asset_path = i_asset.path
@@ -110,10 +110,10 @@ class AssetBatchRegisterOpt(object):
         assets = project.assets(role=qsm_gnl_core.QsmAsset.get_scenery_role_mask())
         with bsc_log.LogProcessContext.create(maximum=len(assets)) as l_p:
             for i_asset in assets:
-                i_task = i_asset.task(self._prs_root.EntityTasks.Model)
+                i_task = i_asset.task(self._prs_root.Tasks.model)
                 if i_task is not None:
                     i_maya_scene_path = i_task.find_result(
-                        self._prs_root.FilePatterns.MayaModelFIle
+                        self._prs_root.Patterns.MayaModelFIle
                     )
                     if i_maya_scene_path is not None:
                         i_asset_path = i_asset.path

@@ -814,6 +814,7 @@ class AbsItemModel(object):
                 continue
 
             i_texts = bsc_pinyin.Text.split_any_to_words_extra(i_text)
+            keys.append(i_text)
             keys.extend(i_texts)
 
         self._data.keyword_filter.key_tgt_set = set(keys)

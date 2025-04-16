@@ -125,10 +125,10 @@ class PrxToolbarForSceneryReference(
         entity = self._asset_prx_input.get_entity(path)
         if entity is not None:
             if entity.type == 'Asset':
-                task = entity.task(self._prs_root.EntityTasks.Model)
+                task = entity.task(self._prs_root.Tasks.model)
                 if task is not None:
                     result = task.find_result(
-                        self._prs_root.FilePatterns.MayaModelFIle
+                        self._prs_root.Patterns.MayaModelFIle
                     )
                     if result is not None:
                         self._asset_path = result

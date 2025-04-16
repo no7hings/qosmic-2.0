@@ -32,7 +32,7 @@ class MayaBin:
                 i_r = re.search(ptn, i_result, re.DOTALL)
                 if i_r:
                     i_version = i_r.group(1)
-                    dict_[i_version] = i_result
+                    dict_[i_version] = i_result, i_version
         return dict_
 
     @classmethod
@@ -42,6 +42,36 @@ class MayaBin:
                 '"{}"'.format(bin_path),
                 '-file',
                 '"{}"'.format(scene_path)
+            ]
+            _cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in _cmd_args]
+            _cmd_script = ' '.join(_cmd_args)
+
+            _env = bsc_core.get_env_mark()
+
+            _result = subprocess.Popen(
+                _cmd_script,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                env=_env
+            )
+            _stdout, _stderr = _result.communicate()
+
+            if _result.returncode != 0:
+                sys.stderr.write(_stderr+'\n')
+                return None
+
+        scene_path = bsc_core.ensure_unicode(scene_path)
+        scene_path = bsc_core.ensure_mbcs(scene_path)
+
+        t = threading.Thread(
+            target=fnc_
+        )
+        t.start()
+
+    @classmethod
+    def open_file_use_rez(cls, version, scene_path):
+        def fnc_():
+            _cmd_args = [
+                'rez-env', 'maya-{}'.format(version), '--no-local', '-- maya', '-file', '"{}"'.format(scene_path)
             ]
             _cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in _cmd_args]
             _cmd_script = ' '.join(_cmd_args)
@@ -108,3 +138,7 @@ class DccFilePatterns(object):
     CfxClothAbcFile = '{directory}/abc/{namespace}.cloth.abc'
     CfxClothJsonFile = '{directory}/json/{namespace}.cloth.json'
     CfxClothMcxFile = '{directory}/mcx/{namespace}.cloth.mcx'
+
+
+class HoudiniBin:
+    pass

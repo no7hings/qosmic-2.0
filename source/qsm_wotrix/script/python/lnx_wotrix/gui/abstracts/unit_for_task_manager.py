@@ -517,8 +517,10 @@ class _GuiSourceTaskUnitSceneOpt(_GuiBaseOpt):
                 maya_exe_dict = qsm_gnl_core.MayaBin.generate_dict()
 
                 for k, v in maya_exe_dict.items():
+                    i_bin_path, i_version = v
+
                     sub_menu_data.append(
-                        (k, 'file/file', functools.partial(qsm_gnl_core.MayaBin.open_file, v, scene_path))
+                        (k, 'file/file', functools.partial(qsm_gnl_core.MayaBin.open_file, i_bin_path, scene_path))
                     )
 
                 menu_data.append(

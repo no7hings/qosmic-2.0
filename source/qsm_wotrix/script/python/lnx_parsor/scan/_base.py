@@ -71,11 +71,11 @@ class AbsEntity(_cor_base.AbsEntityBase):
             variants_list = self._pull_next_entities_sync_cache(cache_key)
             if variants_list:
                 entities_cache_opt = self.NextEntitiesGeneratorClsDict[entity_type](self._root, variants)
-                entities_cache_opt.update_from_cache(variants_list)
+                entities_cache_opt._update_from_cache(variants_list)
                 return entities_cache_opt
 
         entities_cache_opt = self.NextEntitiesGeneratorClsDict[entity_type](self._root, variants)
-        variants_list = entities_cache_opt.update_from_storage(variants_extend, cache_flag)
+        variants_list = entities_cache_opt._update_from_storage(variants_extend, cache_flag)
 
         self._push_next_entities_sync_cache(cache_key, variants_list)
 
@@ -97,13 +97,13 @@ class AbsEntity(_cor_base.AbsEntityBase):
         return entities_cache_opt.get(name)
 
     # evey entity has task, either project, asset, sequence, shot
-    def _generate_tasks_cache_opt(self, variants_extend=None, cache_flag=True):
+    def _generate_tasks_generator(self, variants_extend=None, cache_flag=True):
         if self._tasks_cache_opt is not None:
             return self._tasks_cache_opt
 
         variants = copy.copy(self._variants)
         _ = self.TasksGeneratorCls(self, variants)
-        _.update_from_storage(variants_extend, cache_flag)
+        _._update_from_storage(variants_extend, cache_flag)
         self._tasks_cache_opt = _
         return _
 
@@ -167,32 +167,27 @@ class AbsEntity(_cor_base.AbsEntityBase):
     def dtb_variants(self):
         return self._dtb_variants
 
-    @property
-    def tasks(self):
-        _ = self._generate_tasks_cache_opt()
+    def tasks(self, **kwargs):
+        _ = self._generate_tasks_generator()
         return _.get_all()
 
     def task(self, name):
-        _ = self._generate_tasks_cache_opt()
+        _ = self._generate_tasks_generator()
         return _.get(name)
 
 
 class AbsEntitiesGenerator(object):
     EntityCls = None
 
-    def _generate_stg_ptn_opts(self):
-        _ = _cor_base.DisorderConfig()._entity_resolve_pattern_dict[self.EntityCls.Type]
-        if isinstance(_, list):
-            ps = _
-        else:
-            ps = [_]
-
-        list_ = []
-        for i_p in ps:
-            i_p_opt = bsc_core.BscStgParseOpt(i_p)
-            i_p_opt.update_variants(**self._variants)
-            list_.append(i_p_opt)
-        return list_
+    @classmethod
+    def _scan_fnc(cls, variants):
+        # pattens = _cor_base.DisorderConfig()._entity_resolve_patterns_dict[cls.EntityCls.Type]
+        pth_opt = bsc_core.BscStgParseOpt(
+            _cor_base.DisorderConfig()._entity_resolve_patterns_dict[cls.EntityCls.Type]
+        )
+        pth_opt.update_variants(**variants)
+        matchers = pth_opt.find_matches(sort=True)
+        return matchers
 
     def __init__(self, root, variants):
         self._root = root
@@ -201,32 +196,23 @@ class AbsEntitiesGenerator(object):
         self._variants = {}
         self._variants.update(variants)
 
-        # storage
-        self._stg_ptn_opt_for_scan = bsc_core.BscStgParseOpt(
-            _cor_base.DisorderConfig()._entity_resolve_pattern_dict[self.EntityCls.Type]
-        )
-        self._stg_ptn_opt_for_scan.update_variants(**self._variants)
-        # path
-        self._dcc_ptn_opt = bsc_core.BscDccParseOpt(
-            _cor_base.DisorderConfig()._entity_path_pattern_dict[self.EntityCls.Type]
-        )
-
-        self._variants_list = []
         self._entity_variant_key = self.EntityCls.VariantKey
 
-        self._entity_dict = {}
+        self._dict = {}
+        
+        self._variants_list = []
 
     def __str__(self):
-        return str(self._entity_dict.values())
+        return str(self._dict.values())
 
-    def update_from_storage(self, variants_extend=None, cache_flag=True):
+    def _update_from_storage(self, variants_extend=None, cache_flag=True):
         if variants_extend:
             for k, v in variants_extend.items():
                 # variant is one
                 if isinstance(v, six.string_types):
                     i_variants = copy.copy(self._variants)
                     i_variants[k] = v
-                    i_matchers = self.scan_fnc(i_variants)
+                    i_matchers = self._scan_fnc(i_variants)
                     for k_variant in i_matchers:
                         self._new_entity_fnc(k_variant)
                 # variant is many
@@ -234,32 +220,24 @@ class AbsEntitiesGenerator(object):
                     for j in v:
                         j_variants = copy.copy(self._variants)
                         j_variants[k] = j
-                        j_matchers = self.scan_fnc(j_variants)
+                        j_matchers = self._scan_fnc(j_variants)
                         for k_variant in j_matchers:
                             self._new_entity_fnc(k_variant)
                 else:
                     raise RuntimeError()
         else:
             variants = copy.copy(self._variants)
-            matches = self.scan_fnc(variants)
+            matches = self._scan_fnc(variants)
             for i_variants in matches:
                 self._new_entity_fnc(i_variants)
 
         return self._variants_list
 
-    def scan_fnc(self, variants):
-        pth_opt = bsc_core.BscStgParseOpt(
-            _cor_base.DisorderConfig()._entity_resolve_pattern_dict[self.EntityCls.Type]
-        )
-        pth_opt.update_variants(**variants)
-        matchers = pth_opt.find_matches(sort=True)
-        return matchers
-
     def _new_entity_fnc(self, variants):
         variants = _cor_base.EntityVariantKeyFnc.clean_fnc(variants)
-        path = self._dcc_ptn_opt.update_variants_to(**variants).get_value()
-        if path in self._entity_dict:
-            return self._entity_dict[path]
+        path = _cor_base.AbsEntityBase.to_entity_path(self.EntityCls.Type, variants)
+        if path in self._dict:
+            return self._dict[path]
 
         if self.EntityCls._variant_validation_fnc(variants) is True:
             variants['entity_name'] = variants[self.EntityCls.VariantKey]
@@ -268,20 +246,20 @@ class AbsEntitiesGenerator(object):
             entity = self.EntityCls(self._root, path, variants)
             self._root_entity_stack.register(path, entity)
             self._variants_list.append(variants)
-            self._entity_dict[path] = entity
+            self._dict[path] = entity
             return entity
 
-    def to_entity_path(self, name):
+    def _to_entity_path(self, name):
         variants = copy.copy(self._variants)
         variants[self._entity_variant_key] = name
-        return self._dcc_ptn_opt.update_variants_to(**variants).get_value()
+        return _cor_base.AbsEntityBase.to_entity_path(self.EntityCls.Type, variants)
 
-    def update_from_cache(self, data):
+    def _update_from_cache(self, data):
         for i_variants in data:
             self._new_entity_fnc(i_variants)
 
     def get_all(self):
-        return self._entity_dict.values()
+        return self._dict.values()
 
     def find_all(self, variants_extend):
         list_ = []
@@ -299,23 +277,21 @@ class AbsEntitiesGenerator(object):
         return list_
 
     def get(self, name):
-        path = self.to_entity_path(name)
-        if path in self._entity_dict:
-            return self._entity_dict[path]
+        path = self._to_entity_path(name)
+        if path in self._dict:
+            return self._dict[path]
 
         variants = copy.copy(self._variants)
+        # add name key
         variants[self._entity_variant_key] = name
-        ptn_opt = self._stg_ptn_opt_for_scan.update_variants_to(
-            **variants
-        )
-        matches = ptn_opt.find_matches()
+
+        matches = self._scan_fnc(variants)
         if matches:
             variants_new = matches[0]
             return self._new_entity_fnc(variants_new)
 
     def exist(self, name):
-        path = self.to_entity_path(name)
-        return path in self._entity_dict
+        return bool(self.get(name))
 
 
 class AbsStep(_cor_base.AbsStepBase):
@@ -342,71 +318,60 @@ class AbsTask(_cor_base.AbsTaskBase):
 
 class AbsTasksGenerator(object):
     TaskCls = None
-
-    def _generate_stg_ptn_opts(self):
-        _ = _cor_base.DisorderConfig()._entity_resolve_pattern_dict[self.TaskCls.Type]
-        if isinstance(_, list):
-            ps = _
-        else:
-            ps = [_]
-
-        list_ = []
-        for i_p in ps:
-            i_p_opt = bsc_core.BscStgParseOpt(i_p)
-            i_p_opt.update_variants(**self._variants)
-            list_.append(i_p_opt)
-        return list_
+    
+    @classmethod
+    def _scan_task_fnc(cls, entity_type, variants):
+        key = '{}{}'.format(entity_type, cls.TaskCls.Type)
+        pth_opt = bsc_core.BscStgParseOpt(
+            _cor_base.DisorderConfig()._entity_resolve_patterns_dict[key]
+        )
+        pth_opt.update_variants(**variants)
+        matchers = pth_opt.find_matches(sort=True)
+        return matchers
 
     def __init__(self, entity, variants):
         self._entity = entity
 
         self._variants = {}
         self._variants.update(variants)
-        key = '{}{}'.format(self._entity.Type, self.TaskCls.Type)
-        self._stg_ptn_opt_for_scan = bsc_core.BscStgParseOpt(
-            _cor_base.DisorderConfig()._entity_resolve_pattern_dict[key]
-        )
-        self._stg_ptn_opt_for_scan.update_variants(**self._variants)
-        self._dcc_ptn_opt = bsc_core.BscDccParseOpt(
-            _cor_base.DisorderConfig()._entity_path_pattern_dict[key]
-        )
 
         self._entity_variant_key = self.TaskCls.VariantKey
 
-        self._task_dict = {}
+        self._dict = {}
+        
+        self._variants_list = []
 
-    def update_from_storage(self, variants_extend=None, cache_flag=True):
-        matches = self._stg_ptn_opt_for_scan.find_matches(sort=True)
+    def _update_from_storage(self, variants_extend=None, cache_flag=True):
+        # todo: support variant_extend for step?
+        variants = dict(self._variants)
+        matches = self._scan_task_fnc(self._entity.Type, variants)
         for i_match in matches:
             i_variants = dict(self._variants)
             i_variants.update(i_match)
             self._new_task_fnc(i_variants)
 
     def _new_task_fnc(self, variants):
-        path = _cor_base.AbsEntityBase.to_task_path_(variants)
+        path = _cor_base.AbsEntityBase.to_task_path(variants)
         entity = self.TaskCls(self._entity, path, variants)
-        self._task_dict[path] = entity
+        self._dict[path] = entity
         return entity
 
     def _to_task_path(self, name):
         variants = copy.copy(self._variants)
         variants[self._entity_variant_key] = name
-        return _cor_base.AbsEntityBase.to_task_path_(variants)
+        return _cor_base.AbsEntityBase.to_task_path(variants)
 
     def get_all(self):
-        return self._task_dict.values()
+        return self._dict.values()
 
     def get(self, name):
         path = self._to_task_path(name)
-        if path in self._task_dict:
-            return self._task_dict[path]
+        if path in self._dict:
+            return self._dict[path]
 
         variants = copy.copy(self._variants)
         variants[self._entity_variant_key] = name
-        ptn_opt = self._stg_ptn_opt_for_scan.update_variants_to(
-            **variants
-        )
-        matches = ptn_opt.find_matches()
+        matches = self._scan_task_fnc(self._entity.Type, variants)
         if matches:
             variants_new = matches[0]
             return self._new_task_fnc(variants_new)

@@ -127,6 +127,12 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
             w.gui_setup(unit, resource_properties)
             w.do_gui_refresh_all()
             w.show_window_auto()
+        else:
+            self._window.exec_message_dialog(
+                'entry one {} and retry.'.format(resource_type),
+                title='Task Create',
+                status='warning'
+            )
 
     def gui_setup_post_fnc(self):
         for k, v in self._tab_widget_dict.items():
@@ -135,7 +141,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         self._top_prx_tool_bar.do_gui_refresh(fix_bug=True)
 
     def do_gui_refresh_all(self):
-        self.do_gui_refresh_units(self._unit_prx_tab_tool_box)
+        self.do_gui_refresh_unit_auto(self._unit_prx_tab_tool_box)
 
         resource_type = self._unit_prx_tab_tool_box.get_current_key()
         self.gui_get_scan_resource_prx_input(resource_type)

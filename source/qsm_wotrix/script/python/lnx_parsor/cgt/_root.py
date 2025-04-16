@@ -52,17 +52,23 @@ class Root(_base.AbsEntity):
         self._root_entity_stack.register(path, entity)
         return entity
 
+    def statuses(self, **kwargs):
+        return []
+
+    def status(self, name, **kwargs):
+        return None
+
     def current_user(self):
         t_tw = self._stage._api
         return self.user(
             name=t_tw.login.account()
         )
 
-    def department(self, name, **kwargs):
-        pass
-
     def departments(self, **kwargs):
-        pass
+        return []
+
+    def department(self, name, **kwargs):
+        return None
 
     def users(self, **kwargs):
         t_tw = self._stage._api
@@ -81,9 +87,12 @@ class Root(_base.AbsEntity):
                 self._root._new_entity_fnc(
                     _people.User,
                     dict(
-                        cgt_user=i_dtb_variants['account.entity'],
+                        # todo: use login
+                        user=i_dtb_variants['account.entity'],
+                        #
+                        account=i_dtb_variants['account.entity'],
                         # todo: add field to save login
-                        user=i_dtb_variants.get('account.login'),
+                        login=i_dtb_variants.get('account.login'),
                         #
                         entity_name=i_dtb_variants['account.entity'],
                         entity_gui_name=i_dtb_variants['account.name'],
@@ -105,7 +114,10 @@ class Root(_base.AbsEntity):
             return self._root._new_entity_fnc(
                 _people.User,
                 dict(
+                    # todo: use login
                     user=name,
+                    #
+                    account=name,
                     # todo: add field to save login
                     login=dtb_variants.get('account.login'),
                     #

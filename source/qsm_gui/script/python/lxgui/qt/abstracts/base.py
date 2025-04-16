@@ -1527,7 +1527,7 @@ class AbsQtValueHistoryExtraDef(object):
             values = _gui_core.GuiHistoryStage().get_all(
                 self._history_key
             )
-            if values:
+            if values and isinstance(values, list):
                 # latest show on top
                 values.reverse()
                 # value validation

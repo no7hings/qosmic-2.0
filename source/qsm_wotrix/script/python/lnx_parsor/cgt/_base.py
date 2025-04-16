@@ -18,17 +18,18 @@ class AbsEntity(_cor_base.AbsEntityBase):
         Asset = 'asset'
         Episode = 'eps'
         Sequence = 'seq'
-        Shot = 'Shot'
+        Shot = 'shot'
 
         Step = 'pipeline'
 
     ResourceTypeMap = {
         CgtEntityTypes.Project: _cor_base.ResourceTypes.Project,
         CgtEntityTypes.Asset: _cor_base.ResourceTypes.Asset,
+        CgtEntityTypes.Episode: _cor_base.ResourceTypes.Episode,
         CgtEntityTypes.Sequence: _cor_base.ResourceTypes.Sequence,
         CgtEntityTypes.Shot: _cor_base.ResourceTypes.Shot,
     }
-    ResourceTypeMapReverse = {
+    ResourceTypeQuery = {
         v: k for k, v in ResourceTypeMap.items()
     }
 
@@ -98,7 +99,7 @@ class AbsEntity(_cor_base.AbsEntityBase):
     def _new_step_fnc(self, variants, dtb_variants):
         variants = _cor_base.EntityVariantKeyFnc.clean_fnc(variants)
 
-        path = self.to_step_path(self.Type, variants)
+        path = self.to_step_path(variants)
         return self.StepCls(
             self, path, variants, dtb_variants=dtb_variants
         )
@@ -106,7 +107,7 @@ class AbsEntity(_cor_base.AbsEntityBase):
     def _new_task_fnc(self, variants, dtb_variants):
         variants = _cor_base.EntityVariantKeyFnc.clean_fnc(variants)
 
-        path = self.to_task_path(self.Type, variants)
+        path = self.to_task_path(variants)
         return self.TaskCls(
             self, path, variants, dtb_variants=dtb_variants
         )
@@ -116,6 +117,16 @@ class AbsEntity(_cor_base.AbsEntityBase):
     
     def task(self, name):
         raise NotImplementedError()
+
+
+class AbsResourceType(_cor_base.AbsResourceTypeBase):
+    def __init__(self, *args, **kwargs):
+        super(AbsResourceType, self).__init__(*args, **kwargs)
+        self._dtb_variants = kwargs.get('dtb_variants', {})
+
+    @property
+    def dtb_variants(self):
+        return self._dtb_variants
 
 
 class AbsStep(_cor_base.AbsStepBase):

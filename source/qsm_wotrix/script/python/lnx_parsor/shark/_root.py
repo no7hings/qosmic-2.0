@@ -31,7 +31,7 @@ class _Entity(dict):
         return '\n'+self.__str__()
 
 
-class Database(_abc_.AbsBase):
+class Root(_abc_.AbsBase):
     LOCK = threading.Lock()
     
     @classmethod

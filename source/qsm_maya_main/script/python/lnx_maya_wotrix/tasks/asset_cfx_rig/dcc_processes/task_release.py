@@ -73,7 +73,7 @@ class AssetCfxRigReleaseProcess(object):
             _task_dcc_core.AssetCfxRigHandle.load_rig_preset('default')
             
             # create enable aux
-            _task_dcc_core.AssetCfxRigHandle.create_nclothes_enable_aux()
+            _task_dcc_core.AssetCfxRigHandle().create_nclothes_enable_aux()
 
             # export scene
             location = _task_dcc_core.AssetCfxRigHandle.LOCATION
