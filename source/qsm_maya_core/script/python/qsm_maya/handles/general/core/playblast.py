@@ -7,7 +7,7 @@ import maya.mel as mel
 import qsm_maya.core as qsm_mya_core
 
 
-class RenderSetting(object):
+class RenderSetting:
     @classmethod
     def setup(cls, camera, display_mode, texture_enable, light_enable, shadow_enable):
         if qsm_mya_core.Scene.get_is_ui_mode():
@@ -47,7 +47,7 @@ class RenderSetting(object):
             )
 
 
-class CameraDisplay(object):
+class CameraDisplay:
     @classmethod
     def setup(cls, camera, options):
         if options is not None:
@@ -85,7 +85,7 @@ class CameraDisplay(object):
             cmds.setAttr(camera+'.displayGateMaskColor', 0, 0, 0, type='double3')
 
 
-class Window(object):
+class Window:
     WINDOW_NAME = 'preview_window_2'
 
     @classmethod

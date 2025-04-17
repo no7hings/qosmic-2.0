@@ -178,33 +178,27 @@ class Log(object):
 
     @classmethod
     def get(cls, text):
-        text = ensure_string(text)
-        return '{} {}'.format(cls.get_time(), text)
+        return '{} {}'.format(cls.get_time(), ensure_string(text))
 
     @classmethod
     def get_result(cls, text):
-        text = ensure_string(text)
-        return cls.get('''        | {}'''.format(text))
+        return cls.get('''        | {}'''.format(ensure_string(text)))
 
     @classmethod
     def get_warning(cls, text):
-        text = ensure_string(text)
-        return cls.get('''warning | {}'''.format(text))
+        return cls.get('''warning | {}'''.format(ensure_string(text)))
 
     @classmethod
     def get_error(cls, text):
-        text = ensure_string(text)
-        return cls.get('''  error | {}'''.format(text))
+        return cls.get('''  error | {}'''.format(ensure_string(text)))
 
     @classmethod
     def get_debug(cls, text):
-        text = ensure_string(text)
-        return cls.get('''  debug | {}'''.format(text))
+        return cls.get('''  debug | {}'''.format(ensure_string(text)))
 
     @classmethod
     def get_test(cls, text):
-        text = ensure_string(text)
-        return cls.get('''   test | {}'''.format(text))
+        return cls.get('''   test | {}'''.format(ensure_string(text)))
 
     @classmethod
     def result(cls, text):
@@ -279,10 +273,8 @@ class Log(object):
         :param args: str/unicode, ...
         :return:
         """
-        name = ensure_string(name)
-        text = ''.join(ensure_string(i) for i in args)
         return cls.get_error(
-            '<{}> {}'.format(name, text)
+            '<{}> {}'.format(ensure_string(name), ''.join(ensure_string(i) for i in args))
         )
 
     @classmethod
@@ -292,26 +284,20 @@ class Log(object):
         :param args: str/unicode, ...
         :return:
         """
-        name = ensure_string(name)
-        text = ''.join(ensure_string(i) for i in args)
         return cls.trace_result(
-            '<{}> {}'.format(name, text)
+            '<{}> {}'.format(ensure_string(name), ''.join(ensure_string(i) for i in args))
         )
 
     @classmethod
     def trace_method_warning(cls, name, *args):
-        name = ensure_string(name)
-        text = ''.join(ensure_string(i) for i in args)
         return cls.trace_warning(
-            '<{}> {}'.format(name, text)
+            '<{}> {}'.format(ensure_string(name), ''.join(ensure_string(i) for i in args))
         )
 
     @classmethod
     def trace_method_error(cls, name, *args):
-        name = ensure_string(name)
-        text = ''.join(ensure_string(i) for i in args)
         return cls.trace_error(
-            '<{}> {}'.format(name, text)
+            '<{}> {}'.format(ensure_string(name), ''.join(ensure_string(i) for i in args))
         )
 
     @classmethod
@@ -325,10 +311,8 @@ class Log(object):
     @classmethod
     def debug_method(cls, name, *args):
         if cls.DEBUG is True:
-            name = ensure_string(name)
-            text = ''.join(ensure_string(i) for i in args)
             return cls.debug(
-                '<{}> {}'.format(name, text)
+                '<{}> {}'.format(ensure_string(name), ''.join(ensure_string(i) for i in args))
             )
 
     @classmethod

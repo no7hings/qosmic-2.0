@@ -1,14 +1,14 @@
 # coding:utf-8
 import pkgutil as _pkgutil
 
-import lxbasic.log as _log_core
-
 CRYPTO_FLAG = False
 
 _module = _pkgutil.find_loader('cryptography')
 
 if _module:
     CRYPTO_FLAG = True
+
+    import lxbasic.log as _log_core
 
     _log_core.Log.trace_method_result(
         'cryptography', 'load successful.'

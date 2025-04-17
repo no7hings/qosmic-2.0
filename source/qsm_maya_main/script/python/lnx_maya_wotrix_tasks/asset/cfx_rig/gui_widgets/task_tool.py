@@ -180,6 +180,10 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
             'automation.rest_rig_controls_transformation', self.on_rest_rig_controls_transformation
         )
 
+        self._prx_options_node.set(
+            'automation.auto_color', self.on_auto_color
+        )
+
     def on_create_groups(self):
         if self._unit._gui_task_tool_opt is not None:
             self._unit._gui_task_tool_opt.create_groups_for('cfx_rig')
@@ -296,6 +300,10 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
     def on_rest_rig_controls_transformation(self):
         if self._unit._gui_task_tool_opt is not None:
             self._unit._gui_task_tool_opt.rest_rig_controls_transformation()
+
+    def on_auto_color(self):
+        if self._unit._gui_task_tool_opt is not None:
+            self._unit._gui_task_tool_opt.auto_color()
 
 
 class _PrxExtraToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):

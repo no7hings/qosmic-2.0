@@ -114,12 +114,19 @@ build:
                 name_chs: '自动加载解算预设'
                 value: True
 
+            auto_remove_scenery:
+                widget: boolean
+                name: 'Auto Remove Scenery'
+                name_chs: '自动移除场景'
+                value: False
+                history_group: ['wotrix', 'shot', 'cfx_cloth', 'task_release']
+                pull_history_latest: True
+
             solver_start_frame:
                 widget: integer
                 name: 'Solver Start Frame'
                 name_chs: '解算器起始帧'
                 value: 1
-
 
             drive_mode:
                 widget: capsule_string

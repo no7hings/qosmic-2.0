@@ -4,6 +4,8 @@ import maya.cmds as cmds
 
 import qsm_maya.core as qsm_mya_core
 
+import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
+
 import qsm_maya.handles.cfx.core as qsm_mya_hdl_cfx_core
 
 from ...base.gui_operates import task_tool as _asset_gnl_task_tool
@@ -376,3 +378,12 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
         self.generate_rig_opt()._adv_rig.rest_controls_transformation(
             reset_scheme='transform', translate=True, rotate=True
         )
+
+    @classmethod
+    def auto_color(cls):
+        meshes = []
+        meshes.extend(_task_dcc_core.CfxClothGeoGrpOrg().find_descendants(['mesh']))
+        meshes.extend(_task_dcc_core.CfxAppendixGeoGrpOrg().find_descendants(['mesh']))
+        meshes.extend(_task_dcc_core.CfxColliderGeoGrpOrg().find_descendants(['mesh']))
+
+        qsm_mya_hdl_gnl_core.RandomShader.assign_all(meshes)

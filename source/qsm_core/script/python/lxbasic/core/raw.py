@@ -24,6 +24,13 @@ from ..wrap import *
 
 class BscColor:
     @classmethod
+    def srgb_to_linear(cls, c):
+        # c is (0-1.0)
+        if c <= 0.04045:
+            return c/12.92
+        return ((c+0.055)/1.055)**2.4
+
+    @classmethod
     def rgb2hex(cls, r, g, b):
         return hex(r)[2:].zfill(2)+hex(g)[2:].zfill(2)+hex(b)[2:].zfill(2)
 

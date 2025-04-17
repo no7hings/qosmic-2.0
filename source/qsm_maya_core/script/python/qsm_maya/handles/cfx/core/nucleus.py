@@ -8,6 +8,8 @@ class NCloth(abc_.AbsShapeOpt):
     DEFAULT_PROPERTIES = dict(
         displayColor=(1, 0, 1),
 
+        thickness=0.05,
+
         inputMeshAttract=1,
         inputAttractMethod=1,
         inputAttractMapType=1
@@ -21,7 +23,9 @@ class NRigid(abc_.AbsShapeOpt):
     SHAPE_TYPE = 'nRigid'
 
     DEFAULT_PROPERTIES = dict(
-        displayColor=(0, 0, 1)
+        displayColor=(0, 0, 1),
+
+        thickness=0.05,
     )
 
     def __init__(self, *args, **kwargs):

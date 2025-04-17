@@ -22,6 +22,7 @@ class Swap(object):
         )
         if cgt_exe_paths:
             dir_path = os.path.dirname(cgt_exe_paths[0])
+            # add python package
             py_path = '{}/base'.format(os.path.dirname(dir_path.replace('\\', '/')))
             if py_path not in sys.path:
                 sys.path.append(py_path)

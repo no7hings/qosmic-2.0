@@ -79,8 +79,7 @@ class Reference(object):
     def duplicate(cls, path):
         namespace = cmds.referenceQuery(path, namespace=1, shortName=1)
         file_path = cmds.referenceQuery(path, filename=1, withoutCopyNumber=1)
-        result = _scene_file.SceneFile.reference_file(file_path, namespace)
-        namespace_new = _scene_file.SceneFile.get_namespace(result)
+        namespace_new = _scene_file.SceneFile.reference_file(file_path, namespace)
         return namespace_new
 
     @classmethod

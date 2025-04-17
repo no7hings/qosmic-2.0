@@ -8,3 +8,6 @@ from .control import *
 from .hud import *
 
 from .playblast import *
+
+from .random_shader import *
+

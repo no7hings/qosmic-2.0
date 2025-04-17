@@ -107,8 +107,7 @@ def ensure_unicode(s):
         return s
     elif isinstance(s, _six.binary_type):
         return s.decode('utf-8')
-    else:
-        return s
+    return s
 
 
 def ensure_mbcs(s):

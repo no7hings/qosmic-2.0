@@ -58,7 +58,7 @@ class AbsEntity(_cor_base.AbsEntityBase):
 
     def __str__(self):
         return 'Entity({})'.format(
-            json.dumps(self._variants, indent=4)
+            bsc_core.ensure_string(json.dumps(self._variants, indent=4, ensure_ascii=False))
         )
 
     def __repr__(self):

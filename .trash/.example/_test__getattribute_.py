@@ -6,9 +6,9 @@ class A(object):
         pass
 
     def a(self):
-        print 'c'
+        print('c')
 
 
 a = A()
 
-print a.__getattribute__('a')
+print(a.__getattribute__('a'))

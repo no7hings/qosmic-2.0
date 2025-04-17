@@ -16,6 +16,7 @@ class AdvSketchSet(object):
     @classmethod
     def find_sketches(cls, namespace):
         _ = cls.find_root_location(namespace)
+        # print(namespace, _, 'AAAA')
         if _:
             return cmds.ls(_, type='joint', long=1, dag=1) or []
         return []
