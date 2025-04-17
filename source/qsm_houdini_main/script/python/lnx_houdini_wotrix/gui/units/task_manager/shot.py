@@ -3,13 +3,13 @@ from lnx_wotrix.gui.abstracts import unit_for_task_manager as _abs_unit_for_task
 
 import lnx_houdini.core as lnx_hou_core
 
-from ... import core as _lnx_wtx_core
+from .... import core as _lnx_wtx_core
 
 
 class GuiTaskManagerMain(_abs_unit_for_task_manager.AbsPrxUnitForTaskManager):
     TASK_PARSE_CLS = _lnx_wtx_core.TaskParse
 
-    RESOURCE_TYPE = TASK_PARSE_CLS.ResourceTypes.Project
+    RESOURCE_TYPE = TASK_PARSE_CLS.ResourceTypes.Shot
 
     GUI_KEY = RESOURCE_TYPE
 

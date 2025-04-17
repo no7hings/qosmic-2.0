@@ -5,13 +5,13 @@ from lnx_wotrix.gui.abstracts import page_for_task_manager as _abs_page_for_task
 
 from ... import core as _lnx_wtx_core
 
-from ..units import project_task_manager as _unit_project_task_manager
+from ..units.task_manager import project as _unit_project_task_manager
 
-from ..units import asset_task_manager as _unit_asset_task_manager
+from ..units.task_manager import asset as _unit_asset_task_manager
 
-from ..units import sequence_task_manager as _unit_sequence_task_manager
+from ..units.task_manager import sequence as _unit_sequence_task_manager
 
-from ..units import shot_task_manager as _unit_shot_task_manager
+from ..units.task_manager import shot as _unit_shot_task_manager
 
 
 class PrxPageForTaskManager(_abs_page_for_task_manager.AbsPrxPageForTaskManager):
@@ -27,10 +27,10 @@ class PrxPageForTaskManager(_abs_page_for_task_manager.AbsPrxPageForTaskManager)
         ]
 
     UNIT_CLASSES = [
-        _unit_project_task_manager.PrxUnitForProjectTaskManager,
-        _unit_asset_task_manager.PrxUnitForAssetTaskManager,
-        _unit_sequence_task_manager.PrxUnitForSequenceTaskManager,
-        _unit_shot_task_manager.PrxUnitForShotTaskManager,
+        _unit_project_task_manager.GuiTaskManagerMain,
+        _unit_asset_task_manager.GuiTaskManagerMain,
+        _unit_sequence_task_manager.GuiTaskManagerMain,
+        _unit_shot_task_manager.GuiTaskManagerMain,
     ]
 
     def __init__(self, *args, **kwargs):

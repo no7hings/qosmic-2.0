@@ -15,7 +15,7 @@ requires = [
 
 
 def commands():
-    env.QSM_MAYA_CORE_BASE = '{root}'
+    env.QSM_HOUDINI_CORE_BASE = '{root}'
     # python
     env.PYTHONPATH.append('{root}/script/python')
     # configure

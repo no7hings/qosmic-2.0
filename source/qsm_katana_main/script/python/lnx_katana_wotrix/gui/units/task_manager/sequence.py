@@ -6,10 +6,10 @@ import lnx_katana.core as lnx_hou_core
 from ... import core as _lnx_wtx_core
 
 
-class PrxUnitForAssetTaskManager(_abs_unit_for_task_manager.AbsPrxUnitForTaskManager):
+class GuiTaskManagerMain(_abs_unit_for_task_manager.AbsPrxUnitForTaskManager):
     TASK_PARSE_CLS = _lnx_wtx_core.TaskParse
 
-    RESOURCE_TYPE = TASK_PARSE_CLS.ResourceTypes.Asset
+    RESOURCE_TYPE = TASK_PARSE_CLS.ResourceTypes.Sequence
 
     GUI_KEY = RESOURCE_TYPE
 
@@ -25,5 +25,5 @@ class PrxUnitForAssetTaskManager(_abs_unit_for_task_manager.AbsPrxUnitForTaskMan
         katana_dir_path = task_session.get_file_for('{}-source-katana-dir'.format(resource_type))
         lnx_hou_core.Workspace.create(katana_dir_path)
 
-    def __init__(self, *args, **kwargs):
-        super(PrxUnitForAssetTaskManager, self).__init__(*args, **kwargs)
+    def __init__(self, window, session, *args, **kwargs):
+        super(GuiTaskManagerMain, self).__init__(window, session, *args, **kwargs)

@@ -22,6 +22,7 @@ class GuiProxyUtil(object):
     ):
         exists_app = gui_qt_core.QtUtil.get_exists_app()
         is_window_running = None
+        # no application, etc. clarisse, ue
         if exists_app is None:
             # check show window as unique
             if window_unique_name is not None:
@@ -83,6 +84,7 @@ class GuiProxyUtil(object):
                 window_process_fnc(prx_window)
 
             gui_qt_core.GuiQtDcc.exit_app(app)
+        # has application
         else:
             prx_window = prx_window_cls(**window_kwargs)
             prx_window.set_main_window_geometry(gui_qt_core.GuiQtDcc.get_qt_main_window_geometry_args())
@@ -98,6 +100,8 @@ class GuiProxyUtil(object):
                 window_process_fnc(prx_window)
 
             if gui_qt_core.GuiQtDcc.get_is_clarisse():
+                gui_qt_core.GuiQtDcc.exit_app(exists_app)
+            elif gui_qt_core.GuiQtDcc.get_is_ue():
                 gui_qt_core.GuiQtDcc.exit_app(exists_app)
 
     @staticmethod

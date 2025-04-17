@@ -34,11 +34,11 @@ class PrxPageForTaskManager(_abs_page_for_task_manager.AbsPrxPageForTaskManager)
         ]
 
     UNIT_CLASSES = [
-        _unit_project.PrxUnitForProjectTaskManager,
-        _unit_asset.PrxUnitForAssetTaskManager,
-        _unit_episode.PrxUnitForEpisodeTaskManager,
-        _unit_sequence.PrxUnitForSequenceTaskManager,
-        _unit_shot.PrxUnitForShotTaskManager,
+        _unit_project.GuiTaskManagerMain,
+        _unit_asset.GuiTaskManagerMain,
+        _unit_episode.GuiTaskManagerMain,
+        _unit_sequence.GuiTaskManagerMain,
+        _unit_shot.GuiTaskManagerMain,
     ]
 
     def __init__(self, *args, **kwargs):

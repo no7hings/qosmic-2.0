@@ -12,6 +12,7 @@ def test():
     bsc_session.Hook.execute(
         '*/qsm-lazy-workspace'
     )
+    # import lxbasic.session as bsc_session; bsc_session.Hook.execute("desktop-tools/qsm-lazy-workspace")
 
 
 test()

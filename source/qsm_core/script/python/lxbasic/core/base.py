@@ -64,10 +64,7 @@ class BscPlatform(object):
 class BscApplication(object):
     @classmethod
     def get_is_maya(cls):
-        _ = os.environ.get('MAYA_APP_DIR')
-        if _:
-            return True
-        return False
+        return bool(os.environ.get('QSM_MAYA_CORE_BASE')) or bool(os.environ.get('MAYA_APP_DIR'))
 
     @classmethod
     def get_maya_version(cls):
@@ -81,30 +78,23 @@ class BscApplication(object):
 
     @classmethod
     def get_is_houdini(cls):
-        _ = os.environ.get('HIP')
-        if _:
-            return True
-        return False
+        return bool(os.environ.get('QSM_HOUDINI_CORE_BASE')) or bool(os.environ.get('HIP'))
 
     @classmethod
     def get_is_katana(cls):
-        _ = os.environ.get('KATANA_ROOT')
-        if _:
-            return True
-        return False
+        return bool(os.environ.get('QSM_KATANA_CORE_BASE')) or bool(os.environ.get('KATANA_ROOT'))
 
     @classmethod
     def get_is_clarisse(cls):
-        _ = os.environ.get('IX_PYTHON2HOME')
-        if _:
-            return True
-        return False
+        return bool(os.environ.get('IX_PYTHON2HOME'))
+
+    @classmethod
+    def get_is_ue(cls):
+        # fixme: add a local variant instance
+        return bool(os.environ.get('QSM_UE_CORE_BASE'))
 
     @classmethod
     def get_is_lynxi(cls):
-        _ = os.environ.get('QSM_ROOT')
-        if _:
-            return True
         return False
 
     @classmethod
@@ -118,6 +108,7 @@ class BscApplication(object):
             cls.get_is_houdini,
             cls.get_is_katana,
             cls.get_is_clarisse,
+            cls.get_is_ue(),
             cls.get_is_lynxi
         ]:
             if i_fnc() is True:
@@ -131,6 +122,7 @@ class BscApplication(object):
             (cls.get_is_houdini, _configure.BscApplicationCfg.Houdini),
             (cls.get_is_katana, _configure.BscApplicationCfg.Katana),
             (cls.get_is_clarisse, _configure.BscApplicationCfg.Clarisse),
+            (cls.get_is_ue, _configure.BscApplicationCfg.UE),
             (cls.get_is_lynxi, _configure.BscApplicationCfg.Lynxi)
         ]:
             if i_fnc() is True:

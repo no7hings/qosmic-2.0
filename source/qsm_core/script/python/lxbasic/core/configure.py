@@ -68,6 +68,7 @@ class BscApplicationCfg(object):
     Katana = 'katana'
     Nuke = 'nuke'
     Clarisse = 'clarisse'
+    UE = 'ue'
     #
     Lynxi = 'lynxi'
     #
@@ -79,6 +80,7 @@ class BscApplicationCfg(object):
         Katana,
         Nuke,
         Clarisse,
+        UE,
         #
         Lynxi
     ]

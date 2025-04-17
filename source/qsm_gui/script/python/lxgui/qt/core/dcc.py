@@ -5,6 +5,8 @@ import six
 
 import lxbasic.log as bsc_log
 
+import lxbasic.core as bsc_core
+
 import lxbasic.storage as bsc_storage
 # gui
 from ... import core as gui_core
@@ -17,19 +19,23 @@ from . import base as _base
 class AbsGuiDcc(object):
     @classmethod
     def get_is_maya(cls):
-        return gui_core.GuiUtil.get_is_maya()
+        return bsc_core.BscApplication.get_is_maya()
 
     @classmethod
     def get_is_houdini(cls):
-        return gui_core.GuiUtil.get_is_houdini()
+        return bsc_core.BscApplication.get_is_houdini()
 
     @classmethod
     def get_is_katana(cls):
-        return gui_core.GuiUtil.get_is_katana()
+        return bsc_core.BscApplication.get_is_katana()
 
     @classmethod
     def get_is_clarisse(cls):
-        return gui_core.GuiUtil.get_is_clarisse()
+        return bsc_core.BscApplication.get_is_clarisse()
+
+    @classmethod
+    def get_is_ue(cls):
+        return bsc_core.BscApplication.get_is_ue()
 
 
 class QtMaya(object):
@@ -242,10 +248,12 @@ class GuiQtDcc(AbsGuiDcc):
             return QtKatana.get_qt_main_window()
         elif cls.get_is_clarisse():
             return GuiQtClarisse.get_qt_main_window()
-        #
+        elif cls.get_is_ue():
+            return None
+
         if cls.QT_MAIN_WINDOW is not None:
             return cls.QT_MAIN_WINDOW
-        #
+
         # noinspection PyArgumentList
         _ = QtWidgets.QApplication.topLevelWidgets()
         if _:
@@ -305,6 +313,8 @@ class GuiQtDcc(AbsGuiDcc):
             import pyqt_clarisse
 
             pyqt_clarisse.exec_(app)
+        elif cls.get_is_ue():
+            app.exec_()
         else:
             sys.exit(app.exec_())
 
