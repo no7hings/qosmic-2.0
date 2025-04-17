@@ -1,5 +1,5 @@
 # coding:utf-8
-name = 'qsm_katana_main'
+name = 'qsm_ue_core'
 
 version = '0.0.0'
 
@@ -11,23 +11,16 @@ tools = []
 
 requires = [
     'qsm_dcc_main',
-    # maya
-    'qsm_katana_core',
+    # ue
+    'qsm_ue_core',
 ]
 
 
 def commands():
-    env.QSM_DCC_MAIN_BASE = '{root}'
+    env.QSM_UE_MAIN_BASE = '{root}'
     # python
     env.PYTHONPATH.append('{root}/script/python')
     # configure
     env.QSM_EXTEND_CONFIGURES.append('{root}/configures')
     # resource
     env.QSM_EXTEND_RESOURCES.append('{root}/resources')
-    # katana startup
-    env.KATANA_RESOURCES.append('{root}/startup/katana')
-
-
-timestamp = 1639389924
-
-format_version = 2

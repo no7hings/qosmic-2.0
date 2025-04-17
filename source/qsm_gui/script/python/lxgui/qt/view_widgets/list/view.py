@@ -275,6 +275,7 @@ class QtListWidget(
 
     def __init__(self, *args, **kwargs):
         super(QtListWidget, self).__init__(*args, **kwargs)
+
         # refresh
         self._refresh_button = _wgt_button.QtIconPressButton()
         self._grid_lot.addWidget(self._refresh_button, 0, 0, 1, 1)
@@ -283,11 +284,13 @@ class QtListWidget(
             _gui_core.GuiIcon.get('refresh')
         )
         self._refresh_button.press_clicked.connect(self.refresh.emit)
+
         # top
         self._top_scroll_box = _wgt_scroll.QtHScrollBox()
         self._grid_lot.addWidget(self._top_scroll_box, 0, 1, 1, 1)
         self._top_scroll_box._set_layout_align_left_or_top_()
         self._top_scroll_box.setFixedHeight(self.TOOL_BAR_W)
+
         # left
         self._left_scroll_box = _wgt_scroll.QtVScrollBox()
         self._grid_lot.addWidget(self._left_scroll_box, 1, 0, 1, 1)

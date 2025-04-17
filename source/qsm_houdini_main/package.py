@@ -11,9 +11,8 @@ tools = []
 
 requires = [
     'qsm_dcc_main',
-    # katana
+    # houdini
     'qsm_houdini_core',
-    'qsm_houdini_lib',
 ]
 
 

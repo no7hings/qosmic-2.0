@@ -17,36 +17,41 @@ class Main(object):
     ROOT = '/'.join(os.path.dirname(__file__.replace('\\', '/')).split('/')[:-1])
 
     PACKAGES = [
+        # basic
         'qsm_main',
         'qsm_core',
         'qsm_gui',
         'qsm_lib',
         'qsm_resource',
         'qsm_extra',
-
+        # tools
         'qsm_resora',
         'qsm_wotrix',
         'qsm_nexsolve',
-
+        # dcc main
         'qsm_dcc_main',
         'qsm_dcc_core',
         'qsm_dcc_gui',
         'qsm_dcc_lib',
         'qsm_dcc_resource',
         'qsm_dcc_extra',
-
+        # maya
         'qsm_maya_core',
         'qsm_maya_lib',
         'qsm_maya_resora',
         'qsm_maya_main',
-
+        # houdini
         'qsm_houdini_core',
         'qsm_houdini_lib',
         'qsm_houdini_main',
-
+        # katana
         'qsm_katana_core',
         'qsm_katana_lib',
         'qsm_katana_main',
+        # ue
+        'qsm_ue_core',
+        'qsm_ue_lib',
+        'qsm_ue_main',
     ]
 
     @classmethod

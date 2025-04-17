@@ -250,5 +250,35 @@ if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_main\99.99.99 (
 ) else (
     mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_katana_main\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_katana_main
 )
+if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_core (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_core is exists
+) else (
+    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_core
+)
+if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_core\99.99.99 (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_core\99.99.99 is exists
+) else (
+    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_core\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_ue_core
+)
+if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_lib (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_lib is exists
+) else (
+    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_lib
+)
+if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_lib\99.99.99 (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_lib\99.99.99 is exists
+) else (
+    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_lib\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_ue_lib
+)
+if exist %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_main (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_main is exists
+) else (
+    mkdir  %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_main
+)
+if exist  %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_main\99.99.99 (
+    echo %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_main\99.99.99 is exists
+) else (
+    mklink /D %HOMEDRIVE%%HOMEPATH%\packages\qsm_ue_main\99.99.99 E:\myworkspace\qosmic-2.0\source\qsm_ue_main
+)
 popd
 echo. & pause
