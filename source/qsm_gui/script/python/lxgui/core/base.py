@@ -364,16 +364,16 @@ class GuiFont(object):
         )
 
 
-class GuiModifier(object):
+class GuiDebug(object):
     @staticmethod
-    def run_with_exception_catch(fnc):
+    def run(fnc):
         def fnc_(*args, **kwargs):
             # noinspection PyBroadException
             try:
                 _fnc = fnc(*args, **kwargs)
                 return _fnc
             except Exception:
-                bsc_log.LogException.trace()
+                bsc_log.LogDebug.trace()
                 raise
         return fnc_
 

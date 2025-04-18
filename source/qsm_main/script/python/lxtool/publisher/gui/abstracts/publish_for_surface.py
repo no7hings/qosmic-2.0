@@ -104,7 +104,7 @@ class _PublishOptForSurface(object):
             option=option_opt.to_string()
         )
 
-    @bsc_core.BscModifier.run_with_exception_catch
+    @bsc_log.LogDebug.run
     def execute(self):
         fncs = [
             self.collection_review_fnc,

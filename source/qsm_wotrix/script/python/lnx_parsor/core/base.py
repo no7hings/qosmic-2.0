@@ -475,7 +475,7 @@ class AbsTaskBase(object):
 
     def __str__(self):
         return 'Task({})'.format(
-            bsc_core.ensure_string(json.dumps(self._variants, indent=4, ensure_ascii=True))
+            bsc_core.ensure_string(json.dumps(self._variants, indent=4, ensure_ascii=False))
         )
 
     def __repr__(self):

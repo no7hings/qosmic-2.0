@@ -757,9 +757,7 @@ Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffmpeg.exe -i Z:
             s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             s_p.communicate()
         except subprocess.CalledProcessError:
-            import traceback
-
-            traceback.print_exc()
+            _base.Debug.trace()
 
     @classmethod
     def extract_all_frames(cls, video_path, image_format, width_maximum=None):

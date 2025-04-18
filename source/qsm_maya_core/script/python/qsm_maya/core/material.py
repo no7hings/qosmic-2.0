@@ -100,7 +100,7 @@ class MaterialOpt(_node.NodeOpt):
                 self._name_or_path, path
             )
         except Exception:
-            bsc_core.BscException.set_print()
+            bsc_core.Debug.trace()
 
 
 class MaterialLightLink(object):

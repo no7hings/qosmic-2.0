@@ -298,13 +298,14 @@ class GuiQtMenuOpt(object):
             raise RuntimeError()
 
     @staticmethod
-    @_gui_core.GuiModifier.run_with_exception_catch
+    @_gui_core.GuiDebug.run
     def _debug_run_cmd_script(cmd_str, *args, **kwargs):
         # for python3
+        # noinspection PyRedundantParentheses
         exec (cmd_str)
 
     @staticmethod
-    @_gui_core.GuiModifier.run_with_exception_catch
+    @_gui_core.GuiDebug.run
     def _debug_run_fnc(fnc, *args, **kwargs):
         fnc()
 

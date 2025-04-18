@@ -1,6 +1,8 @@
 # coding:utf-8
 import copy
 
+import lxbasic.log as bsc_log
+
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
@@ -209,7 +211,7 @@ class _PublishOptForGeneral(object):
             option=option_opt.to_string()
         )
 
-    @bsc_core.BscModifier.run_with_exception_catch
+    @bsc_core.Debug.run
     def execute(self):
         fncs = [
             self.pre_fnc,

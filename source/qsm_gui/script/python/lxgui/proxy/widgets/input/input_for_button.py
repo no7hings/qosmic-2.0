@@ -27,12 +27,12 @@ class PrxInputForPressButton(_input_base.AbsPrxInput):
     def get(self):
         return None
 
-    @_gui_core.GuiModifier.run_with_exception_catch
+    @_gui_core.GuiDebug.run
     def __exec_fnc(self, fnc):
         fnc()
 
     @staticmethod
-    @_gui_core.GuiModifier.run_with_exception_catch
+    @_gui_core.GuiDebug.run
     def __exec_scp(script):
         exec (script)
 
@@ -81,7 +81,7 @@ class PrxInputForSpcButton(_input_base.AbsPrxInput):
     def get(self):
         return None
 
-    @_gui_core.GuiModifier.run_with_exception_catch
+    @_gui_core.GuiDebug.run
     def __exec_fnc(self, fnc):
         fnc()
 
@@ -120,7 +120,7 @@ class PrxInputForValidateButton(_input_base.AbsPrxInput):
     def get(self):
         return None
 
-    @_gui_core.GuiModifier.run_with_exception_catch
+    @_gui_core.GuiDebug.run
     def __exec_fnc(self, fnc):
         fnc()
 

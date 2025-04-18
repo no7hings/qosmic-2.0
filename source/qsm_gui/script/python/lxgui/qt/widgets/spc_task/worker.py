@@ -390,7 +390,7 @@ class _QtSpcTaskThreadWorker(QtCore.QThread):
                     self.failed.emit(self._spc.get_results())
                 else:
                     self.failed.emit([])
-                bsc_core.BscException.print_stack()
+                bsc_core.Debug.trace()
             finally:
                 with QtCore.QMutexLocker(self.parent()._thread_worker_mutex):
                     ct = time.time()-st

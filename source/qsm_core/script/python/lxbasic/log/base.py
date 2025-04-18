@@ -519,39 +519,39 @@ class LogProcessContext(object):
         self.set_stop()
 
 
-class LogException:
+class LogDebug:
     @staticmethod
     def _trace():
-        import sys
-
-        import traceback
-
-        exc_texts = []
-        exc_type, exc_value, exc_stack = sys.exc_info()
-        if exc_type:
-            value = repr(exc_value)
-            sys.stderr.write('*'*80+'\n')
-            for i_stk in traceback.extract_tb(exc_stack):
-                i_file_path, i_line, i_fnc, i_fnc_line = i_stk
-                exc_texts.append(
-                    '    file "{}" line {} in {}\n        {}'.format(i_file_path, i_line, i_fnc, i_fnc_line)
-                )
-
-            sys.stderr.write('traceback:\n')
-            sys.stderr.write('\n'.join(exc_texts)+'\n')
-            sys.stderr.write(value+'\n')
-            sys.stderr.write('*'*80+'\n')
+        text = Debug.get_error_stack()
+        if text:
+            sys.stderr.write(text+'\n')
 
     @staticmethod
     def _gui_trace():
         if _bridge.BRG_FNC_LOG_GUI_EXCEPTION_ENABLE is True:
             if isinstance(_bridge.BRG_FNC_LOG_GUI_EXCEPTION_TRACE, (types.FunctionType, types.MethodType)):
                 _bridge.BRG_FNC_LOG_GUI_EXCEPTION_TRACE()
+                return True
+        return False
 
     @classmethod
     def trace(cls):
-        cls._trace()
-        cls._gui_trace()
+        if cls._gui_trace() is False:
+            # trace when gui is disabled
+            cls._trace()
+
+    @staticmethod
+    def run(fnc):
+        def fnc_(*args, **kwargs):
+            # noinspection PyBroadException
+            try:
+                _fnc = fnc(*args, **kwargs)
+                return _fnc
+            except Exception:
+                import lxbasic.core as bsc_core
+                LogDebug.trace()
+                raise
+        return fnc_
 
 
 if __name__ == '__main__':

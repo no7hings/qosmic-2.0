@@ -1017,7 +1017,7 @@ class CmdObjOpt(object):
             try:
                 i_port.set_default()
             except Exception:
-                bsc_core.BscException.set_print()
+                bsc_core.Debug.trace()
 
     def set(self, key, value):
         self.get_port(key).set(value)
@@ -1106,7 +1106,7 @@ class CmdShapeOpt(CmdObjOpt):
                 try:
                     cmds.sets(self.get_path(), forceElement=path)
                 except Exception:
-                    bsc_core.BscException.set_print()
+                    bsc_core.Debug.trace()
 
     def get_render_properties(self, renderer='arnold'):
         properties = {}

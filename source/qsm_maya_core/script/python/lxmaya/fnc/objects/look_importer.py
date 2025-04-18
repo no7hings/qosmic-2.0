@@ -563,7 +563,7 @@ class FncImporterForLookYml(gnl_fnc_abstracts.AbsFncImporterForLookYmlDcc):
                             #
                             port.set(value)
                         except Exception:
-                            bsc_core.BscException.set_print()
+                            bsc_core.Debug.trace()
                             bsc_log.Log.trace_method_error(
                                 'attribute-set',
                                 'obj="{}", port="{}" >> value="{}"'.format(

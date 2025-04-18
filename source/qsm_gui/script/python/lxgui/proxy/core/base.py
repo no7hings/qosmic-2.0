@@ -206,7 +206,7 @@ class GuiLog(object):
             return GuiProxyUtil.window_proxy_write_log(window_proxy, text)
 
 
-class GuiModifier(object):
+class GuiWindowModifier(object):
     @staticmethod
     def window_proxy_waiting(method):
         def sub_fnc_(*args, **kwargs):
@@ -255,35 +255,26 @@ class GuiExceptionCatch(object):
     def trace(cls):
         import sys
 
-        import traceback
-
-        exc_texts = []
-        exc_type, exc_value, exc_stack = sys.exc_info()
-        if exc_type:
-            value = repr(exc_value)
-            for i_stk in traceback.extract_tb(exc_stack):
-                i_file_path, i_line, i_fnc, i_fnc_line = i_stk
-                exc_texts.append(
-                    '    file "{}" line {} in {}\n        {}'.format(i_file_path, i_line, i_fnc, i_fnc_line)
-                )
-
+        text = bsc_core.Debug.get_error_stack()
+        if text:
             w = cls._generate_window()
-
-            text = '\n'.join(['*'*80]+['traceback:']+exc_texts+[value]+['*'*80])
-
             w.set_status(cls.ValidationStatus.Error)
             w.add_content(text)
+            w.set_status(cls.ValidationStatus.Error)
 
-            # save log
+            # show in window
+            w.add_content(text)
+
+            # save file
             file_path = bsc_log.LogBase.get_user_debug_file(
                 'script', create=True
             )
             bsc_storage.StgFileOpt(
                 file_path
             ).set_write(text)
-            
-            # output
-            sys.stderr.write(text)
+
+            # print
+            sys.stderr.write(text+'\n')
             return w
 
 

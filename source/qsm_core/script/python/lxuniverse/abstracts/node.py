@@ -1307,7 +1307,7 @@ class AbsStgFile(
                             'relation="{}" >> "{}"'.format(self.path, file_path_tgt)
                         )
                 except Exception:
-                    bsc_core.BscException.set_print()
+                    bsc_core.Debug.trace()
                     return False, bsc_log.Log.trace_method_error(
                         'file copy',
                         'file="{}" is exception'.format(self.path)

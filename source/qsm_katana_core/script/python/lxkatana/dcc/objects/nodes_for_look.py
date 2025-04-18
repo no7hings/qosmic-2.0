@@ -102,7 +102,7 @@ class Materials(ktn_abstracts.AbsKtnObjs):
                 try:
                     ktn_core.NGNmeOpt(i_ktn_obj).set_contents_update()
                 except Exception:
-                    bsc_core.BscException.set_print()
+                    bsc_core.Debug.trace()
                     #
                     bsc_log.Log.trace_error(
                         'materials update "NetworkMaterialEdit" "{}" is failed'.format(i_ktn_obj.getName())
@@ -147,7 +147,7 @@ class AndShaders(ktn_abstracts.AbsKtnObjs):
                 try:
                     ktn_core.NGNmeOpt(i_ktn_obj).set_contents_update()
                 except Exception:
-                    bsc_core.BscException.set_print()
+                    bsc_core.Debug.trace()
                     #
                     bsc_log.Log.trace_error(
                         'shaders update "NetworkMaterialEdit" "{}" is failed'.format(i_ktn_obj.getName())

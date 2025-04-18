@@ -244,7 +244,7 @@ class PlayblastOpt(object):
                     camera_display_options=None
                 )
             except Exception:
-                bsc_log.LogException.trace()
+                bsc_log.LogDebug.trace()
 
             finally:
                 for i in q.get_all():

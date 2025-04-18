@@ -426,7 +426,7 @@ class MeshOpt(
                     u'obj="{}"; uv-map-name="{}"'.format(self.obj.path, uv_map_name)
                 )
         except Exception:
-            bsc_core.BscException.set_print()
+            bsc_core.Debug.trace()
             bsc_log.Log.trace_method_error(
                 'mesh uv-map assign',
                 'obj="{}"'.format(self.obj.path)

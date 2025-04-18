@@ -1122,7 +1122,7 @@ class StgPathOpt(object):
         try:
             os.utime(self.get_path(), (timestamp, timestamp))
         except Exception:
-            _cor_base.BscException.set_print()
+            _cor_base.Debug.trace()
             bsc_log.Log.trace_error(
                 'change modify time failed'
             )
@@ -1495,7 +1495,7 @@ class StgFileOpt(StgPathOpt):
             try:
                 os.makedirs(directory)
             except Exception:
-                _cor_base.BscException.set_print()
+                _cor_base.Debug.trace()
         if self.ext in {'.json'}:
             with open(self.path, 'w') as j:
                 json.dump(
@@ -1520,7 +1520,7 @@ class StgFileOpt(StgPathOpt):
             StgGzipFileOpt(self._path, '.json').set_write(raw)
         else:
             with open(self.path, 'w') as f:
-                raw = ensure_unicode(raw)
+                raw = ensure_string(raw)
                 f.write(raw)
 
     def append(self, text):
@@ -1578,7 +1578,7 @@ class StgFileOpt(StgPathOpt):
             try:
                 shutil.copy2(file_path_src, file_path_tgt)
             except Exception:
-                _cor_base.BscException.set_print()
+                _cor_base.Debug.trace()
 
     def copy_to_directory(self, directory_path_tgt, replace=False):
         file_path_tgt = six.u('{}/{}').format(

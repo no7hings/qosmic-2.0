@@ -72,10 +72,10 @@ class AbsPnlBuilderForAsset(gui_prx_widgets.PrxSessionToolWindow):
         for i in self._options_prx_node.get_port('build_options').get_children():
             i.set(False)
 
-    @gui_prx_core.GuiModifier.window_proxy_waiting
+    @gui_prx_core.GuiWindowModifier.window_proxy_waiting
     def refresh_all_fnc(self):
         self._set_assets_()
 
-    @gui_prx_core.GuiModifier.window_proxy_waiting
+    @gui_prx_core.GuiWindowModifier.window_proxy_waiting
     def _set_build_run_(self):
         pass

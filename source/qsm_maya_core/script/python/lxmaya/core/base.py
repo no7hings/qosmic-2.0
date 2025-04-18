@@ -341,7 +341,7 @@ class MyaModifier(object):
                 _method = fnc(*args, **kwargs)
                 return _method
             except Exception:
-                bsc_core.BscException.set_print()
+                bsc_core.Debug.trace()
             #
             finally:
                 cmds.undoInfo(closeChunk=1, undoName=fnc.__name__)
@@ -357,7 +357,7 @@ class MyaModifier(object):
                 _method = fnc(*args, **kwargs)
                 return _method
             except Exception:
-                bsc_log.LogException.trace()
+                bsc_log.LogDebug.trace()
                 raise
             #
             finally:
@@ -374,7 +374,7 @@ class MyaModifier(object):
                 _method = method(*args, **kwargs)
                 return _method
             except Exception:
-                bsc_log.LogException.trace()
+                bsc_log.LogDebug.trace()
                 raise
             #
             finally:

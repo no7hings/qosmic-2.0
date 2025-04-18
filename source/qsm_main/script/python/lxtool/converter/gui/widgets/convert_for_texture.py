@@ -418,7 +418,7 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
         else:
             return True
 
-    @gui_core.GuiModifier.run_with_exception_catch
+    @gui_core.GuiDebug.run
     def execute_create_by_format(self):
         ext_tgt = self._options_prx_node.get('by_format.extension')
         width = self._options_prx_node.get('by_format.width')
@@ -620,7 +620,7 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
         else:
             return True
 
-    @gui_core.GuiModifier.run_with_exception_catch
+    @gui_core.GuiDebug.run
     def execute_create_by_color_space(self):
         directory_path_tgt = self._options_prx_node.get('by_color_space.directory')
         ext_tgt = self._options_prx_node.get('by_color_space.extension')

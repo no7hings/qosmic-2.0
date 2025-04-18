@@ -828,7 +828,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
     def refresh_current_group(self):
         self.gui_refresh_group(self._prx_tab_view.get_current_key())
 
-    @gui_core.GuiModifier.run_with_exception_catch
+    @gui_core.GuiDebug.run
     def __debug_run(self, fnc):
         fnc()
 

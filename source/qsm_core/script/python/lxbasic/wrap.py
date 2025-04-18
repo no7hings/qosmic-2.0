@@ -164,3 +164,36 @@ class Debug:
                 return result
             return wrapper
         return decorator
+
+    @staticmethod
+    def get_error_stack():
+        import sys
+
+        import traceback
+
+        exc_texts = []
+        exc_type, exc_value, exc_stack = sys.exc_info()
+        if exc_type:
+            value = repr(exc_value)
+            for i_stk in traceback.extract_tb(exc_stack):
+                i_file_path, i_line, i_fnc, i_fnc_line = i_stk
+                exc_texts.append(
+                    '    file "{}" line {} in {}\n        {}'.format(
+                        i_file_path.replace('\\', '/'),
+                        i_line,
+                        i_fnc,
+                        i_fnc_line
+                    )
+                )
+
+            # convert chinese word to right view
+            value = ensure_string(value.decode('unicode_escape', 'ignore'))
+
+            text = '\n'.join(['*'*80]+['traceback:']+exc_texts+[value]+['*'*80])
+            return text
+
+    @staticmethod
+    def trace():
+        text = Debug.get_error_stack()
+        if text:
+            _sys.stderr.write(text+'\n')

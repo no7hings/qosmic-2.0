@@ -8,7 +8,9 @@ import threading
 import subprocess
 
 import functools
-# process
+
+from . import base as _base
+
 from . import configure as _configure
 
 from . import process as _process
@@ -514,10 +516,9 @@ class TrdFncsChainPool(object):
             try:
                 self._fnc()
             except Exception:
-                import traceback
-                self.__failed(
-                    traceback.format_exc()
-                )
+                text = _base.Debug.get_error_stack()
+                if text:
+                    self.__failed(text)
             finally:
                 self.__finished()
 

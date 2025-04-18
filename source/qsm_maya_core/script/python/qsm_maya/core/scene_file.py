@@ -670,4 +670,4 @@ class Workspace:
                 'source setProject; sp_setLocalWorkspaceCallback "{}";'.format(directory_path)
             )
         except Exception:
-            bsc_core.BscException.set_print()
+            bsc_core.Debug.trace()

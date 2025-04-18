@@ -1207,7 +1207,7 @@ FLUSH PRIVILEGES;
                 )
                 return True
             except Exception:
-                bsc_core.BscException.print_stack()
+                bsc_core.Debug.trace()
                 return False
         # video
         elif file_opt.ext in {'.mov', '.avi', '.mp4'}:
@@ -1232,7 +1232,7 @@ FLUSH PRIVILEGES;
                 )
                 return True
             except Exception:
-                bsc_core.BscException.print_stack()
+                bsc_core.Debug.trace()
                 return False
 
         return False

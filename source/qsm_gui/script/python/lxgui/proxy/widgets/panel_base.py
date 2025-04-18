@@ -127,38 +127,6 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
 
         self._init_base_panel_def(window, session, *args, **kwargs)
 
-    def _gui_debug_run(self, fnc, *args, **kwargs):
-        # noinspection PyBroadException
-        try:
-            fnc(*args, **kwargs)
-        except Exception:
-            import sys
-
-            import traceback
-
-            exc_texts = []
-            exc_type, exc_value, exc_stack = sys.exc_info()
-            if exc_type:
-                value = '{}: "{}"'.format(exc_type.__name__, repr(exc_value))
-                for seq, stk in enumerate(traceback.extract_tb(exc_stack)):
-                    i_file_path, i_line, i_fnc, i_fnc_line = stk
-                    exc_texts.append(
-                        '{indent}file "{file}" line {line} in {fnc}\n{indent}{indent}{fnc_line}'.format(
-                            **dict(
-                                indent='    ',
-                                file=i_file_path,
-                                line=i_line,
-                                fnc=i_fnc,
-                                fnc_line=i_fnc_line
-                            )
-                        )
-                    )
-                #
-                self.show_exception()
-                self.set_exception_content_add('traceback:')
-                [self.set_exception_content_add(i) for i in exc_texts]
-                self.set_exception_content_add(value)
-
     def _gui_setup_fnc(self):
         self.gui_setup_fnc()
 
@@ -214,6 +182,7 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
 
         self.register_window_close_method(self.gui_close_fnc)
 
+        # run delay
         self.start_window_loading(
             self._gui_setup_fnc, post_fnc=self.gui_setup_post_fnc
         )
@@ -543,38 +512,6 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
         self._tab_widget_dict = {}
 
         self._init_base_panel_def(window, session, *args, **kwargs)
-
-    def _gui_debug_run(self, fnc, *args, **kwargs):
-        # noinspection PyBroadException
-        try:
-            fnc(*args, **kwargs)
-        except Exception:
-            import sys
-
-            import traceback
-
-            exc_texts = []
-            exc_type, exc_value, exc_stack = sys.exc_info()
-            if exc_type:
-                value = '{}: "{}"'.format(exc_type.__name__, repr(exc_value))
-                for seq, stk in enumerate(traceback.extract_tb(exc_stack)):
-                    i_file_path, i_line, i_fnc, i_fnc_line = stk
-                    exc_texts.append(
-                        '{indent}file "{file}" line {line} in {fnc}\n{indent}{indent}{fnc_line}'.format(
-                            **dict(
-                                indent='    ',
-                                file=i_file_path,
-                                line=i_line,
-                                fnc=i_fnc,
-                                fnc_line=i_fnc_line
-                            )
-                        )
-                    )
-                #
-                self.show_exception()
-                self.set_exception_content_add('traceback:')
-                [self.set_exception_content_add(i) for i in exc_texts]
-                self.set_exception_content_add(value)
 
     def _gui_setup_fnc(self):
         self.gui_setup_fnc()

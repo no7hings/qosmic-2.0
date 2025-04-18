@@ -78,7 +78,7 @@ class AbsLookOpt(object):
                         u'assign="{}" >> "{}"'.format(geometry_path, material_path)
                     )
                 except Exception:
-                    bsc_core.BscException.set_print()
+                    bsc_core.Debug.trace()
                     bsc_log.Log.trace_method_error(
                         'material-assign',
                         u'assign="{}" >> "{}"'.format(geometry_path, material_path)

@@ -273,7 +273,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 camera_display_options=self.gui_get_camera_display_options()
             )
         except Exception:
-            bsc_core.BscException.set_print()
+            bsc_core.Debug.trace()
 
         finally:
             for i in q.get_all():

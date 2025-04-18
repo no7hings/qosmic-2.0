@@ -49,8 +49,6 @@ def main(argv):
             __execute(option, args_execute, args_extend, environs_extend)
     #
     except getopt.GetoptError:
-        # import traceback
-        # sys.stderr.write(traceback.print_exc())
         sys.stderr.write('argv error\n')
 
 
@@ -243,7 +241,7 @@ def __execute(option, args_execute=None, args_extend=None, kwargs_task=None):
                     task_data = c.get_data_from_task_id(task_id)
                     rsv_project.auto_create_user_task_directory_by_task_data(task_data)
             except Exception:
-                bsc_core.BscException.set_print()
+                bsc_core.Debug.trace()
     else:
         environs_extend = m.EtrBase.get_project_environs_extend(project)
 

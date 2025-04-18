@@ -173,7 +173,7 @@ class Task(_base.AbsEntity):
                     if skt.connect() is True:
                         skt.send(_completed_notice)
                 except Exception:
-                    bsc_core.BscException.print_stack()
+                    bsc_core.Debug.trace()
 
         def on_finished_(task_, status_, results_):
             task_.update_by_finish()

@@ -132,7 +132,7 @@ class QtThreadWorkerForBuild(QtCore.QThread):
                 self._stderr('thread is failed at: {}\n'.format(self._entity))
                 self.run_failed.emit()
                 self.set_status(self.Status.Failed)
-                bsc_core.BscException.print_stack()
+                bsc_core.Debug.trace()
             #
             finally:
                 with QtCore.QMutexLocker(self.parent()._thread_worker_mutex):

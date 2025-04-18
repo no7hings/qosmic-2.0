@@ -789,7 +789,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                 'source setProject; sp_setLocalWorkspaceCallback "{}";'.format(directory_path)
             )
         except Exception:
-            bsc_core.BscException.set_print()
+            bsc_core.Debug.trace()
 
     @classmethod
     def get_workspace_directory_path(cls):

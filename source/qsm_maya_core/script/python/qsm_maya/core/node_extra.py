@@ -372,7 +372,7 @@ class EtrNodeOpt(object):
             try:
                 i_port.set_default()
             except Exception:
-                bsc_core.BscException.set_print()
+                bsc_core.Debug.trace()
 
     def set(self, key, value):
         self.get_port(key).set(value)

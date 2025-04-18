@@ -59,6 +59,19 @@ class PrxBaseWindow(
 
         self._init_base_window_def_(*args, **kwargs)
 
+    def _gui_debug_run(self, fnc, *args, **kwargs):
+        # noinspection PyBroadException
+        try:
+            fnc(*args, **kwargs)
+        except Exception:
+            self.catch_exception()
+
+    def catch_exception(self):
+        text = bsc_core.Debug.get_error_stack()
+        if text:
+            self.show_exception()
+            self.add_exception_content(text)
+
     # noinspection PyUnusedLocal
     def _init_base_window_def_(self, *args, **kwargs):
         self.set_log_file_path(bsc_storage.StgUser.get_user_log_directory())
@@ -278,22 +291,28 @@ class PrxBaseWindow(
     def start_window_loading(self, method, post_fnc=None, delay_time=250):
         def pre_fnc_():
             self.start_waiting()
+
             self._window_loading_flag = True
             # turn off animation
             self._qt_layer_stack._set_animation_enable_(False)
             self.set_current_layer('window_loading_0')
-            gui_qt_core.QtUtil.show_qt_window(
-                self._qt_widget,
-                size=self.WINDOW_LOADING_SIZE
-            )
+            gui_qt_core.QtUtil.show_qt_window(self._qt_widget, size=self.WINDOW_LOADING_SIZE)
 
         def fnc_():
-            method()
+            # noinspection PyBroadException
+            try:
+                method()
+            except Exception:
+                self.stop_waiting()
+                self.catch_exception()
+                raise
+
             _post_fnc_timer = gui_qt_core.QtCore.QTimer(self.widget)
             _post_fnc_timer.singleShot(delay_time, post_fnc_)
 
         def post_fnc_():
             self.stop_waiting()
+
             gui_qt_core.QtUtil.show_qt_window(
                 self._qt_widget, size=self.get_definition_window_size()
             )
@@ -388,7 +407,7 @@ class PrxBaseWindow(
                 text
             )
 
-    def set_exception_content_add(self, text):
+    def add_exception_content(self, text):
         if isinstance(text, six.string_types):
             self._exception_text_browser.append(text)
         elif isinstance(text, (tuple, list)):
@@ -498,38 +517,6 @@ class PrxSessionWindow(PrxBaseWindow):
     @property
     def session(self):
         return self._session
-
-    def _gui_debug_run(self, fnc, *args, **kwargs):
-        # noinspection PyBroadException
-        try:
-            fnc(*args, **kwargs)
-        except Exception:
-            import sys
-
-            import traceback
-
-            exc_texts = []
-            exc_type, exc_value, exc_stack = sys.exc_info()
-            if exc_type:
-                value = '{}: "{}"'.format(exc_type.__name__, repr(exc_value))
-                for seq, stk in enumerate(traceback.extract_tb(exc_stack)):
-                    i_file_path, i_line, i_fnc, i_fnc_line = stk
-                    exc_texts.append(
-                        '{indent}file "{file}" line {line} in {fnc}\n{indent}{indent}{fnc_line}'.format(
-                            **dict(
-                                indent='    ',
-                                file=i_file_path,
-                                line=i_line,
-                                fnc=i_fnc,
-                                fnc_line=i_fnc_line
-                            )
-                        )
-                    )
-                #
-                self.show_exception()
-                self.set_exception_content_add('traceback:')
-                [self.set_exception_content_add(i) for i in exc_texts]
-                self.set_exception_content_add(value)
 
     # noinspection PyUnusedLocal
     def _gui_main_fnc(self, *args, **kwargs):

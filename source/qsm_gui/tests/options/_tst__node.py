@@ -28,6 +28,9 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
             ['test'], '*{}*'.format(k)
         )
 
+    def _error(self):
+        raise RuntimeError(u'测试')
+
     def _test_(self):
         def open_folder_fnc_():
             print('button menu press')
@@ -36,7 +39,7 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         self.add_widget(tab_view)
         self.set_main_style_mode(1)
         for i in [
-            # 'button',
+            'button',
             'constant',
             # 'tuple',
             # 'array',
@@ -53,12 +56,12 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
             )
             if i == 'button':
                 p = i_n.get_port('press_button')
-                print p
                 p.set_menu_data(
                     [
                         ('Open Folder', 'file/folder', open_folder_fnc_)
                     ]
                 )
+                p.set(self._error)
             # print i_n.get_all_ports()
 
         # n.get_port('files.list').set_root('/data/e/workspace/lynxi/script/python/.resources/icons')

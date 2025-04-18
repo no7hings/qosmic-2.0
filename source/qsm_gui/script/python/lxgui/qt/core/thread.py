@@ -1,6 +1,8 @@
 # coding:utf-8
 from __future__ import print_function
 
+import sys
+
 import lxbasic.core as bsc_core
 # gui
 from ... import core as gui_core
@@ -69,8 +71,10 @@ class QtMethodThread(QtCore.QThread):
             #
             self.completed.emit()
         except Exception:
-            bsc_core.BscException.set_print()
-            self.failed.emit(bsc_core.BscException.get_stack_())
+            text = bsc_core.Debug.get_error_stack()
+            if text:
+                sys.stderr.write(text+'\n')
+                self.failed.emit(text)
         finally:
             self.run_finished.emit()
             self.finish_accepted.emit(self)
@@ -140,7 +144,7 @@ class QtBuildThread(QtCore.QThread):
                 self.run_failed.emit()
                 self.set_status(self.Status.Failed)
                 print('thread failed')
-                bsc_core.BscException.print_stack()
+                bsc_core.Debug.trace()
             #
             finally:
                 self.run_finished.emit()

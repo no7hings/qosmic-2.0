@@ -16,7 +16,7 @@ class Undo(object):
                 _method = fnc(*args, **kwargs)
                 return _method
             except Exception:
-                bsc_log.LogException.trace()
+                bsc_log.LogDebug.trace()
             #
             finally:
                 cmds.undoInfo(closeChunk=1, undoName=fnc.__name__)

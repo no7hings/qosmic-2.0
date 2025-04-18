@@ -67,8 +67,7 @@ class QtBuildRunnable(QtCore.QRunnable):
             except Exception:
                 self._build_signals.run_failed.emit()
                 self.set_status(self.Status.Failed)
-                print('runnable failed')
-                print(bsc_core.BscException.get_stack_())
+                bsc_core.Debug.trace()
             #
             finally:
                 self._build_signals.run_finished.emit()

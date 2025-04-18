@@ -132,7 +132,7 @@ class Modifier(object):
             except Exception:
                 import lxbasic.core as bsc_core
 
-                bsc_core.BscException.set_print()
+                bsc_core.Debug.trace()
             #
             finally:
                 Utils.UndoStack.CloseGroup()
@@ -150,10 +150,10 @@ class Modifier(object):
             except Exception:
                 if KtnUtil.get_is_ui_mode() is True:
                     import lxbasic.core as bsc_core
-                    bsc_log.LogException.trace()
+                    bsc_log.LogDebug.trace()
                 else:
                     import lxbasic.core as bsc_core
-                    bsc_core.BscException.set_print()
+                    bsc_core.Debug.trace()
                 raise
             #
             finally:
