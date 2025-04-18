@@ -278,6 +278,7 @@ class ScanGlob(object):
                 if is_finished is True:
                     finish_fnc()
 
+        # noinspection PyCompatibility
         from concurrent.futures import ThreadPoolExecutor
 
         executor = ThreadPoolExecutor(max_workers=32)
@@ -344,6 +345,7 @@ class ScanGlob(object):
 
             locations = cls.glob(_s[0])
 
+            # noinspection PyCompatibility
             from concurrent.futures import ThreadPoolExecutor
 
             executor = ThreadPoolExecutor(max_workers=32)

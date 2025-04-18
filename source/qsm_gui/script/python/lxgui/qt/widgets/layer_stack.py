@@ -7,7 +7,20 @@ from ..core.wrap import *
 from .. import core as _qt_core
 
 
+class SwapMode:
+    Add = 0
+    Switch = 1
+    New = 2
+    Delete = 3
+    DeleteLatest = 4
+
+    Hide = 5
+    Show = 6
+
+
 class QtTrackNode(QtWidgets.QWidget):
+    SwapMode = SwapMode
+
     DELAY_TIME = 250
     DELAY_TIME_FPS = 25
 
@@ -23,13 +36,13 @@ class QtTrackNode(QtWidgets.QWidget):
             index = min(self.__anim_index, self.__anim_index_maximum)
             d = sum([(0.5/(2**i))*1 for i in range(index)])
             c_w, c_h = self.__swap_width_mark, self.__swap_height_mark
-            if self.__swap_mode == 'hide':
+            if self.__swap_mode == self.SwapMode.Hide:
                 c_h_d = c_h*d
                 _c_h_ = c_h - c_h_d
                 # self.setGeometry(x_, y_, w, c_h_)
                 if self.__anim_index == self.__anim_index_maximum:
                     self.hide()
-            elif self.__swap_mode == 'show':
+            elif self.__swap_mode == self.SwapMode.Show:
                 _c_h_d = c_h*d
                 if self.__anim_index == self.__anim_index_maximum:
                     pass
@@ -56,7 +69,7 @@ class QtTrackNode(QtWidgets.QWidget):
         self.__swap_flag = False
         self.__swap_switch_direction = _gui_core.GuiDirections.TopToBottom
 
-        self.__swap_mode = 'hide'
+        self.__swap_mode = self.SwapMode.Hide
         
         self.__swap_width_mark, self.__swap_height_mark = 0, 0
         self.__swap_width_maximum_mark, self.__swap_height_maximum_mark = 166667, 166667
@@ -94,13 +107,13 @@ class QtTrackNode(QtWidgets.QWidget):
 
     def _set_visible_delay_(self, boolean):
         if boolean is True:
-            self.__swap_mode = 'show'
+            self.__swap_mode = self.SwapMode.Show
             # self.setMaximumHeight(self.__swap_height_maximum_mark)
             self.show()
             self.__swap_flag = True
             self.__anim_timer.start(self.__anim_cycle_msec)
         else:
-            self.__swap_mode = 'hide'
+            self.__swap_mode = self.SwapMode.Hide
             w, h = self.width(), self.height()
             self.__swap_width_mark, self.__swap_height_mark = w, h
             self.__swap_width_maximum_mark, self.__swap_height_maximum_mark = self.maximumWidth(), self.maximumHeight()
@@ -123,9 +136,9 @@ class QtTrackNode(QtWidgets.QWidget):
         if self.__swap_flag is True:
             self.__swap_flag = False
 
-            if self.__swap_mode == 'hide':
+            if self.__swap_mode == self.SwapMode.Hide:
                 self.hide()
-            elif self.__swap_mode == 'show':
+            elif self.__swap_mode == self.SwapMode.Show:
                 self.setMaximumHeight(166667)
 
             self.__anim_index = 0
@@ -135,6 +148,8 @@ class QtTrackNode(QtWidgets.QWidget):
 
 
 class QtLayerStack(QtWidgets.QWidget):
+    SwapMode = SwapMode
+        
     current_changed = qt_signal()
 
     DELAY_TIME = 250
@@ -169,7 +184,7 @@ class QtLayerStack(QtWidgets.QWidget):
         self.__swap_flag = False
         self.__swap_switch_direction = _gui_core.GuiDirections.LeftToRight
 
-        self.__swap_mode = 'switch'
+        self.__swap_mode = self.SwapMode.Switch
 
         self.__anim_enable = True
 
@@ -186,7 +201,7 @@ class QtLayerStack(QtWidgets.QWidget):
         if self.__swap_flag is True and self.__anim_enable is True:
             index = min(self.__anim_index, self.__anim_index_maximum)
             d = sum([(0.5/(2**i))*1 for i in range(index)])
-            if self.__swap_mode == 'switch':
+            if self.__swap_mode == self.SwapMode.Switch:
                 w_d = w*d
                 if self.__swap_switch_direction == _gui_core.GuiDirections.LeftToRight:
                     self.__swap_rect_0.setRect(
@@ -202,7 +217,7 @@ class QtLayerStack(QtWidgets.QWidget):
                     self.__swap_rect_1.setRect(
                         x-w+w_d, y, w, h
                     )
-            elif self.__swap_mode == 'delete':
+            elif self.__swap_mode == self.SwapMode.Delete:
                 h_d = h*d
                 self.__swap_rect_0.setRect(
                     x, y-h_d, w, h
@@ -210,7 +225,7 @@ class QtLayerStack(QtWidgets.QWidget):
                 self.__swap_rect_1.setRect(
                     x, h-h_d, w, h
                 )
-            elif self.__swap_mode == 'delete_latest':
+            elif self.__swap_mode == self.SwapMode.DeleteLatest:
                 h_d = h*d
                 self.__swap_rect_0.setRect(
                     x, y-h_d, w, h
@@ -218,7 +233,7 @@ class QtLayerStack(QtWidgets.QWidget):
                 self.__swap_rect_1.setRect(
                     x, y-h_d, w, h
                 )
-            elif self.__swap_mode == 'add':
+            elif self.__swap_mode == self.SwapMode.Add:
                 s = 20
                 c_w, c_h = w-s, 10
                 c_x, c_y = x+(w-c_w)/2, y+s
@@ -229,7 +244,7 @@ class QtLayerStack(QtWidgets.QWidget):
                 self.__swap_rect_1.setRect(
                     c_x, c_y, w_d, c_h
                 )
-            elif self.__swap_mode == 'new':
+            elif self.__swap_mode == self.SwapMode.New:
                 s = 20
                 c_w, c_h = w-s, 10
                 c_x, c_y = x+(w-c_w)/2, y+s
@@ -260,7 +275,8 @@ class QtLayerStack(QtWidgets.QWidget):
     def paintEvent(self, event):
         if self.__swap_flag is True and self.__anim_enable is True:
             painter = _qt_core.QtPainter(self)
-            if self.__swap_mode in {'add', 'new'}:
+            # draw progress
+            if self.__swap_mode in {self.SwapMode.Add, self.SwapMode.New}:
                 painter._draw_alternating_colors_by_rect_(
                     rect=self.__swap_rect_0,
                     colors=((0, 0, 0, 63), (0, 0, 0, 31)),
@@ -301,9 +317,9 @@ class QtLayerStack(QtWidgets.QWidget):
                 index_pre = self._current_index
                 self._current_index = index
                 if index == 0:
-                    self._swap_current_between_(index, index, 'new')
+                    self._swap_current_between_(index, index, self.SwapMode.New)
                 else:
-                    self._swap_current_between_(index_pre, index, 'add')
+                    self._swap_current_between_(index_pre, index, self.SwapMode.Add)
 
         return index
 
@@ -316,7 +332,7 @@ class QtLayerStack(QtWidgets.QWidget):
                 if self.__index_pre is not None:
                     # do swap
                     self._current_index = index
-                    self._swap_current_between_(self.__index_pre, self._current_index, 'switch')
+                    self._swap_current_between_(self.__index_pre, self._current_index, self.SwapMode.Switch)
                 else:
                     self._current_index = index
                     self._refresh_widget_all_()
@@ -395,9 +411,9 @@ class QtLayerStack(QtWidgets.QWidget):
 
             if index == self._current_index:
                 if index == index_next == 0:
-                    self._swap_current_between_(index, index_next, 'delete_latest')
+                    self._swap_current_between_(index, index_next, self.SwapMode.DeleteLatest)
                 else:
-                    self._swap_current_between_(index, index_next, 'delete')
+                    self._swap_current_between_(index, index_next, self.SwapMode.Delete)
 
             widget.close()
             widget.deleteLater()

@@ -7,6 +7,10 @@ import glob
 
 from ..wrap import *
 
+from ..scan import base as _scan_base
+
+from ..scan import glob_ as _scan_glog
+
 
 class AbsResource(object):
     """
@@ -23,60 +27,6 @@ print(BscExtendResource.get('icons/file/folder.svg'))
             _ = os.environ[cls.ENVIRON_KEY]
             if _:
                 return _.split(os.pathsep)
-        return []
-
-    @classmethod
-    def __find_all_results(cls, p):
-        _ = glob.glob(p) or []
-        if _:
-            if platform.system() == 'Windows':
-                _ = [i.replace('\\', '/') for i in _]
-        return _
-
-    @classmethod
-    def __find_all_files(cls, path, ext_includes=None):
-        def rcs_fnc_(path_):
-            _results = os.listdir(path_) or []
-            for _i_name in _results:
-                _i_path = '{}/{}'.format(path_, _i_name)
-                if os.path.isfile(_i_path):
-                    if isinstance(ext_includes, (set, tuple, list)):
-                        _i_name_base, _i_ext = os.path.splitext(_i_name)
-                        if _i_ext not in ext_includes:
-                            continue
-                    #
-                    set_.add(_i_path)
-                elif os.path.isdir(_i_path):
-                    rcs_fnc_(_i_path)
-
-        set_ = set()
-        if os.path.isdir(path):
-            rcs_fnc_(path)
-
-        if set_:
-            list_ = list(set_)
-            list_.sort()
-            return list_
-        return []
-
-    @classmethod
-    def __find_all_directories(cls, path):
-        def rcs_fnc_(path_):
-            _results = os.listdir(path_) or []
-            for _i_name in _results:
-                _i_path = '{}/{}'.format(path_, _i_name)
-                if os.path.isdir(_i_path):
-                    set_.add(_i_path)
-                    rcs_fnc_(_i_path)
-
-        set_ = set()
-        if os.path.isdir(path):
-            rcs_fnc_(path)
-
-        if set_:
-            list_ = list(set_)
-            list_.sort()
-            return list_
         return []
 
     @classmethod
@@ -97,7 +47,7 @@ print(BscExtendResource.get('icons/file/folder.svg'))
         for i_path_root in paths:
             if os.path.isdir(i_path_root) is True:
                 i_p = '{}/{}'.format(i_path_root, key)
-                i_results = cls.__find_all_results(i_p)
+                i_results = _scan_glog.ScanGlob.glob(i_p)
                 if i_results:
                     # use first result
                     value = i_results[0]
@@ -109,7 +59,7 @@ print(BscExtendResource.get('icons/file/folder.svg'))
         for i_path_root in cls.find_all_roots():
             if os.path.isdir(i_path_root) is True:
                 i_p = '{}/{}'.format(i_path_root, key)
-                return cls.__find_all_results(i_p)
+                return _scan_glog.ScanGlob.glob(i_p)
 
     @classmethod
     def find_all_file_keys_at(cls, branch, key, ext_includes):
@@ -118,7 +68,7 @@ print(BscExtendResource.get('icons/file/folder.svg'))
             i_path_branch = '{}/{}'.format(i_path_root, branch)
             i_path_sub = '{}/{}/{}'.format(i_path_root, branch, key)
             if os.path.isdir(i_path_sub) is True:
-                i_all_file_path = cls.__find_all_files(i_path_sub, ext_includes)
+                i_all_file_path = _scan_base.ScanBase.get_all_file_paths(i_path_sub, ext_includes)
                 set_.update(map(lambda x: os.path.splitext(x[len(i_path_branch)+1:])[0], i_all_file_path))
         if set_:
             list_ = list(set_)
@@ -133,7 +83,7 @@ print(BscExtendResource.get('icons/file/folder.svg'))
             i_path_branch = '{}/{}'.format(i_path_root, branch)
             i_path_sub = '{}/{}'.format(i_path_root, branch)
             if os.path.isdir(i_path_sub) is True:
-                i_all_file_path = cls.__find_all_files(i_path_sub, ext_includes)
+                i_all_file_path = _scan_base.ScanBase.get_all_file_paths(i_path_sub, ext_includes)
                 set_.update(map(lambda x: os.path.splitext(x[len(i_path_branch)+1:])[0], i_all_file_path))
         if set_:
             list_ = list(set_)
@@ -148,7 +98,7 @@ print(BscExtendResource.get('icons/file/folder.svg'))
             i_path_branch = '{}/{}'.format(i_path_root, branch)
             i_path_sub = '{}/{}/{}'.format(i_path_root, branch, key)
             if os.path.isdir(i_path_sub) is True:
-                i_all_directory_paths = cls.__find_all_directories(i_path_sub)
+                i_all_directory_paths = _scan_base.ScanBase.get_all_directory_paths(i_path_sub)
                 set_.update(map(lambda x: os.path.splitext(x[len(i_path_branch)+1:])[0], i_all_directory_paths))
         if set_:
             list_ = list(set_)
