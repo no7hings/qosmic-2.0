@@ -2,7 +2,7 @@
 from ..abstracts import subpanel_for_task_create as _subpanel_for_task_create
 
 
-class PrxSubPanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCreate):
+class PrxSubpanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCreate):
     SUBPAGE_CLASSES = [
         # do not add cls here, find cls auto now.
     ]
@@ -17,4 +17,4 @@ class PrxSubPanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCr
     TASK_MODULE_ROOT = 'lnx_wotrix_tasks'
 
     def __init__(self, *args, **kwargs):
-        super(PrxSubPanelForTaskCreate, self).__init__(*args, **kwargs)
+        super(PrxSubpanelForTaskCreate, self).__init__(*args, **kwargs)

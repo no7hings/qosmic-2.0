@@ -108,7 +108,7 @@ class BscApplication(object):
             cls.get_is_houdini,
             cls.get_is_katana,
             cls.get_is_clarisse,
-            cls.get_is_ue(),
+            cls.get_is_ue,
             cls.get_is_lynxi
         ]:
             if i_fnc() is True:

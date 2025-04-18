@@ -1,21 +1,21 @@
 # coding:utf-8
-import sys
-
 import os
 
-import getpass
+import lxbasic.log as bsc_log
 
-QSM_SCHEME = 'default' if getpass.getuser() == 'nothings' else 'new'
+from . import sync as _sync
 
-sys.stdout.write(
-    'qosmic: scheme is "{}"\n'.format(QSM_SCHEME)
-)
+STUDIO = _sync.Sync().studio.get_current()
+
+bsc_log.Log.trace_result('qosmic: studio is "{}".'.format(STUDIO))
 
 
+# fixme: environment
 def scheme_is_release():
-    return QSM_SCHEME == 'new'
+    return STUDIO != 'DEV'
 
 
+# fixme: use configure
 class QsmAsset(object):
     """
     this is shit.
@@ -57,7 +57,8 @@ class QsmAsset(object):
         return cls.SCENERY_ROLE_MASK
 
 
-def check_python_lib():
+def check_python27_lib():
+    # fixme: when is py3 do not check it
     file_path = 'C:/Windows/System32/python27.dll'
     if os.path.isfile(file_path) is False:
         import lxgui.core as gui_core
@@ -81,6 +82,7 @@ def check_python_lib():
 class MySql(object):
     @classmethod
     def get_options(cls):
+        # fixme: use crypto
         if scheme_is_release():
             return dict(
                 user='root',

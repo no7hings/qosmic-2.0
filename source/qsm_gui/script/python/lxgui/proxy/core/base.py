@@ -3,6 +3,8 @@ import sys
 
 import lxbasic.log as bsc_log
 
+import lxbasic.core as bsc_core
+
 import lxbasic.storage as bsc_storage
 
 from lxbasic.log import bridge as log_bridge
@@ -267,25 +269,21 @@ class GuiExceptionCatch(object):
 
             w = cls._generate_window()
 
+            text = '\n'.join(['*'*80]+['traceback:']+exc_texts+[value]+['*'*80])
+
             w.set_status(cls.ValidationStatus.Error)
-            w.add_content('*'*80)
-            w.add_content('traceback:')
-            [w.add_content(i) for i in exc_texts]
-            w.add_content(value)
-            w.add_content('*'*80)
-            
+            w.add_content(text)
+
             # save log
             file_path = bsc_log.LogBase.get_user_debug_file(
                 'script', create=True
             )
             bsc_storage.StgFileOpt(
                 file_path
-            ).set_write('\n'.join(exc_texts))
+            ).set_write(text)
             
             # output
-            sys.stderr.write('traceback:\n')
-            sys.stderr.write('\n'.join(exc_texts)+'\n')
-            sys.stderr.write(value+'\n')
+            sys.stderr.write(text)
             return w
 
 

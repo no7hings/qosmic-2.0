@@ -20,9 +20,9 @@ class PrxWotrixTool(_abs_panel_for_workspace.AbsPrxWotrixTool):
         _page_task_release.PrxPageForTaskRelease
     ]
 
-    SUB_PANEL_CLASSES = [
+    SUBPANEL_CLASSES = [
         # create
-        _subpanel_task_create.PrxSubPanelForTaskCreate
+        _subpanel_task_create.PrxSubpanelForTaskCreate
     ]
 
     def __init__(self, window, session, *args, **kwargs):

@@ -27,7 +27,7 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubpanel):
         for i_resource_type in type_names:
             i_cls = self.find_register_subpage_cls(i_resource_type)
             if i_cls:
-                self._sub_page_class_dict[i_resource_type] = i_cls
+                self._subpage_class_dict[i_resource_type] = i_cls
 
     @staticmethod
     def find_register_subpage_cls(resource_type):
@@ -45,7 +45,7 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubpanel):
     def gui_setup_pages_for(self, resource_types):
         for i_resource_type in resource_types:
 
-            if i_resource_type not in self._sub_page_class_dict:
+            if i_resource_type not in self._subpage_class_dict:
                 continue
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()

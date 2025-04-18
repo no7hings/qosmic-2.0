@@ -1,5 +1,7 @@
 # coding:utf-8
 import collections
+import sys
+import time
 
 import lxbasic.core as bsc_core
 
@@ -95,7 +97,7 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
             )
 
         self._cache_entities()
-        self._on_reload_entities()
+        self._on_reload_entities(use_cache=True)
 
     def _cache_projects(self):
         name_texts = []
@@ -153,6 +155,7 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
             keyword_filter_dict=keyword_filter_dict
         )
 
+    # @bsc_core.Debug.run('cache assets')
     def _cache_assets(self, path_opt):
         name_texts = []
         gui_name_dict = {}
@@ -178,13 +181,17 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
             keyword_filter_dict=keyword_filter_dict
         )
 
-    def _on_reload_entities(self):
+    def _on_reload_entities(self, use_cache=False):
         def post_fnc_():
             self._scan_cache_flag = True
 
         path_text = self._qt_entity_input._get_value_()
-        self._scan_cache_flag = False
-        self._qt_entity_input._update_next_data_for_(path_text, post_fnc_)
+        if use_cache is True:
+            self._scan_cache_flag = True
+            self._qt_entity_input._update_next_data_for_(path_text)
+        else:
+            self._scan_cache_flag = False
+            self._qt_entity_input._update_next_data_for_(path_text, post_fnc_)
 
     def _on_resync_entities(self):
         def post_fnc_():

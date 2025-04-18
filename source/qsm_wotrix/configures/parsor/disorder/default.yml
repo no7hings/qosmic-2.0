@@ -6,9 +6,13 @@ entities:
         Asset: '{root}/{project}/Assets/{role}/{asset}'
         Episode: '{root}/{project}/{episode}'
         # do not add "{seq_IGN}"
-        Sequence: '{root}/{project}/{episode}/{sequence}/分镜'
+        Sequence:
+            - '{root}/{project}/{episode}/{sequence}/分镜'
+            - '{root}/{project}/{episode}/{sequence}/动画'
         # sequence variant has chinese word, so add "{seq_IGN}" for match result.
-        Shot: '{root}/{project}/{episode}/{sequence}{seq_IGN}/分镜/通过文件/{shot}.ma'
+        Shot:
+            - '{root}/{project}/{episode}/{sequence}{seq_IGN}/分镜/通过文件/{shot}.ma'
+            - '{root}/{project}/{episode}/{sequence}{seq_IGN}/动画/通过文件/{shot}.ma'
         #
         ProjectTask: ''
         AssetTask: '{root}/{project}/Assets/{role}/{asset}/{task}/Final'

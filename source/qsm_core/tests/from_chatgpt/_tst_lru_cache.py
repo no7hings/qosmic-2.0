@@ -1,6 +1,7 @@
 # coding:utf-8
 from collections import OrderedDict
 
+
 class LRUCache:
     def __init__(self, max_size):
         self.cache = OrderedDict()

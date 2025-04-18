@@ -1,6 +1,4 @@
 # coding:utf-8
-import os
-
 import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core

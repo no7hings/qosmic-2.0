@@ -113,11 +113,21 @@ build:
                 name: 'Auto Load CFX Rig'
                 name_chs: '自动加载解算预设'
                 value: True
+                join_to_next: True
 
-            auto_remove_scenery:
+            auto_hide_no_use_group:
                 widget: boolean
-                name: 'Auto Remove Scenery'
-                name_chs: '自动移除场景'
+                name: 'Auto Hide No Use Group'
+                name_chs: '自动隐藏无用组'
+                value: False
+                join_to_next: True
+                history_group: ['wotrix', 'shot', 'cfx_cloth', 'task_release']
+                pull_history_latest: True
+
+            ignore_load_scenery:
+                widget: boolean
+                name: 'Ignore Load Scenery'
+                name_chs: '忽略加载场景'
                 value: False
                 history_group: ['wotrix', 'shot', 'cfx_cloth', 'task_release']
                 pull_history_latest: True

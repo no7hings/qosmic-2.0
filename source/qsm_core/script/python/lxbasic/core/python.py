@@ -18,6 +18,23 @@ import imp
 from .. import log as _bsc_log
 
 
+class PyMod(object):
+    def __init__(self, name):
+        _ = pkgutil.find_loader(name)
+        if _:
+            self._module = importlib.import_module(name)
+        else:
+            self._module = None
+    
+    def is_exists(self):
+        return bool(self._module)
+
+    def get_method(self, key):
+        if self._module is not None:
+            if key in self._module.__dict__:
+                return self._module.__dict__[key]
+
+
 class PyModule(object):
     @staticmethod
     def check_exists(module_name):

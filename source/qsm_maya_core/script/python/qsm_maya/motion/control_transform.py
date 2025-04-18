@@ -154,12 +154,8 @@ class ControlTransform:
     def remove_locator_fnc(cls, main_locator):
         frame_mark = _mya_core.Frame.get_current()
         atr_names = [
-            'inTranslateX',
-            'inTranslateY',
-            'inTranslateZ',
-            'inRotateX',
-            'inRotateY',
-            'inRotateZ',
+            'inTranslateX', 'inTranslateY', 'inTranslateZ',
+            'inRotateX', 'inRotateY', 'inRotateZ',
         ]
 
         main_locator_shape = _mya_core.Transform.get_shape(main_locator)
@@ -209,12 +205,13 @@ class ControlTransform:
                         for j_frame, j_value in i_samples:
                             i_curve_opt.create_value_at_time(j_frame, j_value)
 
-            _mya_core.NodeAttribute.break_source(
+            # update value when source is breaked
+            if _mya_core.NodeAttribute.break_source(
                 pair_blend_node, 'weight'
-            )
-            _mya_core.NodeAttribute.set_value(
-                pair_blend_node, 'weight', 0
-            )
+            ):
+                _mya_core.NodeAttribute.set_value(
+                    pair_blend_node, 'weight', 0
+                )
 
             _mya_core.Frame.set_current(frame_mark)
 

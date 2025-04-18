@@ -23,8 +23,8 @@ class PrxWotrixTool(_abs_panel_for_workspace.AbsPrxWotrixTool):
         _page_task_tracker.PrxPageForTaskTracker,
     ]
 
-    SUB_PANEL_CLASSES = [
-        _subpanel_task_create.PrxSubPanelForTaskCreate
+    SUBPANEL_CLASSES = [
+        _subpanel_task_create.PrxSubpanelForTaskCreate
     ]
 
     RESOURCE_TYPE = 'shot'

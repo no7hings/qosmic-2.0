@@ -1,5 +1,6 @@
 # coding:utf-8
 import os
+import sys
 
 # noinspection PyUnresolvedReferences
 from xml.etree import ElementTree as etree
@@ -42,9 +43,11 @@ class AbsDotfile(object):
         if os.path.isfile(file_path) is False:
             raise RuntimeError()
 
-        hash_uuid = bsc_storage.StgFileOpt(file_path).to_hash_uuid()
-        if hash_uuid in cls.INSTANCE_DICT:
-            return cls.INSTANCE_DICT[hash_uuid]
+        key = bsc_core.BscUuid.generate_by_file(file_path)
+        # when is large file, cost lost time.
+        # key = bsc_storage.StgFileOpt(file_path).to_hash_uuid()
+        if key in cls.INSTANCE_DICT:
+            return cls.INSTANCE_DICT[key]
 
         self = super(AbsDotfile, cls).__new__(cls)
         self._file_path = file_path
@@ -53,7 +56,9 @@ class AbsDotfile(object):
         
         self._cache_dict = {}
 
-        cls.INSTANCE_DICT[hash_uuid] = self
+        sys.stdout.write(u'load file: {}\n'.format(file_path))
+
+        cls.INSTANCE_DICT[key] = self
         return self
 
     def _load_lines(self):
@@ -81,9 +86,9 @@ class AbsDotXml(object):
         if os.path.isfile(file_path) is False:
             raise RuntimeError()
 
-        hash_uuid = bsc_storage.StgFileOpt(file_path).to_hash_uuid()
-        if hash_uuid in cls.INSTANCE_DICT:
-            return cls.INSTANCE_DICT[hash_uuid]
+        key = bsc_storage.StgFileOpt(file_path).to_hash_uuid()
+        if key in cls.INSTANCE_DICT:
+            return cls.INSTANCE_DICT[key]
 
         self = super(AbsDotXml, cls).__new__(cls)
         self._file_path = file_path
@@ -92,5 +97,5 @@ class AbsDotXml(object):
 
         self._cache_dict = {}
 
-        cls.INSTANCE_DICT[hash_uuid] = self
+        cls.INSTANCE_DICT[key] = self
         return self

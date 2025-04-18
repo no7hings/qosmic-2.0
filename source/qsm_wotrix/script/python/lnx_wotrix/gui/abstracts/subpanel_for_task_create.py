@@ -29,8 +29,8 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
             module_path = '{}.{}.{}.gui_widgets.task_create'.format(
                 cls.TASK_MODULE_ROOT, resource_type, task
             )
-            module = bsc_core.PyModule(module_path)
-            if module.get_is_exists():
+            module = bsc_core.PyMod(module_path)
+            if module.is_exists():
                 gui_cls = module.get_method('GuiTaskCreateMain')
                 if gui_cls:
                     sys.stdout.write('find task create gui for {}/{} successful.\n'.format(resource_type, task))
@@ -71,34 +71,37 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
     def gui_setup_subpages_for(self, resource_type, tasks):
         self._tab_widget_dict = {}
 
-        for i_task in tasks:
-            i_gui_key = '{}/{}'.format(resource_type, i_task)
+        with self._window.gui_progressing(maximum=len(tasks), label='build task create') as g_p:
+            for i_task in tasks:
+                i_gui_key = '{}/{}'.format(resource_type, i_task)
 
-            i_prx_page = None
+                i_prx_page = None
 
-            # when is register, use register cls, either use auto find
-            if i_gui_key in self._sub_page_class_dict:
-                i_prx_page = self._subwindow.gui_generate_subpage_for(i_gui_key)
-            else:
-                i_gui_cls = self._find_gui_cls(resource_type, i_task)
-                if i_gui_cls:
-                    i_prx_page = self._subwindow.gui_instance_subpage(i_gui_cls)
+                # when is register, use register cls, either use auto find
+                if i_gui_key in self._subpage_class_dict:
+                    i_prx_page = self._subwindow.gui_generate_subpage_for(i_gui_key)
+                else:
+                    i_gui_cls = self._find_gui_cls(resource_type, i_task)
+                    if i_gui_cls:
+                        i_prx_page = self._subwindow.gui_instance_subpage(i_gui_cls)
 
-            if i_prx_page is None:
-                continue
+                if i_prx_page is None:
+                    continue
 
-            i_prx_sca = gui_prx_widgets.PrxVScrollArea()
-            i_prx_sca.add_widget(i_prx_page)
+                i_prx_sca = gui_prx_widgets.PrxVScrollArea()
+                i_prx_sca.add_widget(i_prx_page)
 
-            self._sub_page_prx_tab_tool_box.add_widget(
-                i_prx_sca,
-                key=i_gui_key,
-                name=i_prx_page.get_gui_name(),
-                icon_name_text=i_gui_key,
-                tool_tip=i_prx_page.get_gui_tool_tip()
-            )
+                self._sub_page_prx_tab_tool_box.add_widget(
+                    i_prx_sca,
+                    key=i_gui_key,
+                    name=i_prx_page.get_gui_name(),
+                    icon_name_text=i_gui_key,
+                    tool_tip=i_prx_page.get_gui_tool_tip()
+                )
 
-            self._tab_widget_dict[i_gui_key] = i_prx_page
+                self._tab_widget_dict[i_gui_key] = i_prx_page
+
+                g_p.do_update()
 
     def do_gui_refresh_all(self):
         key = self._sub_page_prx_tab_tool_box.get_current_key()

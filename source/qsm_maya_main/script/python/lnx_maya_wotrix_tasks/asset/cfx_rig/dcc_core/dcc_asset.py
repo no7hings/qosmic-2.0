@@ -58,7 +58,8 @@ class AssetCfxRigSceneOpt(object):
         dict_ = {}
         for i_mesh_shape in self._mesh_set:
             i_mesh_transform = qsm_mya_core.Shape.get_transform(i_mesh_shape)
-            i_name = qsm_mya_core.DagNode.to_name_without_namespace(i_mesh_transform)
+            # use transform name, strip rig namespace
+            i_name = qsm_mya_core.DagNode.to_name_strip_namespace(i_mesh_transform, self.RIG_NAMESPACE)
             i_blend_nodes = qsm_mya_core.MeshBlendSource.get_deform_nodes(
                 i_mesh_transform
             )
@@ -69,6 +70,7 @@ class AssetCfxRigSceneOpt(object):
                     if qsm_mya_core.Reference.is_from_reference(j_blend_node) is True:
                         continue
 
+                    # mak sure no namespace
                     j_name = qsm_mya_core.DagNode.to_name_without_namespace(j_blend_node)
                     i_names.append(j_name)
 
@@ -88,7 +90,7 @@ class AssetCfxRigSceneOpt(object):
     def generate_constraint_map(self, disable=False):
         dict_ = {}
         for i_control_transform in self._control_set:
-            i_name = qsm_mya_core.DagNode.to_name_without_namespace(i_control_transform)
+            i_name = qsm_mya_core.DagNode.to_name_strip_namespace(i_control_transform, self.RIG_NAMESPACE)
 
             i_constraint_nodes = qsm_mya_core.ParentConstraintSource.get_constraint_nodes(i_control_transform)
             if i_constraint_nodes:
@@ -123,7 +125,7 @@ class AssetCfxRigSceneOpt(object):
                 if i_mesh_transform not in paths:
                     continue
 
-                i_name = qsm_mya_core.DagNode.to_name_without_namespace(i_mesh_transform)
+                i_name = qsm_mya_core.DagNode.to_name_strip_namespace(i_mesh_transform, self.RIG_NAMESPACE)
                 # if qsm_mya_core.Transform.is_override_hidden(i_mesh_transform) is True:
                 set_.add(i_name)
 

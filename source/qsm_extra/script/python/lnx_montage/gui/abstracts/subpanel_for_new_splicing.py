@@ -31,7 +31,7 @@ class AbsPrxSubpanelForNewSplicing(gui_prx_widgets.PrxBaseSubpanel):
         self._tab_widget_dict = {}
 
         for i_gui_key in page_keys:
-            if i_gui_key not in self._sub_page_class_dict:
+            if i_gui_key not in self._subpage_class_dict:
                 continue
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()

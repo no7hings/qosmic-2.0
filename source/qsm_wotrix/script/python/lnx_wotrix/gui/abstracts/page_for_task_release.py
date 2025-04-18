@@ -22,8 +22,8 @@ class AbsPrxPageForTaskRelease(gui_prx_widgets.PrxBasePage):
             module_path = '{}.{}.{}.gui_widgets.task_release'.format(
                 cls.TASK_MODULE_ROOT, resource_type, task
             )
-            module = bsc_core.PyModule(module_path)
-            if module.get_is_exists():
+            module = bsc_core.PyMod(module_path)
+            if module.is_exists():
                 gui_cls = module.get_method('GuiTaskReleaseMain')
                 if gui_cls:
                     sys.stdout.write('find task release gui for {}/{} successful.\n'.format(resource_type, task))

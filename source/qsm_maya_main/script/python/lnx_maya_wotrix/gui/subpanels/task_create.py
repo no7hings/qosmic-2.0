@@ -4,7 +4,7 @@ import qsm_general.core as qsm_gnl_core
 from lnx_wotrix.gui.abstracts import subpanel_for_task_create as _subpanel_for_task_create
 
 
-class PrxSubPanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCreate):
+class PrxSubpanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCreate):
     SUBPAGE_CLASSES = [
         # auto load
     ]
@@ -42,4 +42,4 @@ class PrxSubPanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCr
     TASK_MODULE_ROOT = 'lnx_maya_wotrix_tasks'
 
     def __init__(self, window, session, *args, **kwargs):
-        super(PrxSubPanelForTaskCreate, self).__init__(window, session, *args, **kwargs)
+        super(PrxSubpanelForTaskCreate, self).__init__(window, session, *args, **kwargs)

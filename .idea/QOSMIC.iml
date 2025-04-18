@@ -40,6 +40,7 @@
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_katana_lib/lib" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_maya_main/resources/rig" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_ue_lib/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/source/qsm_wotrix/tests/lnx-wotrix/profile" />
     </content>
     <orderEntry type="jdk" jdkName="Python 2.7 (qosmic-2.0) (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

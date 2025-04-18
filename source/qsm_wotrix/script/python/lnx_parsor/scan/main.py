@@ -1,6 +1,8 @@
 # coding:utf-8
 import sys
 
+import lxbasic.log as bsc_log
+
 from .. core import base as _cor_base
 
 from . import _root
@@ -22,7 +24,7 @@ class Stage(object):
         self._root_dict = dict()
         cls.INSTANCE = self
 
-        sys.stdout.write('resolve entity from {}.\n'.format(self.SWAP_FLAG))
+        bsc_log.Log.trace_result('resolve entity from {}.'.format(self.SWAP_FLAG))
         return self
 
     @property

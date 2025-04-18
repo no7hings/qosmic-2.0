@@ -11,7 +11,7 @@ class PrxMontageTool(_panel_for_montage.AbsPrxPanelForMontage):
         _page_splicing.PrxPageForSplicing
     ]
 
-    SUB_PANEL_CLASSES = [
+    SUBPANEL_CLASSES = [
         _subpanel_new_splicing.PrxSubPanelForNewSplicing
     ]
 

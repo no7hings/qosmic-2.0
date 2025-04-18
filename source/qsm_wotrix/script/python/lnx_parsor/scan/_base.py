@@ -181,10 +181,29 @@ class AbsEntitiesGenerator(object):
 
     @classmethod
     def _scan_fnc(cls, variants):
-        # pattens = _cor_base.DisorderConfig()._entity_resolve_patterns_dict[cls.EntityCls.Type]
-        pth_opt = bsc_core.BscStgParseOpt(
-            _cor_base.DisorderConfig()._entity_resolve_patterns_dict[cls.EntityCls.Type]
-        )
+        list_ = []
+        _ = _cor_base.DisorderConfig()._entity_resolve_patterns_dict[cls.EntityCls.Type]
+        if isinstance(_, six.string_types):
+            pattens = [_]
+        elif isinstance(_, list):
+            pattens = _
+        else:
+            raise RuntimeError()
+
+        for i in pattens:
+            i_matches = cls._scan_sub_fnc(i, variants)
+            list_.extend(i_matches)
+        return list_
+        # pth_opt = bsc_core.BscStgParseOpt(
+        #     _cor_base.DisorderConfig()._entity_resolve_patterns_dict[cls.EntityCls.Type]
+        # )
+        # pth_opt.update_variants(**variants)
+        # matchers = pth_opt.find_matches(sort=True)
+        # return matchers
+
+    @classmethod
+    def _scan_sub_fnc(cls, p, variants):
+        pth_opt = bsc_core.BscStgParseOpt(p)
         pth_opt.update_variants(**variants)
         matchers = pth_opt.find_matches(sort=True)
         return matchers

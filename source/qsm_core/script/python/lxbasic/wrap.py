@@ -1,4 +1,6 @@
 # coding:utf-8
+import sys as _sys
+
 import six as _six
 
 import platform as _platform
@@ -13,8 +15,13 @@ import os as _os
 
 import fnmatch as _fnmatch
 
+import time as _time
+
 
 class LRUCache:
+    """
+    Least Recently Used (LRU) cache
+    """
     def __init__(self, maximum=64):
         self._dict = _collections.OrderedDict()
         self._maximum = maximum
@@ -141,3 +148,19 @@ def get_env_mark():
                     k, v = line.split("=", 1)
                     dict_[k] = v
     return dict_
+
+
+class Debug:
+    @staticmethod
+    def run(name):
+        def decorator(fnc):
+            def wrapper(*args, **kwargs):
+                st = _time.time()
+                result = fnc(*args, **kwargs)
+                et = _time.time()
+                _sys.stdout.write('run "{name}", cost: {second}.s\n'.format(
+                    name=name, second=round(et-st, 3))
+                )
+                return result
+            return wrapper
+        return decorator

@@ -1,11 +1,11 @@
 # coding:utf-8
 import getpass
 
-from peewee import *
-
 import datetime
 
 import uuid
+
+from peewee import *
 
 __all__ = [
     'Node',

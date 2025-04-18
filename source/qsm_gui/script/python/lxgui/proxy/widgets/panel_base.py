@@ -84,7 +84,7 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
     PAGE_CLASSES = []
 
     SUB_PANEL_CLASS_DICT = {}
-    SUB_PANEL_CLASSES = []
+    SUBPANEL_CLASSES = []
 
     def _get_subclass_file_path(self):
         frame = inspect.currentframe().f_back
@@ -119,8 +119,8 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
             self._sub_panel_class_dict = self.SUB_PANEL_CLASS_DICT
         else:
             self._sub_panel_class_dict = {}
-            if self.SUB_PANEL_CLASSES:
-                for i_cls in self.SUB_PANEL_CLASSES:
+            if self.SUBPANEL_CLASSES:
+                for i_cls in self.SUBPANEL_CLASSES:
                     self._sub_panel_class_dict[i_cls.GUI_KEY] = i_cls
 
         self._gui_path = '/{}'.format(self.GUI_KEY)
@@ -533,12 +533,12 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
         super(PrxBaseSubpanel, self).__init__(*args, **kwargs)
 
         if self.SUB_PAGE_CLASS_DICT:
-            self._sub_page_class_dict = self.SUB_PAGE_CLASS_DICT
+            self._subpage_class_dict = self.SUB_PAGE_CLASS_DICT
         else:
-            self._sub_page_class_dict = {}
+            self._subpage_class_dict = {}
             if self.SUBPAGE_CLASSES:
                 for i_cls in self.SUBPAGE_CLASSES:
-                    self._sub_page_class_dict[i_cls.GUI_KEY] = i_cls
+                    self._subpage_class_dict[i_cls.GUI_KEY] = i_cls
 
         self._tab_widget_dict = {}
 
@@ -629,7 +629,7 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
         pass
 
     def gui_generate_subpage_for(self, key):
-        return self.gui_instance_subpage(self._sub_page_class_dict[key])
+        return self.gui_instance_subpage(self._subpage_class_dict[key])
 
     def gui_instance_subpage(self, gui_cls):
         return gui_cls(self._window, self._session, self)

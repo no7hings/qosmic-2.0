@@ -2,7 +2,7 @@
 def main(session):
     import qsm_general.core as qsm_gnl_core
 
-    if qsm_gnl_core.check_python_lib() is False:
+    if qsm_gnl_core.check_python27_lib() is False:
         return
 
     import qsm_maya.handles.scenery.scripts as s

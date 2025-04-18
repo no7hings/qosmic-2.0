@@ -24,7 +24,7 @@ from ..wrap import *
 from . import bridge as _bridge
 
 
-class LogBase(object):
+class LogBase:
     LOG_ROOT_KEY = 'QSM_LOG_ROOT'
     DATE_TAG_FORMAT = '%Y_%m%d'
 
@@ -141,7 +141,7 @@ class LogBase(object):
         )
 
 
-class Log(object):
+class Log:
     DEFAULT_CODING = sys.getdefaultencoding()
 
     FILE_SYSTEM_CODING = sys.getfilesystemencoding()
@@ -519,7 +519,7 @@ class LogProcessContext(object):
         self.set_stop()
 
 
-class LogException(object):
+class LogException:
     @staticmethod
     def _trace():
         import sys

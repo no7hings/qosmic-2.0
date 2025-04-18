@@ -107,8 +107,8 @@ class NodeAttribute:
             sourceFromDestination=1
         )
         if atr_path_src:
-            path_src = atr_path_src.split('.')[0]
-            if not cmds.referenceQuery(path_src, isNodeReferenced=1):
+            # ignore when path is from reference
+            if not cmds.referenceQuery(path, isNodeReferenced=1):
                 cmds.disconnectAttr(atr_path_src, atr_path_tgt)
                 return True
         return False
