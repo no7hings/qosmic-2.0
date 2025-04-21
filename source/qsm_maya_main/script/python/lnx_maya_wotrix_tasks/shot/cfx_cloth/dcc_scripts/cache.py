@@ -27,7 +27,17 @@ import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 from .. import dcc_core as _core
 
 
-class ShotCfxClothCacheOpt(qsm_mya_resource.AssetCacheOpt):
+class ShotCfxClothGeometryCacheOpt(qsm_mya_resource.AssetCacheOpt):
+    def __init__(self, *args, **kwargs):
+        super(ShotCfxClothGeometryCacheOpt, self).__init__(*args, **kwargs)
+
+    def do_export(
+        self, directory_path, frame_range, frame_step, frame_offset, include_customize_deform_geometry=True
+    ):
+        pass
+
+
+class ShotCfxClothAbcCacheOpt(qsm_mya_resource.AssetCacheOpt):
     CACHE_ROOT = qsm_mya_hdl_gnl_core.ResourceCacheNodes.CfxClothRoot
     CACHE_NAME = qsm_mya_hdl_gnl_core.ResourceCacheNodes.CfxClothName
 
@@ -45,7 +55,7 @@ class ShotCfxClothCacheOpt(qsm_mya_resource.AssetCacheOpt):
         )
 
     def __init__(self, *args, **kwargs):
-        super(ShotCfxClothCacheOpt, self).__init__(*args, **kwargs)
+        super(ShotCfxClothAbcCacheOpt, self).__init__(*args, **kwargs)
 
     @classmethod
     def create_cache_root_auto(cls):
@@ -270,7 +280,7 @@ class ShotCfxClothCacheExportProcess(object):
                     i_namespace
                 )
 
-                ShotCfxClothCacheOpt(i_resource).do_export(
+                ShotCfxClothAbcCacheOpt(i_resource).do_export(
                     directory_path,
                     frame_range, frame_step, frame_offset,
                     include_customize_deform_geometry=include_customize_deform_geometry

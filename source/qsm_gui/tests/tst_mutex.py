@@ -36,6 +36,7 @@ class WorkerThread(QThread):
     def stop(self):
         self.is_running = False
 
+
 class MainWindow(QWidget):
     def __init__(self):
         super(MainWindow, self).__init__()

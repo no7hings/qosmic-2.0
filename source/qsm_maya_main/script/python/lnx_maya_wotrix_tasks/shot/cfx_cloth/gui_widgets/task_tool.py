@@ -706,10 +706,10 @@ class _PrxExportToolset(
 
         # export cache
         self._prx_options_node.set(
-            'cache_export.export_cloth_cache', self.on_export_cloth_cache_auto
+            'cache_export.export_cloth_abc_cache', self.on_export_cloth_abc_cache_auto
         )
         if self._window._language == 'chs':
-            self._prx_options_node.get_port('cache_export.export_cloth_cache').set_menu_data(
+            self._prx_options_node.get_port('cache_export.export_cloth_abc_cache').set_menu_data(
                 [
                     ('子进程', 'tool/subprocess', self.on_export_cloth_cache_auto_as_subprocess),
                     ('后台', 'tool/backstage', self.on_export_cloth_cache_auto_as_backstage),
@@ -717,7 +717,7 @@ class _PrxExportToolset(
                 ]
             )
         else:
-            self._prx_options_node.get_port('cache_export.export_cloth_cache').set_menu_data(
+            self._prx_options_node.get_port('cache_export.export_cloth_abc_cache').set_menu_data(
                 [
                     ('subprocess', 'tool/subprocess', self.on_export_cloth_cache_auto_as_subprocess),
                     ('backstage', 'tool/backstage', self.on_export_cloth_cache_auto_as_backstage),
@@ -792,7 +792,7 @@ class _PrxExportToolset(
         )
 
     # cache export
-    def on_export_cloth_cache_auto(self):
+    def on_export_cloth_abc_cache_auto(self):
         if self._unit._gui_task_tool_opt is not None:
             export_scheme = self._prx_options_node.get('cache_export.scheme')
             include_customize_deform_geometry = self._prx_options_node.get(
@@ -815,7 +815,7 @@ class _PrxExportToolset(
                     for i_rig_namespace in rig_namespaces:
                         i_handle = _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace)
                         if i_handle.cfx_rig_handle.get_is_enable():
-                            self._unit._gui_task_tool_opt.export_cloth_cache_by_rig_namespace(
+                            self._unit._gui_task_tool_opt.export_cloth_abc_cache_by_rig_namespace(
                                 i_rig_namespace,
                                 directory_path=directory_path,
                                 frame_range=frame_range,

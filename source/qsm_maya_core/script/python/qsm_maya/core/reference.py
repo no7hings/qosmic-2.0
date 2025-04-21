@@ -18,6 +18,7 @@ class Reference(object):
         except Exception:
             return False
 
+    # when extend is False return file etc. /a/b.ma{1}
     @classmethod
     def get_file(cls, path, extend=True):
         # noinspection PyBroadException

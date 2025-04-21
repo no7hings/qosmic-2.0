@@ -179,9 +179,9 @@ class DagNodeOpt(_node.NodeOpt):
 
 class NodeDisplay(object):
     @classmethod
-    def set_outliner_color(cls, path, r, g, b):
+    def set_outliner_color(cls, path, rgb):
         cmds.setAttr(path+'.useOutlinerColor', 1)
-        cmds.setAttr(path+'.outlinerColor', r, g, b)
+        cmds.setAttr(path+'.outlinerColor', *rgb)
 
     @classmethod
     def is_visible(cls, path):

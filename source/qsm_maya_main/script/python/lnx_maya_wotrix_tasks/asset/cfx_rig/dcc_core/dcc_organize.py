@@ -2,56 +2,19 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-import qsm_maya.core as qsm_mya_core
-
-
-class AbsSetBaseOpt(object):
-    SET_ROOT = 'QSM_SET'
-
-    SET_NAME = None
-
-    @classmethod
-    def create_root_set(cls):
-        return qsm_mya_core.Set.create(cls.SET_ROOT)
-
-    @classmethod
-    def create_set(cls):
-        set_root = cls.create_root_set()
-        set_name = qsm_mya_core.Set.create(cls.SET_NAME)
-        qsm_mya_core.Set.add_one(set_root, set_name)
-        return set_name
+from qsm_maya.handles import abc_
 
 
 # group
-class AbsGroupOrg(AbsSetBaseOpt):
-    LOCATION = None
-
-    SET_NAME = 'QSM_GROUP_SET'
-
-    def __init__(self):
-        if qsm_mya_core.Node.is_exists(self.LOCATION) is False:
-            qsm_mya_core.Group.create_dag(self.LOCATION)
-
-    def add_one(self, path):
-        if path.startswith('{}|'.format(self.LOCATION)):
-            return path
-        return qsm_mya_core.Group.add_one(self.LOCATION, path)
-
-    def find_descendants(self, type_includes):
-        return qsm_mya_core.Group.find_descendants(
-            self.LOCATION, type_includes
-        )
-
-
 #   bridge
-class CfxBridgeGeoGrpOrg(AbsGroupOrg):
+class CfxBridgeGeoGrpOrg(abc_.AbsGroupOrg):
     LOCATION = '|master|cfx_rig|cfx_bridge_grp|cfx_bridge_geo_grp'
 
     def __init__(self):
         super(CfxBridgeGeoGrpOrg, self).__init__()
 
 
-class CfxBridgeControlGrpOrg(AbsGroupOrg):
+class CfxBridgeControlGrpOrg(abc_.AbsGroupOrg):
     LOCATION = '|master|cfx_rig|cfx_bridge_grp|cfx_bridge_control_grp'
 
     def __init__(self):
@@ -59,7 +22,7 @@ class CfxBridgeControlGrpOrg(AbsGroupOrg):
 
 
 #   output
-class CfxOutputGrpOrg(AbsGroupOrg):
+class CfxOutputGrpOrg(abc_.AbsGroupOrg):
     LOCATION = '|master|cfx_rig|cfx_output_geo_grp'
 
     def __init__(self):
@@ -67,7 +30,7 @@ class CfxOutputGrpOrg(AbsGroupOrg):
 
 
 #   output cloth
-class CfxClothGeoGrpOrg(AbsGroupOrg):
+class CfxClothGeoGrpOrg(abc_.AbsGroupOrg):
     LOCATION = '|master|cfx_rig|cfx_output_geo_grp|cfx_cloth_geo_grp'
 
     def __init__(self):
@@ -75,7 +38,7 @@ class CfxClothGeoGrpOrg(AbsGroupOrg):
 
 
 #   output appendix
-class CfxAppendixGeoGrpOrg(AbsGroupOrg):
+class CfxAppendixGeoGrpOrg(abc_.AbsGroupOrg):
     LOCATION = '|master|cfx_rig|cfx_output_geo_grp|cfx_appendix_geo_grp'
 
     def __init__(self):
@@ -83,21 +46,21 @@ class CfxAppendixGeoGrpOrg(AbsGroupOrg):
 
 
 #   cloth proxy
-class CfxClothProxyGeoGrpOrg(AbsGroupOrg):
+class CfxClothProxyGeoGrpOrg(abc_.AbsGroupOrg):
     LOCATION = '|master|cfx_rig|cfx_cloth_proxy_grp|cfx_cloth_proxy_geo_grp'
 
     def __init__(self):
         super(CfxClothProxyGeoGrpOrg, self).__init__()
 
 
-class CfxNClothGrpOrg(AbsGroupOrg):
+class CfxNClothGrpOrg(abc_.AbsGroupOrg):
     LOCATION = '|master|cfx_rig|cfx_ncloth_grp'
 
     def __init__(self):
         super(CfxNClothGrpOrg, self).__init__()
 
 
-class CfxNRigidGrpOrg(AbsGroupOrg):
+class CfxNRigidGrpOrg(abc_.AbsGroupOrg):
     LOCATION = '|master|cfx_rig|cfx_nrigid_grp'
 
     def __init__(self):
@@ -105,7 +68,7 @@ class CfxNRigidGrpOrg(AbsGroupOrg):
 
 
 #   collider
-class CfxColliderGeoGrpOrg(AbsGroupOrg):
+class CfxColliderGeoGrpOrg(abc_.AbsGroupOrg):
     LOCATION = '|master|cfx_rig|cfx_collider_grp|cfx_collider_geo_grp'
 
     def __init__(self):
@@ -113,7 +76,7 @@ class CfxColliderGeoGrpOrg(AbsGroupOrg):
 
 
 #   dynamic
-class CfxNucleusGrpOrg(AbsGroupOrg):
+class CfxNucleusGrpOrg(abc_.AbsGroupOrg):
     LOCATION = '|master|cfx_rig|cfx_nucleus_grp'
 
     def __init__(self):
@@ -121,7 +84,7 @@ class CfxNucleusGrpOrg(AbsGroupOrg):
 
 
 #   wrap
-class CfxWrapGrpOrg(AbsGroupOrg):
+class CfxWrapGrpOrg(abc_.AbsGroupOrg):
     LOCATION = '|master|cfx_rig|cfx_wrap_grp'
 
     def __init__(self):
@@ -129,27 +92,8 @@ class CfxWrapGrpOrg(AbsGroupOrg):
 
 
 # layer
-class AbsLayerOrg(AbsSetBaseOpt):
-    NAME = None
-    RGB = (0, 0, 0)
-    VISIBLE = 0
-
-    SET_NAME = 'QSM_LAYER_SET'
-
-    def __init__(self):
-        if qsm_mya_core.Node.is_exists(self.NAME) is False:
-            layer_name = qsm_mya_core.DisplayLayer.create(self.NAME)
-            qsm_mya_core.DisplayLayer.set_rgb(self.NAME, self.RGB)
-            qsm_mya_core.DisplayLayer.set_visible(self.NAME, self.VISIBLE)
-            set_name = self.create_set()
-            qsm_mya_core.Set.add_one(set_name, layer_name)
-
-    def add_one(self, path):
-        qsm_mya_core.DisplayLayer.add_one(self.NAME, path)
-
-
 #   source
-class CfxSourceGeoLyrOrg(AbsLayerOrg):
+class CfxSourceGeoLyrOrg(abc_.AbsLayerOrg):
     NAME = 'CFX_SOURCE_GEO_LYR'
     RGB = (0, 0, 0)
     VISIBLE = 0
@@ -159,7 +103,7 @@ class CfxSourceGeoLyrOrg(AbsLayerOrg):
 
 
 #   bridge
-class CfxBridgeGeoLyrOrg(AbsLayerOrg):
+class CfxBridgeGeoLyrOrg(abc_.AbsLayerOrg):
     NAME = 'CFX_BRIDGE_GEO_LYR'
     RGB = (1, 0, 0)
     VISIBLE = 1
@@ -168,7 +112,7 @@ class CfxBridgeGeoLyrOrg(AbsLayerOrg):
         super(CfxBridgeGeoLyrOrg, self).__init__()
 
 
-class CfxBridgeControlLyrOrg(AbsLayerOrg):
+class CfxBridgeControlLyrOrg(abc_.AbsLayerOrg):
     NAME = 'CFX_BRIDGE_CONTROL_LYR'
     RGB = (0, 1, 1)
     VISIBLE = 1
@@ -178,7 +122,7 @@ class CfxBridgeControlLyrOrg(AbsLayerOrg):
 
 
 #   cloth
-class CfxClothGeoLyrOrg(AbsLayerOrg):
+class CfxClothGeoLyrOrg(abc_.AbsLayerOrg):
     NAME = 'CFX_CLOTH_GEO_LYR'
     RGB = (1, 0, 1)
     VISIBLE = 1
@@ -188,7 +132,7 @@ class CfxClothGeoLyrOrg(AbsLayerOrg):
 
 
 #   cloth proxy
-class CfxClothProxyGeoLyrOrg(AbsLayerOrg):
+class CfxClothProxyGeoLyrOrg(abc_.AbsLayerOrg):
     NAME = 'CFX_CLOTH_PROXY_GEO_LYR'
     RGB = (0, 1, 0)
     VISIBLE = 1
@@ -198,7 +142,7 @@ class CfxClothProxyGeoLyrOrg(AbsLayerOrg):
 
 
 #   collider
-class CfxColliderGeoLyrOrg(AbsLayerOrg):
+class CfxColliderGeoLyrOrg(abc_.AbsLayerOrg):
     NAME = 'CFX_COLLIDER_GEO_LYR'
     RGB = (0, 0, 1)
     VISIBLE = 1
@@ -208,7 +152,7 @@ class CfxColliderGeoLyrOrg(AbsLayerOrg):
 
 
 #   appendix
-class CfxAppendixGeoLyrOrg(AbsLayerOrg):
+class CfxAppendixGeoLyrOrg(abc_.AbsLayerOrg):
     NAME = 'CFX_APPENDIX_GEO_LYR'
     RGB = (1, 1, 0)
     VISIBLE = 1
@@ -218,24 +162,8 @@ class CfxAppendixGeoLyrOrg(AbsLayerOrg):
 
 
 # material
-class AbsMaterialOrg(AbsSetBaseOpt):
-    NAME = None
-    RGB = (0, 0, 0)
-
-    SET_NAME = 'QSM_MATERIAL_SET'
-
-    def __init__(self):
-        if qsm_mya_core.Node.is_exists(self.NAME) is False:
-            qsm_mya_core.Material.create_as_lambert(self.NAME, self.RGB)
-
-    def assign_to(self, path):
-        qsm_mya_core.Material.assign_to(
-            self.NAME, path
-        )
-
-
 #   bridge
-class CfxBridgeGeoMtlOrg(AbsMaterialOrg):
+class CfxBridgeGeoMtlOrg(abc_.AbsMaterialOrg):
     NAME = 'CFX_BRIDGE_MTL'
     RGB = (1, 0, 0)
 
@@ -244,7 +172,7 @@ class CfxBridgeGeoMtlOrg(AbsMaterialOrg):
 
 
 #   cloth
-class CfxClothGeoMtlOrg(AbsMaterialOrg):
+class CfxClothGeoMtlOrg(abc_.AbsMaterialOrg):
     NAME = 'CFX_CLOTH_MTL'
     RGB = (1, 0, 1)
 
@@ -253,7 +181,7 @@ class CfxClothGeoMtlOrg(AbsMaterialOrg):
 
 
 #   cloth proxy
-class CfxClothProxyGeoMtlOrg(AbsMaterialOrg):
+class CfxClothProxyGeoMtlOrg(abc_.AbsMaterialOrg):
     NAME = 'CFX_CLOTH_PROXY_MTL'
     RGB = (0, 1, 0)
 
@@ -262,7 +190,7 @@ class CfxClothProxyGeoMtlOrg(AbsMaterialOrg):
 
 
 #   collider
-class CfxColliderGeoMtlOrg(AbsMaterialOrg):
+class CfxColliderGeoMtlOrg(abc_.AbsMaterialOrg):
     NAME = 'CFX_COLLIDER_MTL'
     RGB = (0, 0, 1)
 
@@ -271,7 +199,7 @@ class CfxColliderGeoMtlOrg(AbsMaterialOrg):
 
 
 #   appendix
-class CfxAppendixGeoMtlOrg(AbsMaterialOrg):
+class CfxAppendixGeoMtlOrg(abc_.AbsMaterialOrg):
     NAME = 'CFX_APPENDIX_MTL'
     RGB = (1, 1, 0)
 

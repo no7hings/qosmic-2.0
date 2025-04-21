@@ -135,6 +135,9 @@ class GuiTaskCreateMain(_sub_page_for_task_create.AbsPrxSubpageForTaskCreate):
 
             auto_load_cfx_rig = self._prx_options_node.get('auto_load_cfx_rig')
             solver_start_frame = self._prx_options_node.get('solver_start_frame')
+            ignore_load_scenery = self._prx_options_node.get('ignore_load_scenery')
+            auto_hide_no_use_group = self._prx_options_node.get('auto_hide_no_use_group')
+            auto_hide_vfx_group = self._prx_options_node.get('auto_hide_vfx_group')
 
             (
                 task_create_opt, kwargs_new, scene_src_path, thumbnail_path
@@ -150,6 +153,9 @@ class GuiTaskCreateMain(_sub_page_for_task_create.AbsPrxSubpageForTaskCreate):
                     solver_start_frame=solver_start_frame,
                     defer_load_reference_nodes=reference_nodes,
                     scene_frame_range=scene_frame_range,
+                    ignore_load_scenery=ignore_load_scenery,
+                    auto_hide_no_use_group=auto_hide_no_use_group,
+                    auto_hide_vfx_group=auto_hide_vfx_group
                 )
 
                 qsm_mya_core.SceneFile.refresh()

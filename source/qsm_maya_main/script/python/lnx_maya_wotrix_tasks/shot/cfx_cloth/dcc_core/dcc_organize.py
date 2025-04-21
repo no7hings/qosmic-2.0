@@ -4,6 +4,15 @@ import qsm_maya.core as qsm_mya_core
 from qsm_maya.handles import abc_
 
 
+class ShotCfxAutoHideLayerOrg(abc_.AbsLayerOrg):
+    NAME = 'AUTO_HIDE_LYR'
+    RGB = (1, 1, 0)
+    VISIBLE = 0
+
+    def __init__(self):
+        super(ShotCfxAutoHideLayerOrg, self).__init__()
+
+
 class ShotCfxRigGroupOrg(abc_.AbsGroupOpt):
     LOCATION = '|assets|cfx|cfx_rig_grp'
 

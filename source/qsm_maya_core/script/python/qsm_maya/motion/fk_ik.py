@@ -275,7 +275,9 @@ class FKIKSwitch(object):
         for i_key in keys:
             i_options = copy.copy(options)
             i_options.update(dict(key=i_key))
+            # joint
             i_ikx = '{namespace}:IKX{key}_{direction}'.format(**i_options)
+            # control
             i_fx = '{namespace}:FK{key}_{direction}'.format(**i_options)
             if (
                 cmds.objExists(i_ikx) is False

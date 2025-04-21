@@ -211,6 +211,9 @@ class TaskSession(object):
             return matches[-1]['result']
         return None
 
+    def is_file_match(self, keyword, file_path):
+        return bool(self.generate_file_variants_for(keyword, file_path))
+
     def generate_release_new_version_number(self, **kwargs):
         kwargs_new = dict(self._properties)
         kwargs_new.update(**kwargs)

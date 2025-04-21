@@ -115,6 +115,15 @@ build:
                 value: True
                 join_to_next: True
 
+            ignore_load_scenery:
+                widget: boolean
+                name: 'Ignore Load Scenery'
+                name_chs: '忽略加载场景'
+                value: False
+                join_to_next: True
+                history_group: ['wotrix', 'shot', 'cfx_cloth', 'task_release']
+                pull_history_latest: True
+
             auto_hide_no_use_group:
                 widget: boolean
                 name: 'Auto Hide No Use Group'
@@ -124,10 +133,10 @@ build:
                 history_group: ['wotrix', 'shot', 'cfx_cloth', 'task_release']
                 pull_history_latest: True
 
-            ignore_load_scenery:
+            auto_hide_vfx_group:
                 widget: boolean
-                name: 'Ignore Load Scenery'
-                name_chs: '忽略加载场景'
+                name: 'Auto Hide VFX Group'
+                name_chs: '自动隐藏特效组'
                 value: False
                 history_group: ['wotrix', 'shot', 'cfx_cloth', 'task_release']
                 pull_history_latest: True

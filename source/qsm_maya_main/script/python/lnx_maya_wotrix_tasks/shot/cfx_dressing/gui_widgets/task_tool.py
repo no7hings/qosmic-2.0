@@ -178,7 +178,7 @@ class _PrxImportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
                         i_variants = ptn_opt.get_variants(i_cache_path)
                         i_resource = resources_query.get(i_variants['namespace'])
                         if i_resource:
-                            i_resource_opt = _shot_cfx_cloth_scripts.ShotCfxClothCacheOpt(i_resource)
+                            i_resource_opt = _shot_cfx_cloth_scripts.ShotCfxClothAbcCacheOpt(i_resource)
                             i_resource_opt.load_cache(i_cache_path)
 
                     g_p.do_update()
@@ -191,7 +191,7 @@ class _PrxImportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
             ) as g_p:
                 for i_rig_namespace in rig_namespaces:
                     i_resource = qsm_mya_hdl_anm_core.AdvRigAsset(i_rig_namespace)
-                    i_opt = _shot_cfx_cloth_scripts.ShotCfxClothCacheOpt(i_resource)
+                    i_opt = _shot_cfx_cloth_scripts.ShotCfxClothAbcCacheOpt(i_resource)
                     i_opt.remove_cache()
 
                 g_p.do_update()

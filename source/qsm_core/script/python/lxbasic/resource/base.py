@@ -29,6 +29,15 @@ print(BscExtendResource.get('icons/file/folder.svg'))
                 return _.split(os.pathsep)
         return []
 
+    # todo: use scan glob instance
+    @classmethod
+    def __find_all_results(cls, p):
+        _ = glob.glob(p) or []
+        if _:
+            if platform.system() == 'Windows':
+                _ = [i.replace('\\', '/') for i in _]
+        return _
+
     @classmethod
     def get(cls, key, search_paths=None):
         """
@@ -43,11 +52,11 @@ print(BscExtendResource.get('icons/file/folder.svg'))
             paths = search_paths
         else:
             paths = cls.find_all_roots()
-        #
+
         for i_path_root in paths:
             if os.path.isdir(i_path_root) is True:
                 i_p = '{}/{}'.format(i_path_root, key)
-                i_results = _scan_glog.ScanGlob.glob(i_p)
+                i_results = cls.__find_all_results(i_p)
                 if i_results:
                     # use first result
                     value = i_results[0]
@@ -59,7 +68,7 @@ print(BscExtendResource.get('icons/file/folder.svg'))
         for i_path_root in cls.find_all_roots():
             if os.path.isdir(i_path_root) is True:
                 i_p = '{}/{}'.format(i_path_root, key)
-                return _scan_glog.ScanGlob.glob(i_p)
+                return cls.__find_all_results(i_p)
 
     @classmethod
     def find_all_file_keys_at(cls, branch, key, ext_includes):
@@ -70,6 +79,7 @@ print(BscExtendResource.get('icons/file/folder.svg'))
             if os.path.isdir(i_path_sub) is True:
                 i_all_file_path = _scan_base.ScanBase.get_all_file_paths(i_path_sub, ext_includes)
                 set_.update(map(lambda x: os.path.splitext(x[len(i_path_branch)+1:])[0], i_all_file_path))
+
         if set_:
             list_ = list(set_)
             list_.sort()
@@ -85,6 +95,7 @@ print(BscExtendResource.get('icons/file/folder.svg'))
             if os.path.isdir(i_path_sub) is True:
                 i_all_file_path = _scan_base.ScanBase.get_all_file_paths(i_path_sub, ext_includes)
                 set_.update(map(lambda x: os.path.splitext(x[len(i_path_branch)+1:])[0], i_all_file_path))
+
         if set_:
             list_ = list(set_)
             list_.sort()
@@ -100,6 +111,7 @@ print(BscExtendResource.get('icons/file/folder.svg'))
             if os.path.isdir(i_path_sub) is True:
                 i_all_directory_paths = _scan_base.ScanBase.get_all_directory_paths(i_path_sub)
                 set_.update(map(lambda x: os.path.splitext(x[len(i_path_branch)+1:])[0], i_all_directory_paths))
+
         if set_:
             list_ = list(set_)
             list_.sort()

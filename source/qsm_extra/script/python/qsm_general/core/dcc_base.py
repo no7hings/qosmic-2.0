@@ -139,6 +139,8 @@ class DccFilePatterns(object):
     CfxClothJsonFile = '{directory}/json/{namespace}.cloth.json'
     CfxClothMcxFile = '{directory}/mcx/{namespace}.cloth.mcx'
 
+    CfxClothMcxFile_ = ''
+
 
 class HoudiniBin:
     pass

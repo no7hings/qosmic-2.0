@@ -345,6 +345,103 @@ build:
                         |-
                         点击应用上面设置的初始帧。
 
+                geometry_cache:
+                    widget: group
+                    name: 'Geometry Cache Generate'
+                    name_chs: '几何缓存'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        待补充。
+
+                geometry_cache/version_scheme:
+                    widget: capsule_string
+                    name: 'Version Scheme'
+                    name_chs: '版本方案'
+                    options: ['no_version', 'new_version']
+                    option_names_chs: ['无版本', '新版本']
+                    default: 'new_version'
+                    enable: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        待补充。
+
+                geometry_cache/include:
+                    widget: capsule_string
+                    name: 'Include'
+                    name_chs: '包含'
+                    options: ['all', 'selected']
+                    option_names: ['All', 'Selected']
+                    option_names_chs: ['所有', '选中的']
+                    default: 'all'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        待补充。
+
+                geometry_cache/create_cloth_geometry_cache:
+                    widget: button
+                    name: 'Generate Cloth Geometry Cache'
+                    name_chs: '生成布料几何缓存'
+                    icon: 'upload'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击导出布料几何缓存。
+                    join_to_next: True
+
+                geometry_cache/remove_cloth_geometry_cache:
+                    widget: button
+                    name: 'Remove Cloth Geometry Cache'
+                    name_chs: '删除布料几何缓存'
+                    icon: 'upload'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击导出布料几何缓存。
+                    join_to_next: True
+
+                preview_export:
+                    widget: group
+                    name: 'Preview Export'
+                    name_chs: '预览导出'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        预览拍屏相关。
+
+                preview_export/playblast:
+                    widget: button
+                    name: 'Playblast'
+                    name_chs: '拍屏'
+                    icon: 'tool/maya/playblast'
+                    menu_enable: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击拍屏，右键点击/点击右边三个点可以查看更多功能：
+                            子进程：
+                                使用子进程进行拍屏；
+                            后台：
+                                使用后台进程进行拍屏，需要打开“懒人后台任务管理”；
+                            农场：
+                                使用农场进行拍屏。
+
                 cache_directory:
                     widget: group
                     name: 'Cache Directory'
@@ -416,36 +513,6 @@ build:
                         |-
                         最终输出的版本文件夹，不可手动设置。
 
-                preview_export:
-                    widget: group
-                    name: 'Preview Export'
-                    name_chs: '预览导出'
-                    tool_tip:
-                        |-
-                        To be supplemented.
-                    tool_tip_chs:
-                        |-
-                        预览拍屏相关。
-
-                preview_export/playblast:
-                    widget: button
-                    name: 'Playblast'
-                    name_chs: '拍屏'
-                    icon: 'tool/maya/playblast'
-                    menu_enable: True
-                    tool_tip:
-                        |-
-                        To be supplemented.
-                    tool_tip_chs:
-                        |-
-                        点击拍屏，右键点击/点击右边三个点可以查看更多功能：
-                            子进程：
-                                使用子进程进行拍屏；
-                            后台：
-                                使用后台进程进行拍屏，需要打开“懒人后台任务管理”；
-                            农场：
-                                使用农场进行拍屏。
-
                 cache_export:
                     widget: group
                     name: 'Cache Export'
@@ -483,10 +550,10 @@ build:
                         |-
                         开启此选项后，导出缓存的时候会包含文件中加了变形器（如wave, nCloth）的模型。
 
-                cache_export/export_cloth_cache:
+                cache_export/export_cloth_abc_cache:
                     widget: button
-                    name: 'Export Cache'
-                    name_chs: '导出CFX布料'
+                    name: 'Export Cloth Abc Cache'
+                    name_chs: '导出布料ABC缓存'
                     icon: 'upload'
                     menu_enable: True
                     tool_tip:
@@ -494,7 +561,7 @@ build:
                         To be supplemented.
                     tool_tip_chs:
                         |-
-                        点击导出布料缓存，右键点击/点击右边三个点可以查看更多功能：
+                        点击导出布料ABC缓存，右键点击/点击右边三个点可以查看更多功能：
                             子进程：
                                 使用子进程进行缓存导出；
                             后台：

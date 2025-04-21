@@ -21,12 +21,12 @@ import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
 from .. import core as _core
 
 
-class ShotCfxClothCacheOpt(qsm_mya_resource.AssetCacheOpt):
+class ShotCfxClothAbcCacheOpt(qsm_mya_resource.AssetCacheOpt):
     CACHE_ROOT = qsm_mya_hdl_gnl_core.ResourceCacheNodes.CfxClothRoot
     CACHE_NAME = qsm_mya_hdl_gnl_core.ResourceCacheNodes.CfxClothName
 
     def __init__(self, *args, **kwargs):
-        super(ShotCfxClothCacheOpt, self).__init__(*args, **kwargs)
+        super(ShotCfxClothAbcCacheOpt, self).__init__(*args, **kwargs)
 
     @classmethod
     def create_cache_root_auto(cls):
@@ -225,7 +225,7 @@ class CfxNClothCacheProcess(object):
         
             i_resource = _core.CfxAdvRigAsset(i_namespace)
 
-            ShotCfxClothCacheOpt(i_resource).do_export(
+            ShotCfxClothAbcCacheOpt(i_resource).do_export(
                 self._directory_path,
                 self._frame_range, self._frame_step, self._frame_offset,
                 self._with_alembic_cache, self._with_geometry_cache
