@@ -1,6 +1,4 @@
 # coding:utf-8
-import sys
-
 import lxbasic.log as bsc_log
 
 from .. core import base as _cor_base

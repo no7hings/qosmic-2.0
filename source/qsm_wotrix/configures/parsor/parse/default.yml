@@ -1,9 +1,13 @@
 spaces:
+    # this space is use for old project
     disorder : 'disorder'
-    # is work source in server
+    # source for work, default is on server
     source: 'source'
-    release: 'release'
+    # for source
     temporary: 'temporary'
+    #
+    pre_release: 'pre_release'
+    release: 'release'
 
 roots:
     # configure root for each space, only support for windows now
@@ -13,11 +17,14 @@ roots:
     source:
         windows: 'Z:/projects'
 
-    release:
-        windows: 'X:'
-
     temporary:
         windows: 'Z:/projects'
+
+    pre_release:
+        windows: 'Z:/projects'
+
+    release:
+        windows: 'X:'
 
 entities:
     # pattern for resolve
@@ -29,7 +36,8 @@ entities:
                 - '{root_source}/{project}/<spaces.source>'
             release:
                 - '{root_release}/{project}/QSM/<spaces.release>'
-        # role
+
+        # role, in shotgun is asset_type
         Role:
             disorder:
                 - '{root_disorder}/{project}/Assets/{role}'
@@ -37,6 +45,7 @@ entities:
                 - '{root_source}/{project}/<spaces.source>/assets/{role}'
             release:
                 - '{root_release}/{project}/QSM/<spaces.release>/assets/{role}'
+
         # asset
         Asset:
             disorder:
@@ -45,7 +54,8 @@ entities:
                 - '{root_source}/{project}/<spaces.source>/assets/{role}/{asset}'
             release:
                 - '{root_release}/{project}/QSM/<spaces.release>/assets/{role}/{asset}'
-        # this branch is unusable
+
+        # episode, can be using for editing task
         Episode:
             disorder:
                 - '{root_disorder}/{project}/{episode}'
@@ -53,7 +63,8 @@ entities:
                 - '{root_source}/{project}/{space}/episodes/{episode}'
             release:
                 - '{root_release}/{project}/QSM/{space}/episodes/{episode}'
-        # sequence
+
+        # sequence, can be using for scene set/set_dressing task
         Sequence:
             disorder:
                 - '{root_disorder}/{project}/{episode}/{sequence}{seq_IGN}/分镜'
@@ -63,6 +74,7 @@ entities:
             release:
                 - '{root_release}/{project}/QSM/{space}/sequences/{sequence}'
                 - '{root_release}/{project}/QSM/<spaces.release>/shots/{sequence}/{shot}'
+
         # shot
         Shot:
             disorder:
