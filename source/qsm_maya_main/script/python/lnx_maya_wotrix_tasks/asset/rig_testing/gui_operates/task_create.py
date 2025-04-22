@@ -16,7 +16,7 @@ class MayaAssetRigTestingCreateOpt(_asset_gnl_task_create.MayaAssetTaskCreateOpt
     def build_scene_src_fnc(self, scene_src_path, upstream_scene_path=None):
 
         if upstream_scene_path is None:
-            upstream_scene_path = self._task_session.get_file_for('asset-disorder-rig_scene-maya-file')
+            upstream_scene_path = self._task_session.get_file_or_dir_for('asset-disorder-rig_scene-maya-file')
 
         if upstream_scene_path:
             if bsc_storage.StgPath.get_is_file(upstream_scene_path):

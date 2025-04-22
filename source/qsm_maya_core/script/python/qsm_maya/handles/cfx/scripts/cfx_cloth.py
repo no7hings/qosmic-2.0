@@ -40,7 +40,7 @@ class ShotCfxClothAbcCacheOpt(qsm_mya_resource.AssetCacheOpt):
         self, directory_path, frame_range, frame_step, frame_offset,
         with_alembic_cache=True, with_geometry_cache=True
     ):
-        mesh_transforms = self._resource.generate_cfx_cloth_export_args()
+        mesh_transforms = self._resource.generate_cloth_abc_cache_export_args()
         if mesh_transforms:
             options = dict(
                 directory=directory_path,

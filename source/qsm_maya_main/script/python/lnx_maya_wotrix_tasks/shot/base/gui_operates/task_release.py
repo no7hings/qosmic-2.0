@@ -50,12 +50,12 @@ class MayaShotTaskReleaseOpt(lnx_wtx_core.DccTaskReleaseOpt):
 
             properties_new['version'] = str(version_number_new).zfill(3)
 
-            version_dir_path_new = self._task_session.get_file_for(
+            version_dir_path_new = self._task_session.get_file_or_dir_for(
                 'shot-release-version-dir', version=version_new
             )
 
             # release source_src file
-            release_scene_src_path_new = self._task_session.get_file_for(
+            release_scene_src_path_new = self._task_session.get_file_or_dir_for(
                 'shot-release-maya-scene_src-file', version=version_new
             )
 
@@ -65,7 +65,7 @@ class MayaShotTaskReleaseOpt(lnx_wtx_core.DccTaskReleaseOpt):
 
             videos = kwargs.get('videos')
             if videos:
-                preview_path = self._task_session.get_file_for(
+                preview_path = self._task_session.get_file_or_dir_for(
                     'shot-release-preview-mov-file', version=version_new
                 )
                 bsc_storage.StgFileOpt(videos[0]).copy_to_file(preview_path)

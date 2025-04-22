@@ -14,7 +14,7 @@ class CfxAdvRigAsset(_tsk_anm_core.AdvRigAsset):
 
         self._cfx_rig_namespace = '{}:cfx_rig'.format(self._namespace)
 
-    def generate_cfx_cloth_export_args(self):
+    def generate_cloth_abc_cache_export_args(self):
         return []
     
     def generate_cfx_component_data(self):

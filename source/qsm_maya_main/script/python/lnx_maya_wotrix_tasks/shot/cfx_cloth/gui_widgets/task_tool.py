@@ -682,6 +682,10 @@ class _PrxExportToolset(
         self._prx_options_node.get_port('cache_directory.specified_version').connect_input_changed_to(
             self.do_gui_refresh_version_by_version_scheme_changing
         )
+        # geometry cache
+        self._prx_options_node.set(
+            'geometry_cache.create_cloth_geometry_cache', self.on_create_cloth_geometry_cache_auto
+        )
 
         # playblast
         self._prx_options_node.set(
@@ -711,17 +715,17 @@ class _PrxExportToolset(
         if self._window._language == 'chs':
             self._prx_options_node.get_port('cache_export.export_cloth_abc_cache').set_menu_data(
                 [
-                    ('子进程', 'tool/subprocess', self.on_export_cloth_cache_auto_as_subprocess),
-                    ('后台', 'tool/backstage', self.on_export_cloth_cache_auto_as_backstage),
-                    ('农场', 'tool/farm', self.on_export_cloth_cache_auto_as_farm)
+                    ('子进程', 'tool/subprocess', self.on_export_cloth_abc_cache_auto_as_subprocess),
+                    ('后台', 'tool/backstage', self.on_export_cloth_abc_cache_auto_as_backstage),
+                    ('农场', 'tool/farm', self.on_export_cloth_abc_cache_auto_as_farm)
                 ]
             )
         else:
             self._prx_options_node.get_port('cache_export.export_cloth_abc_cache').set_menu_data(
                 [
-                    ('subprocess', 'tool/subprocess', self.on_export_cloth_cache_auto_as_subprocess),
-                    ('backstage', 'tool/backstage', self.on_export_cloth_cache_auto_as_backstage),
-                    ('farm', 'tool/farm', self.on_export_cloth_cache_auto_as_farm)
+                    ('subprocess', 'tool/subprocess', self.on_export_cloth_abc_cache_auto_as_subprocess),
+                    ('backstage', 'tool/backstage', self.on_export_cloth_abc_cache_auto_as_backstage),
+                    ('farm', 'tool/farm', self.on_export_cloth_abc_cache_auto_as_farm)
                 ]
             )
 
@@ -729,7 +733,7 @@ class _PrxExportToolset(
         if self._page._task_session:
             self.do_gui_refresh_fps()
 
-            cache_directory_path = self._page._task_session.get_file_for(
+            cache_directory_path = self._page._task_session.get_file_or_dir_for(
                 'shot-source-maya-cfx_cache-dir'
             )
             self._prx_options_node.set(
@@ -757,12 +761,44 @@ class _PrxExportToolset(
 
         if self._unit._gui_task_tool_opt:
             self._unit._gui_task_tool_opt.apply_simulation_start_frame(start_frame)
+            
+    # geometry cache
+    def on_create_cloth_geometry_cache_auto(self):
+        if self._unit._gui_task_tool_opt is not None:
+            export_scheme = self._prx_options_node.get('geometry_cache.include')
+            if export_scheme == 'all':
+                rig_namespaces = self.get_all_rig_namespaces()
+            elif export_scheme == 'selected':
+                rig_namespaces = self.get_rig_namespaces_by_selection()
+            else:
+                raise RuntimeError()
+
+            if rig_namespaces:
+                directory_path = self._unit._gui_task_tool_opt.generate_cloth_geometry_cache_directory()
+
+                frame_range = self.gui_get_frame_range()
+                frame_step = self.gui_get_frame_step()
+                with self._window.gui_progressing(
+                    maximum=len(rig_namespaces), label='load cfx rig'
+                ) as g_p:
+                    for i_rig_namespace in rig_namespaces:
+                        i_handle = _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace)
+                        if i_handle.cfx_rig_handle.get_is_enable():
+                            self._unit._gui_task_tool_opt.create_cloth_geometry_cache_by_rig_namespace(
+                                i_rig_namespace,
+                                directory_path=directory_path,
+                                frame_range=frame_range,
+                                frame_step=frame_step,
+                            )
+
+                        g_p.do_update()
 
     # playblast
     def on_playblast(self):
         clip_start = self._prx_options_node.get('animation.start_frame')
         with self._window.gui_minimized():
             import lxbasic.session as bsc_session
+
             bsc_session.OptionHook.execute(
                 "option_hook_key=dcc-script/maya/qsm-playblast-script&clip_start={}".format(clip_start)
             )
@@ -791,7 +827,7 @@ class _PrxExportToolset(
             "option_hook_key=dcc-script/maya/qsm-playblast-script&scheme=farm&clip_start={}".format(clip_start)
         )
 
-    # cache export
+    # abc cache
     def on_export_cloth_abc_cache_auto(self):
         if self._unit._gui_task_tool_opt is not None:
             export_scheme = self._prx_options_node.get('cache_export.scheme')
@@ -827,7 +863,7 @@ class _PrxExportToolset(
 
                 self.do_gui_refresh_version_by_version_scheme_changing()
 
-    def on_export_cloth_cache_auto_as_subprocess(self):
+    def on_export_cloth_abc_cache_auto_as_subprocess(self):
         if self._unit._gui_task_tool_opt is not None:
             export_scheme = self._prx_options_node.get('cache_export.scheme')
             include_customize_deform_geometry = self._prx_options_node.get(
@@ -869,7 +905,7 @@ class _PrxExportToolset(
 
                 self.do_gui_refresh_version_by_version_scheme_changing()
 
-    def on_export_cloth_cache_auto_as_backstage(self):
+    def on_export_cloth_abc_cache_auto_as_backstage(self):
         if qsm_gnl_prc_task.BackstageTaskSubmit.check_is_valid() is False:
             return
 
@@ -924,7 +960,7 @@ class _PrxExportToolset(
 
                 self.do_gui_refresh_version_by_version_scheme_changing()
 
-    def on_export_cloth_cache_auto_as_farm(self):
+    def on_export_cloth_abc_cache_auto_as_farm(self):
         if qsm_gnl_prc_task.FarmTaskSubmit.check_is_valid() is False:
             return
 

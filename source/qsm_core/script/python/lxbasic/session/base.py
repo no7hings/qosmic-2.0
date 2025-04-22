@@ -1,9 +1,15 @@
 # coding:utf-8
+import sys
+
 import six
 
 import functools
 
 import fnmatch
+
+import subprocess
+
+import threading
 
 import lxbasic.log as bsc_log
 
@@ -14,6 +20,39 @@ import lxbasic.resource as bsc_resource
 import lxbasic.storage as bsc_storage
 
 import lxbasic.extra.methods as bsc_etr_methods
+
+
+class _Shell:
+    @classmethod
+    def execute_script_with_thread(cls, cmd_script, clear_env=True):
+        t = threading.Thread(
+            target=cls.execute_script, args=(cmd_script, ), kwargs=dict(clear_env=clear_env)
+        )
+        t.start()
+
+    @classmethod
+    def execute_script(cls, cmd_script, clear_env=True):
+        cmd_script = bsc_core.ensure_mbcs(cmd_script)
+        if clear_env is True:
+            bsc_log.Log.debug('execute shell (use clear environ): `{}`'.format(cmd_script))
+            prc = subprocess.Popen(
+                cmd_script,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                env=bsc_core.get_env_mark()
+            )
+        else:
+            bsc_log.Log.debug('execute shell: `{}`'.format(cmd_script))
+            prc = subprocess.Popen(
+                cmd_script,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+            )
+
+        stdout, stderr = prc.communicate()
+
+        if prc.returncode != 0:
+            sys.stderr.write(stderr+'\n')
+            # raise?
+            return None
 
 
 class AbsSsnConfigureBaseDef(object):
@@ -268,6 +307,7 @@ class AbsSsnGener(
 
     def execute(self):
         if self._hook_python_file_path:
+            # put session to kwargs
             self.execute_python_file(
                 self._hook_python_file_path, session=self
             )
@@ -282,6 +322,7 @@ class AbsSsnGener(
                 file_path
             )
         )
+        # make sure is run with __main__
         kwargs['__name__'] = '__main__'
         bsc_core.BscSystem.execfile(file_path, kwargs)
         bsc_log.Log.trace_method_result(
@@ -306,22 +347,19 @@ class AbsSsnGener(
         )
         session = kwargs['session']
         if bsc_core.BscPlatform.get_is_linux():
-            cmds = [
+            cmd_args = [
                 'gnome-terminal',
+                # window name
                 '-t "{}-{}"'.format(
                     session.get_name(), bsc_core.BscSystem.get_time_tag()
                 ),
                 '-e "bash -l {}"'.format(file_path)
             ]
-            bsc_core.BscProcess.execute_as_trace_use_thread(
-                ' '.join(cmds)
-            )
+            _Shell.execute_script_with_thread(' '.join(cmd_args))
         elif bsc_core.BscPlatform.get_is_windows():
             # when process finish use /c for auto close terminal, /k not
-            cmds = ['start', 'cmd', '/c', file_path]
-            bsc_core.BscProcess.execute_as_trace_use_thread(
-                ' '.join(cmds)
-            )
+            cmd_args = ['start', 'cmd', '/c', file_path]
+            _Shell.execute_script_with_thread(' '.join(cmd_args))
 
         bsc_log.Log.trace_method_result(
             'option-hook', 'complete for: "{}"'.format(
@@ -333,28 +371,24 @@ class AbsSsnGener(
     def execute_shell_script_use_terminal(cmd, **kwargs):
         session = kwargs['session']
         if bsc_core.BscPlatform.get_is_linux():
-            cmds = [
+            cmd_args = [
                 'gnome-terminal',
                 '-t "{}-{}"'.format(
                     session.get_name(), bsc_core.BscSystem.get_time_tag()
                 ),
                 '--', 'bash', '-l', '-c', cmd
             ]
-            bsc_core.BscProcess.execute_as_trace_use_thread(
-                ' '.join(cmds)
-            )
+            _Shell.execute_script_with_thread(' '.join(cmd_args))
         elif bsc_core.BscPlatform.get_is_windows():
-            cmds = ['start', 'cmd', '/c', cmd]
-            bsc_core.BscProcess.execute_as_trace_use_thread(
-                ' '.join(cmds)
-            )
+            cmd_args = ['start', 'cmd', '/c', cmd]
+            _Shell.execute_script_with_thread(' '.join(cmd_args))
 
     @staticmethod
-    def execute_shell_script(cmd, use_thread=True):
+    def execute_shell_script(cmd_script, use_thread=True, clear_env=True):
         if use_thread is True:
-            bsc_core.BscProcess.execute_use_thread(cmd)
+            _Shell.execute_script_with_thread(cmd_script, clear_env)
         else:
-            bsc_core.BscProcess.execute(cmd)
+            _Shell.execute_script(cmd_script, clear_env)
 
     def set_gui(self, widget):
         self._gui_widget = widget
@@ -512,19 +546,21 @@ class AbsSsnCommand(AbsSsnGener):
         type_ = self.basic_configure.get('type')
         if type_ == 'shell-script':
             shell_file_path = self.get_shell_script_file()
+            # file
             if shell_file_path:
                 self.execute_shell_file_use_terminal(shell_file_path, session=self)
+            # script
             else:
-                command = self.basic_configure.get('command')
-                if command:
-                    self.execute_shell_script_use_terminal(command, session=self)
+                cmd_script = self.basic_configure.get('command')
+                if cmd_script:
+                    self.execute_shell_script_use_terminal(cmd_script, session=self)
         elif type_ == 'python-script':
             python_file_path = self.get_python_script_file()
             if python_file_path:
                 self.execute_python_file(python_file_path, session=self)
             else:
-                command = self.basic_configure.get('command')
-                self.execute_python_script(command, session=self)
+                cmd_script = self.basic_configure.get('command')
+                self.execute_python_script(cmd_script, session=self)
 
 
 class AbsSsnOptionGener(AbsSsnGener):

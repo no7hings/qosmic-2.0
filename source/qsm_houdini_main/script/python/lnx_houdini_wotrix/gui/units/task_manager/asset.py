@@ -22,7 +22,7 @@ class GuiTaskManagerMain(_abs_unit_for_task_manager.AbsPrxUnitForTaskManager):
     def dcc_set_scene_project(self, task_session):
         variants = task_session.properties
         resource_type = variants['resource_type']
-        houdini_dir_path = task_session.get_file_for('{}-source-houdini-dir'.format(resource_type))
+        houdini_dir_path = task_session.get_file_or_dir_for('{}-source-houdini-dir'.format(resource_type))
         lnx_hou_core.Workspace.create(houdini_dir_path)
 
     def __init__(self, *args, **kwargs):

@@ -598,6 +598,7 @@ patterns:
             animation-scene-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_IGN}/动画/通过文件/{shot}.ma'
             animation-preview-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_IGN}/动画/通过文件/{shot}.mov'
 
+        # working space
         source:
             dir: '{root_source}/{project}/{space}/shots/{sequence}/{shot}'
             # task
@@ -616,6 +617,7 @@ patterns:
             katana-thumbnail-file: '<.task_unit-dir>/katana/.thumbnails/<..task_unit-version-name>.jpg'
             #   directories
             maya-cache-dir: '<.task_unit-dir>/maya/caches'
+            maya-ncloth-cache-dir: '<.task_unit-dir>/maya/caches/ncloth/<..task_unit-version-name>'
             maya-cfx_cache-dir: '<.task_unit-dir>/maya/cfx_caches'
             maya-animation_cache-dir: '<.task_unit-dir>/maya/animation_caches'
             maya-animation_cache-version-dir: '<.maya-animation_cache-dir>/v{version}'

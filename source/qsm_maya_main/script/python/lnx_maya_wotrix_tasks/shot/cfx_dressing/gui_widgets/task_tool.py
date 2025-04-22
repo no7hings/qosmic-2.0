@@ -217,7 +217,7 @@ class _PrxImportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
 
     def do_gui_refresh_all(self):
         if self._page._task_session:
-            cache_directory_path = self._page._task_session.get_file_for(
+            cache_directory_path = self._page._task_session.get_file_or_dir_for(
                 'shot-source-maya-cfx_cache-dir', task='cfx_cloth'
             )
             if bsc_storage.StgPath.get_is_directory(cache_directory_path):

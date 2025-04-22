@@ -35,7 +35,7 @@ class ShotCfxDressingReleaseProcess(object):
             l_p.do_update()
 
             # step 3
-            cache_directory_path = task_session.get_file_for(
+            cache_directory_path = task_session.get_file_or_dir_for(
                 'shot-release-cache-abc-dir'
             )
             qsm_mya_core.SceneFile.collection_alembic_caches_to(
@@ -44,7 +44,7 @@ class ShotCfxDressingReleaseProcess(object):
             l_p.do_update()
 
             # step 5
-            scene_path = task_session.get_file_for(
+            scene_path = task_session.get_file_or_dir_for(
                 'shot-release-maya-scene-file'
             )
             qsm_mya_core.SceneFile.save_to(scene_path)
@@ -54,17 +54,17 @@ class ShotCfxDressingReleaseProcess(object):
             l_p.do_update()
 
             # step 6
-            pack_scene_path = task_session.get_file_for(
+            pack_scene_path = task_session.get_file_or_dir_for(
                 'shot-release-pack-maya-scene-file'
             )
             qsm_mya_core.SceneFile.save_to(pack_scene_path)
             qsm_mya_core.SceneFile.collection_alembic_caches_auto()
-            preview_path = task_session.get_file_for(
+            preview_path = task_session.get_file_or_dir_for(
                 'shot-release-preview-mov-file'
             )
             if preview_path:
                 if bsc_storage.StgPath.get_is_file(preview_path):
-                    pack_preview_path = task_session.get_file_for(
+                    pack_preview_path = task_session.get_file_or_dir_for(
                         'shot-release-pack-preview-mov-file'
                     )
                     bsc_storage.StgFileOpt(preview_path).copy_to_file(

@@ -17,7 +17,7 @@ class MayaAssetCfxRigCreateOpt(_asset_gnl_task_create.MayaAssetTaskCreateOpt):
         task = self._properties['task']
 
         if upstream_scene_path is None:
-            upstream_scene_path = self._task_session.get_file_for('asset-disorder-rig_scene-maya-file')
+            upstream_scene_path = self._task_session.get_file_or_dir_for('asset-disorder-rig_scene-maya-file')
 
         if upstream_scene_path:
             if bsc_storage.StgPath.get_is_file(upstream_scene_path):

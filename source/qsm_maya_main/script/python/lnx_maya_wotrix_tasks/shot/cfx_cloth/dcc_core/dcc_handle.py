@@ -226,7 +226,17 @@ class ShotCfxRigHandle:
             return _asset_cfx_rig_core.AssetCfxRigHandle.generate_component_data_for(gui_location, dcc_location)
         return {}
 
-    def generate_export_args(self):
+    def generate_geometry_cache_export_args(self):
+        list_ = []
+        location = self.find_location()
+        # may be intermediate
+        nclothes = qsm_mya_core.Group.find_descendants(location, 'nCloth', no_intermediate=False)
+        for i in nclothes:
+            i_mesh_shapes = qsm_mya_core.NCloth.find_output_mesh_shapes(i)
+            list_.extend(i_mesh_shapes)
+        return list(set(list_))
+
+    def generate_abc_cache_export_args(self):
         mesh_transforms = []
         location = self.find_output_geo_location()
         meshes = qsm_mya_core.Group.find_descendants(

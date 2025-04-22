@@ -31,10 +31,20 @@ class ShotCfxClothGeometryCacheOpt(qsm_mya_resource.AssetCacheOpt):
     def __init__(self, *args, **kwargs):
         super(ShotCfxClothGeometryCacheOpt, self).__init__(*args, **kwargs)
 
-    def do_export(
-        self, directory_path, frame_range, frame_step, frame_offset, include_customize_deform_geometry=True
-    ):
-        pass
+    def do_export(self, directory_path, frame_range, frame_step, frame_offset):
+        meshes = self._resource.generate_cloth_geometry_cache_export_args()
+
+        mcx_path = '{}/{}.mcx'.format(
+            directory_path,
+            # make sure no namespacesep in filename
+            self._namespace.replace(':', '__')
+        )
+        qsm_mya_core.GeometryCacheOpt(
+            file_path=mcx_path,
+            location=meshes,
+            frame_range=frame_range,
+            frame_step=frame_step
+        ).create_and_assign()
 
 
 class ShotCfxClothAbcCacheOpt(qsm_mya_resource.AssetCacheOpt):
@@ -117,7 +127,7 @@ class ShotCfxClothAbcCacheOpt(qsm_mya_resource.AssetCacheOpt):
     def do_export(
         self, directory_path, frame_range, frame_step, frame_offset, include_customize_deform_geometry=True
     ):
-        mesh_transforms = self._resource.generate_cfx_cloth_export_args(include_customize_deform_geometry)
+        mesh_transforms = self._resource.generate_cloth_abc_cache_export_args(include_customize_deform_geometry)
         if mesh_transforms:
             name = self._resource.rig_namespace
             # fix mult layer namespace
@@ -316,11 +326,14 @@ class ShotCfxRigsOpt(object):
             i_variants = i_rig_scene_ptn_opt.get_variants(i_scene_path, extract=True)
             if i_variants:
                 i_task_variants = copy.copy(i_variants)
+
                 i_task_variants['step'] = 'cfx'
                 i_task_variants['task'] = 'cfx_rig'
+
                 i_cfx_rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
                     'asset-release-maya-scene-file', **i_task_variants
                 )
+
                 i_matches = i_cfx_rig_scene_ptn_opt.find_matches(sort=True)
                 if i_matches:
                     i_cfx_fig_scene_path = i_matches[-1]['result']
@@ -332,5 +345,6 @@ class ShotCfxRigsOpt(object):
 
         for i_resource in self._assets_query.get_all():
             i_rig_namespace = i_resource.namespace
+
             i_handle = _core.ShotCfxClothAssetHandle(i_rig_namespace)
             i_handle.cfx_rig_handle.apply_all_solver_start_frame(frame)

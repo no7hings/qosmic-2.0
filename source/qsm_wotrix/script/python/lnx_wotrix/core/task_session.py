@@ -162,7 +162,7 @@ class TaskSession(object):
         )
         return ptn_opt.get_variants(file_path, extract=True)
 
-    def get_file_for(self, keyword, **kwargs):
+    def get_file_or_dir_for(self, keyword, **kwargs):
         kwargs_new = dict(self._properties)
         kwargs_new.update(**kwargs)
         ptn_opt = self._task_parse.generate_pattern_opt_for(

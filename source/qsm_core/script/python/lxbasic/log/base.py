@@ -160,7 +160,7 @@ class Log:
 
     DATE_TAG_FORMAT = '%Y_%m%d'
 
-    DEBUG = False
+    DEBUG = True if os.environ.get('QSM_DEBUG') == '1' else False
     TEST = False
 
     TIMESTAMP = None

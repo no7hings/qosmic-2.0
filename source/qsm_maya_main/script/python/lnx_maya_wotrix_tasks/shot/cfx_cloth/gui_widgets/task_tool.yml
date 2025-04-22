@@ -356,21 +356,6 @@ build:
                         |-
                         待补充。
 
-                geometry_cache/version_scheme:
-                    widget: capsule_string
-                    name: 'Version Scheme'
-                    name_chs: '版本方案'
-                    options: ['no_version', 'new_version']
-                    option_names_chs: ['无版本', '新版本']
-                    default: 'new_version'
-                    enable: True
-                    tool_tip:
-                        |-
-                        To be supplemented.
-                    tool_tip_chs:
-                        |-
-                        待补充。
-
                 geometry_cache/include:
                     widget: capsule_string
                     name: 'Include'
@@ -388,8 +373,8 @@ build:
 
                 geometry_cache/create_cloth_geometry_cache:
                     widget: button
-                    name: 'Generate Cloth Geometry Cache'
-                    name_chs: '生成布料几何缓存'
+                    name: 'Create Cloth Geometry Cache'
+                    name_chs: '创建布料几何缓存'
                     icon: 'upload'
                     tool_tip:
                         |-

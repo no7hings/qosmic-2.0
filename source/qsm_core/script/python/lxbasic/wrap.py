@@ -17,6 +17,8 @@ import fnmatch as _fnmatch
 
 import time as _time
 
+ENVIRON_MARK = None
+
 
 class LRUCache:
     """
@@ -137,17 +139,28 @@ def get_user_name():
     return _getpass.getuser()
 
 
+# when we are in one dcc, use subprocess open another dcc, we must use a clear environment
 def get_env_mark():
+    global ENVIRON_MARK
+
+    if ENVIRON_MARK is not None:
+        return ENVIRON_MARK
+
     dict_ = {}
-    _ = _os.path.join(_os.environ["TEMP"], "qosmic.env_mark.txt")
+
+    # the env mark from other tool, etc. desktop-kit, workspace
+    _ = _os.path.join(_os.environ['TEMP'], 'qosmic.env_mark.txt')
     if _os.path.isfile(_):
-        with open(_, "r") as f:
+        with open(_, 'r') as f:
             for line in f:
                 line = line.strip()
-                if "=" in line:
-                    k, v = line.split("=", 1)
+                if '=' in line:
+                    k, v = line.split('=', 1)
                     dict_[k] = v
-    return dict_
+
+        ENVIRON_MARK = dict_
+        return dict_
+    return dict(_os.environ)
 
 
 class Debug:

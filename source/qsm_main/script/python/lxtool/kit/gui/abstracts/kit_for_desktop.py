@@ -617,6 +617,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
             ],
             switch_to=switch_to
         )
+
         tool_keys = kit_core.KitDesktopHook.find_all_tool_keys_at(page_name)
         for i_tool_key in tool_keys:
             self.gui_add_one_for_customize(i_tool_key, page_name)

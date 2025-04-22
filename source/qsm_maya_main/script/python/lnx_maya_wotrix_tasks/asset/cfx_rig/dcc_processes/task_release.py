@@ -43,11 +43,11 @@ class AssetCfxRigReleaseProcess(object):
 
             # step 3, save blend_map
             if rig_variant == 'default':
-                connect_map_json_path = task_session.get_file_for(
+                connect_map_json_path = task_session.get_file_or_dir_for(
                     'asset-release-connect_map-json-file'
                 )
             else:
-                connect_map_json_path = task_session.get_file_for(
+                connect_map_json_path = task_session.get_file_or_dir_for(
                     'asset-release-connect_map-json-var-file', var=rig_variant
                 )
 
@@ -61,11 +61,11 @@ class AssetCfxRigReleaseProcess(object):
 
             # step 5
             if rig_variant == 'default':
-                scene_path = task_session.get_file_for(
+                scene_path = task_session.get_file_or_dir_for(
                     'asset-release-maya-scene-file'
                 )
             else:
-                scene_path = task_session.get_file_for(
+                scene_path = task_session.get_file_or_dir_for(
                     'asset-release-maya-scene-var-file', var=rig_variant
                 )
 
@@ -88,10 +88,10 @@ class AssetCfxRigReleaseProcess(object):
             # step 6, link to no version directory
             import qsm_lazy_sync.client as c
 
-            version_path = task_session.get_file_for(
+            version_path = task_session.get_file_or_dir_for(
                 'asset-release-version-dir'
             )
-            no_version_path = task_session.get_file_for(
+            no_version_path = task_session.get_file_or_dir_for(
                 'asset-release-no_version-dir'
             )
             

@@ -53,7 +53,7 @@ class GuiTaskReleaseMain(_abs_unit_for_task_release.AbsPrxUnitForTaskRelease):
     def on_show_release_directory(self):
         task_session = self._page._task_session
         if task_session is not None:
-            task_path = task_session.get_file_for('asset-release-task-dir')
+            task_path = task_session.get_file_or_dir_for('asset-release-task-dir')
             if task_path:
                 if bsc_storage.StgPath.get_is_exists(task_path):
                     bsc_storage.StgExplorer.open_directory(task_path)

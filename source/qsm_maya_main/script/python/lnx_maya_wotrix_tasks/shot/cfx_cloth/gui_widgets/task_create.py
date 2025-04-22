@@ -155,7 +155,7 @@ class GuiTaskCreateMain(_sub_page_for_task_create.AbsPrxSubpageForTaskCreate):
                     scene_frame_range=scene_frame_range,
                     ignore_load_scenery=ignore_load_scenery,
                     auto_hide_no_use_group=auto_hide_no_use_group,
-                    auto_hide_vfx_group=auto_hide_vfx_group
+                    auto_hide_vfx_group=auto_hide_vfx_group,
                 )
 
                 qsm_mya_core.SceneFile.refresh()

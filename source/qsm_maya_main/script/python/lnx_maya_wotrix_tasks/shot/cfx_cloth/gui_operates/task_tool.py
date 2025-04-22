@@ -180,12 +180,17 @@ class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
         ani_ctl_cache_handle = asset_handle.ani_ctl_cache_handle
         ani_ctl_cache_handle.load_cache_auto(cache_path)
 
+    # geometry cache
+    def generate_cloth_geometry_cache_directory(self):
+        return self._task_session.get_file_or_dir_for(
+            'shot-source-maya-ncloth-cache-dir'
+        )
+
     @classmethod
     def create_cloth_geometry_cache_by_rig_namespace(
         cls, rig_namespace,
         directory_path,
         frame_range, frame_step=1, frame_offset=0,
-        include_customize_deform_geometry=True
     ):
         asset_handle = _task_dcc_core.ShotCfxClothAssetHandle(rig_namespace)
         cfx_rig_namespace = asset_handle.cfx_rig_namespace
@@ -193,10 +198,10 @@ class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
 
         _task_dcc_scripts.ShotCfxClothGeometryCacheOpt(resource).do_export(
             directory_path,
-            frame_range=frame_range, frame_step=frame_step, frame_offset=frame_offset,
-            include_customize_deform_geometry=include_customize_deform_geometry
+            frame_range=frame_range, frame_step=frame_step, frame_offset=frame_offset
         )
 
+    # abc cache
     @classmethod
     def export_cloth_abc_cache_by_rig_namespace(
         cls, rig_namespace, 
