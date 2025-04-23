@@ -72,6 +72,10 @@ class Material(object):
         cmds.sets(geometry_path, forceElement=name)
 
     @classmethod
+    def assign_to_(cls, name, geometry_path):
+        cmds.sets(geometry_path, edit=1, forceElement=name)
+
+    @classmethod
     def get_surface_shader(cls, name):
         return _attribute.NodeAttribute.get_source_node(
             name, 'surfaceShader'

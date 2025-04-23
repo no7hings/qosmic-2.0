@@ -45,7 +45,7 @@ class Project(_base.AbsEntity):
         for i_dtb_variants in t_tw.pipeline.get(
             cgt_dtb,
             t_tw.pipeline.get_id(cgt_dtb, filters),
-            t_tw.pipeline.fields(cgt_dtb)
+            t_tw.pipeline.fields()
         ):
             list_.append(
                 self._new_step_fnc(
@@ -73,7 +73,7 @@ class Project(_base.AbsEntity):
         if id_list:
             dtb_variants = t_tw.pipeline.get(
                 cgt_dtb,
-                id_list, t_tw.pipeline.fields(cgt_dtb)
+                id_list, t_tw.pipeline.fields()
             )[0]
             dtb_variants['project.database'] = cgt_dtb
             return self._new_step_fnc(

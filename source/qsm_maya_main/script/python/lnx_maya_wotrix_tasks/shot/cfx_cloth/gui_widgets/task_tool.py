@@ -686,6 +686,9 @@ class _PrxExportToolset(
         self._prx_options_node.set(
             'geometry_cache.create_cloth_geometry_cache', self.on_create_cloth_geometry_cache_auto
         )
+        self._prx_options_node.set(
+            'geometry_cache.delete_cloth_geometry_cache', self.on_delete_cloth_geometry_cache_auto
+        )
 
         # playblast
         self._prx_options_node.set(
@@ -779,7 +782,7 @@ class _PrxExportToolset(
                 frame_range = self.gui_get_frame_range()
                 frame_step = self.gui_get_frame_step()
                 with self._window.gui_progressing(
-                    maximum=len(rig_namespaces), label='load cfx rig'
+                    maximum=len(rig_namespaces), label='create geometry cache'
                 ) as g_p:
                     for i_rig_namespace in rig_namespaces:
                         i_handle = _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace)
@@ -790,6 +793,27 @@ class _PrxExportToolset(
                                 frame_range=frame_range,
                                 frame_step=frame_step,
                             )
+
+                        g_p.do_update()
+
+    def on_delete_cloth_geometry_cache_auto(self):
+        if self._unit._gui_task_tool_opt is not None:
+            export_scheme = self._prx_options_node.get('geometry_cache.include')
+            if export_scheme == 'all':
+                rig_namespaces = self.get_all_rig_namespaces()
+            elif export_scheme == 'selected':
+                rig_namespaces = self.get_rig_namespaces_by_selection()
+            else:
+                raise RuntimeError()
+
+            if rig_namespaces:
+                with self._window.gui_progressing(
+                    maximum=len(rig_namespaces), label='delete geometry cache'
+                ) as g_p:
+                    for i_rig_namespace in rig_namespaces:
+                        i_handle = _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace)
+                        if i_handle.cfx_rig_handle.get_is_enable():
+                            self._unit._gui_task_tool_opt.delete_cloth_geometry_cache_by_rig_namespace(i_rig_namespace)
 
                         g_p.do_update()
 

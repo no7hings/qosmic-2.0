@@ -382,6 +382,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
     @classmethod
     def auto_color(cls):
         meshes = []
+
         meshes.extend(_task_dcc_core.CfxClothGeoGrpOrg().find_descendants(['mesh']))
         meshes.extend(_task_dcc_core.CfxAppendixGeoGrpOrg().find_descendants(['mesh']))
         meshes.extend(_task_dcc_core.CfxColliderGeoGrpOrg().find_descendants(['mesh']))

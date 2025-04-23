@@ -72,6 +72,18 @@ class ViewPanels(object):
     def get_current_name(cls):
         return cmds.paneLayout('viewPanes', q=True, pane1=True)
 
+    @classmethod
+    def isolate_select(cls, boolean):
+        for i in cls.get_all_names():
+            cmds.isolateSelect(i, state=boolean)
+
+    @classmethod
+    def isolate_select_for(cls, paths, boolean):
+        for i in cls.get_all_names():
+            cmds.isolateSelect(i, state=boolean)
+            for j in paths:
+                cmds.isolateSelect(i, addDagObject=j)
+
 
 class ViewPanelIsolateSelectOpt(object):
     def __init__(self, panel_name='modelPanel4'):

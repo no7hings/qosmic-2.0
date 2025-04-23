@@ -31,20 +31,21 @@ class ShotCfxClothGeometryCacheOpt(qsm_mya_resource.AssetCacheOpt):
     def __init__(self, *args, **kwargs):
         super(ShotCfxClothGeometryCacheOpt, self).__init__(*args, **kwargs)
 
-    def do_export(self, directory_path, frame_range, frame_step, frame_offset):
-        meshes = self._resource.generate_cloth_geometry_cache_export_args()
+    def do_create(self, directory_path, frame_range, frame_step, frame_offset):
+        meshes, nclothes, conditions = _core.ShotCfxRigHandle(self._namespace).generate_geometry_cache_create_args()
 
         mcx_path = '{}/{}.mcx'.format(
             directory_path,
             # make sure no namespacesep in filename
             self._namespace.replace(':', '__')
         )
-        qsm_mya_core.GeometryCacheOpt(
-            file_path=mcx_path,
-            location=meshes,
-            frame_range=frame_range,
-            frame_step=frame_step
-        ).create_and_assign()
+        qsm_mya_core.GeometryCache.do_create_and_assign(
+            mcx_path, meshes, nclothes, conditions, frame_range, frame_step
+        )
+
+    def do_delete(self):
+        meshes, nclothes, conditions = _core.ShotCfxRigHandle(self._namespace).generate_geometry_cache_delete_args()
+        qsm_mya_core.GeometryCache.do_delete(meshes, nclothes, conditions)
 
 
 class ShotCfxClothAbcCacheOpt(qsm_mya_resource.AssetCacheOpt):
@@ -275,15 +276,19 @@ class ShotCfxClothCacheExportProcess(object):
             directory=directory_path,
         )
         scene_src_path = qsm_gnl_core.DccFilePatterns.SceneSrcFile.format(**options)
+
         with bsc_log.LogProcessContext.create(maximum=len(namespaces)+2, label='cfx cloth cache export') as l_p:
+
             # step 1
             qsm_mya_core.SceneFile.new()
             l_p.do_update()
+
             # step 2
             if os.path.isfile(scene_src_path) is False:
                 raise RuntimeError()
             qsm_mya_core.SceneFile.open(scene_src_path)
             l_p.do_update()
+
             # step 2++
             for i_namespace in namespaces:
                 i_resource = _core.CfxRigAsset(
@@ -309,6 +314,7 @@ class ShotCfxRigsOpt(object):
         self._assets_query = qsm_mya_hdl_anm_core.AdvRigAssetsQuery()
         self._assets_query.do_update()
         task_parse = mya_lzy_wps_core.TaskParse()
+
         for i_resource in self._assets_query.get_all():
             i_rig_namespace = i_resource.namespace
 
@@ -323,6 +329,7 @@ class ShotCfxRigsOpt(object):
             i_rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
                 'asset-disorder-rig_scene-maya-file'
             )
+
             i_variants = i_rig_scene_ptn_opt.get_variants(i_scene_path, extract=True)
             if i_variants:
                 i_task_variants = copy.copy(i_variants)

@@ -70,6 +70,9 @@ class AbsPrxPageForTaskTool(gui_prx_widgets.PrxBasePage):
         if self._gui_task_unit is not None:
             self._gui_task_unit.do_gui_refresh_all()
 
+        if task is None:
+            self._qt_layout._clear_all_widgets_()
+
     def gui_setup_post_fnc(self):
         if self._gui_task_unit is not None:
             self._gui_task_unit.gui_setup_post_fnc()

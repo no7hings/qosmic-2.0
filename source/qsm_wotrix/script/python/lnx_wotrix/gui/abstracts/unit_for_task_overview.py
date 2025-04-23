@@ -80,7 +80,7 @@ class _GuiTaskFilterOpt(_unit_base._GuiBaseOpt):
 
             i_steps = i_project.steps(resource_type=self._unit.RESOURCE_TYPE)
             for j_step in i_steps:
-                j_step_path = u'/Step/{}'.format(j_step)
+                j_step_path = u'/Step/{}'.format(j_step.name)
                 step_path_set.add(j_step_path)
 
         for i in list(project_path_set):

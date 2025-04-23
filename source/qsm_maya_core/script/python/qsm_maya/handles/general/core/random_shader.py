@@ -17,7 +17,11 @@ class RandomShader:
 
         cs = [x-1 for x in range(1, 256+1) if not x%d]
 
-        for i in shape_paths:
+        transform_paths = list(set([qsm_mya_core.Shape.get_transform(x) for x in shape_paths]))
+
+        for i in transform_paths:
+            i_shape_paths = qsm_mya_core.Transform.get_all_shapes(i)
+
             i_r, i_g, i_b = random.choice(cs), random.choice(cs), random.choice(cs)
 
             i_material_name = 'random_{}_MTL'.format(bsc_core.BscColor.rgb2hex(i_r, i_g, i_b))
@@ -31,4 +35,16 @@ class RandomShader:
                         bsc_core.BscColor.srgb_to_linear(i_b/255.0)
                     )
                 )
-            qsm_mya_core.Material.assign_to(i_material_name, i)
+
+            # assign all shape to one shader
+            for j in i_shape_paths:
+                # when intermediateObject is on, can not assign shader
+                j_flag = False
+                if qsm_mya_core.NodeAttribute.get_value(j, 'intermediateObject'):
+                    j_flag = True
+                    qsm_mya_core.NodeAttribute.set_value(j, 'intermediateObject', 0)
+
+                qsm_mya_core.Material.assign_to(i_material_name, j)
+
+                if j_flag is True:
+                    qsm_mya_core.NodeAttribute.set_value(j, 'intermediateObject', 1)

@@ -10,6 +10,6 @@ class History(object):
         return cmds.listHistory(path, allConnections=1) or []
 
     @classmethod
-    def find_one(cls, path, type_includes):
+    def find_many(cls, path, type_includes):
         _ = cls.get_all(path)
         return [x for x in _ if cmds.nodeType(x) in type_includes]

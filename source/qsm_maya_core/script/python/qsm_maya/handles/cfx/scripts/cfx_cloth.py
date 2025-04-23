@@ -65,12 +65,7 @@ class ShotCfxClothAbcCacheOpt(qsm_mya_resource.AssetCacheOpt):
 
             bsc_storage.StgFileOpt(json_path).set_write(data)
             if with_geometry_cache is True:
-                qsm_mya_core.GeometryCacheOpt(
-                    file_path=mcx_path,
-                    location=mesh_transforms,
-                    frame_range=frame_range,
-                    frame_step=frame_step
-                ).create_and_assign()
+                pass
 
             if with_alembic_cache is True:
                 qsm_mya_core.AlembicCacheExport(

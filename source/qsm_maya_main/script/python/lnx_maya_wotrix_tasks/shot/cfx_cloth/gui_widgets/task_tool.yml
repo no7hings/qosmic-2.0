@@ -373,8 +373,8 @@ build:
 
                 geometry_cache/create_cloth_geometry_cache:
                     widget: button
-                    name: 'Create Cloth Geometry Cache'
-                    name_chs: '创建布料几何缓存'
+                    name: 'Create/Update Cloth Geometry Cache'
+                    name_chs: '创建/更新布料几何缓存'
                     icon: 'upload'
                     tool_tip:
                         |-
@@ -384,9 +384,9 @@ build:
                         点击导出布料几何缓存。
                     join_to_next: True
 
-                geometry_cache/remove_cloth_geometry_cache:
+                geometry_cache/delete_cloth_geometry_cache:
                     widget: button
-                    name: 'Remove Cloth Geometry Cache'
+                    name: 'Delete Cloth Geometry Cache'
                     name_chs: '删除布料几何缓存'
                     icon: 'upload'
                     tool_tip:

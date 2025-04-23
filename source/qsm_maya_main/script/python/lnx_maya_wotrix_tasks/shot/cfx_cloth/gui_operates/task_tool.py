@@ -196,10 +196,23 @@ class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
         cfx_rig_namespace = asset_handle.cfx_rig_namespace
         resource = _task_dcc_core.CfxRigAsset(cfx_rig_namespace)
 
-        _task_dcc_scripts.ShotCfxClothGeometryCacheOpt(resource).do_export(
+        # delete first
+        _task_dcc_scripts.ShotCfxClothGeometryCacheOpt(resource).do_delete()
+
+        # next create
+        _task_dcc_scripts.ShotCfxClothGeometryCacheOpt(resource).do_create(
             directory_path,
             frame_range=frame_range, frame_step=frame_step, frame_offset=frame_offset
         )
+
+    @classmethod
+    def delete_cloth_geometry_cache_by_rig_namespace(
+        cls, rig_namespace
+    ):
+        asset_handle = _task_dcc_core.ShotCfxClothAssetHandle(rig_namespace)
+        resource = _task_dcc_core.CfxRigAsset(asset_handle.cfx_rig_namespace)
+
+        _task_dcc_scripts.ShotCfxClothGeometryCacheOpt(resource).do_delete()
 
     # abc cache
     @classmethod

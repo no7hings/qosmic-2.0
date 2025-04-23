@@ -96,9 +96,9 @@ class AbsGroupOrg(AbsSetBaseOpt):
             return path
         return qsm_mya_core.Group.add_one(self.LOCATION, path)
 
-    def find_descendants(self, type_includes):
+    def find_descendants(self, type_includes, no_intermediate=True):
         return qsm_mya_core.Group.find_descendants(
-            self.LOCATION, type_includes
+            self.LOCATION, type_includes, no_intermediate=no_intermediate
         )
 
 

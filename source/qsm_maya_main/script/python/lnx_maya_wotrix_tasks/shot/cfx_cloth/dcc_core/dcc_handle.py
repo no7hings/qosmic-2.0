@@ -226,15 +226,54 @@ class ShotCfxRigHandle:
             return _asset_cfx_rig_core.AssetCfxRigHandle.generate_component_data_for(gui_location, dcc_location)
         return {}
 
-    def generate_geometry_cache_export_args(self):
-        list_ = []
+    def generate_geometry_cache_create_args(self):
+        meshes = []
+        nclothes = []
+        conditions = []
+
         location = self.find_location()
-        # may be intermediate
-        nclothes = qsm_mya_core.Group.find_descendants(location, 'nCloth', no_intermediate=False)
-        for i in nclothes:
-            i_mesh_shapes = qsm_mya_core.NCloth.find_output_mesh_shapes(i)
-            list_.extend(i_mesh_shapes)
-        return list(set(list_))
+        for i in qsm_mya_core.Group.find_descendants(location, type_includes='mesh'):
+            i_nclothes = qsm_mya_core.History.find_many(i, type_includes='nCloth')
+            if not i_nclothes:
+                continue
+
+            i_ncloth = i_nclothes[0]
+
+            # ignore disabled
+            if qsm_mya_core.NodeAttribute.get_value(i_ncloth, 'isDynamic'):
+                meshes.append(i)
+                i_conditions = qsm_mya_core.NodeAttribute.get_target_nodes(i_ncloth, 'isDynamic', 'condition')
+                if i_conditions:
+                    nclothes.append(i_ncloth)
+                    conditions.extend(i_conditions)
+
+        return meshes, nclothes, conditions
+
+    def generate_geometry_cache_delete_args(self):
+        meshes = []
+        nclothes = []
+        conditions = []
+
+        location = self.find_location()
+        for i in qsm_mya_core.Group.find_descendants(location, type_includes='mesh'):
+            i_caches = qsm_mya_core.History.find_many(i, type_includes='cacheFile')
+            if not i_caches:
+                continue
+
+            i_nclothes = qsm_mya_core.History.find_many(i, type_includes='nCloth')
+            if not i_nclothes:
+                continue
+
+            i_ncloth = i_nclothes[0]
+
+            i_conditions = qsm_mya_core.NodeAttribute.get_target_nodes(i_ncloth, 'isDynamic', 'condition')
+            if i_conditions:
+                conditions.extend(i_conditions)
+
+            nclothes.append(i_ncloth)
+            meshes.append(i)
+
+        return meshes, nclothes, conditions
 
     def generate_abc_cache_export_args(self):
         mesh_transforms = []

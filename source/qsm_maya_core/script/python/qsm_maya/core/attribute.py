@@ -150,7 +150,8 @@ class NodeAttribute:
         cmds.connectAttr(atr_path_src, target, force=1)
 
     @classmethod
-    def break_targets(cls, path, atr_name):
+    def break_targets(cls, path, atr_name, ignore_reference=None):
+        connections = []
         atr_path_src = cls.to_atr_path(path, atr_name)
         atr_path_tgt_s = cmds.connectionInfo(
             atr_path_src,
@@ -158,8 +159,13 @@ class NodeAttribute:
         ) or []
         for i_atr_path_tgt in atr_path_tgt_s:
             i_path_tgt = i_atr_path_tgt.split('.')[0]
-            if not cmds.referenceQuery(i_path_tgt, isNodeReferenced=1):
-                cmds.disconnectAttr(atr_path_src, i_atr_path_tgt)
+            if ignore_reference is True:
+                if cmds.referenceQuery(i_path_tgt, isNodeReferenced=1):
+                    continue
+
+            cmds.disconnectAttr(atr_path_src, i_atr_path_tgt)
+            connections.append((atr_path_src, i_atr_path_tgt))
+        return connections
 
     @classmethod
     def get_targets(cls, path, atr_name):

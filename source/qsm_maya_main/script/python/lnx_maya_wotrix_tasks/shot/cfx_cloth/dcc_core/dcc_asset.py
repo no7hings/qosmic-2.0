@@ -17,9 +17,6 @@ class CfxRigAsset(qsm_mya_resource.Asset):
     @property
     def rig_namespace(self):
         return self._rig_namespace
-    
-    def generate_cloth_geometry_cache_export_args(self):
-        return _dcc_handle.ShotCfxRigHandle(self._namespace).generate_geometry_cache_export_args()
 
     def generate_cloth_abc_cache_export_args(self, include_customize_deform_geometry=True):
         handle = _dcc_handle.ShotCfxRigHandle(self._namespace)
