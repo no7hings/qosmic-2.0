@@ -214,6 +214,8 @@ build:
             name: 'Options'
             name_chs: '选项'
 
+            history_group: ['wotrix', 'shot', 'cfx_cloth', 'task_tool']
+
             parameters:
                 setting:
                     widget: group
@@ -364,6 +366,8 @@ build:
                     option_names: ['All', 'Selected']
                     option_names_chs: ['所有', '选中的']
                     default: 'all'
+                    use_history_group: True
+                    pull_history_latest: True
                     tool_tip:
                         |-
                         To be supplemented.

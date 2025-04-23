@@ -1,4 +1,6 @@
 # coding:utf-8
+import six
+
 import functools
 
 import lxbasic.log as bsc_log
@@ -76,6 +78,8 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
 
         self._prx_root_group = self.create_root_group()
         qt_layout_0.addWidget(self._prx_root_group._prx_widget._qt_widget)
+
+        self._gui_history_group = None
 
     def get_path(self):
         return self._path_dag_opt.get_path()
@@ -226,6 +230,11 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
         history_key_ = create_options.get('history_key')
         history_group_ = create_options.get('history_group')
 
+        use_history_group_ = create_options.get('use_history_group')
+        if not history_group_:
+            if use_history_group_:
+                history_group_ = self._gui_history_group
+
         if widget_type in {'string'}:
             port = _port_for_constant.PrxPortForString(
                 port_path,
@@ -268,7 +277,7 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                     port.set(value_)
             else:
                 port.set(value_)
-        
+
         elif widget_type in {'integer2'}:
             port = _port_for_tuple.PrxPortForIntegerTuple(
                 port_path,
@@ -723,13 +732,13 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
 
             if 'icon' in create_options:
                 port.set_icon(create_options['icon'])
-                
+
             if 'menu_enable' in create_options:
                 port.set_menu_enable(create_options['menu_enable'])
 
             if 'use_name_icon' in create_options:
                 port.set_icon_text(widget_name)
-            
+
             if 'icon_text' in create_options:
                 icon_text = create_options['icon_text']
                 if gui_language == _gui_core.GuiLanguage.CHS:
@@ -906,3 +915,17 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
         port = self.get_port(key)
         if port is not None:
             return port.get_enumerate_strings()
+
+    def set_history_group(self, arg):
+        if arg:
+            if isinstance(arg, six.string_types):
+                key = [arg]
+            elif isinstance(arg, (tuple, list)):
+                key = list(arg)
+            else:
+                raise RuntimeError()
+
+            self._gui_history_group = key
+
+    def get_history_group(self):
+        return self._gui_history_group

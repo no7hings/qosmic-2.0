@@ -49,7 +49,9 @@ class AbsPrxToolsetForTaskTool(gui_prx_widgets.PrxVirtualBaseSubunit):
             )
         )
         prx_v_sca.add_widget(self._prx_options_node)
-
+        self._prx_options_node.set_history_group(
+            self._unit._configure.get('build.{}.options.history_group'.format(self.GUI_KEY))
+        )
         self._prx_options_node.build_by_data(
             self._unit._configure.get('build.{}.options.parameters'.format(self.GUI_KEY))
         )
