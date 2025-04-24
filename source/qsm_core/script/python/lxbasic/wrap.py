@@ -160,6 +160,8 @@ def get_env_mark():
 
         ENVIRON_MARK = dict_
         return dict_
+
+    # when env mark is not found, use current
     return dict(_os.environ)
 
 
