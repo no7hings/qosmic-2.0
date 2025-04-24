@@ -16,6 +16,7 @@ class VideoCaptureOpt(object):
     def __init__(self, video_path, height_maximum=256, fps=24):
         self._video_path = bsc_core.ensure_unicode(video_path)
         self._height_maximum = height_maximum
+        self._w, self._h = 1, 1
         self.update()
 
     def update(self):
@@ -24,10 +25,10 @@ class VideoCaptureOpt(object):
             original_width = int(self._cpt.get(cv2.CAP_PROP_FRAME_WIDTH))
             original_height = int(self._cpt.get(cv2.CAP_PROP_FRAME_HEIGHT))
             aspect_ratio = float(original_width)/float(original_height)
-            target_height = self._height_maximum
-            target_width = int(target_height*aspect_ratio)
-            self._cpt.set(cv2.CAP_PROP_FRAME_WIDTH, target_width)
-            self._cpt.set(cv2.CAP_PROP_FRAME_HEIGHT, target_height)
+            self._h = self._height_maximum
+            self._w = int(self._h*aspect_ratio)
+            self._cpt.set(cv2.CAP_PROP_FRAME_WIDTH, self._w)
+            self._cpt.set(cv2.CAP_PROP_FRAME_HEIGHT, self._h)
 
     def is_valid(self):
         return self._cpt.isOpened()
@@ -44,7 +45,7 @@ class VideoCaptureOpt(object):
     def to_qt_image(cls, q_img_cl, data):
         cv_img, width, height, channel = data
         return q_img_cl(
-            cv_img.data, width, height, width*3, q_img_cl.Format_RGB888
+            cv_img.data, width, height, width*channel, q_img_cl.Format_RGB888
         )
 
     def generate_qt_image(self, q_img_cl, frame_index):
@@ -53,9 +54,11 @@ class VideoCaptureOpt(object):
         if ret:
             # convert bgr to rgb
             cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+            # if numpy.all(cv_img == 255):
+            #     print('abc')
             height, width, channel = cv_img.shape
             return q_img_cl(
-                cv_img.data, width, height, width*3, q_img_cl.Format_RGB888
+                cv_img.data, width, height, width*channel, q_img_cl.Format_RGB888
             )
         return q_img_cl()
 
@@ -101,6 +104,9 @@ class VideoCaptureOpt(object):
 
     def release(self):
         self._cpt.release()
+
+    def get_size(self):
+        return self._w, self._h
 
     def __enter__(self):
         return self

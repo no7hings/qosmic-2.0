@@ -13,7 +13,8 @@ import lnx_screw.scripts as lnx_scr_scripts
 class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
     CONFIGURE_KEY = 'resora/gui/main'
 
-    KEY_TAB_KEYS = 'resora.page_keys'
+    KEY_PAGE_KEYS = 'resora.page_keys'
+    KEY_PAGE_KEY_CURRENT = 'resora.page_key_current'
 
     def _gui_tab_add_menu_content_generate_fnc(self):
         content = bsc_content.Dict()
@@ -123,7 +124,8 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
 
     def gui_close_fnc(self):
         page_keys = self._prx_tab_view.get_all_page_keys()
-        gui_core.GuiHistoryStage().set_one(self.KEY_TAB_KEYS, page_keys)
+        gui_core.GuiHistoryStage().set_array(self.KEY_PAGE_KEYS, page_keys)
+        gui_core.GuiHistoryStage().set_one(self.KEY_PAGE_KEY_CURRENT, self._prx_tab_view.get_current_key())
 
     def gui_setup_fnc(self):
         self.set_main_style_mode(1)
@@ -143,18 +145,21 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
         self._prx_tab_view.set_history_key(
             [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
         )
-
-        history_tag_keys = gui_core.GuiHistoryStage().get_one(self.KEY_TAB_KEYS)
+        
+        tab_keys = gui_core.GuiHistoryStage().get_array(self.KEY_PAGE_KEYS)
+        tab_key_current = gui_core.GuiHistoryStage().get_one(self.KEY_PAGE_KEY_CURRENT)
         page_keys = self._all_scr_stage_keys
-        if history_tag_keys:
-            _ = [x for x in history_tag_keys if x in self._all_scr_stage_keys]
+        if tab_keys:
+            _ = [x for x in tab_keys if x in self._all_scr_stage_keys]
             if _:
                 page_keys = _
         else:
             page_keys = ['resource_manifest']
 
+        c = len(page_keys[:5])
+
         for i_page_key in page_keys[:5]:
-            self._gui_tab_add_page_fnc(i_page_key, False)
+            self._gui_tab_add_page_fnc(i_page_key, i_page_key==tab_key_current)
 
         self.connect_refresh_action_for(self.do_gui_refresh_all)
         self.register_window_close_method(self.gui_close_fnc)

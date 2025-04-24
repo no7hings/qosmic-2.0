@@ -29,7 +29,7 @@ entities:
         Episode: '/{project}/{episode}'
         Sequence: '/{project}/{sequence}'
         Shot: '/{project}/{sequence}/{shot}'
-        Step: '/{project}/{step}'
+        Step: '/{project}/{resource_type}/{step}'
         Task: '{entity_path}/{task}'
 
     variant_keys:

@@ -1,4 +1,6 @@
 # coding:utf-8
+import time
+
 import six
 
 import lxbasic.core as bsc_core
@@ -16,11 +18,11 @@ from ....qt import core as _qt_core
 from .. import item_base as _item_base
 
 
-class _FramePlayThread(QtCore.QThread):
+class _ImagePlayThread(QtCore.QThread):
     timeout = qt_signal()
 
     def __init__(self, parent):
-        super(_FramePlayThread, self).__init__(parent)
+        super(_ImagePlayThread, self).__init__(parent)
         self._interval = 1000.0/24
 
         self._running_flag = False
@@ -208,7 +210,7 @@ class ListItemModel(_item_base.AbsItemModel):
     def _init_autoplay(self, fps):
         self._data.autoplay_enable = True
 
-        play_thread = _FramePlayThread(self._view)
+        play_thread = _ImagePlayThread(self._view)
         play_thread.timeout.connect(self._on_autoplaying)
         frame_interval = int(1000/fps)
         play_thread.set_interval(frame_interval)
@@ -307,7 +309,7 @@ class ListItemModel(_item_base.AbsItemModel):
                         if index > self._data.video.index_maximum:
                             index = 0
 
-                        self._update_video_frame_at(index)
+                        self._update_video_image_at(index)
                     elif self._data.image_sequence_enable is True:
                         # make frame cycle
                         index = self._data.image_sequence.index
@@ -320,7 +322,7 @@ class ListItemModel(_item_base.AbsItemModel):
         if self._data.play_enable is True:
             # reset image to first frame
             if self._data.video_enable is True:
-                self._update_video_frame_at(
+                self._update_video_image_at(
                     self._data.video.index_default
                 )
             elif self._data.image_sequence_enable is True:
@@ -513,7 +515,11 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._draw_rect(painter, frame_rect, QtGui.QColor(0, 0, 0))
                 # draw video image
                 video_rect = qt_rect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
-                self._draw_pixmap(painter, video_rect, self._data.video.pixmap)
+                image_data = self._data.video.image_data
+                if image_data:
+                    image = self._data.video.capture_opt.to_qt_image(QtGui.QImage, image_data)
+                    pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
+                    self._draw_pixmap(painter, video_rect, pixmap)
             # audio
             elif self._data.audio_enable is True:
                 # fill to frame rect
@@ -906,7 +912,10 @@ class ListItemModel(_item_base.AbsItemModel):
                 index_maximum=1,
                 fps=24,
 
+                image_data_dict={},
+                image_data=None,
                 pixmap_cache_dict={},
+                pixmap=None,
                 hover_flag=False,
             )
             self._data.video.file = file_path
@@ -936,7 +945,8 @@ class ListItemModel(_item_base.AbsItemModel):
                 if _image_data:
                     _frame_count = _capture_opt.get_frame_count()
                     _fps = _capture_opt.get_frame_rate()
-                    _cache = [_capture_opt, _image_data, _frame_count, _fps, _index_default]
+                    _size = _capture_opt.get_size()
+                    _cache = [_capture_opt, _image_data, _frame_count, _fps, _size, _index_default]
                     self._view._view_model.push_video_cache(_file_path, _cache)
                     return _cache
             return []
@@ -946,13 +956,11 @@ class ListItemModel(_item_base.AbsItemModel):
                 return
 
             if data_:
-                _capture_opt, _image_data, _frame_count, _fps, _index_default = data_
-                _image = _capture_opt.to_qt_image(QtGui.QImage, _image_data)
-                _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
+                _capture_opt, _image_data, _frame_count, _fps, _size, _index_default = data_
                 self._data.video_enable = True
                 self._data.video.capture_opt = _capture_opt
-                self._data.video.pixmap = _pixmap
-                self._data.video.size = _pixmap.size()
+                self._data.video.image_data = _image_data
+                self._data.video.size = QtCore.QSize(*_size)
                 self._data.video.index_default = _index_default
                 self._data.video.index_maximum = _frame_count-1
                 self._data.video.fps = _fps
@@ -983,11 +991,11 @@ class ListItemModel(_item_base.AbsItemModel):
             index = int(self._data.video.index_maximum*percent)
             if index != self._data.video.index:
                 self._data.video.hover_flag = True
-                self._update_video_frame_at(index)
+                self._update_video_image_at(index)
             else:
                 self._data.video.hover_flag = False
 
-    def _update_video_frame_at(self, index, cache_flag=True):
+    def _update_video_image_at(self, index, cache_flag=True):
         index = max(min(index, self._data.video.index_maximum), 0)
         self._data.video.index = index
         # update percent by index changing
@@ -1000,19 +1008,14 @@ class ListItemModel(_item_base.AbsItemModel):
         )
 
         # cache pixmap
-        if index in self._data.video.pixmap_cache_dict:
-            self._data.video.pixmap = self._data.video.pixmap_cache_dict[index]
+        if index in self._data.video.image_data_dict:
+            self._data.video.image_data = self._data.video.image_data_dict[index]
         else:
+            # do not create QImage here use image_data
             capture_opt = self._data.video.capture_opt
-            # capture_opt.update()
-            # fixme: may lost frame as white flat.
-            image = capture_opt.generate_qt_image(QtGui.QImage, index)
-            if image.isNull() is False:
-                pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
-                self._data.video.pixmap = pixmap
-                # todo: disable cache when hover for fix error frame.
-                if cache_flag is True:
-                    self._data.video.pixmap_cache_dict[index] = pixmap
+            image_data = capture_opt.get_data(index)
+            if image_data:
+                self._data.video.image_data = image_data
 
         self.mark_force_refresh(True)
         self.update_view()

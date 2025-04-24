@@ -12,7 +12,7 @@ class PrxResoraTool(_abstracts.AbsPrxResoraPanel):
     )
 
     SUB_PANEL_CLASS_DICT = dict(
-        register=_subpanel_register.PrxSubPanelForRegister
+        register=_subpanel_register.PrxSubpanelForRegister
     )
 
     def __init__(self, window, session, *args, **kwargs):

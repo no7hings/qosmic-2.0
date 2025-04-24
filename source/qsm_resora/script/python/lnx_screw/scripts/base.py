@@ -237,7 +237,7 @@ class ManifestStageOpt(object):
                 continue
 
             i_type_args = i_type_name.split('/')
-            if i_type_args > 1:
+            if len(i_type_args) > 1:
                 i_type_group_name = i_type_args[0]
                 i_type_group_gui_name = main_configure.get('types.{}.gui_name'.format(i_type_group_name))
                 i_type_group_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(i_type_group_name))

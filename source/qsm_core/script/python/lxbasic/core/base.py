@@ -261,7 +261,6 @@ class BscSystem(object):
                             dict_[i_k] = i_v
         return dict_
 
-    #
     @classmethod
     def get_system_includes(cls, system_keys):
         lis = []
@@ -285,7 +284,6 @@ class BscSystem(object):
     def check_is_matched(cls, system_keys):
         return cls.get_current() in cls.get_system_includes(system_keys)
 
-    #
     @classmethod
     def get(cls, key):
         dict_ = {
@@ -316,7 +314,7 @@ class BscSystem(object):
 
     @classmethod
     def get_is_dev(cls):
-        return getpass.getuser() == 'nothings'
+        return os.environ.get('QSM_DEV') == '1'
 
     @classmethod
     def execute_cmd_script(cls, cmd_script):

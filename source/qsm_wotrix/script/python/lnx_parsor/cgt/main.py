@@ -34,7 +34,6 @@ class Stage(object):
 
         cls.INSTANCE = self
 
-        sys.stdout.write('resolve entity from {}.\n'.format(self.SWAP_FLAG))
         bsc_log.Log.trace_result('resolve entity from {}.'.format(self.SWAP_FLAG))
         return self
 

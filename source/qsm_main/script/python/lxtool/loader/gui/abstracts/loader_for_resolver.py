@@ -525,13 +525,13 @@ class _GuiGuideOpt(_GuiBaseOpt):
 
     def gui_refresh(self):
         path = None
-        list_item_prxes = self._prx_list_view.get_selected_items()
+        list_item_prxes = self._prx_list_view.get_selected_item_widgets()
         # gain list first
         if list_item_prxes:
             list_item_prx = list_item_prxes[-1]
             path = list_item_prx.get_gui_attribute('path')
         else:
-            tree_item_prxes = self._prx_tree_view.get_selected_items()
+            tree_item_prxes = self._prx_tree_view.get_selected_item_widgets()
             if tree_item_prxes:
                 tree_item_prx = tree_item_prxes[-1]
                 path = tree_item_prx.get_gui_attribute('path')

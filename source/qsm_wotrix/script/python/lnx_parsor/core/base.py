@@ -188,11 +188,7 @@ class EntityPathPatterns:
     Shot = None
 
     Step = None
-
-    ProjectTask = None
-    AssetTask = None
-    SequenceTask = None
-    ShotTask = None
+    Task = None
 
 
 class StepKeys:

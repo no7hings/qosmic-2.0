@@ -923,7 +923,7 @@ class _UnitrResource(
                 )
 
     def get_current_obj(self):
-        _ = self._prx_list_view.get_selected_items()
+        _ = self._prx_list_view.get_selected_item_widgets()
         if _:
             return _[-1].get_gui_dcc_obj(self.GUI_NAMESPACE)
 
@@ -1259,7 +1259,7 @@ class _GuiGuideOpt(_GuiBaseOpt):
         # gain list first
         if list_item_prxes:
             list_item_prx = list_item_prxes[-1]
-            path = list_item_prx.get_gui_attribute('path')
+            path = list_item_prx.gui_proxy.get_gui_attribute('path')
         else:
             tree_item_prxes = self._prx_tree_view.get_selected_items()
             if tree_item_prxes:

@@ -1,4 +1,6 @@
 # coding:utf-8
+import six
+
 from ..core import base as _cor_base
 
 from . import _base
@@ -39,11 +41,43 @@ class Project(_base.AbsEntity):
     def __init__(self, *args, **kwargs):
         super(Project, self).__init__(*args, **kwargs)
 
+    def _new_step_fnc(self, variants):
+        path = _cor_base.AbsEntityBase.to_step_path(variants)
+        return _step.Step(self, path, variants)
+
+    def _find_step_variants(self, **kwargs):
+        list_ = []
+
+        if 'resource_type' in kwargs:
+            _ = kwargs['resource_type']
+            if isinstance(_, six.string_types):
+                resource_types = [_]
+            elif isinstance(_, list):
+                resource_types = _
+            else:
+                raise RuntimeError()
+        else:
+            resource_types = self.ResourceTypes.All
+
+        for i in resource_types:
+            i_step_names = _cor_base.DisorderConfig()._resource_step_dict.get(i, [])
+            for j_step_name in i_step_names:
+                list_.append(
+                    dict(
+                        project=self._variants['project'],
+                        resource_type=kwargs['resource_type'],
+                        step=j_step_name
+                    )
+                )
+        return list_
+
     # step
     def steps(self, **kwargs):
-        if 'resource_type' in kwargs:
-            return _cor_base.DisorderConfig()._resource_step_dict.get(kwargs['resource_type'], [])
-        return self.Steps.all
+        list_ = []
+        for i in self._find_step_variants(**kwargs):
+            i_step = self._new_step_fnc(i)
+            list_.append(i_step)
+        return list_
 
     def step(self, name, **kwargs):
         return None
@@ -99,4 +133,3 @@ class ProjectsGenerator(_base.AbsEntitiesGenerator):
 
     def __init__(self, *args, **kwargs):
         super(ProjectsGenerator, self).__init__(*args, **kwargs)
-

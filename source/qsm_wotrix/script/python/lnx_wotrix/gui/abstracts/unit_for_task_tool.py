@@ -79,6 +79,7 @@ class AbsPrxUnitForTaskTool(gui_prx_widgets.PrxBaseUnit):
     def _gui_add_main_tools(self):
         self._left_visible_swap_tool = gui_prx_widgets.PrxToggleButton()
         self._main_prx_tool_box.add_widget(self._left_visible_swap_tool)
+
         self._left_visible_swap_tool.set_name('task')
         self._left_visible_swap_tool.set_icon_name('tree')
         self._left_visible_swap_tool.set_checked(True)
@@ -156,6 +157,7 @@ class AbsPrxUnitForTaskTool(gui_prx_widgets.PrxBaseUnit):
 
     def do_gui_refresh_toolsets(self):
         key = self._toolset_prx_tab_tool_box.get_current_key()
+
         toolset = self.gui_find_page(key)
         if toolset:
             toolset.do_gui_refresh_all()
@@ -164,6 +166,7 @@ class AbsPrxUnitForTaskTool(gui_prx_widgets.PrxBaseUnit):
         task_session = self._page._task_session
         if task_session is not None:
             task = task_session.properties['task']
+
             scene_path = task_session.properties['result']
             scene_src_path_pre = self._scene_src_qt_input._get_value_()
             if scene_path != scene_src_path_pre:

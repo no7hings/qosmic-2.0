@@ -281,7 +281,7 @@ class StgSsh(object):
     USER = 'root'
 
     # noinspection PyAugmentAssignment
-    class MakePassword(object):
+    class _MakePassword(object):
         def __init__(self, key, s):
             self.key = key
             self.s = s
@@ -337,7 +337,7 @@ class StgSsh(object):
             'command=`{}`'.format(cmd)
         )
         #
-        password = StgSsh.MakePassword(120, 'KBHBOCCCMDMBKEBDCBKBLAKA')
+        password = StgSsh._MakePassword(120, 'KBHBOCCCMDMBKEBDCBKBLAKA')
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(
