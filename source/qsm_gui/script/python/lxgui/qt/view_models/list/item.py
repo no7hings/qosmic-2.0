@@ -1,6 +1,4 @@
 # coding:utf-8
-import time
-
 import six
 
 import lxbasic.core as bsc_core
@@ -254,10 +252,10 @@ class ListItemModel(_item_base.AbsItemModel):
                 # update video or image sequence frame
                 if self._data.video_enable is True:
                     self._update_video_by_hover_move()
-                elif self._data.audio_enable is True:
-                    self._update_audio_by_hover_move()
                 elif self._data.image_sequence_enable is True:
                     self._update_sequence_image_by_hover_move()
+                elif self._data.audio_enable is True:
+                    self._update_audio_by_hover_move()
 
                 if self._data.autoplay_enable is True:
                     # rest autoplay
@@ -746,6 +744,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._data.image.load_flag = False
                 self._load_image()
 
+    @_item_base.ItemThreadPoolFactor.push
     def _load_image(self):
         def cache_fnc_():
             _file_path = self._data.image.file
@@ -780,10 +779,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self.mark_force_refresh(True)
                 self.update_view()
 
-        trd = self._view._generate_thread_(
-            cache_fnc_, build_fnc_
-        )
-        trd.start()
+        return cache_fnc_, build_fnc_
 
     # image sequence
     def set_image_sequence(self, file_path, fps=24):
@@ -813,6 +809,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._data.image_sequence.load_flag = False
                 self._load_image_sequence()
 
+    @_item_base.ItemThreadPoolFactor.push
     def _load_image_sequence(self):
         def cache_fnc_():
             _file_path = self._data.image_sequence.file
@@ -861,10 +858,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self.mark_force_refresh(True)
                 self.update_view()
 
-        trd = self._view._generate_thread_(
-            cache_fnc_, build_fnc_
-        )
-        trd.start()
+        return cache_fnc_, build_fnc_
 
     def _update_sequence_image_by_hover_move(self):
         flag, percent = self._update_hover_play_percent()
@@ -872,6 +866,7 @@ class ListItemModel(_item_base.AbsItemModel):
             index = int(self._data.image_sequence.index_maximum*percent)
             if index != self._data.image_sequence.index:
                 self._update_sequence_image_frame_at(index)
+                self._data.image_sequence.index = index
 
     def _update_sequence_image_frame_at(self, index):
         index = max(min(index, self._data.image_sequence.index_maximum), 0)
@@ -916,7 +911,6 @@ class ListItemModel(_item_base.AbsItemModel):
                 image_data=None,
                 pixmap_cache_dict={},
                 pixmap=None,
-                hover_flag=False,
             )
             self._data.video.file = file_path
             self._data.video.load_flag = True
@@ -928,6 +922,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._data.video.load_flag = False
                 self._load_video()
 
+    @_item_base.ItemThreadPoolFactor.push
     def _load_video(self):
         def cache_fnc_():
             _file_path = self._data.video.file
@@ -980,20 +975,15 @@ class ListItemModel(_item_base.AbsItemModel):
                 self.mark_force_refresh(True)
                 self.update_view()
 
-        trd = self._view._generate_thread_(
-            cache_fnc_, build_fnc_
-        )
-        trd.start()
+        return cache_fnc_, build_fnc_
 
     def _update_video_by_hover_move(self):
         flag, percent = self._update_hover_play_percent()
         if flag is True:
             index = int(self._data.video.index_maximum*percent)
             if index != self._data.video.index:
-                self._data.video.hover_flag = True
                 self._update_video_image_at(index)
-            else:
-                self._data.video.hover_flag = False
+                self._data.video.index = index
 
     def _update_video_image_at(self, index, cache_flag=True):
         index = max(min(index, self._data.video.index_maximum), 0)
@@ -1055,6 +1045,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._data.audio.load_flag = False
                 self._load_audio()
 
+    @_item_base.ItemThreadPoolFactor.push
     def _load_audio(self):
         def cache_fnc_():
             _file_path = self._data.audio.file
@@ -1105,10 +1096,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self.mark_force_refresh(True)
                 self.update_view()
 
-        trd = self._view._generate_thread_(
-            cache_fnc_, build_fnc_
-        )
-        trd.start()
+        return cache_fnc_, build_fnc_
 
     def _update_audio_by_hover_move(self):
         flag, percent = self._update_hover_play_percent()

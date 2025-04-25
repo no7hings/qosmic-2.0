@@ -64,13 +64,15 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
         self._sketch_map = self.generate_sketch_map()
 
     def zero_out(self):
-        for i in self._paths:
-            for j_atr_name in ['rotateX', 'rotateY', 'rotateZ']:
-                cmds.setAttr(i+'.'+j_atr_name, 0)
+        # make sure auto keyframe is disable
+        with qsm_mya_core.auto_keyframe_context(False):
+            for i in self._paths:
+                for j_atr_name in ['rotateX', 'rotateY', 'rotateZ']:
+                    cmds.setAttr(i+'.'+j_atr_name, 0)
 
-        distance = self.compute_root_height()
-        root = self.get('Root_M')
-        cmds.setAttr(root+'.translateY', distance)
+            distance = self.compute_root_height()
+            root = self.get('Root_M')
+            cmds.setAttr(root+'.translateY', distance)
 
     def compute_root_height(self):
         toe = self._sketch_map.get('ToesEnd_R')

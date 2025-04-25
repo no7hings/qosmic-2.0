@@ -10,10 +10,12 @@ from . import connection as _connection
 from . import node_for_dag as _node_for_dag
 
 
+# use turn on/off auto keyframe and keep default state
 @contextmanager
 def auto_keyframe_context(auto_keyframe=False):
-    auto_key_mark = cmds.autoKeyframe(state=1, query=1)
-    if auto_key_mark:
+    state = cmds.autoKeyframe(state=1, query=1)
+    # turn off first
+    if state:
         cmds.autoKeyframe(state=False)
 
     if auto_keyframe is True:
@@ -24,7 +26,8 @@ def auto_keyframe_context(auto_keyframe=False):
     if auto_keyframe is True:
         cmds.autoKeyframe(state=False)
 
-    if auto_key_mark:
+    # reset state
+    if state:
         cmds.autoKeyframe(state=True)
 
 

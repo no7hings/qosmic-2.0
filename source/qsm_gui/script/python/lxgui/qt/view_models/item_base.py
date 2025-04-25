@@ -14,6 +14,16 @@ from ...qt.core.wrap import *
 from ...qt import core as _qt_core
 
 
+class ItemThreadPoolFactor:
+
+    @staticmethod
+    def push(fnc):
+        def wrapper(self, *args, **kwargs):
+            self._view._generate_thread_(*fnc(self, *args, **kwargs)).start()
+            return None
+        return wrapper
+
+
 class AbsItemModel(object):
     Status = _gui_core.GuiItemStatus
 

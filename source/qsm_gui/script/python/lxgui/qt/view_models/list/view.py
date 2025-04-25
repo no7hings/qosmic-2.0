@@ -241,6 +241,7 @@ class ListViewModel(_view_base.AbsViewModel):
             self._widget.setViewMode(self._widget.IconMode)
         else:
             self._widget.setViewMode(self._widget.ListMode)
+
         # fixme: when mode is change, must update drag flag
         self._update_item_drag_enable()
 

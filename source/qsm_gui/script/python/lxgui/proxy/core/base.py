@@ -24,8 +24,10 @@ class GuiProxyUtil(object):
     ):
         exists_app = gui_qt_core.QtUtil.get_exists_app()
         is_window_running = None
+
         # no application, etc. clarisse, ue
         if exists_app is None:
+
             # check show window as unique
             if window_unique_name is not None:
                 if gui_qt_core.QT_LOAD_FLAG == 'pyqt':
@@ -45,6 +47,7 @@ class GuiProxyUtil(object):
 
                 from ...qt.widgets import window_for_dialog as _qt_wgt_window_for_dialog
 
+                # create an app, do not remove this
                 app = gui_qt_core.QtUtil.create_app()
 
                 w = _qt_wgt_window_for_dialog.QtMessageDialog()
@@ -86,7 +89,8 @@ class GuiProxyUtil(object):
                 window_process_fnc(prx_window)
 
             gui_qt_core.GuiQtDcc.exit_app(app)
-        # has application
+
+        # had application
         else:
             prx_window = prx_window_cls(**window_kwargs)
             prx_window.set_main_window_geometry(gui_qt_core.GuiQtDcc.get_qt_main_window_geometry_args())
@@ -253,17 +257,14 @@ class GuiExceptionCatch(object):
 
     @classmethod
     def trace(cls):
-        import sys
-
         text = bsc_core.Debug.get_error_stack()
         if text:
             w = cls._generate_window()
             w.set_status(cls.ValidationStatus.Error)
-            w.add_content(text)
-            w.set_status(cls.ValidationStatus.Error)
 
             # show in window
             w.add_content(text)
+            w.set_status(cls.ValidationStatus.Error)
 
             # save file
             file_path = bsc_log.LogBase.get_user_debug_file(

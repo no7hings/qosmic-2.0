@@ -880,20 +880,34 @@ class _GuiNodeOpt(_GuiBaseOpt):
                 lnx_scr_core.DataContext.save(data)
 
     # node
-    def gui_update_entities(self, node_path_set, gui_thread_flag):
+    def gui_update_entities(self, node_path_set):
         self._node_path_set_pre = copy.copy(self._node_path_set)
+
+        # auto add or remove
         if node_path_set:
             self._node_path_set = copy.copy(node_path_set)
 
             node_path_set_addition = self._node_path_set.difference(self._node_path_set_pre)
+
+            # check is addition mode, do not update thread flag this mode
+            addition_flag = bool(node_path_set_addition) and node_path_set_addition != node_path_set
+            if addition_flag is False:
+                gui_thread_flag = self.gui_update_thread_flag()
+            else:
+                gui_thread_flag = self._gui_thread_flag
+
+            # add addition entities
+            if node_path_set_addition:
+                self.gui_add_entities(list(node_path_set_addition), gui_thread_flag)
+
             node_path_set_deletion = self._node_path_set_pre.difference(self._node_path_set)
 
+            # remove deletion entities
             if node_path_set_deletion:
                 for i_scr_node_path in node_path_set_deletion:
                     self._qt_list_widget._view_model._remove_item(i_scr_node_path)
 
-            if node_path_set_addition:
-                self.gui_add_entities(list(node_path_set_addition), gui_thread_flag)
+        # remove all
         else:
             self._node_path_set.clear()
             self.restore()
@@ -944,6 +958,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
                         i_thumbnail_path, i_scene_path, i_source_path
                     )
                 )
+
         return [
             entity_data,
             gui_thread_flag
@@ -960,6 +975,10 @@ class _GuiNodeOpt(_GuiBaseOpt):
             self.gui_add_entity(i_entity_data, gui_thread_flag)
 
     def gui_add_entity(self, entity_data, gui_thread_flag):
+        if gui_thread_flag is not None:
+            if gui_thread_flag != self._gui_thread_flag:
+                return
+
         (
             scr_entity, source_type,
             lock_flag, trash_flag,
@@ -1158,15 +1177,17 @@ class _GuiNodeOpt(_GuiBaseOpt):
 
             self._page._gui_tag_opt.intersection_all_item_assign_path_set(self._type_node_path_set)
 
+            # has tag for filter unit
             flag, self._tag_node_path_set = self.gui_get_tag_path_set()
             if flag is True:
                 if self._tag_node_path_set:
                     node_path_set = set.intersection(self._type_node_path_set, self._tag_node_path_set)
                 else:
                     node_path_set = set()
-                self.gui_update_entities(node_path_set, self.gui_update_thread_flag())
+
+                self.gui_update_entities(node_path_set)
             else:
-                self.gui_update_entities(self._type_node_path_set, self.gui_update_thread_flag())
+                self.gui_update_entities(self._type_node_path_set)
 
         # when type is non selected, load by tag
         else:
@@ -1174,7 +1195,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
             # restore tag intersection to default
             self._page._gui_tag_opt.intersection_all_item_assign_path_set(self._type_node_path_set)
 
-            self.gui_update_entities(self._tag_node_path_set, self.gui_update_thread_flag())
+            self.gui_update_entities(self._tag_node_path_set)
 
     def gui_get_tag_path_set(self):
         scr_tag_paths = self._page._gui_tag_opt.get_check_entity_paths()
@@ -1203,12 +1224,12 @@ class _GuiNodeOpt(_GuiBaseOpt):
             else:
                 node_path_set = self._tag_node_path_set
 
-            self.gui_update_entities(node_path_set, self._gui_thread_flag)
+            self.gui_update_entities(node_path_set)
         # when tag is non checked, upload from type
         else:
             self._tag_node_path_set.clear()
 
-            self.gui_update_entities(self._type_node_path_set, self._gui_thread_flag)
+            self.gui_update_entities(self._type_node_path_set)
 
     def gui_do_close(self):
         self._qt_list_widget._view_model.do_close()

@@ -64,29 +64,31 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
         self._sketch_map = self.generate_sketch_map()
 
     def zero_out(self):
-        dict_ = {}
-        root_sketch = self._sketch_map.get('Root_M')
+        # make sure auto keyframe is disable
+        with qsm_mya_core.auto_keyframe_context(False):
+            dict_ = {}
+            root_sketch = self._sketch_map.get('Root_M')
 
-        root_rotate = cmds.getAttr(root_sketch+'.rotate')[0]
-        root_rotate = [round(x, 3) for x in root_rotate]
-        if root_rotate == [0, 0, 0]:
-            sys.stdout.write(
-                'Root is zero, ignore zero out action.\n'
-            )
-            return
+            root_rotate = cmds.getAttr(root_sketch+'.rotate')[0]
+            root_rotate = [round(x, 3) for x in root_rotate]
+            if root_rotate == [0, 0, 0]:
+                sys.stdout.write(
+                    'Root is zero, ignore zero out action.\n'
+                )
+                return
 
-        for i in self._paths:
-            i_dict = {}
-            dict_[i] = i_dict
-            for j_atr_name in ['rotateX', 'rotateY', 'rotateZ']:
-                i_atr = i+'.'+j_atr_name
-                i_dict[j_atr_name] = cmds.getAttr(i_atr)
-                cmds.setAttr(i_atr, 0)
+            for i in self._paths:
+                i_dict = {}
+                dict_[i] = i_dict
+                for j_atr_name in ['rotateX', 'rotateY', 'rotateZ']:
+                    i_atr = i+'.'+j_atr_name
+                    i_dict[j_atr_name] = cmds.getAttr(i_atr)
+                    cmds.setAttr(i_atr, 0)
 
-        # to floor
-        distance = self.compute_root_height()
-        cmds.setAttr(root_sketch+'.translateY', distance)
-        return dict_
+            # to floor
+            distance = self.compute_root_height()
+            cmds.setAttr(root_sketch+'.translateY', distance)
+            return dict_
 
     def compute_root_height(self):
         bottom_sketch = self._sketch_map.get('ToesEnd_R')

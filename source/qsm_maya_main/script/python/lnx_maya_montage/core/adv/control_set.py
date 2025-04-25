@@ -62,31 +62,33 @@ class AdvChrControlSet(AdvControlSet):
         super(AdvChrControlSet, self).__init__(*args, **kwargs)
 
     def zero_out(self):
-        data = {}
-        atr_names = [
-            'translateX', 'translateY', 'translateZ',
-            'rotateX', 'rotateY', 'rotateZ'
-        ]
+        # make sure auto keyframe is disable
+        with qsm_mya_core.auto_keyframe_context(False):
+            data = {}
+            atr_names = [
+                'translateX', 'translateY', 'translateZ',
+                'rotateX', 'rotateY', 'rotateZ'
+            ]
 
-        for i_path in self._paths:
-            i_attrs = {}
-            data[i_path] = i_attrs
-            for j_atr_name in atr_names:
-                j_atr = '{}.{}'.format(i_path, j_atr_name)
+            for i_path in self._paths:
+                i_attrs = {}
+                data[i_path] = i_attrs
+                for j_atr_name in atr_names:
+                    j_atr = '{}.{}'.format(i_path, j_atr_name)
 
-                # ignore non exists
-                if cmds.objExists(j_atr) is False:
-                    continue
+                    # ignore non exists
+                    if cmds.objExists(j_atr) is False:
+                        continue
 
-                # ignore non settable
-                if qsm_mya_core.NodeAttribute.is_settable(i_path, j_atr_name) is False:
-                    continue
+                    # ignore non settable
+                    if qsm_mya_core.NodeAttribute.is_settable(i_path, j_atr_name) is False:
+                        continue
 
-                j_value = round(cmds.getAttr(j_atr), 4)
-                i_attrs[j_atr_name] = j_value
-                if j_value != 0:
-                    cmds.setAttr(j_atr, 0)
-        return data
+                    j_value = round(cmds.getAttr(j_atr), 4)
+                    i_attrs[j_atr_name] = j_value
+                    if j_value != 0:
+                        cmds.setAttr(j_atr, 0)
+            return data
 
     @classmethod
     def apply_data(cls, data):

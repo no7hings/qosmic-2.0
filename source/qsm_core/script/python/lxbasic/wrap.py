@@ -149,13 +149,13 @@ def get_env_mark():
     dict_ = {}
 
     # the env mark from other tool, etc. desktop-kit, workspace
-    _ = _os.path.join(_os.environ['TEMP'], 'qosmic.env_mark.txt')
+    _ = '{}/qosmic.env_mark.txt'.format(_os.environ['TEMP'])
     if _os.path.isfile(_):
         with open(_, 'r') as f:
-            for line in f:
-                line = line.strip()
-                if '=' in line:
-                    k, v = line.split('=', 1)
+            for i in f:
+                i = i.strip()
+                if '=' in i:
+                    k, v = i.split('=', 1)
                     dict_[k] = v
 
         ENVIRON_MARK = dict_
