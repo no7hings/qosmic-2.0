@@ -3,6 +3,40 @@ import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core
 
+import qsm_lazy_sync.client as qsm_snc_client
+
+
+class SyncFnc:
+
+    @staticmethod
+    def sync_version_directory(version_dir_path):
+        studio = Sync().studio.get_current()
+
+        symlink_kwargs = Sync().generate_sync_kwargs(
+            studio, version_dir_path
+        )
+        if symlink_kwargs:
+            return qsm_snc_client.TaskClient.new_task(
+                'sync', **symlink_kwargs
+            )
+
+
+class SyncFactory:
+    @staticmethod
+    def run(fnc):
+        def wrapper(*args, **kwargs):
+            task_session = fnc(*args, **kwargs)
+            version_dir_path = task_session.get_file_or_dir_for('asset-release-version-dir')
+
+            # sync version folder
+            SyncFnc.sync_version_directory(version_dir_path)
+
+            # fixme: cannot use for production, server not support.
+            # link current version to no version
+            no_version_dir_path = task_session.get_file_or_dir_for('asset-release-no_version-dir')
+            # c.TaskClient.new_task('symlink', source=version_dir_path, target=no_version_dir_path, replace=True)
+        return wrapper
+
 
 class Sync(object):
     INSTANCE = None
@@ -36,7 +70,8 @@ class Sync(object):
         kwargs = dict(
             source=self.driver_map.convert_path(studio, path),
             targets=[],
-            replace=False,
+            # todo: maybe use replace mode?
+            replace=True,
         )
         if target_studios:
             for i_studio in target_studios:

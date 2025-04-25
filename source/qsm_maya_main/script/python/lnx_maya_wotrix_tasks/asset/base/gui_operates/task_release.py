@@ -1,6 +1,5 @@
 # coding:utf-8
 import copy
-
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -9,6 +8,8 @@ import lxbasic.core as bsc_core
 import lxbasic.storage as bsc_storage
 
 import lxgui.core as gui_core
+
+import qsm_general.core as qsm_gnl_core
 
 import lnx_wotrix.core as lnx_wtx_core
 
@@ -63,9 +64,10 @@ class MayaAssetTaskReleaseOpt(lnx_wtx_core.DccTaskReleaseOpt):
                 'asset-release-maya-scene_src-file', version=version_new
             )
 
-            bsc_storage.StgFileOpt(source_scene_src_path).copy_to_file(
-                release_scene_src_path_new
-            )
+            # copy source file
+            if bsc_storage.StgFileOpt(source_scene_src_path).copy_to_file(release_scene_src_path_new):
+                # sync version folder when version folder is create
+                qsm_gnl_core.SyncFnc.sync_version_directory(version_dir_path_new)
 
             preview_path = self._task_session.get_file_or_dir_for(
                 'asset-release-preview-mov-file', version=version_new

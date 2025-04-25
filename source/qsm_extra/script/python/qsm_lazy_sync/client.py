@@ -15,7 +15,6 @@ from . import _configure
 
 
 class TaskClient(object):
-
     @classmethod
     def new_task(cls, fnc, *args, **kwargs):
         url = 'http://{host}:{port}/task_new'.format(

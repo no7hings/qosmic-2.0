@@ -99,7 +99,7 @@ class TaskBase(object):
 
 
 class Task(object):
-    DEFAULT_LOCATION = 'Z:/caches/database/sync-task/tasks'
+    DEFAULT_LOCATION = TaskBase.LOCATION
 
     class Status(enum.IntEnum):
         Unknown = 0

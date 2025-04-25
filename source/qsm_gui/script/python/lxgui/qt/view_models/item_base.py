@@ -14,7 +14,7 @@ from ...qt.core.wrap import *
 from ...qt import core as _qt_core
 
 
-class ItemThreadPoolFactor:
+class ItemThreadPoolFactory:
 
     @staticmethod
     def push(fnc):

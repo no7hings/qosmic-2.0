@@ -744,7 +744,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._data.image.load_flag = False
                 self._load_image()
 
-    @_item_base.ItemThreadPoolFactor.push
+    @_item_base.ItemThreadPoolFactory.push
     def _load_image(self):
         def cache_fnc_():
             _file_path = self._data.image.file
@@ -809,7 +809,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._data.image_sequence.load_flag = False
                 self._load_image_sequence()
 
-    @_item_base.ItemThreadPoolFactor.push
+    @_item_base.ItemThreadPoolFactory.push
     def _load_image_sequence(self):
         def cache_fnc_():
             _file_path = self._data.image_sequence.file
@@ -922,7 +922,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._data.video.load_flag = False
                 self._load_video()
 
-    @_item_base.ItemThreadPoolFactor.push
+    @_item_base.ItemThreadPoolFactory.push
     def _load_video(self):
         def cache_fnc_():
             _file_path = self._data.video.file
@@ -1045,7 +1045,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._data.audio.load_flag = False
                 self._load_audio()
 
-    @_item_base.ItemThreadPoolFactor.push
+    @_item_base.ItemThreadPoolFactory.push
     def _load_audio(self):
         def cache_fnc_():
             _file_path = self._data.audio.file

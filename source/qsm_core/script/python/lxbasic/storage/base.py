@@ -1561,11 +1561,11 @@ class StgFileOpt(StgPathOpt):
         if replace is True:
             if os.path.exists(file_path_tgt):
                 os.remove(file_path_tgt)
-        #
+
         file_path_src = self.path
         if file_path_src == file_path_tgt:
-            return
-        #
+            return False
+
         if os.path.exists(file_path_tgt) is False:
             directory_path_tgt = os.path.dirname(file_path_tgt)
             if os.path.exists(directory_path_tgt) is False:
@@ -1573,12 +1573,15 @@ class StgFileOpt(StgPathOpt):
                 try:
                     os.makedirs(directory_path_tgt)
                 except Exception:
-                    pass
+                    return False
             # noinspection PyBroadException
             try:
                 shutil.copy2(file_path_src, file_path_tgt)
+                return True
             except Exception:
                 _cor_base.Debug.trace()
+                return False
+        return False
 
     def copy_to_directory(self, directory_path_tgt, replace=False):
         file_path_tgt = six.u('{}/{}').format(

@@ -5,6 +5,7 @@ studio:
     XQD: '//192.160.0.101/pipeline-root'
     # is non network share
     DEV: 'Y:'
+    DEV_TST: 'Y:/sync_test'
 
 driver_map:
     XSH:
@@ -16,6 +17,8 @@ driver_map:
     # is non network share
     DEV:
         X: 'X:'
+    DEV_TST:
+        X: 'X:/sync_test'
 
 studio_targets_map:
     # for asset sync.
@@ -28,7 +31,8 @@ studio_targets_map:
     XQD:
         - XSH
         - XHZ
-    DEV: []
+    DEV:
+        - DEV_TST
 
 rez_package:
     # for rez package sync, etc. push to XSH, then sync to XHZ and XQD
