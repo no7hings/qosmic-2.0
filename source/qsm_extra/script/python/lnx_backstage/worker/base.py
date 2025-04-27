@@ -16,4 +16,5 @@ class TaskWebServerBase(object):
 class NoticeWebServerBase(object):
     NAME = 'Qosmic Notice Web Server'
     HOST = 'localhost'
-    PORT = 12308
+    # do not use 12308, it is use for sync server
+    PORT = 12310

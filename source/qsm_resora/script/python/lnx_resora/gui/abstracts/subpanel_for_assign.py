@@ -1,11 +1,5 @@
 # coding:utf-8
-import functools
-
-import lxgui.core as gui_core
-
 import lxgui.proxy.widgets as gui_prx_widgets
-
-import lnx_screw.core as lnx_scr_core
 
 
 class AbsPrxSubPanelForAssign(gui_prx_widgets.PrxBaseSubpanel):

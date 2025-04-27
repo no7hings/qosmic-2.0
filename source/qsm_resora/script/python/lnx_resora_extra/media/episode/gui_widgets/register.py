@@ -1,12 +1,12 @@
 # coding:utf-8
-from lnx_resora.gui import abstracts as lnx_rsr_abstracts
+from lnx_resora.gui import abstracts as lnx_rsr_gui_abstracts
 
 from .. import scripts as _scripts
 
 
-class PrxSubpageForRegister(lnx_rsr_abstracts.AbsPrxPageForAnyRegister):
+class GuiResourceRegisterMain(lnx_rsr_gui_abstracts.AbsPrxPageForAnyRegister):
     def __init__(self, *args, **kwargs):
-        super(PrxSubpageForRegister, self).__init__(*args, **kwargs)
+        super(GuiResourceRegisterMain, self).__init__(*args, **kwargs)
 
     def _update_history_options(self):
         for i in [

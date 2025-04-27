@@ -3,14 +3,14 @@ name = 'qsm_houdini_core'
 
 version = '0.0.0'
 
-description = ''
+description = 'package for houdini'
 
 authors = ['']
 
 tools = []
 
 requires = [
-    'qsm_houdini_lib'
+    'qsm_houdini_lib',
 ]
 
 

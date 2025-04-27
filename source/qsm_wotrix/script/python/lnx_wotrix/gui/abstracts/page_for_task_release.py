@@ -1,6 +1,8 @@
 # coding:utf-8
 import sys
 
+import lxbasic.log as bsc_log
+
 import lxbasic.core as bsc_core
 
 import lxgui.qt.widgets as gui_qt_widgets
@@ -24,9 +26,11 @@ class AbsPrxPageForTaskRelease(gui_prx_widgets.PrxBasePage):
             )
             module = bsc_core.PyMod(module_path)
             if module.is_exists():
-                gui_cls = module.get_method('GuiTaskReleaseMain')
+                gui_cls = module.get('GuiTaskReleaseMain')
                 if gui_cls:
-                    sys.stdout.write('find task release gui for {}/{} successful.\n'.format(resource_type, task))
+                    bsc_log.Log.trace(
+                        'find task release gui for {}/{} successful.'.format(resource_type, task)
+                    )
                     return gui_cls
         except Exception:
             pass

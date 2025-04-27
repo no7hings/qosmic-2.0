@@ -3,21 +3,27 @@ name = 'qsm_houdini_lib'
 
 version = '0.0.0'
 
-description = ''
+description = 'houdini extend library, support py2/py3'
 
 authors = ['']
 
 tools = []
 
-requires = []
+
+# requires = []
+def requires():
+    # todo: use this method to dynamic load requires package
+    return []
 
 
 def commands():
     import platform
 
     import os
+
     # root
     env.QSM_HOUDINI_LIB_BASE = '{root}'
+
     # python
     if 'QSM_PYTHON_VERSION' in os.environ:
         if os.environ['QSM_PYTHON_VERSION'] == '3':

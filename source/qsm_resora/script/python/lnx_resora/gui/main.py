@@ -8,10 +8,10 @@ from .subpanels import register as _subpanel_register
 
 class PrxResoraTool(_abstracts.AbsPrxResoraPanel):
     PAGE_CLASS_DICT = dict(
-        manager=_page_manager.PrxPageForResourceManager
+        manager=_page_manager.GuiResourceManagerMain
     )
 
-    SUB_PANEL_CLASS_DICT = dict(
+    SUBPANEL_CLASS_DICT = dict(
         register=_subpanel_register.PrxSubpanelForRegister
     )
 

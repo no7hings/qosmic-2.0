@@ -10,7 +10,7 @@ authors = ['']
 tools = []
 
 requires = [
-    'qsm_katana_lib'
+    'qsm_katana_lib',
 ]
 
 

@@ -31,7 +31,7 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
             )
             module = bsc_core.PyMod(module_path)
             if module.is_exists():
-                gui_cls = module.get_method('GuiTaskCreateMain')
+                gui_cls = module.get('GuiTaskCreateMain')
                 if gui_cls:
                     sys.stdout.write('find task create gui for {}/{} successful.\n'.format(resource_type, task))
                     return gui_cls

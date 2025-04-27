@@ -5,12 +5,12 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import lnx_screw.scripts as lnx_scr_scripts
 
-from lnx_resora.gui import abstracts as lnx_rsr_abstracts
+from lnx_resora.gui import abstracts as lnx_rsr_gui_abstracts
 
 
-class PrxSubpageForRegister(lnx_rsr_abstracts.AbsPrxSubpageForRegister):
+class GuiResourceRegisterMain(lnx_rsr_gui_abstracts.AbsGuiResourceRegisterMain):
     def __init__(self, window, session, subwindow, *args, **kwargs):
-        super(PrxSubpageForRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+        super(GuiResourceRegisterMain, self).__init__(window, session, subwindow, *args, **kwargs)
 
     def _on_apply(self):
         prx_node = self._prx_options_node

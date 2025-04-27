@@ -1,8 +1,8 @@
 # coding:utf-8
-from .. import abstracts as _abstracts
+import lnx_resora.gui.abstracts as lnx_rsr_gui_abstracts
 
 
-class GuiResourceManagerMain(_abstracts.AbsPrxPageForManager):
+class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
     GUI_KEY = 'manager'
 
     def __init__(self, window, session, *args, **kwargs):

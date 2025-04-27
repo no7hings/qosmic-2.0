@@ -46,12 +46,12 @@ class _AbsRegister(object):
         self._post_fnc = fnc
 
 
-class AbsPrxSubpageForRegister(
+class AbsGuiResourceRegisterMain(
     gui_prx_widgets.PrxBaseSubpage,
     _AbsRegister
 ):
     def __init__(self, window, session, subwindow, *args, **kwargs):
-        super(AbsPrxSubpageForRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+        super(AbsGuiResourceRegisterMain, self).__init__(window, session, subwindow, *args, **kwargs)
 
         self._configure = self.generate_local_configure()
 

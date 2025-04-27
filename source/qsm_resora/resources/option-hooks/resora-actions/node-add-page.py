@@ -31,7 +31,7 @@ def main(session):
                 )
                 return
 
-        window._gui_tab_add_page_fnc(database_name, True)
+        window._gui_add_manager_page_fnc(database_name, True)
 
 
 if __name__ == '__main__':

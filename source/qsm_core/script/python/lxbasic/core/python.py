@@ -29,7 +29,7 @@ class PyMod(object):
     def is_exists(self):
         return bool(self._module)
 
-    def get_method(self, key):
+    def get(self, key):
         if self._module is not None:
             if key in self._module.__dict__:
                 return self._module.__dict__[key]

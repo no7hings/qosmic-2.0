@@ -1,11 +1,9 @@
 # coding:utf-8
+import lxbasic.log as bsc_log
+
 import lxbasic.core as bsc_core
 
-import lxgui.core as gui_core
-
 import lxgui.proxy.widgets as gui_prx_widgets
-
-import lnx_screw.core as lnx_scr_core
 
 import lnx_screw.scripts as lnx_scr_scripts
 
@@ -16,28 +14,22 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubpanel):
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxSubPanelForRegister, self).__init__(window, session, *args, **kwargs)
 
-        self.update_valid_subpage_cls()
-
     def gui_setup_fnc(self):
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._page_prx_tab_tool_box)
 
-    def update_valid_subpage_cls(self):
-        type_names = lnx_scr_scripts.ManifestStageOpt.get_valid_type_names()
-        for i_resource_type in type_names:
-            i_cls = self.find_register_subpage_cls(i_resource_type)
-            if i_cls:
-                self._subpage_class_dict[i_resource_type] = i_cls
-
     @staticmethod
-    def find_register_subpage_cls(resource_type):
+    def _gui_find_register_subpage_cls(resource_type):
         # noinspection PyBroadException
         try:
             module_path = 'lnx_resora_extra.{}.gui_widgets.register'.format(resource_type.replace('/', '.'))
-            module = bsc_core.PyModule(module_path)
-            if module.get_is_exists():
-                cls = module.get_method('PrxSubpageForRegister')
+            module = bsc_core.PyMod(module_path)
+            if module.is_exists():
+                cls = module.get('GuiResourceRegisterMain')
                 if cls:
+                    bsc_log.Log.trace(
+                        'find register gui for {} successful.'.format(resource_type)
+                    )
                     return cls
         except Exception:
             pass
@@ -45,11 +37,17 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubpanel):
     def gui_setup_pages_for(self, resource_types):
         for i_resource_type in resource_types:
 
-            if i_resource_type not in self._subpage_class_dict:
-                continue
+            if i_resource_type in self._subpage_class_dict:
+                i_prx_page_cls = self._subpage_class_dict[i_resource_type]
+            else:
+                i_prx_page_cls = self._gui_find_register_subpage_cls(i_resource_type)
+
+            if i_prx_page_cls:
+                i_prx_page = self.gui_instance_subpage(i_prx_page_cls)
+            else:
+                raise RuntimeError()
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
-            i_prx_page = self._subwindow.gui_generate_subpage_for(i_resource_type)
             i_prx_sca.add_widget(i_prx_page)
 
             self._page_prx_tab_tool_box.add_widget(

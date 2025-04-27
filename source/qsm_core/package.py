@@ -3,7 +3,7 @@ name = 'qsm_core'
 
 version = '0.0.0'
 
-description = ''
+description = 'core package for all.'
 
 authors = ['']
 

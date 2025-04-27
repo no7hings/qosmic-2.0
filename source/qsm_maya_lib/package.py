@@ -9,7 +9,11 @@ authors = ['']
 
 tools = []
 
-requires = []
+
+# requires = []
+def requires():
+    # todo: use this method to dynamic load requires package
+    return []
 
 
 def commands():

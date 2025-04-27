@@ -104,9 +104,11 @@ class PrxLazyBackstage(gui_prx_widgets.PrxSessionWindow):
             )
             server_process.terminate()
             server_process.join()
+
             for i in qsm_prc_server.TaskWorker.PROCESS_STACK:
                 i.terminate()
                 # i.join()
+
             bsc_log.Log.trace_result(
                 'quit server completed'
             )

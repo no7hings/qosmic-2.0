@@ -1,12 +1,12 @@
 # coding:utf-8
-from lnx_resora.gui import abstracts as lnx_rsr_abstracts
+from lnx_resora.gui import abstracts as lnx_rsr_gui_abstracts
 
 from .. import scripts as _script
 
 
-class PrxSubpageForRegister(lnx_rsr_abstracts.AbsPrxSubpageForVideoRegister):
+class GuiResourceRegisterMain(lnx_rsr_gui_abstracts.AbsPrxSubpageForVideoRegister):
     def __init__(self, window, session, subwindow, *args, **kwargs):
-        super(PrxSubpageForRegister, self).__init__(window, session, subwindow, *args, **kwargs)
+        super(GuiResourceRegisterMain, self).__init__(window, session, subwindow, *args, **kwargs)
 
     def _on_apply(self):
         prx_node = self._prx_options_node

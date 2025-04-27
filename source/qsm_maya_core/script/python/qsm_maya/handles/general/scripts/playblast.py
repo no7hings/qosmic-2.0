@@ -189,23 +189,31 @@ class PlayblastOpt(object):
                 percent=percent, quality=quality
             )
 
+        # render images
         cls.movie_prc(
             image_file_path=image_file_path_tmp,
             movie_file_path=movie_file_path_tmp,
             start_frame=start_frame, end_frame=end_frame, clip_start=clip_start, fps=fps
         )
+
         # close window
         _core.Window.close()
+
         # copy to source
         bsc_storage.StgFileOpt(movie_file_path_tmp).copy_to_file(
             movie_file_path, replace=True
         )
-        # clear temp
+
+        # copy image sequence
         if image_sequence_dir_path is not None:
             bsc_storage.StgDirectoryOpt(image_directory_path_tmp).copy_all_files_to_directory(
                 image_sequence_dir_path, replace=True
             )
+
+        # remove cache
         bsc_storage.StgDirectoryOpt(directory_path_tmp).do_delete()
+
+        # start file
         if play_enable is True:
             os.startfile(
                 movie_file_path

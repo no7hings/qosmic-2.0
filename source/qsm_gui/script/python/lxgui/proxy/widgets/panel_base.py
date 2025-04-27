@@ -83,7 +83,7 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
     PAGE_CLASS_DICT = {}
     PAGE_CLASSES = []
 
-    SUB_PANEL_CLASS_DICT = {}
+    SUBPANEL_CLASS_DICT = {}
     SUBPANEL_CLASSES = []
 
     def _get_subclass_file_path(self):
@@ -115,8 +115,8 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
                 for i_cls in self.PAGE_CLASSES:
                     self._page_class_dict[i_cls.GUI_KEY] = i_cls
 
-        if self.SUB_PANEL_CLASS_DICT:
-            self._sub_panel_class_dict = self.SUB_PANEL_CLASS_DICT
+        if self.SUBPANEL_CLASS_DICT:
+            self._sub_panel_class_dict = self.SUBPANEL_CLASS_DICT
         else:
             self._sub_panel_class_dict = {}
             if self.SUBPANEL_CLASSES:
@@ -214,7 +214,10 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
         return self._sub_panel_class_dict[key](self._window, self._session)
 
     def gui_generate_page_for(self, key):
-        return self._page_class_dict[key](self._window, self._session)
+        return self.gui_instance_page(self._page_class_dict[key])
+
+    def gui_instance_page(self, gui_cls):
+        return gui_cls(self._window, self._session)
 
     def gui_find_page(self, key):
         return self._tab_widget_dict.get(key)

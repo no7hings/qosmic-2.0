@@ -3,7 +3,7 @@ name = 'qsm_houdini_main'
 
 version = '0.0.0'
 
-description = ''
+description = 'houdini enter'
 
 authors = ['']
 
