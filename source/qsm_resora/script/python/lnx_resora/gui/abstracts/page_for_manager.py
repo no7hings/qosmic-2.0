@@ -927,16 +927,16 @@ class _GuiNodeOpt(_GuiBaseOpt):
         for i_scr_node_paths in scr_node_paths_map:
             i_r = self._qt_list_widget._view._generate_thread_(
                 functools.partial(
-                    self._gui_add_entities_sub_cache_fnc, i_scr_node_paths, gui_thread_flag
+                    self._gui_add_entities_cache_sub_fnc, i_scr_node_paths, gui_thread_flag
                 ),
-                self._gui_add_entities_sub_build_fnc,
+                self._gui_add_entities_build_sub_fnc,
                 post_fnc=self._qt_list_widget._view_model.update_widget
             )
             ts.append(i_r)
 
         [x.do_start() for x in ts]
 
-    def _gui_add_entities_sub_cache_fnc(self, scr_node_paths, gui_thread_flag):
+    def _gui_add_entities_cache_sub_fnc(self, scr_node_paths, gui_thread_flag):
         if gui_thread_flag is not None:
             if gui_thread_flag != self._gui_thread_flag:
                 return [[], 0]
@@ -964,7 +964,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
             gui_thread_flag
         ]
 
-    def _gui_add_entities_sub_build_fnc(self, *args):
+    def _gui_add_entities_build_sub_fnc(self, *args):
         entity_data, gui_thread_flag = args[0]
 
         if gui_thread_flag is not None:
@@ -994,13 +994,14 @@ class _GuiNodeOpt(_GuiBaseOpt):
 
         qt_item._scr_entity = scr_entity
         # qt_item._item_model.set_type(scr_entity.type)
-        qt_item._item_model.set_sort_dict(
+        item_model = qt_item._item_model
+        item_model.set_sort_dict(
             dict(
                 gui_name=scr_entity.gui_name,
                 gui_name_chs=scr_entity.gui_name_chs,
             )
         )
-        qt_item._item_model.register_keyword_filter_keys(
+        item_model.register_keyword_filter_keys(
             [scr_entity.gui_name, scr_entity.gui_name_chs]
         )
 
@@ -1008,31 +1009,19 @@ class _GuiNodeOpt(_GuiBaseOpt):
         if self._window._language == 'chs':
             gui_name = scr_entity.gui_name_chs
 
-        qt_item._item_model.set_name(gui_name)
-        qt_item._item_model.set_index(scr_entity.id)
-        qt_item._item_model.set_locked(lock_flag)
+        item_model.set_name(gui_name)
+        item_model.set_index(scr_entity.id)
+        item_model.set_locked(lock_flag)
 
         # add thumbnail
         if thumbnail_path:
-            qt_item._item_model.set_image(thumbnail_path, source_type)
+            item_model.set_image(thumbnail_path, source_type)
 
-        # add drag data
-        if scene_path is not None:
-            qt_item._item_model.set_drag_data(
-                dict(
-                    file=scene_path,
-                    scr_entity_path=scr_entity.path
-                )
-            )
-        elif source_path is not None:
-            qt_item._item_model.set_drag_data(
-                dict(
-                    file=source_path,
-                    scr_entity_path=scr_entity.path
-                )
-            )
+        item_model.set_drag_data_generate_fnc(
+            functools.partial(self._page.gui_node_drag_data_generate_fnc, scr_entity)
+        )
 
-        qt_item._item_model.set_show_fnc(
+        item_model.set_show_fnc(
             functools.partial(self._gui_node_show_cache_fnc, qt_item, scr_entity, gui_thread_flag),
             self._gui_node_show_build_fnc
         )
@@ -1299,64 +1288,6 @@ class AbsPrxPageForManager(
         if scr_tag_paths:
             self._gui_tag_opt.gui_update_entities_for(scr_tag_paths)
 
-    def _gui_add_filter_tools(self):
-        self._keyword_set = set()
-        self._keyword_pinyin_dict = {}
-        self._prx_filter_bar = gui_prx_widgets.PrxFilterBar()
-        self._filter_prx_tool_box.add_widget(self._prx_filter_bar)
-        
-        self._prx_filter_bar._qt_widget._set_input_completion_buffer_fnc_(self._gui_keyword_filter_completion_gain_fnc)
-        self._prx_filter_bar._qt_widget.input_value_accepted.connect(self._gui_update_keyword_filter_path_set_fnc)
-    
-    def _gui_keyword_filter_completion_gain_fnc(self, *args, **kwargs):
-        keyword = args[0]
-        if keyword:
-            match_pinyin = bsc_core.BscFnmatch.filter(
-                self._keyword_pinyin_dict.keys(), six.u('*{}*').format(keyword)
-            )
-
-            match_chs = [self._keyword_pinyin_dict[x] for x in match_pinyin]
-
-            matches = bsc_core.BscFnmatch.filter(
-                self._keyword_set, six.u('*{}*').format(keyword)
-            )
-            all_texts = match_chs + matches
-            return bsc_core.BscTexts.sort_by_initial(all_texts)[:self.FILTER_COMPLETION_MAXIMUM]
-        return []
-
-    def _gui_update_keyword_filter_path_set_fnc(self, *args, **kwargs):
-        keyword = args[0]
-        print(keyword)
-
-    def _gui_update_keyword_filter_texts(self):
-        def cache_fnc_(gui_thread_flag_):
-            self._keyword_set = set()
-            self._keyword_pinyin_dict = {}
-
-            _all_scr_nodes = self._scr_stage.find_all(
-                self._scr_stage.EntityTypes.Node,
-                [
-                    ('type', 'is', 'node'),
-                ]
-            )
-
-            for _i in _all_scr_nodes:
-                _i_list, _i_dict = bsc_pinyin.Text.to_pinyin_map(_i.gui_name_chs)
-                self._keyword_set.update(_i_list)
-                self._keyword_pinyin_dict.update(_i_dict)
-
-            return []
-
-        def build_fnc_(data_):
-            pass
-
-        t = self.gui_generate_thread(
-            functools.partial(cache_fnc_, self._gui_thread_flag),
-            build_fnc_
-        )
-
-        t.do_start()
-
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForManager, self).__init__(window, session, *args, **kwargs)
         self._init_gui_thread_extra_(window)
@@ -1365,6 +1296,19 @@ class AbsPrxPageForManager(
         self._scr_stage = None
 
         # self._window.register_window_close_method(self.gui_close_fnc)
+
+    def gui_add_top_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
+        tool_box = gui_prx_widgets.PrxHToolBox()
+        if isinstance(insert_args, int):
+            self._top_prx_tool_bar.insert_widget_at(insert_args, tool_box)
+        else:
+            self._top_prx_tool_bar.add_widget(tool_box)
+
+        tool_box.set_name(name)
+        tool_box.set_expanded(expanded)
+        tool_box.set_visible(visible)
+        tool_box.set_size_mode(size_mode)
+        return tool_box
 
     def _gui_add_main_tools(self):
         for i in [
@@ -1384,11 +1328,8 @@ class AbsPrxPageForManager(
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
 
-        self._main_prx_tool_box = self._top_prx_tool_bar.create_tool_box('main')
+        self._main_prx_tool_box = self.gui_add_top_tool_box('main')
         self._gui_add_main_tools()
-
-        self._filter_prx_tool_box = self._top_prx_tool_bar.create_tool_box('filter', size_mode=1)
-        # self._gui_add_filter_tools()
 
         prx_sca = gui_prx_widgets.PrxVScrollArea()
         self._qt_layout.addWidget(prx_sca.widget)
@@ -1411,10 +1352,37 @@ class AbsPrxPageForManager(
         self._prx_h_splitter_0.set_fixed_size_at(2, 320)
         self._prx_v_splitter_0.set_fixed_size_at(1, 480)
 
+        self.gui_page_setup_sup_fnc()
+
         self.do_gui_refresh_all()
 
     def do_gui_refresh_all(self):
-        # self._gui_update_keyword_filter_texts()
-
         self._gui_type_opt.do_gui_refresh_all()
         self._gui_tag_opt.do_gui_refresh_all()
+
+        self.gui_page_refresh_sup_fnc()
+
+    # fnc for supplement widget when inherit
+    def gui_page_setup_sup_fnc(self):
+        pass
+
+    def gui_page_refresh_sup_fnc(self):
+        pass
+
+    # fnc for generate drag data, can be override, put it to configure?
+    def gui_node_drag_data_generate_fnc(self, scr_entity):
+        scr_entity_path = scr_entity.path
+
+        scene_path = self._scr_stage.get_node_parameter(scr_entity_path, 'scene')
+        if scene_path:
+            return dict(
+                file=scene_path,
+                scr_entity_path=scr_entity_path
+            )
+
+        source_path = self._scr_stage.get_node_parameter(scr_entity_path, 'source')
+        if source_path:
+            return dict(
+                file=source_path,
+                scr_entity_path=scr_entity_path
+            )

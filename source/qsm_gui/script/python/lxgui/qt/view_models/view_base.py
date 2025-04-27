@@ -532,13 +532,25 @@ class AbsViewModel(object):
 
     def generate_drag_data_for(self, items):
         list_ = []
+
         for i_item in items:
-            if i_item._item_model.is_locked():
+            i_item_model = i_item._item_model
+
+            # ignore when is locked
+            if i_item_model.is_locked():
                 continue
 
-            i_drag_data = i_item._item_model.get_drag_data()
-            if i_drag_data:
-                list_.append(i_drag_data)
+            # ignore when daga is disabled
+            if i_item_model.is_drag_enable() is False:
+                continue
+
+            i_drag_data_0 = i_item_model.get_drag_data()
+            if i_drag_data_0:
+                list_.append(i_drag_data_0)
+            else:
+                i_drag_data_1 = i_item_model.generate_drag_data()
+                if i_drag_data_1:
+                    list_.append(i_drag_data_1)
         return list_
 
     def create_group_item(self, path, *args, **kwargs):

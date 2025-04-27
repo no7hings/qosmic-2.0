@@ -57,7 +57,7 @@ class PrxListView(
         self._qt_layout_0.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_border_radius(1)
         # check
-        self._prx_check_tool_box = self.create_top_tool_box('check', True, False, 0)
+        self._prx_check_tool_box = self.add_top_tool_box('check', True, False, 0)
         #
         self._check_all_button = _qt_widget_button.QtIconPressButton()
         self._check_all_button._set_name_text_('check all')
@@ -77,7 +77,7 @@ class PrxListView(
             '"LMB-click" for unchecked all visible items'
         )
         # mode switch
-        self._prx_mode_switch_tool_box = self.create_top_tool_box('mode', True, True, 0)
+        self._prx_mode_switch_tool_box = self.add_top_tool_box('mode', True, True, 0)
         #
         self._view_mode_swap_button = _qt_widget_button.QtIconPressButton()
         self._prx_mode_switch_tool_box.add_widget(self._view_mode_swap_button)
@@ -88,11 +88,11 @@ class PrxListView(
             '"LMB-click" for switch view mode to "icon" / "list"'
         )
         # scale switch
-        self._prx_scale_switch_tool_box = self.create_top_tool_box('scale', True, False, 0)
+        self._prx_scale_switch_tool_box = self.add_top_tool_box('scale', True, False, 0)
         # sort
-        self._prx_sort_switch_tool_box = self.create_top_tool_box('sort', True, False, 0)
+        self._prx_sort_switch_tool_box = self.add_top_tool_box('sort', True, False, 0)
         # filter
-        self._prx_filter_tool_box = self.create_top_tool_box('filter', True, True, 1)
+        self._prx_filter_tool_box = self.add_top_tool_box('filter', True, True, 1)
         #
         self._prx_filer_bar_0 = _utility.PrxFilterBar()
         self._prx_filter_tool_box.add_widget(self._prx_filer_bar_0)
@@ -149,7 +149,7 @@ class PrxListView(
     def set_item_event_override_flag(self, boolean):
         self._qt_view._set_item_event_override_flag_(boolean)
 
-    def create_top_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
+    def add_top_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
         tool_box = _container_for_box.PrxHToolBox()
         if isinstance(insert_args, int):
             self._top_prx_tool_bar.insert_widget_at(insert_args, tool_box)

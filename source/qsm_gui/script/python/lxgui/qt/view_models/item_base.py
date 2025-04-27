@@ -1,5 +1,7 @@
 # coding:utf-8
 import copy
+import functools
+import types
 
 import six
 
@@ -261,7 +263,13 @@ class AbsItemModel(object):
         # drag
         self._data.drag = _gui_core.DictOpt(
             enable=False,
-            data=None
+            data=None,
+            # function for auto create drag file,
+            # etc. we drag file to maya, we want to use reference mode, so we generate a mel for drag
+            data_generate_fnc=None,
+            # when is True, use data cache
+            data_cache_enable=False,
+            data_cache=None,
         )
 
         # tool tip
@@ -1059,15 +1067,46 @@ class AbsItemModel(object):
         pass
 
     # drag
+    def is_drag_enable(self):
+        return self._data.drag.enable
+
     def set_drag_data(self, data):
         if data is not None:
-            assert isinstance(data, dict)
+            if not isinstance(data, dict):
+                raise TypeError('data must be dict type')
 
             self._data.drag.enable = True
             self._data.drag.data = data
 
     def get_drag_data(self):
         return self._data.drag.data
+
+    def set_drag_data_generate_fnc(self, fnc):
+        # check type
+        if not isinstance(fnc, (types.FunctionType, types.MethodType, types.LambdaType, functools.partial)):
+            raise TypeError('fnc must be one of function, method, lambda, functools.partial')
+
+        self._data.drag.enable = True
+        self._data.drag.data_generate_fnc = fnc
+
+    def clear_drag_data_cache(self):
+        self._data.drag.data_cache = None
+
+    def generate_drag_data(self):
+        if self._data.drag.enable is True:
+            if self._data.drag.data_cache_enable is True:
+                if self._data.drag.data_cache:
+                    return self._data.drag.data_cache
+
+                if self._data.drag.data_generate_fnc:
+                    data = self._data.drag.data_generate_fnc()
+                    if data:
+                        # cache when is valid
+                        self._data.drag.data_cache = data
+                    return data
+            else:
+                if self._data.drag.data_generate_fnc:
+                    return self._data.drag.data_generate_fnc()
 
     def do_delete(self):
         raise NotImplementedError()

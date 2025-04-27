@@ -173,7 +173,7 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
         self._prx_tab_view.set_history_key(
             [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
         )
-        
+
         tab_keys = gui_core.GuiHistoryStage().get_array(self.KEY_PAGE_KEYS)
         tab_key_current = gui_core.GuiHistoryStage().get_one(self.KEY_PAGE_KEY_CURRENT)
         page_keys = self._all_scr_stage_keys

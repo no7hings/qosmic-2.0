@@ -1671,7 +1671,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
                 self._gui_asset_prx_unit.copy_to_clipboard_from(dtb_resource)
 
     def __gui_add_resource_copy_tools(self):
-        self._copy_tool_box = self._resource_prx_view.create_top_tool_box(
+        self._copy_tool_box = self._resource_prx_view.add_top_tool_box(
             'copy action', insert_args=4
         )
         tools = []

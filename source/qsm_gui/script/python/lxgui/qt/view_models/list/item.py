@@ -484,6 +484,7 @@ class ListItemModel(_item_base.AbsItemModel):
         refresh pixmap cache for painter, when size is changing or "force_refresh_flag" is True
         """
         rect = self._data.basic.rect
+
         # check size change
         if rect.size() != self._data.basic.size or self._data.force_refresh_flag is True:
             self._data.basic.size = rect.size()
@@ -499,10 +500,12 @@ class ListItemModel(_item_base.AbsItemModel):
 
             frm_x, frm_y, frm_w, frm_h = x+2, y+2, bsc_w-4, bsc_h-4
             frame_rect = qt_rect(frm_x, frm_y, frm_w, frm_h)
+
             # basic frame
             painter.setPen(QtGui.QColor(0, 0, 0, 0))
             painter.setBrush(self._data.frame.brush)
             painter.drawRect(frame_rect)
+
             # video for play
             if self._data.video_enable is True:
                 img_w, img_h = self._data.video.size.width(), self._data.video.size.height()
@@ -518,6 +521,7 @@ class ListItemModel(_item_base.AbsItemModel):
                     image = self._data.video.capture_opt.to_qt_image(QtGui.QImage, image_data)
                     pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
                     self._draw_pixmap(painter, video_rect, pixmap)
+
             # audio
             elif self._data.audio_enable is True:
                 # fill to frame rect
@@ -546,6 +550,7 @@ class ListItemModel(_item_base.AbsItemModel):
                         )
                         painter.setPen(self._data.audio.handle_color)
                         painter.drawLine(self._data.audio.handle_line)
+
             # image sequence for play
             elif self._data.image_sequence_enable is True:
                 img_w, img_h = self._data.image_sequence.size.width(), self._data.image_sequence.size.height()
@@ -557,6 +562,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 # draw image
                 img_rect = qt_rect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
                 self._draw_pixmap(painter, img_rect, self._data.image_sequence.pixmap)
+
             # image
             elif self._data.image_enable is True:
                 source_type = self._data.image.source_type
@@ -574,6 +580,7 @@ class ListItemModel(_item_base.AbsItemModel):
                     )
                     img_rect = qt_rect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
                     self._draw_pixmap(painter, img_rect, self._data.image.pixmap)
+
             # placeholder
             else:
                 img_w = img_h = min(frm_w, frm_h)
@@ -583,8 +590,10 @@ class ListItemModel(_item_base.AbsItemModel):
                 img_rect = QtCore.QRectF(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
                 # draw empty
                 self._draw_svg(painter, img_rect, self._data.thumbnail_placeholder_svg)
+
             # about play
             if self._data.play_enable is True:
+
                 # time and progress
                 if (
                     self._data.video_enable is True
@@ -592,6 +601,7 @@ class ListItemModel(_item_base.AbsItemModel):
                     or self._data.image_sequence_enable is True
                 ):
                     if self._data.play.flag is True:
+
                         # time from index
                         time_txt = self._data.play.time_index_text
                         if self._data.play.progress_enable is True:
@@ -1252,6 +1262,7 @@ class ListGroupItemModel(_item_base.AbsItemModel):
     def update(self, rect):
         # check rect is change
         if rect != self._data.rect:
+
             # need rebuild instance
             self._data.rect = qt_rect(rect)
 
@@ -1262,6 +1273,7 @@ class ListGroupItemModel(_item_base.AbsItemModel):
             self._data.basic.rect.setRect(
                 bsc_x, bsc_y, bsc_w, bsc_h
             )
+
             # icon
             item_h = 20
             item_icon_w = 16
@@ -1274,6 +1286,7 @@ class ListGroupItemModel(_item_base.AbsItemModel):
                 self._data.expand.rect.setRect(
                     x+(epd_w-epd_icn_w)/2+1, y+(epd_w-epd_icn_w)/2, epd_icn_w, epd_icn_w
                 )
+
             # check
             cck_w = 0
             if self._data.check_enable is True:

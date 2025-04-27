@@ -84,7 +84,7 @@ class PrxTreeView(
         self._loading_item_prxes = []
         self._view_keyword_filter_occurrence_index_current = 0
         # check
-        self._prx_check_tool_box = self.create_top_tool_box('check', True, False, 0)
+        self._prx_check_tool_box = self.add_top_tool_box('check', True, False, 0)
         #
         self._check_all_button = gui_qt_wgt_button.QtIconPressButton()
         self._check_all_button._set_name_text_('check all')
@@ -104,7 +104,7 @@ class PrxTreeView(
             '"LMB-click" for unchecked all visible items'
         )
 
-        self._prx_filter_tool_box = self.create_top_tool_box('filter', True, True, 1)
+        self._prx_filter_tool_box = self.add_top_tool_box('filter', True, True, 1)
 
         self._prx_filer_bar_0 = _utility.PrxFilterBar()
         self._prx_filter_tool_box.add_widget(self._prx_filer_bar_0)
@@ -133,7 +133,7 @@ class PrxTreeView(
     def generate_thread(self, cache_fnc, build_fnc, previous_fnc=None, post_fnc=None):
         self._qt_view._generate_thread_(cache_fnc, build_fnc, previous_fnc=previous_fnc, post_fnc=post_fnc)
 
-    def create_top_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
+    def add_top_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
         tool_box = _container_for_box.PrxHToolBox()
         if isinstance(insert_args, int):
             self._top_prx_tool_bar.insert_widget_at(insert_args, tool_box)

@@ -207,18 +207,22 @@ class _QtListView(
             if drag_data:
                 mime_data = QtCore.QMimeData()
 
-                c = len(drag_data)
-                draw_c = min(c, 40)
                 drag = QtGui.QDrag(self)
+
                 x, y = 0, 0
                 grd_w, grd_h = self.gridSize().width(), self.gridSize().height()
                 spc = 4
+
+                c = len(drag_data)
+                draw_c = min(c, 40)
+
                 frm_w, frm_h = grd_w, 20
                 pxm_w, pxm_h = grd_w, frm_h+spc*(draw_c-1)
+
                 # fixme: painter error
-                # pixmap = QtGui.QPixmap(pxm_w, pxm_h)
-                # pixmap.fill(QtGui.QColor(63, 63, 63, 255))
-                # painter = QtGui.QPainter(pixmap)
+                # drag_pixmap = QtGui.QPixmap(pxm_w, pxm_h)
+                # drag_pixmap.fill(QtGui.QColor(63, 63, 63, 255))
+                # painter = QtGui.QPainter(drag_pixmap)
                 #
                 # if painter.isActive():
                 #     for i_idx in range(draw_c):
@@ -226,6 +230,7 @@ class _QtListView(
                 #         painter.setPen(QtGui.QColor(*_gui_core.GuiRgba.LightPinkPurple))
                 #         painter.setBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
                 #         painter.drawRect(i_rect)
+                #
                 #         # last item
                 #         if i_idx == (draw_c-1):
                 #             i_item_model = items[i_idx]._item_model
@@ -248,12 +253,13 @@ class _QtListView(
                 #
                 # painter.end()
 
-                pixmap = current_item._item_model._pixmap_cache
-                drag.setPixmap(pixmap)
+                drag_pixmap = current_item._item_model._pixmap_cache
+                drag.setPixmap(drag_pixmap)
 
                 urls = []
                 for i_data in drag_data:
                     for j_k, j_v in i_data.items():
+                        # when 'file' in keys, put it to mine data
                         if j_k == 'file':
                             # noinspection PyArgumentList
                             urls.append(QtCore.QUrl.fromLocalFile(j_v))
@@ -262,8 +268,10 @@ class _QtListView(
                                 bsc_core.ensure_string(j_k),
                                 QtCore.QByteArray(bsc_core.ensure_string(j_v).encode('utf-8'))
                             )
+
                 if urls:
                     mime_data.setUrls(urls)
+
                 drag.setMimeData(mime_data)
                 drag.exec_(actions)
 

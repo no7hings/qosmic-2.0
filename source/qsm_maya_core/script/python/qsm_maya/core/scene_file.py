@@ -61,9 +61,12 @@ class SceneFile:
         return cls.FILE_TYPE_DICT.get(ext, cls.FILE_TYPE_ASCII)
 
     @classmethod
-    def reference_file(cls, file_path, namespace=':'):
+    def reference_file(cls, file_path, namespace=':', auto_namespace=False):
         if os.path.isfile(file_path) is False:
             return None
+
+        if auto_namespace is True:
+            namespace = os.path.splitext(os.path.basename(file_path))[0]
 
         file_path = cmds.file(
             file_path,

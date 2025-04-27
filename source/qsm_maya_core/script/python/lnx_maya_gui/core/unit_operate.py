@@ -324,13 +324,13 @@ class PrxTreeviewUnitForAssetOpt(
 
         self._tool_dict = {}
         if 'reference' in self.TOOL_INCLUDES:
-            self._prx_asset_prx_tool_box = self._prx_tree_view.create_top_tool_box(
+            self._prx_asset_prx_tool_box = self._prx_tree_view.add_top_tool_box(
                 'reference', insert_args=1
             )
             self._gui_build_reference_tools()
 
         if 'isolate-select' in self.TOOL_INCLUDES:
-            self._prx_isolate_select_tool_box = self._prx_tree_view.create_top_tool_box(
+            self._prx_isolate_select_tool_box = self._prx_tree_view.add_top_tool_box(
                 'isolate-select', insert_args=1
             )
             self._gui_build_isolate_select_tools()
