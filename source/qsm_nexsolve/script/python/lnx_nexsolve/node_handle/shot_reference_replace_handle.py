@@ -56,7 +56,7 @@ class LoadPremiereXml(object):
                                 i_name = i_ma.get_name_base()
                                 i_flag_0, i_node_0 = root.add_node(
                                     'LoadMayaScene',
-                                    path='/{}_{}_S'.format(node_name, i_name)
+                                    path='/{}_{}_MA'.format(node_name, i_name)
                                 )
                                 if i_flag_0 is True:
                                     i_w, i_h = i_node_0.get_size()
@@ -116,13 +116,14 @@ class LoadMayaScene(object):
 
             ma = qsm_gnl_dotfile.MayaAscii(file_path)
 
-            self._node.set('data.frame_range', ma.get_frame_range())
-            self._node.set('data.fps', ma.get_fps())
-            self._node.set('data.cameras', ma.get_cameras())
-            self._node.set('data.references', ma.get_reference_files(ignore_unloaded=ignore_unloaded))
+            self._node.set('data.frame_range', ma.get_frame_range(), ignore_undo=True)
+            self._node.set('data.fps', ma.get_fps(), ignore_undo=True)
+            self._node.set('data.cameras', ma.get_cameras(), ignore_undo=True)
+            self._node.set('data.references', ma.get_reference_files(ignore_unloaded=ignore_unloaded), ignore_undo=True)
 
             self._node.set(
-                'setting.location', '/root/maya/scene/{}'.format(bsc_storage.StgFileOpt(file_path).name_base)
+                'setting.location', '/root/maya/scene/{}'.format(bsc_storage.StgFileOpt(file_path).name_base),
+                ignore_undo=True
             )
 
 

@@ -1002,9 +1002,11 @@ class StandardNode(_AbsNode):
     def parameters(self):
         return self._param_root
     
-    def set(self, key, value):
+    def set(self, key, value, ignore_undo=False):
         p = self._param_root.get_parameter(key)
         if p:
+            if ignore_undo is True:
+                return p._set_value(value)
             return p.set_value(value)
 
     def get(self, key):

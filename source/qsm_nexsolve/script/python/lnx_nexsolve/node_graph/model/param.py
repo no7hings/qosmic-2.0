@@ -108,7 +108,7 @@ class _AbsTypedParam(_AbsParam):
     def _set_value_evt(self, value):
         return self._set_value(value)
 
-    # for gui
+    # ignore undo
     def _set_value(self, value):
         # use json for unicode and str compare
         if json.dumps(value) != json.dumps(self._data.value):

@@ -312,7 +312,7 @@ class _Base(object):
     CONNECT_SEP = '->'
 
     @classmethod
-    def _find_next_node_path(cls, path_set, prefix, parent_path=None):
+    def _find_next_node_path(cls, path_set, prefix, parent_path=None, **kwargs):
         parent_path = parent_path or ''
         path = '{}/{}'.format(parent_path, prefix)
         if path not in path_set:
@@ -734,6 +734,6 @@ class _ActionBase(object):
         # use for check file path is match this action
         return False
 
-    def accept_file(self, file_path):
+    def accept_file(self, file_path, index=0):
         # do something
         return False

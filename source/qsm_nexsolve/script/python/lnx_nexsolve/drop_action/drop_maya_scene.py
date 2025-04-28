@@ -22,15 +22,14 @@ class DropAction(_nxs_cor_base._ActionBase):
             return True
         return False
 
-    def accept_file(self, file_path):
-        flag, node = self._root_model.add_node('LoadMayaScene')
+    def accept_file(self, file_path, index=0):
+        name = '{}_MA'.format(os.path.splitext(os.path.basename(file_path))[0])
+        flag, node = self._root_model.add_node_on_cursor('LoadMayaScene', name=name, index=index)
         if flag is True:
-            self._root_model.move_node_to_cursor(node)
             file_name = os.path.splitext(os.path.basename(file_path))[0]
-            node.set('input.file', file_path)
-            node.set('setting.location', '/root/maya/scene/{}'.format(file_name))
+            node.set('input.file', file_path, ignore_undo=True)
+            node.set('setting.location', '/root/maya/scene/{}'.format(file_name), ignore_undo=True)
             node.execute('data.update_data')
-            # print(file_path, 'ABC')
 
 
 def register():

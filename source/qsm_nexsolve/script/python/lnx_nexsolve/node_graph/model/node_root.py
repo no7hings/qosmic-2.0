@@ -182,7 +182,7 @@ class RootNode(
             flag, node = self._generate_node(type_name, **kwargs)
             model_cls.create(node)
             w, h = node.get_size()
-            node._set_position((p.x()-w/2, p.y()-h/2))
+            node._set_position((p.x()-w/2+(w*index*1.25), p.y()-h/2))
             return flag, node
 
         def _undo_fnc():
@@ -191,15 +191,27 @@ class RootNode(
                 self._unregister_node(node)
             return node_path_new
 
-        if 'path' in kwargs:
-            node_path_new = kwargs['path']
+        if 'index' in kwargs:
+            # remove index key
+            index = kwargs.pop('index') or 0
         else:
-            node_path_new = self._find_next_node_path(self._data.nodes, type_name, **kwargs)
+            index = 0
+
+        if 'name' in kwargs:
+            node_path_new = self._find_next_node_path(self._data.nodes, kwargs['name'], **kwargs)
+        else:
+            if 'path' in kwargs:
+                node_path_new = kwargs['path']
+            else:
+                node_path_new = self._find_next_node_path(self._data.nodes, type_name, **kwargs)
 
         point = QtGui.QCursor().pos()
         p = self._gui._map_from_global(point)
 
         return self.undo_stack, _redo_fnc, _undo_fnc
+
+    def add_node_on_cursor(self, type_name, *args, **kwargs):
+        return self._push_add_node_cmd(type_name, *args, **kwargs)
 
     def move_node_to_cursor(self, node):
         point = QtGui.QCursor().pos()
@@ -1196,11 +1208,11 @@ class RootNode(
         if data.hasUrls():
             urls = data.urls()
             if urls:
-                for i_url in urls:
+                for i_index, i_url in enumerate(urls):
                     i_value = i_url.toLocalFile()
                     for j_action in self._generate_drop_actions():
                         if j_action.filter_file(i_value):
-                            j_action.accept_file(i_value)
+                            j_action.accept_file(i_value, index=i_index)
 
     @classmethod
     def register_drop_action(cls, action_name, action_cls):
