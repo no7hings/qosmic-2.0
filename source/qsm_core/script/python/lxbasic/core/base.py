@@ -880,9 +880,7 @@ class BscUuid(object):
 
     @classmethod
     def generate_by_text(cls, text):
-        if isinstance(text, six.text_type):
-            text = text.encode('utf-8')
-        return str(uuid.uuid3(uuid.UUID(cls.BASIC), str(text))).upper()
+        return str(uuid.uuid3(uuid.UUID(cls.BASIC), ensure_string(text))).upper()
 
     @classmethod
     def generate_by_hash_value(cls, hash_value):

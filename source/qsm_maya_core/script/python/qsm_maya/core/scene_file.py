@@ -1,5 +1,5 @@
 # coding:utf-8
-import six
+import re
 
 import os
 # noinspection PyUnresolvedReferences
@@ -25,6 +25,29 @@ class SceneFile:
         '.abc': FILE_TYPE_ALEMBIC,
         '.fbx': 'FBX',
     }
+
+    @classmethod
+    def _to_name_args(cls, name):
+        match = re.match(r'([^\d]*)(\d*)$', name)
+        if match:
+            return match.group(1), match.group(2)
+        return name, ''
+
+    @classmethod
+    def next_namespace(cls, namespace):
+        if cmds.namespace(exists=namespace):
+            text, number = cls._to_name_args(namespace)
+            if number:
+                idx = int(number)
+            else:
+                idx = 1
+
+            new_namespace = '{}{}'.format(text, idx)
+            while cmds.namespace(exists=new_namespace):
+                idx += 1
+                new_namespace = '{}{}'.format(text, idx)
+            return new_namespace
+        return namespace
 
     @classmethod
     def get_namespace(cls, file_path):
@@ -87,7 +110,7 @@ class SceneFile:
         return cmds.file(query=1, expandName=1)
 
     @classmethod
-    def import_file(cls, file_path, namespace=':'):
+    def import_file(cls, file_path, namespace=':', auto_namespace=False):
         """
     Set/query the currently set file options. file options are used while saving a maya file. Two file option flags supported in current file command are v and p.
     v(verbose) indicates whether long or short attribute names and command flags names are used when saving the file. Used by both maya ascii and maya binary file formats.
@@ -107,6 +130,11 @@ class SceneFile:
         # auto load dependent plugin
         if file_type == cls.FILE_TYPE_ALEMBIC:
             cmds.loadPlugin('AbcImport', quiet=1)
+
+        if auto_namespace is True:
+            namespace = os.path.splitext(os.path.basename(file_path))[0]
+            # open file can not update namespace auto, we use this fnc to generate a new namespace
+            namespace = cls.next_namespace(namespace)
 
         return cmds.file(
             file_path,
