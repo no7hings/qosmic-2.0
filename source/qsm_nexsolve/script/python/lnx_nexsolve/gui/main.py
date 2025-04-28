@@ -13,10 +13,12 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 from .. import node_type as _node_type
 
+from .. import drop_action as _drop_action
+
 from . import widgets as _widgets
 
 
-def register_node_types_from(module):
+def register_fnc(module):
     dir_path = os.path.dirname(module.__file__)
 
     all_names = os.listdir(dir_path)
@@ -120,7 +122,8 @@ class PrxNexsolveTool(gui_prx_widgets.PrxBasePanel):
 
         self._node_graph._root_node_gui.scene_path_accepted.connect(self._update_scene_path)
 
-        register_node_types_from(_node_type)
+        register_fnc(_node_type)
+        register_fnc(_drop_action)
 
         # self._node_graph._scene_file.open('C:/Users/nothings/QSM/scenes/untitled_2.nxs_prj')
 

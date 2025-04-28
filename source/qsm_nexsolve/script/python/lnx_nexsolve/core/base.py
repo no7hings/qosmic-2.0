@@ -702,3 +702,38 @@ class _Dict(object):
 
     def update(self, **kwargs):
         self._dict.update(**kwargs)
+
+
+class _ActionBase(object):
+    NAME = 'DropMayaScene'
+
+    INSTANCE_DICT = dict()
+
+    def __new__(cls, *args, **kwargs):
+        name, root_model = args[:2]
+        if name in cls.INSTANCE_DICT:
+            return cls.INSTANCE_DICT[name]
+
+        self = super(_ActionBase, cls).__new__(cls)
+
+        self._name = name
+        self._root_model = root_model
+
+        cls.INSTANCE_DICT[name] = self
+        return self
+
+    def __str__(self):
+        return 'DropAction({})'.format(
+            self._name
+        )
+
+    def __repr__(self):
+        return '\n'+self.__str__()
+
+    def filter_file(self, file_path):
+        # use for check file path is match this action
+        return False
+
+    def accept_file(self, file_path):
+        # do something
+        return False

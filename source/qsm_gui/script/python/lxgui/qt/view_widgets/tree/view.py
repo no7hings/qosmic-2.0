@@ -373,6 +373,7 @@ class _QtTreeView(
             menu._popup_start_()
 
     def dragEnterEvent(self, event):
+        # accept when has url (file)
         if event.mimeData().hasUrls():
             event.accept()
             return
@@ -380,7 +381,7 @@ class _QtTreeView(
         return
 
     def dragMoveEvent(self, event):
-        QtCore.QMimeData()
+        # accept when has url (file)
         if event.mimeData().hasUrls():
             event.setDropAction(QtCore.Qt.MoveAction)
             event.accept()

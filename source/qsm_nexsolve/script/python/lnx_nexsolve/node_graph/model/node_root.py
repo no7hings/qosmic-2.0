@@ -1,20 +1,19 @@
 # coding:utf-8
-import collections
+from __future__ import print_function
 
-import os
+import collections
 
 import contextlib
 
 import functools
 
 import json
+
 import sys
 
 import six
 
 import lxbasic.core as bsc_core
-
-import lxbasic.storage as bsc_storage
 
 import lxgui.core as gui_core
 
@@ -40,7 +39,8 @@ class RootNode(
 ):
     ActionFlags = _cor_action.ActionFlags
 
-    NODE_GUI_CLS_DICT = dict()
+    NODE_BUILD_DICT = dict()
+    DROP_ACTION_BUILD_DICT = dict()
 
     def __init__(self, gui_widget):
         super(RootNode, self).__init__(gui_widget)
@@ -143,7 +143,7 @@ class RootNode(
 
     def _add_node_menu_data_generate_fnc(self):
         sub_menu_data = []
-        for k, v in self.NODE_GUI_CLS_DICT.items():
+        for k, v in self.NODE_BUILD_DICT.items():
             if self._gui_language == 'chs':
                 i_gui_type_name = v.get('type_gui_name_chs')
             else:
@@ -173,10 +173,10 @@ class RootNode(
     @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeAdd)
     def _push_add_node_cmd(self, type_name, *args, **kwargs):
         def _redo_fnc():
-            if type_name not in self.NODE_GUI_CLS_DICT:
+            if type_name not in self.NODE_BUILD_DICT:
                 raise RuntimeError()
 
-            node_data = self.NODE_GUI_CLS_DICT[type_name]
+            node_data = self.NODE_BUILD_DICT[type_name]
             model_cls = node_data['model_cls']
 
             flag, node = self._generate_node(type_name, **kwargs)
@@ -201,14 +201,20 @@ class RootNode(
 
         return self.undo_stack, _redo_fnc, _undo_fnc
 
+    def move_node_to_cursor(self, node):
+        point = QtGui.QCursor().pos()
+        p = self._gui._map_from_global(point)
+        w, h = node.get_size()
+        node._set_position((p.x()-w/2, p.y()-h/2))
+
     @_cor_undo.GuiUndoFactory.push(_cor_undo.UndoActions.NodeAdd)
     def add_node(self, type_name, *args, **kwargs):
         # do not remove *args
         def _redo_fnc():
-            if type_name not in self.NODE_GUI_CLS_DICT:
+            if type_name not in self.NODE_BUILD_DICT:
                 raise RuntimeError()
 
-            node_data = self.NODE_GUI_CLS_DICT[type_name]
+            node_data = self.NODE_BUILD_DICT[type_name]
             model_cls = node_data['model_cls']
 
             flag, node = self._generate_node(type_name, **kwargs)
@@ -293,7 +299,7 @@ class RootNode(
         type_gui_name=None, type_gui_name_chs=None
     ):
         gui_cls.MODEL_CLS = model_cls
-        cls.NODE_GUI_CLS_DICT[type_name] = dict(
+        cls.NODE_BUILD_DICT[type_name] = dict(
             model_cls=model_cls,
             gui_cls=gui_cls,
             version=version,
@@ -302,7 +308,7 @@ class RootNode(
         )
 
     def _generate_node(self, type_name, name=None, parent_path=None, path=None, *args, **kwargs):
-        if type_name not in self.NODE_GUI_CLS_DICT:
+        if type_name not in self.NODE_BUILD_DICT:
             raise RuntimeError()
 
         if path is None:
@@ -313,7 +319,7 @@ class RootNode(
             return False, self._data.nodes[path]
 
         path_opt = bsc_core.BscNodePathOpt(path)
-        node_data = self.NODE_GUI_CLS_DICT[type_name]
+        node_data = self.NODE_BUILD_DICT[type_name]
         gui_cls = node_data['gui_cls']
         gui = gui_cls()
         self._gui.scene().addItem(gui)
@@ -1183,3 +1189,24 @@ class RootNode(
 
         if nodes:
             self._frame_nodes([x._gui for x in nodes])
+
+    # drop
+    def do_drop(self, event):
+        data = event.mimeData()
+        if data.hasUrls():
+            urls = data.urls()
+            if urls:
+                for i_url in urls:
+                    i_value = i_url.toLocalFile()
+                    for j_action in self._generate_drop_actions():
+                        if j_action.filter_file(i_value):
+                            j_action.accept_file(i_value)
+
+    @classmethod
+    def register_drop_action(cls, action_name, action_cls):
+        cls.DROP_ACTION_BUILD_DICT[action_name] = dict(
+            action_cls=action_cls
+        )
+
+    def _generate_drop_actions(self):
+        return [v['action_cls'](k, self) for k, v in self.DROP_ACTION_BUILD_DICT.items()]

@@ -1,10 +1,10 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-from ...core import base as _scn_cor_base
+from ...core import base as _nxs_cor_base
 
 
-class InputModel(_scn_cor_base._PortBase):
+class InputModel(_nxs_cor_base._PortBase):
     def __init__(self, *args, **kwargs):
         super(InputModel, self).__init__(*args, **kwargs)
         self._gui_data.connection_path = None
@@ -61,7 +61,7 @@ class InputModel(_scn_cor_base._PortBase):
         self.root_model._connect_ports(source_port, self)
 
 
-class OutputModel(_scn_cor_base._PortBase):
+class OutputModel(_nxs_cor_base._PortBase):
     def __init__(self, *args, **kwargs):
         super(OutputModel, self).__init__(*args, **kwargs)
         

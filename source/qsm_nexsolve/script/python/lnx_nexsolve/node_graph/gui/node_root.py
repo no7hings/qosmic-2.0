@@ -81,11 +81,16 @@ class RootNodeGui(
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
         self.setRenderHint(QtGui.QPainter.Antialiasing, True)
-        self.setDragMode(self.RubberBandDrag)
         self.setTransformationAnchor(self.NoAnchor)
         self.setResizeAnchor(self.NoAnchor)
         self.setInteractive(True)
+
+        # drag
+        # self.setDragMode(self.RubberBandDrag)
         self.setDragMode(self.NoDrag)
+
+        # drop
+        self.setAcceptDrops(True)
 
         self._init_thread_worker_extra_def_(self)
 
@@ -673,6 +678,27 @@ class RootNodeGui(
 
         if menu is not None:
             menu._popup_start_()
+
+    # for drop
+    def dragEnterEvent(self, event):
+        # accept when has url (file)
+        if event.mimeData().hasUrls():
+            event.accept()
+            return
+        event.ignore()
+        return
+
+    def dragMoveEvent(self, event):
+        # accept when has url (file)
+        if event.mimeData().hasUrls():
+            event.setDropAction(QtCore.Qt.CopyAction)
+            event.accept()
+            return
+        event.ignore()
+        return
+
+    def dropEvent(self, event):
+        self._model.do_drop(event)
 
     def _get_gui_translate(self):
         transform = self.transform()
