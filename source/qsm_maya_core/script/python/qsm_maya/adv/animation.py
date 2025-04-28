@@ -280,6 +280,21 @@ class AdvOpt(_base.AdvNamespaceExtra):
         _mya_core.Transform.set_translate(main_locator, (x_0+x, y_0+y, z_0+z))
         _mya_motion.ControlMove.remove_locator_fnc(main_control)
 
+    def move_to_mouse(self):
+        pos = _mya_core.ViewportProject.compute_point_at_mouse()
+        if pos:
+            self.move_to(pos)
+
+    def move_to(self, pos):
+        main_control = self._control_set.get('Main')
+        if main_control:
+            _mya_core.Transform.set_translate(main_control, pos)
+
+    def select_main(self):
+        main_control = self._control_set.get('Main')
+        if main_control:
+            _mya_core.Selection.set_current(main_control)
+
 
 class AdvChrOpt(AdvOpt):
     LOG_KEY = 'adv rig motion'

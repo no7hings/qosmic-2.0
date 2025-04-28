@@ -1,12 +1,16 @@
 # coding:utf-8
-# noinspection PyUnresolvedReferences
-import maya.cmds as cmds
+from .wrap import *
 
 
 class Selection(object):
     @classmethod
     def set(cls, paths):
         cmds.select([x for x in paths if cmds.objExists(x)])
+
+    @classmethod
+    def set_current(cls, path):
+        if cmds.objExists(path):
+            cmds.select(path)
 
     @classmethod
     def clear(cls):

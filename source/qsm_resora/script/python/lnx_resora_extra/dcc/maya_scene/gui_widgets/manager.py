@@ -1,9 +1,11 @@
 # coding:utf-8
 import functools
 
+import lxgui.core as gui_core
+
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_resora.core.drag as lnx_rsr_cor_drag
+import lnx_resora.core.drag_action as lnx_rsr_cor_drag
 
 import lnx_resora.gui.abstracts as lnx_rsr_gui_abstracts
 
@@ -13,6 +15,8 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
         Reference = 'reference'
         Import = 'import'
         Open = 'open'
+
+    GUI_HIS_GROUP_DRAG_MODE = 'resora.dcc.maya_scene.drag_mode'
 
     def __init__(self, window, session, *args, **kwargs):
         super(GuiResourceManagerMain, self).__init__(window, session, *args, **kwargs)
@@ -47,19 +51,30 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
         self._auto_namespace_button.set_name('use namespace')
         self._auto_namespace_button.set_icon_name('namespace')
         self._auto_namespace_button.set_tool_tip(
-            '"LMB-click" for turn "on"/"off" auto namespace, when reference or import.'
+            '"LMB-click" for turn "on/off" "auto namespace", when drag mode is "reference" or "import".'
         )
         self._auto_namespace_button.set_checked(True)
+
+        self._move_to_cursor_button = gui_prx_widgets.PrxToggleButton()
+        self._drag_option_prx_tool_box.add_widget(self._move_to_cursor_button)
+        self._move_to_cursor_button.set_name('move to cursor')
+        self._move_to_cursor_button.set_icon_name('resora/maya_move_to_cursor')
+        self._move_to_cursor_button.set_tool_tip(
+            '"LMB-click" for turn "on/off" "move to cursor", \
+            when drag mode is "reference" or "import" and "auto namespace" is "on".'
+        )
+        self._move_to_cursor_button.set_checked(True)
 
     def _gui_switch_drag_mode(self, drag_mode):
         if drag_mode != self._drag_mode:
             self._drag_mode = drag_mode
+            gui_core.GuiHistoryStage().set_one(self.GUI_HIS_GROUP_DRAG_MODE, drag_mode)
 
     def _gui_get_drag_mode(self):
         return self._drag_mode
 
     def gui_page_setup_sup_fnc(self):
-        self._drag_mode = 'reference'
+        self._drag_mode = gui_core.GuiHistoryStage().get_one(self.GUI_HIS_GROUP_DRAG_MODE) or 'reference'
 
         self._drag_mode_switch_prx_tool_box = self.gui_add_top_tool_box('drag mode switch')
         self._gui_add_drag_mode_switch_tools()
@@ -72,11 +87,17 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
 
         file_path = self._scr_stage.get_node_parameter(scr_entity_path, 'source')
         auto_namespace = self._auto_namespace_button.get_is_checked()
+        move_to_cursor = self._move_to_cursor_button.get_is_checked()
         if file_path:
-            if self._drag_mode == self.DragMode.Import:
-                file_path = lnx_rsr_cor_drag.MayaSceneFileMel.generate_import_mel(file_path, auto_namespace)
-            elif self._drag_mode == self.DragMode.Reference:
-                file_path = lnx_rsr_cor_drag.MayaSceneFileMel.generate_reference_mel(file_path, auto_namespace)
+
+            if self._drag_mode == self.DragMode.Reference:
+                file_path = lnx_rsr_cor_drag.MayaSceneFileMel.generate_reference_mel(
+                    file_path, auto_namespace, move_to_cursor
+                )
+            elif self._drag_mode == self.DragMode.Import:
+                file_path = lnx_rsr_cor_drag.MayaSceneFileMel.generate_import_mel(
+                    file_path, auto_namespace, move_to_cursor
+                )
             elif self._drag_mode == self.DragMode.Open:
                 file_path = lnx_rsr_cor_drag.MayaSceneFileMel.generate_open_mel(file_path)
 

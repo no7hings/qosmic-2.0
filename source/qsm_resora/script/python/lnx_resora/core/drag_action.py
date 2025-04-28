@@ -21,16 +21,22 @@ class MayaSceneFileMel:
         return temp_file_path
 
     @classmethod
-    def generate_import_mel(cls, scene_path, auto_namespace=False):
-        mel_script = u'python("import qsm_maya.core as c; c.SceneFile.import_file(\\"{}\\", auto_namespace={})");'.format(
-            scene_path, auto_namespace
+    def generate_import_mel(cls, scene_path, auto_namespace=False, move_to_mouse=False):
+        mel_script = (
+            u'python("import lnx_maya_resora.core as c; '
+            u'c.FileDragAction.import_one(\\"{}\\", auto_namespace={}, move_to_mouse={})");'
+        ).format(
+            scene_path, auto_namespace, move_to_mouse
         )
         return cls.to_temp_mel_file(mel_script)
 
     @classmethod
-    def generate_reference_mel(cls, scene_path, auto_namespace=False):
-        mel_script = u'python("import qsm_maya.core as c; c.SceneFile.reference_file(\\"{}\\", auto_namespace={})");'.format(
-            scene_path, auto_namespace
+    def generate_reference_mel(cls, scene_path, auto_namespace=False, move_to_mouse=False):
+        mel_script = (
+            u'python("import lnx_maya_resora.core as c; '
+            u'c.FileDragAction.reference_one(\\"{}\\", auto_namespace={}, move_to_mouse={})");'
+        ).format(
+            scene_path, auto_namespace, move_to_mouse
         )
         return cls.to_temp_mel_file(mel_script)
 

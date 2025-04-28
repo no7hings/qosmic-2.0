@@ -17,8 +17,8 @@ import lnx_screw.scripts as lnx_scr_scripts
 class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
     CONFIGURE_KEY = 'resora/gui/main'
 
-    KEY_PAGE_KEYS = 'resora.page_keys'
-    KEY_PAGE_KEY_CURRENT = 'resora.page_key_current'
+    GUI_HIS_KEY_PAGE_KEYS = 'resora.page_keys'
+    GUI_HIS_KEY_PAGE_KEY_CURRENT = 'resora.page_key_current'
 
     @staticmethod
     def _gui_find_manager_page_cls(resource_type):
@@ -152,8 +152,8 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
 
     def gui_close_fnc(self):
         page_keys = self._prx_tab_view.get_all_page_keys()
-        gui_core.GuiHistoryStage().set_array(self.KEY_PAGE_KEYS, page_keys)
-        gui_core.GuiHistoryStage().set_one(self.KEY_PAGE_KEY_CURRENT, self._prx_tab_view.get_current_key())
+        gui_core.GuiHistoryStage().set_array(self.GUI_HIS_KEY_PAGE_KEYS, page_keys)
+        gui_core.GuiHistoryStage().set_one(self.GUI_HIS_KEY_PAGE_KEY_CURRENT, self._prx_tab_view.get_current_key())
 
     def gui_setup_fnc(self):
         self.set_main_style_mode(1)
@@ -174,8 +174,8 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
             [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
         )
 
-        tab_keys = gui_core.GuiHistoryStage().get_array(self.KEY_PAGE_KEYS)
-        tab_key_current = gui_core.GuiHistoryStage().get_one(self.KEY_PAGE_KEY_CURRENT)
+        tab_keys = gui_core.GuiHistoryStage().get_array(self.GUI_HIS_KEY_PAGE_KEYS)
+        tab_key_current = gui_core.GuiHistoryStage().get_one(self.GUI_HIS_KEY_PAGE_KEY_CURRENT)
         page_keys = self._all_scr_stage_keys
         if tab_keys:
             _ = [x for x in tab_keys if x in self._all_scr_stage_keys]

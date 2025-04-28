@@ -316,6 +316,11 @@ class QtContentDialog(_QtDialog):
 class QtMessageDialog(QtContentDialog):
     def __init__(self, *args, **kwargs):
         super(QtMessageDialog, self).__init__(*args, **kwargs)
+        main_window = _qt_core.GuiQtDcc.get_qt_main_window()
+        if main_window != self:
+            self.setParent(
+                main_window, _qt_core.QtCore.Qt.Window
+            )
         self.setWindowFlags(QtCore.Qt.Dialog)
         self.setWindowModality(QtCore.Qt.ApplicationModal)
 

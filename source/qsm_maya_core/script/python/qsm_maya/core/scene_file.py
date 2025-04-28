@@ -150,10 +150,15 @@ class SceneFile:
         )
 
     @classmethod
-    def import_scene(cls, file_path, namespace=':'):
+    def import_scene(cls, file_path, namespace=':', auto_namespace=False):
         """
         file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash true -namespace ":" -options "v=0;p=17;f=0"  -pr  -importFrameRate true  -importTimeRange "override" "X:/QSM_TST/A001/A001_001/动画/通过文件/A001_001_001.ma";
         """
+        if auto_namespace is True:
+            namespace = os.path.splitext(os.path.basename(file_path))[0]
+            # open file can not update namespace auto, we use this fnc to generate a new namespace
+            namespace = cls.next_namespace(namespace)
+
         cmds.file(
             file_path,
             i=1,
@@ -167,6 +172,7 @@ class SceneFile:
             importFrameRate=1,
             importTimeRange='override'
         )
+        return namespace
 
     @classmethod
     def import_fbx(cls, file_path, namespace=':'):
