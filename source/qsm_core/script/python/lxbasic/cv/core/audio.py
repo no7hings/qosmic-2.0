@@ -1,9 +1,5 @@
 # coding:utf-8
-import os.path
-
-import numpy as np
-
-import cv2
+import os
 
 import pydub
 
@@ -16,6 +12,8 @@ import lxbasic.core as bsc_core
 import lxbasic.storage as bsc_storage
 
 import pickle
+
+from .wrap import *
 
 
 class AudioCaptureOpt(object):
@@ -41,8 +39,14 @@ class AudioCaptureOpt(object):
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
 
         cache_directory_path = '{}/{}'.format(cache_root, region)
-        if not os.path.exists(cache_directory_path):
-            os.makedirs(cache_directory_path)
+
+        # this fnc may run in thread, os.path.exists make "WindowsError(183, '')"
+        # noinspection PyBroadException
+        try:
+            if not os.path.exists(cache_directory_path):
+                os.makedirs(cache_directory_path)
+        except Exception:
+            pass
         
         return key, cache_directory_path
 
@@ -67,11 +71,16 @@ class AudioCaptureOpt(object):
     def get_data(self):
         n_channels = self._audio_segment.channels
         frame_rate = self._audio_segment.frame_rate
-        samples = np.array(self._audio_segment.get_array_of_samples())
+        samples = numpy.array(self._audio_segment.get_array_of_samples())
         # split channel
         if n_channels == 2:
             samples = samples.reshape((-1, 2))
         return samples, frame_rate, self._audio_segment.duration_seconds, n_channels
+
+    def get_info(self):
+        return dict(
+            microsecond=self.get_frame_count()
+        )
 
     def get_frame_rate(self):
         return self._fps
@@ -103,7 +112,7 @@ class AudioCaptureOpt(object):
         audio = pydub.AudioSegment.from_file(wav_path)
         n_channels = audio.channels
         frame_rate = audio.frame_rate
-        samples = np.array(audio.get_array_of_samples())
+        samples = numpy.array(audio.get_array_of_samples())
         # split channel
         if n_channels == 2:
             samples = samples.reshape((-1, 2))
@@ -112,9 +121,9 @@ class AudioCaptureOpt(object):
 
     @classmethod
     def _generate_cv_image(cls, waveform, img_width, img_height, n_channels):
-        cv_img = np.ones((img_height, img_width, 3), dtype=np.uint8)*31
+        cv_img = numpy.ones((img_height, img_width, 3), dtype=numpy.uint8)*31
         mid_y = img_height//2
-        max_value = np.max(np.abs(waveform))
+        max_value = numpy.max(numpy.abs(waveform))
         step = len(waveform)//img_width
 
         for i in range(img_width):
@@ -142,32 +151,6 @@ class AudioCaptureOpt(object):
         file_path = bsc_core.ensure_unicode(file_path)
         file_path = bsc_core.ensure_mbcs(file_path)
         cv2.imwrite(file_path, cv_img)
-
-    def play_from(self, percent):
-        frame_count = self.get_frame_count()
-        start_time = frame_count*percent
-
-        segment_to_play = self._audio_segment[start_time:]
-
-        p = pyaudio.PyAudio()
-
-        stream = p.open(
-            format=pyaudio.paInt16,
-            channels=segment_to_play.channels,
-            rate=segment_to_play.frame_rate,
-            output=True
-        )
-
-        samples = segment_to_play.get_array_of_samples()
-        stream.write(samples.tostring())
-
-        stream.stop_stream()
-        stream.close()
-        p.terminate()
-
-    def play_from_with_thread(self, percent):
-        thread = threading.Thread(target=self.play_from, kwargs=dict(percent=percent))
-        thread.start()
 
     def compute_image_size(self):
         img_w_min, img_w_max = 512, 4096

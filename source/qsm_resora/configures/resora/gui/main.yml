@@ -155,6 +155,9 @@ entity-type-actions:
                 - 'resora-actions/node-assign-tag-auto': {
                     gui_parent: '/Assign', gui_name: 'Tag', gui_parent_chs: '/指定', gui_name_chs: '标签'
                 }
+                - 'resora-actions/node-assign-tag-by-name-auto': {
+                    gui_parent: '/Assign', gui_name: 'Tag (by Name)', gui_parent_chs: '/指定', gui_name_chs: '标签（通过名字）'
+                }
 
                 # lock
                 - 'resora-actions/node-lock-enable-auto': {

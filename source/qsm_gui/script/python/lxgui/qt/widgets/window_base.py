@@ -265,6 +265,7 @@ class QtMainWindow(
             w._set_no_visible_(True)
         if kwargs.get('show_cancel', False):
             w._set_cancel_visible_(True)
+
         w._set_message_(message)
         if 'status' in kwargs:
             status = kwargs['status']

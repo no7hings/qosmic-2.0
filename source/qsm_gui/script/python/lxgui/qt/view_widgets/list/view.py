@@ -165,6 +165,8 @@ class _QtListView(
         # data from item
         item = self.itemAt(event.pos())
         if item:
+            item._item_model._stop_any_play()
+
             item_menu_data = item._item_model.get_menu_data()
             item_menu_content = item._item_model.get_menu_content()
             item_menu_data_generate_fnc = item._item_model.get_menu_data_generate_fnc()

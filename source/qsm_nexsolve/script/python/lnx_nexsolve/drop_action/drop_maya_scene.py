@@ -17,6 +17,7 @@ class DropAction(_nxs_cor_base._ActionBase):
 
     def filter_file(self, file_path):
         ext = os.path.splitext(file_path)[-1]
+
         # support ".ma" only now
         if ext in {'.ma'}:
             return True

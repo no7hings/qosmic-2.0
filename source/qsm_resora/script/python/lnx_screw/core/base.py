@@ -1272,40 +1272,42 @@ FLUSH PRIVILEGES;
             node_path, 'thumbnail', thumbnail_jpg_path
         )
 
-    def upload_node_audio(self, node_path, file_path, collect_source=False):
-        file_opt = bsc_storage.StgFileOpt(file_path)
-        if file_opt.get_is_file() is False:
+    # media
+    def upload_node_image_sequence(self, node_path, file_path, fps, collect_source=False):
+        file_paths = bsc_storage.StgFileTiles.get_tiles(file_path)
+        if not file_paths:
             return False
 
         node_name = bsc_core.BscNodePathOpt(node_path).name
         options = copy.copy(self._options)
         options['node'] = node_name
 
+        frame_count = len(file_paths)
         thumbnail_jpg_path = self.NodePathPattens.ThumbnailJpg.format(**options)
-
-        import lxbasic.cv.core as bsc_cv_core
-
-        capture_opt = bsc_cv_core.AudioCaptureOpt(file_path)
-        capture_opt.create_thumbnail(thumbnail_jpg_path, replace=False)
-
-        preview_audio_mp3_path = self.NodePathPattens.PreviewMp3.format(**options)
-        capture_opt.create_compress(preview_audio_mp3_path, replace=False)
+        mid = int(len(file_paths)/2)
+        image_path = file_paths[mid]
+        bsc_storage.StgFileOpt(image_path).copy_to_file(thumbnail_jpg_path)
 
         self.create_or_update_node_parameter(
-            node_path, 'thumbnail', thumbnail_jpg_path
+            node_path, 'image_sequence', file_path
         )
-
         self.create_or_update_node_parameter(
-            node_path, 'source_type', 'audio'
+            node_path, 'fps', fps
         )
-
         self.create_or_update_node_parameter(
-            node_path, 'audio', preview_audio_mp3_path
+            node_path, 'frame_count', frame_count
+        )
+        self.create_or_update_node_parameter(
+            node_path, 'start_frame', 1
+        )
+        self.create_or_update_node_parameter(
+            node_path, 'end_frame', frame_count
         )
 
         if collect_source is True:
             source_dir_path = self.generate_node_source_dir_path(node_path)
-            file_path = file_opt.copy_to_directory(source_dir_path)
+            for i in file_paths:
+                bsc_storage.StgFileOpt(i).copy_to_directory(source_dir_path)
 
         self.create_or_update_node_parameter(
             node_path, 'source', file_path
@@ -1323,7 +1325,11 @@ FLUSH PRIVILEGES;
         thumbnail_jpg_path = self.NodePathPattens.ThumbnailJpg.format(**options)
 
         import lxbasic.cv.core as bsc_cv_core
-        bsc_cv_core.VideoCaptureOpt(file_path).create_thumbnail(thumbnail_jpg_path, replace=True)
+
+        capture_opt = bsc_cv_core.VideoCaptureOpt(file_path)
+        capture_opt.create_thumbnail(thumbnail_jpg_path, replace=True)
+        frame_count = capture_opt.get_frame_count()
+        fps = capture_opt.get_frame_rate()
 
         preview_video_path = self.NodePathPattens.PreviewMov.format(**options)
 
@@ -1332,13 +1338,69 @@ FLUSH PRIVILEGES;
         self.create_or_update_node_parameter(
             node_path, 'thumbnail', thumbnail_jpg_path
         )
-
         self.create_or_update_node_parameter(
             node_path, 'source_type', 'video'
         )
-
         self.create_or_update_node_parameter(
             node_path, 'video', preview_video_path
+        )
+        self.create_or_update_node_parameter(
+            node_path, 'fps', fps
+        )
+        self.create_or_update_node_parameter(
+            node_path, 'frame_count', frame_count
+        )
+        self.create_or_update_node_parameter(
+            node_path, 'start_frame', 1
+        )
+        self.create_or_update_node_parameter(
+            node_path, 'end_frame', frame_count
+        )
+
+        if collect_source is True:
+            source_dir_path = self.generate_node_source_dir_path(node_path)
+            file_path = file_opt.copy_to_directory(source_dir_path)
+
+        self.create_or_update_node_parameter(
+            node_path, 'source', file_path
+        )
+
+    def upload_node_audio(self, node_path, file_path, collect_source=False):
+        file_opt = bsc_storage.StgFileOpt(file_path)
+        if file_opt.get_is_file() is False:
+            return False
+
+        node_name = bsc_core.BscNodePathOpt(node_path).name
+        options = copy.copy(self._options)
+        options['node'] = node_name
+
+        thumbnail_jpg_path = self.NodePathPattens.ThumbnailJpg.format(**options)
+
+        import lxbasic.cv.core as bsc_cv_core
+
+        capture_opt = bsc_cv_core.AudioCaptureOpt(file_path)
+        capture_opt.create_thumbnail(thumbnail_jpg_path, replace=False)
+        frame_count = capture_opt.get_frame_count()
+
+        preview_audio_mp3_path = self.NodePathPattens.PreviewMp3.format(**options)
+
+        capture_opt.create_compress(preview_audio_mp3_path, replace=False)
+
+        self.create_or_update_node_parameter(
+            node_path, 'thumbnail', thumbnail_jpg_path
+        )
+
+        self.create_or_update_node_parameter(
+            node_path, 'source_type', 'audio'
+        )
+
+        self.create_or_update_node_parameter(
+            node_path, 'audio', preview_audio_mp3_path
+        )
+
+        self.create_or_update_node_parameter(
+            # is microsecond
+            node_path, 'frame_count', frame_count
         )
 
         if collect_source is True:
@@ -1481,3 +1543,21 @@ FLUSH PRIVILEGES;
                         l_p_1.do_update()
 
                 l_p_0.do_update()
+
+    def generate_tag_map(self, language):
+        dict_ = {}
+        for i in self.find_all(
+            self.EntityTypes.Tag,
+            filters=[
+                ('type', 'is', 'node'),
+                ('kind', 'is not', 'unavailable')
+            ]
+        ):
+            if language == 'chs':
+                i_key = i.gui_name_chs
+            else:
+                i_key = i.gui_name
+
+            i_value = i.path
+            dict_.setdefault(i_key, []).append(i_value)
+        return dict_

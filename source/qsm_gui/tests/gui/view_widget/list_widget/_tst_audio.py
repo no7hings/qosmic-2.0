@@ -49,16 +49,12 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         random.seed(0)
 
-        for i in range(100):
+        for i in range(10):
             i_path = '/test_{}'.format(i)
             i_create_flag, i_item = self._d._view._view_model.create_item(i_path)
             # i_item._item_model.set_icon_name('file/file')
             i_item._item_model.set_tool_tip('TEST-{}'.format(i))
             i_item._item_model.register_keyword_filter_keys(['TEST-{}'.format(i), u'测试'])
-            if i% 3:
-                i_item._item_model.set_locked(True)
-            elif i% 4:
-                i_item._item_model.set_status(i_item._item_model.Status.Error)
 
             i_item._item_model.set_group_dict(
                 dict(
@@ -84,40 +80,30 @@ class W(gui_prx_widgets.PrxBaseWindow):
         if index%2:
             return [
                 item, dict(
-                    image_sequence='Z:/libraries/lazy-resource/all/motion_test/ceshi_jichu_paobu_run_female_anim/preview/images/image.%04d.jpg'
-                )
-            ]
-        elif index%3:
-            return [
-                item, dict(
-                    video='Z:/temporaries/dynamic_gpu/test_1.mov'
-                )
-            ]
-        elif index%4:
-            return [
-                item, dict(
                     audio='Z:/temporaries/tst_wav/751427__flavioconcini__fx-sound.wav'
+                )
+            ]
+        if index%3:
+            return [
+                item, dict(
+                    audio='Z:/temporaries/tst_wav/751748__scpsea__ender-jaguar-growl-and-moaning.mp3'
                 )
             ]
         else:
             return [
                 item, dict(
-                    image='Z:/libraries/lazy-resource/all/asset_test/QSM_TST_amanda/thumbnail.jpg'
+                    audio='Z:/temporaries/tst_wav/751515__recalltv__happy-piano-tag.mp3'
                 )
             ]
 
     def build_fnc(self, data):
         if data:
             item, property_dict = data
-            if 'image_sequence' in property_dict:
-                item._item_model.set_image_sequence(property_dict['image_sequence'])
-            elif 'video' in property_dict:
-                item._item_model.set_video(property_dict['video'])
-            elif 'image' in property_dict:
-                item._item_model.set_image(property_dict['image'])
-            # todo: load audio must use delay mode
-            elif 'audio' in property_dict:
-                item._item_model.set_audio(property_dict['audio'])
+            item._item_model.set_image(
+                'Z:/caches/temporary/.audio-cache/13Q/FAB87DAD-4C43-3124-9A42-C6131007B596.png', source_type='audio'
+            )
+            if 'audio' in property_dict:
+                item._item_model.set_audio(property_dict['audio'], delay_flag=False)
 
             # item._item_model.refresh_force()
 

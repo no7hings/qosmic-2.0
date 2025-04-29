@@ -12,11 +12,14 @@ import itertools
 
 class Text(object):
     @staticmethod
-    def split_any_to_texts(text):
-        # to string
-        text = ensure_unicode(text)
-        return re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text)
+    def split(text):
+        return re.split(six.u(r'[^a-zA-Z0-9\u4e00-\u9fff]+'), ensure_unicode(text))
 
+    @staticmethod
+    def split_any_to_texts(text):
+        return re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), ensure_unicode(text))
+
+    # no chines word
     @classmethod
     def split_any_to_words(cls, text):
         list_ = []

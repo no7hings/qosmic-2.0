@@ -7,6 +7,8 @@ import copy
 
 import functools
 
+import pyaudio
+
 import six
 
 import lxbasic.core as bsc_core
@@ -832,6 +834,8 @@ class _GuiNodeOpt(_GuiBaseOpt):
         if item_frame_size is None:
             item_frame_size = self._window._gui_configure.get('item_frame_size')
 
+        self._pyaudio_instance = pyaudio.PyAudio()
+
         self._qt_list_widget = gui_qt_vew_widgets.QtListWidget()
         self._page._prx_h_splitter_0.add_widget(self._qt_list_widget)
 
@@ -1136,9 +1140,9 @@ class _GuiNodeOpt(_GuiBaseOpt):
             qt_item._item_model.set_video(property_dict['video'])
         elif 'audio' in property_dict:
             qt_item._item_model.set_audio(
-                property_dict['audio'],
-                property_dict['thumbnail']
+                property_dict['audio']
             )
+            qt_item._item_model.set_pyaudio_instance(self._pyaudio_instance)
         elif 'image_sequence' in property_dict:
             fps = property_dict.get('fps')
             if fps is not None:

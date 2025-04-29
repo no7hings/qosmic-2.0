@@ -1,14 +1,14 @@
 # Animation Pipeline Frame
 ## 2025 update
+### Framework
+```text
+support python27 and python310.
+```
 ### Lazy Nexsolve 0.0
 ```text
 process some thing use node graph.
 ```
 [https://rk8o3v6r7h.feishu.cn/docx/VjALdOeJaodseJxY6TacXWo0nPo]
-### Framework
-```text
-support python27 and python310.
-```
 ## 2024 update
 ### Main
 ```text

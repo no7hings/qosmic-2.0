@@ -16,8 +16,8 @@ class Main(object):
             scr_stage_name = self._option_opt.get('stage_name')
 
             page = window.gui_get_current_page()
-            node_opt = page._gui_node_opt
-            scr_entities = node_opt.gui_get_checked_or_selected_scr_entities()
+            gui_node_opt = page._gui_node_opt
+            scr_entities = gui_node_opt.gui_get_checked_or_selected_scr_entities()
             if not scr_entities:
                 return
 

@@ -65,6 +65,7 @@ class MoCapDotFbxMotionGenerate(object):
         start_frame, end_frame = metadata['start_frame'], metadata['end_frame']
         image_sequence_dir_path = scr_stage.generate_node_image_sequence_dir_path(self._scr_node_path)
         image_sequence_path = '{}/image.%04d.jpg'.format(image_sequence_dir_path)
+
         scr_stage.create_or_update_node_parameter(self._scr_node_path, 'motion', motion_json_path)
         scr_stage.create_or_update_node_parameter(self._scr_node_path, 'image_sequence', image_sequence_path)
         scr_stage.create_or_update_node_parameter(self._scr_node_path, 'fps', metadata['fps'])

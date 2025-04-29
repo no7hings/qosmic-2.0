@@ -15,6 +15,7 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
         Reference = 'reference'
         Import = 'import'
         Open = 'open'
+        Disable = 'disable'
 
     GUI_HIS_GROUP_DRAG_MODE = 'resora.dcc.maya_scene.drag_mode'
 
@@ -25,7 +26,8 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
         cfg = [
             ('reference', 'resora/maya_reference'),
             ('import', 'resora/maya_import'),
-            ('open', 'resora/maya_open')
+            ('open', 'resora/maya_open'),
+            ('disable', 'tool/disable')
         ]
         tools = []
         for i_drag_mode, i_icon_name in cfg:

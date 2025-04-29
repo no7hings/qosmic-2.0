@@ -317,20 +317,20 @@ class _Base(object):
         path = '{}/{}'.format(parent_path, prefix)
         if path not in path_set:
             return path
+
+        text, number = cls._to_name_args(prefix)
+        if number:
+            idx = int(number)
         else:
-            text, number = cls._to_name_args(prefix)
-            if number:
-                idx = int(number)
-            else:
-                idx = 1
+            idx = 1
 
-            new_path = path
-            while new_path in path_set:
-                new_path = '{}/{}{}'.format(parent_path, text, idx)
-                idx += 1
+        new_path = path
+        while new_path in path_set:
+            new_path = '{}/{}{}'.format(parent_path, text, idx)
+            idx += 1
 
-            if new_path not in path_set:
-                return new_path
+        if new_path not in path_set:
+            return new_path
 
     @classmethod
     def _find_next_port_path(cls, paths, prefix, parent_path=None):
@@ -341,24 +341,24 @@ class _Base(object):
 
         if port_path not in paths:
             return port_path
+
+        text, number = cls._to_name_args(prefix)
+        if number:
+            idx = int(number)
         else:
-            text, number = cls._to_name_args(prefix)
-            if number:
-                idx = int(number)
+            idx = 1
+
+        new_path = port_path
+        while new_path in paths:
+            if parent_path is None:
+                new_path = '{}{}'.format(text, idx)
             else:
-                idx = 1
+                new_path = '{}.{}'.format(parent_path, text)
 
-            new_path = port_path
-            while new_path in paths:
-                if parent_path is None:
-                    new_path = '{}{}'.format(text, idx)
-                else:
-                    new_path = '{}.{}'.format(parent_path, text)
+            idx += 1
 
-                idx += 1
-
-            if new_path not in paths:
-                return new_path
+        if new_path not in paths:
+            return new_path
 
     @classmethod
     def _find_next_param_path(cls, paths, prefix, parent_path=None):
@@ -369,24 +369,24 @@ class _Base(object):
 
         if port_path not in paths:
             return port_path
+
+        text, number = cls._to_name_args(prefix)
+        if number:
+            idx = int(number)
         else:
-            text, number = cls._to_name_args(prefix)
-            if number:
-                idx = int(number)
+            idx = 1
+
+        new_path = port_path
+        while new_path in paths:
+            if parent_path is None:
+                new_path = '{}{}'.format(text, idx)
             else:
-                idx = 1
+                new_path = '{}.{}'.format(parent_path, text)
 
-            new_path = port_path
-            while new_path in paths:
-                if parent_path is None:
-                    new_path = '{}{}'.format(text, idx)
-                else:
-                    new_path = '{}.{}'.format(parent_path, text)
+            idx += 1
 
-                idx += 1
-
-            if new_path not in paths:
-                return new_path
+        if new_path not in paths:
+            return new_path
 
     @classmethod
     def _json_str_to_data(cls, json_str):

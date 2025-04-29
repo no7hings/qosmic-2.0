@@ -1,6 +1,8 @@
 # coding:utf-8
 import six
 
+import pyaudio
+
 import lxbasic.core as bsc_core
 
 import lxbasic.pinyin as bsc_pinyin
@@ -57,10 +59,12 @@ class _AudioPlayThread(QtCore.QThread):
     finished = qt_signal()
     progress_percent_changed = qt_signal(float)
 
-    def __init__(self, parent, audio_segment):
+    def __init__(self, parent, pyaudio_instance, audio_segment):
         super(_AudioPlayThread, self).__init__(parent)
         self._audio_segment = audio_segment
         self._time_maximum = len(audio_segment)/1000.0
+
+        self._pyaudio_instance = pyaudio_instance
 
         self._interval = 1000.0/24
         self._start_time = 0
@@ -76,15 +80,14 @@ class _AudioPlayThread(QtCore.QThread):
         self._interval = interval
 
     def run(self):
-        import pyaudio
-
-        pa = pyaudio.PyAudio()
+        if self._pyaudio_instance is None:
+            return
 
         stream = None
         while self._running_flag:
             segment_to_play = self._audio_segment[self._start_time:]
 
-            stream = pa.open(
+            stream = self._pyaudio_instance.open(
                 format=pyaudio.paInt16,
                 channels=segment_to_play.channels,
                 rate=segment_to_play.frame_rate,
@@ -166,13 +169,17 @@ class ListItemModel(_item_base.AbsItemModel):
                 image=None,
                 # image sequence, default use none
                 image_sequence_enable=False,
+                image_sequence_load_flag=False,
                 image_sequence=None,
                 # video
                 video_enable=False,
+                video_load_flag=False,
                 video=None,
                 # audio
                 audio_enable=False,
+                audio_load_flag=False,
                 audio=None,
+                pyaudio_instance=None,
                 # play
                 play_enable=False,
                 autoplay_enable=False,
@@ -229,13 +236,13 @@ class ListItemModel(_item_base.AbsItemModel):
 
         if self._data.basic.rect.contains(point):
             if _qt_core.QtApplication.is_ctrl_modifier():
-                if self._data.audio_enable is True:
+                if self._data.audio_load_flag is True:
                     if self._data.audio.autoplay_flag is True:
                         percent = self._data.play.progress_percent
                         # close pre and create new thread to play from percent
                         self._data.audio.play_thread.do_close()
                         self._data.audio.play_thread = _AudioPlayThread(
-                            self._view, self._data.audio.play_thread._audio_segment
+                            self._view, self._data.pyaudio_instance, self._data.audio.play_thread._audio_segment
                         )
                         self._data.audio.play_thread.progress_percent_changed.connect(
                             self._update_audio_play_progress_percent
@@ -250,12 +257,12 @@ class ListItemModel(_item_base.AbsItemModel):
 
                 self._data.play.point.setX(point.x())
                 # update video or image sequence frame
-                if self._data.video_enable is True:
-                    self._update_video_by_hover_move()
-                elif self._data.image_sequence_enable is True:
-                    self._update_sequence_image_by_hover_move()
-                elif self._data.audio_enable is True:
-                    self._update_audio_by_hover_move()
+                if self._data.video_load_flag is True:
+                    self._update_video_on_hover_move()
+                elif self._data.image_sequence_load_flag is True:
+                    self._update_sequence_image_on_hover_move()
+                elif self._data.audio_load_flag is True:
+                    self._update_audio_on_hover_move()
 
                 if self._data.autoplay_enable is True:
                     # rest autoplay
@@ -266,7 +273,7 @@ class ListItemModel(_item_base.AbsItemModel):
                     if _qt_core.QtApplication.is_ctrl_modifier() is False:
                         self._data.autoplay.wait_timer.start(self.WAIT_PLAY_DELAY)
             # audio
-            if self._data.audio_enable is True:
+            if self._data.audio_load_flag is True:
                 self._start_audio_autoplay()
         else:
             self._stop_any_play()
@@ -277,7 +284,7 @@ class ListItemModel(_item_base.AbsItemModel):
         if self._data.autoplay_enable is True:
             self._data.autoplay.play_thread.do_close()
 
-        if self._data.audio_enable is True:
+        if self._data.audio_load_flag is True:
             self._data.audio.play_thread.do_close()
 
     # play
@@ -300,7 +307,7 @@ class ListItemModel(_item_base.AbsItemModel):
         if self._data.play_enable is True:
             if self._data.autoplay_enable is True:
                 if self._data.autoplay.flag is True:
-                    if self._data.video_enable is True:
+                    if self._data.video_load_flag is True:
                         # make frame cycle
                         index = self._data.video.index
                         index += 1
@@ -308,7 +315,7 @@ class ListItemModel(_item_base.AbsItemModel):
                             index = 0
 
                         self._update_video_image_at(index)
-                    elif self._data.image_sequence_enable is True:
+                    elif self._data.image_sequence_load_flag is True:
                         # make frame cycle
                         index = self._data.image_sequence.index
                         index += 1
@@ -335,7 +342,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._data.autoplay.flag = False
                 self._data.autoplay.play_thread.do_stop()
         # audio
-        if self._data.audio_enable is True:
+        if self._data.audio_load_flag is True:
             self._data.audio.autoplay_flag = False
             self._update_audio_play_progress_percent(0.0)
             self._data.audio.play_thread.do_stop()
@@ -508,60 +515,63 @@ class ListItemModel(_item_base.AbsItemModel):
 
             # video for play
             if self._data.video_enable is True:
-                img_w, img_h = self._data.video.size.width(), self._data.video.size.height()
-                img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
-                    (img_w, img_h), (frm_w, frm_h)
-                )
-                # draw base frame
-                self._draw_rect(painter, frame_rect, QtGui.QColor(0, 0, 0))
-                # draw video image
-                video_rect = qt_rect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
-                image_data = self._data.video.image_data
-                if image_data:
-                    image = self._data.video.capture_opt.to_qt_image(QtGui.QImage, image_data)
-                    pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
-                    self._draw_pixmap(painter, video_rect, pixmap)
+                if self._data.video_load_flag is True:
+                    img_w, img_h = self._data.video.size.width(), self._data.video.size.height()
+                    img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
+                        (img_w, img_h), (frm_w, frm_h)
+                    )
+                    # draw base frame
+                    self._draw_rect(painter, frame_rect, QtGui.QColor(0, 0, 0))
+                    # draw video image
+                    video_rect = qt_rect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
+                    image_data = self._data.video.image_data
+                    if image_data:
+                        image = self._data.video.capture_opt.to_qt_image(QtGui.QImage, image_data)
+                        pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
+                        self._draw_pixmap(painter, video_rect, pixmap)
 
             # audio
             elif self._data.audio_enable is True:
-                # fill to frame rect
-                img_rect = qt_rect(frm_x, frm_y, frm_w, frm_h)
-                self._draw_pixmap(painter, img_rect, self._data.audio.pixmap)
-                # draw frame
-                painter.setPen(self._data.frame.color)
-                painter.setBrush(QtGui.QColor(0, 0, 0, 0))
-                painter.drawRect(img_rect)
-                # draw progress and handle
-                if self._data.audio.autoplay_flag is True:
-                    progress_w = frm_w*self._data.audio.progress_percent
-                    self._data.audio.progress_rect.setRect(
-                        frm_x, frm_y, progress_w, frm_h
-                    )
-                    painter.setPen(self._data.audio.progress_color)
-                    painter.setBrush(self._data.audio.progress_color)
-                    painter.drawRect(self._data.audio.progress_rect)
-                # dra handle
-                if self._data.play_enable is True:
-                    if self._data.play.flag is True:
-                        percent = self._data.play.progress_percent
-                        hdl_x = frm_x+int(frm_w*percent)
-                        self._data.audio.handle_line.setLine(
-                            hdl_x, frm_y, hdl_x, frm_y+frm_h
+                if self._data.audio_load_flag:
+                    # fill to frame rect
+                    img_rect = qt_rect(frm_x, frm_y, frm_w, frm_h)
+                    self._draw_pixmap(painter, img_rect, self._data.audio.pixmap)
+                    # draw frame
+                    painter.setPen(self._data.frame.color)
+                    painter.setBrush(QtGui.QColor(0, 0, 0, 0))
+                    painter.drawRect(img_rect)
+                    # draw progress and handle
+                    if self._data.audio.autoplay_flag is True:
+                        progress_w = frm_w*self._data.audio.progress_percent
+                        self._data.audio.progress_rect.setRect(
+                            frm_x, frm_y, progress_w, frm_h
                         )
-                        painter.setPen(self._data.audio.handle_color)
-                        painter.drawLine(self._data.audio.handle_line)
+                        painter.setPen(self._data.audio.progress_color)
+                        painter.setBrush(self._data.audio.progress_color)
+                        painter.drawRect(self._data.audio.progress_rect)
+                    # draw handle
+                    if self._data.play_enable is True:
+                        if self._data.play.flag is True:
+                            percent = self._data.play.progress_percent
+                            hdl_x = frm_x+int(frm_w*percent)
+                            self._data.audio.handle_line.setLine(
+                                hdl_x, frm_y, hdl_x, frm_y+frm_h
+                            )
+                            painter.setPen(self._data.audio.handle_color)
+                            painter.drawLine(self._data.audio.handle_line)
 
             # image sequence for play
             elif self._data.image_sequence_enable is True:
-                img_w, img_h = self._data.image_sequence.size.width(), self._data.image_sequence.size.height()
-                img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
-                    (img_w, img_h), (frm_w, frm_h)
-                )
-                # draw base frame
-                self._draw_rect_0(painter, frame_rect, QtGui.QColor(0, 0, 0))
-                # draw image
-                img_rect = qt_rect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
-                self._draw_pixmap(painter, img_rect, self._data.image_sequence.pixmap)
+                if self._data.image_sequence_load_flag is True:
+                    img_w, img_h = self._data.image_sequence.size.width(), self._data.image_sequence.size.height()
+                    img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
+                        (img_w, img_h), (frm_w, frm_h)
+                    )
+                    # draw base frame
+                    self._draw_rect_0(painter, frame_rect, QtGui.QColor(0, 0, 0))
+                    # draw image
+                    img_rect = qt_rect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
+                    self._draw_pixmap(painter, img_rect, self._data.image_sequence.pixmap)
 
             # image
             elif self._data.image_enable is True:
@@ -601,7 +611,6 @@ class ListItemModel(_item_base.AbsItemModel):
                     or self._data.image_sequence_enable is True
                 ):
                     if self._data.play.flag is True:
-
                         # time from index
                         time_txt = self._data.play.time_index_text
                         if self._data.play.progress_enable is True:
@@ -735,6 +744,7 @@ class ListItemModel(_item_base.AbsItemModel):
         if file_path is not None:
             self._data.image = _gui_core.DictOpt(
                 load_flag=False,
+
                 reload_flag=reload_cache,
 
                 file=None,
@@ -846,6 +856,8 @@ class ListItemModel(_item_base.AbsItemModel):
             if data_:
                 _file_paths, _pixmap = data_
                 self._data.image_sequence_enable = True
+                self._data.image_sequence_load_flag = True
+
                 self._data.image_sequence.pixmap = _pixmap
                 self._data.image_sequence.size = _pixmap.size()
                 self._data.image_sequence.files = _file_paths
@@ -870,7 +882,7 @@ class ListItemModel(_item_base.AbsItemModel):
 
         return cache_fnc_, build_fnc_
 
-    def _update_sequence_image_by_hover_move(self):
+    def _update_sequence_image_on_hover_move(self):
         flag, percent = self._update_hover_play_percent()
         if flag is True:
             index = int(self._data.image_sequence.index_maximum*percent)
@@ -904,11 +916,12 @@ class ListItemModel(_item_base.AbsItemModel):
         self.update_view()
 
     # video
-    def set_video(self, file_path):
+    def set_video(self, file_path, delay_flag=False):
         if file_path is not None:
             self._data.video = _gui_core.DictOpt(
-                load_flag=False,
-                file=None,
+                load_flag=True,
+
+                file=file_path,
                 capture_opt=None,
                 size=None,
                 index=0,
@@ -921,9 +934,9 @@ class ListItemModel(_item_base.AbsItemModel):
                 image_data=None,
                 pixmap_cache_dict={},
                 pixmap=None,
+
+                delay_flag=delay_flag
             )
-            self._data.video.file = file_path
-            self._data.video.load_flag = True
 
     def _load_video_auto(self):
         if self._data.video is not None:
@@ -963,6 +976,8 @@ class ListItemModel(_item_base.AbsItemModel):
             if data_:
                 _capture_opt, _image_data, _frame_count, _fps, _size, _index_default = data_
                 self._data.video_enable = True
+                self._data.video_load_flag = True
+
                 self._data.video.capture_opt = _capture_opt
                 self._data.video.image_data = _image_data
                 self._data.video.size = QtCore.QSize(*_size)
@@ -987,7 +1002,7 @@ class ListItemModel(_item_base.AbsItemModel):
 
         return cache_fnc_, build_fnc_
 
-    def _update_video_by_hover_move(self):
+    def _update_video_on_hover_move(self):
         flag, percent = self._update_hover_play_percent()
         if flag is True:
             index = int(self._data.video.index_maximum*percent)
@@ -1021,12 +1036,15 @@ class ListItemModel(_item_base.AbsItemModel):
         self.update_view()
 
     # audio
-    def set_audio(self, file_path, thumbnail_path=None):
+    def set_pyaudio_instance(self, pyaudio_instance):
+        self._data.pyaudio_instance = pyaudio_instance
+
+    def set_audio(self, file_path, delay_flag=False):
         if file_path is not None:
             self._data.audio = _gui_core.DictOpt(
-                load_flag=False,
-                file=None,
-                thumbnail=thumbnail_path,
+                load_flag=True,
+
+                file=file_path,
                 capture_opt=None,
                 size=None,
 
@@ -1044,12 +1062,15 @@ class ListItemModel(_item_base.AbsItemModel):
                 handle_color=QtGui.QColor(*_gui_core.GuiRgba.LightTorchRed),
 
                 autoplay_flag=False,
+
+                delay_flag=delay_flag,
             )
-            self._data.audio.file = file_path
-            self._data.audio.load_flag = True
 
     def _load_audio_auto(self):
         if self._data.audio is not None:
+            if self._data.audio.delay_flag is True:
+                return
+
             if self._data.audio.load_flag is True:
                 # mark to false for load once
                 self._data.audio.load_flag = False
@@ -1068,11 +1089,8 @@ class ListItemModel(_item_base.AbsItemModel):
             _capture_opt = bsc_cv_core.AudioCaptureOpt(_file_path)
             # catch first frame
             if _capture_opt.is_valid():
-                if self._data.audio.thumbnail is not None:
-                    _image = QtGui.QImage()
-                    _image.load(self._data.audio.thumbnail)
-                else:
-                    _image = _capture_opt.generate_at_image_from_cache(QtGui.QImage)
+                _image = _capture_opt.generate_at_image_from_cache(QtGui.QImage)
+
                 _microsecond = _capture_opt.get_frame_count()
                 _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
                 _cache = [_capture_opt, _pixmap, _microsecond]
@@ -1087,12 +1105,16 @@ class ListItemModel(_item_base.AbsItemModel):
             if data_:
                 _capture_opt, _pixmap, _microsecond = data_
                 self._data.audio_enable = True
+                self._data.audio_load_flag = True
+
                 self._data.audio.capture_opt = _capture_opt
                 self._data.audio.pixmap = _pixmap
                 self._data.audio.size = _pixmap.size()
                 self._data.audio.time_microsecond = _microsecond
 
-                self._data.audio.play_thread = _AudioPlayThread(self._view, _capture_opt._audio_segment)
+                self._data.audio.play_thread = _AudioPlayThread(
+                    self._view, self._data.pyaudio_instance, _capture_opt._audio_segment
+                )
                 self._data.audio.play_thread.progress_percent_changed.connect(
                     self._update_audio_play_progress_percent
                 )
@@ -1108,7 +1130,7 @@ class ListItemModel(_item_base.AbsItemModel):
 
         return cache_fnc_, build_fnc_
 
-    def _update_audio_by_hover_move(self):
+    def _update_audio_on_hover_move(self):
         flag, percent = self._update_hover_play_percent()
 
     def _update_audio_play_progress_percent(self, percent):
@@ -1134,7 +1156,7 @@ class ListItemModel(_item_base.AbsItemModel):
             self._data.hover.flag = flag
             if (
                 self._data.video_enable is True
-                or self._data.audio_enable is True
+                or self._data.audio_load_flag is True
                 or self._data.image_sequence_enable is True
             ):
                 # stop when mouse leave

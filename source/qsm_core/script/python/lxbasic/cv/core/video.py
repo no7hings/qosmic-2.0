@@ -41,6 +41,12 @@ class VideoCaptureOpt(object):
             height, width, channel = cv_img.shape
             return cv_img, width, height, channel
 
+    def get_info(self):
+        return dict(
+            frame=self.get_frame_count(),
+            fps=self.get_frame_rate()
+        )
+
     @classmethod
     def to_qt_image(cls, q_img_cl, data):
         cv_img, width, height, channel = data
@@ -95,6 +101,9 @@ class VideoCaptureOpt(object):
 
     def get_frame_count(self):
         return int(self._cpt.get(cv2.CAP_PROP_FRAME_COUNT))
+
+    def get_frame_range(self):
+        return 1, self.get_frame_count()
 
     def get_fps_tag(self):
         return int(self._cpt.get(cv2.CAP_PROP_FPS))

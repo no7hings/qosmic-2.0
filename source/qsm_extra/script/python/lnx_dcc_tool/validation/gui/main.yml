@@ -461,7 +461,7 @@ build:
                 message_chs: '输入一个文件名模版，然后继续。'
 
             no_assets:
-                message: 'Check or select one or more asset, and continue.'
+                message: 'Check or select one or more assets, and continue.'
                 message_chs: '勾选/选中一个或多个资产，然后继续。'
 
             no_process_options:
@@ -766,7 +766,7 @@ build:
                 message_chs: '输入一个文件名模版，然后继续。'
 
             no_assets:
-                message: 'Check or select one or more asset, and continue.'
+                message: 'Check or select one or more assets, and continue.'
                 message_chs: '勾选/选中一个或多个资产，然后继续。'
 
             no_process_options:

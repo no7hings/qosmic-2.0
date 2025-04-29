@@ -9,6 +9,8 @@ import getpass as _getpass
 
 import collections as _collections
 
+import threading as _threading
+
 import re as _re
 
 import os as _os
@@ -26,15 +28,19 @@ class LRUCache:
     """
     def __init__(self, maximum=64):
         self._dict = _collections.OrderedDict()
+        # make thread safe
+        self._lock = _threading.Lock()
         self._maximum = maximum
 
     def __contains__(self, key):
-        return key in self._dict
+        with self._lock:
+            return key in self._dict
 
     def __str__(self):
-        return "{}({})".format(
-            self.__class__.__name__, self._dict.items()
-        )
+        with self._lock:
+            return "{}({})".format(
+                self.__class__.__name__, self._dict.items()
+            )
 
     def __repr__(self):
         return '\n'+self.__str__()
@@ -46,24 +52,27 @@ class LRUCache:
         self.set(key, value)
 
     def get(self, key):
-        if key in self._dict:
-            # move to last
-            value = self._dict.pop(key)
-            self._dict[key] = value
-            return value
-        return None
+        with self._lock:
+            if key in self._dict:
+                # move to last
+                value = self._dict.pop(key)
+                self._dict[key] = value
+                return value
+            return None
 
     def set(self, key, value):
-        if key in self._dict:
-            # move to last
-            self._dict.pop(key)
-        # remove first
-        elif len(self._dict) >= self._maximum:
-            self._dict.popitem(last=False)
-        self._dict[key] = value
+        with self._lock:
+            if key in self._dict:
+                # move to last
+                self._dict.pop(key)
+            # remove first
+            elif len(self._dict) >= self._maximum:
+                self._dict.popitem(last=False)
+            self._dict[key] = value
 
     def pop(self, key):
-        self._dict.pop(key)
+        with self._lock:
+            self._dict.pop(key)
 
 
 class Fnmatch(object):
