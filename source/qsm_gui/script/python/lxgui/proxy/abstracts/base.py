@@ -119,9 +119,9 @@ class AbsPrxWidget(AbsPrx):
 
         self._qt_thread_enable = bsc_core.BscEnviron.get_qt_thread_enable()
 
-        self._gui_build_()
+        self._gui_build_fnc()
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         pass
 
     def set_hide(self, boolean=True):
@@ -262,12 +262,12 @@ class AbsPrxWindow(AbsPrx):
         #
         self._status = self.ValidationStatus.Normal
 
-        self._gui_build_()
+        self._gui_build_fnc()
 
     def get_window_unique_id(self):
         return self._window_unicode_id
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         pass
 
     def set_main_window_geometry(self, geometry):

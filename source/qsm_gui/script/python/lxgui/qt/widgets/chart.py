@@ -124,7 +124,7 @@ class QtChartAsRgbaChoose(
         self._init_widget_base_def_(self)
         self._init_action_base_def_(self)
         self._init_chart_base_def_(self)
-        self._gui_build_()
+        self._gui_build_fnc()
 
     def paintEvent(self, event):
         self._color_path_dict = {}
@@ -395,7 +395,7 @@ class QtChartAsRgbaChoose(
         self._color_hsv = bsc_core.BscColor.rgb_to_hsv(r, g, b)
         self._color_css = hex(r)[2:].zfill(2)+hex(g)[2:].zfill(2)+hex(b)[2:].zfill(2)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._color_rgba_255 = 255, 255, 255, 255
         self._color_hsv = 0, 0, 1
         self._color_css = 'FFFFFF'
@@ -1090,7 +1090,7 @@ class QtChartAsHistogram(
         #
         self._init_chart_base_def_(self)
         #
-        self._gui_build_()
+        self._gui_build_fnc()
 
     def _set_labels_(self, labels):
         self._xValueExplain, self._yValueExplain = labels
@@ -1221,7 +1221,7 @@ class QtChartAsHistogram(
         self._selectedIndex = index
 
     #
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._value_array = []
         #
         self._xValueExplain = 'X'
@@ -1304,7 +1304,7 @@ class QtChartAsSequence(
         #
         self.installEventFilter(self)
         #
-        self._gui_build_()
+        self._gui_build_fnc()
         #
         self._init_name_base_def_(self)
         self._init_chart_base_def_(self)
@@ -1449,7 +1449,7 @@ class QtChartAsSequence(
                         )
 
     #
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._chart_index_array = []
         self._chart_index_range = 0, 0
         #

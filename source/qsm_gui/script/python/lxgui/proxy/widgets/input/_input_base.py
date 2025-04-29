@@ -23,7 +23,7 @@ class AbsPrxInput(_abstracts.AbsPrxWidget):
         if self.QT_H > 0:
             self.widget.setFixedHeight(self.QT_H)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._qt_layout = _qt_wgt_base.QtHBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(0, 0, 0, 0)
         self._qt_layout.setSpacing(2)
@@ -178,7 +178,7 @@ class AbsPrxInputExtra(_abstracts.AbsPrxWidget):
     def __init__(self, *args, **kwargs):
         super(AbsPrxInputExtra, self).__init__(*args, **kwargs)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._qt_layout = _qt_wgt_base.QtHBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(0, 0, 0, 0)
         self._qt_layout.setSpacing(2)

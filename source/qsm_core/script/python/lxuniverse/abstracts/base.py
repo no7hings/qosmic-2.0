@@ -191,7 +191,7 @@ class AbsObjStack(object):
         """
         :return: list[int(<obj-index>), ...]
         """
-        return range(len(self.get_object_indices()))
+        return range(self._count)
 
     def __getitem__(self, index):
         """

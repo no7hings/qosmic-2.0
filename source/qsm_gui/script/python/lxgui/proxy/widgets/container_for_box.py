@@ -19,7 +19,7 @@ class PrxHToolBox(gui_prx_abstracts.AbsPrxWidget):
     def __init__(self, *args, **kwargs):
         super(PrxHToolBox, self).__init__(*args, **kwargs)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._wgt_w, self._wgt_h = 24, 24
         self._wgt_w_min, self._wgt_h_min = 12, 24
         #
@@ -60,6 +60,18 @@ class PrxHToolBox(gui_prx_abstracts.AbsPrxWidget):
 
     def set_name(self, name):
         self._qt_head._set_name_text_(name)
+        
+    def get_name(self):
+        return self._qt_head._get_name_text_()
+    
+    def set_path(self, path):
+        self._qt_head._set_path_text_(path)
+    
+    def get_path(self):
+        return self._qt_head._get_path_text_()
+
+    def set_tool_tip(self, text):
+        self._qt_head._set_tool_tip_(text)
 
     def set_expanded(self, boolean):
         self._qt_head._set_expanded_(boolean)

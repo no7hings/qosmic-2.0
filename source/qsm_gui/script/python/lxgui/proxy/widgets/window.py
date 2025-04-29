@@ -81,7 +81,7 @@ class AbsPrxDialogWindow(
         self._central_qt_layout = _qt_wgt_base.QtVBoxLayout(self._central_qt_widget)
         self._central_qt_layout.setContentsMargins(*[4]*4)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._set_central_layout_create_()
         #
         self._set_waiting_def_init_()
@@ -102,7 +102,7 @@ class AbsPrxDialogWindow(
         self._central_qt_layout.addWidget(self._top_toolbar.widget)
         self._top_toolbar.set_expanded(True)
         #
-        self._modal_button = gui_prx_wdt_utility.PrxToggleButton()
+        self._modal_button = gui_prx_wdt_utility.PrxIconToggleButton()
         self._top_toolbar.add_widget(self._modal_button)
         self._modal_button.set_icon_name('window-modal')
         self._modal_button.set_checked(True)
@@ -492,7 +492,7 @@ class PrxMonitorWindow(
             gui_qt_core.QtCore.Qt.WindowModal
         )
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._central_qt_widget = _qt_wgt_utility.QtWidget()
         self._qt_widget.setCentralWidget(self._central_qt_widget)
         self._central_qt_layout = _qt_wgt_base.QtVBoxLayout(self._central_qt_widget)
@@ -549,7 +549,7 @@ class PrxSprcTaskWindow(
 
         self.set_definition_window_size((480, 240))
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._central_qt_widget = _qt_wgt_utility.QtWidget()
         self._qt_widget.setCentralWidget(self._central_qt_widget)
         self._central_qt_layout = _qt_wgt_base.QtVBoxLayout(self._central_qt_widget)

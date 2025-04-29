@@ -84,7 +84,7 @@ class PrxBaseWindow(
             self.show_help_unit, 'F1'
         )
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._language = gui_core.GuiUtil.get_language()
 
         self._window_loading_flag = False

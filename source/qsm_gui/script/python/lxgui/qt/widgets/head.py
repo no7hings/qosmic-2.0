@@ -542,6 +542,7 @@ class QtVHeadFrame(AbsQtHeadFrame):
 
 class AbsQtHead2(
     QtWidgets.QWidget,
+    _qt_abstracts.AbsQtPathBaseDef,
     _qt_abstracts.AbsQtNameBaseDef,
     _qt_abstracts.AbsQtIconBaseDef,
     #
@@ -561,6 +562,7 @@ class AbsQtHead2(
         #
         self._name_draw_font = _qt_core.QtFonts.ToolGroup
         #
+        self._init_path_base_def_(self)
         self._init_name_base_def_(self)
         self._init_icon_base_def_(self)
         self._name_icon_flag = True

@@ -212,7 +212,7 @@ class PrxTreeviewUnitForAssetOpt(
             )
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
-            i_tool = gui_prx_widgets.PrxToggleButton()
+            i_tool = gui_prx_widgets.PrxIconToggleButton()
             self._prx_isolate_select_tool_box.add_widget(i_tool)
             i_tool.set_name(i_key)
             i_tool.set_icon_name(i_icon_name)

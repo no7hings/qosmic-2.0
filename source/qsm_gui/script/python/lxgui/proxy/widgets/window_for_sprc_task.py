@@ -50,7 +50,7 @@ class PrxSprcTaskWindow(
     def set_thread_maximum(self, value):
         self._qt_widget._thread_worker_maximum = value
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._language = _gui_core.GuiUtil.get_language()
         self._central_qt_widget = _qt_wgt_utility.QtWidget()
         self._qt_widget.setCentralWidget(self._central_qt_widget)
@@ -152,7 +152,7 @@ class PrxSpcTaskWindow(
     def set_thread_maximum(self, value):
         self._spc_task_widget._set_thread_maximum(value)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._language = _gui_core.GuiUtil.get_language()
         self._central_qt_widget = _qt_wgt_utility.QtWidget()
         self._qt_widget.setCentralWidget(self._central_qt_widget)

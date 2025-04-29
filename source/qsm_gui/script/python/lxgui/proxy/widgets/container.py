@@ -1,4 +1,7 @@
 # coding:utf-8
+import lxbasic.core as bsc_core
+
+from ... import core as _gui_core
 # qt
 from ...qt import core as gui_qt_core
 # qt widgets
@@ -14,6 +17,8 @@ from .. import abstracts as gui_prx_abstracts
 
 from . import container_for_box as _container_for_box
 
+from . import utility as _utility
+
 
 class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_wgt_utility.QtVLine
@@ -24,7 +29,7 @@ class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
     def __init__(self, *args, **kwargs):
         super(AbsPrxToolGroup, self).__init__(*args, **kwargs)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(self._qt_widget)
         qt_layout_0.setAlignment(gui_qt_core.QtCore.Qt.AlignTop)
         qt_layout_0.setContentsMargins(0, 0, 0, 0)
@@ -176,21 +181,33 @@ class PrxHToolGroupNew(AbsPrxToolGroup):
         super(PrxHToolGroupNew, self).__init__(*args, **kwargs)
 
 
+class _Stack(bsc_core.AbsStack):
+    def __init__(self):
+        super(_Stack, self).__init__()
+
+    def get_key(self, obj):
+        return obj.get_path()
+
+
 class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_wgt_utility.QtWidget
 
     def __init__(self, *args, **kwargs):
         super(PrxHToolBar, self).__init__(*args, **kwargs)
-        #
+
         self.widget.setSizePolicy(
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Minimum
         )
 
+        self._language = _gui_core.GuiUtil.get_language()
+
+        self._stack = _Stack()
+
     def do_gui_refresh(self, fix_bug=False):
         self._qt_view._refresh_widget_all_(fix_bug=fix_bug)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._wgt_w, self._wgt_h = 28, 28
         self._wgt_w_min, self._wgt_h_min = 12, 12
 
@@ -305,6 +322,80 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
     def set_border_radius(self, radius):
         self._qt_head._set_frame_border_radius_(radius)
 
+    def _create_group_fnc(self, data):
+        gui = _container_for_box.PrxHToolBox()
+
+        name_ = data.get('name')
+        tool_tip_ = data.get('tool_tip')
+        if self._language == 'chs':
+            if 'gui_name_chs' in data:
+                name_ = data['gui_name_chs']
+
+            if 'tool_tip_chs' in data:
+                tool_tip_ = data['tool_tip_chs']
+
+        if name_:
+            gui.set_name(name_)
+        if tool_tip_:
+            gui.set_tool_tip(tool_tip_)
+
+        gui.set_expanded(data.get('expand', True))
+        gui.set_visible(data.get('visible', True))
+        gui.set_size_mode([0, 1][data.get('size_mode', 'fixed') == 'expanding'])
+        return gui
+
+    def _create_button_fnc(self, data):
+        mode_ = data.get('mode')
+        if mode_ == 'toggle':
+            gui = _utility.PrxIconToggleButton()
+        else:
+            gui = _utility.PrxIconPressButton()
+
+        name_ = data.get('name')
+        tool_tip_ = data.get('tool_tip')
+        if self._language == 'chs':
+            if 'gui_name_chs' in data:
+                name_ = data['gui_name_chs']
+
+            if 'tool_tip_chs' in data:
+                tool_tip_ = data['tool_tip_chs']
+
+        if name_:
+            gui.set_name(name_)
+        if tool_tip_:
+            gui.set_tool_tip(tool_tip_)
+
+        icon_name_ = data.get('icon_name')
+        if icon_name_:
+            gui.set_icon_name(icon_name_)
+        return gui
+
+    def build_by_data(self, data):
+        for k, v in data.items():
+            self.create_tool_by_data(k.replace('/', '.'), v)
+
+    def create_tool_by_data(self, path, data):
+        parent_path = bsc_core.BscPortPath.get_dag_parent_path(path)
+        widget_ = data['widget']
+        if widget_ == 'group':
+            gui = self._create_group_fnc(data)
+        elif widget_ == 'button':
+            gui = self._create_button_fnc(data)
+        else:
+            raise RuntimeError()
+
+        gui.set_path(path)
+        self._stack.add_one(gui)
+
+        if parent_path is None:
+            self.add_widget(gui)
+        else:
+            parent_gui = self._stack.get_one(parent_path)
+            parent_gui.add_widget(gui)
+
+    def get_tool(self, path):
+        return self._stack.get_one(path)
+
 
 class PrxVToolBar(PrxHToolBar):
     QT_WIDGET_CLS = gui_qt_wgt_utility.QtWidget
@@ -317,7 +408,7 @@ class PrxVToolBar(PrxHToolBar):
             gui_qt_core.QtWidgets.QSizePolicy.Expanding
         )
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._wgt_w, self._wgt_h = 28, 28
         self._wgt_w_min, self._wgt_h_min = 12, 12
         #

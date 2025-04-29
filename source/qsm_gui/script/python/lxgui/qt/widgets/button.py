@@ -1073,6 +1073,7 @@ class QtIconPressButton(
 class QtIconMenuButton(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtPathBaseDef,
     _qt_abstracts.AbsQtNameBaseDef,
     _qt_abstracts.AbsQtMenuBaseDef,
     #
@@ -1111,6 +1112,7 @@ class QtIconMenuButton(
         self.installEventFilter(self)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
         #
+        self._init_path_base_def_(self)
         self._init_name_base_def_(self)
         self._init_icon_base_def_(self)
         self._init_menu_base_def_(self)
@@ -1155,9 +1157,10 @@ class QtIconMenuButton(
 class QtIconToggleButton(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtWidgetBaseDef,
+    _qt_abstracts.AbsQtPathBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
     _qt_abstracts.AbsQtFrameBaseDef,
     _qt_abstracts.AbsQtIconBaseDef,
-    _qt_abstracts.AbsQtNameBaseDef,
     _qt_abstracts.AbsQtMenuBaseDef,
     #
     _qt_abstracts.AbsQtActionBaseDef,
@@ -1185,9 +1188,10 @@ class QtIconToggleButton(
         self.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self._init_widget_base_def_(self)
+        self._init_path_base_def_(self)
+        self._init_name_base_def_(self)
         self._init_frame_base_def_(self)
         self._init_icon_base_def_(self)
-        self._init_name_base_def_(self)
         self._init_menu_base_def_(self)
 
         self._init_action_for_hover_def_(self)

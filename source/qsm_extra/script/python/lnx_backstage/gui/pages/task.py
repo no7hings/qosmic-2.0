@@ -510,7 +510,7 @@ class PrxPageForTaskMonitor(prx_abstracts.AbsPrxWidget):
             ('filter', 'tool/filter', '', self.gui_filter_update_visible)
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
-            i_tool = gui_prx_widgets.PrxToggleButton()
+            i_tool = gui_prx_widgets.PrxIconToggleButton()
             self._main_prx_tool_box.add_widget(i_tool)
             i_tool.set_name(i_key)
             i_tool.set_icon_name(i_icon_name)

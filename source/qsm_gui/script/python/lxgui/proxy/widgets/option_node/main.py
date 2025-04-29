@@ -6,8 +6,6 @@ import functools
 import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
-
-import lxuniverse.abstracts as unr_abstracts
 # gui
 from .... import core as _gui_core
 # qt widgets
@@ -51,9 +49,9 @@ from. import _port_for_file
 from. import _port_for_group
 
 
-class _PortStackNode(unr_abstracts.AbsObjStack):
+class _Stack(bsc_core.AbsStack):
     def __init__(self):
-        super(_PortStackNode, self).__init__()
+        super(_Stack, self).__init__()
 
     def get_key(self, obj):
         return obj.get_port_path()
@@ -61,7 +59,7 @@ class _PortStackNode(unr_abstracts.AbsObjStack):
 
 class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
-    PORT_STACK_CLS = _PortStackNode
+    PORT_STACK_CLS = _Stack
 
     def __init__(self, path_or_name, *args, **kwargs):
         super(PrxOptionsNode, self).__init__(*args, **kwargs)
@@ -92,7 +90,7 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
     name = property(get_name)
 
     def _get_ports_(self, port_paths):
-        return [self._port_stack.get_object(i) for i in port_paths]
+        return [self._port_stack.get_one(i) for i in port_paths]
 
     def get_port_paths(self):
         return self._port_stack.get_keys()
@@ -139,11 +137,11 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
 
     def _register_port(self, port):
         port._set_node(self)
-        self._port_stack.add_object(port)
+        self._port_stack.add_one(port)
         if hasattr(port, 'connect_tab_pressed_to'):
             connect_result = port.connect_tab_pressed_to(functools.partial(self.focus_next_fnc, port))
             if connect_result is True:
-                self._port_switch_stack.add_object(port)
+                self._port_switch_stack.add_one(port)
 
     def focus_next_fnc(self, port):
         maximum = self._port_switch_stack.get_maximum()
@@ -153,21 +151,21 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             if index_next > maximum:
                 index_next = 0
             #
-            port = self._port_switch_stack.get_object_at(index_next)
+            port = self._port_switch_stack.get_one_at(index_next)
             port.set_focus_in()
 
     def get_port(self, port_path):
-        return self._port_stack.get_object(port_path)
+        return self._port_stack.get_one(port_path)
 
     def get_ports(self, regex=None):
-        return self._port_stack.get_objects(regex)
+        return self._port_stack.get_many(regex)
 
     def get_all_ports(self):
-        return self._port_stack.get_all_objects()
+        return self._port_stack.get_all()
 
     def to_dict(self):
         dic = {}
-        ports = self._port_stack.get_objects()
+        ports = self._port_stack.get_all()
         for i_port in ports:
             key = i_port.get_port_path()
             if i_port.get_category() not in {'group'}:
@@ -179,8 +177,8 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
         self._name_width = w
         # self._prx_root_group._qt_label_widget.setFixedWidth(self._name_width)
 
-    def build_by_data(self, configure):
-        for k, v in configure.items():
+    def build_by_data(self, data):
+        for k, v in data.items():
             self.create_port_by_data(k.replace('/', '.'), v)
 
     def create_port_by_data(self, port_path, create_options):

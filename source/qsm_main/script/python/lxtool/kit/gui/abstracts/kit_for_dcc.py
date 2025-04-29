@@ -60,7 +60,7 @@ class AbsToolKitForDcc(gui_prx_widgets.PrxSessionWindow):
 
         tools = []
         for i_key, i_w_p, i_h_p in self._percent_args:
-            i_b = gui_prx_widgets.PrxToggleButton()
+            i_b = gui_prx_widgets.PrxIconToggleButton()
             self._switch_tool_box.add_widget(i_b)
             i_b.set_icon_name('tool/icon-{}'.format(i_key))
             if i_w_p == self._w_p:

@@ -79,7 +79,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
 
         tools = []
         for i_application, i_icon_name in cfg:
-            i_tool = gui_prx_widgets.PrxToggleButton()
+            i_tool = gui_prx_widgets.PrxIconToggleButton()
             self._application_switch_qt_tool_box._add_widget_(i_tool)
             i_tool._qt_widget._set_exclusive_widgets_(tools)
             i_tool.set_name(i_application)

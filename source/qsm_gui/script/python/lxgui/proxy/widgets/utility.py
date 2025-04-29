@@ -110,7 +110,7 @@ class Window(gui_prx_abstracts.AbsPrxWindow):
     def __init__(self, *args, **kwargs):
         super(Window, self).__init__(*args, **kwargs)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._qt_main_widget = _wgt_utility.QtWidget()
         self._qt_widget.setCentralWidget(self._qt_main_widget)
         self._main_qt_layout = _qt_wgt_base.QtHBoxLayout(self._qt_main_widget)
@@ -128,7 +128,7 @@ class PrxLayerWidget(gui_prx_abstracts.AbsPrxWidget):
     def __init__(self, *args, **kwargs):
         super(PrxLayerWidget, self).__init__(*args, **kwargs)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         qt_layout_0 = _qt_wgt_base.QtVBoxLayout(self.widget)
         qt_layout_0.setContentsMargins(0, 0, 0, 0)
         qt_layout_0.setSpacing(0)
@@ -224,7 +224,7 @@ class PrxTextBrowser(gui_prx_abstracts.AbsPrxWidget):
     def __init__(self, *args, **kwargs):
         super(PrxTextBrowser, self).__init__(*args, **kwargs)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         qt_layout_0 = _qt_wgt_base.QtVBoxLayout(self.widget)
         qt_layout_0.setContentsMargins(*[0]*4)
         widget = _qt_wgt_ipt_for_content.QtInputForContent()
@@ -336,6 +336,12 @@ class PrxIconPressButton(gui_prx_abstracts.AbsPrxWidget):
         super(PrxIconPressButton, self).__init__(*args, **kwargs)
         self._qt_widget.setFixedSize(20, 20)
 
+    def set_path(self, path):
+        self._qt_widget._set_path_text_(path)
+
+    def get_path(self):
+        return self._qt_widget._get_path_text_()
+
     def set_name(self, *args, **kwargs):
         self._qt_widget._set_name_text_(*args, **kwargs)
 
@@ -395,6 +401,64 @@ class PrxIconPressButton(gui_prx_abstracts.AbsPrxWidget):
 
     def save_main_icon_to_file(self, file_path):
         self._qt_widget._save_main_icon_to_file_(file_path)
+
+
+class PrxIconToggleButton(gui_prx_abstracts.AbsPrxWidget):
+    QT_WIDGET_CLS = _qt_wgt_button.QtIconToggleButton
+
+    def __init__(self, *args, **kwargs):
+        super(PrxIconToggleButton, self).__init__(*args, **kwargs)
+        self._qt_widget._set_size_(20, 20)
+
+    def set_path(self, path):
+        self._qt_widget._set_path_text_(path)
+
+    def get_path(self):
+        return self._qt_widget._get_path_text_()
+
+    def set_name(self, text):
+        self._qt_widget._set_name_text_(text)
+
+    def set_icon_name(self, icon_name):
+        self._qt_widget._set_icon_file_path_(
+            gui_core.GuiIcon.get(icon_name),
+        )
+
+    def set_tool_tip(self, text):
+        self._qt_widget._set_tool_tip_(text)
+
+    def set_checked(self, boolean):
+        self._qt_widget._set_checked_(boolean)
+
+    def get_is_checked(self):
+        return self._qt_widget._is_checked_()
+
+    def execute_swap_check(self):
+        self._qt_widget._swap_check_()
+
+    def get_checked(self):
+        return self._qt_widget._is_checked_()
+
+    def connect_check_clicked_to(self, fnc):
+        self._qt_widget.check_clicked.connect(fnc)
+
+    def connect_check_toggled_to(self, fnc):
+        self._qt_widget.check_toggled.connect(fnc)
+
+    def connect_user_check_clicked_to(self, fnc):
+        self._qt_widget.user_check_clicked.connect(fnc)
+
+    def connect_user_check_toggled_to(self, fnc):
+        self._qt_widget.user_check_toggled.connect(fnc)
+
+    def connect_check_clicked_as_exclusive_to(self, fnc):
+        self._qt_widget.user_check_clicked_as_exclusive.connect(fnc)
+
+    def connect_check_changed_as_exclusive_to(self, fnc):
+        self._qt_widget.check_changed_as_exclusive.connect(fnc)
+
+    def connect_check_swapped_as_exclusive_to(self, fnc):
+        self._qt_widget.check_swapped_as_exclusive.connect(fnc)
 
 
 class PrxPressButton(gui_prx_abstracts.AbsPrxWidget):
@@ -504,58 +568,6 @@ class PrxCheckItem(gui_prx_abstracts.AbsPrxWidget):
             gui_core.GuiIcon.get(icon_name_0),
             gui_core.GuiIcon.get(icon_name_1)
         )
-
-
-class PrxToggleButton(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = _qt_wgt_button.QtIconToggleButton
-
-    def __init__(self, *args, **kwargs):
-        super(PrxToggleButton, self).__init__(*args, **kwargs)
-        self._qt_widget._set_size_(20, 20)
-
-    def set_name(self, text):
-        self._qt_widget._set_name_text_(text)
-
-    def set_icon_name(self, icon_name):
-        self._qt_widget._set_icon_file_path_(
-            gui_core.GuiIcon.get(icon_name),
-        )
-
-    def set_tool_tip(self, text):
-        self._qt_widget._set_tool_tip_(text)
-
-    def set_checked(self, boolean):
-        self._qt_widget._set_checked_(boolean)
-
-    def get_is_checked(self):
-        return self._qt_widget._is_checked_()
-
-    def execute_swap_check(self):
-        self._qt_widget._swap_check_()
-
-    def get_checked(self):
-        return self._qt_widget._is_checked_()
-
-    def connect_check_clicked_to(self, fnc):
-        self._qt_widget.check_clicked.connect(fnc)
-
-    def connect_check_toggled_to(self, fnc):
-        self._qt_widget.check_toggled.connect(fnc)
-
-    def connect_user_check_clicked_to(self, fnc):
-        self._qt_widget.user_check_clicked.connect(fnc)
-
-    def connect_user_check_toggled_to(self, fnc):
-        self._qt_widget.user_check_toggled.connect(fnc)
-
-    def connect_check_clicked_as_exclusive_to(self, fnc):
-        self._qt_widget.user_check_clicked_as_exclusive.connect(fnc)
-
-    def connect_check_changed_as_exclusive_to(self, fnc):
-        self._qt_widget.check_changed_as_exclusive.connect(fnc)
-
-    def connect_check_swapped_as_exclusive_to(self, fnc):
-        self._qt_widget.check_swapped_as_exclusive.connect(fnc)
 
 
 class PrxFilterBar(gui_prx_abstracts.AbsPrxWidget):

@@ -209,7 +209,7 @@ class PrxListView(
         for i_key, i_enable, i_scale in [
             ('small', False, .75), ('medium', True, 1.0), ('large', False, 1.25), ('super', False, 1.5)
         ]:
-            i_tool = _utility.PrxToggleButton()
+            i_tool = _utility.PrxIconToggleButton()
             self._prx_scale_switch_tool_box.add_widget(i_tool)
             # i_tool._qt_widget._set_size_(24, 24)
             # i_tool._qt_widget._set_icon_frame_draw_size_(24, 24)
@@ -234,7 +234,7 @@ class PrxListView(
         for i_key, i_mode in [
             ('number', 0), ('name', 1)
         ]:
-            i_tool = _utility.PrxToggleButton()
+            i_tool = _utility.PrxIconToggleButton()
             self._prx_sort_switch_tool_box.add_widget(i_tool)
             # i_tool._qt_widget._set_size_(24, 24)
             # i_tool._qt_widget._set_icon_frame_draw_size_(24, 24)

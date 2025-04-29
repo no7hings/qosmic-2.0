@@ -133,7 +133,7 @@ class QtContentDialog(_QtDialog):
     def __init__(self, *args, **kwargs):
         super(QtContentDialog, self).__init__(*args, **kwargs)
 
-        self._gui_build_()
+        self._gui_build_fnc()
 
         self._ok_python_script = None
         self._no_python_script = None
@@ -166,7 +166,7 @@ class QtContentDialog(_QtDialog):
         self._do_window_close_()
         self.reject()
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._set_icon_name_('log')
 
         lot = _base.QtVBoxLayout(self)
@@ -370,7 +370,7 @@ class QtInputDialog(
 
         self._verbose = False
 
-        self._gui_build_()
+        self._gui_build_fnc()
 
     def eventFilter(self, *args):
         widget, event = args
@@ -391,7 +391,7 @@ class QtInputDialog(
     def _set_title_(self, text):
         self.setWindowTitle(text)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._set_icon_name_('input')
 
         lot = _base.QtVBoxLayout(self)
@@ -535,7 +535,7 @@ class QtToolDialog(
 
         self._verbose = False
 
-        self._gui_build_()
+        self._gui_build_fnc()
 
     def closeEvent(self, event):
         self._do_window_close_()
@@ -544,7 +544,7 @@ class QtToolDialog(
     def _set_title_(self, text):
         self.setWindowTitle(text)
 
-    def _gui_build_(self):
+    def _gui_build_fnc(self):
         self._set_icon_name_('tool/chart')
 
         lot = _base.QtVBoxLayout(self)

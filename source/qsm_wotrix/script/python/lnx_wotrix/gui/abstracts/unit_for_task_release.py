@@ -63,7 +63,7 @@ class AbsPrxUnitForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
 
     def _gui_add_main_tools(self):
-        self._left_visible_swap_tool = gui_prx_widgets.PrxToggleButton()
+        self._left_visible_swap_tool = gui_prx_widgets.PrxIconToggleButton()
         self._main_prx_tool_box.add_widget(self._left_visible_swap_tool)
         self._left_visible_swap_tool.set_name('task')
         self._left_visible_swap_tool.set_icon_name('tree')

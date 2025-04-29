@@ -12,10 +12,10 @@ import lnx_resora.gui.abstracts as lnx_rsr_gui_abstracts
 
 class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
     class DragMode:
+        Default = 'default'
         Reference = 'reference'
         Import = 'import'
         Open = 'open'
-        Disable = 'disable'
 
     GUI_HIS_GROUP_DRAG_MODE = 'resora.dcc.maya_scene.drag_mode'
 
@@ -24,14 +24,14 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
 
     def _gui_add_drag_mode_switch_tools(self):
         cfg = [
+            ('default', 'file/file'),
             ('reference', 'resora/maya_reference'),
             ('import', 'resora/maya_import'),
             ('open', 'resora/maya_open'),
-            ('disable', 'tool/disable')
         ]
         tools = []
         for i_drag_mode, i_icon_name in cfg:
-            i_tool = gui_prx_widgets.PrxToggleButton()
+            i_tool = gui_prx_widgets.PrxIconToggleButton()
             self._drag_mode_switch_prx_tool_box.add_widget(i_tool)
 
             i_tool._qt_widget._set_exclusive_widgets_(tools)
@@ -48,7 +48,7 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
             )
 
     def _gui_add_drag_option_tools(self):
-        self._auto_namespace_button = gui_prx_widgets.PrxToggleButton()
+        self._auto_namespace_button = gui_prx_widgets.PrxIconToggleButton()
         self._drag_option_prx_tool_box.add_widget(self._auto_namespace_button)
         self._auto_namespace_button.set_name('use namespace')
         self._auto_namespace_button.set_icon_name('namespace')
@@ -57,7 +57,7 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
         )
         self._auto_namespace_button.set_checked(True)
 
-        self._move_to_cursor_button = gui_prx_widgets.PrxToggleButton()
+        self._move_to_cursor_button = gui_prx_widgets.PrxIconToggleButton()
         self._drag_option_prx_tool_box.add_widget(self._move_to_cursor_button)
         self._move_to_cursor_button.set_name('move to cursor')
         self._move_to_cursor_button.set_icon_name('resora/maya_move_to_cursor')

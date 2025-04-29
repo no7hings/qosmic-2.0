@@ -9,11 +9,7 @@ import functools
 
 import pyaudio
 
-import six
-
 import lxbasic.core as bsc_core
-
-import lxbasic.pinyin as bsc_pinyin
 
 import lxbasic.session as bsc_session
 
@@ -26,6 +22,11 @@ import lxgui.qt.view_widgets as gui_qt_vew_widgets
 import lxgui.proxy.widgets as gui_prx_widgets
 
 import lnx_screw.core as lnx_scr_core
+
+
+class TagMatchMode:
+    MatchAll = 0
+    MatchAny = 1
 
 
 class _GuiThreadExtra(object):
@@ -522,6 +523,12 @@ class _GuiTypeOpt(
     def get_assign_path_set_for(self, scr_type_path):
         return self._qt_tree_widget._view_model._get_item(scr_type_path)._item_model.get_assign_path_set_for()
 
+    def get_assign_path_set_for_many(self, scr_type_paths):
+        path_set = set()
+        for i_scr_type_path in scr_type_paths:
+            path_set.update(self.get_assign_path_set_for(i_scr_type_path))
+        return path_set
+
     def gui_reload_entity(self, scr_entity_path):
         qt_item = self._qt_tree_widget._view_model._get_item(scr_entity_path)
         if qt_item:
@@ -546,6 +553,7 @@ class _GuiTypeOpt(
 class _GuiTagOpt(
     _GuiBaseOpt
 ):
+
     def restore(self):
         self._qt_tag_widget._view_model.restore()
 
@@ -780,6 +788,8 @@ class _GuiTagOpt(
         self.restore_all()
         self.gui_add_all_entities()
 
+        self._page.do_gui_node_refresh_by_type_select_or_check()
+
     def get_check_entity_paths(self):
         return self._qt_tag_widget._view_model.get_all_checked_node_paths()
 
@@ -788,6 +798,24 @@ class _GuiTagOpt(
 
     def get_assign_path_set_for(self, scr_tag_path):
         return self._qt_tag_widget._view_model._get_item(scr_tag_path)._get_assign_path_set_()
+
+    def get_assign_path_set_for_many(self, scr_tag_paths, mode):
+        if mode == TagMatchMode.MatchAll:
+            path_set_dict = {}
+            for i_scr_tag_path in scr_tag_paths:
+                i_scr_tag_group_path = bsc_core.BscNodePath.get_dag_parent_path(i_scr_tag_path)
+                i_path_set = self.get_assign_path_set_for(i_scr_tag_path)
+                path_set_dict.setdefault(i_scr_tag_group_path, set()).update(i_path_set)
+            return set.intersection(*list(path_set_dict.values()))
+        elif mode == TagMatchMode.MatchAny:
+            path_set = set()
+            for i_scr_tag_path in scr_tag_paths:
+                path_set.update(
+                    self.get_assign_path_set_for(i_scr_tag_path)
+                )
+            return path_set
+        else:
+            raise RuntimeError()
 
     def gui_do_close(self):
         pass
@@ -834,6 +862,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
         if item_frame_size is None:
             item_frame_size = self._window._gui_configure.get('item_frame_size')
 
+        # do not instance this in thread
         self._pyaudio_instance = pyaudio.PyAudio()
 
         self._qt_list_widget = gui_qt_vew_widgets.QtListWidget()
@@ -1163,11 +1192,10 @@ class _GuiNodeOpt(_GuiBaseOpt):
     def do_gui_add_all_by_type_(self, scr_type_paths):
         if scr_type_paths:
             self._type_node_path_set.clear()
-            for i_scr_type_path in scr_type_paths:
-                i_node_path_set = self._page._gui_type_opt.get_assign_path_set_for(i_scr_type_path)
-                if i_node_path_set:
-                    self._type_node_path_set.update(i_node_path_set)
 
+            self._type_node_path_set = self._page._gui_type_opt.get_assign_path_set_for_many(scr_type_paths)
+
+            # update tag intersection
             self._page._gui_tag_opt.intersection_all_item_assign_path_set(self._type_node_path_set)
 
             # has tag for filter unit
@@ -1185,6 +1213,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
         # when type is non selected, load by tag
         else:
             self._type_node_path_set.clear()
+
             # restore tag intersection to default
             self._page._gui_tag_opt.intersection_all_item_assign_path_set(self._type_node_path_set)
 
@@ -1193,24 +1222,20 @@ class _GuiNodeOpt(_GuiBaseOpt):
     def gui_get_tag_path_set(self):
         scr_tag_paths = self._page._gui_tag_opt.get_check_entity_paths()
         if scr_tag_paths:
-            path_set = set()
-            for i_scr_tag_path in scr_tag_paths:
-                i_node_path_set = self._page._gui_tag_opt.get_assign_path_set_for(i_scr_tag_path)
-                if i_node_path_set:
-                    path_set.update(i_node_path_set)
+            path_set = self._page._gui_tag_opt.get_assign_path_set_for_many(
+                scr_tag_paths, TagMatchMode.MatchAll
+            )
             return True, path_set
         return False, set()
 
     # by tag
     def do_gui_add_all_by_tag_(self, scr_tag_paths):
         if scr_tag_paths:
-            # self.restore()
-
             self._tag_node_path_set.clear()
-            for i_scr_tag_path in scr_tag_paths:
-                i_node_path_set = self._page._gui_tag_opt.get_assign_path_set_for(i_scr_tag_path)
-                if i_node_path_set:
-                    self._tag_node_path_set.update(i_node_path_set)
+
+            self._tag_node_path_set = self._page._gui_tag_opt.get_assign_path_set_for_many(
+                scr_tag_paths, TagMatchMode.MatchAll
+            )
 
             if self._type_node_path_set:
                 node_path_set = set.intersection(self._type_node_path_set, self._tag_node_path_set)
@@ -1218,6 +1243,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
                 node_path_set = self._tag_node_path_set
 
             self.gui_update_entities(node_path_set)
+
         # when tag is non checked, upload from type
         else:
             self._tag_node_path_set.clear()
@@ -1254,11 +1280,13 @@ class AbsPrxPageForManager(
 
     FILTER_COMPLETION_MAXIMUM = 50
 
+    # refresh by type
     def do_gui_node_refresh_by_type_select_or_check(self):
         self._gui_node_opt.do_gui_add_all_by_type_(
             self._gui_type_opt.get_selected_and_checked_entity_paths()
         )
 
+    # refresh by tag
     def do_gui_node_refresh_by_tag_check(self):
         self._gui_node_opt.do_gui_add_all_by_tag_(
             self._gui_tag_opt.get_check_entity_paths()
