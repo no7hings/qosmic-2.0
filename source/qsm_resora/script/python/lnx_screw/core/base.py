@@ -1376,9 +1376,9 @@ FLUSH PRIVILEGES;
 
         thumbnail_jpg_path = self.NodePathPattens.ThumbnailJpg.format(**options)
 
-        import lxbasic.cv.core as bsc_cv_core
+        import lxbasic.audio.core as bsc_ado_core
 
-        capture_opt = bsc_cv_core.AudioCaptureOpt(file_path)
+        capture_opt = bsc_ado_core.AudioCaptureOpt(file_path)
         capture_opt.create_thumbnail(thumbnail_jpg_path, replace=False)
         frame_count = capture_opt.get_frame_count()
 

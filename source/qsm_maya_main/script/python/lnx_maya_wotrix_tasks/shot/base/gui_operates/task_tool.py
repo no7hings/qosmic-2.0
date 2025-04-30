@@ -4,13 +4,13 @@ import lnx_wotrix.core as lnx_wtx_core
 import qsm_maya.core as qsm_mya_core
 
 
-class MayaShotTaskToolOpt(lnx_wtx_core.DccTaskToolOpt):
+class GuiTaskToolOpt(lnx_wtx_core.DccTaskToolOpt):
     @classmethod
     def test(cls):
         pass
 
     def __init__(self, *args, **kwargs):
-        super(MayaShotTaskToolOpt, self).__init__(*args, **kwargs)
+        super(GuiTaskToolOpt, self).__init__(*args, **kwargs)
 
     def create_groups_for(self, task):
         content = self._task_session._task_parse.dcc_configure.get_as_content(

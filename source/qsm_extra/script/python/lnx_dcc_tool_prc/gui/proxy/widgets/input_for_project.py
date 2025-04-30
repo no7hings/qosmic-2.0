@@ -103,7 +103,7 @@ class PrxInputForProject(prx_abstracts.AbsPrxWidget):
 
             i_gui_name = i_entity.variants.get('entity_gui_name')
             gui_name_dict[i_name] = i_gui_name
-            keyword_filter_dict[i_name] = filter(None, [i_name, i_gui_name])
+            keyword_filter_dict[i_name] = list(filter(None, [i_name, i_gui_name]))
             tag_filter_dict[i_name] = ['All']
 
         return dict(

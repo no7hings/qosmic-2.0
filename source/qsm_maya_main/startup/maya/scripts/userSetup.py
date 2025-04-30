@@ -20,7 +20,7 @@ class Setup(object):
 
             import lxmaya.startup as mya_startup
 
-            with bsc_log.LogContext.create(cls.LOG_KEY, 'TD menu'):
+            with bsc_log.LogContext.create(cls.LOG_KEY, 'Qosmic menu'):
                 mya_startup.MenuBuild().execute()
 
         import lxmaya.core as mya_core

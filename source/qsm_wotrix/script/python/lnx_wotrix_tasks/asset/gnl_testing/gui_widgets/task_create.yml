@@ -1,6 +1,6 @@
 build:
-    name: 'General Testing'
-    name_chs: '通用测试'
+    name: 'Testing'
+    name_chs: '测试'
 
     tool_tip:
         |-

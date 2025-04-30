@@ -9,14 +9,14 @@ from lnx_wotrix.gui.abstracts import subpage_for_task_create as _sub_page_for_ta
 
 import qsm_maya.core as qsm_mya_core
 
-import lnx_maya_wotrix.core as mya_lzy_wps_core
+import lnx_maya_wotrix.core as lnx_mya_wtx_core
 
 from ..gui_operates import task_create as _task_create_opt
 
 
 # cfx rig
 class GuiTaskCreateMain(_sub_page_for_task_create.AbsPrxSubpageForTaskCreate):
-    TASK_CREATE_OPT_CLS = _task_create_opt.MayaAssetCfxRigCreateOpt
+    TASK_CREATE_OPT_CLS = _task_create_opt.GuiTaskCreateOpt
 
     GUI_KEY = '{}/{}'.format(TASK_CREATE_OPT_CLS.RESOURCE_TYPE, TASK_CREATE_OPT_CLS.TASK)
 
@@ -31,7 +31,7 @@ class GuiTaskCreateMain(_sub_page_for_task_create.AbsPrxSubpageForTaskCreate):
         kwargs_new = copy.copy(resource_properties)
         kwargs_new['step'] = 'rig'
         kwargs_new['task'] = 'rigging'
-        task_parse = mya_lzy_wps_core.TaskParse()
+        task_parse = lnx_mya_wtx_core.TaskParse()
         rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
             'asset-disorder-rig_scene-maya-file', **kwargs_new
         )
@@ -49,7 +49,7 @@ class GuiTaskCreateMain(_sub_page_for_task_create.AbsPrxSubpageForTaskCreate):
             return
 
         if qsm_mya_core.SceneFile.new_with_dialog() is True:
-            task_parse = mya_lzy_wps_core.TaskParse()
+            task_parse = lnx_mya_wtx_core.TaskParse()
 
             task_unit = self._prx_options_node.get('task_unit')
             if not task_unit:

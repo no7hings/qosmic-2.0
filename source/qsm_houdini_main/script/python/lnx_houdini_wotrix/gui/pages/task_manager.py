@@ -9,6 +9,8 @@ from ..units.task_manager import project as _unit_project_task_manager
 
 from ..units.task_manager import asset as _unit_asset_task_manager
 
+from ..units.task_manager import episode as _unit_episode_task_manager
+
 from ..units.task_manager import sequence as _unit_sequence_task_manager
 
 from ..units.task_manager import shot as _unit_shot_task_manager
@@ -23,12 +25,16 @@ class PrxPageForTaskManager(_abs_page_for_task_manager.AbsPrxPageForTaskManager)
         ]
     else:
         RESOURCE_TYPES = [
-            'project', 'asset', 'sequence', 'shot'
+            'project', 'asset', 'episode', 'sequence', 'shot'
         ]
 
     UNIT_CLASSES = [
+        # project
         _unit_project_task_manager.GuiTaskManagerMain,
+        # asset
         _unit_asset_task_manager.GuiTaskManagerMain,
+        # episode, sequence, shot
+        _unit_episode_task_manager.GuiTaskManagerMain,
         _unit_sequence_task_manager.GuiTaskManagerMain,
         _unit_shot_task_manager.GuiTaskManagerMain,
     ]

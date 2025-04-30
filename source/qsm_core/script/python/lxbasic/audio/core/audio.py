@@ -1,12 +1,6 @@
 # coding:utf-8
 import os
 
-import pydub
-
-import pyaudio
-
-import threading
-
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
@@ -14,6 +8,8 @@ import lxbasic.storage as bsc_storage
 import pickle
 
 from .wrap import *
+
+from ...cv.core.wrap import *
 
 
 class AudioCaptureOpt(object):

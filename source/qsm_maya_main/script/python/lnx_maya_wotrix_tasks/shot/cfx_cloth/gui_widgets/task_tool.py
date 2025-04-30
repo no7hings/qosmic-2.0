@@ -1037,7 +1037,7 @@ class GuiTaskToolMain(
         _PrxExportToolset,
     ]
 
-    TASK_TOOL_OPT_CLS = _gui_task_tool_opt.MayaShotCfxClothToolOpt
+    TASK_TOOL_OPT_CLS = _gui_task_tool_opt.GuiTaskToolOpt
 
     def __init__(self, *args, **kwargs):
         super(GuiTaskToolMain, self).__init__(*args, **kwargs)

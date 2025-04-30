@@ -2,6 +2,6 @@
 from ...base.gui_operates import task_tool as _shot_gnl
 
 
-class MayaShotCfxDressingToolOpt(_shot_gnl.MayaShotTaskToolOpt):
+class GuiTaskToolOpt(_shot_gnl.GuiTaskToolOpt):
     def __init__(self, *args, **kwargs):
-        super(MayaShotCfxDressingToolOpt, self).__init__(*args, **kwargs)
+        super(GuiTaskToolOpt, self).__init__(*args, **kwargs)

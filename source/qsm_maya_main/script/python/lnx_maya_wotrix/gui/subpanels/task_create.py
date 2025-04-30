@@ -14,7 +14,6 @@ class PrxSubpanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCr
             'cfx_rig',
         ]
         SHOT_TASKS = [
-            'animation',
             'cfx_cloth',
             'cfx_dressing',
         ]
@@ -28,15 +27,17 @@ class PrxSubpanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCr
 
             'cfx_rig',
         ]
+        EPISODE_TASKS = [
+            'gnl_testing',
+        ]
         SEQUENCE_TASKS = [
             'gnl_testing',
         ]
         SHOT_TASKS = [
             'gnl_testing',
 
-            'animation',
-            'cfx_cloth',
-            'cfx_dressing',
+            'layout', 'animation',
+            'cfx_cloth', 'cfx_dressing',
         ]
 
     TASK_MODULE_ROOT = 'lnx_maya_wotrix_tasks'

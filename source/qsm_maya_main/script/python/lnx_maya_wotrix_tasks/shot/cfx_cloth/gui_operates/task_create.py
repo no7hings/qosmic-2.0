@@ -12,12 +12,12 @@ from . import task_tool as _task_tool
 from ..dcc_core import dcc_organize as _dcc_cor_organize
 
 
-class MayaShotCfxClothCreateOpt(_shot_gnl_task_create.MayaShotTaskCreateOpt):
+class GuiTaskCreateOpt(_shot_gnl_task_create.GuiTaskCreateOpt):
     STEP = 'cfx'
     TASK = 'cfx_cloth'
 
     def __init__(self, *args, **kwargs):
-        super(MayaShotCfxClothCreateOpt, self).__init__(*args, **kwargs)
+        super(GuiTaskCreateOpt, self).__init__(*args, **kwargs)
 
     def build_scene_src_fnc(
         self,
@@ -55,7 +55,7 @@ class MayaShotCfxClothCreateOpt(_shot_gnl_task_create.MayaShotTaskCreateOpt):
         task = self._properties['task']
         self.create_groups_for(task)
 
-        task_tool_opt = self._task_session.generate_opt_for(_task_tool.MayaShotCfxClothToolOpt)
+        task_tool_opt = self._task_session.generate_opt_for(_task_tool.GuiTaskToolOpt)
 
         task_tool_opt.apply_animation_scene_src(upstream_scene_path)
 

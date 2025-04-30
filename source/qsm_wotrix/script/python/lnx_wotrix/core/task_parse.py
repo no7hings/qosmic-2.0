@@ -191,6 +191,12 @@ class TaskParse(object):
             'asset-source-maya-scene_src-file'
         )
 
+    def generate_source_task_unit_pattern_opt_for(self, application, **variants):
+        resource_type = variants['resource_type']
+        return self.generate_pattern_opt_for(
+            '{}-source-{}-dir'.format(resource_type, application), **variants
+        )
+
     def generate_source_task_scene_src_pattern_opt_for(self, application, **variants):
         resource_type = variants['resource_type']
         return self.generate_pattern_opt_for(

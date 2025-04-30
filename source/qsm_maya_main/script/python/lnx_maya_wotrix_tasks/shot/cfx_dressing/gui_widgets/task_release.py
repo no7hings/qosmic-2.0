@@ -44,7 +44,7 @@ class GuiTaskReleaseMain(_abs_unit_for_task_release.AbsPrxUnitForTaskRelease):
 
     GUI_RESOURCE_VIEW_CLS = _PrxNodeView
 
-    TASK_RELEASE_OPT_CLS = _task_release.MayaShotCfxDressingReleaseOpt
+    TASK_RELEASE_OPT_CLS = _task_release.GuiTaskReleaseOpt
 
     def on_show_release_directory(self):
         task_session = self._page._task_session

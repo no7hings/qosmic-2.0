@@ -7,11 +7,11 @@ import copy
 
 import functools
 
-import pyaudio
-
 import lxbasic.core as bsc_core
 
 import lxbasic.session as bsc_session
+
+import lxbasic.audio.core as bsc_ado_core
 
 import lxgui.core as gui_core
 
@@ -876,8 +876,11 @@ class _GuiNodeOpt(_GuiBaseOpt):
         if item_frame_size is None:
             item_frame_size = self._window._gui_configure.get('item_frame_size')
 
-        # do not instance this in thread
-        self._pyaudio_instance = pyaudio.PyAudio()
+        if bsc_ado_core.AUDIO_FLAG is True:
+            # do not instance this in thread
+            self._pyaudio_instance = bsc_ado_core.pyaudio.PyAudio()
+        else:
+            self._pyaudio_instance = None
 
         self._qt_list_widget = gui_qt_vew_widgets.QtListWidget()
         self._page._prx_h_splitter_0.add_widget(self._qt_list_widget)

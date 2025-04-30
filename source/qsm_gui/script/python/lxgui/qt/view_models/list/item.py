@@ -1,8 +1,6 @@
 # coding:utf-8
 import six
 
-import pyaudio
-
 import lxbasic.core as bsc_core
 
 import lxbasic.pinyin as bsc_pinyin
@@ -82,6 +80,8 @@ class _AudioPlayThread(QtCore.QThread):
     def run(self):
         if self._pyaudio_instance is None:
             return
+
+        import pyaudio
 
         stream = None
         while self._running_flag:
@@ -1102,7 +1102,7 @@ class ListItemModel(_item_base.AbsItemModel):
             if _:
                 return _
 
-            import lxbasic.cv.core as bsc_cv_core
+            import lxbasic.audio.core as bsc_cv_core
 
             _capture_opt = bsc_cv_core.AudioCaptureOpt(_file_path)
             # catch first frame

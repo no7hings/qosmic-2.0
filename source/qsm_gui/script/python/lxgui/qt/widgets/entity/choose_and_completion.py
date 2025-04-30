@@ -433,6 +433,7 @@ class QtEntityChooseStack(QtWidgets.QWidget):
         self._dict = {}
 
     def _load_data(self, data):
+        # print(data)
         key = bsc_core.BscHash.to_hash_key(data)
         if key in self._dict:
             gui = self._dict[key]

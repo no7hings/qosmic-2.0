@@ -1,6 +1,8 @@
 # coding:utf-8
 import sys
 
+import lxbasic.log as bsc_log
+
 import lxbasic.core as bsc_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
@@ -14,6 +16,8 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
     PROJECT_TASKS =[
     ]
     ASSET_TASKS = [
+    ]
+    EPISODE_TASKS = [
     ]
     SEQUENCE_TASKS = [
     ]
@@ -35,8 +39,10 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
                 if gui_cls:
                     sys.stdout.write('find task create gui for {}/{} successful.\n'.format(resource_type, task))
                     return gui_cls
+            else:
+                sys.stderr.write('module: {} is not found.\n'.format(module_path))
         except Exception:
-            pass
+            bsc_log.LogDebug.trace()
 
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxSubpanelForTaskCreate, self).__init__(window, session, *args, **kwargs)
@@ -58,6 +64,8 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
             self.gui_setup_subpages_for(resource_type, self.PROJECT_TASKS)
         elif resource_type == 'asset':
             self.gui_setup_subpages_for(resource_type, self.ASSET_TASKS)
+        elif resource_type == 'episode':
+            self.gui_setup_subpages_for(resource_type, self.EPISODE_TASKS)
         elif resource_type == 'sequence':
             self.gui_setup_subpages_for(resource_type, self.SEQUENCE_TASKS)
         elif resource_type == 'shot':
@@ -69,6 +77,10 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
         self._sub_page_prx_tab_tool_box.load_history()
 
     def gui_setup_subpages_for(self, resource_type, tasks):
+        if not tasks:
+            sys.stderr.write('no task for create.\n')
+            return
+
         self._tab_widget_dict = {}
 
         with self._window.gui_progressing(maximum=len(tasks), label='build task create') as g_p:
@@ -83,6 +95,8 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
                 else:
                     i_gui_cls = self._find_gui_cls(resource_type, i_task)
                     if i_gui_cls:
+                        # register subpage class
+                        self.__class__.SUB_PAGE_CLASS_DICT[i_gui_key] = i_gui_cls
                         i_prx_page = self._subwindow.gui_instance_subpage(i_gui_cls)
 
                 if i_prx_page is None:

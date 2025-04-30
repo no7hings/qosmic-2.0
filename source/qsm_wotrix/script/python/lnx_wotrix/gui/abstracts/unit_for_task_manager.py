@@ -168,8 +168,10 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
             if gui_thread_flag != self._gui_thread_flag:
                 return [[], 0]
 
-            _task_unit_ptn_opt = self._unit._task_parse.generate_pattern_opt_for(
-                '{}-source-task_unit-dir'.format(self._unit.RESOURCE_TYPE), **task_variants
+            # to task unit
+            _task_unit_ptn_opt = self._unit._task_parse.generate_source_task_unit_pattern_opt_for(
+                application=self._application,
+                **task_variants
             )
             _matches = _task_unit_ptn_opt.find_matches()
             return [_matches, self._gui_thread_flag]
@@ -786,6 +788,17 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
                         resource_type='asset',
                         role=scan_resource_properties.role,
                         asset=scan_resource_properties.asset,
+                        file_format='ma',
+                        artist=self._artist,
+                    )
+                    self._resource_path = self._task_parse.to_wsp_resource_path(**resource_properties)
+
+                    self.gui_setup(resource_properties)
+                elif scan_entity.type == self._task_parse.EntityTypes.Episode:
+                    resource_properties = dict(
+                        project=scan_resource_properties.project,
+                        resource_type='episode',
+                        episode=scan_resource_properties.episode,
                         file_format='ma',
                         artist=self._artist,
                     )

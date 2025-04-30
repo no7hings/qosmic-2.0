@@ -1,6 +1,4 @@
 # coding:utf-8
-import sys
-
 import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
@@ -33,7 +31,7 @@ class AbsPrxPageForTaskRelease(gui_prx_widgets.PrxBasePage):
                     )
                     return gui_cls
         except Exception:
-            pass
+            bsc_log.LogDebug.trace()
 
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForTaskRelease, self).__init__(window, session, *args, **kwargs)

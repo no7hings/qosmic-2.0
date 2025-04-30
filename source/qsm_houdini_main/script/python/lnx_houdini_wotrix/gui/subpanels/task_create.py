@@ -9,9 +9,24 @@ class PrxSubpanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCr
     ]
 
     if qsm_gnl_core.scheme_is_release():
-        pass
+        ASSET_TASKS = [
+        ]
     else:
-        pass
+        PROJECT_TASKS = [
+            'gnl_testing',
+        ]
+        ASSET_TASKS = [
+            'gnl_testing',
+        ]
+        EPISODE_TASKS = [
+            'gnl_testing',
+        ]
+        SEQUENCE_TASKS = [
+            'gnl_testing',
+        ]
+        SHOT_TASKS = [
+            'gnl_testing',
+        ]
 
     TASK_MODULE_ROOT = 'lnx_houdini_wotrix_tasks'
 

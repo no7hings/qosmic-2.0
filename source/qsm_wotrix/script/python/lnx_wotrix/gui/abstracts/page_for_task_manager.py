@@ -129,7 +129,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
             w.show_window_auto()
         else:
             self._window.exec_message_dialog(
-                'entry one {} and retry.'.format(resource_type),
+                'enter one {} and retry.'.format(resource_type),
                 title='Task Create',
                 status='warning'
             )

@@ -374,7 +374,7 @@ class GuiTaskToolMain(_abs_unit_for_task_tool.AbsPrxUnitForTaskTool):
         _PrxExtraToolset
     ]
 
-    TASK_TOOL_OPT_CLS = _gui_task_tool_opt.MayaAssetCfxRigToolOpt
+    TASK_TOOL_OPT_CLS = _gui_task_tool_opt.GuiTaskToolOpt
 
     def __init__(self, *args, **kwargs):
         super(GuiTaskToolMain, self).__init__(*args, **kwargs)

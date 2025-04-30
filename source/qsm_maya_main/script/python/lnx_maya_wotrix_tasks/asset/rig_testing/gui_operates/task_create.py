@@ -6,12 +6,12 @@ import qsm_maya.core as qsm_mya_core
 from ...base.gui_operates import task_create as _asset_gnl_task_create
 
 
-class MayaAssetRigTestingCreateOpt(_asset_gnl_task_create.MayaAssetTaskCreateOpt):
+class GuiTaskCreateOpt(_asset_gnl_task_create.GuiTaskCreateOpt):
     STEP = 'rig'
     TASK = 'rig_testing'
 
     def __init__(self, *args, **kwargs):
-        super(MayaAssetRigTestingCreateOpt, self).__init__(*args, **kwargs)
+        super(GuiTaskCreateOpt, self).__init__(*args, **kwargs)
 
     def build_scene_src_fnc(self, scene_src_path, upstream_scene_path=None):
 

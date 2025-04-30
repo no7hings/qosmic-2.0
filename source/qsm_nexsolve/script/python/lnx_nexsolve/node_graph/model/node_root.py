@@ -254,7 +254,9 @@ class RootNode(
         return node.get_path() in self._gui_data.viewed.node_path_set
 
     def get_viewed_nodes(self):
-        return filter(None, [self.get_node(x) for x in self._gui_data.viewed.node_path_set])
+        return list(
+            filter(None, [self.get_node(x) for x in self._gui_data.viewed.node_path_set])
+        )
 
     def _clear_viewed_node(self):
         [x._update_viewed(False) for x in self.get_viewed_nodes()]
@@ -284,7 +286,9 @@ class RootNode(
         return node.get_path() in self._gui_data.edited.node_path_set
 
     def get_edited_nodes(self):
-        return filter(None, [self.get_node(x) for x in self._gui_data.edited.node_path_set])
+        return list(
+            filter(None, [self.get_node(x) for x in self._gui_data.edited.node_path_set])
+        )
 
     def _clear_edited_node(self):
         [x._update_edited(False) for x in self.get_edited_nodes()]

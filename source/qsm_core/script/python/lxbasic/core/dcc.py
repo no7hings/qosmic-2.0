@@ -942,8 +942,7 @@ class AbsStack(object):
         :return: bool
         """
         if regex:
-            keys = self.get_keys(regex)
-            return keys != []
+            return bool(self.get_keys(regex))
         return self._count > 0
 
     def add_one(self, obj):

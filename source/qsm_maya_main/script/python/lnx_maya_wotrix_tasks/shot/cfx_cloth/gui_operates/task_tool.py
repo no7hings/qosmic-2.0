@@ -18,10 +18,10 @@ from .. import dcc_core as _task_dcc_core
 from .. import dcc_scripts as _task_dcc_scripts
 
 
-class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
+class GuiTaskToolOpt(_shot_gnl.GuiTaskToolOpt):
 
     def __init__(self, *args, **kwargs):
-        super(MayaShotCfxClothToolOpt, self).__init__(*args, **kwargs)
+        super(GuiTaskToolOpt, self).__init__(*args, **kwargs)
 
     def load_cfx_rig_auto(self, rig_namespace, force=False):
         reference_cache = qsm_mya_core.ReferencesCache()

@@ -33,7 +33,7 @@ class AbsPrxPageForTaskTool(gui_prx_widgets.PrxBasePage):
                     )
                     return gui_cls
         except Exception:
-            pass
+            bsc_log.LogDebug.trace()
 
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForTaskTool, self).__init__(window, session, *args, **kwargs)

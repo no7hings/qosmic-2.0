@@ -13,9 +13,9 @@ from ...base.gui_operates import task_tool as _asset_gnl_task_tool
 from .. import dcc_core as _task_dcc_core
 
 
-class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
+class GuiTaskToolOpt(_asset_gnl_task_tool.GuiTaskToolOpt):
     def __init__(self, *args, **kwargs):
-        super(MayaAssetCfxRigToolOpt, self).__init__(*args, **kwargs)
+        super(GuiTaskToolOpt, self).__init__(*args, **kwargs)
 
     @classmethod
     def generate_rig_opt(cls):

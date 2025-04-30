@@ -309,11 +309,11 @@ class ShotCfxRigsOpt(object):
         pass
 
     def load_all(self):
-        import lnx_maya_wotrix.core as mya_lzy_wps_core
+        import lnx_maya_wotrix.core as lnx_mya_wtx_core
 
         self._assets_query = qsm_mya_hdl_anm_core.AdvRigAssetsQuery()
         self._assets_query.do_update()
-        task_parse = mya_lzy_wps_core.TaskParse()
+        task_parse = lnx_mya_wtx_core.TaskParse()
 
         for i_resource in self._assets_query.get_all():
             i_rig_namespace = i_resource.namespace

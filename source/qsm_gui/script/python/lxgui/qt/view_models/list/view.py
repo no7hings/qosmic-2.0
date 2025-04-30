@@ -443,7 +443,7 @@ class ListViewModel(_view_base.AbsViewModel):
                     ).append(i_item)
 
             group_names = dict_.keys()
-            group_names = filter(None, group_names)
+            group_names = list(filter(None, group_names))
 
             sort_order = self.get_item_sort_order()
             if sort_order is not None:

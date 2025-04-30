@@ -110,7 +110,7 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
 
             i_gui_name = i_entity.variants.get('entity_gui_name')
             gui_name_dict[i_name] = i_gui_name
-            keyword_filter_dict[i_name] = filter(None, [i_name, i_gui_name])
+            keyword_filter_dict[i_name] = list(filter(None, [i_name, i_gui_name]))
             tag_filter_dict[i_name] = ['All']
 
         return dict(
@@ -135,7 +135,7 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
                 role_mask = self.ROLE_MASK
 
             if role_mask:
-                entities = filter(None, [project.role(x, cache_flag=self._scan_cache_flag) for x in role_mask])
+                entities = list(filter(None, [project.role(x, cache_flag=self._scan_cache_flag) for x in role_mask]))
             else:
                 entities = project.roles(cache_flag=self._scan_cache_flag)
 
@@ -144,7 +144,7 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
                 name_texts.append(i_entity.name)
                 i_gui_name = i_entity.variants.get('entity_gui_name')
                 gui_name_dict[i_name] = i_gui_name
-                keyword_filter_dict[i_name] = filter(None, [i_name, i_gui_name])
+                keyword_filter_dict[i_name] = list(filter(None, [i_name, i_gui_name]))
                 tag_filter_dict[i_name] = ['All']
 
         return dict(
@@ -169,9 +169,9 @@ class PrxInputForAsset(gui_prx_abstracts.AbsPrxWidget):
                 name_texts.append(i_entity.name)
                 i_gui_name = i_entity.variants.get('entity_gui_name')
                 gui_name_dict[i_name] = i_gui_name
-                keyword_filter_dict[i_name] = filter(None, [i_name, i_gui_name])
+                keyword_filter_dict[i_name] = list(filter(None, [i_name, i_gui_name]))
                 i_level = i_entity.dtb_variants.get('asset.difficulty_level')
-                tag_filter_dict[i_name] = filter(None, ['All', i_level])
+                tag_filter_dict[i_name] = list(filter(None, ['All', i_level]))
 
         return dict(
             type_text='asset',

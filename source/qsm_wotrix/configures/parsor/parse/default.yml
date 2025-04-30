@@ -403,6 +403,11 @@ workspace:
         asset_task: '<.asset>/user.{artist}/{step}.{task}'
         asset_task_unit: '<.asset_task>/{task_unit}'
         asset_task_unit_scene: '<.asset_task_unit>/{asset}.{step}.{task}.{task_unit}.v{version}'
+        # episode
+        episode: '/{project}/{episode}'
+        episode_task: '<.episode>/user.{artist}/{step}.{task}'
+        episode_task_unit: '<.episode_task>/{task_unit}'
+        episode_task_unit_scene: '<.episode_task_unit>/{episode}.{step}.{task}.{task_unit}.v{version}'
         # sequence
         sequence: '/{project}/{sequence}'
         sequence_task: '<.sequence>/user.{artist}/{step}.{task}'

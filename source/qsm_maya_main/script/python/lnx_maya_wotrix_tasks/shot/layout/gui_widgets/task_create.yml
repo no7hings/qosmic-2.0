@@ -1,0 +1,42 @@
+build:
+    name: 'Layout'
+    name_chs: '分镜'
+
+    tool_tip:
+        |-
+        To be supplemented.
+
+    tool_tip_chs:
+        |-
+        待补充。
+
+    buttons:
+        apply_and_close:
+            name: 'Apply and Close'
+            name_chs: '应用并关闭'
+
+        apply:
+            name: 'Apply'
+            name_chs: '应用'
+
+        close:
+            name: 'Close'
+            name_chs: '关闭'
+
+    options:
+        name: 'Options'
+        name_chs: '选项'
+
+        parameters:
+            task_unit:
+                widget: enumerate
+                name: 'Task Unit'
+                name_chs: '任务单元'
+                options: ['main', 'test']
+                default: 'main'
+
+            use_current_scene:
+                widget: boolean
+                name: 'Use Current Scene'
+                name_chs: '使用当前文件'
+                value: False

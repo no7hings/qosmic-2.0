@@ -16,9 +16,9 @@ import lnx_wotrix.core as lnx_wtx_core
 import qsm_maya.core as qsm_mya_core
 
 
-class MayaAssetTaskReleaseOpt(lnx_wtx_core.DccTaskReleaseOpt):
+class GuiTaskReleaseOpt(lnx_wtx_core.DccTaskReleaseOpt):
     def __init__(self, *args, **kwargs):
-        super(MayaAssetTaskReleaseOpt, self).__init__(*args, **kwargs)
+        super(GuiTaskReleaseOpt, self).__init__(*args, **kwargs)
 
     def release_scene_src(self, *args, **kwargs):
         # ensure source non changed to save
