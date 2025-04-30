@@ -421,7 +421,7 @@ class PnlRscTextureAddTool(gui_prx_widgets.PrxSessionWindow):
 
     @classmethod
     def get_matches_by_patterns(cls, pattern_string, variants):
-        patterns = map(lambda x: str(x).strip(), pattern_string.split(','))
+        patterns = list(map(lambda x: str(x).strip(), pattern_string.split(',')))
         for i_pattern in patterns:
             i_pattern_opt = bsc_core.BscStgParseOpt(i_pattern)
             i_pattern_opt.update_variants(**variants)

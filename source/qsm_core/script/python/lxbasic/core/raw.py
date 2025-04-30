@@ -764,7 +764,7 @@ class BscText(object):
         text = ensure_string(text)
 
         pieces = re.compile(r'(\d+)').split(text)
-        pieces[1::2] = map(int, pieces[1::2])
+        pieces[1::2] = list(map(int, pieces[1::2]))
         return pieces
 
     @classmethod

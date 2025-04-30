@@ -694,7 +694,7 @@ class StgExtra(object):
         if _:
             # fix windows path
             if _cor_base.BscSystem.get_is_windows():
-                _ = map(lambda x: x.replace('\\', '/'), _)
+                _ = list(map(lambda x: x.replace('\\', '/'), _))
             if len(_) > 1:
                 # sort by number
                 if sort_by == 'number':

@@ -45,6 +45,6 @@ class GuiTaskCreateMain(_sub_page_for_task_create.AbsPrxSubpageForTaskCreate):
                 lnx_hou_core.SceneFile.refresh()
 
                 with self._subwindow._window.gui_minimized():
-                    gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
+                    gui_qt_core.QtHoudini.make_snapshot(thumbnail_path)
 
                 prx_widget.gui_load_task_unit_scene(kwargs_new)

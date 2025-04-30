@@ -88,7 +88,7 @@ def main(session):
         return _list
 
     def deduplication_fnc_():
-        _formats = map(lambda x: str(x).strip(), o.get('deduplication_priority_formats').split(','))
+        _formats = list(map(lambda x: str(x).strip(), o.get('deduplication_priority_formats').split(',')))
         _file_paths_as_dd = bsc_storage.StgPath.deduplication_files_by_formats(
             file_paths, _formats
         )

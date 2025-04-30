@@ -621,18 +621,20 @@ patterns:
             # task
             task-dir: '<.dir>/user.{artist}/{step}.{task}'
             task_unit-dir: '<.task-dir>/{task_unit}'
+            # maya
             maya-dir: '<.task_unit-dir>/maya'
             # scene_src
-            #   maya
             maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
             maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
-            #   houdini
+            # houdini
+            houdini-dir: '<.task_unit-dir>/houdini'
             houdini-scene_src-file: '<.task_unit-dir>/houdini/scenes/<..task_unit-version-name>.hip'
             houdini-thumbnail-file: '<.task_unit-dir>/houdini/.thumbnails/<..task_unit-version-name>.jpg'
-            #   katana
+            # katana
+            katana-dir: '<.task_unit-dir>/katana'
             katana-scene_src-file: '<.task_unit-dir>/katana/scenes/<..task_unit-version-name>.katana'
             katana-thumbnail-file: '<.task_unit-dir>/katana/.thumbnails/<..task_unit-version-name>.jpg'
-            #   directories
+            # directories
             maya-cache-dir: '<.task_unit-dir>/maya/caches'
             maya-ncloth-cache-dir: '<.task_unit-dir>/maya/caches/ncloth/<..task_unit-version-name>'
             maya-cfx_cache-dir: '<.task_unit-dir>/maya/cfx_caches'

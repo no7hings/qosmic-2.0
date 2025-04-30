@@ -64,6 +64,7 @@ class _AbsCustomGui(QtWidgets.QWidget):
     def _exec_script_fnc(self, script):
         if script:
             node = self._param.node
+            # noinspection PyRedundantParentheses
             exec (script)
 
 

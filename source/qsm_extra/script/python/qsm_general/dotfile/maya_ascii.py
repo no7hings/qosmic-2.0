@@ -14,6 +14,7 @@ from ..core import dcc_base as _dcc_base
 from . import abc_
 
 
+# fixme: no result in Py3
 class MayaAscii(abc_.AbsDotfile):
     SEP = ';\n'
 

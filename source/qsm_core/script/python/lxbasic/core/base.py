@@ -390,7 +390,7 @@ class BscStorage(object):
         )
         if _:
             if cls.get_platform_is_windows():
-                _ = map(lambda x: x.replace('\\', '/'), _)
+                _ = list(map(lambda x: x.replace('\\', '/'), _))
             return _
         return []
 
@@ -909,7 +909,7 @@ class BscUuid(object):
 
     @classmethod
     def generate_by_files(cls, file_paths, extra=None):
-        file_strs = map(cls._to_file_str, file_paths)
+        file_strs = list(map(cls._to_file_str, file_paths))
         file_strs.sort()
         if isinstance(extra, (tuple, list)):
             file_strs.extend(extra)

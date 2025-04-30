@@ -1006,7 +1006,7 @@ class StandardNode(_AbsNode):
         p = self._param_root.get_parameter(key)
         if p:
             if ignore_undo is True:
-                return p._set_value(value)
+                return p._set_value_evt(value)
             return p.set_value(value)
 
     def get(self, key):

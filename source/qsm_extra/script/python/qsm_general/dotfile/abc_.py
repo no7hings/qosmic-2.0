@@ -67,7 +67,7 @@ class AbsDotfile(object):
             with open(self._file_path) as f:
                 data = f.read()
                 sep = self.SEP
-                self._lines = map(lambda x: r'{}{}'.format(x.rstrip(), sep), data.split(sep))
+                self._lines = list(map(lambda x: r'{}{}'.format(x.rstrip(), sep), data.split(sep)))
 
 
 class AbsDotXml(object):

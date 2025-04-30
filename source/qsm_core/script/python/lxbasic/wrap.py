@@ -210,8 +210,8 @@ class Debug:
                     )
                 )
 
-            # convert chinese word to right view
-            value = ensure_string(value.decode('unicode_escape', 'ignore'))
+            # todo: convert chinese word to right view
+            value = ensure_string(value)
 
             text = '\n'.join(['*'*80]+['traceback:']+exc_texts+[value]+['*'*80])
             return text

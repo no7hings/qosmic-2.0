@@ -24,7 +24,7 @@ class BscPattern:
         )
         if _:
             if _base.BscSystem.get_is_windows():
-                _ = map(lambda x: x.replace('\\', '/'), _)
+                _ = list(map(lambda x: x.replace('\\', '/'), _))
             return _
         return []
 
@@ -127,7 +127,7 @@ class BscVersion:
     @classmethod
     def to_number_embedded_args(cls, text):
         pieces = re.compile(r'(\d+)').split(text)
-        pieces[1::2] = map(int, pieces[1::2])
+        pieces[1::2] = list(map(int, pieces[1::2]))
         return pieces
 
     @classmethod

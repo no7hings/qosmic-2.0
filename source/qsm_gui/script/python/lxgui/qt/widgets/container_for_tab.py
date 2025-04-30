@@ -234,6 +234,7 @@ class _AbsQtHTabToolBox(
             scroll_abs_w = 0
             tab_items = self._tab_item_stack.get_all_items()
             if tab_items:
+
                 # update size
                 for i_index, i_tab_item in enumerate(tab_items):
                     i_name_text = i_tab_item.get_name()
@@ -241,14 +242,17 @@ class _AbsQtHTabToolBox(
                         i_txt_w = QtGui.QFontMetrics(self._tab_text_font).width(i_name_text)
                     else:
                         i_txt_w = tab_w
+
                     # compute tab width
                     i_tab_w = i_txt_w+8
                     if i_tab_item.icon_text:
                         i_tab_w += 4
                     self._item_width_or_height_dict[i_index] = i_tab_w
                     scroll_abs_w += i_tab_w
+
                 # scroll
                 scroll_w = h  # use height
+
                 # update scroll model
                 self._scroll_bar_model.set_w_or_h(scroll_w)
                 self._scroll_bar_model.set_abs_w_or_h(scroll_abs_w+btn_frm_w*3)
@@ -296,6 +300,7 @@ class _AbsQtHTabToolBox(
                     self._tab_scroll_previous_button.hide()
                     self._tab_scroll_next_button.hide()
                     self._tab_choose_button.hide()
+
                 # tab items
                 scroll_value = self._scroll_bar_model.get_value()
                 heights = list(self._item_width_or_height_dict.values())
