@@ -136,7 +136,7 @@ class _QtSpcTaskView(
         self._update_timer = QtCore.QTimer(self)
         self._update_timer.timeout.connect(self._refresh_on_time)
 
-        self._update_timer.start(1000/12)
+        self._update_timer.start(int(1000/12))
 
         self._init_thread_worker_extra_def_(self)
 

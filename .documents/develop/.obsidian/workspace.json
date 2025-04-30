@@ -48,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:#waiting",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -188,7 +188,7 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "15555a3b0fd2386a",
+  "active": "91a87c4c69dbe632",
   "lastOpenFiles": [
     "开发相关/开发进度/开发-2025.md",
     "开发相关/开发进度/优化-2024.md",
