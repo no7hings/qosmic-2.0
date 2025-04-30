@@ -339,7 +339,7 @@ class _PrxNodeView(
             )
 
     def gui_select_all_root(self):
-        self._qt_tree_widget._view_model.clear_item_selection()
+        self._qt_tree_widget._view_model.unselect_all_items()
         for i in self._qt_tree_widget._view_model.get_all_items():
             i_dcc_node_type = i._item_model.get_assign_data('dcc_node_type')
             if i_dcc_node_type == 'root':

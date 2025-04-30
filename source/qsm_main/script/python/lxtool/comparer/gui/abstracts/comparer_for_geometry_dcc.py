@@ -63,7 +63,7 @@ class AbsPnlComparerForAssetGeometryDcc(gui_prx_widgets.PrxSessionWindow):
         self._update_geometry_from_model_item.connect_press_clicked_to(self.import_fnc)
 
     def _set_viewer_groups_build_(self):
-        expand_box_0 = gui_prx_widgets.PrxHToolGroup()
+        expand_box_0 = gui_prx_widgets.PrxHToolGroupA()
         expand_box_0.set_name('Viewer(s)')
         expand_box_0.set_expanded(True)
         self.add_widget(expand_box_0)

@@ -5,16 +5,44 @@ build:
             name_chs: ''
 
             tools:
-                toolbox:
+                toolbox0:
                     widget: group
                     name: 'toolbox'
                     name_chs: '工具盒'
                     tool_tip: 'toolbox'
                     tool_tip_chs: '工具盒'
 
-                toolbox/tool0:
+                toolbox0/tool0:
                     widget: button
                     name: 'button'
                     name_chs: '按钮'
                     icon_name: 'file/file'
+                    tool_tip: 'tool'
+                    tool_tip_chs: '工具'
 
+                toolbox0/tool1:
+                    widget: button
+                    mode: 'toggle'
+                    name: 'button'
+                    name_chs: '按钮'
+                    icon_name: 'file/file'
+                    tool_tip: 'tool'
+                    tool_tip_chs: '工具'
+
+                toolbox0/tool2:
+                    widget: button
+                    mode: 'toggle'
+                    name: 'button'
+                    name_chs: '按钮'
+                    icon_name: 'file/file'
+                    tool_tip: 'tool'
+                    tool_tip_chs: '工具'
+                    exclusive_set: ['toolbox0/tool1', 'toolbox0/tool2']
+
+                toolbox1/tool0:
+                    widget: button
+                    name: 'button'
+                    name_chs: '按钮'
+                    icon_name: 'file/file'
+                    tool_tip: 'tool'
+                    tool_tip_chs: '工具'

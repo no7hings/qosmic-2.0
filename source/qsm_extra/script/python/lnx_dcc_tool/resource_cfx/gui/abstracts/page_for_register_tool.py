@@ -313,7 +313,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         self._prx_options_node.set('playblast.show_window', self.do_show_playblast_window)
         self._prx_options_node.set('playblast.create', self.do_create_playblast)
 
-        self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        self._prx_tool_group = gui_prx_widgets.PrxHToolGroupA()
         qt_v_lot.addWidget(self._prx_tool_group.widget)
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(

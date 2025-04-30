@@ -400,17 +400,23 @@ class AbsQtHeadFrame(
 ):
     toggled = qt_signal(bool)
 
+    QT_ORIENTATION = None
+
     def _refresh_widget_draw_(self):
         self.update()
 
     def __init__(self, *args, **kwargs):
         super(AbsQtHeadFrame, self).__init__(*args, **kwargs)
-        self.installEventFilter(self)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
-        self.setSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
+            self.setSizePolicy(
+                QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+            )
+        else:
+            self.setSizePolicy(
+                QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
+            )
 
         self._init_frame_base_def_(self)
         self._init_name_base_def_(self)
@@ -431,6 +437,8 @@ class AbsQtHeadFrame(
         self._refresh_expand_()
         # font
         self.setFont(_qt_core.QtFonts.NameNormal)
+
+        self.installEventFilter(self)
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
@@ -474,13 +482,23 @@ class AbsQtHeadFrame(
 
     def _refresh_expand_(self):
         if self._is_expanded is True:
-            self.setSizePolicy(
-                QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum
-            )
+            if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
+                self.setSizePolicy(
+                    QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum
+                )
+            else:
+                self.setSizePolicy(
+                    QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed
+                )
         else:
-            self.setSizePolicy(
-                QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
-            )
+            if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
+                self.setSizePolicy(
+                    QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+                )
+            else:
+                self.setSizePolicy(
+                    QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
+                )
         #
         if self._expand_direction == self.ExpandDirection.TopToBottom:
             self._set_icon_file_path_(
@@ -517,23 +535,20 @@ class AbsQtHeadFrame(
 
 
 class QtHHeadFrame(AbsQtHeadFrame):
+    QT_ORIENTATION = QtCore.Qt.Horizontal
+
     def __init__(self, *args, **kwargs):
         super(QtHHeadFrame, self).__init__(*args, **kwargs)
-        self.setSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
-        )
-
         self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('qt-style/arrow-right')
         self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('qt-style/arrow-down')
         self._expand_icon_file_path_2 = _gui_core.GuiIcon.get('qt-style/arrow-up')
 
 
 class QtVHeadFrame(AbsQtHeadFrame):
+    QT_ORIENTATION = QtCore.Qt.Vertical
+
     def __init__(self, *args, **kwargs):
         super(QtVHeadFrame, self).__init__(*args, **kwargs)
-        self.setSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
-        )
 
         self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('qt-style/arrow-down')
         self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('qt-style/arrow-right')

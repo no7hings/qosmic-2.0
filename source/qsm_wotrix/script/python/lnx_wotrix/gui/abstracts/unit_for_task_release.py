@@ -83,7 +83,7 @@ class AbsPrxUnitForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         )
 
     def gui_unit_setup_fnc(self):
-        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
@@ -127,7 +127,7 @@ class AbsPrxUnitForTaskRelease(gui_prx_widgets.PrxBaseUnit):
             )
         )
 
-        self._tip_tool_group = gui_prx_widgets.PrxHToolGroup()
+        self._tip_tool_group = gui_prx_widgets.PrxHToolGroupA()
         right_v_sca.add_widget(self._tip_tool_group)
         self._tip_tool_group.set_expanded(True)
         self._tip_tool_group.set_name(
@@ -144,7 +144,7 @@ class AbsPrxUnitForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         self._prx_h_splitter.set_contract_enable(False)
         self._prx_h_splitter.set_fixed_size_at(0, 320)
 
-        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(self._bottom_prx_tool_bar.widget)
         self._bottom_prx_tool_bar.set_expanded(True)
         self._bottom_prx_tool_bar.set_align_right()

@@ -65,7 +65,7 @@ class QtNodeGraphWidget(gui_qt_vew_wgt_base._BaseViewWidget):
         self._build_keyword_filter_tool_box()
 
     def _add_top_tool_box(self, name, size_mode=0):
-        tool_box = gui_qt_widgets.QtHToolBox()
+        tool_box = gui_qt_widgets.QtHToolbox()
         self._top_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)
         tool_box._set_name_text_(name)

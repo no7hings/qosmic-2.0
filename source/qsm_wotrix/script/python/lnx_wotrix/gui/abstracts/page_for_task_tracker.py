@@ -67,7 +67,7 @@ class AbsPrxPageForTaskTracker(gui_prx_widgets.PrxBasePage):
             )
 
     def gui_page_setup_fnc(self):
-        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)

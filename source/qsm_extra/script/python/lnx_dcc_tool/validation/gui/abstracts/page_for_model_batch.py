@@ -316,7 +316,7 @@ class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
         for k, v in process_options.items():
             self._prx_options_node.set(k, v)
 
-        self._file_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        self._file_prx_tool_group = gui_prx_widgets.PrxHToolGroupA()
         prx_v_sca.add_widget(self._file_prx_tool_group)
         self._file_prx_tool_group.set_expanded(True)
         self._file_prx_tool_group.set_name(
@@ -338,7 +338,7 @@ class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
         self._asset_qt_tree_widget._view.item_select_changed.connect(self._show_results)
 
         # results
-        self._result_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        self._result_prx_tool_group = gui_prx_widgets.PrxHToolGroupA()
         prx_v_sca.add_widget(self._result_prx_tool_group)
         self._result_prx_tool_group.set_expanded(True)
         self._result_prx_tool_group.set_name(
@@ -357,7 +357,7 @@ class AbsPrxPageForScnModelBatch(gui_prx_widgets.PrxBasePage):
         )
 
         # buttons
-        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(self._bottom_prx_tool_bar.widget)
         self._bottom_prx_tool_bar.set_expanded(True)
 

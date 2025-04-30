@@ -1385,13 +1385,13 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         v_qt_layout = qt_widgets.QtVBoxLayout(v_qt_widget)
         v_qt_layout.setContentsMargins(0, 0, 0, 0)
         # top
-        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         v_qt_layout.addWidget(self._top_prx_tool_bar._qt_widget)
         self._top_prx_tool_bar.set_name('guide')
         self._top_prx_tool_bar.set_expanded(True)
         self._top_prx_tool_bar.set_align_left()
         #   guide
-        self._guide_tool_box = gui_prx_widgets.PrxHToolBox()
+        self._guide_tool_box = gui_prx_widgets.PrxHToolboxOld()
         self._top_prx_tool_bar.add_widget(self._guide_tool_box)
         self._guide_tool_box.set_expanded(True)
         self._guide_tool_box.set_size_mode(1)
@@ -1400,7 +1400,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         self._guide_tool_box.add_widget(self._type_guide_bar)
         self._type_guide_bar.set_name('guide for type')
         #   tag
-        self._tag_tool_box = gui_prx_widgets.PrxHToolBox()
+        self._tag_tool_box = gui_prx_widgets.PrxHToolboxOld()
         self._top_prx_tool_bar.add_widget(self._tag_tool_box)
         # self._tag_tool_box.set_expanded(True)
         self._tag_tool_box.set_size_mode(1)

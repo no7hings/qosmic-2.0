@@ -75,9 +75,10 @@ class AbsItemModel(object):
             painter.drawPath(i_path)
 
     @classmethod
-    def _draw_time_text(cls, painter, rect, text):
+    def _draw_time_text(cls, painter, rect, text, option=None):
         painter.setPen(QtGui.QColor(223, 223, 223))
-        painter.drawText(rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter, text)
+        option = option or QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter
+        painter.drawText(rect, option, text)
 
     @classmethod
     def _draw_text(cls, painter, rect, text, color, option=None):

@@ -322,7 +322,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         )
         text_browser.set_font_size(12)
         #
-        tool_bar = gui_prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolbar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
         button = gui_prx_widgets.PrxPressButton()
@@ -349,7 +349,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         )
         text_browser.set_font_size(12)
         #
-        tool_bar = gui_prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolbar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
         button = gui_prx_widgets.PrxPressButton()
@@ -376,7 +376,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         )
         text_browser.set_font_size(12)
         #
-        tool_bar = gui_prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolbar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
         button = gui_prx_widgets.PrxPressButton()
@@ -488,13 +488,13 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         l_0 = qt_widgets.QtVBoxLayout(w_0)
         l_0.setContentsMargins(0, 0, 0, 0)
 
-        top_tool_bar = gui_prx_widgets.PrxHToolBar()
+        top_tool_bar = gui_prx_widgets.PrxHToolbar()
         l_0.addWidget(top_tool_bar._qt_widget)
         top_tool_bar.set_expanded(True)
         top_tool_bar.set_align_left()
 
         if tool_data:
-            tool_box = gui_prx_widgets.PrxHToolBoxNew()
+            tool_box = gui_prx_widgets.PrxHToolbox()
             top_tool_bar.add_widget(tool_box)
             tool_box.set_expanded(True)
             for i_data in tool_data:

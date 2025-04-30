@@ -122,7 +122,7 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
         )
         load_prx_sca.add_widget(self._load_prx_page)
         # buttons
-        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         self.add_widget(self._bottom_prx_tool_bar)
         self._bottom_prx_tool_bar.set_expanded(True)
 

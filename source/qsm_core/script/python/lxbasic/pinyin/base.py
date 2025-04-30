@@ -56,9 +56,25 @@ class Text(object):
                 list_.append(''.join(map(lambda x: str(x).capitalize(), pypinyin.lazy_pinyin(i_c))))
         return list_
 
+    @staticmethod
+    def split_any_to_strings(text):
+        list_ = []
+        # to string
+        text = ensure_unicode(text)
+
+        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text)
+        for i_c in chars:
+            # is chinese
+            if re.match(six.u(r'[\u4e00-\u9fff]+'), i_c):
+                # to pinyin
+                list_.append(''.join(map(lambda x: str(x).capitalize(), pypinyin.lazy_pinyin(i_c))))
+            else:
+                list_.append(i_c)
+        return list_
+
     @classmethod
     def to_dcc_name(cls, text):
-        pieces = cls.split_any_to_words_extra(text)
+        pieces = cls.split_any_to_strings(text)
         name = '_'.join([x.lower() for x in pieces])
         if len(name) > 1:
             if name[0].isdigit():

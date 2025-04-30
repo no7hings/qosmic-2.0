@@ -273,7 +273,7 @@ class QtTagWidget(
         self._build_keyword_filter_tool_box()
 
     def _add_top_tool_box(self, name, size_mode=0):
-        tool_box = _wgt_container.QtHToolBox()
+        tool_box = _wgt_container.QtHToolbox()
         self._top_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)
         tool_box._set_name_text_(name)
@@ -281,7 +281,7 @@ class QtTagWidget(
         return tool_box
 
     def _add_left_tool_box(self, name):
-        tool_box = _wgt_container.QtVToolBox()
+        tool_box = _wgt_container.QtVToolbox()
         self._left_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)
         tool_box._set_name_text_(name)

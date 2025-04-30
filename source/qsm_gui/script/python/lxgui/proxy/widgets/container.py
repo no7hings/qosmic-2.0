@@ -52,9 +52,9 @@ class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
         #
         self._qt_view = qt_widget_1
         #
-        self._refresh_expand_()
+        self._refresh_expand_fnc()
 
-    def _refresh_expand_(self):
+    def _refresh_expand_fnc(self):
         self._qt_view.setVisible(
             self.get_is_expanded()
         )
@@ -91,7 +91,7 @@ class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
 
     def set_expanded(self, boolean):
         self._qt_head._set_expanded_(boolean)
-        self._refresh_expand_()
+        self._refresh_expand_fnc()
 
     def set_head_visible(self, boolean):
         self._qt_head.setHidden(not boolean)
@@ -163,22 +163,22 @@ class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
         rcs_fnc_(self._layout)
 
 
-class PrxHToolGroup(AbsPrxToolGroup):
+class PrxHToolGroupA(AbsPrxToolGroup):
     QT_HEAD_CLS = gui_qt_wgt_head.QtHeadStyleA
 
     QT_HEAD_HEIGHT = 22
 
     def __init__(self, *args, **kwargs):
-        super(PrxHToolGroup, self).__init__(*args, **kwargs)
+        super(PrxHToolGroupA, self).__init__(*args, **kwargs)
 
 
-class PrxHToolGroupNew(AbsPrxToolGroup):
+class PrxHToolGroupB(AbsPrxToolGroup):
     QT_HEAD_CLS = gui_qt_wgt_head.QtHeadStyleB
 
     QT_HEAD_HEIGHT = 20
 
     def __init__(self, *args, **kwargs):
-        super(PrxHToolGroupNew, self).__init__(*args, **kwargs)
+        super(PrxHToolGroupB, self).__init__(*args, **kwargs)
 
 
 class _Stack(bsc_core.AbsStack):
@@ -189,20 +189,30 @@ class _Stack(bsc_core.AbsStack):
         return obj.get_path()
 
 
-class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
+class PrxHToolbar(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_wgt_utility.QtWidget
+    QT_ORIENTATION = gui_qt_core.QtCore.Qt.Horizontal
 
     def __init__(self, *args, **kwargs):
-        super(PrxHToolBar, self).__init__(*args, **kwargs)
+        super(PrxHToolbar, self).__init__(*args, **kwargs)
 
-        self.widget.setSizePolicy(
-            gui_qt_core.QtWidgets.QSizePolicy.Expanding,
-            gui_qt_core.QtWidgets.QSizePolicy.Minimum
-        )
+        if self._is_h():
+            self.widget.setSizePolicy(
+                gui_qt_core.QtWidgets.QSizePolicy.Expanding,
+                gui_qt_core.QtWidgets.QSizePolicy.Minimum
+            )
+        else:
+            self.widget.setSizePolicy(
+                gui_qt_core.QtWidgets.QSizePolicy.Minimum,
+                gui_qt_core.QtWidgets.QSizePolicy.Expanding
+            )
 
         self._language = _gui_core.GuiUtil.get_language()
 
         self._stack = _Stack()
+
+    def _is_h(self):
+        return self.QT_ORIENTATION == gui_qt_core.QtCore.Qt.Horizontal
 
     def do_gui_refresh(self, fix_bug=False):
         self._qt_view._refresh_widget_all_(fix_bug=fix_bug)
@@ -211,47 +221,76 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
         self._wgt_w, self._wgt_h = 28, 28
         self._wgt_w_min, self._wgt_h_min = 12, 12
 
-        qt_layout_0 = gui_qt_wgt_base.QtHBoxLayout(self._qt_widget)
+        if self._is_h():
+            qt_layout_0 = gui_qt_wgt_base.QtHBoxLayout(self._qt_widget)
+        else:
+            qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(self._qt_widget)
         qt_layout_0.setContentsMargins(0, 0, 0, 0)
         qt_layout_0.setSpacing(2)
         # header
-        self._qt_head = gui_qt_wgt_head.QtHHeadFrame()
+        if self._is_h():
+            self._qt_head = gui_qt_wgt_head.QtHHeadFrame()
+        else:
+            self._qt_head = gui_qt_wgt_head.QtVHeadFrame()
         qt_layout_0.addWidget(self._qt_head)
         self._qt_head.expand_toggled.connect(self.set_expanded)
         self._qt_head._set_tool_tip_text_('"LMB-click" to expand "on" / "off"')
 
-        qt_widget_1 = gui_qt_wgt_scroll.QtHScrollBox()
+        if self._is_h():
+            qt_widget_1 = gui_qt_wgt_scroll.QtHScrollBox()
+        else:
+            qt_widget_1 = gui_qt_wgt_scroll.QtVScrollBox()
         qt_layout_0.addWidget(qt_widget_1)
 
         self._qt_view = qt_widget_1
         self._qt_layout_0 = qt_widget_1._get_layout_()
 
-        self._refresh_expand_()
+        self._refresh_expand_fnc()
 
-        self._qt_view.setSizePolicy(
-            gui_qt_core.QtWidgets.QSizePolicy.Expanding,
-            gui_qt_core.QtWidgets.QSizePolicy.Minimum
-        )
-
-    def _refresh_expand_(self):
-        if self.get_is_expanded() is True:
-            self._qt_head.setMaximumSize(self._wgt_w_min, self._wgt_h)
-            self._qt_head.setMinimumSize(self._wgt_w_min, self._wgt_h)
-            #
-            self.widget.setMaximumHeight(self._wgt_h)
-            self.widget.setMinimumHeight(self._wgt_h)
+        if self._is_h():
+            self._qt_view.setSizePolicy(
+                gui_qt_core.QtWidgets.QSizePolicy.Expanding,
+                gui_qt_core.QtWidgets.QSizePolicy.Minimum
+            )
         else:
-            self._qt_head.setMaximumSize(166667, self._wgt_h_min)
-            self._qt_head.setMinimumSize(self._wgt_w_min, self._wgt_h_min)
-            #
-            self.widget.setMaximumHeight(self._wgt_h_min)
-            self.widget.setMinimumHeight(self._wgt_h_min)
-        #
+            self._qt_view.setSizePolicy(
+                gui_qt_core.QtWidgets.QSizePolicy.Minimum,
+                gui_qt_core.QtWidgets.QSizePolicy.Expanding
+            )
+
+    def _refresh_expand_fnc(self):
+        if self.get_is_expanded() is True:
+            if self._is_h():
+                self._qt_head.setMaximumSize(self._wgt_w_min, self._wgt_h)
+                self._qt_head.setMinimumSize(self._wgt_w_min, self._wgt_h)
+
+                self.widget.setMaximumHeight(self._wgt_h)
+                self.widget.setMinimumHeight(self._wgt_h)
+            else:
+                self._qt_head.setMaximumSize(self._wgt_w, self._wgt_h_min)
+                self._qt_head.setMinimumSize(self._wgt_w, self._wgt_h_min)
+
+                self.widget.setMaximumWidth(self._wgt_w)
+                self.widget.setMinimumWidth(self._wgt_w)
+        else:
+            if self._is_h():
+                self._qt_head.setMaximumSize(166667, self._wgt_h_min)
+                self._qt_head.setMinimumSize(self._wgt_w_min, self._wgt_h_min)
+
+                self.widget.setMaximumHeight(self._wgt_h_min)
+                self.widget.setMinimumHeight(self._wgt_h_min)
+            else:
+                self._qt_head.setMaximumSize(self._wgt_w_min, 166667)
+                self._qt_head.setMinimumSize(self._wgt_w_min, self._wgt_h_min)
+
+                self.widget.setMaximumWidth(self._wgt_w_min)
+                self.widget.setMinimumWidth(self._wgt_w_min)
+
         self._qt_view.setVisible(self.get_is_expanded())
         self._qt_head._refresh_expand_()
 
     def create_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
-        tool_box = _container_for_box.PrxHToolBox()
+        tool_box = _container_for_box.PrxHToolboxOld()
         if isinstance(insert_args, int):
             self.insert_widget_at(insert_args, tool_box)
         else:
@@ -270,7 +309,7 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
 
     def set_expanded(self, boolean):
         self._qt_head._set_expanded_(boolean)
-        self._refresh_expand_()
+        self._refresh_expand_fnc()
 
     def swap_expanded(self):
         self.set_expanded(not self.get_is_expanded())
@@ -295,11 +334,11 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
 
     def set_width(self, w):
         self._wgt_w = w
-        self._refresh_expand_()
+        self._refresh_expand_fnc()
 
     def set_height(self, h):
         self._wgt_h = h
-        self._refresh_expand_()
+        self._refresh_expand_fnc()
 
     def get_qt_layout(self):
         return self._qt_layout_0
@@ -319,11 +358,44 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
     def set_align_right(self):
         self._qt_layout_0.setAlignment(gui_qt_core.QtCore.Qt.AlignRight)
 
+    def set_align_top(self):
+        self._qt_layout_0.setAlignment(gui_qt_core.QtCore.Qt.AlignTop)
+
     def set_border_radius(self, radius):
         self._qt_head._set_frame_border_radius_(radius)
 
+    def _create_group_auto(self, path):
+        paths = bsc_core.BscPortPath.get_dag_component_paths(path)
+        paths.reverse()
+        for i_path in paths:
+            if self._stack.exists_one(i_path) is False:
+                print(i_path, 'A')
+                self._create_group(i_path)
+
+        return self._stack.get_one(path)
+
+    def _create_group(self, path):
+        if self._is_h():
+            gui = _container_for_box.PrxHToolbox()
+        else:
+            gui = _container_for_box.PrxVToolbox()
+
+        parent_path = bsc_core.BscPortPath.get_dag_parent_path(path)
+        if parent_path is None:
+            self.add_widget(gui)
+        else:
+            self._stack.get_one(parent_path).add_widget(gui)
+
+        gui.set_path(path)
+        gui.set_name(bsc_core.BscPortPath.to_dag_name(path))
+        gui.set_expanded(True)
+        self._stack.add_one(gui)
+
     def _create_group_fnc(self, data):
-        gui = _container_for_box.PrxHToolBox()
+        if self._is_h():
+            gui = _container_for_box.PrxHToolbox()
+        else:
+            gui = _container_for_box.PrxVToolbox()
 
         name_ = data.get('name')
         tool_tip_ = data.get('tool_tip')
@@ -370,11 +442,19 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
             gui.set_icon_name(icon_name_)
         return gui
 
+    def _update_exclusive_set(self, paths):
+        tools = []
+        for i_path in paths:
+            i_path = i_path.replace('/', '.')
+            i_tool = self.get_tool(i_path)
+            tools.append(i_tool._qt_widget)
+            i_tool._qt_widget._set_exclusive_widgets_(tools)
+
     def build_by_data(self, data):
         for k, v in data.items():
-            self.create_tool_by_data(k.replace('/', '.'), v)
+            self._create_by_data(k.replace('/', '.'), v)
 
-    def create_tool_by_data(self, path, data):
+    def _create_by_data(self, path, data):
         parent_path = bsc_core.BscPortPath.get_dag_parent_path(path)
         widget_ = data['widget']
         if widget_ == 'group':
@@ -391,66 +471,21 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
             self.add_widget(gui)
         else:
             parent_gui = self._stack.get_one(parent_path)
+            if parent_gui is None:
+                parent_gui = self._create_group_auto(parent_path)
             parent_gui.add_widget(gui)
+
+        # run latest
+        if 'exclusive_set' in data:
+            self._update_exclusive_set(data['exclusive_set'])
 
     def get_tool(self, path):
         return self._stack.get_one(path)
 
 
-class PrxVToolBar(PrxHToolBar):
+class PrxVToolbar(PrxHToolbar):
     QT_WIDGET_CLS = gui_qt_wgt_utility.QtWidget
+    QT_ORIENTATION = gui_qt_core.QtCore.Qt.Vertical
 
     def __init__(self, *args, **kwargs):
-        super(PrxVToolBar, self).__init__(*args, **kwargs)
-        #
-        self.widget.setSizePolicy(
-            gui_qt_core.QtWidgets.QSizePolicy.Minimum,
-            gui_qt_core.QtWidgets.QSizePolicy.Expanding
-        )
-
-    def _gui_build_fnc(self):
-        self._wgt_w, self._wgt_h = 28, 28
-        self._wgt_w_min, self._wgt_h_min = 12, 12
-        #
-        qt_layout_0 = gui_qt_wgt_base.QtHBoxLayout(self._qt_widget)
-        qt_layout_0.setContentsMargins(*[0]*4)
-        qt_layout_0.setSpacing(2)
-        qt_layout_0.setAlignment(gui_qt_core.QtCore.Qt.AlignLeft)
-        # header
-        self._qt_head = gui_qt_wgt_head.QtVHeadFrame()
-        qt_layout_0.addWidget(self._qt_head)
-        self._qt_head.expand_toggled.connect(self.set_expanded)
-        self._qt_head._set_tool_tip_text_('"LMB-click" to expand "on" / "off"')
-        #
-        qt_widget_1 = gui_qt_wgt_utility.QtWidget()
-        qt_layout_0.addWidget(qt_widget_1)
-        qt_layout_1 = gui_qt_wgt_base.QtVBoxLayout(qt_widget_1)
-        qt_layout_1.setContentsMargins(0, 0, 0, 0)
-        qt_layout_1.setAlignment(gui_qt_core.QtCore.Qt.AlignLeft)
-        self._qt_layout_0 = qt_layout_1
-        #
-        self._qt_view = qt_widget_1
-        #
-        self._refresh_expand_()
-        #
-        self._qt_view.setSizePolicy(
-            gui_qt_core.QtWidgets.QSizePolicy.Minimum,
-            gui_qt_core.QtWidgets.QSizePolicy.Expanding
-        )
-
-    def _refresh_expand_(self):
-        if self.get_is_expanded() is True:
-            self._qt_head.setMaximumSize(self._wgt_w_min, 166667)
-            self._qt_head.setMinimumSize(self._wgt_w_min, self._wgt_h_min)
-            #
-            self.widget.setMaximumWidth(self._wgt_w)
-            self.widget.setMinimumWidth(self._wgt_w)
-        else:
-            self._qt_head.setMaximumSize(self._wgt_w_min, 166667)
-            self._qt_head.setMinimumSize(self._wgt_w_min, self._wgt_h_min)
-            #
-            self.widget.setMaximumWidth(self._wgt_w_min)
-            self.widget.setMinimumWidth(self._wgt_w_min)
-        #
-        self._qt_view.setVisible(self.get_is_expanded())
-        self._qt_head._refresh_expand_()
+        super(PrxVToolbar, self).__init__(*args, **kwargs)

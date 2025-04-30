@@ -13,11 +13,11 @@ from ...qt.widgets import head as gui_qt_wgt_head
 from .. import abstracts as gui_prx_abstracts
 
 
-class PrxHToolBox(gui_prx_abstracts.AbsPrxWidget):
+class PrxHToolboxOld(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_wgt_utility.QtWidget
 
     def __init__(self, *args, **kwargs):
-        super(PrxHToolBox, self).__init__(*args, **kwargs)
+        super(PrxHToolboxOld, self).__init__(*args, **kwargs)
 
     def _gui_build_fnc(self):
         self._wgt_w, self._wgt_h = 24, 24
@@ -116,11 +116,26 @@ class PrxHToolBox(gui_prx_abstracts.AbsPrxWidget):
             )
 
 
-class PrxHToolBoxNew(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_container.QtHToolBox
+class PrxHToolbox(gui_prx_abstracts.AbsPrxWidget):
+    QT_WIDGET_CLS = gui_qt_wgt_container.QtHToolbox
 
     def __init__(self, *args, **kwargs):
-        super(PrxHToolBoxNew, self).__init__(*args, **kwargs)
+        super(PrxHToolbox, self).__init__(*args, **kwargs)
+
+    def set_name(self, name):
+        self._qt_widget._head._set_name_text_(name)
+
+    def get_name(self):
+        return self._qt_widget._head._get_name_text_()
+
+    def set_path(self, path):
+        self._qt_widget._head._set_path_text_(path)
+
+    def get_path(self):
+        return self._qt_widget._head._get_path_text_()
+
+    def set_tool_tip(self, text):
+        self._qt_widget._head._update_tool_tip_text_(text)
 
     def set_expanded(self, boolean):
         self._qt_widget._set_expanded_(boolean)
@@ -128,9 +143,12 @@ class PrxHToolBoxNew(gui_prx_abstracts.AbsPrxWidget):
     def add_widget(self, widget):
         self._qt_widget._add_widget_(widget)
 
+    def set_size_mode(self, mode):
+        self._qt_widget._set_size_mode_(mode)
 
-class PrxVToolBoxNew(PrxHToolBoxNew):
-    QT_WIDGET_CLS = gui_qt_wgt_container.QtVToolBox
+
+class PrxVToolbox(PrxHToolbox):
+    QT_WIDGET_CLS = gui_qt_wgt_container.QtVToolbox
 
     def __init__(self, *args, **kwargs):
-        super(PrxVToolBoxNew, self).__init__(*args, **kwargs)
+        super(PrxVToolbox, self).__init__(*args, **kwargs)

@@ -140,7 +140,7 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
 
         self.do_gui_load_data_types()
         # tip
-        self._tip_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        self._tip_prx_tool_group = gui_prx_widgets.PrxHToolGroupA()
         qt_v_lot.addWidget(self._tip_prx_tool_group.widget)
         self._tip_prx_tool_group.set_expanded(True)
         self._tip_prx_tool_group.set_name(

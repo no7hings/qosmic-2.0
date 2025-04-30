@@ -134,7 +134,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         main_qt_lot.setContentsMargins(*[0]*4)
         main_qt_lot.setSpacing(2)
         # top
-        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         main_qt_lot.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
@@ -187,7 +187,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
             self._window, self, self._session
         )
         # bottom
-        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         main_qt_lot.addWidget(self._bottom_prx_tool_bar.widget)
         self._bottom_prx_tool_bar.set_align_left()
         self._bottom_prx_tool_bar.set_expanded(True)

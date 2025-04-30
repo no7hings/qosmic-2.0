@@ -13,16 +13,16 @@ class AbsToolKitForDcc(gui_prx_widgets.PrxSessionWindow):
         super(AbsToolKitForDcc, self).__init__(session, *args, **kwargs)
 
     def gui_setup_fnc(self):
-        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         self.add_widget(self._top_prx_tool_bar)
         self._top_prx_tool_bar.set_expanded(True)
         self._top_prx_tool_bar.set_align_left()
 
-        self._switch_tool_box = gui_prx_widgets.PrxHToolBox()
+        self._switch_tool_box = gui_prx_widgets.PrxHToolboxOld()
         self._top_prx_tool_bar.add_widget(self._switch_tool_box)
         self._switch_tool_box.set_expanded(True)
 
-        self._filter_tool_box = gui_prx_widgets.PrxHToolBox()
+        self._filter_tool_box = gui_prx_widgets.PrxHToolboxOld()
         self._top_prx_tool_bar.add_widget(self._filter_tool_box)
 
         self._filter_bar = gui_prx_widgets.PrxFilterBar()
@@ -88,7 +88,7 @@ class AbsToolKitForDcc(gui_prx_widgets.PrxSessionWindow):
     def gui_get_view_args(self, group_name):
         group_path = '/{}'.format(group_name)
         if group_path not in self._view_dict:
-            tool_group = gui_prx_widgets.PrxHToolGroupNew()
+            tool_group = gui_prx_widgets.PrxHToolGroupB()
             self._scroll_bar.add_widget(tool_group)
             tool_group.set_expanded(True)
             tool_group.set_name(group_name)

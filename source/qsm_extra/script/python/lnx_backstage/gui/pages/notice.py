@@ -249,7 +249,7 @@ class PrxPageForNoticeMonitor(prx_abstracts.AbsPrxWidget):
         self._main_layout.setContentsMargins(*[0]*4)
         self._main_layout.setSpacing(2)
 
-        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._main_layout.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_expanded(True)
         self._top_prx_tool_bar.set_align_left()

@@ -86,7 +86,7 @@ class AbsPrxSubpageForMotionRegister(
             self._configure.get('build.options.parameters'),
         )
 
-        self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        self._prx_tool_group = gui_prx_widgets.PrxHToolGroupA()
         prx_sca.add_widget(self._prx_tool_group)
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
@@ -256,7 +256,7 @@ class AbsPrxPageForMediaRegister(
             self._configure.get('build.options.parameters'),
         )
 
-        self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        self._prx_tool_group = gui_prx_widgets.PrxHToolGroupA()
         prx_sca.add_widget(self._prx_tool_group)
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
@@ -280,7 +280,7 @@ class AbsPrxPageForMediaRegister(
         )
         self._tag_qt_tag_widget._hide_all_tool_bar_()
 
-        bottom_tool_bar = gui_prx_widgets.PrxHToolBar()
+        bottom_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(bottom_tool_bar.widget)
         bottom_tool_bar.set_expanded(True)
 
@@ -482,7 +482,7 @@ class AbsPrxPageForAnyRegister(
             self._configure.get('build.options.parameters'),
         )
 
-        self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        self._prx_tool_group = gui_prx_widgets.PrxHToolGroupA()
         prx_sca.add_widget(self._prx_tool_group)
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
@@ -506,7 +506,7 @@ class AbsPrxPageForAnyRegister(
         )
         self._tag_qt_tag_widget._hide_all_tool_bar_()
 
-        bottom_tool_bar = gui_prx_widgets.PrxHToolBar()
+        bottom_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(bottom_tool_bar.widget)
         bottom_tool_bar.set_expanded(True)
 
@@ -635,7 +635,7 @@ class AbsPrxPageForQuixelRegister(
             self._configure.get('build.options.parameters'),
         )
 
-        bottom_tool_bar = gui_prx_widgets.PrxHToolBar()
+        bottom_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(bottom_tool_bar.widget)
         bottom_tool_bar.set_expanded(True)
 

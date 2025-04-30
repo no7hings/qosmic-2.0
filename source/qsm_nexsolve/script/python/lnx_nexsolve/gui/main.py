@@ -88,7 +88,7 @@ class PrxNexsolveTool(gui_prx_widgets.PrxBasePanel):
         lot.setContentsMargins(*[0]*4)
         lot.setSpacing(2)
 
-        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         lot.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)

@@ -51,7 +51,7 @@ class PrxListView(
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
         #
-        self._top_prx_tool_bar = _container.PrxHToolBar()
+        self._top_prx_tool_bar = _container.PrxHToolbar()
         self._top_prx_tool_bar.set_name('top')
         self._top_prx_tool_bar.set_align_left()
         self._qt_layout_0.addWidget(self._top_prx_tool_bar.widget)
@@ -150,7 +150,7 @@ class PrxListView(
         self._qt_view._set_item_event_override_flag_(boolean)
 
     def add_top_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
-        tool_box = _container_for_box.PrxHToolBox()
+        tool_box = _container_for_box.PrxHToolboxOld()
         if isinstance(insert_args, int):
             self._top_prx_tool_bar.insert_widget_at(insert_args, tool_box)
         else:

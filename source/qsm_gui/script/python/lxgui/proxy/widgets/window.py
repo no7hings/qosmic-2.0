@@ -97,7 +97,7 @@ class AbsPrxDialogWindow(
         #
         self._init_progressing_def_()
         #
-        self._top_toolbar = gui_prx_wgt_container.PrxHToolBar()
+        self._top_toolbar = gui_prx_wgt_container.PrxHToolbar()
         self._top_toolbar.set_hide()
         self._central_qt_layout.addWidget(self._top_toolbar.widget)
         self._top_toolbar.set_expanded(True)
@@ -130,14 +130,14 @@ class AbsPrxDialogWindow(
         self._customize_layout.addWidget(self._options_prx_node.widget)
         self._options_prx_node.set_hide()
         # tip
-        self._tip_prx_tool_group = gui_prx_wgt_container.PrxHToolGroup()
+        self._tip_prx_tool_group = gui_prx_wgt_container.PrxHToolGroupA()
         self._customize_layout.addWidget(self._tip_prx_tool_group.widget)
         self._tip_prx_tool_group.set_visible(False)
         self._tip_prx_tool_group.set_name('tips')
         self._tip_prx_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
         self._tip_prx_tool_group.add_widget(self._tip_prx_text_browser)
         #
-        self._bottom_toolbar = gui_prx_wgt_container.PrxHToolBar()
+        self._bottom_toolbar = gui_prx_wgt_container.PrxHToolbar()
         self._central_qt_layout.addWidget(self._bottom_toolbar.widget)
         self._bottom_toolbar.set_expanded(True)
         qt_widget_2 = _qt_wgt_utility.QtWidget()
@@ -560,7 +560,7 @@ class PrxSprcTaskWindow(
         self._tip_prx_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
         self._central_qt_layout.addWidget(self._tip_prx_text_browser.widget)
 
-        self._bottom_toolbar = gui_prx_wgt_container.PrxHToolBar()
+        self._bottom_toolbar = gui_prx_wgt_container.PrxHToolbar()
         self._central_qt_layout.addWidget(self._bottom_toolbar.widget)
         self._bottom_toolbar.set_expanded(True)
         self._bottom_toolbar.set_align_right()

@@ -50,7 +50,7 @@ class AbsPrxSubpageForNewSplicing(gui_prx_widgets.PrxBaseSubpage):
             self._configure.get('build.options.parameters'),
         )
 
-        bottom_tool_bar = gui_prx_widgets.PrxHToolBar()
+        bottom_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(bottom_tool_bar.widget)
         bottom_tool_bar.set_expanded(True)
 

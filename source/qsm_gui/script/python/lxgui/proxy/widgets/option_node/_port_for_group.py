@@ -30,7 +30,7 @@ class PrxNodePortGroup(_port_base.AbsPrxPortBaseDef):
         if is_pseudo_root is True:
             self._set_use_as_pseudo_root()
 
-        self._prx_widget = _container.PrxHToolGroup()
+        self._prx_widget = _container.PrxHToolGroupA()
         self._prx_widget.set_height_match_to_minimum()
         self._qt_widget = self._prx_widget.widget
         self._prx_widget.set_name(self.get_gui_name())

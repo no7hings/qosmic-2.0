@@ -10,7 +10,7 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         self._test_()
 
     def _test_(self):
-        tool_box = gui_prx_widgets.PrxHToolBoxNew()
+        tool_box = gui_prx_widgets.PrxHToolbox()
         self.add_widget(tool_box)
         tool_box.set_expanded(True)
 
@@ -22,7 +22,7 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         tool_box.add_widget(tool)
         tool.set_icon_name('application/python')
 
-        tool_box = gui_prx_widgets.PrxVToolBoxNew()
+        tool_box = gui_prx_widgets.PrxVToolbox()
         self.add_widget(tool_box)
         tool_box.set_expanded(True)
 

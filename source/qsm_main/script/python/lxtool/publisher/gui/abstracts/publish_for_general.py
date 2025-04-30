@@ -291,7 +291,7 @@ class AbsPnlPublisherForGeneral(gui_prx_widgets.PrxSessionWindow):
         )
         self._publish_tip.set_font_size(12)
 
-        tool_bar = gui_prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolbar()
         layer_widget.add_widget(tool_bar)
         tool_bar.set_expanded(True)
 

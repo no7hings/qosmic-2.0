@@ -18,13 +18,21 @@ class W(gui_prx_widgets.PrxBaseWindow):
             '{}/data.yml'.format(os.path.dirname(__file__))
         ).set_read()
 
-        self._d = gui_prx_widgets.PrxHToolBar()
-        self.add_widget(self._d)
-        self._d.set_align_left()
-        self._d.set_expanded(True)
-        self._d.build_by_data(data['build']['top']['toolbar']['tools'])
+        self._d_0 = gui_prx_widgets.PrxHToolbar()
+        self.add_widget(self._d_0)
+        self._d_0.set_align_left()
+        self._d_0.set_expanded(True)
+        self._d_0.build_by_data(data['build']['top']['toolbar']['tools'])
 
-        self._d.get_tool('toolbox.tool0').connect_press_clicked_to(self._test)
+        self._d_0.get_tool('toolbox0.tool0').connect_press_clicked_to(self._test)
+
+        self._d_1 = gui_prx_widgets.PrxVToolbar()
+        self.add_widget(self._d_1)
+        self._d_1.set_align_top()
+        self._d_1.set_expanded(True)
+        self._d_1.build_by_data(data['build']['top']['toolbar']['tools'])
+
+        self._d_1.get_tool('toolbox0.tool0').connect_press_clicked_to(self._test)
 
     def _test(self):
         print('A')

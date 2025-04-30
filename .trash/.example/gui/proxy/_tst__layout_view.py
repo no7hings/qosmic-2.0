@@ -9,7 +9,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         s = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(s)
 
-        tool_group = gui_prx_widgets.PrxHToolGroupNew()
+        tool_group = gui_prx_widgets.PrxHToolGroupB()
         s.add_widget(tool_group)
         tool_group.set_expanded(True)
         tool_group.set_name('Test')
@@ -22,7 +22,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
             i_item.set_name(str(i).zfill(4))
             g.add_widget(i_item)
 
-        tool_group = gui_prx_widgets.PrxHToolGroupNew()
+        tool_group = gui_prx_widgets.PrxHToolGroupB()
         s.add_widget(tool_group)
         tool_group.set_expanded(True)
         g = gui_prx_widgets.PrxToolGridLayoutWidget()

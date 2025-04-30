@@ -39,7 +39,7 @@ class AbsPnlSubmitterForAssetRenderDcc(gui_prx_widgets.PrxSessionWindow):
         sa_0 = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(sa_0)
 
-        ep_0 = gui_prx_widgets.PrxHToolGroup()
+        ep_0 = gui_prx_widgets.PrxHToolGroupA()
         sa_0.add_widget(ep_0)
         ep_0.set_expanded(True)
         ep_0.set_name('render nodes')

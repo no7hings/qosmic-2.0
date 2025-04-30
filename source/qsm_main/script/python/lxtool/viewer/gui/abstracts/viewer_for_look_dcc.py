@@ -32,7 +32,7 @@ class AbsPnlViewerForShaderDcc(
         # self._set_configure_groups_build_()
 
     def _set_viewer_groups_build_(self):
-        expand_box_0 = gui_prx_widgets.PrxHToolGroup()
+        expand_box_0 = gui_prx_widgets.PrxHToolGroupA()
         expand_box_0.set_name('viewers')
         expand_box_0.set_expanded(True)
         self.add_widget(expand_box_0)
@@ -165,7 +165,7 @@ class AbsPnlViewerForMaterialDcc(
         self.refresh_all_fnc()
 
     def _set_viewer_groups_build_(self):
-        expand_box_0 = gui_prx_widgets.PrxHToolGroup()
+        expand_box_0 = gui_prx_widgets.PrxHToolGroupA()
         expand_box_0.set_name('viewers')
         expand_box_0.set_expanded(True)
         self.add_widget(expand_box_0)

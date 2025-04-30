@@ -204,7 +204,7 @@ class QtHToolGroupStyleC(AbsQtToolGroup):
         super(QtHToolGroupStyleC, self).__init__(*args, **kwargs)
 
 
-class AbsQtToolBox(QtWidgets.QWidget):
+class AbsQtToolbox(QtWidgets.QWidget):
     class SizeMode(enum.IntEnum):
         Fixed = 0
         Expanding = 1
@@ -214,7 +214,7 @@ class AbsQtToolBox(QtWidgets.QWidget):
     QT_HEAD_W, QT_HEAD_H = 12, 24
 
     def __init__(self, *args, **kwargs):
-        super(AbsQtToolBox, self).__init__(*args, **kwargs)
+        super(AbsQtToolbox, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self._build_widget_()
 
@@ -231,11 +231,12 @@ class AbsQtToolBox(QtWidgets.QWidget):
         lot.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         lot.setContentsMargins(*[0]*4)
         lot.setSpacing(0)
+
         # header
         self._head = self.QT_HEAD_CLS()
         lot.addWidget(self._head)
         self._head.expand_toggled.connect(self._set_expanded_)
-        self._head._set_tool_tip_text_('"LMB-click" to expand "on" / "off"')
+        self._head._update_action_tip_text_('"LMB-click" to expand "on" / "off"')
         self._head.setFixedSize(self.QT_HEAD_W, self.QT_HEAD_H)
 
         self._body = QtWidgets.QWidget()
@@ -294,6 +295,9 @@ class AbsQtToolBox(QtWidgets.QWidget):
 
     def _set_name_text_(self, text):
         self._head._set_name_text_(text)
+
+    def _get_name_text_(self):
+        return self._head._get_name_text_()
         
     def _set_visible_(self, boolean):
         self.setVisible(boolean)
@@ -310,27 +314,27 @@ class AbsQtToolBox(QtWidgets.QWidget):
             )
 
 
-class QtHToolBox(AbsQtToolBox):
+class QtHToolbox(AbsQtToolbox):
     QT_HEAD_CLS = _head.QtHExpandHead2
     QT_ORIENTATION = QtCore.Qt.Horizontal
     QT_HEAD_W, QT_HEAD_H = 12, 24
 
     def __init__(self, *args, **kwargs):
-        super(QtHToolBox, self).__init__(*args, **kwargs)
+        super(QtHToolbox, self).__init__(*args, **kwargs)
 
 
-class QtVToolBox(AbsQtToolBox):
+class QtVToolbox(AbsQtToolbox):
     QT_HEAD_CLS = _head.QtVExpandHead2
     QT_ORIENTATION = QtCore.Qt.Vertical
     QT_HEAD_W, QT_HEAD_H = 24, 12
 
     def __init__(self, *args, **kwargs):
-        super(QtVToolBox, self).__init__(*args, **kwargs)
+        super(QtVToolbox, self).__init__(*args, **kwargs)
 
 
-class AbsQtToolBar(QtWidgets.QWidget):
+class AbsQtToolbar(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
-        super(AbsQtToolBar, self).__init__(*args, **kwargs)
+        super(AbsQtToolbar, self).__init__(*args, **kwargs)
         qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
         self.setAutoFillBackground(True)
@@ -394,7 +398,7 @@ class AbsQtToolBar(QtWidgets.QWidget):
             self._layout.insertWidget(index, widget.widget)
     
     def _create_tool_box_(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
-        tool_box = QtHToolBox()
+        tool_box = QtHToolbox()
         if isinstance(insert_args, int):
             self._insert_widget_at_(insert_args, tool_box)
         else:
@@ -436,7 +440,7 @@ class AbsQtToolBar(QtWidgets.QWidget):
         self._head._set_frame_border_radius_(radius)
 
 
-class QtHToolBar(AbsQtToolBar):
+class QtHToolbar(AbsQtToolbar):
     def __init__(self, *args, **kwargs):
-        super(QtHToolBar, self).__init__(*args, **kwargs)
+        super(QtHToolbar, self).__init__(*args, **kwargs)
 

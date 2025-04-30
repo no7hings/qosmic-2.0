@@ -360,7 +360,7 @@ class QtListWidget(
         self._view_model.set_item_group_enable(boolean)
 
     def _add_top_tool_box(self, name, size_mode=0):
-        tool_box = _wgt_container.QtHToolBox()
+        tool_box = _wgt_container.QtHToolbox()
         self._top_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)
         tool_box._set_name_text_(name)
@@ -368,14 +368,14 @@ class QtListWidget(
         return tool_box
 
     def _add_left_tool_box(self, name):
-        tool_box = _wgt_container.QtVToolBox()
+        tool_box = _wgt_container.QtVToolbox()
         self._left_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)
         tool_box._set_name_text_(name)
         return tool_box
 
     def _insert_left_tool_box(self, index, name):
-        tool_box = _wgt_container.QtVToolBox()
+        tool_box = _wgt_container.QtVToolbox()
         self._left_scroll_box.insertWidget(index, tool_box)
         tool_box._set_expanded_(True)
         tool_box._set_name_text_(name)

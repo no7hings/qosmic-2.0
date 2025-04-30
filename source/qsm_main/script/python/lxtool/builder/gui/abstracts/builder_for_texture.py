@@ -146,7 +146,7 @@ class AbsPnlBuilderForTexture(gui_prx_widgets.PrxSessionWindow):
             self, self._session, self._prx_tree_view
         )
 
-        tool_bar = gui_prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolbar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
         button = gui_prx_widgets.PrxPressButton()

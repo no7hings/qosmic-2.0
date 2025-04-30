@@ -10,10 +10,10 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         self._test_()
 
     def _test_(self):
-        tool_bar = gui_prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolbar()
         self.add_widget(tool_bar)
         tool_bar.set_expanded(True)
-        tool_group_0 = gui_prx_widgets.PrxHToolBox()
+        tool_group_0 = gui_prx_widgets.PrxHToolboxOld()
         tool_bar.add_widget(tool_group_0)
         tool_bar.set_align_left()
 
@@ -21,7 +21,7 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         tool_group_0.add_widget(tool)
         tool.set_icon_name('application/python')
 
-        tool_group_1 = gui_prx_widgets.PrxHToolBox()
+        tool_group_1 = gui_prx_widgets.PrxHToolboxOld()
         tool_bar.add_widget(tool_group_1)
         tool_group_1.set_size_mode(1)
 

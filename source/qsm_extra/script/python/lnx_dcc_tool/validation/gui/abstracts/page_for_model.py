@@ -125,7 +125,7 @@ class AbsPrxPageForScnModel(gui_prx_widgets.PrxBasePage):
         self.gui_page_setup_fnc()
 
     def gui_page_setup_fnc(self):
-        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
@@ -162,7 +162,7 @@ class AbsPrxPageForScnModel(gui_prx_widgets.PrxBasePage):
             self._window._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
         )
         # validation results
-        self._result_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        self._result_prx_tool_group = gui_prx_widgets.PrxHToolGroupA()
         prx_v_sca.add_widget(self._result_prx_tool_group)
         self._result_prx_tool_group.set_expanded(True)
         self._result_prx_tool_group.set_name(
@@ -180,7 +180,7 @@ class AbsPrxPageForScnModel(gui_prx_widgets.PrxBasePage):
             )
         )
         # buttons
-        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(self._bottom_prx_tool_bar.widget)
         self._bottom_prx_tool_bar.set_expanded(True)
 

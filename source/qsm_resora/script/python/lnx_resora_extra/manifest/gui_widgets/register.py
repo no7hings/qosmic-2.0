@@ -66,7 +66,7 @@ class GuiResourceRegisterMain(lnx_rsr_gui_abstracts.AbsGuiResourceRegisterMain):
         p.set_history_group(['resora', 'manifest_register'])
         p.pull_history_latest()
 
-        bottom_tool_bar = gui_prx_widgets.PrxHToolBar()
+        bottom_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(bottom_tool_bar.widget)
         bottom_tool_bar.set_expanded(True)
 

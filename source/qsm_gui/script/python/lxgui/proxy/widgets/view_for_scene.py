@@ -34,7 +34,7 @@ class PrxSceneView(
         self._qt_view.setFocusProxy(self._qt_widget)
         self._qt_view._view_model.set_item_frame_size(200, 106)
 
-        self._bottom_prx_tool_bar = _container.PrxHToolBar()
+        self._bottom_prx_tool_bar = _container.PrxHToolbar()
         self._bottom_prx_tool_bar.set_name('bottom')
         self._bottom_prx_tool_bar.set_align_right()
         self._qt_widget._grid_lot.addWidget(self._bottom_prx_tool_bar.widget, 1, 0, 1, 1)

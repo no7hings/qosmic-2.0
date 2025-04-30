@@ -63,7 +63,7 @@ class AbsPrxSubpageForTaskCreate(gui_prx_widgets.PrxBaseSubpage):
             task_unit_names
         )
 
-        bottom_tool_bar = gui_prx_widgets.PrxHToolBar()
+        bottom_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(bottom_tool_bar.widget)
         bottom_tool_bar.set_expanded(True)
 

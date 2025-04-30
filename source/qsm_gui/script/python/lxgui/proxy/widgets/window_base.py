@@ -189,13 +189,13 @@ class PrxBaseWindow(
         self._main_qt_layout = _qt_wgt_base.QtVBoxLayout(self._qt_main_widget)
         self._main_qt_layout.setContentsMargins(2, 2, 2, 2)
         # bottom toolbar
-        self._window_bottom_tool_bar = _container.PrxHToolBar()
+        self._window_bottom_tool_bar = _container.PrxHToolbar()
         qt_layout_0.addWidget(self._window_bottom_tool_bar.widget)
         self._window_bottom_tool_bar.set_expanded(True)
         self._window_bottom_tool_bar.set_hide()
         self._window_bottom_tool_bar.set_bottom_direction()
         #
-        self._log_tool_bar = _container.PrxHToolBar()
+        self._log_tool_bar = _container.PrxHToolbar()
         qt_layout_0.addWidget(self._log_tool_bar.widget)
         self._log_tool_bar.set_hide()
         self._log_tool_bar.set_height(120)

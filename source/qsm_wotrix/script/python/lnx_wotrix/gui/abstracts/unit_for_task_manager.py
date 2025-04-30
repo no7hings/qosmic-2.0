@@ -843,7 +843,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
 
         self._prx_h_splitter.set_fixed_size_at(0, 320)
 
-        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(self._bottom_prx_tool_bar._qt_widget)
         self._bottom_prx_tool_bar.set_expanded(True)
         self._bottom_prx_tool_bar.set_align_right()

@@ -511,6 +511,7 @@ class _GuiTypeOpt(
 
     def do_gui_refresh_all(self):
         # restore resource
+        self._page._gui_tag_opt.clear_select_and_check()
         self._page._gui_node_opt.restore_all()
         # restore self
         self.restore_all()
@@ -547,6 +548,9 @@ class _GuiTypeOpt(
         qt_item = self._qt_tree_widget._view_model._get_item(scr_entity_path)
         if qt_item:
             qt_item._item_model.do_delete()
+    
+    def clear_select_and_check(self):
+        self._qt_tree_widget._view_model.unselect_all_items()
 
 
 # tag
@@ -579,7 +583,7 @@ class _GuiTagOpt(
         self._leaf_entity_path_set = set()
 
     # entity
-    def gui_add_all_entities(self):
+    def gui_add_all_entities(self, post_fnc=None):
         self.gui_update_thread_flag()
 
         t = self.gui_generate_thread(
@@ -587,6 +591,7 @@ class _GuiTagOpt(
                 self._gui_add_entity_cache_fnc, self._gui_thread_flag
             ),
             self._gui_add_entity_build_fnc,
+            post_fnc,
         )
         t.do_start()
 
@@ -783,12 +788,11 @@ class _GuiTagOpt(
 
     # main
     def do_gui_refresh_all(self):
+        self._page._gui_type_opt.clear_select_and_check()
         self._page._gui_node_opt.restore_all()
 
         self.restore_all()
         self.gui_add_all_entities()
-
-        self._page.do_gui_node_refresh_by_type_select_or_check()
 
     def get_check_entity_paths(self):
         return self._qt_tag_widget._view_model.get_all_checked_node_paths()
@@ -824,6 +828,9 @@ class _GuiTagOpt(
         qt_item = self._qt_tag_widget._view_model._get_item(scr_entity_path)
         if qt_item:
             qt_item._item_model.do_delete()
+    
+    def clear_select_and_check(self):
+        self._qt_tag_widget._view_model.uncheck_all_items()
 
 
 # node
@@ -841,6 +848,13 @@ class _GuiNodeOpt(_GuiBaseOpt):
     def gui_clear_cache(self):
         self._type_cache_node_paths = []
         self._tag_cache_node_paths = []
+
+        self._type_node_path_set.clear()
+        self._tag_node_path_set.clear()
+
+        self._node_path_set.clear()
+        self._node_path_set_pre.clear()
+
         self.gui_clear_node_cache()
 
     def gui_clear_node_cache(self):
@@ -1330,7 +1344,7 @@ class AbsPrxPageForManager(
         # self._window.register_window_close_method(self.gui_close_fnc)
 
     def gui_add_top_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
-        tool_box = gui_prx_widgets.PrxHToolBox()
+        tool_box = gui_prx_widgets.PrxHToolboxOld()
         if isinstance(insert_args, int):
             self._top_prx_tool_bar.insert_widget_at(insert_args, tool_box)
         else:
@@ -1355,7 +1369,7 @@ class AbsPrxPageForManager(
             i_tool.connect_press_clicked_to(i_fnc)
 
     def gui_page_setup_fnc(self):
-        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         self._qt_layout.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)

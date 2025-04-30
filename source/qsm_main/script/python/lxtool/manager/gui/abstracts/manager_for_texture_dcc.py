@@ -46,7 +46,7 @@ class AbsPnlManagerForAssetTextureDcc(gui_prx_widgets.PrxSessionWindow):
             icon_name_text='dcc',
         )
 
-        e_p_0 = gui_prx_widgets.PrxHToolGroup()
+        e_p_0 = gui_prx_widgets.PrxHToolGroupA()
         s_a_0.add_widget(e_p_0)
         h_s_0 = gui_prx_widgets.PrxHSplitter()
         e_p_0.add_widget(h_s_0)

@@ -8,7 +8,7 @@ class W0(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W0, self).__init__(*args, **kwargs)
 
-        grp = gui_prx_widgets.PrxHToolGroup()
+        grp = gui_prx_widgets.PrxHToolGroupA()
         self.add_widget(grp)
         grp.set_expanded(True)
 

@@ -49,7 +49,7 @@ class PrxTagView(
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
 
-        self._top_prx_tool_bar = _container.PrxHToolBar()
+        self._top_prx_tool_bar = _container.PrxHToolbar()
         self._top_prx_tool_bar.set_name('top')
         self._top_prx_tool_bar.set_align_left()
         self._qt_layout_0.addWidget(self._top_prx_tool_bar.widget)

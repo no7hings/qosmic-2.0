@@ -15,7 +15,7 @@ class PnlBuilderForAssetLook(gui_prx_widgets.PrxSessionToolWindow):
             self._session.configure.get('build.node.options'),
         )
         # tip
-        self._tip_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        self._tip_prx_tool_group = gui_prx_widgets.PrxHToolGroupA()
         s.add_widget(self._tip_prx_tool_group)
         self._tip_prx_tool_group.set_expanded(True)
         self._tip_prx_tool_group.set_name('tips')

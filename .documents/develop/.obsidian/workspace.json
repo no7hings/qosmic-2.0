@@ -65,7 +65,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -187,7 +188,7 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "91a87c4c69dbe632",
+  "active": "15555a3b0fd2386a",
   "lastOpenFiles": [
     "开发相关/开发进度/开发-2025.md",
     "开发相关/开发进度/优化-2024.md",

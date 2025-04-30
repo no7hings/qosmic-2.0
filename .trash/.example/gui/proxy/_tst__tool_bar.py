@@ -10,12 +10,12 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         self._test_()
 
     def _test_(self):
-        tool_bar = gui_prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolbar()
         self.add_widget(tool_bar)
         tool_bar.set_align_left()
         tool_bar.set_expanded(True)
         #
-        tool_box = gui_prx_widgets.PrxHToolBoxNew()
+        tool_box = gui_prx_widgets.PrxHToolbox()
         tool_bar.add_widget(tool_box)
         tool_box.set_expanded(True)
 

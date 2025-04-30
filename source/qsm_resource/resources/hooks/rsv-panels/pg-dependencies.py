@@ -21,7 +21,7 @@ class PGDependencies(gui_prx_widgets.PrxSessionWindow):
         self._target_format_create_data = []
         self._target_color_space_create_data = []
         #
-        self._viewer_group = gui_prx_widgets.PrxHToolGroup()
+        self._viewer_group = gui_prx_widgets.PrxHToolGroupA()
         self.add_widget(self._viewer_group)
         self._viewer_group.set_name('dependencies')
         self._viewer_group.set_expanded(True)

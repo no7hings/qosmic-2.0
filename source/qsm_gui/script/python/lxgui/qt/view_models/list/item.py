@@ -557,6 +557,27 @@ class ListItemModel(_item_base.AbsItemModel):
                             self._data.audio.handle_line.setLine(
                                 hdl_x, frm_y, hdl_x, frm_y+frm_h
                             )
+
+                            txt = self._data.audio.handle_text
+                            txt_w, txt_h = self._font_metrics.width(txt)+16, 20
+
+                            w_less = (frm_x+frm_w)-hdl_x-txt_w
+                            if w_less > 0:
+                                self._data.audio.handle_text_rect.setRect(
+                                    hdl_x, frm_y+frm_h/2-txt_h/2, txt_w, txt_h
+                                )
+                            else:
+                                self._data.audio.handle_text_rect.setRect(
+                                    hdl_x-txt_w, frm_y+frm_h/2-txt_h/2, txt_w, txt_h
+                                )
+
+                            _qt_core.QtItemDrawBase._draw_time_frame(
+                                painter,  self._data.audio.handle_text_rect,
+                            )
+                            _qt_core.QtItemDrawBase._draw_time_text(
+                                painter, self._data.audio.handle_text_rect, self._data.audio.handle_text,
+                            )
+
                             painter.setPen(self._data.audio.handle_color)
                             painter.drawLine(self._data.audio.handle_line)
 
@@ -604,7 +625,7 @@ class ListItemModel(_item_base.AbsItemModel):
             # about play
             if self._data.play_enable is True:
 
-                # time and progress
+                # text and progress
                 if (
                     self._data.video_enable is True
                     or self._data.audio_enable is True
@@ -641,15 +662,10 @@ class ListItemModel(_item_base.AbsItemModel):
                         frm_x+frm_w-time_txt_w-mrg, frm_y+frm_h-16-mrg, time_txt_w, 16
                     )
 
-                    painter.setPen(
-                        QtGui.QColor(0, 0, 0, 0)
+                    _qt_core.QtItemDrawBase._draw_time_frame(
+                        painter, time_rect
                     )
-                    painter.setBrush(
-                        QtGui.QBrush(QtGui.QColor(15, 15, 15, 127))
-                    )
-                    painter.drawRect(time_rect)
-
-                    self._draw_time_text(painter, time_rect, time_txt)
+                    _qt_core.QtItemDrawBase._draw_time_text(painter, time_rect, time_txt)
 
             painter.end()
 
@@ -729,7 +745,7 @@ class ListItemModel(_item_base.AbsItemModel):
             return True
         return False
 
-    def _update_hover_play_percent(self):
+    def _update_play_percent_by_hover(self):
         x = self._data.play.point.x()
         x_offset = self._data.rect.x()
         w = self._data.basic.size.width()
@@ -883,7 +899,7 @@ class ListItemModel(_item_base.AbsItemModel):
         return cache_fnc_, build_fnc_
 
     def _update_sequence_image_on_hover_move(self):
-        flag, percent = self._update_hover_play_percent()
+        flag, percent = self._update_play_percent_by_hover()
         if flag is True:
             index = int(self._data.image_sequence.index_maximum*percent)
             if index != self._data.image_sequence.index:
@@ -1003,7 +1019,7 @@ class ListItemModel(_item_base.AbsItemModel):
         return cache_fnc_, build_fnc_
 
     def _update_video_on_hover_move(self):
-        flag, percent = self._update_hover_play_percent()
+        flag, percent = self._update_play_percent_by_hover()
         if flag is True:
             index = int(self._data.video.index_maximum*percent)
             if index != self._data.video.index:
@@ -1060,6 +1076,8 @@ class ListItemModel(_item_base.AbsItemModel):
 
                 handle_line=QtCore.QLine(),
                 handle_color=QtGui.QColor(*_gui_core.GuiRgba.LightTorchRed),
+                handle_text='',
+                handle_text_rect=qt_rect(),
 
                 autoplay_flag=False,
 
@@ -1131,7 +1149,11 @@ class ListItemModel(_item_base.AbsItemModel):
         return cache_fnc_, build_fnc_
 
     def _update_audio_on_hover_move(self):
-        flag, percent = self._update_hover_play_percent()
+        flag, percent = self._update_play_percent_by_hover()
+        if flag is True:
+            self._data.audio.handle_text = bsc_core.BscInteger.millisecond_to_time_prettify(
+                int(percent*self._data.audio.time_microsecond),
+            )
 
     def _update_audio_play_progress_percent(self, percent):
         self._data.audio.progress_percent = percent

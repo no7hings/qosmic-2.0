@@ -56,14 +56,14 @@ class PrxSprcTaskWindow(
         self._qt_widget.setCentralWidget(self._central_qt_widget)
         self._central_qt_layout = _qt_wgt_base.QtVBoxLayout(self._central_qt_widget)
 
-        self._task_prx_tool_group = _container.PrxHToolGroupNew()
+        self._task_prx_tool_group = _container.PrxHToolGroupB()
         self._central_qt_layout.addWidget(self._task_prx_tool_group.widget)
         self._task_prx_tool_group.set_expanded(True)
 
         self._prx_scroll_area = gui_prx_wdt_utility.PrxVScrollArea()
         self._task_prx_tool_group.add_widget(self._prx_scroll_area)
 
-        self._tip_prx_tool_group = _container.PrxHToolGroupNew()
+        self._tip_prx_tool_group = _container.PrxHToolGroupB()
         self._central_qt_layout.addWidget(self._tip_prx_tool_group.widget)
         self._tip_prx_tool_group.set_expanded(True)
         self._tip_prx_tool_group.set_height_match_to_maximum()
@@ -72,7 +72,7 @@ class PrxSprcTaskWindow(
         self._tip_prx_tool_group.add_widget(self._tip_prx_text_browser.widget)
         self._tip_prx_text_browser._qt_widget.setMaximumHeight(80)
 
-        self._bottom_prx_tool_bar = _container.PrxHToolBar()
+        self._bottom_prx_tool_bar = _container.PrxHToolbar()
         self._central_qt_layout.addWidget(self._bottom_prx_tool_bar.widget)
         self._bottom_prx_tool_bar.set_expanded(True)
 
@@ -158,14 +158,14 @@ class PrxSpcTaskWindow(
         self._qt_widget.setCentralWidget(self._central_qt_widget)
         self._central_qt_layout = _qt_wgt_base.QtVBoxLayout(self._central_qt_widget)
 
-        self._task_prx_tool_group = _container.PrxHToolGroupNew()
+        self._task_prx_tool_group = _container.PrxHToolGroupB()
         self._central_qt_layout.addWidget(self._task_prx_tool_group.widget)
         self._task_prx_tool_group.set_expanded(True)
         
         self._spc_task_widget = _qt_wgt_for_sprc_task.QtSpcTaskWidget()
         self._task_prx_tool_group.add_widget(self._spc_task_widget)
 
-        self._tip_prx_tool_group = _container.PrxHToolGroupNew()
+        self._tip_prx_tool_group = _container.PrxHToolGroupB()
         self._central_qt_layout.addWidget(self._tip_prx_tool_group.widget)
         self._tip_prx_tool_group.set_expanded(True)
         self._tip_prx_tool_group.set_height_match_to_maximum()
@@ -174,7 +174,7 @@ class PrxSpcTaskWindow(
         self._tip_prx_tool_group.add_widget(self._tip_prx_text_browser.widget)
         self._tip_prx_text_browser._qt_widget.setMaximumHeight(80)
 
-        self._bottom_prx_tool_bar = _container.PrxHToolBar()
+        self._bottom_prx_tool_bar = _container.PrxHToolbar()
         self._central_qt_layout.addWidget(self._bottom_prx_tool_bar.widget)
         self._bottom_prx_tool_bar.set_expanded(True)
 

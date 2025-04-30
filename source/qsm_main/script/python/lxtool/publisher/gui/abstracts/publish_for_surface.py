@@ -423,7 +423,7 @@ class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
             icon_name_text='Configure',
         )
 
-        ep_0 = gui_prx_widgets.PrxHToolGroup()
+        ep_0 = gui_prx_widgets.PrxHToolGroupA()
         sa_0.add_widget(ep_0)
         ep_0.set_expanded(True)
         ep_0.set_name('check results')
@@ -521,7 +521,7 @@ class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
         )
         self._publish_tip.set_font_size(12)
 
-        tool_bar = gui_prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolbar()
         layer_widget.add_widget(tool_bar)
         tool_bar.set_expanded(True)
 

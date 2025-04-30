@@ -80,7 +80,7 @@ class ManifestStageOpt(object):
         scr_type_path = '/type/{}'.format(type_name)
         main_configure = self._scr_stage.get_main_configure()
         type_args = type_name.split('/')
-        if type_args > 1:
+        if len(type_args) > 1:
             type_group_name = type_args[0]
             type_group_gui_name = main_configure.get('types.{}.gui_name'.format(type_group_name))
             type_group_gui_name_chs = main_configure.get('types.{}.gui_name_chs'.format(type_group_name))

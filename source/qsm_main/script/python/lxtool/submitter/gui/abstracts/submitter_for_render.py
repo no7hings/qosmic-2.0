@@ -127,7 +127,7 @@ class AbsPnlSubmitterForRenderBase(
         self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         qt_layout_0.addWidget(self._options_prx_node.widget)
         #
-        prx_expanded_group_0 = gui_prx_widgets.PrxHToolGroup()
+        prx_expanded_group_0 = gui_prx_widgets.PrxHToolGroupA()
         v_splitter_0.add_widget(prx_expanded_group_0)
         prx_expanded_group_0.set_name('combinations')
         prx_expanded_group_0.set_expanded(True)
@@ -136,7 +136,7 @@ class AbsPnlSubmitterForRenderBase(
         prx_expanded_group_0.add_widget(self._filter_tree_viewer_0)
         v_splitter_0.set_stretches([2, 1])
         #
-        prx_expanded_group_1 = gui_prx_widgets.PrxHToolGroup()
+        prx_expanded_group_1 = gui_prx_widgets.PrxHToolGroupA()
         h_splitter_0.add_widget(prx_expanded_group_1)
         prx_expanded_group_1.set_expanded(True)
         prx_expanded_group_1.set_name('renderers')

@@ -426,7 +426,7 @@ class AbsViewModel(object):
         if leaf_items:
             leaf_items[-1].setSelected(True)
 
-    def clear_item_selection(self):
+    def unselect_all_items(self):
         self._widget.clearSelection()
 
     def get_current_item(self):

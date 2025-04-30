@@ -161,6 +161,17 @@ class QtItemDrawBase:
             painter.drawRect(rect)
 
     @classmethod
+    def _draw_time_text(cls, painter, rect, text):
+        painter.setPen(QtGui.QColor(223, 223, 223))
+        painter.drawText(rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter, text)
+
+    @classmethod
+    def _draw_time_frame(cls, painter, rect):
+        painter.setPen(QtGui.QColor(0, 0, 0, 0))
+        painter.setBrush(QtGui.QColor(15, 15, 15, 127))
+        painter.drawRect(rect)
+
+    @classmethod
     def _draw_line(cls, painter, point_0, point_1, border_color, border_width=1):
         painter.setPen(QtGui.QPen(border_color, border_width))
         painter.drawLine(point_0, point_1)

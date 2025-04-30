@@ -1404,7 +1404,7 @@ if QT_USD_VIEWPORT_FLAG is True:
                 self._dataModel.viewSettings.showHUD = boolean
 
             #
-            tool_box = _qt_wgt_container.QtHToolBox()
+            tool_box = _qt_wgt_container.QtHToolbox()
             self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('hud-display and camera-mask')
@@ -1433,7 +1433,7 @@ if QT_USD_VIEWPORT_FLAG is True:
                 tool_box._add_widget_(i_button)
 
         def __add_material_and_light_switch_tools_(self):
-            tool_box = _qt_wgt_container.QtHToolBox()
+            tool_box = _qt_wgt_container.QtHToolbox()
             self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('material and light')
@@ -1459,7 +1459,7 @@ if QT_USD_VIEWPORT_FLAG is True:
                 tool_box._add_widget_(i_button)
 
         def __add_color_space_switch_tools_(self):
-            tool_box = _qt_wgt_container.QtHToolBox()
+            tool_box = _qt_wgt_container.QtHToolbox()
             self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('color space')
@@ -1483,7 +1483,7 @@ if QT_USD_VIEWPORT_FLAG is True:
                 tool_box._add_widget_(i_button)
 
         def __add_camera_and_renderer_switch_tools_(self):
-            tool_box = _qt_wgt_container.QtHToolBox()
+            tool_box = _qt_wgt_container.QtHToolbox()
             self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('camera and renderer')
@@ -1514,7 +1514,7 @@ if QT_USD_VIEWPORT_FLAG is True:
                 tool_box._add_widget_(i_button)
 
         def __add_environment_switch_tools_(self):
-            tool_box = _qt_wgt_container.QtHToolBox()
+            tool_box = _qt_wgt_container.QtHToolbox()
             self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('display-purpose and environment')
@@ -1535,7 +1535,7 @@ if QT_USD_VIEWPORT_FLAG is True:
                 tool_box._add_widget_(i_button)
 
         def __add_other_tools_(self):
-            tool_box = _qt_wgt_container.QtHToolBox()
+            tool_box = _qt_wgt_container.QtHToolbox()
             self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('display-purpose and environment')
@@ -1637,7 +1637,7 @@ if QT_USD_VIEWPORT_FLAG is True:
                     self._usd_do_clear_geometry_isolate_selection_()
 
             #
-            tool_box = _qt_wgt_container.QtVToolBox()
+            tool_box = _qt_wgt_container.QtVToolbox()
             self._left_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('isolate select')
@@ -1665,7 +1665,7 @@ if QT_USD_VIEWPORT_FLAG is True:
                 self._dataModel.viewSettings.renderMode = value_
 
             #
-            tool_box = _qt_wgt_container.QtVToolBox()
+            tool_box = _qt_wgt_container.QtVToolbox()
             self._left_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('render mode')
@@ -1695,7 +1695,7 @@ if QT_USD_VIEWPORT_FLAG is True:
                 tool_box._add_widget_(i_button)
 
         def __add_other_switch_tools_(self):
-            tool_box = _qt_wgt_container.QtVToolBox()
+            tool_box = _qt_wgt_container.QtVToolbox()
             self._left_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('extend')

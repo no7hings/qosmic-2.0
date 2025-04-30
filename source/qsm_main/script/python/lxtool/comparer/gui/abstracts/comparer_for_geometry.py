@@ -146,7 +146,7 @@ class AbsPnlComparerForAssetGeometry(gui_prx_widgets.PrxSessionWindow):
         s = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(s)
 
-        e_g = gui_prx_widgets.PrxHToolGroup()
+        e_g = gui_prx_widgets.PrxHToolGroupA()
         s.add_widget(e_g)
         e_g.set_name('viewers')
         e_g.set_expanded(True)

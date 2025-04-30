@@ -536,7 +536,7 @@ class PrxPageForTaskMonitor(prx_abstracts.AbsPrxWidget):
             self._session.configure.get('build.task_properties.parameters'),
         )
         #
-        tool_bar = gui_prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolbar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
         button = gui_prx_widgets.PrxPressButton()
@@ -584,7 +584,7 @@ class PrxPageForTaskMonitor(prx_abstracts.AbsPrxWidget):
         qt_lot.setContentsMargins(*[0]*4)
         qt_lot.setSpacing(2)
 
-        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolbar()
         qt_lot.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_expanded(True)
         self._top_prx_tool_bar.set_align_left()

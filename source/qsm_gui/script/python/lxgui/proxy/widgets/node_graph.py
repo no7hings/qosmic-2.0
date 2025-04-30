@@ -26,7 +26,7 @@ class PrxNGGraph(
         self._qt_layout_0 = _qt_widget_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout_0.setContentsMargins(2, 2, 2, 2)
         self._qt_layout_0.setSpacing(2)
-        self._top_prx_tool_bar = _container.PrxHToolBar()
+        self._top_prx_tool_bar = _container.PrxHToolbar()
         self._qt_layout_0.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_border_radius(1)
         #
@@ -67,7 +67,7 @@ class PrxNGTree(
         self._qt_layout_0 = _qt_widget_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
-        self._top_prx_tool_bar = _container.PrxHToolBar()
+        self._top_prx_tool_bar = _container.PrxHToolbar()
         self._qt_layout_0.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_border_radius(1)
         #
@@ -101,7 +101,7 @@ class PrxNGImageGraph(
         self._qt_layout_0 = _qt_widget_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
-        self._top_prx_tool_bar = _container.PrxHToolBar()
+        self._top_prx_tool_bar = _container.PrxHToolbar()
         self._qt_layout_0.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_border_radius(1)
         #

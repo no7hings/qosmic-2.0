@@ -35,6 +35,7 @@ class Main(object):
                 show_cancel=True,
             )
             if result:
+                tag_path_set = set()
                 tag_map = scr_stage.generate_tag_map('chs')
                 if tag_map and scr_entities:
                     with window.gui_progressing(maximum=len(scr_entities)) as g_p:
@@ -46,11 +47,14 @@ class Main(object):
                                 if j_key in tag_map:
                                     j_tag_paths = tag_map[j_key]
                                     for k_tag_path in j_tag_paths:
+                                        tag_path_set.add(k_tag_path)
                                         scr_stage.create_node_tag_assign(
                                             i_node_path, k_tag_path
                                         )
 
                             g_p.do_update()
+
+                    page._gui_tag_opt.gui_update_entities_for(tag_path_set)
 
 
 if __name__ == '__main__':

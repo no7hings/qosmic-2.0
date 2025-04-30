@@ -482,7 +482,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
 
         self._do_gui_refresh_output_by_save_scheme()
         # tip
-        self._tip_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        self._tip_prx_tool_group = gui_prx_widgets.PrxHToolGroupA()
         prx_sca.add_widget(self._tip_prx_tool_group)
         self._tip_prx_tool_group.set_expanded(True)
         self._tip_prx_tool_group.set_name(
@@ -498,7 +498,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
             )
         )
 
-        tool_bar = gui_prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolbar()
         qt_lot.addWidget(tool_bar.widget)
         tool_bar.set_expanded(True)
 
