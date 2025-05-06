@@ -30,7 +30,7 @@ class AbsPrxResoraPanel(gui_prx_widgets.PrxBasePanel):
                 cls = module.get('GuiResourceManagerMain')
                 if cls:
                     bsc_log.Log.trace(
-                        'find manager gui for {} successful.'.format(resource_type)
+                        'find resora manager gui for {} successful.'.format(resource_type)
                     )
                     return cls
         except Exception:

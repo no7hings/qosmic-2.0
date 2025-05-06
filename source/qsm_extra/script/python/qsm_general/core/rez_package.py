@@ -26,6 +26,7 @@ import subprocess
 import functools
 
 
+# todo: use rez-release instance
 class RezPackage:
 
     PACKAGE_DIR_SOURCE = '{package_root_source}/{package}'

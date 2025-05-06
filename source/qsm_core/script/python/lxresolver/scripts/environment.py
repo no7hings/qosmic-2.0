@@ -10,6 +10,7 @@ import lxresolver.scripts as rsv_scripts
 print(rsv_scripts.ScpEnvironment.get_data('/production/shows/nsa_dev/assets/chr/td_test/user/work.dongchangbao/katana/scenes/surface/td_test.srf.surface.v000_002.katana'))
     """
 
+    # todo: remove this module? or use lnx_parsor instance?
     @classmethod
     def register_from_scene(cls, file_path):
         resolver = rsv_core.RsvBase.generate_root()

@@ -134,7 +134,7 @@ class AbsSsnConfigureBaseDef(object):
 
 
 class AbsSsnEnvironmentBaseDef(object):
-    def _init_environment_base_def_(self):
+    def _init_environment_base_def(self):
         # self._test_flag = bsc_core.BscEnviron.get('QSM_TEST')
         pass
 
@@ -153,6 +153,41 @@ class AbsSsnGener(
 ):
     Platform = bsc_core.BscPlatform
     Application = bsc_core.BscApplicationCfg
+
+    @classmethod
+    def _match_fnc(cls, condition_string, match_dict):
+        if condition_string:
+            for i in condition_string.split('&'):
+                i_key, i_condition = i.split('=')
+                if i_key not in match_dict:
+                    continue
+                #
+                i_input = match_dict[i_key]
+                #
+                if not i_input:
+                    return False
+                #
+                if '+' in i_condition:
+                    i_values = i_condition.split('+')
+                    if i_input not in i_values:
+                        return False
+                else:
+                    if i_condition != i_input:
+                        return False
+        return True
+
+    @classmethod
+    def open_url(cls, url):
+        bsc_core.BscUrl.open_in_chrome(url)
+
+    @classmethod
+    def _get_choice_scheme_matched(cls, choice_scheme, choice_scheme_includes):
+        for i_choice_scheme in choice_scheme_includes:
+            if fnmatch.filter(
+                    [choice_scheme], i_choice_scheme
+            ):
+                return True
+        return False
 
     def __init__(self, *args, **kwargs):
         if 'type' in kwargs:
@@ -207,7 +242,7 @@ class AbsSsnGener(
         self._gui_widget = None
         self._prx_window = None
 
-        self._init_environment_base_def_()
+        self._init_environment_base_def()
         self._init_configure_base_def_()
 
     def get_type(self):
@@ -412,15 +447,6 @@ class AbsSsnGener(
     def get_is_system_matched(self, system_key):
         return self.system in bsc_core.BscSystem.get_system_includes([system_key])
 
-    @classmethod
-    def _get_choice_scheme_matched_(cls, choice_scheme, choice_scheme_includes):
-        for i_choice_scheme in choice_scheme_includes:
-            if fnmatch.filter(
-                    [choice_scheme], i_choice_scheme
-            ):
-                return True
-        return False
-
     def set_execute_fnc(self, fnc):
         pass
 
@@ -492,34 +518,8 @@ class AbsSsnGener(
             'rsv-match-condition'
         )
         if condition_string:
-            return self._match_fnc_(condition_string, match_dict)
+            return self._match_fnc(condition_string, match_dict)
         return True
-
-    @classmethod
-    def _match_fnc_(cls, condition_string, match_dict):
-        if condition_string:
-            for i in condition_string.split('&'):
-                i_key, i_condition = i.split('=')
-                if i_key not in match_dict:
-                    continue
-                #
-                i_input = match_dict[i_key]
-                #
-                if not i_input:
-                    return False
-                #
-                if '+' in i_condition:
-                    i_values = i_condition.split('+')
-                    if i_input not in i_values:
-                        return False
-                else:
-                    if i_condition != i_input:
-                        return False
-        return True
-
-    @classmethod
-    def open_url(cls, url):
-        bsc_core.BscUrl.open_in_chrome(url)
 
     def open_file(self, path):
         pass

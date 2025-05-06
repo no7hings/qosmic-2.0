@@ -129,6 +129,7 @@ class Resource(AbsResource):
     ENVIRON_KEY = 'QSM_RESOURCES'
 
 
+# todo: remove EXTEND keyword?
 class BscExtendResource(AbsResource):
     CACHE = LRUCache(maximum=1024)
 

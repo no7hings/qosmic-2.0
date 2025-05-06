@@ -4,6 +4,7 @@ import lxbasic.content as bsc_content
 from . import base as _base
 
 
+# todo: remove EXTEND keyword?
 class BscExtendConfigure(_base.AbsResource):
     """
 print(RscConfigure.get_yaml('database/library/resource-basic'))

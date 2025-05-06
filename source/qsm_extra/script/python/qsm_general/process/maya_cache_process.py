@@ -18,6 +18,7 @@ class MayaCacheSubprocess(_base.DccProcess):
                 maya_version = '2024'
             else:
                 maya_version = '2020'
+
         # do not use unicode
         # windows
         main_arg = 'rez-env maya-{} mtoa qsm_maya_main'.format(maya_version)

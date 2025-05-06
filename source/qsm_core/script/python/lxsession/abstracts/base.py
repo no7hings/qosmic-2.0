@@ -168,7 +168,6 @@ class AbsSsnOptionExecuteDef(object):
         else:
             raise TypeError()
 
-    #
     def _set_option_execute_def_init_(self, configure):
         self._ddl_configure = configure
         self._ddl_job_id = None
@@ -900,7 +899,7 @@ class AbsOptionRsvTaskBatcherSession(
 
 
 if __name__ == '__main__':
-    print(bsc_session.AbsSsnGener._match_fnc_(
+    print(bsc_session.AbsSsnGener._match_fnc(
         'branch=asset&step=srf',
         {
             "root": "/production/shows",

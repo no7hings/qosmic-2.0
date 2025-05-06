@@ -51,7 +51,7 @@ def set_session_option_hooks_execute_by_deadline(session):
         #
         _choice_scheme_includes = _hook_option_opt.get('choice_scheme_includes', as_array=True)
         if _choice_scheme_includes:
-            if session._get_choice_scheme_matched_(
+            if session._get_choice_scheme_matched(
                     _batch_choice_scheme,
                     _choice_scheme_includes
             ) is False:

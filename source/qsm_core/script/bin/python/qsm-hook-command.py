@@ -37,8 +37,8 @@ def __print_help():
     sys.stdout.write(
         '***** qsm-hook-command *****\n'
         '\n'
-        #
         '-h or --help: show help\n'
+        '-o or --option: execute by option\n'
     )
 
 

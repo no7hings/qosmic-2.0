@@ -51,14 +51,14 @@ class AdvControlSet(object):
 
 class AdvChrControlSet(AdvControlSet):
     @classmethod
-    def find_face_set(cls, namespace):
+    def find_face_control_set(cls, namespace):
         _ = cmds.ls('{}:FaceControlSet'.format(namespace), long=1)
         if _:
             return _[0]
 
     @classmethod
     def find_controls(cls, namespace):
-        sets = filter(None, [cls.find_set(namespace), cls.find_face_set(namespace)])
+        sets = filter(None, [cls.find_set(namespace), cls.find_face_control_set(namespace)])
         list_ = []
         for i in sets:
             list_.extend(

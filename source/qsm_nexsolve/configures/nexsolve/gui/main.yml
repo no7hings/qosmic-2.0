@@ -20,4 +20,4 @@ option:
 
         size: [1280, 960]
 
-        help_url: 'http://127.0.0.1/dokuwiki/doku.php?id=%E6%87%92%E4%BA%BA%E5%B7%A5%E5%85%B7:%E6%87%92%E4%BA%BA%E8%A7%A3%E7%B4%A2'
+        help_url: 'http://{host}/dokuwiki/doku.php?id=%E6%87%92%E4%BA%BA%E5%B7%A5%E5%85%B7:%E6%87%92%E4%BA%BA%E8%A7%A3%E7%B4%A2'

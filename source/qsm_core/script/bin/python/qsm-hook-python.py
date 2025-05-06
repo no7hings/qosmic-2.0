@@ -40,9 +40,7 @@ def __print_help():
         '***** qsm-hook-python *****\n'
         '\n'
         '-h or --help: show help\n'
-        '\n'
-        'etc.\n'
-        '-o "hook_key=desktop-tools/desktop-tool-kit"\n'
+        '-o or --option: execute by option\n'
     )
 
 

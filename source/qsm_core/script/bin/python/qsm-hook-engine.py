@@ -41,7 +41,7 @@ def __print_help():
         'run command(s) by rez-env and application program\n'
         '\n'
         '-h or --help: show help\n'
-        '-o or --option: set run with option\n'
+        '-o or --option: execute by option\n'
         '\n'
         'engines:\n'
         '    python,'
