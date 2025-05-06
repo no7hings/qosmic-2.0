@@ -26,7 +26,7 @@ class QtInputForBubbleChoose(
 
     QT_POPUP_CHOOSE_CLS = _wgt_popup.QtPopupForChoose
 
-    def _pull_history_(self, value):
+    def _pull_history_fnc_(self, value):
         if value in self._choose_values:
             self._entry_widget._set_value_(value)
 
@@ -69,8 +69,8 @@ class QtInputForBubbleChoose(
             self._entry_widget._get_frame_rect_()
         )
 
-        self._choose_popup_widget.user_popup_value_accepted.connect(self._push_history_)
-        self.input_value_accepted.connect(self._push_history_)
+        self._choose_popup_widget.user_popup_value_accepted.connect(self._push_history_fnc_)
+        self.input_value_accepted.connect(self._push_history_fnc_)
 
         self.input_value_accepted = self._entry_widget.entry_value_accepted
         # choose signal

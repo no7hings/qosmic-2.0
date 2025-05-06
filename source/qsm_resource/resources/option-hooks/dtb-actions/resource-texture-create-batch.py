@@ -113,7 +113,6 @@ def main(session):
     dtb_opt = session.get_database_opt()
     session.reload_configure()
     if dtb_opt:
-        #
         base_variants = dict(root=dtb_opt.get_stg_root())
         #
         texture_original_src_directory_p = dtb_opt.get_pattern(keyword='texture-original-src-dir')

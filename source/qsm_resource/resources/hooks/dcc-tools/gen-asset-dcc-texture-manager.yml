@@ -96,7 +96,7 @@ build:
                 widget: directory
                 open_or_save: open
                 history_group: ['lynxi', 'gen_asset_dcc_test_manager']
-                pull_history_latest: True
+                pull_history: True
                 value: ''
                 tool_tip: 'entry or choose a directory for searching'
 
@@ -130,7 +130,7 @@ build:
                 widget: directory
                 open_or_save: save
                 history_group: ['lynxi', 'gen_asset_dcc_test_manager']
-                pull_history_latest: True
+                pull_history: True
                 value: ''
                 tool_tip: 'entry or choose a directory for collection execute'
 

@@ -8,7 +8,7 @@ option:
         name: 'Desktop Tool Kit'
         group_name: ''
         #
-        icon_name: 'application/tool_kit'
+        icon_name: 'qosmic/logo'
         tool_tip: ''
         #
         size: [480, 720]

@@ -36,7 +36,7 @@ build:
                 enable: True
                 tool_tip: '...'
                 history_group: ['lynxi', 'resource_export_for_clarisse_batch']
-                pull_history_latest: True
+                pull_history: True
 
             file_type:
                 widget: capsule_string

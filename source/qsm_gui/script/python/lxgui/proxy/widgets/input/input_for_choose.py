@@ -93,7 +93,7 @@ class PrxInputForSchemeChoose(_input_base.AbsPrxInput):
         if isinstance(raw, (tuple, list)):
             self.append_history(raw[0])
             self.update_history()
-            self.pull_history_latest()
+            self.pull_history()
 
     def set_default(self, raw, **kwargs):
         self._qt_input_widget._set_value_default_(raw)
@@ -141,7 +141,7 @@ class PrxInputForSchemeChoose(_input_base.AbsPrxInput):
                     histories
                 )
 
-    def pull_history_latest(self):
+    def pull_history(self):
         if self._scheme_key is not None:
             _ = _gui_core.GuiHistoryStage().get_latest(self._scheme_key)
             if _:

@@ -23,6 +23,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self._d_0.set_align_left()
         self._d_0.set_expanded(True)
         self._d_0.build_by_data(data['build']['top']['toolbar']['tools'])
+        self._d_0.set_history_group(data['build']['top']['toolbar']['history_group'])
 
         self._d_0.get_tool('toolbox0.tool0').connect_press_clicked_to(self._test)
 

@@ -142,6 +142,7 @@ class _QtSpcTaskView(
 
         self._thread_worker_maximum = 2
 
+    # this is from xgen
     def drawBranches(self, painter, rect, index):
         # Get the indention level of the row
         level = 0

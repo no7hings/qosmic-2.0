@@ -24,6 +24,7 @@ class GuiHistoryStage(object):
 
         self = super(GuiHistoryStage, cls).__new__(cls)
 
+        # use for file name
         self._k = k
         self._cc_dict = dict()
         self._cc = bsc_content.ContentCache(_base.GuiUtil.get_user_history_file(k))
@@ -47,7 +48,7 @@ class GuiHistoryStage(object):
     def _to_key_args(self, key):
         if isinstance(key, six.string_types):
             return self._k, key
-        elif isinstance(key, (tuple, list)):
+        elif isinstance(key, list):
             return '{}.{}'.format(self._k, '.'.join(key[:-1])), key[-1]
         raise RuntimeError()
 
@@ -106,9 +107,20 @@ class GuiHistoryStage(object):
         c = self._generate_c(k)
         return copy.copy(c.get(key)) or []
 
+    def get_available(self, key):
+        k, key = self._to_key_args(key)
+        c = self._generate_c(k)
+        _ = c.get(key)
+
+        # value maybe is "False"
+        if isinstance(_, list):
+            return _[-1]
+        return _
+
     def get_latest(self, key):
         k, key = self._to_key_args(key)
         c = self._generate_c(k)
         _ = c.get(key)
-        if _:
+
+        if isinstance(_, list):
             return _[-1]

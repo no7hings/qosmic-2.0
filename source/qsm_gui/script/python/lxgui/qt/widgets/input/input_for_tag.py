@@ -18,7 +18,7 @@ class QtInputForTag(
 ):
     QT_ENTRY_CLS = _entry_for_tag.QtEntryForTag
 
-    def _pull_history_(self, *args, **kwargs):
+    def _pull_history_fnc_(self, *args, **kwargs):
         self._entry_widget._set_value_(args[0])
 
     def __init__(self, *args, **kwargs):
@@ -47,7 +47,7 @@ class QtInputForTag(
         self.user_input_value_accepted = self._entry_widget.user_value_accepted
 
         self.user_input_value_accepted.connect(
-            self._push_history_
+            self._push_history_fnc_
         )
 
     def _set_value_options_(self, values, names=None):

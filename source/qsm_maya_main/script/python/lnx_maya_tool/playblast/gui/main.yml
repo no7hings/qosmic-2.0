@@ -84,7 +84,7 @@ build:
                     default: 'default'
                     enable: True
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
                 camera_display/display_resolution:
                     widget: boolean
@@ -95,7 +95,7 @@ build:
                        operator: 'is', port: 'camera_display/scheme', value: 'customize'
                     }
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
                 camera_display/display_safe_action:
                     widget: boolean
@@ -107,7 +107,7 @@ build:
                         operator: 'is', port: 'camera_display/scheme', value: 'customize'
                     }
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
                 camera_display/display_safe_title:
                     widget: boolean
@@ -117,7 +117,7 @@ build:
                         operator: 'is', port: 'camera_display/scheme', value: 'customize'
                     }
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
                 camera_display/display_film_pivot:
                     widget: boolean
@@ -127,7 +127,7 @@ build:
                         operator: 'is', port: 'camera_display/scheme', value: 'customize'
                     }
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
                     join_to_next: True
 
                 camera_display/display_film_origin:
@@ -138,7 +138,7 @@ build:
                         operator: 'is', port: 'camera_display/scheme', value: 'customize'
                     }
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
                 camera_display/overscan:
                     widget: float
@@ -149,7 +149,7 @@ build:
                         operator: 'is', port: 'camera_display/scheme', value: 'customize'
                     }
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
                 resolution:
                     widget: group
@@ -172,7 +172,7 @@ build:
                     options: ['HD 1080P', 'HD 720P', 'HD 540P', '640x480', '320x240', '4k Square', '3k Square', '2k Square', '1k Square']
                     default: 'HD 720P'
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
                     enable: True
                     tool_tip:
                         |-
@@ -245,7 +245,7 @@ build:
                     name_chs: '贴图'
                     value: True
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
                 render_setting/light_enable:
                     widget: boolean
@@ -254,7 +254,7 @@ build:
                     value: True
                     join_to_next: True
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
                 render_setting/shadow_enable:
                     widget: boolean
@@ -262,7 +262,7 @@ build:
                     name_chs: '影子'
                     value: True
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
                 display_setting:
                     widget: group
@@ -276,7 +276,7 @@ build:
                     value: True
                     enable: True
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
                 output:
                     widget: group
@@ -292,7 +292,7 @@ build:
                     default: 'auto'
                     enable: True
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
                 output/update_scheme:
                     widget: capsule_string
@@ -306,7 +306,7 @@ build:
                         operator: 'match_one', port: 'output/save_scheme', value: ['auto', 'specific_directory']
                     }
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
                 output/directory:
                     widget: directory
@@ -315,7 +315,7 @@ build:
                     open_or_save: save
                     value: ''
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
                     visible_condition: {
                        operator: 'is', port: 'output/save_scheme', value: 'specific_directory'
                     }
@@ -328,7 +328,7 @@ build:
                     ext_filter: 'All File (*.mov)'
                     value: ''
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
                     visible_condition: {
                         operator: 'is', port: 'output/save_scheme', value: 'specific_file'
                     }
@@ -340,7 +340,7 @@ build:
                     value: True
                     enable: True
                     history_group: ['playblast', 'main']
-                    pull_history_latest: True
+                    pull_history: True
 
         buttons:
             playblast:

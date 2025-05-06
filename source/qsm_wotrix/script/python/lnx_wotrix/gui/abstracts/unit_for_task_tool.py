@@ -176,7 +176,7 @@ class AbsPrxUnitForTaskTool(gui_prx_widgets.PrxBaseUnit):
 
                     self._gui_task_tool_opt = task_tool_opt
                     self._scene_src_qt_input._set_value_(scene_path)
-                    self._scene_src_qt_input._push_history_(scene_path)
+                    self._scene_src_qt_input._push_history_fnc_(scene_path)
 
             # refresh all time
             self._gui_resource_view_opt.do_gui_refresh_all()

@@ -71,7 +71,7 @@ class PrxInputForEpisode(prx_abstracts.AbsPrxWidget):
             history_key = self.HISTORY_KEY
 
         self._qt_entity_input._set_history_key_(history_key)
-        self._qt_entity_input._pull_history_latest_()
+        self._qt_entity_input._pull_history_()
         self._qt_entity_input.user_history_pull_accepted.connect(self._pull_history_fnc)
 
         self._qt_reload_button.press_clicked.connect(self._on_reload_entities)

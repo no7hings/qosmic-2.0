@@ -26,7 +26,7 @@ build:
                 widget: file
                 open_or_save: open
                 history_group: ['lynxi', 'usd_format_converter']
-                pull_history_latest: True
+                pull_history: True
                 ext_includes: ['.usda', '.usd', '.abc']
                 value: ''
                 tool_tip: '...'
@@ -35,7 +35,7 @@ build:
                 widget: file
                 open_or_save: save
                 history_group: ['lynxi', 'usd_format_converter']
-                pull_history_latest: True
+                pull_history: True
                 ext_includes: ['.usda', '.usd', '.abc']
                 value: ''
                 tool_tip: '...'

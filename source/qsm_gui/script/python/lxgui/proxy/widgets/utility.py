@@ -460,6 +460,12 @@ class PrxIconToggleButton(gui_prx_abstracts.AbsPrxWidget):
     def connect_check_swapped_as_exclusive_to(self, fnc):
         self._qt_widget.check_swapped_as_exclusive.connect(fnc)
 
+    def set_history_key(self, key):
+        self._qt_widget._set_history_key_(key)
+
+    def pull_history(self):
+        return self._qt_widget._pull_history_()
+
 
 class PrxPressButton(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = _qt_wgt_button.QtPressButton

@@ -30,7 +30,7 @@ class QtInputForArray(
     def _refresh_choose_index_(self):
         pass
 
-    def _pull_history_(self, *args, **kwargs):
+    def _pull_history_fnc_(self, *args, **kwargs):
         pass
 
     QT_ENTRY_CLS = _entry_for_array.QtEntryForArray
@@ -193,7 +193,7 @@ class QtInputForArrayChoose(
     def _refresh_choose_index_(self):
         pass
 
-    def _pull_history_(self, *args, **kwargs):
+    def _pull_history_fnc_(self, *args, **kwargs):
         pass
 
     QT_ENTRY_CLS = _entry_for_array.QtEntryForArray

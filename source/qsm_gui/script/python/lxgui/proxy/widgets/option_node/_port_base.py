@@ -97,14 +97,16 @@ class AbsPrxPortBaseDef(object):
     def _init_prx_port_base_def(self, category, port_path, label=None):
         self._prx_node = None
         self._prx_group = None
-        #
+
         self._category = category
         self._port_path = port_path
+
+        # fixme: use port path instance?
         self._gui_sub_path = '/{}'.format(self._port_path.replace('.', '/'))
         self._name = self._port_path.split('.')[-1]
 
         self.__is_pseudo_root = False
-        #
+
         if label is not None:
             self._label = label
         else:
@@ -260,6 +262,7 @@ class AbsPrxPort(AbsPrxPortBaseDef):
 
         self._prx_port_enable = self.ENABLE_CLS(node_widget)
         self._prx_port_enable.set_hide()
+
         # gui
         self._prx_port_label = self.LABEL_CLS(node_widget)
         self._prx_port_label.set_hide()
@@ -487,8 +490,8 @@ class AbsPrxPort(AbsPrxPortBaseDef):
 
         self._prx_port_input.set_history_key(key)
 
-    def pull_history_latest(self):
-        return self._prx_port_input.pull_history_latest()
+    def pull_history(self):
+        return self._prx_port_input.pull_history()
 
     def update_exclusive_set(self, ps):
         def exclusive_fnc_(p_cur_):
@@ -501,6 +504,7 @@ class AbsPrxPort(AbsPrxPortBaseDef):
         for i_p in ps:
             i_port = self.get_node().get_port(i_p)
             i_qt_widget = i_port._prx_port_input._qt_input_widget
+
             # use radio icon
             i_qt_widget._set_check_icon_file_paths_(
                 _gui_core.GuiIcon.get('radio_unchecked'),

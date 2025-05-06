@@ -367,7 +367,7 @@ build:
                     option_names_chs: ['所有', '选中的']
                     default: 'all'
                     use_history_group: True
-                    pull_history_latest: True
+                    pull_history: True
                     tool_tip:
                         |-
                         To be supplemented.

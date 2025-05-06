@@ -70,7 +70,7 @@ class QtInputForStorage(
         else:
             self._history_button._set_action_enable_(False)
 
-    def _pull_history_(self, value):
+    def _pull_history_fnc_(self, value):
         self._set_value_(value)
 
     def __init__(self, *args, **kwargs):
@@ -157,7 +157,7 @@ class QtInputForStorage(
         )
         if value:
             self._set_value_(value)
-            self._push_history_(value)
+            self._push_history_fnc_(value)
 
     def _do_save_file_(self):
         value = gui_core.GuiStorageDialog.save_file(
@@ -167,7 +167,7 @@ class QtInputForStorage(
         )
         if value:
             self._set_value_(value)
-            self._push_history_(value)
+            self._push_history_fnc_(value)
 
     def _do_open_directory_(self):
         value = gui_core.GuiStorageDialog.open_directory(
@@ -175,7 +175,7 @@ class QtInputForStorage(
         )
         if value:
             self._set_value_(value)
-            self._push_history_(value)
+            self._push_history_fnc_(value)
 
     def _do_save_directory_(self):
         value = gui_core.GuiStorageDialog.save_directory(
@@ -183,7 +183,7 @@ class QtInputForStorage(
         )
         if value:
             self._set_value_(value)
-            self._push_history_(value)
+            self._push_history_fnc_(value)
 
     def _do_any_(self):
         if self._storage_scheme == self.StorageScheme.FileOpen:
@@ -277,7 +277,7 @@ class QtInputForStorage(
         # completion
         self._build_input_completion_()
         self.user_input_completion_value_accepted.connect(self._set_value_)
-        self.user_input_completion_value_accepted.connect(self._push_history_)
+        self.user_input_completion_value_accepted.connect(self._push_history_fnc_)
         self._set_input_completion_buffer_fnc_(
             self._choose_value_completion_gain_fnc_
         )

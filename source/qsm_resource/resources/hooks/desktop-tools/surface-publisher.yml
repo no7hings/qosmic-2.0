@@ -34,7 +34,7 @@ build:
                 widget: file
                 open_or_save: open
                 history_group: ['lynxi', 'asset_surface_publisher']
-                pull_history_latest: False
+                pull_history: False
                 value: ''
                 tool_tip: '...'
                 enable: True

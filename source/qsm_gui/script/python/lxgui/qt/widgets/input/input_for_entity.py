@@ -47,7 +47,7 @@ class QtInputForEntity(
 
     QT_HISTORY_POPUP_CLS = _popup.QtPopupForHistory
 
-    def _pull_history_(self, value):
+    def _pull_history_fnc_(self, value):
         self._set_value_(value)
         self.user_history_pull_accepted.emit(value)
 
@@ -97,7 +97,7 @@ class QtInputForEntity(
 
         # history
         self._build_input_history_(self._history_button)
-        self._cmp_entry_widget.entry_value_accepted.connect(self._push_history_)
+        self._cmp_entry_widget.entry_value_accepted.connect(self._push_history_fnc_)
 
         # choose popup
         self._choose_popup = _entity_view.QtEntityChooseStack(self)

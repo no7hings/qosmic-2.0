@@ -31,7 +31,7 @@ class QtInputForConstant(
 
     entry_value_changed = qt_signal()
 
-    def _pull_history_(self, value):
+    def _pull_history_fnc_(self, value):
         if value is not None:
             self._entry_widget._set_value_(value)
 
@@ -63,7 +63,7 @@ class QtInputForConstant(
 
         self.input_value_accepted = self._entry_widget.entry_value_accepted
 
-        self._entry_widget.entry_value_accepted.connect(self._push_history_)
+        self._entry_widget.entry_value_accepted.connect(self._push_history_fnc_)
 
     def _set_value_entry_validator_use_as_name_(self):
         self._entry_widget._set_value_validator_use_as_name_()
@@ -91,7 +91,7 @@ class QtInputForConstantChoose(
     # completion
     _qt_abstracts.AbsQtInputCompletionExtraDef,
 ):
-    def _pull_history_(self, value):
+    def _pull_history_fnc_(self, value):
         if value is not None:
             self._set_value_(value)
 
@@ -136,7 +136,7 @@ class QtInputForConstantChoose(
         self._build_input_entry_(self._value_type)
 
         self.user_input_choose_value_accepted.connect(
-            self._push_history_
+            self._push_history_fnc_
         )
 
         self.installEventFilter(self)

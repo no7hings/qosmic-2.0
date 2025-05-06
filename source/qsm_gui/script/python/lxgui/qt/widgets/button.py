@@ -29,6 +29,9 @@ class QtCheckButton(
     _qt_abstracts.AbsQtValueDefaultExtraDef,
     _qt_abstracts.AbsQtValueHistoryExtraDef
 ):
+    def _pull_history_fnc_(self, value):
+        self._set_checked_(value)
+
     def _refresh_widget_all_(self):
         pass
 
@@ -87,15 +90,12 @@ class QtCheckButton(
 
         self._set_name_draw_font_(_qt_core.QtFonts.Button)
 
-        self.user_check_toggled.connect(self._push_history_)
+        self.user_check_toggled.connect(self._push_history_fnc_)
 
     def _get_value_is_valid_(self, value):
         if isinstance(value, bool):
             return True
         return False
-
-    def _pull_history_(self, value):
-        self._set_checked_(value)
 
     def _get_value_(self):
         return self._is_checked_()
@@ -1168,11 +1168,16 @@ class QtIconToggleButton(
     _qt_abstracts.AbsQtActionForCheckDef,
     #
     _qt_abstracts.AbsQtValueDefaultExtraDef,
+    _qt_abstracts.AbsQtValueHistoryExtraDef
 ):
-    def _refresh_widget_all_(self):
-        pass
-
     QT_MENU_CLS = _utility.QtMenu
+
+    def _pull_history_fnc_(self, value):
+        self._set_checked_(value)
+
+    def _refresh_widget_all_(self):
+        self._refresh_widget_draw_geometry_()
+        self._refresh_widget_draw_()
 
     def __init__(self, *args, **kwargs):
         super(QtIconToggleButton, self).__init__(*args, **kwargs)
@@ -1200,6 +1205,7 @@ class QtIconToggleButton(
         self._set_check_enable_(True)
 
         self._init_value_default_extra_def_(self)
+        self._init_value_history_base_def_(self)
 
         self._refresh_check_()
 
@@ -1257,8 +1263,9 @@ class QtIconToggleButton(
         widget, event = args
         if widget == self:
             self._execute_action_hover_by_filter_(event)
-            #
-            if event.type() == QtCore.QEvent.MouseButtonPress:
+            if event.type() == QtCore.QEvent.Resize:
+                self._refresh_widget_all_()
+            elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.button() == QtCore.Qt.LeftButton:
                     self._set_action_flag_(self.ActionFlag.CheckPress)
                 elif event.button() == QtCore.Qt.RightButton:
@@ -1273,11 +1280,11 @@ class QtIconToggleButton(
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
-        #
-        self._refresh_widget_draw_geometry_()
-        #
+
+        # self._refresh_widget_draw_geometry_()
+
         offset = self._get_action_offset_()
-        #
+
         background_color = painter._generate_item_background_color_by_rect_(
             self._check_frame_rect,
             is_hovered=self._is_hovered,

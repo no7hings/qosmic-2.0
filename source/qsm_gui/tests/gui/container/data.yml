@@ -3,6 +3,7 @@ build:
         toolbar:
             name: ''
             name_chs: ''
+            history_group: ['toolbar', 'test']
 
             tools:
                 toolbox0:
@@ -25,7 +26,7 @@ build:
                     mode: 'toggle'
                     name: 'button'
                     name_chs: '按钮'
-                    icon_name: 'file/file'
+                    icon_name: 'application/maya'
                     tool_tip: 'tool'
                     tool_tip_chs: '工具'
 
@@ -34,7 +35,7 @@ build:
                     mode: 'toggle'
                     name: 'button'
                     name_chs: '按钮'
-                    icon_name: 'file/file'
+                    icon_name: 'application/houdini'
                     tool_tip: 'tool'
                     tool_tip_chs: '工具'
                     exclusive_set: ['toolbox0/tool1', 'toolbox0/tool2']

@@ -15,7 +15,7 @@ class AbsQtInputBaseDef(
     gui_qt_abs_base.AbsQtValueValidationExtraDef,
     gui_qt_abs_base.AbsQtValueHistoryExtraDef,
 ):
-    def _pull_history_(self, *args, **kwargs):
+    def _pull_history_fnc_(self, *args, **kwargs):
         pass
 
     user_key_tab_pressed = qt_signal()
@@ -114,7 +114,7 @@ class AbsQtInputForComponentsBaseDef(
     gui_qt_abs_base.AbsQtValueValidationExtraDef,
     gui_qt_abs_base.AbsQtValueHistoryExtraDef,
 ):
-    def _pull_history_(self, *args, **kwargs):
+    def _pull_history_fnc_(self, *args, **kwargs):
         pass
 
     def _init_input_as_components_base_def_(self, widget):
@@ -173,7 +173,7 @@ class AbsQtInputForComponentsBaseDef(
 
 #   other, etc. rgba, icon, ...
 class AbsQtInputForOtherBaseDef(AbsQtInputBaseDef):
-    def _pull_history_(self, *args, **kwargs):
+    def _pull_history_fnc_(self, *args, **kwargs):
         pass
 
     def _init_input_as_other_base_def_(self, widget):
@@ -338,7 +338,7 @@ class AbsQtInputHistoryExtraDef(object):
     def _get_history_values_(self):
         raise NotImplementedError()
 
-    def _pull_history_(self):
+    def _pull_history_fnc_(self):
         raise NotImplementedError()
 
     def _init_input_history_extra_def_(self, widget):
@@ -361,7 +361,7 @@ class AbsQtInputHistoryExtraDef(object):
             history_button.press_clicked.connect(self._get_history_popup_widget_()._do_popup_start_)
             history_button.hide()
 
-        self._history_popup_widget.user_popup_value_accepted.connect(self._pull_history_)
+        self._history_popup_widget.user_popup_value_accepted.connect(self._pull_history_fnc_)
 
     def _get_history_popup_widget_(self):
         return self._history_popup_widget

@@ -85,10 +85,10 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
         self._qt_scheme_input._set_value_(self.Schemes.AssetTask)
 
         self._qt_scheme_input._set_history_key_('gui.shotgun-branch')
-        self._qt_scheme_input._pull_history_latest_()
+        self._qt_scheme_input._pull_history_()
 
         self._qt_entity_input._set_history_key_('gui.input-path-{}'.format(self.__scheme))
-        self._qt_entity_input._pull_history_latest_()
+        self._qt_entity_input._pull_history_()
 
         self._qt_entity_input._create_widget_shortcut_action_(
             self.__to_next_scheme, 'Alt+Right'
@@ -132,7 +132,7 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
                 self.__resource_type = 'shot'
 
             self._qt_entity_input._set_history_key_('gui.input-path-{}'.format(self.__scheme))
-            if self._qt_entity_input._pull_history_latest_() is False:
+            if self._qt_entity_input._pull_history_() is False:
                 cs = path.get_components()
                 cs.reverse()
                 d = len(cs)

@@ -44,7 +44,7 @@ build:
                     option_names_chs: ['图片', '视频']
 
                     history_group: ['wotrix', 'asset', 'cfx_rig', 'task_release']
-                    pull_history_latest: True
+                    pull_history: True
 
                 images:
                     widget: medias

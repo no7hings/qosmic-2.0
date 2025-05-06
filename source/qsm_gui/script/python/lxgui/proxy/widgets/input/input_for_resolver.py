@@ -241,7 +241,7 @@ class PrxInputForRsvProject(_input_base.AbsPrxInput):
                 histories
             )
 
-    def pull_history_latest(self):
+    def pull_history(self):
         _ = _gui_core.GuiHistoryStage().get_latest(self.HISTORY_KEY)
         if _:
             self._qt_input_widget._set_value_(_)

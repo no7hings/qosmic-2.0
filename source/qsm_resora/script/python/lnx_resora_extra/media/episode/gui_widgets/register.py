@@ -19,7 +19,7 @@ class GuiResourceRegisterMain(lnx_rsr_gui_abstracts.AbsPrxPageForAnyRegister):
         ]:
             i_p = self._prx_options_node.get_port(i)
             i_p.set_history_group(['resora', self._scr_stage.key])
-            i_p.pull_history_latest()
+            i_p.pull_history()
 
     def _on_apply(self):
         prx_node = self._prx_options_node

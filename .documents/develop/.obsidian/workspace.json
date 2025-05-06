@@ -184,8 +184,7 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "mermaid-tools:Open Mermaid Toolbar": false,
-      "card-board:CardBoard": false
+      "mermaid-tools:Open Mermaid Toolbar": false
     }
   },
   "active": "91a87c4c69dbe632",

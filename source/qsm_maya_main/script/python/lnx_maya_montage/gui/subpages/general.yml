@@ -36,7 +36,7 @@ build:
                 option_names_chs: ['ADV', '动捕']
                 default: 'adv'
                 history_group: ['montage', 'general']
-                pull_history_latest: True
+                pull_history: True
 
             # ADV
             adv_rig_namespace:
@@ -58,7 +58,7 @@ build:
                 option_names_chs: ['Alpha （男）', 'Beta （女）']
                 default: ['alpha']
                 history_group: ['montage', 'general']
-                pull_history_latest: True
+                pull_history: True
                 visible_condition: {
                     operator: 'is', port: 'rig_scheme', value: 'mocap'
                 }
@@ -81,4 +81,4 @@ build:
                 option_names_chs: ['无', '走', '慢跑', '跑', '跑跳', '跳舞']
                 default: 'none'
                 history_group: ['montage', 'general']
-                pull_history_latest: True
+                pull_history: True

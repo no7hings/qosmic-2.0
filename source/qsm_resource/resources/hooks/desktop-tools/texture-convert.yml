@@ -29,7 +29,7 @@ build:
                 widget: directory
                 open_or_save: open
                 history_group: ['lynxi', 'texture_converter']
-#                pull_history_latest: True
+#                pull_history: True
                 value: ''
                 tool_tip: '...'
 
@@ -54,7 +54,7 @@ build:
                 widget: directory
                 open_or_save: save
                 history_group: ['lynxi', 'texture_converter']
-#                pull_history_latest: True
+#                pull_history: True
                 value: ''
                 tool_tip: 'choose a target directory for execute'
 
@@ -97,7 +97,7 @@ build:
                 widget: directory
                 open_or_save: save
                 history_group: ['lynxi', 'texture_converter']
-#                pull_history_latest: True
+#                pull_history: True
                 value: ''
                 tool_tip: 'choose a target directory for execute'
 

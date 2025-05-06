@@ -1,4 +1,6 @@
 # coding:utf-8
+import six
+
 import lxbasic.core as bsc_core
 
 from ... import core as _gui_core
@@ -208,6 +210,7 @@ class PrxHToolbar(gui_prx_abstracts.AbsPrxWidget):
             )
 
         self._language = _gui_core.GuiUtil.get_language()
+        self._history_group = ['toolbar']
 
         self._stack = _Stack()
 
@@ -364,12 +367,12 @@ class PrxHToolbar(gui_prx_abstracts.AbsPrxWidget):
     def set_border_radius(self, radius):
         self._qt_head._set_frame_border_radius_(radius)
 
+    # method for create by configure
     def _create_group_auto(self, path):
         paths = bsc_core.BscPortPath.get_dag_component_paths(path)
         paths.reverse()
         for i_path in paths:
             if self._stack.exists_one(i_path) is False:
-                print(i_path, 'A')
                 self._create_group(i_path)
 
         return self._stack.get_one(path)
@@ -481,6 +484,20 @@ class PrxHToolbar(gui_prx_abstracts.AbsPrxWidget):
 
     def get_tool(self, path):
         return self._stack.get_one(path)
+
+    def set_history_group(self, arg):
+        if arg:
+            if isinstance(arg, six.string_types):
+                _ = [arg]
+            elif isinstance(arg, (tuple, list)):
+                _ = list(arg)
+            else:
+                raise RuntimeError()
+
+            self._history_group = _
+
+    def get_history_group(self):
+        return self._history_group
 
 
 class PrxVToolbar(PrxHToolbar):

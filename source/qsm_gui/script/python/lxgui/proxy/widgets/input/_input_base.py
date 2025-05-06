@@ -93,8 +93,8 @@ class AbsPrxInput(_abstracts.AbsPrxWidget):
     def set_history_key(self, key):
         self._qt_input_widget._set_history_key_(key)
 
-    def pull_history_latest(self):
-        return self._qt_input_widget._pull_history_latest_()
+    def pull_history(self):
+        return self._qt_input_widget._pull_history_()
 
     def set_tool_tip(self, *args, **kwargs):
         if hasattr(self._qt_input_widget, '_set_tool_tip_'):

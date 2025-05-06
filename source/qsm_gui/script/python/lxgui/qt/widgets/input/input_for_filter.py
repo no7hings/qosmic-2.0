@@ -49,7 +49,7 @@ class QtInputForFilter(
     def _refresh_widget_draw_(self):
         pass
 
-    def _pull_history_(self, value):
+    def _pull_history_fnc_(self, value):
         if value is not None:
             self._accept_element_(value)
 
@@ -186,17 +186,17 @@ class QtInputForFilter(
         self._build_input_completion_()
         self.user_input_completion_finished.connect(self.input_value_changed)
         self.user_input_completion_value_accepted.connect(self._accept_element_)
-        self.user_input_completion_value_accepted.connect(self._push_history_)
+        self.user_input_completion_value_accepted.connect(self._push_history_fnc_)
         #
         self._build_input_history_(self._history_button)
-        self._entry_widget.entry_value_accepted.connect(self._push_history_)
+        self._entry_widget.entry_value_accepted.connect(self._push_history_fnc_)
         self._entry_widget.entry_value_accepted.connect(self._text_bubbles._create_one_)
         #
         self._text_bubbles._set_entry_widget_(self._entry_widget)
         # noinspection PyUnresolvedReferences
         self._entry_widget.textEdited.connect(self._do_refresh_filter_tip_)
         self._entry_widget.user_entry_text_accepted.connect(self._text_bubbles._create_one_)
-        self._entry_widget.user_entry_text_accepted.connect(self._push_history_)
+        self._entry_widget.user_entry_text_accepted.connect(self._push_history_fnc_)
         # backspace press
         self._entry_widget.key_backspace_extra_pressed.connect(self._text_bubbles._on_backspace_)
         #

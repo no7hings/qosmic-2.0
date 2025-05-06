@@ -1496,14 +1496,14 @@ class AbsQtValueHistoryExtraDef(object):
     def _get_history_key_(self):
         return self._history_key
 
-    def _get_history_latest_(self):
+    def _get_history_(self):
         if self._history_key is not None:
-            return _gui_core.GuiHistoryStage().get_latest(self._history_key)
+            return _gui_core.GuiHistoryStage().get_available(self._history_key)
 
-    def _pull_history_(self, *args, **kwargs):
+    def _pull_history_fnc_(self, *args, **kwargs):
         raise NotImplementedError()
 
-    def _push_history_(self, value):
+    def _push_history_fnc_(self, value):
         if self._history_key is not None:
             if value is not None:
                 if self._get_value_is_valid_(value) is True:
@@ -1514,11 +1514,11 @@ class AbsQtValueHistoryExtraDef(object):
 
             self._refresh_history_()
 
-    def _pull_history_latest_(self):
+    def _pull_history_(self):
         if self._history_key is not None:
-            value = _gui_core.GuiHistoryStage().get_latest(self._history_key)
+            value = _gui_core.GuiHistoryStage().get_available(self._history_key)
             if value is not None:
-                self._pull_history_(value)
+                self._pull_history_fnc_(value)
                 return True
         return False
 

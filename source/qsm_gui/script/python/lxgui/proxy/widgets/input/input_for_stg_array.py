@@ -142,7 +142,7 @@ class PrxInputForStorageArray(_input_base.AbsPrxInput):
                 histories
             )
 
-    def pull_history_latest(self):
+    def pull_history(self):
         if self._history_key is not None:
             _ = _gui_core.GuiHistoryStage().get_latest(self._history_key)
             if _:

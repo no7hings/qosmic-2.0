@@ -18,7 +18,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
             lot.addWidget(i_wgt)
             i_wgt._set_storage_scheme_(i)
             i_wgt._set_history_key_('gui.input-storage-test-{}'.format(i))
-            i_wgt._pull_history_latest_()
+            i_wgt._pull_history_()
 
 
 if __name__ == '__main__':

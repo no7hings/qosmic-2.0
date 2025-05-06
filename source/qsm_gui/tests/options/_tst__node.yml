@@ -18,7 +18,7 @@ constant:
         tool_tip: '...'
         enable: True
         history_group: ['test', 'node']
-        pull_history_latest: True
+        pull_history: True
 
     float:
         widget: float
@@ -144,7 +144,7 @@ storage:
         widget: directory
         open_or_save: open
         history_group: ['test', 'node']
-        pull_history_latest: True
+        pull_history: True
         value: ''
         tool_tip: '...'
         lock: True
@@ -154,7 +154,7 @@ storage:
         widget: directory
         open_or_save: save
         history_group: ['test', 'node']
-        pull_history_latest: True
+        pull_history: True
         value: ''
         tool_tip: '...'
         enable: True
@@ -163,7 +163,7 @@ storage:
         widget: file
         open_or_save: open
         history_group: ['test', 'node']
-        pull_history_latest: True
+        pull_history: True
         ext_filter: 'All File (*.usd *.usda)'
         value: ''
         tool_tip: '...'
@@ -173,7 +173,7 @@ storage:
         widget: file
         open_or_save: save
         history_group: ['test', 'node']
-        pull_history_latest: True
+        pull_history: True
         ext_filter: 'All File (*.json)'
         value: ''
         tool_tip: '...'

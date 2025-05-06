@@ -27,7 +27,7 @@ class QtInputForContent(
     _wgt_entry_frame.QtEntryFrame,
     _qt_abstracts.AbsQtInputBaseDef,
 ):
-    def _pull_history_(self, *args, **kwargs):
+    def _pull_history_fnc_(self, *args, **kwargs):
         pass
 
     QT_ENTRY_CLS = _entry_for_content.QtEntryForContent

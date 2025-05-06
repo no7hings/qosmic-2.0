@@ -122,7 +122,7 @@ build:
                 value: False
                 join_to_next: True
                 history_group: ['wotrix', 'shot', 'cfx_cloth', 'task_release']
-                pull_history_latest: True
+                pull_history: True
 
             auto_hide_no_use_group:
                 widget: boolean
@@ -131,7 +131,7 @@ build:
                 value: False
                 join_to_next: True
                 history_group: ['wotrix', 'shot', 'cfx_cloth', 'task_release']
-                pull_history_latest: True
+                pull_history: True
 
             auto_hide_vfx_group:
                 widget: boolean
@@ -139,7 +139,7 @@ build:
                 name_chs: '自动隐藏特效组'
                 value: False
                 history_group: ['wotrix', 'shot', 'cfx_cloth', 'task_release']
-                pull_history_latest: True
+                pull_history: True
 
             solver_start_frame:
                 widget: integer

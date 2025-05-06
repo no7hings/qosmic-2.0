@@ -278,6 +278,7 @@ class ContentFile(object):
                         y.close()
                         return raw
                 else:
+                    # noinspection PyArgumentList
                     with open(path, encoding='utf-8', errors='ignore') as y:
                         raw = ContentYamlBase.load(y)
                         y.close()

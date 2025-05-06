@@ -331,7 +331,7 @@ class AbsPrxSubpageForVideoRegister(AbsPrxPageForMediaRegister):
             i_p = self._prx_options_node.get_port(i)
             if i_p:
                 i_p.set_history_group(['resora', self._scr_stage.key])
-                i_p.pull_history_latest()
+                i_p.pull_history()
 
 
 class AbsPrxSubpageForAudioRegister(AbsPrxPageForMediaRegister):
@@ -455,7 +455,7 @@ class AbsPrxPageForAnyRegister(
             i_p = self._prx_options_node.get_port(i)
             if i_p:
                 i_p.set_history_group(['resora', self._scr_stage.key])
-                i_p.pull_history_latest()
+                i_p.pull_history()
 
     def gui_get_scr_type_paths(self):
         return self._type_qt_tag_widget._view_model.get_all_checked_node_paths()

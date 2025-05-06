@@ -103,7 +103,7 @@ class PrxPageForCharacterAndProp(gui_prx_widgets.PrxBasePage):
         self._selection_scheme_prx_input.set_history_key(
             [self._window.GUI_KEY, '{}.page'.format(self._gui_path)]
         )
-        self._selection_scheme_prx_input.pull_history_latest()
+        self._selection_scheme_prx_input.pull_history()
 
         self._selection_scheme_prx_input.connect_input_changed_to(
             self._gui_asset_prx_unit.do_dcc_refresh_resources_selection

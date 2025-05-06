@@ -21,7 +21,7 @@ class QtInputForTuple(
     _qt_abstracts.AbsQtNameBaseDef,
     _qt_abstracts.AbsQtInputForComponentsBaseDef,
 ):
-    def _pull_history_(self, *args, **kwargs):
+    def _pull_history_fnc_(self, *args, **kwargs):
         pass
 
     QT_ENTRY_CLS = _entry_for_constant.QtEntryForConstant
