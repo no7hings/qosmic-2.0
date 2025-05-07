@@ -1230,6 +1230,8 @@ class QtBubbleAsChoose(
     QtWidgets.QDialog,
     _qt_abstracts.AbsQtActionBaseDef,
 ):
+    bubble_text_choose_accepted = qt_signal(str)
+
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
         self._refresh_widget_draw_()
@@ -1279,11 +1281,6 @@ class QtBubbleAsChoose(
 
     def _refresh_widget_draw_(self):
         self.update()
-
-    bubble_text_choose_accepted = qt_signal(str)
-
-    def _do_cancel_(self):
-        self._do_popup_close_()
 
     def __init__(self, *args, **kwargs):
         super(QtBubbleAsChoose, self).__init__(*args, **kwargs)
@@ -1455,6 +1452,9 @@ class QtBubbleAsChoose(
             self._do_popup_close_()
         else:
             self._do_popup_close_()
+
+    def _do_cancel_(self):
+        self._do_popup_close_()
 
     def _do_popup_start_(self):
         press_pos = _qt_core.QtUtil.get_qt_cursor_point()

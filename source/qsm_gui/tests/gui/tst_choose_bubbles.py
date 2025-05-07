@@ -20,7 +20,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         b._do_popup_start_()
 
-        print b._get_result_()
+        print (b._get_result_())
 
 
 if __name__ == '__main__':
