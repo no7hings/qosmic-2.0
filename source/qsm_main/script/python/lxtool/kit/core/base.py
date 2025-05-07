@@ -27,7 +27,7 @@ class KitDesktopHook(object):
 
     @classmethod
     def get_args(cls, key):
-        _ = bsc_resource.RscToolForDesktop.get_args(
+        _ = bsc_resource.BscDesktopTool.get_args(
                 key
             )
         if _:
@@ -49,11 +49,11 @@ class KitDesktopHook(object):
 
     @classmethod
     def find_all_tool_keys_at(cls, page_name):
-        return bsc_resource.RscToolForDesktop.find_all_tool_keys_at(page_name)
+        return bsc_resource.BscDesktopTool.find_all_tool_keys_at(page_name)
 
     @classmethod
     def find_all_page_keys_at(cls, page_name):
-        return bsc_resource.RscToolForDesktop.find_all_page_keys_at(page_name)
+        return bsc_resource.BscDesktopTool.find_all_page_keys_at(page_name)
 
     @classmethod
     def get_current_user_group_key(cls):
@@ -63,7 +63,7 @@ class KitDesktopHook(object):
 
     @classmethod
     def check_is_valid(cls, widget=None):
-        if bsc_resource.RscTool.is_valid() is False:
+        if bsc_resource.BscTool.is_valid() is False:
             gui_core.GuiDialog.create(
                 'Error',
                 content='tools root is not found.',
@@ -108,14 +108,14 @@ class KitDesktopHookAddOpt(object):
         self._session = session
         self._options = options
 
-        self._default_root = bsc_resource.RscToolForDesktop.get_default_root()
+        self._default_root = bsc_resource.BscDesktopTool.get_default_root()
 
     def get_is_exists(self):
         pass
 
     @classmethod
     def get_default_root(cls):
-        return bsc_resource.RscToolForDesktop.get_default_root()
+        return bsc_resource.BscDesktopTool.get_default_root()
 
     @classmethod
     def get_all_hook_keys_from_fnc(cls, path):

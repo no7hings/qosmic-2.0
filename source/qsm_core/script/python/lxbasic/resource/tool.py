@@ -8,7 +8,7 @@ import lxbasic.content as bsc_content
 from . import base as _base
 
 
-class RscTool(_base.AbsResource):
+class BscTool(_base.AbsResource):
     CACHE = {}
     ENVIRON_KEY = 'QSM_TOOLS'
 
@@ -34,30 +34,30 @@ class RscTool(_base.AbsResource):
             )
 
 
-class RscToolForDesktop(object):
+class BscDesktopTool(object):
     BRANCH = 'desktop'
 
     @classmethod
     def get_yaml(cls, key):
-        return RscTool.get_yaml('{}/{}'.format(cls.BRANCH, key))
+        return BscTool.get_yaml('{}/{}'.format(cls.BRANCH, key))
 
     @classmethod
     def get_python(cls, key):
-        return RscTool.get_python('{}/{}'.format(cls.BRANCH, key))
+        return BscTool.get_python('{}/{}'.format(cls.BRANCH, key))
 
     @classmethod
     def get_shell(cls, key):
-        return RscTool.get_shell('{}/{}'.format(cls.BRANCH, key))
+        return BscTool.get_shell('{}/{}'.format(cls.BRANCH, key))
 
     @classmethod
     def find_all_tool_keys_at(cls, group_name):
-        return RscTool.find_all_file_keys_at(
+        return BscTool.find_all_file_keys_at(
             cls.BRANCH, group_name, ext_includes={'.yml'}
         )
 
     @classmethod
     def find_all_page_keys_at(cls, group_name):
-        return RscTool.find_all_directory_keys_at(
+        return BscTool.find_all_directory_keys_at(
             cls.BRANCH, group_name
         )
 
@@ -83,14 +83,10 @@ class RscToolForDesktop(object):
 
     @classmethod
     def get_default_root(cls):
-        roots = RscTool.find_all_roots()
+        roots = BscTool.find_all_roots()
         if roots:
             return '{}/{}'.format(roots[0], cls.BRANCH)
 
 
-class RscToolForDcc(RscToolForDesktop):
+class BscDccTool(BscDesktopTool):
     BRANCH = 'dcc'
-
-
-if __name__ == '__main__':
-    pass
