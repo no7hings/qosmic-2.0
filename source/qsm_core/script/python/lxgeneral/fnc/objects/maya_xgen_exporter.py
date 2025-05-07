@@ -49,7 +49,7 @@ class FncExporterForDotXarc(
         #
         file_path = option.get('file')
         #
-        j2_template = bsc_resource.RscExtendJinja.get_template('xarc/proxy')
+        j2_template = bsc_resource.BscJinja.get_template('xarc/proxy')
         raw = j2_template.render(
             **self._option
         )
@@ -120,11 +120,11 @@ class FncExporterForDotXgenUsda(
         if maya_scene_file_path:
             xgen_collection_file_paths = self._find_scene_xgen_collection_file_paths(maya_scene_file_path)
             key = 'usda/asset-xgen'
-            t = bsc_resource.RscExtendJinja.get_template(
+            t = bsc_resource.BscJinja.get_template(
                 key
             )
 
-            c = bsc_resource.RscExtendJinja.get_configure(
+            c = bsc_resource.BscJinja.get_configure(
                 key
             )
             for i_xgen_collection_file_path in xgen_collection_file_paths:

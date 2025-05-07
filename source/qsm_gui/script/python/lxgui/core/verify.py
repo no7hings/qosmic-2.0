@@ -90,7 +90,7 @@ class Verify:
 
     @classmethod
     def __match_server_fnc(cls, key, password):
-        serve_json_path = bsc_resource.BscExtendResource.get('verify/{}.json'.format(key))
+        serve_json_path = bsc_resource.BscResource.get('verify/{}.json'.format(key))
         encrypted_dict = bsc_storage.StgFileOpt(serve_json_path).set_read()
         data_dict = bsc_process.Crypto.decrypt_to_dict(
             'QOSMIC', encrypted_dict

@@ -18,7 +18,7 @@ class FKIKSwitch(object):
     def __init__(self, namespace):
         self._namespace = namespace
 
-        self._cfg = bsc_resource.BscExtendConfigure.get_as_content('maya/rig/adv_fk_ik_switch')
+        self._cfg = bsc_resource.BscConfigure.get_as_content('maya/rig/adv_fk_ik_switch')
         self._cfg.do_flatten()
 
     @classmethod
@@ -56,7 +56,7 @@ class FKIKSwitch(object):
 
     @classmethod
     def execute_auto(cls, *args, **kwargs):
-        cfg = bsc_resource.BscExtendConfigure.get_as_content('maya/rig/adv_fk_ik_switch')
+        cfg = bsc_resource.BscConfigure.get_as_content('maya/rig/adv_fk_ik_switch')
         cfg.do_flatten()
 
         args = cls.guess_args(cfg)

@@ -125,7 +125,7 @@ class AbsSsnConfigureBaseDef(object):
 
     @property
     def gui_icon_file(self):
-        return bsc_resource.RscExtendIcon.get(
+        return bsc_resource.BscIcon.get(
             self.gui_icon_name
         )
 

@@ -150,7 +150,7 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
         if configure_key is None:
             self.load_local_configure()
         else:
-            self._configure = bsc_resource.BscExtendConfigure.get_as_content(configure_key)
+            self._configure = bsc_resource.BscConfigure.get_as_content(configure_key)
 
         self._configure.do_flatten()
 
@@ -225,7 +225,7 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
     def show_help_unit(self):
         url_p = self._gui_configure.get('help_url')
         if url_p:
-            cfg = bsc_resource.BscExtendConfigure.get_as_content('dokuwiki/main')
+            cfg = bsc_resource.BscConfigure.get_as_content('dokuwiki/main')
             if bsc_core.BscSystem.get_is_dev():
                 host = cfg.get('connection_dev.host')
             else:
@@ -543,7 +543,7 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
         if configure_key is None:
             self.load_local_configure()
         else:
-            self._configure = bsc_resource.BscExtendConfigure.get_as_content(configure_key)
+            self._configure = bsc_resource.BscConfigure.get_as_content(configure_key)
 
         self._option_configure = self._configure.get_as_content('option')
         self._gui_configure = self._configure.get_as_content('option.gui')

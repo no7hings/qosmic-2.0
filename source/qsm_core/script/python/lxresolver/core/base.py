@@ -27,7 +27,7 @@ class RsvConfigure(object):
     def get_raw(cls, scheme):
         raw = collections.OrderedDict()
         for i_key in cls.MainKeys:
-            i_file = bsc_resource.BscExtendConfigure.get_yaml('resolver/{}/{}'.format(scheme, i_key))
+            i_file = bsc_resource.BscConfigure.get_yaml('resolver/{}/{}'.format(scheme, i_key))
             if i_file is not None:
                 i_raw = bsc_storage.StgFileOpt(i_file).set_read() or {}
                 raw.update(i_raw)

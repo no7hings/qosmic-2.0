@@ -5,11 +5,11 @@ import lxbasic.resource as bsc_resource
 
 key = 'usda/set/surface'
 
-c = bsc_resource.RscExtendJinja.get_configure(key)
+c = bsc_resource.BscJinja.get_configure(key)
 
 k = 'geo_extra'
 
-t = bsc_resource.RscExtendJinja.get_template('{}/{}'.format(key, k))
+t = bsc_resource.BscJinja.get_template('{}/{}'.format(key, k))
 
 raw = t.render(
     **c.value

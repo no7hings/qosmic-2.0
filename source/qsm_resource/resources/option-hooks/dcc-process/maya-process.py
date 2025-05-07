@@ -348,7 +348,7 @@ def lib_scene_to_look_fnc(option_opt):
             #
             if look_preview_json_file_opt.get_is_exists() is True:
                 look_data = look_preview_json_file_opt.set_read()
-                r = bsc_resource.RscExtendJinja.get_result(
+                r = bsc_resource.BscJinja.get_result(
                     'usda/look/preview-material-diffuse',
                     look_data
                 )

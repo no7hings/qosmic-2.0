@@ -27,7 +27,7 @@ class Setup(object):
 
         bsc_core.BscEnvironExtra.append_lua_path(
             '{}/?.lua'.format(
-                bsc_resource.BscExtendResource.get(
+                bsc_resource.BscResource.get(
                     'lua-scripts'
                 )
             )

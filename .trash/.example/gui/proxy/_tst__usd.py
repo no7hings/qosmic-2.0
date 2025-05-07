@@ -75,8 +75,8 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self._category_group = '3d_plant_proxy'
 
         self._dtb_opt = bsc_database.DtbOptForResource(
-            bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-basic'),
-            bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-{}'.format(self._category_group))
+            bsc_resource.BscConfigure.get_yaml('database/library/resource-basic'),
+            bsc_resource.BscConfigure.get_yaml('database/library/resource-{}'.format(self._category_group))
         )
 
         self._data = self._dtb_opt.find_resource_paths_by_category('/3d_plant_proxy/tree')
@@ -109,8 +109,8 @@ class W(gui_prx_widgets.PrxBaseWindow):
         cs = path_opt.get_components()
         category_group = cs[-2].get_name()
         dtb_opt = bsc_database.DtbOptForResource(
-            bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-basic'),
-            bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-{}'.format(category_group))
+            bsc_resource.BscConfigure.get_yaml('database/library/resource-basic'),
+            bsc_resource.BscConfigure.get_yaml('database/library/resource-{}'.format(category_group))
         )
         dtb_version = dtb_opt.get_dtb_version(version_path)
 
@@ -163,8 +163,8 @@ class W(gui_prx_widgets.PrxBaseWindow):
         cs = path_opt.get_components()
         category_group = cs[-2].get_name()
         dtb_opt = bsc_database.DtbOptForResource(
-            bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-basic'),
-            bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-{}'.format(category_group))
+            bsc_resource.BscConfigure.get_yaml('database/library/resource-basic'),
+            bsc_resource.BscConfigure.get_yaml('database/library/resource-{}'.format(category_group))
         )
         dtb_version = dtb_opt.get_dtb_version(version_path)
 

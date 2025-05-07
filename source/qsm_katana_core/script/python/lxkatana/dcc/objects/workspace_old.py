@@ -31,7 +31,7 @@ from . import nodes_for_rfn as ktn_dcc_obj_nodes
 
 # todo: remove this method
 class AssetWorkspaceOld(object):
-    CONFIGURE_FILE_PATH = bsc_resource.BscExtendConfigure.get_yaml('katana/workspace/asset-default-v1')
+    CONFIGURE_FILE_PATH = bsc_resource.BscConfigure.get_yaml('katana/workspace/asset-default-v1')
     GEOMETRY_TYPES = [
         'subdmesh',
         'renderer procedural',

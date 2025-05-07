@@ -6,7 +6,7 @@ import lxbasic.core as bsc_core
 import tempfile
 
 
-class MayaSceneFileMel:
+class MayaSceneDrop:
 
     @classmethod
     def to_temp_mel_file(cls, mel_script):
@@ -24,8 +24,12 @@ class MayaSceneFileMel:
     def generate_load_mel(cls, scene_path, auto_namespace=False, move_to_mouse=False):
         mel_script = (
             u'python("import lnx_maya_resora.core as c; '
-            u'c.FileDragAction.load_one(\\"{}\\", auto_namespace={}, move_to_mouse={})");'
+            u'c.SceneDropAction.load_one(\\"{}\\", auto_namespace={}, move_to_mouse={})");'
         ).format(
             scene_path, auto_namespace, move_to_mouse
         )
         return cls.to_temp_mel_file(mel_script)
+
+
+class MayaVideoDrop:
+    pass

@@ -148,7 +148,7 @@ class AbsDccPort(AbsDccBaseDef):
         return self.get_name()
 
     def get_icon(self):
-        return bsc_resource.RscExtendIcon.get('attribute')
+        return bsc_resource.BscIcon.get('attribute')
 
     icon = property(get_icon)
 

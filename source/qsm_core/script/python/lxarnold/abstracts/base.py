@@ -105,7 +105,7 @@ class AbsObjScene(
         self._platform = bsc_core.BscPlatform.get_current()
 
         self._node_configure = bsc_content.Content(
-            value=bsc_resource.BscExtendConfigure.get_yaml('arnold/node')
+            value=bsc_resource.BscConfigure.get_yaml('arnold/node')
         )
         self._node_configure.do_flatten()
 

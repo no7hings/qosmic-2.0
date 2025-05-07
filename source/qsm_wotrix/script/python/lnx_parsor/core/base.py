@@ -126,7 +126,7 @@ class DisorderConfig(object):
         self = super(DisorderConfig, cls).__new__(cls)
 
         # init
-        cfg = bsc_resource.BscExtendConfigure.get_as_content('parsor/disorder/default')
+        cfg = bsc_resource.BscConfigure.get_as_content('parsor/disorder/default')
 
         self._entity_resolve_patterns_dict = cfg.get('entities.resolve_patterns')
         self._entity_path_pattern_dict = cfg.get('entities.path_patterns')

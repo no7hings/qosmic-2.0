@@ -609,11 +609,11 @@ class RsvUsdAssetSetCreator(object):
 
         key = 'usda/asset-set-v003'
 
-        t = bsc_resource.RscExtendJinja.get_template(
+        t = bsc_resource.BscJinja.get_template(
             key
         )
 
-        c = bsc_resource.RscExtendJinja.get_configure(
+        c = bsc_resource.BscJinja.get_configure(
             key
         )
 
@@ -658,11 +658,11 @@ class RsvUsdAssetSetCreator(object):
 
             key = 'usda/shot-asset-set-v002'
 
-            t = bsc_resource.RscExtendJinja.get_template(
+            t = bsc_resource.BscJinja.get_template(
                 key
             )
 
-            c = bsc_resource.RscExtendJinja.get_configure(
+            c = bsc_resource.BscJinja.get_configure(
                 key
             )
             c.set('file', asset_shot_set_usd_file_path)
@@ -933,8 +933,8 @@ class RsvTaskOverrideUsdCreator(gnl_fnc_abstracts.AbsFncOptionBase):
                     )
             #
             if elements:
-                i_c = bsc_resource.RscExtendJinja.get_configure('usda/geometry/all/{}'.format(key))
-                i_t = bsc_resource.RscExtendJinja.get_template('usda/geometry/all/{}'.format(key))
+                i_c = bsc_resource.BscJinja.get_configure('usda/geometry/all/{}'.format(key))
+                i_t = bsc_resource.BscJinja.get_template('usda/geometry/all/{}'.format(key))
                 i_c.set('elements', elements)
                 i_raw = i_t.render(**i_c.get_value())
                 bsc_storage.StgFileOpt(
@@ -990,7 +990,7 @@ class RsvUsdHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             )
         )
         key = 'usda/set/shot-asset'
-        c = bsc_resource.RscExtendJinja.get_configure(key)
+        c = bsc_resource.BscJinja.get_configure(key)
         c.update_from(
             self._rsv_scene_properties.value
         )
@@ -1005,7 +1005,7 @@ class RsvUsdHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         usda_dict = c.get('usdas')
         #
         for k, v in usda_dict.items():
-            t = bsc_resource.RscExtendJinja.get_template(
+            t = bsc_resource.BscJinja.get_template(
                 '{}/{}'.format(key, k)
             )
             i_raw = t.render(
@@ -1205,7 +1205,7 @@ class RsvUsdHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         if step in step_mapper:
             key = step_mapper[step]
             #
-            c = bsc_resource.RscExtendJinja.get_configure(key)
+            c = bsc_resource.BscJinja.get_configure(key)
             #
             c.update_from(
                 self._rsv_scene_properties.value
@@ -1230,7 +1230,7 @@ class RsvUsdHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                 else:
                     raise RuntimeError()
 
-                t = bsc_resource.RscExtendJinja.get_template('{}/{}'.format(key, k))
+                t = bsc_resource.BscJinja.get_template('{}/{}'.format(key, k))
                 i_raw = t.render(
                     **c.value
                 )

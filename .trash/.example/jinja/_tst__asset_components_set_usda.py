@@ -7,11 +7,11 @@ import lxbasic.storage as bsc_storage
 
 key = 'usda/asset-components-set'
 
-t = bsc_resource.RscExtendJinja.get_template(
+t = bsc_resource.BscJinja.get_template(
     key
 )
 
-c = bsc_resource.RscExtendJinja.get_configure(
+c = bsc_resource.BscJinja.get_configure(
     key
 )
 

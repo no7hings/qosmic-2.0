@@ -263,7 +263,7 @@ class AbsKtnObj(gnl_dcc_abstracts.AbsDccNode):
     type = property(get_type)
 
     def get_icon(self):
-        return bsc_resource.RscExtendIcon.get('application/katana')
+        return bsc_resource.BscIcon.get('application/katana')
 
     icon = property(get_icon)
 

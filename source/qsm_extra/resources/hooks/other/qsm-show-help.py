@@ -10,7 +10,7 @@ def main(session):
 
     url_p = gui_configure.get('help_url')
     if url_p:
-        cfg = bsc_resource.BscExtendConfigure.get_as_content('dokuwiki/main')
+        cfg = bsc_resource.BscConfigure.get_as_content('dokuwiki/main')
         if bsc_core.BscSystem.get_is_dev():
             host = cfg.get('connection_dev.host')
         else:

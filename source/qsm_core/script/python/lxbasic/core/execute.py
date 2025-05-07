@@ -19,13 +19,13 @@ class BscBinExecute(object):
             _ = _environ.BscEnviron.find_execute(name)
             if _:
                 return name
-            return _bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.BscExe.get(name)
         elif _base.BscSystem.get_is_linux():
             name = 'oiiotool'
             _ = _environ.BscEnviron.find_execute(name)
             if _:
                 return name
-            return _bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.BscExe.get(name)
 
     @classmethod
     def oslc(cls):
@@ -34,13 +34,13 @@ class BscBinExecute(object):
             _ = _environ.BscEnviron.find_execute(name)
             if _:
                 return name
-            return _bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.BscExe.get(name)
         elif _base.BscSystem.get_is_linux():
             name = 'oslc'
             _ = _environ.BscEnviron.find_execute(name)
             if _:
                 return name
-            return _bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.BscExe.get(name)
 
     @classmethod
     def oslinfo(cls):
@@ -49,13 +49,13 @@ class BscBinExecute(object):
             _ = _environ.BscEnviron.find_execute(name)
             if _:
                 return name
-            return _bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.BscExe.get(name)
         elif _base.BscSystem.get_is_linux():
             name = 'oslinfo'
             _ = _environ.BscEnviron.find_execute(name)
             if _:
                 return name
-            return _bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.BscExe.get(name)
 
     @classmethod
     def ffmpeg(cls):
@@ -64,13 +64,13 @@ class BscBinExecute(object):
             _ = _environ.BscEnviron.find_execute(name)
             if _:
                 return name
-            return _bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.BscExe.get(name)
         elif _base.BscSystem.get_is_linux():
             name = 'ffmpeg'
             _ = _environ.BscEnviron.find_execute(name)
             if _:
                 return name
-            return _bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.BscExe.get(name)
 
 
 class BscScriptExecute(object):

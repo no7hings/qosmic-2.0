@@ -5,7 +5,7 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_resora.core.drag_action as lnx_rsr_cor_drag
+import lnx_resora.core.drop_action as lnx_rsr_cor_drag
 
 import lnx_resora.gui.abstracts as lnx_rsr_gui_abstracts
 

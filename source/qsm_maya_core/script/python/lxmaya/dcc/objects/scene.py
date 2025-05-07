@@ -52,7 +52,7 @@ class Namespace(
 
     @property
     def icon(self):
-        return bsc_resource.RscExtendIcon.get('name')
+        return bsc_resource.BscIcon.get('name')
 
     @property
     def name(self):

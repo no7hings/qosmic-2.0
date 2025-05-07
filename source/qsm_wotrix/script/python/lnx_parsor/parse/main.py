@@ -91,7 +91,7 @@ class Stage(_abc_.AbsStage):
         self._scheme = scheme
         self._platform = bsc_core.BscPlatform.get_current()
 
-        self._configure = bsc_resource.BscExtendConfigure.get_as_content('parsor/parse/{}'.format(self._scheme))
+        self._configure = bsc_resource.BscConfigure.get_as_content('parsor/parse/{}'.format(self._scheme))
         self._configure.do_flatten()
         self._variants = dict(
             scheme=self._scheme,

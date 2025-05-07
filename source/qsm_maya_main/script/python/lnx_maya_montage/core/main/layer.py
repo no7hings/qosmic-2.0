@@ -245,7 +245,7 @@ class MtgLayerBase(object):
     def create_master_layer(cls, layer_namespace):
         layer_name = _bsc_util.MtgLayerNamespace.to_master_later_name(layer_namespace)
         if qsm_mya_core.Node.is_exists(layer_name) is False:
-            location = _bas_graph.MotionLayerGraph(
+            location = _bas_graph.MtgLayerGraph(
                 layer_namespace, 'maya/montage/mtg_master_layer'
             ).create_all()
             # add layer attribute
@@ -269,15 +269,15 @@ class MtgLayerBase(object):
     def create_layer(cls, layer_namespace):
         layer_name = _bsc_util.MtgLayerNamespace.to_layer_name(layer_namespace)
         if qsm_mya_core.Node.is_exists(layer_name) is False:
-            clip_location = _bas_graph.MotionTimeGraph(layer_namespace).create_all()
-            location = _bas_graph.MotionLayerGraph(
+            mtg_time = _bas_graph.MtgTimeGraph(layer_namespace).create_all()
+            location = _bas_graph.MtgLayerGraph(
                 layer_namespace, 'maya/montage/mtg_layer'
             ).create_all()
 
             qsm_mya_core.Container.add_dag_nodes(
                 location,
                 [
-                    clip_location,
+                    mtg_time,
                     # blend_location
                 ]
             )

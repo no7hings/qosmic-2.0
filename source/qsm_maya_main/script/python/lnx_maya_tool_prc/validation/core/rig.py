@@ -41,7 +41,7 @@ class RigValidationBase(object):
 class RigValidationTemplate(RigValidationBase):
     def __init__(self, namespace):
         self._namespace = namespace
-        self._adv_cfg = bsc_resource.BscExtendConfigure.get_as_content('rig/adv_validation')
+        self._adv_cfg = bsc_resource.BscConfigure.get_as_content('rig/adv_validation')
 
     def generate(self, file_path):
         joint_dict = collections.OrderedDict()

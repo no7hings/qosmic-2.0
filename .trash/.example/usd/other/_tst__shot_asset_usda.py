@@ -3,11 +3,11 @@ import lxbasic.resource as bsc_resource
 
 key = 'usda/shot-asset-set'
 
-t = bsc_resource.RscExtendJinja.get_template(
+t = bsc_resource.BscJinja.get_template(
     key
 )
 
-c = bsc_resource.RscExtendJinja.get_configure(
+c = bsc_resource.BscJinja.get_configure(
     key
 )
 

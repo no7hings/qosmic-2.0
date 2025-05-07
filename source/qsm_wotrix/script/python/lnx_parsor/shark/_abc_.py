@@ -26,7 +26,7 @@ class AbsBase(object):
             key = 'lazy/mysql_new'
         else:
             key = 'lazy/mysql'
-        return bsc_resource.BscExtendConfigure.get_as_content(key)
+        return bsc_resource.BscConfigure.get_as_content(key)
 
     @classmethod
     def _get_mysql_options(cls):

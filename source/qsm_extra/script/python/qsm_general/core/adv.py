@@ -4,7 +4,7 @@ import lxbasic.resource as bsc_resource
 
 class AdvCharacterControlConfigure(object):
     def __init__(self):
-        self._cfg = bsc_resource.BscExtendConfigure.get_as_content('gui/adv-character-control')
+        self._cfg = bsc_resource.BscConfigure.get_as_content('gui/adv-character-control')
         self._body_control_tree_cfg = self._cfg.get_as_content('body_control_tree')
         self._body_control_map_cfg = self._cfg.get_as_content('body_control_map')
     

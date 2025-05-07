@@ -1150,7 +1150,7 @@ class _GuiFileOpt(
         #
         if images:
             gui_qt_core.QtUtil.set_text_to_clipboard(
-                bsc_resource.RscExtendJinja.get_result(
+                bsc_resource.BscJinja.get_result(
                     'katana/images',
                     dict(
                         images=images
@@ -1296,7 +1296,7 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
         path = p_o.update_variants_to(**variants).get_value()
         if bsc_storage.StgPath.get_is_exists(path):
             return path
-        return bsc_resource.BscExtendResource.get('assets/library/preview-material.usda')
+        return bsc_resource.BscResource.get('assets/library/preview-material.usda')
 
     def get_geometry_usd_file(self, variants):
         p = self._dtb_opt.get_pattern(keyword='geometry-usd-file')
@@ -1304,7 +1304,7 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
         path = p_o.update_variants_to(**variants).get_value()
         if bsc_storage.StgPath.get_is_exists(path):
             return path
-        return bsc_resource.BscExtendResource.get('assets/library/geometry/sphere.usda')
+        return bsc_resource.BscResource.get('assets/library/geometry/sphere.usda')
 
     def get_data(self, dtb_version):
         key = dtb_version.path
@@ -1513,7 +1513,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         self._type_guide_bar.connect_user_text_choose_accepted_to(self.gui_guide_choose_cbk)
         self._type_guide_bar.connect_user_text_press_accepted_to(self.gui_guide_press_cbk)
 
-        self._dtb_cfg_file_path = bsc_resource.BscExtendConfigure.get_yaml('database/library/resource-basic')
+        self._dtb_cfg_file_path = bsc_resource.BscConfigure.get_yaml('database/library/resource-basic')
         self._dtb_cfg = bsc_content.Content(value=self._dtb_cfg_file_path)
 
         self._dtb_superclass_paths = self._dtb_cfg.get('category_groups')
@@ -1591,7 +1591,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             )
 
         self._dtb_superclass_name_cur = bsc_core.BscNodePathOpt(self._dtb_superclass_path_cur).get_name()
-        self._dtb_cfg_file_path_extend = bsc_resource.BscExtendConfigure.get_yaml(
+        self._dtb_cfg_file_path_extend = bsc_resource.BscConfigure.get_yaml(
             'database/library/resource-{}'.format(self._dtb_superclass_name_cur)
         )
         #

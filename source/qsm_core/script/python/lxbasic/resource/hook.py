@@ -8,29 +8,29 @@ import lxbasic.content as bsc_content
 from . import base as _base
 
 
-class RscHook(object):
+class BscHook(object):
     BRANCH = 'hooks'
 
     @classmethod
     def get_yaml(cls, key, search_paths=None):
-        return _base.BscExtendResource.get(
+        return _base.BscResource.get(
             '{}/{}.yml'.format(cls.BRANCH, key), search_paths
         )
 
     @classmethod
     def get_python(cls, key, search_paths=None):
-        return _base.BscExtendResource.get(
+        return _base.BscResource.get(
             '{}/{}.py'.format(cls.BRANCH, key), search_paths
         )
 
     @classmethod
     def get_shell(cls, key, search_paths=None):
         if platform.system() == 'Linux':
-            return _base.BscExtendResource.get(
+            return _base.BscResource.get(
                 '{}.sh'.format(key), search_paths
             )
         elif platform.system() == 'Windows':
-            return _base.BscExtendResource.get(
+            return _base.BscResource.get(
                 '{}.bat'.format(key)
             )
 
@@ -55,5 +55,5 @@ class RscHook(object):
         return None
 
 
-class RscOptionHook(RscHook):
+class BscOptionHook(BscHook):
     BRANCH = 'option-hooks'

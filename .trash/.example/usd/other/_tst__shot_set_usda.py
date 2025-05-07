@@ -3,7 +3,7 @@ import lxbasic.resource as bsc_resource
 
 key = 'usda/set/asset-shot'
 
-c = bsc_resource.RscExtendJinja.get_configure(
+c = bsc_resource.BscJinja.get_configure(
     key
 )
 
@@ -37,7 +37,7 @@ c.do_flatten()
 usda_dict = c.get('usdas')
 #
 for k, v in usda_dict.items():
-    t = bsc_resource.RscExtendJinja.get_template(
+    t = bsc_resource.BscJinja.get_template(
         '{}/{}'.format(key, k)
     )
     i_raw = t.render(

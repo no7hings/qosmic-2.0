@@ -14,8 +14,8 @@ from ..scan import glob_ as _scan_glog
 
 class AbsResource(object):
     """
-print(BscExtendResource.get('icons/file/file.svg'))
-print(BscExtendResource.get('icons/file/folder.svg'))
+print(BscResource.get('icons/file/file.svg'))
+print(BscResource.get('icons/file/folder.svg'))
     """
     CACHE = LRUCache(maximum=1024)
 
@@ -130,7 +130,7 @@ class Resource(AbsResource):
 
 
 # todo: remove EXTEND keyword?
-class BscExtendResource(AbsResource):
+class BscResource(AbsResource):
     CACHE = LRUCache(maximum=1024)
 
     ENVIRON_KEY = 'QSM_EXTEND_RESOURCES'

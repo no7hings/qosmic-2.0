@@ -9,11 +9,11 @@ key_name = 'main'
 
 key = 'usda/geometry/{}'.format(key_name)
 
-c = bsc_resource.RscExtendJinja.get_configure(
+c = bsc_resource.BscJinja.get_configure(
     key
 )
 
-t = bsc_resource.RscExtendJinja.get_template(key)
+t = bsc_resource.BscJinja.get_template(key)
 
 raw = t.render(
     **c.value

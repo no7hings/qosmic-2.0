@@ -854,16 +854,16 @@ class FncExporterForGeometryUsdNew(gnl_fnc_abstracts.AbsFncOptionBase):
         if export_args:
             payload_key = 'payload'
             payload_cfg_key = 'usda/geometry/{}'.format(payload_key)
-            payload_c = bsc_resource.RscExtendJinja.get_configure(payload_cfg_key)
-            payload_t = bsc_resource.RscExtendJinja.get_template(payload_cfg_key)
+            payload_c = bsc_resource.BscJinja.get_configure(payload_cfg_key)
+            payload_t = bsc_resource.BscJinja.get_template(payload_cfg_key)
             with bsc_log.LogProcessContext.create(maximum=len(export_args)) as g_p:
                 for i_branch_key, i_branch_data in export_args:
                     g_p.do_update()
                     #
                     if i_branch_data:
                         i_branch_cfg_key = 'usda/geometry/all/{}'.format(i_branch_key)
-                        i_branch_c = bsc_resource.RscExtendJinja.get_configure(i_branch_cfg_key)
-                        i_branch_t = bsc_resource.RscExtendJinja.get_template(i_branch_cfg_key)
+                        i_branch_c = bsc_resource.BscJinja.get_configure(i_branch_cfg_key)
+                        i_branch_t = bsc_resource.BscJinja.get_template(i_branch_cfg_key)
                         for j_leaf_option in i_branch_data:
                             i_branch_c.append_element('elements', j_leaf_option)
                             #

@@ -32,7 +32,7 @@ bsc_scripts.ScpOslBuilder(
         output_file_opt.create_directory()
         info = bsc_storage.OslFileMtd.get_info(file_path)
         if info:
-            j2_template = bsc_resource.RscExtendJinja.get_template('arnold/katana-ui-template-v002')
+            j2_template = bsc_resource.BscJinja.get_template('arnold/katana-ui-template-v002')
             raw = j2_template.render(
                 **info
             )
@@ -45,7 +45,7 @@ bsc_scripts.ScpOslBuilder(
         output_file_opt.create_directory()
         info = bsc_storage.OslFileMtd.get_info(file_path)
         if info:
-            j2_template = bsc_resource.RscExtendJinja.get_template('arnold/maya-ui-template-v002')
+            j2_template = bsc_resource.BscJinja.get_template('arnold/maya-ui-template-v002')
             raw = j2_template.render(
                 **info
             )

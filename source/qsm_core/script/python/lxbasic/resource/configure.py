@@ -5,7 +5,7 @@ from . import base as _base
 
 
 # todo: remove EXTEND keyword?
-class BscExtendConfigure(_base.AbsResource):
+class BscConfigure(_base.AbsResource):
     """
 print(RscConfigure.get_yaml('database/library/resource-basic'))
     """
@@ -32,7 +32,7 @@ print(RscConfigure.get_yaml('database/library/resource-basic'))
         return cls.get('{}.j2'.format(key))
 
 
-class RscExtendJinja(object):
+class BscJinja(object):
     """
 c = RscJinjaConfigure.get_configure_yaml(
     'test/test'
@@ -68,7 +68,7 @@ print(
 
     @classmethod
     def get_configure(cls, key):
-        f = BscExtendConfigure.get_yaml(
+        f = BscConfigure.get_yaml(
             'jinja/{}'.format(key)
         )
         if f:
@@ -80,7 +80,7 @@ print(
     def get_template(cls, key):
         import jinja2
 
-        f = BscExtendConfigure.get_jinja(
+        f = BscConfigure.get_jinja(
             'jinja/{}'.format(key)
         )
         if f:
@@ -90,7 +90,7 @@ print(
 
     @classmethod
     def get_result(cls, key, variants):
-        t = RscExtendJinja.get_template(key)
+        t = BscJinja.get_template(key)
         return t.render(
             **variants
         )

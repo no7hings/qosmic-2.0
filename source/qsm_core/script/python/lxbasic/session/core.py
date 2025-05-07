@@ -12,7 +12,7 @@ class SsnHookEngine(object):
         if cls.CONTENT is not None:
             return cls.CONTENT
         cls.CONTENT = bsc_content.Content(
-            value=bsc_resource.BscExtendConfigure.get_yaml('session/hook-engine')
+            value=bsc_resource.BscConfigure.get_yaml('session/hook-engine')
         )
         cls.CONTENT.do_flatten()
         return cls.CONTENT

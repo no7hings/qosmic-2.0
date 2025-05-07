@@ -1188,7 +1188,6 @@ nodes:
             - '<options.namespace>:z_axis_geoShape.instObjGroups[0]'
             - '<options.namespace>:z_axis_material.dagSetMembers[0]'
 
-
 containers:
     MASTER_LAYER:
         name: '<options.namespace>:<..key>'

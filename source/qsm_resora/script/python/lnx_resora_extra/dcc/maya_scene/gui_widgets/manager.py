@@ -5,13 +5,13 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lnx_resora.core.drag_action as lnx_rsr_cor_drag
+import lnx_resora.core.drop_action as lnx_rsr_cor_drag
 
 import lnx_resora.gui.abstracts as lnx_rsr_gui_abstracts
 
 
 class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
-    class DragMode:
+    class DropMode:
         Default = 'default'
         MayaLoad = 'maya_load'
 
@@ -68,8 +68,8 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
 
     def _gui_add_drag_mode_switch_tools(self):
         cfg = [
-            (self.DragMode.Default, 'file/file'),
-            (self.DragMode.MayaLoad, 'application/maya'),
+            (self.DropMode.Default, 'file/file'),
+            (self.DropMode.MayaLoad, 'application/maya'),
         ]
         tools = []
 
@@ -102,8 +102,8 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
         auto_namespace = self._auto_namespace_button.get_is_checked()
         move_to_cursor = self._move_to_cursor_button.get_is_checked()
         if file_path:
-            if self._drag_mode == self.DragMode.MayaLoad:
-                file_path = lnx_rsr_cor_drag.MayaSceneFileMel.generate_load_mel(
+            if self._drag_mode == self.DropMode.MayaLoad:
+                file_path = lnx_rsr_cor_drag.MayaSceneDrop.generate_load_mel(
                     file_path, auto_namespace, move_to_cursor
                 )
 

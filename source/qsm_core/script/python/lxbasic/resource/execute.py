@@ -5,13 +5,13 @@ from . import base as _base
 import platform
 
 
-class RscExtendExe(object):
+class BscExe(object):
     BRANCH = 'executes'
 
     @classmethod
     def get(cls, key):
         platform_key = platform.system().lower()
-        result = _base.BscExtendResource.get(
+        result = _base.BscResource.get(
             '{}/{}/{}'.format(cls.BRANCH, platform_key, key)
         )
         if result is not None:

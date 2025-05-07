@@ -15,7 +15,7 @@ class ScpCbkEnvironment(object):
 
     def __init__(self):
         self._cfg = bsc_content.Content(
-            value=bsc_resource.BscExtendConfigure.get_yaml(
+            value=bsc_resource.BscConfigure.get_yaml(
                 'katana/script/scene'
             )
         )

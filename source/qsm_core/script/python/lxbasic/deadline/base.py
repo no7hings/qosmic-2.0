@@ -22,7 +22,7 @@ class DdlBase(object):
         if cls.CONTENT is not None:
             return cls.CONTENT
 
-        cls.CONTENT = bsc_resource.BscExtendConfigure.get_as_content('deadline/main')
+        cls.CONTENT = bsc_resource.BscConfigure.get_as_content('deadline/main')
         cls.CONTENT.do_flatten()
         return cls.CONTENT
     

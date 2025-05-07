@@ -355,7 +355,7 @@ class QtAdvCharacterPicker(
 
         self._adv_control_cfg = qsm_gnl_core.AdvCharacterControlConfigure()
 
-        self._body_json_file = bsc_resource.BscExtendResource.get('gui/adv-picker/v2.json')
+        self._body_json_file = bsc_resource.BscResource.get('gui/adv-picker/v2.json')
         if self._body_json_file is None:
             raise RuntimeError()
 

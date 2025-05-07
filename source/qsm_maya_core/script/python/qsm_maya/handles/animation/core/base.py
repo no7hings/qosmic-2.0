@@ -13,7 +13,7 @@ import qsm_general.core as qsm_gnl_core
 class AdvQuery(object):
 
     def __init__(self, namespace):
-        ctt = bsc_resource.BscExtendConfigure.get_as_content(
+        ctt = bsc_resource.BscConfigure.get_as_content(
             'maya/rig/adv'
         )
         ctt.set('option.namespace', namespace)

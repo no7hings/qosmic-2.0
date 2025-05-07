@@ -7,35 +7,26 @@ import lxbasic.resource as bsc_resource
 
 import qsm_maya.core as qsm_mya_core
 
+import qsm_maya.graph as qsm_mya_graph
+
 import qsm_maya.motion as qsm_mya_motion
 
 from ..base import sketch as _bsc_sketch
 
-from ..base import graph as _bsc_graph
-
 from ..base import sketch_set as _bsc_sketch_set
 
 
-class _SketchGraph(_bsc_graph._GraphBase):
+class _SketchGraph(qsm_mya_graph.GraphBase):
     def __init__(self, namespace, cfg_key):
         self._namespace = namespace
         self._cfg_key = cfg_key
 
     def create_all(self):
         qsm_mya_core.Namespace.create(self._namespace)
-        self._cfg = bsc_resource.BscExtendConfigure.get_as_content(self._cfg_key)
+        self._cfg = bsc_resource.BscConfigure.get_as_content(self._cfg_key)
         self._cfg.set('options.namespace', self._namespace)
         self._cfg.do_flatten()
-        dag_nodes = self._create_dag_nodes()
-
-    def _create_dag_nodes(self):
-        results = []
-        c = self._cfg.get_as_content('dag_nodes')
-        for i_key in c.get_top_keys():
-            i_data = c.get_as_content(i_key)
-            i_path = '|'.join(['{}:{}'.format(self._namespace, x) if x else '' for x in i_key.split('/')])
-            results.append(self._create_dag_node(i_path, i_data))
-        return results
+        dag_nodes = self._create_dag_nodes_fnc(self._namespace, self._cfg)
 
 
 class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):

@@ -36,7 +36,7 @@ class AssImportFnc(object):
         self._assign_selection_enable = assign_selection_enable
         #
         self._convert_configure = bsc_content.Content(
-            value=bsc_resource.BscExtendConfigure.get_yaml('arnold/convert')
+            value=bsc_resource.BscConfigure.get_yaml('arnold/convert')
         )
         self._convert_configure.do_flatten()
 

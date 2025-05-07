@@ -22,9 +22,9 @@ class Node(
             self._name = self.path
 
         if 'icon_name' in kwargs:
-            self._icon_file_path = bsc_resource.RscExtendIcon.get(kwargs.get('icon_name'))
+            self._icon_file_path = bsc_resource.BscIcon.get(kwargs.get('icon_name'))
         else:
-            self._icon_file_path = bsc_resource.RscExtendIcon.get('node/object')
+            self._icon_file_path = bsc_resource.BscIcon.get('node/object')
 
         if 'type_name' in kwargs:
             self._type_name = kwargs.get('type_name')
@@ -46,7 +46,7 @@ class Node(
 
     def create_dag_fnc(self, path):
         _ = self.__class__(path)
-        _._icon_file_path = bsc_resource.RscExtendIcon.get('node/group')
+        _._icon_file_path = bsc_resource.BscIcon.get('node/group')
         return _
 
     def _get_child_paths_(self, path):
@@ -88,7 +88,7 @@ class Component(
     path = property(get_path)
 
     def get_icon(self):
-        return bsc_resource.RscExtendIcon.get('node/{}'.format(self.type))
+        return bsc_resource.BscIcon.get('node/{}'.format(self.type))
 
     icon = property(get_icon)
 

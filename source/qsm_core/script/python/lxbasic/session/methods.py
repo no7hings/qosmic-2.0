@@ -17,7 +17,7 @@ from . import base as _base
 class Hook(object):
     @classmethod
     def get_args(cls, key):
-        _ = bsc_resource.RscHook.get_args(
+        _ = bsc_resource.BscHook.get_args(
                 key
             )
         if _:
@@ -171,7 +171,7 @@ class OptionHook(object):
         option_opt = bsc_core.ArgDictStringOpt(option)
         hook_key = option_opt.get('option_hook_key')
 
-        _ = bsc_resource.RscOptionHook.get_args(
+        _ = bsc_resource.BscOptionHook.get_args(
             hook_key, search_paths
         )
         if _:

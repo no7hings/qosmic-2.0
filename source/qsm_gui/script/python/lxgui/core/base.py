@@ -305,7 +305,7 @@ class GuiIcon(object):
 
     @classmethod
     def get(cls, key):
-        return bsc_resource.BscExtendResource.get(
+        return bsc_resource.BscResource.get(
             '{}/{}.*'.format(cls.BRANCH, key)
         )
 
@@ -332,7 +332,7 @@ class GuiIcon(object):
 
     @classmethod
     def find_all_keys_at(cls, group_branch):
-        return bsc_resource.BscExtendResource.find_all_file_keys_at(
+        return bsc_resource.BscResource.find_all_file_keys_at(
             cls.BRANCH, group_branch, ext_includes={'.png', '.svg'}
         )
 
@@ -343,7 +343,7 @@ class GuiIconDirectory(object):
 
     @classmethod
     def get(cls, key):
-        return bsc_resource.BscExtendResource.get(
+        return bsc_resource.BscResource.get(
             '{}/{}'.format(cls.BRANCH, key)
         )
 
@@ -353,13 +353,13 @@ class GuiFont(object):
 
     @classmethod
     def get(cls, key):
-        return bsc_resource.BscExtendResource.get(
+        return bsc_resource.BscResource.get(
             '{}/{}.*'.format(cls.BRANCH, key)
         )
 
     @classmethod
     def get_all(cls, sub_key='*'):
-        return bsc_resource.BscExtendResource.get_all(
+        return bsc_resource.BscResource.get_all(
             '{}/{}.*'.format(cls.BRANCH, sub_key)
         )
 

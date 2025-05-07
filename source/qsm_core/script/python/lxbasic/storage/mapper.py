@@ -26,7 +26,7 @@ class StgPathMapper(object):
         if cls.MAPPER is None:
             cls.MAPPER = bsc_cor_base.StgPathMapDict(
                 _base.StgFileOpt(
-                    bsc_resource.BscExtendConfigure.get_yaml('storage/path-mapper')
+                    bsc_resource.BscConfigure.get_yaml('storage/path-mapper')
                 ).set_read()
             )
 
@@ -86,7 +86,7 @@ class StgEnvPathMapper(object):
         if cls.MAPPER is None:
             cls.MAPPER = bsc_cor_base.StgEnvPathMapDict(
                 _base.StgFileOpt(
-                    bsc_resource.BscExtendConfigure.get_yaml('storage/path-environment-mapper')
+                    bsc_resource.BscConfigure.get_yaml('storage/path-environment-mapper')
                 ).set_read()
             )
 

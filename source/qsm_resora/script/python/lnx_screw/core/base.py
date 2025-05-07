@@ -251,7 +251,7 @@ FLUSH PRIVILEGES;
             key = 'lazy/mysql_new'
         else:
             key = 'lazy/mysql'
-        return bsc_resource.BscExtendConfigure.get_as_content(key)
+        return bsc_resource.BscConfigure.get_as_content(key)
 
     @classmethod
     def get_mysql_options(cls):
@@ -317,12 +317,12 @@ FLUSH PRIVILEGES;
 
     @classmethod
     def get_basic_configure(cls):
-        base_configure = bsc_resource.BscExtendConfigure.get_as_content('screw/basic')
+        base_configure = bsc_resource.BscConfigure.get_as_content('screw/basic')
         return base_configure
 
     @classmethod
     def get_main_configure(cls):
-        return bsc_resource.BscExtendConfigure.get_as_content('screw/main')
+        return bsc_resource.BscConfigure.get_as_content('screw/main')
 
     @classmethod
     def get_resource_type_options(cls, database_name):
@@ -337,7 +337,7 @@ FLUSH PRIVILEGES;
 
     @classmethod
     def get_override_configure(cls, configure_key):
-        return bsc_resource.BscExtendConfigure.get_as_content('screw/{}'.format(configure_key))
+        return bsc_resource.BscConfigure.get_as_content('screw/{}'.format(configure_key))
 
     @classmethod
     def _to_expression_str(cls, entity_type, filters):

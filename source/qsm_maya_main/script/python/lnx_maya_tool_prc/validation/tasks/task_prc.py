@@ -48,7 +48,7 @@ class RigValidationTaskPrc(ValidationTaskPrc):
 
     def __init__(self, *args, **kwargs):
         super(RigValidationTaskPrc, self).__init__(*args, **kwargs)
-        self._adv_cfg = bsc_resource.BscExtendConfigure.get_as_content('rig/adv_validation')
+        self._adv_cfg = bsc_resource.BscConfigure.get_as_content('rig/adv_validation')
 
     def find_all_controls(self):
         return qsm_mya_adv.AdvChrOpt(self._namespace).find_all_controls()

@@ -762,7 +762,7 @@ class AbsRsvEntity(
 
     @property
     def icon(self):
-        return bsc_resource.RscExtendIcon.get('file/folder')
+        return bsc_resource.BscIcon.get('file/folder')
 
     def create_dag_fnc(self, path):
         return self.rsv_project.get_rsv_entity(path)
@@ -1064,7 +1064,7 @@ class AbsRsvTask(AbsRsvEntity):
 
     @property
     def icon(self):
-        return bsc_resource.RscExtendIcon.get('file/file')
+        return bsc_resource.BscIcon.get('file/file')
 
     def get_work_scene_src_directory_open_menu_raw(self):
         def add_fnc_(application_):
@@ -1312,7 +1312,7 @@ class AbsRsvResource(AbsRsvEntity):
 
     @property
     def icon(self):
-        return bsc_resource.RscExtendIcon.get('resolver/asset')
+        return bsc_resource.BscIcon.get('resolver/asset')
 
     def get_rsv_steps(self, **kwargs):
         self._completion_kwargs_from_parent(self, kwargs)
@@ -1934,7 +1934,7 @@ class AbsRsvProject(
 
     @property
     def icon(self):
-        return bsc_resource.RscExtendIcon.get('resolver/project')
+        return bsc_resource.BscIcon.get('resolver/project')
 
     def get_all_workspaces(self):
         return list(
@@ -3131,7 +3131,7 @@ class AbsRsvRoot(
 
     @property
     def icon(self):
-        return bsc_resource.RscExtendIcon.get('resolver/root')
+        return bsc_resource.BscIcon.get('resolver/root')
 
     def create_dag_fnc(self, path):
         if path == self.path:

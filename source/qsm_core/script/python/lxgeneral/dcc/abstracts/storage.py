@@ -63,7 +63,7 @@ class AbsStgDirectory(
         )
 
     def get_icon(self):
-        return bsc_resource.RscExtendIcon.get('file/folder')
+        return bsc_resource.BscIcon.get('file/folder')
 
     icon = property(get_icon)
 
@@ -166,10 +166,10 @@ class AbsStgFile(
 
     def get_icon(self):
         if self.ext:
-            _ = bsc_resource.RscExtendIcon.get('file/{}'.format(self.ext[1:]))
+            _ = bsc_resource.BscIcon.get('file/{}'.format(self.ext[1:]))
             if _:
                 return _
-        return bsc_resource.RscExtendIcon.get('file/file')
+        return bsc_resource.BscIcon.get('file/file')
 
     icon = property(get_icon)
 
@@ -1216,7 +1216,7 @@ class AbsStgTexture(
 
     @property
     def icon(self):
-        return bsc_resource.RscExtendIcon.get('file/image')
+        return bsc_resource.BscIcon.get('file/image')
 
     def get_args_as_ext_tgt(self, ext_tgt):
         path_src, path_tgt = self._get_path_args_as_ext_tgt_(self.path, ext_tgt)
