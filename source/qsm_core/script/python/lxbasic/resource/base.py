@@ -123,13 +123,7 @@ print(BscResource.get('icons/file/folder.svg'))
         return not not cls.find_all_roots()
 
 
-class Resource(AbsResource):
-    CACHE = LRUCache(maximum=1024)
-
-    ENVIRON_KEY = 'QSM_RESOURCES'
-
-
-# todo: remove EXTEND keyword?
+# todo: remove EXTEND keyword from env key?
 class BscResource(AbsResource):
     CACHE = LRUCache(maximum=1024)
 

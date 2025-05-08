@@ -88,14 +88,14 @@ class EtrNodeOpt(object):
         return cmds.objExists(node_path)
 
     @classmethod
-    def create(cls, node_path, type_name):
+    def create(cls, name, type_name):
         if type_name == _node_query.NodeQuery.Types.Material:
-            cls.create_material(node_path, type_name)
-        elif type_name in _node_category.ShaderCategory.is_shader_type(type_name):
-            cls.create_shader(node_path, type_name)
+            return cls.create_material(name, type_name)
+        elif _node_category.ShaderCategory.is_shader_type(type_name):
+            return cls.create_shader(name, type_name)
         else:
-            _ = cmds.createNode(
-                type_name, name=node_path, skipSelect=1
+            return cmds.createNode(
+                type_name, name=name, skipSelect=1
             )
 
     @classmethod
@@ -105,13 +105,18 @@ class EtrNodeOpt(object):
         return True, _node_for_dag.DagNode.create(path, type_name)
 
     @classmethod
-    def generate_node_create_args(cls, name, type_name):
+    def generate_node_create_args(cls, name, type_name, **kwargs):
         if cmds.objExists(name) is True:
             return False, name
-
-        return True, cmds.createNode(
-            type_name, name=name, skipSelect=1
-        )
+        if type_name == 'expression':
+            return True, cmds.expression(
+                name=name,
+                string=kwargs['expression_options']['script'],
+                object=kwargs['expression_options']['node'],
+                alwaysEvaluate=0,
+                unitConversion='none'
+            )
+        return True, cls.create(name, type_name)
     
     @classmethod
     def generate_container_create_args(cls, path_or_name, type_name):
@@ -143,11 +148,11 @@ class EtrNodeOpt(object):
         return self.__str__()
 
     @classmethod
-    def create_shader(cls, name_or_path, type_name):
-        if cls.check_exists(name_or_path) is False:
+    def create_shader(cls, name, type_name):
+        if cls.check_exists(name) is False:
             category = _node_category.ShaderCategory.get(type_name, 'utility')
             kwargs = dict(
-                name=name_or_path,
+                name=name,
                 skipSelect=1
             )
             if category == 'shader':
@@ -159,18 +164,21 @@ class EtrNodeOpt(object):
             elif category == 'utility':
                 kwargs['asUtility'] = 1
             #
-            _ = cmds.shadingNode(type_name, **kwargs)
+            return cmds.shadingNode(type_name, **kwargs)
+        return name
 
     @classmethod
-    def create_material(cls, name_or_path, type_name):
-        if cls.check_exists(name_or_path) is False:
+    def create_material(cls, name, type_name):
+        if cls.check_exists(name) is False:
             result = cmds.shadingNode(
                 type_name,
-                name=name_or_path,
+                name=name,
                 asUtility=1,
                 skipSelect=1
             )
             _material.MaterialLightLink.create(result)
+            return result
+        return name
 
     def clear_array_ports(self):
         ports = self.get_all_ports()
@@ -410,6 +418,9 @@ class EtrNodeOpt(object):
 
             self.set(k, v)
 
+    def set_properties(self, *args, **kwargs):
+        self.set_dict(*args, **kwargs)
+
     @classmethod
     def create_connections_by_data(cls, data):
         for seq, i in enumerate(data):
@@ -417,6 +428,10 @@ class EtrNodeOpt(object):
                 i_source = data[seq-1]
                 i_target = i
                 cmds.connectAttr(i_source, i_target, force=1)
+
+    @classmethod
+    def create_connections(cls, *args, **kwargs):
+        cls.create_connections_by_data(*args, **kwargs)
 
     def create_properties(self, data):
         for k, v in data.items():
@@ -454,6 +469,10 @@ class EtrNodeOpt(object):
             elif i_type == 'string':
                 _attribute.NodeAttribute.create_as_string(
                     self._path, k, i_value
+                )
+            elif i_type == 'enumerate':
+                _attribute.NodeAttribute.create_as_enumerate(
+                    self._path, k, v['options'], i_value
                 )
 
     # motion

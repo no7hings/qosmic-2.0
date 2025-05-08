@@ -4,11 +4,12 @@ import lxbasic.content as bsc_content
 from . import base as _base
 
 
-# todo: remove EXTEND keyword?
+# todo: remove EXTEND keyword from env key?
 class BscConfigure(_base.AbsResource):
     """
 print(RscConfigure.get_yaml('database/library/resource-basic'))
     """
+
     CACHE = {}
     ENVIRON_KEY = 'QSM_EXTEND_CONFIGURES'
 

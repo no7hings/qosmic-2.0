@@ -1,0 +1,272 @@
+options:
+    namespace: ''
+
+# use adv rule
+dag_nodes:
+    /Group:
+        type: transform
+
+    # control
+    /Group/MotionSystem:
+        type: transform
+    /Group/MotionSystem/MainSystem:
+        type: transform
+    /Group/MotionSystem/MainSystem/MainExtra2:
+        type: transform
+    /Group/MotionSystem/MainSystem/MainExtra2/MainExtra2Shape:
+        type: nurbsCurve
+        properties:
+            overrideEnabled: 1
+            overrideColor: 18
+    /Group/MotionSystem/MainSystem/MainExtra2/MainExtra1:
+        type: transform
+    /Group/MotionSystem/MainSystem/MainExtra2/MainExtra1/MainExtra1Shape:
+        type: nurbsCurve
+        properties:
+            overrideEnabled: 1
+            overrideColor: 17
+    /Group/MotionSystem/MainSystem/MainExtra2/MainExtra1/Main:
+        type: transform
+        create_properties:
+            fx_radius:
+                type: float
+                value: 1.0
+            fx_image_width:
+                type: integer
+                value: 512
+            fx_image_height:
+                type: integer
+                value: 512
+            fx_image_start_frame:
+                type: integer
+                value: 1
+            fx_image_end_frame:
+                type: integer
+                value: 24
+            fx_image_frame:
+                type: integer
+                value: 1
+            fx_play_speed:
+                type: float
+                value: 1.0
+            fx_play_offset:
+                type: integer
+                value: 0
+            fx_play_frame:
+                type: integer
+                value: 1
+            jointVis:
+                type: enumerate
+                options: ['off', 'on']
+                value: 0
+        connections:
+            - 'time1.outTime'
+            - 'Main.fx_play_frame'
+
+    /Group/MotionSystem/MainSystem/MainExtra2/MainExtra1/Main/MainShape:
+        type: nurbsCurve
+        properties:
+            overrideEnabled: 1
+            overrideColor: 15
+
+    # sketch
+    /Group/DeformationSystem:
+        type: transform
+    /Group/DeformationSystem/Root_M:
+        type: joint
+        connections:
+            - 'Main.jointVis'
+            - 'Root_M.visibility'
+
+    # geometry
+    /Group/Geometry:
+        type: transform
+    /Group/Geometry/geo_grp:
+        type: transform
+    /Group/Geometry/geo_grp/geo:
+        type: transform
+    /Group/Geometry/geo_grp/geo/geoShape:
+        type: mesh
+
+nodes:
+
+    # control
+    main_curve_create:
+        type: makeNurbCircle
+        properties: {}
+        connections:
+            - '<..key>.outputCurve'
+            - 'MainShape.create'
+
+    main_extra_1_curve_create:
+        type: makeNurbCircle
+        properties:
+            radius: 1.25
+        connections:
+            - '<..key>.outputCurve'
+            - 'MainExtra1Shape.create'
+
+    main_extra_2_curve_create:
+        type: makeNurbCircle
+        properties:
+            radius: 1.5
+        connections:
+            - '<..key>.outputCurve'
+            - 'MainExtra2Shape.create'
+
+    ctl_radius_mtp:
+        type: multiplyDivide
+        properties:
+            operation: 1
+        connections:
+            - 'Main.fx_radius'
+            - '<..key>.input1X'
+            - '<..key>.outputX'
+            - 'main_curve_create.radius'
+
+    ctl_radius_extra_1_mtp:
+        type: multiplyDivide
+        properties:
+            operation: 1
+            input2X: 1.25
+        connections:
+            - 'ctl_radius_mtp.outputX'
+            - '<..key>.input1X'
+            - '<..key>.outputX'
+            - 'main_extra_1_curve_create.radius'
+
+    ctl_radius_extra_2_mtp:
+        type: multiplyDivide
+        properties:
+            operation: 1
+            input2X: 1.5
+        connections:
+            - 'ctl_radius_mtp.outputX'
+            - '<..key>.input1X'
+            - '<..key>.outputX'
+            - 'main_extra_2_curve_create.radius'
+
+    # sketch
+    root_mtx:
+        type: 'decomposeMatrix'
+        connections:
+            - 'Main.worldMatrix[0]'
+            - '<..key>.inputMatrix'
+            - '<..key>.outputTranslate'
+            - 'Root_M.translate'
+            - '<..key>.outputRotate'
+            - 'Root_M.rotate'
+            - '<..key>.outputScale'
+            - 'Root_M.scale'
+
+    # geometry
+    geo_create:
+        type: polyPlane
+        properties:
+            subdivisionsWidth: 1
+            subdivisionsHeight: 1
+        connections:
+            - '<..key>.output'
+            - 'geoShape.inMesh'
+
+    geo_length_pow:
+        type: multiplyDivide
+        properties:
+            operation: 3
+            input2X: 2
+            input2Y: 2
+        connections:
+            - 'Main.fx_image_width'
+            - '<..key>.input1X'
+            - 'Main.fx_image_height'
+            - '<..key>.input1Y'
+
+    geo_length_pls:
+        type: plusMinusAverage
+        properties:
+            operation: 1
+        connections:
+            - 'geo_length_pow.outputX'
+            - '<..key>.input1D[0]'
+            - 'geo_length_pow.outputY'
+            - '<..key>.input1D[1]'
+
+    geo_length_sqr:
+        type: multiplyDivide
+        properties:
+            operation: 3
+            input2X: 0.5
+        connections:
+            - 'geo_length_pls.output1D'
+            - '<..key>.input1X'
+
+    geo_scale_dvd:
+        type: multiplyDivide
+        properties:
+            operation: 2
+        connections:
+            - 'Main.fx_radius'
+            - '<..key>.input1X'
+            - 'geo_length_sqr.outputX'
+            - '<..key>.input2X'
+
+    geo_size_mtp:
+        type: multiplyDivide
+        properties:
+            operation: 1
+        connections:
+            - 'Main.fx_image_width'
+            - '<..key>.input1X'
+            - 'Main.fx_image_height'
+            - '<..key>.input1Y'
+            - 'geo_scale_dvd.outputX'
+            - '<..key>.input2X'
+            - 'geo_scale_dvd.outputX'
+            - '<..key>.input2Y'
+
+    geo_size_2_mtp:
+        type: multiplyDivide
+        properties:
+            operation: 1
+            input2X: 2
+            input2Y: 2
+        connections:
+            - 'geo_size_mtp.outputX'
+            - '<..key>.input1X'
+            - 'geo_size_mtp.outputY'
+            - '<..key>.input1Y'
+            - '<..key>.outputX'
+            - 'geo_create.width'
+            - '<..key>.outputY'
+            - 'geo_create.height'
+
+    # material
+    geo_surface_sdr:
+        category: shader
+        type: lambert
+        connections: []
+
+    geo_mtl:
+        type: shadingEngine
+        connections:
+            # from shader
+            - 'geo_surface_sdr.outColor'
+            - '<..key>.surfaceShader'
+            # to geo
+            - 'geoShape.instObjGroups[0]'
+            - '<..key>.dagSetMembers[0]'
+
+    image_frame_exp:
+        type: expression
+        properties: {}
+        expression_options:
+            node: 'Main'
+            script:
+                |-
+                \$start_frame=Main.fx_image_start_frame;
+                \$end_frame=Main.fx_image_end_frame;
+                \$frame_count=$end_frame-$start_frame+1;
+                \$frame=Main.fx_play_frame;
+                \$offset=Main.fx_play_offset;
+                \$speed=Main.fx_play_speed;
+                Main.fx_image_frame=$start_frame+abs($frame-1)%$frame_count;

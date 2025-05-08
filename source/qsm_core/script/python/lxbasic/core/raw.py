@@ -283,6 +283,14 @@ class BscCoord(object):
             radian = r270+math.atan2((-y0+y1), (x0-x1))
         return radian*180/math.pi
 
+    @classmethod
+    def map_to_circle(cls, x, y, radius):
+        length = math.sqrt(x**2+y**2)
+        if length == 0:
+            return radius, 0
+        scale = radius/length
+        return x*scale, y*scale
+
 
 class BscArrayForNested(object):
     @classmethod

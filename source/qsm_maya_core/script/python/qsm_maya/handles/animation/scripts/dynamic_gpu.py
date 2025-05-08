@@ -220,6 +220,16 @@ class DynamicGpuCacheOpt(qsm_mya_resource.AssetCacheOpt):
 
 
 class DynamicGpuCacheGenerate(object):
+    # fixme: use new expression
+    """
+$start_frame=Main.fx_image_start_frame;
+$end_frame=Main.fx_image_end_frame;
+$frame_count=$end_frame-$start_frame+1;
+$frame=Main.fx_play_frame;
+$offset=Main.fx_play_offset;
+$speed=Main.fx_play_speed;
+Main.fx_image_frame=abs($start_frame+($frame-1)%$frame_count);
+    """
     CACHE_ROOT = '|__DYNAMIC_GPU__'
 
     CACHE_NAME = _core.RigConfigure.DynamicGpuCacheName
