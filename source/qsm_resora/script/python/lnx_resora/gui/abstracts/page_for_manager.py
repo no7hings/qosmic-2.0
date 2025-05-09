@@ -1317,6 +1317,8 @@ class AbsPrxPageForManager(
     def do_gui_page_initialize(self, key):
         self._scr_stage_name = key
         self._scr_stage = lnx_scr_core.Stage(self._scr_stage_name)
+        # set history group for per page
+        self._gui_history_group = ['resora', self._scr_stage_name]
 
         self.gui_page_setup_fnc()
 
@@ -1343,6 +1345,7 @@ class AbsPrxPageForManager(
 
         self._scr_stage_name = None
         self._scr_stage = None
+        self._gui_history_group = ['resora', 'dcc', 'general']
 
         # self._window.register_window_close_method(self.gui_close_fnc)
 

@@ -28,24 +28,39 @@ dag_nodes:
     /Group/MotionSystem/MainSystem/MainExtra2/MainExtra1/Main:
         type: transform
         create_properties:
+
+            # parameter for save fx name
+            fx_name:
+                type: string
+                value: ''
+
+            # basic size for fx image
             fx_radius:
                 type: float
                 value: 1.0
+
+            # image size
             fx_image_width:
                 type: integer
                 value: 512
             fx_image_height:
                 type: integer
                 value: 512
+
+            # image sequence frame
             fx_image_start_frame:
                 type: integer
                 value: 1
             fx_image_end_frame:
                 type: integer
                 value: 24
+
+            # output frame to file node, work by expression
             fx_image_frame:
                 type: integer
                 value: 1
+
+            # set play speed, set 0 to stop play
             fx_play_speed:
                 type: float
                 value: 1.0
@@ -59,10 +74,6 @@ dag_nodes:
                 type: enumerate
                 options: ['off', 'on']
                 value: 0
-        connections:
-            - 'time1.outTime'
-            - 'Main.fx_play_frame'
-
     /Group/MotionSystem/MainSystem/MainExtra2/MainExtra1/Main/MainShape:
         type: nurbsCurve
         properties:
@@ -83,13 +94,12 @@ dag_nodes:
         type: transform
     /Group/Geometry/geo_grp:
         type: transform
-    /Group/Geometry/geo_grp/geo:
+    /Group/Geometry/geo_grp/fx_geo:
         type: transform
-    /Group/Geometry/geo_grp/geo/geoShape:
+    /Group/Geometry/geo_grp/fx_geo/fx_geoShape:
         type: mesh
 
 nodes:
-
     # control
     main_curve_create:
         type: makeNurbCircle
@@ -101,7 +111,9 @@ nodes:
     main_extra_1_curve_create:
         type: makeNurbCircle
         properties:
-            radius: 1.25
+            radius: 1.2
+            degree: 1
+            sections: 12
         connections:
             - '<..key>.outputCurve'
             - 'MainExtra1Shape.create'
@@ -110,6 +122,8 @@ nodes:
         type: makeNurbCircle
         properties:
             radius: 1.5
+            degree: 1
+            sections: 6
         connections:
             - '<..key>.outputCurve'
             - 'MainExtra2Shape.create'
@@ -167,7 +181,7 @@ nodes:
             subdivisionsHeight: 1
         connections:
             - '<..key>.output'
-            - 'geoShape.inMesh'
+            - 'fx_geoShape.inMesh'
 
     geo_length_pow:
         type: multiplyDivide
@@ -240,20 +254,40 @@ nodes:
             - '<..key>.outputY'
             - 'geo_create.height'
 
-    # material
-    geo_surface_sdr:
-        category: shader
-        type: lambert
+    # create one empty expression to over maya script auto create
+    fx_image_exp:
+        type: expression
         connections: []
 
-    geo_mtl:
+    fx_image:
+        type: file
+        properties:
+
+            # default fame use 0
+            frameExtension: 0
+        connections:
+            - 'fx_image_exp.output[0]'
+            - '<..key>.frameExtension'
+            - 'Main.fx_image_frame'
+            - '<..key>.frameOffset'
+
+    # material
+    fx_surface_sdr:
+        type: lambert
+        connections:
+            - 'fx_image.outColor'
+            - '<..key>.color'
+
+    fx_mtl:
         type: shadingEngine
         connections:
+
             # from shader
-            - 'geo_surface_sdr.outColor'
+            - 'fx_surface_sdr.outColor'
             - '<..key>.surfaceShader'
+
             # to geo
-            - 'geoShape.instObjGroups[0]'
+            - 'fx_geoShape.instObjGroups[0]'
             - '<..key>.dagSetMembers[0]'
 
     image_frame_exp:
@@ -269,4 +303,26 @@ nodes:
                 \$frame=Main.fx_play_frame;
                 \$offset=Main.fx_play_offset;
                 \$speed=Main.fx_play_speed;
-                Main.fx_image_frame=$start_frame+abs($frame-1)%$frame_count;
+                Main.fx_image_frame=$start_frame+(ceil(abs($frame-1)*$speed)+abs($offset))%$frame_count;
+
+    # time
+    time_to_frame:
+        type: timeToUnitConversion
+        properties:
+
+            # todo: this parameter is not connectable, update use method instance
+            conversionFactor: 0.004
+        connections:
+            - 'time1.outTime'
+            - '<..key>.input'
+            - '<..key>.output'
+            - 'Main.fx_play_frame'
+
+    # display layer
+    Hi:
+        type: displayLayer
+        properties:
+            displayType: 2
+        connections:
+            - '<..key>.drawInfo'
+            - 'fx_geo.drawOverride'

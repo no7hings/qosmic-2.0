@@ -6,7 +6,7 @@ import qsm_maya.core as qsm_mya_core
 import qsm_maya.graph as qsm_mya_graph
 
 
-class FxProxyGraph(qsm_mya_graph.GraphBase):
+class FxProxyRigGraph(qsm_mya_graph.GraphBase):
     @classmethod
     def test(cls):
         cls(None, 'maya/resora/fx_proxy_rig').create_all()
@@ -29,9 +29,25 @@ class FxProxyGraph(qsm_mya_graph.GraphBase):
 
     def _post_fnc(self):
         qsm_mya_core.NodeAttribute.set_value(
-            'geo', 'rotateX', 90
+            'fx_geo', 'rotateX', 90
         )
-        qsm_mya_core.Transform.freeze_transformations('geo')
+        qsm_mya_core.Transform.freeze_transformations('fx_geo')
         qsm_mya_core.SmoothBindSkin.create(
-            ['Root_M'], ['geo']
+            ['Root_M'], ['fx_geo']
+        )
+
+        # apply image sequence
+        qsm_mya_core.NodeAttribute.set_as_string(
+            'fx_image',
+            'fileTextureName',
+            'Z:/libraries/lazy-resource/all/motion_splice/free_test_jump/preview/images/image.<f>.jpg'
+        )
+        # turn image sequence on
+        qsm_mya_core.NodeAttribute.set_value(
+            'fx_image',
+            'useFrameExtension',
+            1
+        )
+        qsm_mya_core.NodeAttribute.set_value(
+            'Main', 'fx_image_end_frame', 66
         )

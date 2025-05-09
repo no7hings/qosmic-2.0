@@ -15,8 +15,6 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
         Default = 'default'
         MayaLoad = 'maya_load'
 
-    GUI_HIS_GROUP_DRAG_MODE = ['resora', 'dcc', 'maya_scene']
-
     def __init__(self, window, session, *args, **kwargs):
         super(GuiResourceManagerMain, self).__init__(window, session, *args, **kwargs)
 
@@ -29,7 +27,7 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
             '"LMB-click" for turn "on/off" "auto namespace", when drag mode is "reference" or "import".'
         )
         self._auto_namespace_button.connect_check_toggled_to(self._gui_set_auto_namespace)
-        self._auto_namespace_button.set_history_key(self.GUI_HIS_GROUP_DRAG_MODE+['auto_namespace'])
+        self._auto_namespace_button.set_history_key(self._gui_history_group+['auto_namespace'])
         if self._auto_namespace_button.pull_history() is False:
             self._auto_namespace_button.set_checked(True)
 
@@ -42,7 +40,7 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
             when drag mode is "reference" or "import" and "auto namespace" is "on".'
         )
         self._move_to_cursor_button.connect_check_toggled_to(self._gui_set_move_to_cursor)
-        self._move_to_cursor_button.set_history_key(self.GUI_HIS_GROUP_DRAG_MODE+['move_to_cursor'])
+        self._move_to_cursor_button.set_history_key(self._gui_history_group+['move_to_cursor'])
         if self._move_to_cursor_button.pull_history() is False:
             self._move_to_cursor_button.set_checked(True)
 
@@ -51,14 +49,14 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
 
     def _gui_set_auto_namespace(self, boolean):
         self._auto_namespace = boolean
-        gui_core.GuiHistoryStage().set_one(self.GUI_HIS_GROUP_DRAG_MODE+['auto_namespace'], boolean)
+        gui_core.GuiHistoryStage().set_one(self._gui_history_group+['auto_namespace'], boolean)
 
     def _gui_set_move_to_cursor(self, boolean):
         self._move_to_cursor = boolean
-        gui_core.GuiHistoryStage().set_one(self.GUI_HIS_GROUP_DRAG_MODE+['move_to_cursor'], boolean)
+        gui_core.GuiHistoryStage().set_one(self._gui_history_group+['move_to_cursor'], boolean)
 
     def gui_page_setup_sup_fnc(self):
-        self._drag_mode = gui_core.GuiHistoryStage().get_one(self.GUI_HIS_GROUP_DRAG_MODE+['drag_mode']) or 'default'
+        self._drag_mode = gui_core.GuiHistoryStage().get_one(self._gui_history_group+['drag_mode']) or 'default'
 
         self._drag_mode_switch_prx_tool_box = self.gui_add_top_tool_box('drag mode switch')
         self._gui_add_drag_mode_switch_tools()
@@ -93,7 +91,7 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
     def _gui_switch_drag_mode(self, drag_mode):
         if drag_mode != self._drag_mode:
             self._drag_mode = drag_mode
-            gui_core.GuiHistoryStage().set_one(self.GUI_HIS_GROUP_DRAG_MODE+['drag_mode'], drag_mode)
+            gui_core.GuiHistoryStage().set_one(self._gui_history_group+['drag_mode'], drag_mode)
 
     def gui_node_drag_data_generate_fnc(self, scr_entity):
         scr_entity_path = scr_entity.path

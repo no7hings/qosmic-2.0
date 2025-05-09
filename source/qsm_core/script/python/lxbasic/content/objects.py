@@ -492,6 +492,7 @@ class Configure(object):
         pass
 
     def _get_subclass_file_path(self):
+        # find this class's file path
         frame = inspect.currentframe().f_back
         subclass = frame.f_locals.get('self', None)
         if subclass and isinstance(subclass, self.__class__):
@@ -500,6 +501,7 @@ class Configure(object):
         return None
 
     def generate_local_configure(self):
+        # read yaml by python file path, etc. you had one configure.py, auto find configure.yml
         self._configure_local_flag = True
 
         file_path = self._get_subclass_file_path()

@@ -21,6 +21,8 @@ from . import keyframe as _keyframe
 
 from . import node_keyframe as _node_keyframe
 
+from . import display_layer as _display_layer
+
 from . import node_for_dag as _node_for_dag
 
 
@@ -109,13 +111,16 @@ class EtrNodeOpt(object):
         if cmds.objExists(name) is True:
             return False, name
         if type_name == 'expression':
+            expression_options = kwargs.get('expression_options', {})
             return True, cmds.expression(
                 name=name,
-                string=kwargs['expression_options']['script'],
-                object=kwargs['expression_options']['node'],
+                string=expression_options.get('script', ''),
+                object=expression_options.get('node', ''),
                 alwaysEvaluate=0,
                 unitConversion='none'
             )
+        elif type_name == 'displayLayer':
+            return True, _display_layer.DisplayLayer.create(name)
         return True, cls.create(name, type_name)
     
     @classmethod
