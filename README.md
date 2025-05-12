@@ -4,6 +4,9 @@
 | ----------- | ------- | ------- | ------ |
 | Application | MAYA    | HOUDINI | KATANA |
 | Python      | 2.7     | 3.10    |        |
+```text
+framework for animation pipeline, support python27/310
+```
 [https://rk8o3v6r7h.feishu.cn/docx/ZGMxd503ioJHcYxQl5Uce3sdnRh?from=from_copylink]
 ## Tool
 ### Main Page
