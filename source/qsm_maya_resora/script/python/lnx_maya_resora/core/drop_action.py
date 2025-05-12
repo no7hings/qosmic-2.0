@@ -30,7 +30,11 @@ class SceneDropAction:
     @classmethod
     def load_one(cls, file_path, auto_namespace=False, move_to_mouse=False):
         w = gui_core.GuiDialogForChooseAsBubble.create(
-            ['import', 'reference', 'open'],
+            [
+                'import',
+                'reference',
+                'open'
+            ],
             'load maya scene, choose one scheme to continue'
         )
         scheme = w.get_result()
@@ -43,6 +47,19 @@ class SceneDropAction:
             elif scheme == 'open':
                 qsm_mya_core.SceneFile.open_with_dialog(file_path)
 
+
+class VideoDropAction:
+    @classmethod
+    def reference_one(cls, file_path):
+        pass
+
+    @classmethod
+    def import_one(cls, file_path):
+        pass
+
+    @classmethod
+    def load_one(cls, file_path):
+        pass
 
 
 

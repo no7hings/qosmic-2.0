@@ -954,7 +954,7 @@ class StgFileTiles(object):
     def to_glob_pattern(cls, name_base):
         if name_base in cls.CACHE:
             return cls.CACHE[name_base]
-        #
+
         name_base_new = name_base
         for i_keyword, i_re_format, i_count in _cor_pattern.BscFileTiles.RE_MULTIPLY_KEYS:
             i_results = re.finditer(i_re_format.format(i_keyword), name_base, re.IGNORECASE) or []
@@ -964,7 +964,7 @@ class StgFileTiles(object):
                     s = cls.P
                 else:
                     s = cls.P*i_count
-                #
+
                 name_base_new = name_base_new.replace(name_base[j_start:j_end], s, 1)
         cls.CACHE[name_base] = name_base_new
         return name_base_new
@@ -985,7 +985,7 @@ class StgFileTiles(object):
 
     @classmethod
     def get_is_exists(cls, file_path):
-        return not not cls.get_tiles(file_path)
+        return bool(cls.get_tiles(file_path))
 
 
 class StgPathOpt(object):

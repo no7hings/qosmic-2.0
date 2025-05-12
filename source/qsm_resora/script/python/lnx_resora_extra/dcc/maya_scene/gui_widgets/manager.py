@@ -101,7 +101,7 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
         move_to_cursor = self._move_to_cursor_button.get_is_checked()
         if file_path:
             if self._drag_mode == self.DropMode.MayaLoad:
-                file_path = lnx_rsr_cor_drag.MayaSceneDrop.generate_load_mel(
+                file_path = lnx_rsr_cor_drag.MayaSceneDropAction.generate_load_mel(
                     file_path, auto_namespace, move_to_cursor
                 )
 

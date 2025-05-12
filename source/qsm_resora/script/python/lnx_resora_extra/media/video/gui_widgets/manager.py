@@ -13,15 +13,13 @@ import lnx_resora.gui.abstracts as lnx_rsr_gui_abstracts
 class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
     class DragMode:
         Default = 'default'
-        MayaImageSequencePlane = 'maya_image_sequence_plane'
-
-    GUI_HIS_GROUP_DRAG_MODE = ['resora', 'media', 'video']
+        MayaFxProxyRig = 'maya_fx_proxy_rig'
 
     def __init__(self, window, session, *args, **kwargs):
         super(GuiResourceManagerMain, self).__init__(window, session, *args, **kwargs)
 
     def gui_page_setup_sup_fnc(self):
-        self._drag_mode = gui_core.GuiHistoryStage().get_one(self.GUI_HIS_GROUP_DRAG_MODE+['drag_mode']) or 'default'
+        self._drag_mode = gui_core.GuiHistoryStage().get_one(self._gui_history_group+['drag_mode']) or 'default'
 
         self._drag_mode_switch_prx_tool_box = self.gui_add_top_tool_box('drag mode switch')
         self._gui_add_drag_mode_switch_tools()
@@ -29,7 +27,7 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
     def _gui_add_drag_mode_switch_tools(self):
         cfg = [
             (self.DragMode.Default, 'file/file'),
-            (self.DragMode.MayaImageSequencePlane, 'application/maya'),
+            (self.DragMode.MayaFxProxyRig, 'application/maya'),
         ]
         tools = []
         for i_drag_mode, i_icon_name in cfg:

@@ -6,7 +6,7 @@ import lxbasic.core as bsc_core
 import tempfile
 
 
-class MayaSceneDrop:
+class MayaSceneDropAction:
 
     @classmethod
     def to_temp_mel_file(cls, mel_script):
@@ -31,5 +31,5 @@ class MayaSceneDrop:
         return cls.to_temp_mel_file(mel_script)
 
 
-class MayaVideoDrop:
+class MayaVideoDropAction:
     pass

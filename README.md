@@ -1,4 +1,7 @@
-# Animation Pipeline Frame
+# Animation Pipeline Framework
+## Framework
+[https://rk8o3v6r7h.feishu.cn/docx/ZGMxd503ioJHcYxQl5Uce3sdnRh?from=from_copylink]
+# Update
 ## 2025 update
 ### Framework
 ```text

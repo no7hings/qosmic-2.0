@@ -6,17 +6,22 @@ import os
 
 class BscEnviron(object):
     PYTHON_VERSION_KEY = 'QSM_PYTHON_VERSION'
-    CORE_BASE_KEY = 'QSM_CORE_BASE'
 
     # todo, rename to QSM_GUI_LANGUAGE
     GUI_LANGUAGE_KEY = 'QSM_UI_LANGUAGE'
-    DEPLOY_ROOT_KEY = 'QSM_DEPLOY_ROOT'
 
+    # use for version
+    CORE_BASE_KEY = 'QSM_CORE_BASE'
+
+    DEPLOY_ROOT_KEY = 'QSM_DEPLOY_ROOT'
     PROJECT_ROOT_KEY = 'QSM_PROJECT_ROOT'
-    CACHE_ROOT_KEY = 'QSM_CACHE_ROOT'
-    LOCAL_CACHE_ROOT_KEY = 'QSM_CACHE_LOCAL_ROOT'
     LIBRARY_ROOT_KEY = 'QSM_LIBRARY_ROOT'
 
+    # cache
+    CACHE_ROOT_KEY = 'QSM_CACHE_ROOT'
+    LOCAL_CACHE_ROOT_KEY = 'QSM_CACHE_LOCAL_ROOT'
+
+    # todo: use 0, 1 instance
     TRUE = 'true'
     FALSE = 'false'
     
@@ -75,13 +80,14 @@ class BscEnviron(object):
 
     @classmethod
     def get_qt_thread_enable(cls):
-        # fixme: why disable in maya?
+        # bug is fixed, remove this
         # if _base.BscApplication.get_is_maya():
         #     return False
         return True
 
     @classmethod
     def append_lua_path(cls, path):
+        # use for katana
         key = 'LUA_PATH'
         value = cls.get(key)
         if value:
