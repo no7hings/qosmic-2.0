@@ -482,7 +482,7 @@ class _ScenePrc(object):
         ).execute()
 
 
-class AssetUnitAssemblyProcess(object):
+class AssetUnitAssemblyGenerateProcess(object):
     LOG_KEY = 'unit assembly'
     PLUG_NAMES = [
         'sceneAssembly',

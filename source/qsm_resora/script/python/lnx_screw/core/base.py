@@ -195,6 +195,7 @@ FLUSH PRIVILEGES;
         PreviewJpg = PreviewDir+'/image.jpg'
         PreviewImageDir = PreviewDir+'/images'
         PreviewImageSequence = PreviewDir+'/images/image.%04d.{format}'
+        PreviewImageSequenceJpg = PreviewDir+'/images/image.%04d.jpg'
         PreviewVideo = PreviewDir+'/video.{format}'
         PreviewMov = PreviewDir+'/video.mov'
         PreviewAudio = PreviewDir+'/audio.{format}'
@@ -1480,6 +1481,11 @@ FLUSH PRIVILEGES;
         options = copy.copy(self._options)
         options['node'] = bsc_core.BscNodePathOpt(node_path).name
         return self.NodePathPattens.PreviewImageDir.format(**options)
+
+    def generate_node_image_sequence_path(self, node_path):
+        options = copy.copy(self._options)
+        options['node'] = bsc_core.BscNodePathOpt(node_path).name
+        return self.NodePathPattens.PreviewImageSequenceJpg.format(**options)
 
     def get_node(self, path):
         return self.get_entity(

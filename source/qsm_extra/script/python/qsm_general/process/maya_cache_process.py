@@ -59,7 +59,7 @@ class MayaCacheSubprocess(_base.DccProcess):
         )
 
     @classmethod
-    def to_option_dict(cls, option):
+    def to_option_kwargs(cls, option):
         option_opt = bsc_core.ArgDictStringOpt(option)
         key = option_opt.get('method_option')
         file_path = cls.to_option_file_path(key)

@@ -5,7 +5,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.core as gui_core
 
-import lnx_resora_extra.animation.motion.scripts as _etr_scripts
+import lnx_resora_extra.media.video.scripts as _etr_scripts
 
 
 class Main(object):
@@ -19,7 +19,7 @@ class Main(object):
         with window.gui_progressing(maximum=len(scr_entities)) as g_p:
             for i_scr_entity in scr_entities:
                 i_scr_entity_path = i_scr_entity.path
-                i_opt = _etr_scripts.MoCapDotFbxMotionGenerate(
+                i_opt = _etr_scripts.FxProxyRigGenerateOpt(
                     scr_stage_name, i_scr_entity_path
                 )
                 i_args = i_opt.generate_args()
@@ -62,9 +62,9 @@ class Main(object):
                 task_window.set_thread_maximum(4)
 
                 if task_window._language == 'chs':
-                    task_window.set_window_title('生成动作（MoCap fbx）')
+                    task_window.set_window_title('生成特效代理绑定')
                 else:
-                    task_window.set_window_title('Generate Motion (MoCap fbx)')
+                    task_window.set_window_title('Generate FX Proxy Rig')
 
                 task_window.run_fnc_delay(
                     functools.partial(

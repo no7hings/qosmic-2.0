@@ -29,6 +29,11 @@ dag_nodes:
         type: transform
         create_properties:
 
+            # basic
+            fx_basic_sep:
+                type: separator
+                value: 'Basic'
+
             # parameter for save fx name
             fx_name:
                 type: string
@@ -39,13 +44,23 @@ dag_nodes:
                 type: float
                 value: 1.0
 
-            # image size
+            # image
+            fx_image_sep:
+                type: separator
+                value: 'Image'
+
             fx_image_width:
                 type: integer
                 value: 512
             fx_image_height:
                 type: integer
                 value: 512
+
+            # alpha
+            fx_image_use_alpha:
+                type: enumerate
+                options: ['off', 'on']
+                value: 0
 
             # image sequence frame
             fx_image_start_frame:
@@ -60,6 +75,11 @@ dag_nodes:
                 type: integer
                 value: 1
 
+            # play
+            fx_play_sep:
+                type: separator
+                value: 'Play'
+
             # set play speed, set 0 to stop play
             fx_play_speed:
                 type: float
@@ -70,6 +90,7 @@ dag_nodes:
             fx_play_frame:
                 type: integer
                 value: 1
+
             jointVis:
                 type: enumerate
                 options: ['off', 'on']
@@ -262,9 +283,9 @@ nodes:
     fx_image:
         type: file
         properties:
-
             # default fame use 0
             frameExtension: 0
+            alphaIsLuminance: 1
         connections:
             - 'fx_image_exp.output[0]'
             - '<..key>.frameExtension'
@@ -304,6 +325,21 @@ nodes:
                 \$offset=Main.fx_play_offset;
                 \$speed=Main.fx_play_speed;
                 Main.fx_image_frame=$start_frame+(ceil(abs($frame-1)*$speed)+abs($offset))%$frame_count;
+
+    fx_image_use_alpha_cdt:
+        type: condition
+        properties:
+            firstTerm: 0
+            secondTerm: 1
+            operation: 0
+            colorIfFalse: [0, 0, 0]
+        connections:
+            - '<..key>.outColor'
+            - 'fx_surface_sdr.transparency'
+            - 'fx_image.outTransparency'
+            - '<..key>.colorIfTrue'
+            - 'Main.fx_image_use_alpha'
+            - '<..key>.firstTerm'
 
     # time
     time_to_frame:

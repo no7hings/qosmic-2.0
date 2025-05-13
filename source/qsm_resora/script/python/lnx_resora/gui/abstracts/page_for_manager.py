@@ -66,7 +66,7 @@ class _GuiBaseOpt(
         scr_stage_name = self._page._scr_stage.key
         options = []
         c = self._window._configure.get(
-            'entity-type-actions.{}.{}.option-hooks'.format(scr_stage_type, scr_entity_type)
+            'entity_type-actions.{}.{}.option-hooks'.format(scr_stage_type, scr_entity_type)
         )
         if c:
             for i in c:
@@ -126,7 +126,7 @@ class _GuiBaseOpt(
         scr_stage_type = self._page._scr_stage.type
         scr_stage_name = self._page._scr_stage.key
 
-        cfg_key = 'entity-press-dbl-click.{}.{}.option-hooks'.format(scr_stage_type, scr_entity.entity_type)
+        cfg_key = 'entity-press-dbl_click-actions.{}.{}.option-hooks'.format(scr_stage_type, scr_entity.entity_type)
         data = self._window._configure.get(cfg_key)
         if data:
             hook_key = data

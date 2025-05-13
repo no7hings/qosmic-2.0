@@ -11,9 +11,9 @@ import lnx_resora.gui.abstracts as lnx_rsr_gui_abstracts
 
 
 class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
-    class DragMode:
+    class DropMode:
         Default = 'default'
-        MayaFxProxyRig = 'maya_fx_proxy_rig'
+        MayaLoad = 'maya_load'
 
     def __init__(self, window, session, *args, **kwargs):
         super(GuiResourceManagerMain, self).__init__(window, session, *args, **kwargs)
@@ -26,8 +26,8 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
 
     def _gui_add_drag_mode_switch_tools(self):
         cfg = [
-            (self.DragMode.Default, 'file/file'),
-            (self.DragMode.MayaFxProxyRig, 'application/maya'),
+            (self.DropMode.Default, 'file/file'),
+            (self.DropMode.MayaLoad, 'application/maya'),
         ]
         tools = []
         for i_drag_mode, i_icon_name in cfg:
@@ -48,4 +48,28 @@ class GuiResourceManagerMain(lnx_rsr_gui_abstracts.AbsPrxPageForManager):
             )
 
     def _gui_switch_drag_mode(self, drag_mode):
-        pass
+        if drag_mode != self._drag_mode:
+            self._drag_mode = drag_mode
+            gui_core.GuiHistoryStage().set_one(self._gui_history_group+['drag_mode'], drag_mode)
+
+    def gui_node_drag_data_generate_fnc(self, scr_entity):
+        scr_entity_path = scr_entity.path
+
+        file_path = self._scr_stage.get_node_parameter(scr_entity_path, 'source')
+        if file_path:
+            if self._drag_mode == self.DropMode.MayaLoad:
+                fx_proxy_rig = self._scr_stage.get_node_parameter(scr_entity_path, 'fx_proxy_rig')
+                if fx_proxy_rig:
+                    file_path = lnx_rsr_cor_drag.MayaVideoDropAction.generate_load_mel(
+                        fx_proxy_rig, auto_namespace=True
+                    )
+                    return dict(
+                        file=file_path,
+                        scr_entity_path=scr_entity_path
+                    )
+
+            return dict(
+                file=file_path,
+                scr_entity_path=scr_entity_path
+            )
+

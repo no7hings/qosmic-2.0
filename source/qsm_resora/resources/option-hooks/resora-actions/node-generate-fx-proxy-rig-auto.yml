@@ -2,16 +2,20 @@ option:
     type: dtb-action
     #
     systems:
-        - '*-maya'
+        - '*-*'
     #
     gui:
-        group_name: 'nodes'
+        group_name: 'node'
         #
-        name: 'Load Source'
+        name: 'Generate FX Proxy Rig'
         icon_name: 'application/python'
         #
         size: [720, 720]
 
+        window:
+            name: 'Generate Fx Proxy Rig'
+            name_chs: '生成特效代理绑定'
+#
 hook_option:
     script:
         window_unique_id: ''

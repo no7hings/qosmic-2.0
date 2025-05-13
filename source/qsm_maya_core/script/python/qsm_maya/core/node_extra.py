@@ -479,6 +479,10 @@ class EtrNodeOpt(object):
                 _attribute.NodeAttribute.create_as_enumerate(
                     self._path, k, v['options'], i_value
                 )
+            elif i_type == 'separator':
+                _attribute.NodeAttribute.create_as_separator(
+                    self._path, k, i_value
+                )
 
     # motion
     def generate_motion_properties(self, key_includes=None):

@@ -26,7 +26,7 @@ option:
         help_url: 'http://{host}/dokuwiki/doku.php?id=%E6%87%92%E4%BA%BA%E5%B7%A5%E5%85%B7:%E6%87%92%E4%BA%BA%E8%B5%84%E6%BA%90'
 
 # for all entities (select or check)
-entity-type-actions:
+entity_type-actions:
     basic:
         Node:
             option-hooks:
@@ -257,11 +257,6 @@ entity-type-actions:
                     gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '关闭'
                 }
 
-                # load
-                - 'resora-actions/maya/node-reference-source-auto': {
-                    gui_parent: '/Load', gui_name: 'Reference Source', gui_parent_chs: '/加载', gui_name_chs: '引用源文件'
-                }
-
     dcc/houdini_scene:
         $: '..basic'
 
@@ -445,6 +440,11 @@ entity-actions:
                     gui_parent: '/Copy Path', gui_name: 'File (Source)', gui_parent_chs: '/复制路径', gui_name_chs: '文件（源）'
                 }
 
+                # generate
+                -   'resora-actions/node-generate-fx-proxy-rig-auto': {
+                    gui_parent: '/Generate', gui_name: 'FX Proxy Rig', gui_parent_chs: '/生成', gui_name_chs: '特效代理绑定'
+                }
+
     media/episode:
         $: '..basic'
         Node:
@@ -551,8 +551,8 @@ entity-actions:
     cache/mocap_fbx:
         $: '..basic'
 
-
-entity-press-dbl-click:
+# double click
+entity-press-dbl_click-actions:
     basic:
         Node:
             option-hooks: 'resora-actions/node-open-directory'
@@ -608,3 +608,13 @@ entity-press-dbl-click:
     cache/mocap_fbx:
         Node:
             option-hooks: 'resora-actions/node-open-source-directory'
+
+# drop
+entity-drop-actions:
+    dcc/maya_scene:
+        Node:
+            option-hooks: ''
+    
+    media/video:
+        Node:
+            option-hooks: ''

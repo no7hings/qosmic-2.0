@@ -186,10 +186,18 @@ class PrxSpcTaskWindow(
             self._task_prx_tool_group.set_name('进度')
             self._tip_prx_tool_group.set_name('提示')
             self._stop_and_close_prx_button.set_name('关闭')
+            self.set_tip(
+                '任务正在执行，请耐心等待；\n'
+                '如需要终止任务，请点击“关闭”。'
+            )
         else:
             self._task_prx_tool_group.set_name('Progress')
             self._tip_prx_tool_group.set_name('Tip')
             self._stop_and_close_prx_button.set_name('Close')
+            self.set_tip(
+                'Tasks is running, please wait patiently;\n'
+                'If you need to terminate the task, please click "Close". '
+            )
 
     def _do_gui_stop(self):
         self._spc_task_widget._model.do_quit()

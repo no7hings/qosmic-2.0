@@ -18,7 +18,7 @@ import tempfile
 from . import base as _base
 
 
-class BscFfmpegVideo(object):
+class BscFfmpegVideo:
     """
     ffmpeg version 7.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2024 the FFmpeg developers
       built with gcc 13.2.0 (Rev5, Built by MSYS2 project)
@@ -697,6 +697,9 @@ class BscFfmpegVideo(object):
 
     @classmethod
     def get_frame_args(cls, video_path):
+        # to unicode first
+        video_path = _base.ensure_unicode(video_path)
+
         cmd_args = [
             cls.get_ffprobe_source(),
             '-v error',
@@ -705,27 +708,24 @@ class BscFfmpegVideo(object):
             '-show_entries',
             'stream=r_frame_rate,duration',
             '-of',
-            'default=nokey=1:noprint_wrappers=1',
+            'json',
+            # 'default=nokey=1:noprint_wrappers=1',
+            '"{}"'.format(_base.ensure_mbcs(video_path))
         ]
         cmd_args = [_base.ensure_mbcs(x) for x in cmd_args]
-        cmd_script = '{} "{}"'.format(' '.join(cmd_args), video_path)
+        cmd_script = ' '.join(cmd_args)
 
         result = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         stdout, stderr = result.communicate()
-
-        stdout = _base.ensure_unicode(stdout)
 
         if result.returncode != 0:
             sys.stderr.write(stderr+'\n')
             return None
 
-        lines = stdout.strip().split('\n')
-        if len(lines) < 2:
-            sys.stderr.write("Error: Could not retrieve frame rate and duration.\n")
-            return None
+        info = json.loads(stdout)
 
-        frame_rate_str = lines[0]
-        duration_str = lines[1]
+        frame_rate_str = info['streams'][0]['r_frame_rate']
+        duration_str = info['streams'][0]['duration']
 
         frame_rate = eval(frame_rate_str)
         if duration_str == 'N/A':
@@ -734,8 +734,35 @@ class BscFfmpegVideo(object):
             duration = float(duration_str)
 
         frame_count = int(frame_rate*duration)
-
         return frame_rate, frame_count
+
+    @classmethod
+    def get_size_args(cls, video_path):
+        # to unicode first
+        video_path = _base.ensure_unicode(video_path)
+
+        cmd_args = [
+            cls.get_ffprobe_source(),
+            '-v error',
+            '-select_streams',
+            'v:0',
+            '-show_entries',
+            'stream=width,height',
+            '-of',
+            'json',
+            '"{}"'.format(_base.ensure_mbcs(video_path))
+        ]
+        cmd_args = [_base.ensure_mbcs(x) for x in cmd_args]
+        cmd_script = ' '.join(cmd_args)
+        result = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        stdout, stderr = result.communicate()
+        if result.returncode != 0:
+            sys.stderr.write(stderr+'\n')
+            return None
+        info = json.loads(stdout)
+        width = info['streams'][0]['width']
+        height = info['streams'][0]['height']
+        return width, height
 
     @classmethod
     def extract_frame(cls, video_path, image_path, frame_index):
@@ -761,17 +788,24 @@ Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffmpeg.exe -i Z:
 
     @classmethod
     def extract_all_frames(cls, video_path, image_format, width_maximum=None):
+        video_path = _base.ensure_unicode(video_path)
         directory_path = os.path.dirname(video_path)
-        base = os.path.basename(video_path)
-        name_base, ext = os.path.splitext(base)
-        image_directory_path = '{}/{}.images'.format(directory_path, name_base)
-        image_file_path = '{}/image.%04d.{}'.format(image_directory_path, image_format)
-        _base.BscStorage.create_directory(image_directory_path)
+        name_base, ext = os.path.splitext(os.path.basename(video_path))
+        image_sequence_dir_path = '{}/{}.images'.format(directory_path, name_base)
+        image_sequence_path = '{}/image.%04d.{}'.format(image_sequence_dir_path, image_format)
+        return cls.extract_image_sequence(video_path, image_sequence_path, width_maximum)
+
+    @classmethod
+    def extract_image_sequence(cls, video_path, image_sequence_path, width_maximum=None):
+        video_path = _base.ensure_unicode(video_path)
+        image_sequence_dir_path = os.path.dirname(image_sequence_path)
+        _base.BscStorage.create_directory(image_sequence_dir_path)
         frame_args = cls.get_frame_args(video_path)
         if frame_args:
             cmd_args = [
                 cls.get_ffmpeg_source(),
-                '-i', video_path,
+                '-i',
+                '"{}"'.format(_base.ensure_mbcs(video_path)),
             ]
 
             if isinstance(width_maximum, int):
@@ -783,18 +817,14 @@ Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffmpeg.exe -i Z:
 
             cmd_args.extend(
                 [
-                    '-vsync vfr', '-q:v 2', '-y',
-                    '{}/image.%04d.{}'.format(
-                        image_directory_path,
-                        image_format
-                    )
+                    '-vsync vfr', '-q:v 2', '-y', image_sequence_path
                 ]
             )
             cmd_args = [_base.ensure_mbcs(x) for x in cmd_args]
             cmd_script = ' '.join(cmd_args)
             s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             s_p.communicate()
-            return image_file_path
+            return image_sequence_path
 
     @classmethod
     def create_compress(cls, video_path_src, video_path_dst, width_maximum=512, replace=False):

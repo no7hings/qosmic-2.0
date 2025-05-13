@@ -32,4 +32,13 @@ class MayaSceneDropAction:
 
 
 class MayaVideoDropAction:
-    pass
+
+    @classmethod
+    def generate_load_mel(cls, scene_path, auto_namespace=False, move_to_mouse=False):
+        mel_script = (
+            u'python("import lnx_maya_resora.core as c; '
+            u'c.SceneDropAction.load_one(\\"{}\\", auto_namespace={}, move_to_mouse={})");'
+        ).format(
+            scene_path, auto_namespace, move_to_mouse
+        )
+        return MayaSceneDropAction.to_temp_mel_file(mel_script)

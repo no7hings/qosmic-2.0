@@ -48,6 +48,7 @@ class Main(object):
         'qsm_katana_core',
         'qsm_katana_lib',
         'qsm_katana_main',
+        # clarisse
         # ue
         'qsm_ue_core',
         'qsm_ue_lib',

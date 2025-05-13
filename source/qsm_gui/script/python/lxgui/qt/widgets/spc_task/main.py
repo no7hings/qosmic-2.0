@@ -63,7 +63,7 @@ class _QtSpcTaskGroupItem(QtWidgets.QTreeWidgetItem):
         return '\n'+self.__str__()
 
 
-# view
+# tree view
 class _QtSpcTaskView(
     QtWidgets.QTreeWidget,
     _qt_abstracts.AbsQtThreadWorkerExtraDef,

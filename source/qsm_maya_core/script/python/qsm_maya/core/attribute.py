@@ -372,6 +372,15 @@ class NodeAttribute:
             cls.set_value(path, atr_name, default)
 
     @classmethod
+    def create_as_separator(cls, path, atr_name, name):
+        if cls.is_exists(path, atr_name) is False:
+            cmds.addAttr(
+                path, longName=atr_name, attributeType='enum', enumName=':'.join([name]), keyable=1,
+                niceName='-'*24
+            )
+            cmds.setAttr(cls.to_atr_path(path, atr_name), lock=1)
+
+    @classmethod
     def create_as_matrix(cls, path, atr_name, default=None):
         if cls.is_exists(path, atr_name) is False:
             cmds.addAttr(
