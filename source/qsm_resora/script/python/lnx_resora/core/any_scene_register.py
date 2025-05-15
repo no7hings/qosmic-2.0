@@ -34,7 +34,8 @@ class AnySceneRegister(object):
         self,
         scr_stage, file_path,
         with_preview, preview_pattern, preview_formats,
-        with_file_reference, file_reference_pattern
+        with_file_reference, file_reference_pattern,
+        ignore_exists
     ):
         assert isinstance(scr_stage, lnx_scr_core.Stage)
 
@@ -48,7 +49,7 @@ class AnySceneRegister(object):
         self._with_file_reference = with_file_reference
         self._file_reference_pattern = file_reference_pattern
 
-        self._ignore_exists = True
+        self._ignore_exists = ignore_exists
 
     def execute(self, scr_type_paths=None, scr_tag_paths=None):
         file_opt = bsc_storage.StgFileOpt(self._file_path)
@@ -160,7 +161,7 @@ class AnySceneRegisterBatch(object):
         file_pattern='{directory}//*.{format}', file_formats='ma',
         with_preview=True, preview_pattern='{file_directory}/{file_name}.{format}', preview_formats='png, jpg',
         with_file_reference=False, file_reference_pattern='{file_directory}//*',
-        scr_type_paths=None, scr_tag_paths=None
+        scr_type_paths=None, scr_tag_paths=None, ignore_exists=True
     ):
         file_paths = cls.get_files_fnc(directory_path, file_pattern, file_formats)
 
@@ -176,6 +177,7 @@ class AnySceneRegisterBatch(object):
                     database_name, file_paths,
                     with_preview=with_preview, preview_pattern=preview_pattern, preview_formats=preview_formats,
                     with_file_reference=with_file_reference, file_reference_pattern=file_reference_pattern,
+                    ignore_exists=ignore_exists
                 ).execute(
                     scr_type_paths, scr_tag_paths
                 )
@@ -191,7 +193,8 @@ class AnySceneRegisterBatch(object):
         self,
         database_name, file_paths,
         with_preview, preview_pattern, preview_formats,
-        with_file_reference, file_reference_pattern
+        with_file_reference, file_reference_pattern,
+        ignore_exists
     ):
         self._scr_stage = lnx_scr_core.Stage(database_name)
 
@@ -203,6 +206,8 @@ class AnySceneRegisterBatch(object):
 
         self._with_file_reference = with_file_reference
         self._file_reference_pattern = file_reference_pattern
+
+        self._ignore_exists = ignore_exists
 
     def execute(self, scr_type_paths=None, scr_tag_paths=None):
         if self._file_paths:
@@ -219,7 +224,8 @@ class AnySceneRegisterBatch(object):
                             preview_pattern=self._preview_pattern,
                             preview_formats=self._preview_formats,
                             with_file_reference=self._with_file_reference,
-                            file_reference_pattern=self._file_reference_pattern
+                            file_reference_pattern=self._file_reference_pattern,
+                            ignore_exists=self._ignore_exists
                         ).execute(
                             scr_type_paths, scr_tag_paths
                         )

@@ -11,7 +11,7 @@ framework for animation pipeline, support python27/310
 ## Tool
 ### Main Page
 ```text
-develop pipeline use rez.
+deploy pipeline use rez.
 ```
 [https://rk8o3v6r7h.feishu.cn/docx/HlNOddq7EonL1yxnIjlcKE14nWd]
 ### Lazy Workspace 1.0

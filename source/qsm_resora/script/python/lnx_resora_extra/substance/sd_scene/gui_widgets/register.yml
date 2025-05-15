@@ -140,3 +140,14 @@ build:
                         “{file_directory}”为源文件的文件夹路径；
                         如果只收集文件夹下的文件后面加“/*”；
                         如果需要收集文件夹下的所有文件（包含所有的子文件夹）加“//*”。
+
+            ignore_exists:
+                widget: boolean
+                name: 'Ignore Exists'
+                name_chs: '忽略已存在'
+                value: True
+                tool_tip:
+                    |-
+                    To be supplemented.
+                tool_tip_chs:
+                    如果被关闭，会覆盖已经录入过的文件。

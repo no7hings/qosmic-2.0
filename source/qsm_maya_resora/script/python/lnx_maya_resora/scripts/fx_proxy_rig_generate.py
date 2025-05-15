@@ -37,11 +37,11 @@ class FxProxyRigGenerateProcess(object):
 
             # step 2
             qsm_mya_core.SceneFile.new()
-            start_frame, end_frame = frame_args
+            frame_rate, frame_count = frame_args
             image_sequence_path = image_sequence_path.replace('%04d', '<f>')
 
             _core.FxProxyRigGraph().create_all(
-                image_sequence_path, start_frame, end_frame, width, height
+                image_sequence_path, 1, frame_count, width, height
             )
             l_p.do_update()
 

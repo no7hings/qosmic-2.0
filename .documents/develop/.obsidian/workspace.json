@@ -4,18 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "535f1b4782353fce",
+        "id": "1b4fd3d6a14eef0c",
         "type": "tabs",
         "children": [
           {
-            "id": "91a87c4c69dbe632",
+            "id": "3627603a4fa0f82e",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "image",
               "state": {
-                "file": "README.md",
-                "mode": "source",
-                "source": true
+                "file": "Pasted image 20250109134709.png"
               }
             }
           }
@@ -85,7 +83,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "README.md",
+                "file": "Pasted image 20250109134709.png",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +100,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "README.md",
+                "file": "Pasted image 20250109134709.png",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +123,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md"
+                "file": "Pasted image 20250109134709.png"
               }
             }
           },
@@ -147,7 +145,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "README.md"
+                "file": "Pasted image 20250109134709.png"
               }
             }
           },
@@ -187,10 +185,12 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "91a87c4c69dbe632",
+  "active": "3627603a4fa0f82e",
   "lastOpenFiles": [
-    "开发相关/开发进度/优化-2025.md",
+    "Pasted image 20250225170819.png",
+    "Pasted image 20250109134709.png",
     "README.md",
+    "开发相关/开发进度/优化-2025.md",
     "未命名.canvas",
     "开发相关/开发进度/开发-2025.md",
     "开发相关/开发进度/优化-2024.md",
@@ -203,7 +203,6 @@
     "技术文档/REZ.md",
     "开发相关/开发文档/解算流程工具.md",
     "开发相关/开发进度/BUG-2024.md",
-    "Pasted image 20250225170819.png",
     "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
     "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
     "开发相关/开发文档/懒人动画（Lazy Animation）.md",
@@ -223,11 +222,9 @@
     "开发相关/开发任务/maya/绑定相关/简模代理（Skin Proxy）.md",
     "开发相关/开发任务/2025-规划.md",
     "随记/2025随记.md",
-    "Pasted image 20250109134709.png",
     "Pasted image 20250109134209.png",
     "Pasted image 20250109134149.png",
     "Pasted image 20250109133827.png",
-    "开发相关/开发任务/maya/解算相关/节点图模版工具（Node Graph Template Tool）.md",
     "images",
     "USD/植被流程/流程图.canvas",
     "USD/植被流程",

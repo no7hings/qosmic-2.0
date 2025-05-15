@@ -414,7 +414,8 @@ class _GuiTypeOpt(
     def gui_update_entities_for(self, scr_entity_paths):
         for i_scr_entity_path in scr_entity_paths:
             i_qt_item = self._qt_tree_widget._view_model._get_item(i_scr_entity_path)
-            self.gui_update_entity_for(i_qt_item)
+            if i_qt_item:
+                self.gui_update_entity_for(i_qt_item)
 
         # update force
         for i_scr_entity_path in [
@@ -424,8 +425,9 @@ class _GuiTypeOpt(
         ]:
             if i_scr_entity_path not in scr_entity_paths:
                 # update for unspecified latest
-                qt_item = self._qt_tree_widget._view_model._get_item(i_scr_entity_path)
-                self.gui_update_entity_for(qt_item)
+                i_qt_item = self._qt_tree_widget._view_model._get_item(i_scr_entity_path)
+                if i_qt_item:
+                    self.gui_update_entity_for(i_qt_item)
 
         self._page.do_gui_node_refresh_by_type_select_or_check()
 
@@ -755,7 +757,8 @@ class _GuiTagOpt(
     def gui_update_entities_for(self, scr_entity_paths):
         for i_scr_entity_path in scr_entity_paths:
             i_qt_item = self._qt_tag_widget._view_model._get_item(i_scr_entity_path)
-            self.gui_update_entity_for(i_qt_item)
+            if i_qt_item:
+                self.gui_update_entity_for(i_qt_item)
 
         self._page.do_gui_node_refresh_by_tag_check()
 

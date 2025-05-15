@@ -283,14 +283,24 @@ nodes:
     fx_image:
         type: file
         properties:
-            # default fame use 0
-            frameExtension: 0
+            # do not set this value, unusable!
+            # frameExtension: 0
             alphaIsLuminance: 1
         connections:
             - 'fx_image_exp.output[0]'
             - '<..key>.frameExtension'
+
+    # add -1 for frameExtension default value
+    fx_image_frame_offset_pls:
+        type: plusMinusAverage
+        properties:
+            operation: 1
+            input1D[1]: -1
+        connections:
             - 'Main.fx_image_frame'
-            - '<..key>.frameOffset'
+            - '<..key>.input1D[0]'
+            - '<..key>.output1D'
+            - 'fx_image.frameOffset'
 
     # material
     fx_surface_sdr:

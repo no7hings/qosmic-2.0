@@ -594,15 +594,21 @@ class BscStorage(object):
 
     @classmethod
     def get_is_exists(cls, path):
-        return os.path.exists(path)
+        if path is not None:
+            return os.path.exists(path)
+        return False
 
     @classmethod
     def get_is_file(cls, path):
-        return os.path.isfile(path)
+        if path is not None:
+            return os.path.isfile(path)
+        return False
 
     @classmethod
     def get_is_directory(cls, path):
-        return os.path.isdir(path)
+        if path is not None:
+            return os.path.isdir(path)
+        return False
 
     @classmethod
     def get_is_readable(cls, path):

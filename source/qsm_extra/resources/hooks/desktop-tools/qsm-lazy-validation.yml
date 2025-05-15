@@ -5,7 +5,7 @@ option:
         - '*-maya'
     #
     gui:
-        name: 'Lazy Validation Tool'
+        name: 'Lazy Validation'
         name_chs: '懒人检查工具'
         group_name: 'Animation(s)'
         #

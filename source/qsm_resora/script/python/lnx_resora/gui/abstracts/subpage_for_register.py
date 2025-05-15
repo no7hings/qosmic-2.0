@@ -554,6 +554,9 @@ class AbsPrxPageForAnySceneRegister(AbsPrxPageForAnyRegister):
         with_file_reference = prx_node.get('file_reference.enable')
         file_reference_pattern = prx_node.get('file_reference.pattern')
 
+        # default is True
+        ignore_exists = prx_node.get('ignore_exists') or True
+
         scr_type_paths = self.gui_get_scr_type_paths()
         scr_tag_paths = self.gui_get_scr_tag_paths()
 
@@ -562,7 +565,8 @@ class AbsPrxPageForAnySceneRegister(AbsPrxPageForAnyRegister):
             file_pattern=file_pattern, file_formats=file_formats,
             with_preview=with_preview, preview_pattern=preview_pattern, preview_formats=preview_formats,
             with_file_reference=with_file_reference, file_reference_pattern=file_reference_pattern,
-            scr_type_paths=scr_type_paths, scr_tag_paths=scr_tag_paths
+            scr_type_paths=scr_type_paths, scr_tag_paths=scr_tag_paths,
+            ignore_exists=ignore_exists
         )
 
         if self._post_fnc is not None:

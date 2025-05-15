@@ -1,3 +1,4 @@
+# configure for develop, use local deadline host
 connection_dev:
     host: '10.32.21.16'
     port: 8082
@@ -6,6 +7,7 @@ connection_dev:
 #    host: '127.0.0.1'
 #    port: 8082
 
+# configure for production, use server deadline host
 connection_new:
     host: '10.33.4.90'
     port: 8082
