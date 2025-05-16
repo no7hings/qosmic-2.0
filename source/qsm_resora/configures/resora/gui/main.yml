@@ -69,20 +69,20 @@ entity_type-actions:
                     gui_parent: '/Assign', gui_name: 'Tag', gui_parent_chs: '/指定', gui_name_chs: '标签'
                 }
 
-                # lock
-                - 'resora-actions/node-lock-enable-auto': {
-                    gui_parent: '/Lock', gui_name: 'Enable', gui_parent_chs: '/锁定', gui_name_chs: '开启'
-                }
-                - 'resora-actions/node-lock-disable-auto': {
-                    gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '关闭'
-                }
-
                 # trash
                 - 'resora-actions/node-trash-enable-auto': {
                     gui_parent: '/Trash', gui_name: 'Delete', gui_parent_chs: '/回收', gui_name_chs: '删除'
                 }
                 - 'resora-actions/node-trash-disable-auto': {
                     gui_parent: '/Trash', gui_name: 'Recover', gui_parent_chs: '/回收', gui_name_chs: '恢复'
+                }
+
+                # lock
+                - 'resora-actions/node-lock-enable-auto': {
+                    gui_parent: '/Lock', gui_name: 'Enable', gui_parent_chs: '/锁定', gui_name_chs: '开启'
+                }
+                - 'resora-actions/node-lock-disable-auto': {
+                    gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '关闭'
                 }
 
     media/video:
@@ -96,6 +96,14 @@ entity_type-actions:
                 }
                 - 'resora-actions/node-assign-tag-auto': {
                     gui_parent: '/Assign', gui_name: 'Tag', gui_parent_chs: '/指定', gui_name_chs: '标签'
+                }
+
+                # trash
+                - 'resora-actions/node-trash-enable-auto': {
+                    gui_parent: '/Trash', gui_name: 'Delete', gui_parent_chs: '/回收', gui_name_chs: '删除'
+                }
+                - 'resora-actions/node-trash-disable-auto': {
+                    gui_parent: '/Trash', gui_name: 'Recover', gui_parent_chs: '/回收', gui_name_chs: '恢复'
                 }
 
                 # lock
@@ -125,6 +133,14 @@ entity_type-actions:
                 }
                 - 'resora-actions/node-assign-tag-auto': {
                     gui_parent: '/Assign', gui_name: 'Tag', gui_parent_chs: '/指定', gui_name_chs: '标签'
+                }
+
+                # trash
+                -   'resora-actions/node-trash-enable-auto': {
+                    gui_parent: '/Trash', gui_name: 'Delete', gui_parent_chs: '/回收', gui_name_chs: '删除'
+                }
+                -   'resora-actions/node-trash-disable-auto': {
+                    gui_parent: '/Trash', gui_name: 'Recover', gui_parent_chs: '/回收', gui_name_chs: '恢复'
                 }
 
                 # lock
@@ -157,6 +173,14 @@ entity_type-actions:
                 }
                 - 'resora-actions/node-assign-tag-by-name-auto': {
                     gui_parent: '/Assign', gui_name: 'Tag (by Name)', gui_parent_chs: '/指定', gui_name_chs: '标签（通过名字）'
+                }
+
+                # trash
+                -   'resora-actions/node-trash-enable-auto': {
+                    gui_parent: '/Trash', gui_name: 'Delete', gui_parent_chs: '/回收', gui_name_chs: '删除'
+                }
+                -   'resora-actions/node-trash-disable-auto': {
+                    gui_parent: '/Trash', gui_name: 'Recover', gui_parent_chs: '/回收', gui_name_chs: '恢复'
                 }
 
                 # lock
@@ -608,13 +632,3 @@ entity-press-dbl_click-actions:
     cache/mocap_fbx:
         Node:
             option-hooks: 'resora-actions/node-open-source-directory'
-
-# drop
-entity-drop-actions:
-    dcc/maya_scene:
-        Node:
-            option-hooks: ''
-    
-    media/video:
-        Node:
-            option-hooks: ''

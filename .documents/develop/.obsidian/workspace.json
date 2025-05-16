@@ -4,16 +4,18 @@
     "type": "split",
     "children": [
       {
-        "id": "1b4fd3d6a14eef0c",
+        "id": "28ff4de023ad32e3",
         "type": "tabs",
         "children": [
           {
-            "id": "3627603a4fa0f82e",
+            "id": "11b1083097bc651e",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "Pasted image 20250109134709.png"
+                "file": "开发相关/开发文档/懒人动画（Lazy Animation）.md",
+                "mode": "source",
+                "source": false
               }
             }
           }
@@ -83,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Pasted image 20250109134709.png",
+                "file": "开发相关/开发文档/懒人动画（Lazy Animation）.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -100,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Pasted image 20250109134709.png",
+                "file": "开发相关/开发文档/懒人动画（Lazy Animation）.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -123,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Pasted image 20250109134709.png"
+                "file": "开发相关/开发文档/懒人动画（Lazy Animation）.md"
               }
             }
           },
@@ -145,7 +147,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "Pasted image 20250109134709.png"
+                "file": "开发相关/开发文档/懒人动画（Lazy Animation）.md"
               }
             }
           },
@@ -185,24 +187,26 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "3627603a4fa0f82e",
+  "active": "11b1083097bc651e",
   "lastOpenFiles": [
-    "Pasted image 20250225170819.png",
-    "Pasted image 20250109134709.png",
-    "README.md",
+    "Pasted image 20250109133827.png",
     "开发相关/开发进度/优化-2025.md",
-    "未命名.canvas",
+    "开发相关/开发进度/BUG-2024.md",
     "开发相关/开发进度/开发-2025.md",
+    "技术文档/Qosmic.md",
+    "技术文档/Qosmic/组件与模块/组件/基础/qsm_resource.md",
+    "技术文档/REZ.md",
+    "Pasted image 20250109134709.png",
+    "Pasted image 20250225170819.png",
+    "README.md",
+    "未命名.canvas",
     "开发相关/开发进度/优化-2024.md",
     "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
     "技术文档/Qosmic/环境变量（Environment）.md",
     "技术文档/Qosmic/存储结构（Storage Hierarchy）.md",
     "技术文档/总览.canvas",
-    "技术文档/Qosmic.md",
     "技术文档/工具安装说明（临时版）.md",
-    "技术文档/REZ.md",
     "开发相关/开发文档/解算流程工具.md",
-    "开发相关/开发进度/BUG-2024.md",
     "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
     "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
     "开发相关/开发文档/懒人动画（Lazy Animation）.md",
@@ -221,10 +225,8 @@
     "开发相关/开发任务/maya/绑定相关/动态GPU（Dynamic GPU）.md",
     "开发相关/开发任务/maya/绑定相关/简模代理（Skin Proxy）.md",
     "开发相关/开发任务/2025-规划.md",
-    "随记/2025随记.md",
     "Pasted image 20250109134209.png",
     "Pasted image 20250109134149.png",
-    "Pasted image 20250109133827.png",
     "images",
     "USD/植被流程/流程图.canvas",
     "USD/植被流程",

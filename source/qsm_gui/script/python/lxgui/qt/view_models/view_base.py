@@ -43,6 +43,8 @@ class AbsViewModel(object):
         self._data.item_user_enable = False
         # item number
         self._data.item_number_enable = False
+        # item trash
+        self._data.item_trash_enable = False
         # item lock
         self._data.item_lock_enable = False
         # item check
@@ -132,6 +134,13 @@ class AbsViewModel(object):
 
     def is_item_number_enable(self):
         return self._data.item_number_enable
+
+    # item trash
+    def set_item_trash_enable(self, boolean):
+        self._data.item_trash_enable = boolean
+
+    def is_item_trash_enable(self):
+        return self._data.item_trash_enable
 
     # item lock
     def set_item_lock_enable(self, boolean):

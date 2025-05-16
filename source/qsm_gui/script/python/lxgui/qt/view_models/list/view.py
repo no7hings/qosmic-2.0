@@ -296,6 +296,9 @@ class ListViewModel(_view_base.AbsViewModel):
         # item user
         if self.is_item_user_enable() is True:
             item_model.set_user_enable(True)
+
+        if self.is_item_trash_enable() is True:
+            item_model.set_trash_enable(True)
         # lock and check
         if self.is_item_lock_enable() is True:
             item_model.set_lock_enable(True)

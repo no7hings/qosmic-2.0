@@ -217,6 +217,9 @@ class AbsItemModel(object):
         # status
         self._data.status_enable = False
 
+        # trash
+        self._data.trash_enable = False
+
         # lock
         self._data.lock_enable = False
 
@@ -993,6 +996,26 @@ class AbsItemModel(object):
 
     def get_descendants(self):
         return []
+
+    # trash
+    def set_trash_enable(self, boolean):
+        self._data.trash_enable = boolean
+        if boolean is True:
+            self._data.trash = _gui_core.DictOpt(
+                flag=False,
+                rect=qt_rect(),
+                file=_gui_core.GuiIcon.get('trash-watermark'),
+            )
+
+    def set_trashed(self, boolean):
+        if self._data.trash_enable is True:
+            if boolean != self._data.trash.flag:
+                self._data.trash.flag = boolean
+
+    def is_trashed(self):
+        if self._data.trash_enable is True:
+            return self._data.trash.flag
+        return False
 
     # lock
     def set_lock_enable(self, boolean):

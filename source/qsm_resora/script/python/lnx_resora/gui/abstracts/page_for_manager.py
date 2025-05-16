@@ -302,6 +302,7 @@ class _GuiTypeOpt(
                             entity_type=self._page._scr_stage.EntityTypes.Node,
                             filters=[
                                 ('type', 'is', 'node'),
+                                ('trash', 'is', False),
                                 ('lock', 'is', False)
                             ]
                         )
@@ -315,6 +316,7 @@ class _GuiTypeOpt(
                             entity_type=self._page._scr_stage.EntityTypes.Assign,
                             filters=[
                                 ('type', 'is', 'type_assign'),
+                                ('trash', 'is', False),
                                 ('lock', 'is', False)
                             ]
                         )
@@ -891,6 +893,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
         self._qt_list_widget._view_model.set_item_frame_size(*item_frame_size)
 
         self._qt_list_widget._set_item_sort_enable(True)
+        self._qt_list_widget._view_model.set_item_trash_enable(True)
         self._qt_list_widget._view_model.set_item_lock_enable(True)
         self._qt_list_widget._set_item_check_enable(True)
         self._qt_list_widget._view_model.set_item_drag_enable(True)
@@ -999,15 +1002,15 @@ class _GuiNodeOpt(_GuiBaseOpt):
             i_scr_entity = self._page._scr_stage.get_node(i_scr_entity_path)
             if i_scr_entity:
                 i_source_type = self._page._scr_stage.get_node_parameter(i_scr_entity_path, 'source_type')
-                i_lock_flag = i_scr_entity.lock
                 i_trash_flag = i_scr_entity.trash
+                i_lock_flag = i_scr_entity.lock
                 i_thumbnail_path = self._page._scr_stage.get_node_parameter(i_scr_entity_path, 'thumbnail')
                 i_scene_path = self._page._scr_stage.get_node_parameter(i_scr_entity_path, 'scene')
                 i_source_path = self._page._scr_stage.get_node_parameter(i_scr_entity_path, 'source')
                 entity_data.append(
                     (
                         i_scr_entity, i_source_type,
-                        i_lock_flag, i_trash_flag,
+                        i_trash_flag,i_lock_flag,
                         i_thumbnail_path, i_scene_path, i_source_path
                     )
                 )
@@ -1034,7 +1037,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
 
         (
             scr_entity, source_type,
-            lock_flag, trash_flag,
+            trash_flag, lock_flag,
             thumbnail_path, scene_path, source_path
         ) = entity_data
 
@@ -1064,6 +1067,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
 
         item_model.set_name(gui_name)
         item_model.set_index(scr_entity.id)
+        item_model.set_trashed(trash_flag)
         item_model.set_locked(lock_flag)
 
         # add thumbnail

@@ -376,6 +376,8 @@ class ListItemModel(_item_base.AbsItemModel):
         self.draw_texts(painter, option, index)
 
         self.draw_status(painter, option, index)
+
+        self.draw_trash(painter, option, index)
         self.draw_lock(painter, option, index)
 
         painter.restore()
@@ -433,6 +435,11 @@ class ListItemModel(_item_base.AbsItemModel):
                 _qt_core.QtItemDrawBase._draw_image(
                     painter, self._data.icon.rect, self._data.icon.image
                 )
+
+    def draw_trash(self, painter, option, index):
+        if self._data.trash_enable is True:
+            if self._data.trash.flag is True:
+                self._draw_icon_by_file(painter, self._data.trash.rect, self._data.trash.file)
 
     def draw_lock(self, painter, option, index):
         if self._data.lock_enable is True:
@@ -701,6 +708,12 @@ class ListItemModel(_item_base.AbsItemModel):
             item_icon_w = 16
 
             txt_x, txt_y = x, y+bsc_h_0
+            # trash
+            if self._data.trash_enable is True:
+                tsh_w = tsh_h = int(min(bsc_w, bsc_h)*.75)
+                self._data.trash.rect.setRect(
+                    bsc_x+(bsc_w-tsh_w)/2, bsc_y+(bsc_h-tsh_h)/2, tsh_w, tsh_h
+                )
             # lock
             if self._data.lock_enable is True:
                 lck_w = lck_h = int(min(bsc_w, bsc_h)*.75)
