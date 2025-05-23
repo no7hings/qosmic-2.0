@@ -104,7 +104,7 @@ class QtAccountWidget(QtWidgets.QWidget):
                 print('ABC')
                 pass
             else:
-                _qt_core.QtItemDrawBase._draw_icon_by_text(
+                _qt_core.QtDrawBase._draw_icon_by_text(
                     painter,
                     self._data.icon.rect,
                     self._data.name.text
@@ -112,14 +112,14 @@ class QtAccountWidget(QtWidgets.QWidget):
 
             # name
             if self._data.name.text:
-                _qt_core.QtItemDrawBase._draw_name_text(
+                _qt_core.QtDrawBase._draw_name_text(
                     painter, self._data.name.rect, self._data.name.text,
                     self._data.name.text_color, self._data.name.text_option, self._data.name.font
                 )
 
             # department
             if self._data.department.text:
-                _qt_core.QtItemDrawBase._draw_name_text(
+                _qt_core.QtDrawBase._draw_name_text(
                     painter, self._data.department.rect, self._data.department.text,
                     self._data.department.text_color, self._data.department.text_option, self._data.department.font
                 )

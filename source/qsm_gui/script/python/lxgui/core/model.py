@@ -31,3 +31,6 @@ class DictOpt(object):
 
     def items(self):
         return self._dict.items()
+
+    def update(self, *args, **kwargs):
+        self._dict.update(*args, **kwargs)

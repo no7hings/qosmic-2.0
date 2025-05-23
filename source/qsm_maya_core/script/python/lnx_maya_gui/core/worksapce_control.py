@@ -101,7 +101,7 @@ import lxbasic.core as bsc_core
 #                 minimumWidth=height
 #             )
 #         else:
-#             LEcomponent = mel.eval(r'getUIComponentDockControl("Channel Box / Layer Editor", false);')
+#             LEcomponent = mel.eval(r'getUIComponentDocker("Channel Box / Layer Editor", false);')
 #             cmds.workspaceControl(
 #                 control_name,
 #                 label=control_label, tabToControl=(LEcomponent, -1),

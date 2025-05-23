@@ -222,7 +222,7 @@ class QtListWidget(
     def wheelEvent(self, event):
         if _qt_core.QtUtil.is_ctrl_modifier():
             self._do_wheel_(event)
-            event.ignore()
+            event.accept()
         else:
             super(QtListWidget, self).wheelEvent(event)
 

@@ -42,7 +42,7 @@ class IconAuxGui(
 
         rect = self.rect()
 
-        gui_qt_core.QtItemDrawBase._draw_icon_by_file(
+        gui_qt_core.QtDrawBase._draw_icon_by_file(
             painter, rect, gui_core.GuiIcon.get('bypass')
         )
 
@@ -98,7 +98,7 @@ class AddInputAuxGui(
         border_color = pen.color()
         background_color = pen.color()
 
-        gui_qt_core.QtItemDrawBase._draw_frame(
+        gui_qt_core.QtDrawBase._draw_frame(
             painter,
             rect=rect,
             border_color=border_color,
@@ -107,7 +107,7 @@ class AddInputAuxGui(
             border_radius=2
         )
 
-        gui_qt_core.QtItemDrawBase._draw_icon_by_file(
+        gui_qt_core.QtDrawBase._draw_icon_by_file(
             painter, rect, gui_core.GuiIcon.get('add_input')
         )
 

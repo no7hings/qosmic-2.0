@@ -411,7 +411,7 @@ class ListItemModel(_item_base.AbsItemModel):
 
         # draw check
         if self._data.check_enable is True:
-            _qt_core.QtItemDrawBase._draw_icon_by_file(
+            _qt_core.QtDrawBase._draw_icon_by_file(
                 painter, self._data.check.rect, self._data.check.file
             )
 
@@ -420,19 +420,19 @@ class ListItemModel(_item_base.AbsItemModel):
 
             # file icon
             if self._data.icon.file_flag is True:
-                _qt_core.QtItemDrawBase._draw_icon_by_file(
+                _qt_core.QtDrawBase._draw_icon_by_file(
                     painter, self._data.icon.rect, self._data.icon.file
                 )
 
             # text icon
             elif self._data.icon.text_flag is True:
-                _qt_core.QtItemDrawBase._draw_icon_by_text(
+                _qt_core.QtDrawBase._draw_icon_by_text(
                     painter, self._data.icon.rect, self._data.icon.text
                 )
 
             # image
             elif self._data.icon.image_flag is True:
-                _qt_core.QtItemDrawBase._draw_image(
+                _qt_core.QtDrawBase._draw_image(
                     painter, self._data.icon.rect, self._data.icon.image
                 )
 
@@ -464,7 +464,7 @@ class ListItemModel(_item_base.AbsItemModel):
                     self._data.text.color, self._data.text.action_color
                 ][self._data.select.flag or self._data.hover.flag]
 
-            _qt_core.QtItemDrawBase._draw_name_text(
+            _qt_core.QtDrawBase._draw_name_text(
                 painter, self._data.name.rect, self._data.name.text,
                 text_color, self._data.name.text_option, self._data.text.font
             )
@@ -474,21 +474,21 @@ class ListItemModel(_item_base.AbsItemModel):
             text_color = [
                 self._data.text.color, self._data.text.action_color
             ][self._data.select.flag or self._data.hover.flag]
-            _qt_core.QtItemDrawBase._draw_name_text(
+            _qt_core.QtDrawBase._draw_name_text(
                 painter, self._data.subname.rect, self._data.subname.text,
                 text_color, self._data.subname.text_option, self._data.text.font
             )
 
         # mtime
         if self._data.mtime_enable is True:
-            _qt_core.QtItemDrawBase._draw_name_text(
+            _qt_core.QtDrawBase._draw_name_text(
                 painter, self._data.mtime.rect, self._data.mtime.text,
                 self._data.mtime.text_color, self._data.mtime.text_option, self._data.text.font
             )
 
         # user
         if self._data.user_enable is True:
-            _qt_core.QtItemDrawBase._draw_name_text(
+            _qt_core.QtDrawBase._draw_name_text(
                 painter, self._data.user.rect, self._data.user.text,
                 self._data.user.text_color, self._data.user.text_option, self._data.text.font
             )
@@ -578,10 +578,10 @@ class ListItemModel(_item_base.AbsItemModel):
                                     hdl_x-txt_w, frm_y+frm_h/2-txt_h/2, txt_w, txt_h
                                 )
 
-                            _qt_core.QtItemDrawBase._draw_time_frame(
+                            _qt_core.QtDrawBase._draw_time_frame(
                                 painter,  self._data.audio.handle_text_rect,
                             )
-                            _qt_core.QtItemDrawBase._draw_time_text(
+                            _qt_core.QtDrawBase._draw_time_text(
                                 painter, self._data.audio.handle_text_rect, self._data.audio.handle_text,
                             )
 
@@ -669,10 +669,10 @@ class ListItemModel(_item_base.AbsItemModel):
                         frm_x+frm_w-time_txt_w-mrg, frm_y+frm_h-16-mrg, time_txt_w, 16
                     )
 
-                    _qt_core.QtItemDrawBase._draw_time_frame(
+                    _qt_core.QtDrawBase._draw_time_frame(
                         painter, time_rect
                     )
-                    _qt_core.QtItemDrawBase._draw_time_text(painter, time_rect, time_txt)
+                    _qt_core.QtDrawBase._draw_time_text(painter, time_rect, time_txt)
 
             painter.end()
 

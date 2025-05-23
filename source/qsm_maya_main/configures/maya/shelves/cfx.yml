@@ -4,19 +4,21 @@ build:
 
     options:
         /:
-            type: shelf
+            type: tab
             name: 'CFX'
             name_chs: '解算'
 
         /separator_0:
             type: separator
+            name: 'Workspace'
+            name_chs: '工作区'
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '待补充。'
 
         /tool_0_0:
             type: button
             name: 'Lazy Workspace'
-            name_chs: '懒人工作区域'
+            name_chs: '懒人工作区'
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '待补充。'
             button_style: 'text_and_icon'
@@ -42,6 +44,8 @@ build:
 
         /separator_1:
             type: separator
+            name: 'CFX'
+            name_chs: '角色特效'
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '待补充。'
 
@@ -61,6 +65,8 @@ build:
 
         /separator_2:
             type: separator
+            name: 'Playblast'
+            name_chs: '拍屏'
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '待补充。'
 
@@ -116,6 +122,8 @@ build:
 
         /separator_3:
             type: separator
+            name: 'Motion'
+            name_chs: '动作'
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '待补充。'
 
@@ -138,6 +146,8 @@ build:
 
         /separator_4:
             type: separator
+            name: 'Extend'
+            name_chs: '扩展'
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '待补充。'
 
@@ -171,6 +181,8 @@ build:
 
         /separator_5:
             type: separator
+            name: 'Other'
+            name_chs: '其他'
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '待补充。'
 

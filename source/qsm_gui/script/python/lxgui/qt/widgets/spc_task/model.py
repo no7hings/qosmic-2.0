@@ -90,7 +90,7 @@ class _SpcTaskItemModel(object):
             name_dict=dict()
         )
 
-        color, color_hover = _qt_core.QtItemDrawBase._gen_rgba_args_by_status(
+        color, color_hover = _qt_core.QtDrawBase._gen_rgba_args_by_status(
             self.Status.Waiting
         )
         self._percent_mark = 0
@@ -257,7 +257,7 @@ class _SpcTaskItemModel(object):
         if status != self._data.progress.status:
             self._data.progress.status = status
             self._data.progress.status_text = _gui_core.GuiProcessStatusMapper.get_name(status)
-            color, color_hover = _qt_core.QtItemDrawBase._gen_rgba_args_by_status(
+            color, color_hover = _qt_core.QtDrawBase._gen_rgba_args_by_status(
                 self._data.progress.status
             )
             self._data.progress.color = color
@@ -496,7 +496,7 @@ class _SpcTaskItemModel(object):
             self.draw_base(painter, option, index)
             self.draw_text(painter, option, index)
             if self._data.icon.file_flag is True:
-                _qt_core.QtItemDrawBase._draw_icon_by_file(painter, self._data.icon.rect, self._data.icon.file)
+                _qt_core.QtDrawBase._draw_icon_by_file(painter, self._data.icon.rect, self._data.icon.file)
 
         painter.restore()
 
@@ -505,7 +505,7 @@ class _SpcTaskItemModel(object):
 
         painter.setRenderHint(painter.Antialiasing, True)
 
-        _qt_core.QtItemDrawBase._draw_frame(
+        _qt_core.QtDrawBase._draw_frame(
             painter,
             rect=self._data.progress.base.rect,
             border_color=self._data.progress.base.border_color,
@@ -514,7 +514,7 @@ class _SpcTaskItemModel(object):
         )
 
         if self._data.progress.finish_flag is True:
-            _qt_core.QtItemDrawBase._draw_frame(
+            _qt_core.QtDrawBase._draw_frame(
                 painter,
                 rect=self._data.progress.rect,
                 border_color=self._data.progress.color,
@@ -522,7 +522,7 @@ class _SpcTaskItemModel(object):
                 border_radius=2
             )
         else:
-            _qt_core.QtItemDrawBase._draw_alternating_frame(
+            _qt_core.QtDrawBase._draw_alternating_frame(
                 painter,
                 rect=self._data.progress.rect,
                 colors=[self._data.progress.color, self._data.progress.color_base],
@@ -538,12 +538,12 @@ class _SpcTaskItemModel(object):
             ][self._data.select.flag or self._data.hover.flag]
 
             painter.setFont(self._data.text.font)
-            _qt_core.QtItemDrawBase._draw_name_text(
+            _qt_core.QtDrawBase._draw_name_text(
                 painter, self._data.progress.text_rect, self._data.progress.text,
                 text_color, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
             )
 
-            _qt_core.QtItemDrawBase._draw_name_text(
+            _qt_core.QtDrawBase._draw_name_text(
                 painter, self._data.progress.percent_rect, self._data.progress.percent_text,
                 text_color, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
             )
@@ -739,7 +739,7 @@ class _SpcTaskGroupItemModel(object):
             self.draw_base(painter, option, index)
             self.draw_text(painter, option, index)
             if self._data.icon.file_flag is True:
-                _qt_core.QtItemDrawBase._draw_icon_by_file(painter, self._data.icon.rect, self._data.icon.file)
+                _qt_core.QtDrawBase._draw_icon_by_file(painter, self._data.icon.rect, self._data.icon.file)
 
         painter.restore()
 
@@ -754,7 +754,7 @@ class _SpcTaskGroupItemModel(object):
             ][self._data.select.flag or self._data.hover.flag]
 
             painter.setFont(self._data.text.font)
-            _qt_core.QtItemDrawBase._draw_name_text(
+            _qt_core.QtDrawBase._draw_name_text(
                 painter, self._data.name.rect, self._data.name.text,
                 text_color, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
             )

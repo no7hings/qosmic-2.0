@@ -2,18 +2,18 @@
 import lxbasic.content as bsc_content
 
 c = bsc_content.Content(value={})
-print c
+print(c)
 
 c.set('a', '\\<A\\>')
 c.set('c', 'C')
 c.set('b', '<c>')
 c.set('e.a.b.c', '<c>')
-print c
+print(c)
 
 c.do_flatten()
-print c
-print c['b']
-print c.get('b')
+print(c)
+print(c['b'])
+print(c.get('b'))
 
 c.set('e.a.b.c', 'e')
-print c
+print(c)

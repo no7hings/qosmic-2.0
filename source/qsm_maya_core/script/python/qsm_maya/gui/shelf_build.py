@@ -13,10 +13,8 @@ class ShelfBuild(object):
     def test(cls):
         cls('maya/shelves/animation').execute()
 
-    def __init__(self, configure_key):
-        self._c = bsc_resource.BscConfigure.get_as_content(
-            configure_key
-        )
+    def __init__(self, cfg_key):
+        self._c = bsc_resource.BscConfigure.get_as_content(cfg_key)
         self._language = gui_core.GuiUtil.get_language()
 
     def create_shelf(self, data):
@@ -116,7 +114,7 @@ class ShelfBuild(object):
         shelf = None
         for k, v in shelf_data.items():
             i_type = v['type']
-            if i_type == 'shelf':
+            if i_type in {'tab', 'shelf'}:
                 shelf = self.create_shelf(v)
             elif i_type == 'separator':
                 self.create_separator(shelf, v)

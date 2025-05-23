@@ -19,12 +19,16 @@ if _:
     cmds = maya.cmds
 
     mel = maya.mel
+
     # api
     OpenMayaUI = maya.OpenMayaUI
-    omui = maya.OpenMayaUI
+    omui = OpenMayaUI
 
-    om = maya.OpenMaya
-    om2 = maya.api.OpenMaya
+    OpenMaya = maya.OpenMaya
+    om = OpenMaya
+    OpenMaya2 = maya.api.OpenMaya
+    om2 = OpenMaya2
+
     # xgen
     # noinspection PyUnresolvedReferences
     import xgenm
@@ -32,3 +36,10 @@ if _:
     xg = xgenm
 
     xgg = xgenm.xgGlobal
+
+    # gui
+    shiboken2 = _sys.modules.get('shiboken2')
+    PySide2 = _sys.modules.get('PySide2')
+    QtWidgets = PySide2.QtWidgets
+    QtCore = PySide2.QtCore
+    QtGui = PySide2.QtGui

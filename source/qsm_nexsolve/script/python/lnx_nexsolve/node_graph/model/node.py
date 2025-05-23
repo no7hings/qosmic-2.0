@@ -453,7 +453,7 @@ class StandardNode(_AbsNode):
         else:
             background_color = self._gui_data.color.background
 
-        gui_qt_core.QtItemDrawBase._draw_frame(
+        gui_qt_core.QtDrawBase._draw_frame(
             painter,
             rect=self._gui_data.basic.rect,
             border_color=border_color,
@@ -465,7 +465,7 @@ class StandardNode(_AbsNode):
         # draw type
         type_text = self.get_type_label()
 
-        gui_qt_core.QtItemDrawBase._draw_name_text(
+        gui_qt_core.QtDrawBase._draw_name_text(
             painter,
             rect=self._gui_data.type.rect,
             text=type_text,
@@ -476,7 +476,7 @@ class StandardNode(_AbsNode):
 
         # draw viewed
         if self._gui_data.viewed.value is True:
-            gui_qt_core.QtItemDrawBase._draw_frame(
+            gui_qt_core.QtDrawBase._draw_frame(
                 painter,
                 rect=self._gui_data.viewed.rect,
                 border_color=QtGui.QColor(*gui_core.GuiRgba.Purple),
@@ -485,7 +485,7 @@ class StandardNode(_AbsNode):
                 border_radius=0
             )
         else:
-            gui_qt_core.QtItemDrawBase._draw_frame(
+            gui_qt_core.QtDrawBase._draw_frame(
                 painter,
                 rect=self._gui_data.viewed.rect,
                 border_color=QtGui.QColor(47, 47, 47, 255),
@@ -496,7 +496,7 @@ class StandardNode(_AbsNode):
 
         # draw edited
         if self._gui_data.edited.value is True:
-            gui_qt_core.QtItemDrawBase._draw_frame(
+            gui_qt_core.QtDrawBase._draw_frame(
                 painter,
                 rect=self._gui_data.edited.rect,
                 border_color=QtGui.QColor(*gui_core.GuiRgba.NeonGreen),
@@ -505,7 +505,7 @@ class StandardNode(_AbsNode):
                 border_radius=0
             )
         else:
-            gui_qt_core.QtItemDrawBase._draw_frame(
+            gui_qt_core.QtDrawBase._draw_frame(
                 painter,
                 rect=self._gui_data.edited.rect,
                 border_color=QtGui.QColor(47, 47, 47, 255),
@@ -1275,13 +1275,13 @@ class ImagingNode(StandardNode):
 
     def draw_base_prc(self, painter, options):
         if self._gui_data.draw_flag == self.DrawFlags.Image:
-            gui_qt_core.QtItemDrawBase._draw_pixmap(
+            gui_qt_core.QtDrawBase._draw_pixmap(
                 painter,
                 rect=self._gui_data.image.image_rect,
                 pixmap=self._gui_data.image.pixmap
             )
         if self._gui_data.draw_flag == self.DrawFlags.Video:
-            gui_qt_core.QtItemDrawBase._draw_pixmap(
+            gui_qt_core.QtDrawBase._draw_pixmap(
                 painter,
                 rect=self._gui_data.video.image_rect,
                 pixmap=self._gui_data.video.pixmap
@@ -1416,7 +1416,7 @@ class Backdrop(_AbsNode):
             border_width = 1
 
         # frame
-        gui_qt_core.QtItemDrawBase._draw_frame(
+        gui_qt_core.QtDrawBase._draw_frame(
             painter,
             rect=self._gui_data.basic.rect,
             border_color=border_color,
@@ -1426,7 +1426,7 @@ class Backdrop(_AbsNode):
         )
 
         # type
-        gui_qt_core.QtItemDrawBase._draw_name_text(
+        gui_qt_core.QtDrawBase._draw_name_text(
             painter, self._gui_data.type.rect, self._data.type,
             text_color=self._gui_data.type.color,
             text_option=QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
@@ -1434,13 +1434,13 @@ class Backdrop(_AbsNode):
         )
 
         # headline
-        gui_qt_core.QtItemDrawBase._draw_line(
+        gui_qt_core.QtDrawBase._draw_line(
             painter, point_0=self._gui_data.head.rect.bottomLeft(), point_1=self._gui_data.head.rect.bottomRight(),
             border_color=border_color, border_width=border_width
         )
 
         # description
-        gui_qt_core.QtItemDrawBase._draw_frame(
+        gui_qt_core.QtDrawBase._draw_frame(
             painter,
             rect=self._gui_data.description.rect,
             border_color=border_color,
@@ -1449,7 +1449,7 @@ class Backdrop(_AbsNode):
             border_radius=4
         )
 
-        gui_qt_core.QtItemDrawBase._draw_description_text(
+        gui_qt_core.QtDrawBase._draw_description_text(
             painter,
             rect=self._gui_data.description.text_rect,
             text=self._gui_data.description.text,
@@ -1458,7 +1458,7 @@ class Backdrop(_AbsNode):
         )
 
         # resize
-        gui_qt_core.QtItemDrawBase._draw_icon_by_file(
+        gui_qt_core.QtDrawBase._draw_icon_by_file(
             painter,
             rect=self._gui_data.resize.icon_rect,
             file_path=self._gui_data.resize.icon.file

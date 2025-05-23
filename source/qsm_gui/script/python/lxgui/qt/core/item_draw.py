@@ -12,7 +12,7 @@ from ... import core as _gui_core
 from . import base as _base
 
 
-class QtItemDrawBase:
+class QtDrawBase:
     Status = _gui_core.GuiProcessStatus
 
     Rgba = _gui_core.GuiRgba
@@ -111,21 +111,26 @@ class QtItemDrawBase:
         painter.drawText(rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter, txt_draw)
 
     @classmethod
-    def _draw_name_text(cls, painter, rect, text, text_color, text_option=None, text_font=None):
+    def _draw_name_text(cls, painter, rect, text, text_color, text_option=None, text_font=None, text_word_warp=False):
         painter.setPen(text_color)
 
         if text_font:
             painter.setFont(text_font)
 
-        text = painter.fontMetrics().elidedText(
-            text,
-            QtCore.Qt.ElideMiddle,
-            rect.width(),
-            QtCore.Qt.TextShowMnemonic
-        )
-
         text_option = text_option or QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
-        painter.drawText(rect, text_option, text)
+        if text_word_warp is True:
+            rect_f = QtCore.QRectF(rect.x(), rect.y(), rect.width(), rect.height())
+            text_option = QtGui.QTextOption(text_option)
+            text_option.setWrapMode(text_option.WrapAtWordBoundaryOrAnywhere)
+            painter.drawText(rect_f, text, text_option)
+        else:
+            text = painter.fontMetrics().elidedText(
+                text,
+                QtCore.Qt.ElideMiddle,
+                rect.width(),
+                QtCore.Qt.TextShowMnemonic
+            )
+            painter.drawText(rect, text_option, text)
 
     @classmethod
     def _draw_description_text(cls, painter, rect, text, text_color, text_font=None):

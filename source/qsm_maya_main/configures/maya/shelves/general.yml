@@ -1,19 +1,23 @@
 build:
     options:
         /:
-            type: shelf
+            type: tab
             name: 'Lazy Tool'
             name_chs: '懒人工具'
+            tool_tip: 'Lazy Tools.'
+            tool_tip_chs: '懒人工具。'
 
         /separator_0:
             type: separator
+            name: 'Workspace'
+            name_chs: '工作区'
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '待补充。'
 
         /tool_0_0:
             type: button
             name: 'Lazy Workspace'
-            name_chs: '懒人工作区域'
+            name_chs: '懒人工作区'
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '待补充。'
             button_style: 'text_and_icon'
@@ -23,9 +27,24 @@ build:
             icon: 'lazy/wotrix'
             script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-workspace")'
             dbl_script: ''
+        
+        /tool_0_1:
+            type: button
+            name: 'Lazy Autosave'
+            name_chs: '懒人自动保存'
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '待补充。'
+            button_style: 'text_and_icon'
+            button_name: 'Autosave'
+            button_name_chs: '保存'
+            icon: 'tool/save'
+            script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-workspace-autosave")'
+            dbl_script: ''
 
         /separator_1:
             type: separator
+            name: 'Animation'
+            name_chs: '动画'
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '待补充。'
 
@@ -80,6 +99,8 @@ build:
 
         /separator_2:
             type: separator
+            name: 'Extend'
+            name_chs: '扩展'
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '待补充。'
 
@@ -113,6 +134,8 @@ build:
 
         /separator_3:
             type: separator
+            name: 'Other'
+            name_chs: '其他'
             tool_tip: 'To be supplemented.'
             tool_tip_chs: '待补充。'
 

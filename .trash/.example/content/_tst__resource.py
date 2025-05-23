@@ -7,4 +7,4 @@ c = bsc_resource.BscConfigure.get_as_content(
 
 c.do_flatten()
 
-print c
+print(c)

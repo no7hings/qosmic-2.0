@@ -238,7 +238,7 @@ class _QtEntityChooseWidget(QtWidgets.QWidget):
         if self._keyword_filter_entry._get_value_():
             pass
         else:
-            _qt_core.QtItemDrawBase._draw_name_text(
+            _qt_core.QtDrawBase._draw_name_text(
                 painter,
                 rect=top_rect,
                 text=(
@@ -589,7 +589,7 @@ class QtEntityCompletionWidget(QtWidgets.QWidget):
         painter.setBrush(QtGui.QColor(*_gui_core.GuiRgba.Basic))
         painter.drawRect(top_rect)
 
-        _qt_core.QtItemDrawBase._draw_name_text(
+        _qt_core.QtDrawBase._draw_name_text(
             painter,
             rect=top_rect,
             text=(

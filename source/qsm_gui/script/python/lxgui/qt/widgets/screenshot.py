@@ -557,7 +557,7 @@ class QtScreenshotFrame(
                     text=self._help_text_start,
                     font=_qt_core.QtFonts.Large,
                     text_option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop,
-                    word_warp=True
+                    text_word_warp=True
                 )
 
                 painter._set_border_color_(
@@ -596,7 +596,7 @@ class QtScreenshotFrame(
                     text=self._help_text_edit,
                     font=_qt_core.QtFonts.Large,
                     text_option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop,
-                    word_warp=True
+                    text_word_warp=True
                 )
                 # geometry text
                 painter._set_text_color_(

@@ -370,7 +370,7 @@ class _QtSpcTaskOverview(QtWidgets.QWidget):
                 i_rect = QtCore.QRect()
                 i_text = '{}*{}'.format(i_status_name, i_count)
                 i_text_w = QtGui.QFontMetrics(text_font).width(i_text)+16
-                i_color, i_color_hover = _qt_core.QtItemDrawBase._gen_rgba_args_by_status(i_status)
+                i_color, i_color_hover = _qt_core.QtDrawBase._gen_rgba_args_by_status(i_status)
                 i_rect.setRect(
                     x_c+1, y+1, i_text_w-2, h-2
                 )
@@ -421,10 +421,10 @@ class _QtSpcTaskOverview(QtWidgets.QWidget):
             painter.setFont(font)
             for i in overview_data.draw_data:
                 i_text, i_rect, i_color, i_color_hover = i
-                _qt_core.QtItemDrawBase._draw_frame(
+                _qt_core.QtDrawBase._draw_frame(
                     painter, i_rect, i_color, i_color
                 )
-                _qt_core.QtItemDrawBase._draw_name_text(
+                _qt_core.QtDrawBase._draw_name_text(
                     painter, i_rect, i_text,
                     text_color, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter
                 )

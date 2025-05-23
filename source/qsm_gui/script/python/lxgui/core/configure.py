@@ -321,6 +321,9 @@ class GuiRgba(object):
     BdrButtonHover = 151, 151, 151, 255
     BdrButtonDisable = 87, 87, 87, 255
 
+    BdrButtonHoverA = 255, 255, 255, 63
+    BkgButtonHoverA = 255, 255, 255, 63
+
     # menu
     BkgMenu = 55, 55, 55, 255
     # border +32

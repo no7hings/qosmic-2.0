@@ -43,7 +43,7 @@ class QtImageNode(_gnl_node.QtGeneralNode):
                 text_color=_qt_core.QtRgba.Text,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 offset=offset,
-                word_warp=True
+                text_word_warp=True
             )
 
         if self._image_path is not None:
@@ -245,7 +245,7 @@ class QtImageGraph(_gnl_graph.QtGeneralNodeGraph):
                 text_color=_qt_core.QtRgba.Text,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 offset=offset,
-                word_warp=True
+                text_word_warp=True
             )
             i_i_rect = qt_rect(
                 x_0, h_-i_i_h-m, i_i_w, i_i_h

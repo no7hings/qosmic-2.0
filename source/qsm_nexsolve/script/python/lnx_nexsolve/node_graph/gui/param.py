@@ -486,7 +486,7 @@ class _AbsGroupGui(QtWidgets.QWidget):
 
     def _draw(self, painter):
         if self._param is not None:
-            gui_qt_core.QtItemDrawBase._draw_frame(
+            gui_qt_core.QtDrawBase._draw_frame(
                 painter,
                 rect=self._gui_data.main.rect,
                 border_color=self._gui_data.main.border_color,
@@ -495,13 +495,13 @@ class _AbsGroupGui(QtWidgets.QWidget):
                 border_radius=2
             )
 
-            gui_qt_core.QtItemDrawBase._draw_icon_by_file(
+            gui_qt_core.QtDrawBase._draw_icon_by_file(
                 painter,
                 rect=self._gui_data.head.icon.rect,
                 file_path=self._gui_data.head.icon.file
             )
 
-            gui_qt_core.QtItemDrawBase._draw_name_text(
+            gui_qt_core.QtDrawBase._draw_name_text(
                 painter,
                 rect=self._gui_data.head.text.rect,
                 text=self._param.get_label(),
@@ -511,7 +511,7 @@ class _AbsGroupGui(QtWidgets.QWidget):
             )
 
             if self._gui_data.expand_flag is True:
-                gui_qt_core.QtItemDrawBase._draw_frame(
+                gui_qt_core.QtDrawBase._draw_frame(
                     painter,
                     rect=self._gui_data.body.rect,
                     border_color=self._gui_data.body.border_color,
@@ -652,7 +652,7 @@ class ParamRootGui(_AbsGroupGui):
 
     def _draw(self, painter):
         if self._node is not None:
-            gui_qt_core.QtItemDrawBase._draw_frame(
+            gui_qt_core.QtDrawBase._draw_frame(
                 painter,
                 rect=self._gui_data.main.rect,
                 border_color=self._gui_data.main.border_color,
@@ -661,7 +661,7 @@ class ParamRootGui(_AbsGroupGui):
                 border_radius=2
             )
 
-            gui_qt_core.QtItemDrawBase._draw_icon_by_file(
+            gui_qt_core.QtDrawBase._draw_icon_by_file(
                 painter,
                 rect=self._gui_data.head.icon.rect,
                 file_path=self._gui_data.head.icon.file
@@ -677,7 +677,7 @@ class ParamRootGui(_AbsGroupGui):
             txt_w_1 = QtGui.QFontMetrics(self._gui_data.head.text.font).width(type_text)+8
             txt_rect_1 = QtCore.QRect(txt_x, txt_y, txt_w_1, txt_h)
 
-            gui_qt_core.QtItemDrawBase._draw_name_text(
+            gui_qt_core.QtDrawBase._draw_name_text(
                 painter,
                 rect=txt_rect_1,
                 text=type_text,
@@ -690,7 +690,7 @@ class ParamRootGui(_AbsGroupGui):
             txt_w_0 = QtGui.QFontMetrics(self._gui_data.head.text.font).width(path_text)+8
             txt_rect_0 = QtCore.QRect(txt_x++txt_w_1, txt_y, txt_w_0, txt_h)
 
-            gui_qt_core.QtItemDrawBase._draw_name_text(
+            gui_qt_core.QtDrawBase._draw_name_text(
                 painter,
                 rect=txt_rect_0,
                 text=path_text,
@@ -700,7 +700,7 @@ class ParamRootGui(_AbsGroupGui):
             )
 
             if self._gui_data.expand_flag is True:
-                gui_qt_core.QtItemDrawBase._draw_frame(
+                gui_qt_core.QtDrawBase._draw_frame(
                     painter,
                     rect=self._gui_data.body.rect,
                     border_color=self._gui_data.body.border_color,

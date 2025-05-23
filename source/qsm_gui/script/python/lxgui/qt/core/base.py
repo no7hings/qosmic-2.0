@@ -258,26 +258,26 @@ class QtUtil(object):
             '<style>.no_wrap{white-space:nowrap;}</style>\n'
             '<style>.no_warp_and_center{white-space:nowrap;text-align: center;}</style>\n'
         )
-        title = bsc_core.ensure_string(title)
-        title = title.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-        css += '<h3><p class="no_warp_and_center">{}</p></h3>\n'.format(title)
+        if title is not None:
+            title = bsc_core.ensure_string(title)
+            title = title.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
+            css += '<h3><p class="no_warp_and_center">{}</p></h3>\n'.format(title)
 
         if content:
-            # add split line
-            css += '<p><hr></p>\n'
             text = bsc_core.ensure_string(content)
             if isinstance(text, six.string_types):
                 texts = text.split('\n')
             elif isinstance(text, (tuple, list)):
                 texts = text
             else:
-                raise RuntimeError()
-            #
-            for i_text in texts:
-                i_text = bsc_core.ensure_string(i_text)
-                i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-                i_text = cls.generate_tool_tip_action_css(i_text)
-                css += '<p class="no_wrap">{}</p>\n'.format(i_text)
+                texts = []
+            if texts:
+                css += '<p><hr></p>\n'
+                for i_text in texts:
+                    i_text = bsc_core.ensure_string(i_text)
+                    i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
+                    i_text = cls.generate_tool_tip_action_css(i_text)
+                    css += '<p class="no_wrap">{}</p>\n'.format(i_text)
 
         if 'action_tip' in kwargs:
             action_tip = kwargs['action_tip']
@@ -286,16 +286,30 @@ class QtUtil(object):
             elif isinstance(action_tip, (tuple, list)):
                 texts = action_tip
             else:
-                raise RuntimeError()
-            css += '<p><hr></p>\n'
-            for i_text in texts:
-                i_text = bsc_core.ensure_string(i_text)
-                i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-                i_text = cls.generate_tool_tip_action_css(i_text)
-                css += '<p class="no_wrap">{}</p>\n'.format(i_text)
+                texts = []
+
+            if texts:
+                css += '<p><hr></p>\n'
+                for i_text in texts:
+                    i_text = bsc_core.ensure_string(i_text)
+                    i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
+                    i_text = cls.generate_tool_tip_action_css(i_text)
+                    css += '<p class="no_wrap">{}</p>\n'.format(i_text)
 
         css += '</body>\n</html>'
         return css
+
+    @classmethod
+    def get_all_widgets_at(cls, layout):
+        list_ = []
+        c = layout.count()
+        if c:
+            for i in range(c):
+                item = layout.itemAt(i)
+                if item:
+                    widget = item.widget()
+                    list_.append(widget)
+        return list_
 
     # noinspection PyArgumentList
     @classmethod

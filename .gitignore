@@ -1,1 +1,13 @@
+# ignore compile
 *.pyc
+# directory
+/.build
+/.doc
+/.documents
+/.launch
+/.pycharm
+/.startup
+/.trash
+/source/qsm_lib/bin
+/source/qsm_lib/lib
+/source/qsm_ue_lib/lib

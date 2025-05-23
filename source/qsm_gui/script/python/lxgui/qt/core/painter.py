@@ -1990,7 +1990,7 @@ class QtPainter(QtGui.QPainter):
             self.drawRect(rect_offset)
 
     def _draw_text_by_rect_(
-        self, rect, text, text_color=None, font=None, offset=0, text_option=None, word_warp=False, is_hovered=False,
+        self, rect, text, text_color=None, font=None, offset=0, text_option=None, text_word_warp=False, is_hovered=False,
         is_selected=False
     ):
         if text_color is not None:
@@ -2022,7 +2022,7 @@ class QtPainter(QtGui.QPainter):
         text_option__ = QtGui.QTextOption(
             text_option_
         )
-        if word_warp is True:
+        if text_word_warp is True:
             text_ = text
             text_option__.setWrapMode(
                 text_option__.WrapAtWordBoundaryOrAnywhere

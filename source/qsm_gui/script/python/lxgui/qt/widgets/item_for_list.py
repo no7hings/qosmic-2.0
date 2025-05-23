@@ -814,7 +814,7 @@ class QtListItemWidget(
                             text=self._get_name_text_at_(i_name_index),
                             font=_qt_core.QtFonts.Default,
                             text_option=text_option,
-                            word_warp=self._name_word_warp,
+                            text_word_warp=self._name_word_warp,
                             offset=offset,
                             is_hovered=self._is_hovered,
                             is_selected=self._is_selected

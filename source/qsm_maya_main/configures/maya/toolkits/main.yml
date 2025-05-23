@@ -1,0 +1,10 @@
+build:
+    options:
+        key: 'qsm_toolkit'
+        name: 'Toolkit'
+        name_chs: '工具架'
+
+        tabs:
+            - 'maya/shelves/general'
+            - 'maya/shelves/animation'
+            - 'maya/shelves/cfx'

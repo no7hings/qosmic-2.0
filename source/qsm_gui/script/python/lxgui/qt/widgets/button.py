@@ -933,7 +933,7 @@ class QtIconPressButton(
                 text=self._name_text,
                 font=_qt_core.QtFonts.Default,
                 text_option=QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop,
-                word_warp=self._name_word_warp,
+                text_word_warp=self._name_word_warp,
                 offset=offset,
                 # is_hovered=self._is_hovered,
             )

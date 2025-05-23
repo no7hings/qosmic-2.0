@@ -84,10 +84,6 @@ from .alembic_cache import *
 
 from .geometry_cache import *
 
-from .window import *
-
-from .shelf import *
-
 from .node_for_deform import *
 
 from .node_for_dynamic import *
@@ -118,9 +114,10 @@ from .smooth_bind_skin import *
 
 from .set import *
 
+# gui
+from .window import *
 
-
-
+from .shelf import *
 
 
 

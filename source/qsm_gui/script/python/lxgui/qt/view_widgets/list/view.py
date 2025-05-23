@@ -197,7 +197,7 @@ class _QtListView(
     def wheelEvent(self, event):
         if _qt_core.QtUtil.is_ctrl_modifier():
             self._view_model.on_wheel(event)
-            event.ignore()
+            event.accept()
         else:
             super(_QtListView, self).wheelEvent(event)
 
