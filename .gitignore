@@ -8,6 +8,12 @@
 /.pycharm
 /.startup
 /.trash
+# base lib
 /source/qsm_lib/bin
 /source/qsm_lib/lib
+/source/qsm_lib/resources/executes
+# dcc lib
+/source/qsm_maya_lib/lib
+/source/qsm_houdini_lib/lib
+/source/qsm_katana_lib/lib
 /source/qsm_ue_lib/lib
