@@ -1,0 +1,22 @@
+PyYAML==6.0.2
+charset-normalizer==3.4.1
+peewee==3.17.9
+six==1.17.0
+urllib3==2.3.0
+pypinyin==0.53.0
+  - typing; python_version < "3.5"
+  - enum34; python_version < "3.4"
+parse==1.20.2
+setuptools==57.4.0
+mysql==0.0.3
+  - mysqlclient
+pip==25.0.1
+requests==2.32.3
+  - idna<4,>=2.5
+  - charset-normalizer<4,>=2
+  - urllib3<3,>=1.21.1
+  - certifi>=2017.4.17
+certifi==2025.1.31
+idna==3.10
+mysqlclient==2.2.7
+scandir==1.10.0
