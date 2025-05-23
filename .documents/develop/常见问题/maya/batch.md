@@ -1,1 +1,0 @@
->在window下使用bath命令应该使用"-- mayabatch", 如果使用"-- maya - batch"会弹出命令行窗口

@@ -1,3 +1,0 @@
-This is some data,
-that this package will release.
-The end.

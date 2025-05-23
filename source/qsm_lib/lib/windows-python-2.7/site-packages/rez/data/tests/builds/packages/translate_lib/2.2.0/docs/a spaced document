@@ -1,3 +1,0 @@
-This file has spaces in its name
-which is here so that cmake macros
-get tested for handling spaces in filenames

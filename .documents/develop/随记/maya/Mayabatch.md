@@ -1,1 +1,0 @@
->batch模式下使用playblast需要通过设置硬件渲染（hardwareRenderingGlobals）来得到GUI模式下的画面
