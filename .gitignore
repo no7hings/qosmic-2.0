@@ -14,8 +14,11 @@
 /source/qsm_lib/bin
 /source/qsm_lib/lib
 /source/qsm_lib/resources/executes
-# dcc lib
+# maya
 /source/qsm_maya_lib/lib
+/source/qsm_maya_main/resources/rig
+# houdini
 /source/qsm_houdini_lib/lib
+# katana
 /source/qsm_katana_lib/lib
 /source/qsm_ue_lib/lib
