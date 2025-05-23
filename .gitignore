@@ -22,3 +22,5 @@
 # katana
 /source/qsm_katana_lib/lib
 /source/qsm_ue_lib/lib
+# server
+/source/qsm_server/lib
