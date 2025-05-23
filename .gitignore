@@ -1,11 +1,13 @@
 # ignore compile
 *.pyc
-# directory
+# IDE
+/.pycharm
+/.idea
+# local
 /.build
 /.doc
 /.documents
 /.launch
-/.pycharm
 /.startup
 /.trash
 # base lib
